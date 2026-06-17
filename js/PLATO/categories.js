@@ -1,0 +1,106 @@
+﻿var categories = {
+  mastercategories: [
+    {
+      index: 0,
+      description: "PLATO Overview",
+      name: "Overview",
+    },
+    {
+      index: 1,
+      description: "",
+      name: "Plato Api",
+    },
+    {
+      index: 2,
+      description:
+        "This service provides the centralized PLATO Batch Core features.",
+      name: "plato-batch-server",
+    },
+    {
+      index: 3,
+      description: "This is a sample server reports server.",
+      name: "reports-service",
+    },
+  ],
+};
+var subCategories = {
+  list: [
+    {
+      index: 1,
+      yaml: "PLATO/APIs.yaml",
+      description: "login Api",
+      parentcategory: "1",
+      displayName: "Login",
+    },
+    {
+      index: 2,
+      yaml: "PLATO/Alerts.yaml",
+      description: "Alerts API",
+      parentcategory: "1",
+      displayName: "Alerts",
+    },
+    {
+      index: 3,
+      yaml: "PLATO/Feed-Services.yaml",
+      description: "Feed Services API",
+      parentcategory: "1",
+      displayName: "Feed Services",
+    },
+    {
+      index: 4,
+      yaml: "PLATO/Feed.yaml",
+      description: "Feed Services API",
+      parentcategory: "1",
+      displayName: "Feed Services",
+    },
+    {
+      index: 5,
+      yaml: "PLATO/Plato-Batch-Server/BatchCoreJobLauncherController.yaml",
+      description: "Batch Core Job Launcher API",
+      parentcategory: "2",
+      displayName: "Batch Core Job Launcher Controller",
+    },
+    {
+      index: 6,
+      yaml: "PLATO/Plato-Batch-Server/JobLauncherController.yaml",
+      description: "JobLauncherController",
+      parentcategory: "2",
+      displayName: "JobLauncherController.yaml",
+    },
+    {
+      index: 7,
+      yaml: "PLATO/Plato-Batch-Server/JobExplorerController.yaml",
+      description: "Job Explorer Controller API",
+      parentcategory: "2",
+      displayName: "Job Explorer Controller",
+    },
+    {
+      index: 8,
+      yaml: "PLATO/Plato-Batch-Server/JobRegistryController.yaml",
+      description: "Job Registry Controller API",
+      parentcategory: "2",
+      displayName: "Job Registry Controller",
+    },
+    {
+      index: 9,
+      yaml: "PLATO/Plato-Batch-Server/JobTriggerDefinitionsController.yaml",
+      description: "Job Trigger Definitions Controller API",
+      parentcategory: "2",
+      displayName: "Job Trigger Definitions Controller",
+    },
+    {
+      index: 10,
+      yaml: "PLATO/reports-service/ReportMetadata.yaml",
+      description: "Report Metadata API",
+      parentcategory: "3",
+      displayName: "Report Metadata",
+    },
+    {
+      index: 11,
+      yaml: "PLATO/reports-service/TemplateMetadata.yaml",
+      description: "Template Metadata API",
+      parentcategory: "3",
+      displayName: "Template Metadata",
+    },
+  ],
+};
