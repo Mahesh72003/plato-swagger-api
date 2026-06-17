@@ -1,0 +1,240 @@
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Ketki
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Customer Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CustomerAPI"
+    description: "API for Customer's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /customerReport/generateReport:
+    post:
+      tags:
+        - "CustomerReportAPI"
+      summary: "Get all valid oblm-report-services."
+      description: "Get all valid oblm-report-services. This endpoints will be used to Get all valid oblm-report-services maintenance records."
+      operationId: "generateReport"
+      parameters:
+        - name: "customerInDTO" 
+          in: "body" 
+          description: "Request Body that contains data required for creating a new oblm-report-services" 
+          required: true
+          schema:
+            $ref: "#/definitions/CustomerInDTO"
+      responses:
+        201:
+          description: "Returns the Id of the customer"
+          headers:
+            Location:
+              description: "URL of customer report"
+              type: "string"
+          schema:
+              $ref: "#/definitions/CustomerReportDTOCollection"  
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  CustomerInDTO:
+   type: "object"
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      customerId:
+       type: string
+       description: "Id of the customer"
+      customerName:
+       type: string
+       description: "Name of the customer"
+      userId:
+       description: "User Id of the customer"
+       type: string
+  CustomerDTO:
+   type: object
+   properties:
+    CustomerheaderDTO:
+     $ref: "#/definitions/CustomerHeaderDTO"
+    CustomerbodyDTO:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CustomerBodyDTO"
+  CustomerHeaderDTO:
+   type: object
+   properties:
+    userId:
+     type: string
+    dateAndTime:
+     type: string
+    CustomerName:
+     type: string
+    CustomerID:
+     type: string
+  CustomerBodyDTO:
+   type: object
+   properties:
+    CustomerID:
+     type: string
+    CustomerName:
+     type: string
+    Address:
+      type: string
+    ParentCustomerID:
+      type: string
+  LmmTmCustomerDTO:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      customerId:
+       type: string
+       description: ""
+      customerName:
+       type: string
+       description: ""
+      parentCustomerId:
+       type: string
+       description: ""
+      address:
+       type: string
+       description: ""
+      bankCode:
+       type: string
+       description: ""
+      branchCode:
+       type: string
+       description: ""
+      sourceSystem:
+       type: string
+       description: ""
+      sourceSystemCustNo:
+       type: string
+       description: ""
+      closedStat:
+       type: string
+       description: ""
+      closedDtStamp:
+       type: string
+       format: date
+       description: ""
+      isForgotten:
+       type: string
+       description: ""
+     required:
+      - customerId
+      - customerName
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/ResponseCode"
+    requestId:
+      type: string
+  ResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+    args:
+     type: array
+     items:
+      type: object
+    arg:
+     type: string  
+  GenericDto:
+   allOf:
+    - type: object
+      discriminator: resource_type
+  CustomerDTOCollection: 
+   description: "Collection of entries."
+   type: "object"
+   properties:
+    data:
+     $ref: "#/definitions/CustomerDTO"
+    messages:
+     $ref: "#/definitions/ResponseDto"
+  CustomerReportDTOCollection: 
+   description: "Collection of entries."
+   type: "object"
+   properties:
+    data:
+     $ref: "#/definitions/ReportResponse"
+    messages:
+     $ref: "#/definitions/ResponseDto"
+  LmmTmCustomerCollection: 
+   description: "Collection of customer."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items:
+      $ref: "#/definitions/LmmTmCustomerDTO"
+  LmmTmCustomerWrapperDTO:
+    type: object
+    properties:
+     data:
+       $ref: "#/definitions/LmmTmCustomerDTO" 

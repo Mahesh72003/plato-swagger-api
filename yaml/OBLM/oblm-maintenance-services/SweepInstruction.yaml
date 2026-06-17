@@ -1,0 +1,560 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server instruction server." 
+ version: "1.0.0"
+ title: "instruction Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "instruction"
+   description: " "
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../instruction
+
+ /instruction:
+  post:
+   tags:
+    - "instruction"
+   summary: "Adds a new instruction."
+   description: "Adds a new instruction. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "instruction" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new instruction" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmSweepInstructionDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created instruction" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "instruction"
+   summary: "Get all valid instruction."
+   description:  "Get all valid instruction. This endpoints will be used to Get all valid instruction maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: instructionId
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query   
+     name: productCode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmSweepInstructionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../instruction/xxx
+#   DELETE    .../instruction/xxx
+#   GET       .../instruction/xxx
+#   GET       .../instruction/xxx?version=latestrecord
+#   GET       .../instruction/xxx?version=1
+
+ /instruction/{id}:
+  put:
+   tags:
+    - "instruction"
+   summary: "Update an existing instruction."
+   description:  "Update an existing instruction."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the instruction Maintenance"
+      required: true
+      type: "string"
+    - name: "instruction"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing instruction"
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmSweepInstructionDTO"
+   responses:
+    200:
+     description: "Returns updated instruction"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "instruction"
+   summary: "Retrieves the instruction by ID."
+   description:  "Retrieves the instruction by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the instruction based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmSweepInstructionWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "instruction"
+   summary: "Deletes the instruction identified by given ID."
+   description:  "Deletes the instruction identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the instruction maintenance"
+      required: true
+      type: "string"
+    - name: "instruction"
+      in: "body"
+      description: Request body contain instruction and Modification no of instruction maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../instruction/xxx/approve
+
+ /instruction/{id}/approve:
+  patch:
+   tags:
+    - "instruction"
+   summary: "Authorize the instruction by given ID."
+   description:  "Authorize the instruction identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the instruction maintenance"
+      required: true
+      type: "string"
+    - name: "instruction"
+      in: "body"
+      description: Request body contain instruction and Modification no of instruction maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../instruction/xxx/close
+ /instruction/{id}/close:
+  patch:
+   tags:
+    - "instruction"
+   summary: "Close the instruction by given ID."
+   description:  "Close the instruction identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the instruction maintenance"
+      required: true
+      type: "string"
+    - name: "instruction"
+      in: "body"
+      description: Request body contain instruction and Modification no of instruction maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../instruction/xxx/reopen
+
+ /instruction/{id}/reopen:
+  patch:
+   tags:
+    - "instruction"
+   summary: "reopen the instruction by given ID."
+   description:  "reopen the instruction identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the instruction maintenance"
+      required: true
+      type: "string"
+    - name: "instruction"
+      in: "body"
+      description: Request body contain instruction and Modification no of instruction maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../instruction/xxx/unauthorized
+
+ /instruction/{id}/unauthorized:
+  get:
+   tags:
+    - "instruction"
+   summary: "Retrives the instruction by given ID."
+   description:  "Retrives the instruction identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the instruction based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmSweepInstructionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../instruction/xxx/history
+
+ /instruction/{id}/history:
+  get:
+   tags:
+    - "instruction"
+   summary: "Retrives the instruction by given ID."
+   description:  "Retrives the instruction by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the instruction based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmSweepInstructionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ LmmTmSweepInstructionDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     instructionId:
+      type: string
+      description: ""
+     instructionDescription:
+      type: string
+      description: ""
+     productCode:
+      type: string
+      description: ""
+     LmmTmSweepInstructionDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmSweepInstructionDetailsDTO'
+    required:
+     - instructionId
+     - productCode
+ LmmTmSweepInstructionDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     sweepInstructionId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+  required:
+   - sweepInstructionId
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmSweepInstructionCollection: 
+  description: "Collection of sweepinstruction."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmSweepInstructionDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmSweepInstructionWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmSweepInstructionDTO"

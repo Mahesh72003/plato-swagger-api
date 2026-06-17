@@ -1,0 +1,501 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Anusha
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+ description: "This services is used for internal transfer that enables balance transfer between two virtual account that belong to a real account." 
+ version: "1.0.0"
+ title: "intbks Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "intbks"
+   description: "This services is used for internal transfer that enables balance transfer between two virtual account that belong to a real account."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../intbks
+
+ /service/intbks:
+  post:
+   tags:
+    - "intbksService"
+   summary: "Adds a new intbks."
+   description: "This endpoint is used to add a new intbks"
+   operationId: "create"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "intbks" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new intbks" 
+      required: true
+      schema:
+       $ref: "#/definitions/VanTbInternalTransfersServiceSaveDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created intbks" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VanTbInternalTransfersResponseWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+ 
+  get:
+   tags:
+    - "intbksService"
+   summary: "Get all valid intbks."
+   description:  "Get all valid intbks. This endpoints will be used to Get all valid intbks maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: bookingRefNo
+     required: false
+     type: string
+   - in: query
+     name: transactionStatus
+     required: false
+     type: string
+   - in: query
+     name: txnVirtualAccountNo
+     required: false
+     type: string
+   - in: query
+     name: offsetVirtualAccountNo
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+   - in: query
+     name: realAccountNo
+     required: false
+     type: string
+   - in: query
+     name: txnVirtualAccountCcy
+     required: false
+     type: string
+   - in: query
+     name: bookingDate
+     required: false
+     type: string
+   - in: query
+     name: valueDate
+     required: false
+     type: string
+   - in: query
+     name: originalRefNo
+     required: false
+     type: string
+     
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VanTbInternalTransfersServiceCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+     
+ /service/intbks/{bookingRefNo}/reverse:
+  patch:
+   tags:
+    - "intbksService"
+   summary: "Reverse the txn by given ID."
+   description:  "Reverse the transaction identified by given ID."
+   operationId: "reverse"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "bookingRefNo"
+      in: "path"
+      description: "Booking Reference Number"
+      required: true
+      type: "string"
+    - name: "InternalTransferReverseDto"
+      in: "body"
+      description: "Request body contain remarks on reversing the transaction"
+      required: true
+      schema:
+       $ref: "#/definitions/InternalTransferReverseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VanTbInternalTransfersResponseWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request."
+    500:
+     description: "Internal server error."
+definitions:
+ VanTbInternalTransfersServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     bookingRefNo:
+      type: string
+      description: "Booking Reference Number.Auto-generated.Need not be input"
+     bookingDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date of Booking"
+     valueDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Value Date"
+     txnBranch:
+      type: string
+      description: "Real Account Branch"
+     sourceCode:
+      type: string
+      description: "Source Code"
+     sourceRefNo:
+      type: string
+      description: "Source Reference Number"
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number"
+     realAccountNo:
+      type: string
+      description: "Real Account Number"
+     exchRate:
+      type: number
+      description: "Exchange Rate"
+     remarks:
+      type: string
+      description: "Customer narrative information received from External System or User can also enter remarks"
+      minLength: 0
+      maxLength: 4000
+     transactionStatus:
+      type: string
+      description: "Transaction Status"
+     authStatus:
+      type: string
+      description: "Auth Status"
+     drCr:
+      type: string
+      description: "Debit Credit Indicator"
+     txnVirtualAccountNo:
+      type: string
+      description: "Transaction Virtual Account Number"
+     offsetVirtualAccountNo:
+      type: string
+      description: "Offset Virtual Account Number"
+     txnVirtualAccountCcy:
+      type: string
+      description: "Transaction Virtual Account Currency"
+     offsetVirtualAccountCcy:
+      type: string
+      description: "Offset Virtual Account Currency"
+     txnAmount:
+      type: number
+      description: "Transaction Amount"
+     offsetAmount:
+      type: number
+      description: "Offset Amount"
+     txnTrnCode:
+      type: string
+      description: "Transaction Code"
+     offsetTrnCode:
+      type: string
+      description: "Offset Transaction Code"
+     originalRefNo:
+      type: string
+      description: "Original Reference Number"
+     checkerDtStamp:
+      type: string
+      description: "DateStamp of Authorization"
+     makerDtStamp:
+      type: string
+      description: "DateStamp of Making of the Transaction"
+     checkerId:
+      type: string
+      description: "User id of Authorizer"
+     makerId:
+      type: string
+      description: "User id of Maker"
+     initialMaker:
+      type: string
+      description: "User id and datestamp when transaction first created"
+     initialChecker:
+      type: string
+      description: "User id and datestamp when transaction first authorized"
+     makerRemarks:
+      type: string
+      description: "maker remarks"
+     checkerRemarks:
+      type: string
+      description: "checker remarks"
+    required:
+     - offsetVirtualAccountNo
+     - offsetVirtualAccountCcy
+     - txnVirtualAccountNo
+     - txnVirtualAccountCcy
+     - drCr
+     - realAccountNo
+     - txnBranch
+     - txnAmount
+     - txnTrnCode
+     - offsetTrnCode
+     - realCustomerNo
+     - valueDate
+ VanTbInternalTransfersServiceSaveDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     bookingRefNo:
+      type: string
+      description: "Booking Reference Number.Auto-generated.Need not be input"
+     bookingDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date of Booking"
+     valueDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Value Date"
+     txnBranch:
+      type: string
+      description: "Real Account Branch"
+     sourceCode:
+      type: string
+      description: "Source Code"
+     sourceRefNo:
+      type: string
+      description: "Source Reference Number"
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number"
+     realAccountNo:
+      type: string
+      description: "Real Account Number"
+     realAccountBrn:
+      type: string
+      description: "Real Account Branch"
+     exchRate:
+      type: number
+      description: "Exchange Rate"
+     remarks:
+      type: string
+      description: "Customer narrative information received from External System or User can also enter remarks"
+      minLength: 0
+      maxLength: 4000
+     drCr:
+      type: string
+      description: "Debit Credit Indicator"
+     txnVirtualAccountNo:
+      type: string
+      description: "Transaction Virtual Account Number"
+     offsetVirtualAccountNo:
+      type: string
+      description: "Offset Virtual Account Number"
+     txnVirtualAccountCcy:
+      type: string
+      description: "Transaction Virtual Account Currency"
+     offsetVirtualAccountCcy:
+      type: string
+      description: "Offset Virtual Account Currency"
+     txnAmount:
+      type: number
+      description: "Transaction Amount"
+     offsetAmount:
+      type: number
+      description: "Offset Amount"
+     txnTrnCode:
+      type: string
+      description: "Transaction Code"
+     offsetTrnCode:
+      type: string
+      description: "Offset Transaction Code"
+     originalRefNo:
+      type: string
+      description: "Original Reference Number"
+     makerRemarks:
+      type: string
+      description: "maker remarks"
+     checkerRemarks:
+      type: string
+      description: "checker remarks"    
+    required:
+     - offsetVirtualAccountNo
+     - offsetVirtualAccountCcy
+     - txnVirtualAccountNo
+     - txnVirtualAccountCcy
+     - drCr
+     - realAccountNo
+     - txnBranch
+     - txnAmount
+     - txnTrnCode
+     - offsetTrnCode
+     - realCustomerNo
+     - valueDate
+ InternalTransferReverseDto:
+  type: object
+  properties:
+   remarks:
+    type: string  
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ VanTbInternalTransfersServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VanTbInternalTransfersServiceResponseCode"
+ VanTbInternalTransfersServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ ResourceSupport:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VanTbInternalTransfersServiceCollection: 
+  description: "Collection of internaltransfers."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VanTbInternalTransfersServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ VanTbInternalTransfersResponseWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VanTbInternalTransfersServiceResponseDto"
+   data:
+    $ref: "#/definitions/VanTbInternalTransfersServiceDTO"
+ ResponseResourceSupport:
+  type: object
+ VanTbInternalTransfersServiceWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VanTbInternalTransfersServiceDTO"

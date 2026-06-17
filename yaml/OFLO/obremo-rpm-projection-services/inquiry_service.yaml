@@ -1,0 +1,553 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East),
+#  Mumbai - 400 063, India.
+#
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : inquiry_service.yaml
+#  **
+#  ** Module     :
+#  **
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: RPM Inquiry Services
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-projection-services
+tags:
+  - name: InquiryService
+    description: Service for Inquiry screen & all filters
+schemes:
+  - http
+paths:
+  /service/inquiry/applicationsList:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - InquiryService
+      summary: get list of all applications as per the filter
+      description: get list of all applications as per the filter
+      operationId: getListOfApplications
+      parameters:       
+        - name: fromDate
+          in: query
+          description: Application date From Filter
+          required: false
+          type: string
+        - name: toDate
+          in: query
+          description: Application date To Filter
+          required: false
+          type: string
+        - name: applicationNo
+          in: query
+          description: Application number
+          required: false
+          type: string
+        - name: processRefNo
+          in: query
+          description: Process reference number
+          type: string
+          required: false
+        - name: productType
+          in: query
+          description: Product Type
+          required: false
+          type: string
+        - name: productSubType
+          in: query
+          description: Product sub type
+          required: false
+          type: string
+        - name: productName
+          in: query
+          description: Business Product name
+          type: string
+          required: false
+        - name: custName
+          in: query
+          description: Customer Name
+          required: false
+          type: string
+        - name: custMobile
+          in: query
+          description: Customer mobile number
+          required: false
+          type: string
+        - name: custEmail
+          in: query
+          description: Customer email id
+          required: false
+          type: string
+        - name: branchCode
+          in: query
+          description: branch code
+          required: false
+          type: string
+        - name: channel
+          in: query
+          description: channel
+          required: true
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: primaryMobileISD
+          in: query
+          description: primaryMobileISD
+          required: false
+          type: string         
+        - name: status
+          in: query
+          description: status
+          required: false
+          type: string
+        - name: ipaReference
+          in: query
+          description: In-Principle Approval Reference No
+          required: false
+          type: string         
+      responses:
+        201:
+          description: Returns the domain with the count of applications initiated by the RM
+          schema:
+            $ref: "#/definitions/ApplicationsList"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/inquiry/ipaApplicationSearch:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - InquiryService
+      summary: get In-Principle Approval application Details
+      description: get In-Principle Approval application Details
+      operationId: getIpaApplicationsDetails
+      parameters:       
+        - name: searchValue
+          in: query
+          description: Search Value
+          required: true
+          type: string       
+        - name: offset
+          in: query
+          description: offset
+          required: false
+          type: integer 
+        - name: limit   
+          in: query
+          description: limit
+          required: false
+          type: integer 
+        - name: channel
+          in: query
+          description: channel
+          required: true
+          type: string                 
+      responses:
+        201:
+          description: Returns the domain with the count of applications initiated by the RM
+          schema:
+            $ref: "#/definitions/IPAApplicationsSearchList"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  ApplicationsList:
+    description: List of all apllications
+    type: object
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/DashboardModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  StageList:
+    type: object
+    properties:
+      stageCode:
+        description: stage code
+        type: string
+      stageName:
+        description: stage name
+        type: string
+      currentStage:
+        description: current stage
+        type: string
+      status:
+        description: status
+        type: string
+      seq:
+        description: Sequence
+        type: string
+      stageStartDate:
+        description: start date
+        type: string
+  StageList2:
+    type: object
+    properties:
+      stageCode:
+        description: stage code
+        type: string
+      stageName:
+        description: stage name
+        type: string
+      status:
+        description: status
+        type: string
+      seq:
+        description: Sequence
+        type: string
+      stageStartDate:
+        description: start date
+        type: string
+  DashboardModel:
+    description: ApplicationTransactionMasterModel
+    type: object
+    required:
+      - applicationNumber
+      - processRefNo
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+        maxLength: 36
+      processRefNo:
+        description: Process Reference Number
+        type: string
+        maxLength: 36
+      currentStageCode:
+        description: Current Stage Code
+        type: string
+        maxLength: 20
+      currentStageName:
+        description: Current Stage Name
+        type: string
+        maxLength: 40
+      domain:
+        description: Domain
+        type: string
+        maxLength: 40
+      businessProductCode:
+        description: Business Product Code
+        type: string
+      businessProductName:
+        description: Business Product Name
+        type: string
+        maxLength: 60
+      initiatedBy:
+        description: Initiated By
+        type: string
+        maxLength: 60
+      status:
+        description: Status
+        type: string
+        maxLength: 20
+      primaryCustName:
+        description: Customer Name
+        type: string
+        maxLength: 36
+      amount:
+        description: Amount
+        type: string
+      currency:
+        description: Currency
+        type: string
+        maxLength: 6
+      tenure:
+        description: Tenure
+        type: string
+      initiatedDtStamp:
+        description: Initiated Date Stamp
+        type: string
+      lastUpdatedDate:
+        description: Last Updated Date
+        type: string
+      accountOpenDate:
+        description: Account Open Date
+        type: string
+      branchCode:
+        description: Branch code
+        type: string
+      primaryCustEmail:
+        description: primary Cust Email
+        type: string
+      primaryCustMobileNo:
+        description: primary Customer Mobile No
+        type: string
+      channel:
+        description: channel
+        type: string
+      primaryCustDOB:
+        description: primary customer name
+        type: string
+      primaryCustCIF:
+        description: primary Customer CIF
+        type: string
+      secCustName:
+        description: secondary Customer Name
+        type: string
+      secCustEmail:
+        description: secondary Customer Email
+        type: string
+      secCustMobileNo:
+        description: secondary Customer Mobile No
+        type: string
+      secCustDOB:
+        description: secondary Customer DOB
+        type: string
+      secCustCIF:
+        description: secondary Customer CIF
+        type: string
+      totalCollateralValue:
+        description: toatal Collateral value
+        type: string
+      collateralCurrency:
+        description: toatal Collateral value
+        type: string
+      subDomain:
+        description: sub domain value
+        type: string
+      priority:
+        description: priority
+        type: string
+      stageList:
+        description: Stage List
+        type: array
+        items:
+          $ref: '#/definitions/StageList'
+      accountNumber:
+        description: Generated Account Number
+        type: string
+      allowedChannel:
+        description: allowed channel
+        type: string
+      appPriority:
+        description: Application Priority
+        type: string
+      phaseList:
+        description: Phase List
+        type: array
+        items:
+          $ref: '#/definitions/PhaseList'
+  PhaseList:
+    description: Phase List
+    properties:
+      phaseCode:
+        description: phase code
+        type: string
+      phaseName:
+        description: phase name
+        type: string
+      status:
+        description: status
+        type: string
+      seq:
+        description: Sequence
+        type: string
+      phaseStartDate:
+        description: start date
+        type: string
+      stagesList:
+        description: stage list
+        type: array
+        items:
+          $ref: '#/definitions/StageList2'
+      mobileISD:
+        description: mobile ISD
+        type: string
+      sourcedById:
+        description: Sourced By ID
+        type: string
+      processExpPeriodInDays:
+        description: Process Expiry Period in Days
+        type: integer
+      offerExpPeriodInDays:
+        description: Offer Expiry Period in Days
+        type: integer
+  IPAApplicationsSearchList:
+    description: In-Principle Approval Details of all applications
+    type: object
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/IPASearchModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  IPASearchModel:
+    description: In-Principle Approval Search Model
+    type: object    
+    properties:
+      ipaRefNo:
+        description: In-Principle Approval Ref Number
+        type: string
+        maxLength: 36
+      ipaReqDate:
+        description: In-Principle Approval Request Date        
+        type: string
+        maxLength: 36
+      ipaOfferedDate:
+        description: In-Principle Approval Offered Date       
+        type: string
+        maxLength: 36
+      ipaExpiryDate:
+        description: In-Principle Approval Expiry Date     
+        type: string
+        maxLength: 36        
+      status:
+        description: status
+        type: string
+        maxLength: 36
+      initiatedBy:
+        description: Initiated By
+        type: string
+        maxLength: 36       
+      amount:
+        description: Amount
+        type: string
+        maxLength: 36
+      currency:
+        description: Currency
+        type: string
+        maxLength: 36
+      tenure:
+        description: Tenure
+        type: string
+        maxLength: 36
+      branchCode:
+        description: Branch Code
+        type: string
+        maxLength: 36
+      lastUpdatedDate:
+        description: last upadted date
+        type: string
+        maxLength: 36
+      primaryCustName:
+        description: primary cust name
+        type: string
+        maxLength: 36
+      primaryCustEmail:
+        description: amount
+        type: string
+        maxLength: 36
+      primaryCustMobileNo:
+        description: primary cust mobile no.
+        type: string
+        maxLength: 36
+      primaryCustCIF:
+        description: primary cust cif
+        type: string
+        maxLength: 36
+      secCustName:
+        description: seconday cust name
+        type: string
+        maxLength: 36
+      secCustEmail:
+        description: secondary cust email
+        type: string
+        maxLength: 36
+      secCustMobileNo:
+        description: secondary cust Mobile No.
+        type: string
+        maxLength: 36
+      primaryCustCIF:
+        description: primary cust cif
+        type: string
+        maxLength: 36
+      secCustCIF:
+        description: secondary cust cif
+        type: string
+        maxLength: 36
+      channel:
+        description: channel
+        type: string
+        maxLength: 36
+      businessProductCode:
+        description: primary cust cif
+        type: string
+        maxLength: 36
+      prodType:
+        description: product type
+        type: string
+        maxLength: 36
+      subProdType:
+        description: sub product type
+        type: string
+        maxLength: 36
+      primaryUniqueId:
+        description: primary Unique Id
+        type: string
+        maxLength: 36
+      secUniqueId:
+        description: secondary Unique Id
+        type: string
+        maxLength: 36
+      primaryCustDOB:
+        description: primary cust DOB
+        type: string
+        maxLength: 36
+      secCustDOB:
+        description: secondary cust DOB
+        type: string
+        maxLength: 36 
+      businessProductName:
+        description: business prod name
+        type: string
+        maxLength: 36

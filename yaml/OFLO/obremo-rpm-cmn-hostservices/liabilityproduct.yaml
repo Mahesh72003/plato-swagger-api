@@ -1,0 +1,657 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : savingAggregate.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Liability Product Services
+host: localhost:7001
+basePath: /liability-product-services
+tags:
+- name: Liability Product Services
+  description: API for Liability Product Services Operations
+schemes:
+- http
+paths:
+   /web/v1/liabilityproducts/{productcode}:
+    get:
+      produces:
+      - application/json
+      tags:
+      - liabilityproducts
+      summary: get the productDetails from Host.
+      description: getliabilityProductDetails.
+      operationId: getLiabilityProduct
+      parameters:
+      - description: "productCode"
+        in: path
+        name: productcode
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+        
+      
+      responses:
+        200:
+          description: Returns the product Details based on given productCode.
+          schema:
+            $ref: '#/definitions/LiabilityProductDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+   /web/v1/liabilityproducts/interest/{productcode}/{currencycode}:
+    get:
+      produces:
+      - application/json
+      tags:
+      - liabilityproducts
+      summary: get the productDetails from Host.
+      description: getLiabilityProductInterest.
+      operationId: getLiabilityProductInterest
+      parameters:
+      - description: "productCode"
+        in: path
+        name: productcode
+        required: true
+        type: string
+      - description: "currencyCode"
+        in: path
+        name: currencycode
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      
+      responses:
+        200:
+          description: Returns the interest  Details based on given productCode.
+          schema:
+            $ref: '#/definitions/LiabilityProductInterestDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+   /web/v1/liabilityproducts:
+    get:
+      produces:
+      - application/json
+      tags:
+      - liabilityproducts
+      summary: get the list of Loan product from Host.
+      description: getLiabilityProductList.
+      operationId: getLiabilityProductList
+      parameters:
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      - description: productType
+        in: query
+        name: productType
+        required: false
+        type: string  
+       
+      responses:
+        200:
+          description: Returns the list of Liabilities product from host.
+          schema:
+            $ref: '#/definitions/LiabilityProductLovCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+          
+   /web/v1/liability/customerLiability:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - liabilityproducts
+      summary: Create Liability 
+      description: Create Liability 
+      operationId: createLiability
+      parameters:
+      - name: liabilityDetails
+        in: body
+        description: Request Body that contains data required for creating new liability
+        required: true
+        schema:
+          $ref: '#/definitions/LiabilityDetailsModel'
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string      
+      responses:
+        201:
+          description: Returns the Id of the newly created Liability
+          headers:
+            Location:
+              description: URL of newly created Liability
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+          
+   /web/v1/liability/customerLiability/{liabilityId}:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - liabilityproducts
+      summary: Link Liability with Customer
+      description: Link Liability with Customer
+      operationId: linkCustomerWithLiability
+      parameters:
+      - description: "Liability Id"
+        in: path
+        name: liabilityId
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string      
+      responses:
+        201:
+          description: Returns the Id of the Linked Liability
+          headers:
+            Location:
+              description: URL of newly Linked Liability
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+
+   /web/v1/liability/customerLiability/{customerId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - liabilityproducts
+      summary: Get Customer Liability Details
+      description: Get Customer liability Details
+      operationId: getCustomerLiability
+      parameters:
+      - description: "Customer Id"
+        in: path
+        name: customerId
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Returns the liability details 
+          schema:
+            $ref: '#/definitions/LiabilityDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+ LiabProductLovModel:
+   description: "Liabilities Product LOV Model"
+   type: object
+   properties:
+    productCode:
+     description: product Code
+     type: string
+    productType:
+     description: product type
+     type: string
+    atmfacilty:
+     description: atm facility
+     type: string
+    chqbkfacility:
+     description: cheque book facility
+     type: string
+    overdraftfacility:
+     description: over draft facility
+     type: string
+    passbookfacility:
+     description: passbook facility
+     type: string
+    accstatementtype:
+     description: account statement type 
+     type: string
+     
+ LiabilityProductLovCollection:  
+   description: "Collection of Liability Products LOV Model"
+   type: object
+   properties:
+    liabProductLovList:
+     description: list of liab products lov 
+     type: array
+     items:
+      $ref: '#/definitions/LiabProductLovModel'
+   
+
+ LiabilityProductDetailsModel:  
+   description: " Liability Product Details Model"
+   type: object
+   properties:
+    productCode:
+     description: liability Prodcutcode
+     type: string
+    productDescription:
+     description: liabilityProdcut Discription
+     type: string
+    productType:
+     description: liability Prodcut Type
+     type: string
+    liabilityProdcutPreference:
+     description: liability Prodcut Preference
+     $ref: '#/definitions/LiabilityProdcutPreference'
+    odRateComponents:
+     type: array
+     items:
+      $ref: '#/definitions/OdRateComponent'
+    components:
+     type: array
+     items:
+      $ref: '#/definitions/Component' 
+ LiabilityProdcutPreference:
+    description: LiabilityProdcutPreference
+    type: object
+    properties:
+     branchPreference:
+      $ref: '#/definitions/BranchPreference'
+     currencyPreference:
+      $ref: '#/definitions/CurrencyPreference'
+     overDraftAllowed:
+      description: overDraftAllowed
+      type: string
+     passbookAllowed:
+      description: passbookAllowed
+      type: string
+     chequeBookAllowed:
+      description: chequeBookAllowed
+      type: string
+     directBankingFacility:
+      description: directBankingFacility
+      type: string
+     replicateCustomerSignature:
+      description: replicateCustomerSignature
+      type: string
+ OdRateComponent:
+   description : CASA Overdraft Limit Rate Components
+   type: object
+   properties:
+     accountClass:
+       type: string
+     limitType:
+       type: string
+     rateValue:
+       type: string
+     rateCode:
+       type: string
+     minimumRate:
+       type: string
+     maximumRate:
+       type: string
+ BranchPreference:
+    description: BranchPreference
+    type: object
+    properties:
+     branchList:
+      type: array
+      items:
+       type: string
+     branchSelctionAllowed:
+      description: branchSelctionAllowed
+      type: string
+ CurrencyPreference:
+    description: CurrencyPreference
+    type: object
+    properties:
+     currencyList:
+      type: array
+      items:
+       type: string
+     currencySelctionAllowed:
+      description: currencySelctionAllowed
+      type: string
+ Component:
+    description: Component
+    type: object
+    properties:
+     componentName:
+      description: componentName
+      type: string
+     componentType:
+      description: componentType
+      type: string
+     componentDescription:
+      description: componentDiscription
+      type: string
+     chargeDetails:
+      $ref: '#/definitions/ChargeDetails'
+     interestDetails:
+      $ref: '#/definitions/InterestDetails'
+ ChargeDetails:
+    description: ChargeDetails
+    type: object
+    properties:
+     currencyPreference:
+      description: currencyPreference
+      type: string
+     isTieredCharge:
+      description: isTieredCharge
+      type: string
+     chargeBasis:
+      description: chargeBasis
+      type: string 
+ InterestDetails:
+    description: InterestDetails
+    type: object
+    properties:
+     currencyPreference:
+      description: currencyPreference
+      type: string
+     interestRule:
+      description: interestRule
+      type: string
+     interestRuledesc:
+      description: InterestRuledesc
+      type: string
+     productUdes:
+      type: array
+      items:
+       $ref: '#/definitions/Udedetails'
+     componentFormulaBook:
+      type: array
+      items:
+       $ref: '#/definitions/ComponentFormulas' 
+ Udedetails:
+    description: Udedetails
+    type: object
+    properties:
+     udeId:
+      description: udeId
+      type: string
+     udeDescripition:
+      description: udeType
+      type: string
+ ComponentFormulas:
+    description: ComponentFormulas
+    type: object
+    properties:
+     formulaName:
+      description: formulaNo
+      type: string
+     bookExpression: 
+      type: array
+      items:
+       $ref: '#/definitions/UdeformulaExpressions' 
+ UdeformulaExpressions:
+    description: UdeformulaExpressions
+    type: object
+    properties:
+     formulaType:
+      description: condition
+      type: string
+     exprLine:
+      description: line
+      type: string  
+     result:
+      description: result
+      type: string     
+ LiabilityProductInterestDetailsModel:
+    description: product Interest Details
+    type: object
+    properties:
+     productCode:
+      description: productCode
+      type: string
+     currency:
+      description: currency
+      type: string
+     casaComponents:
+      type: array
+      items:
+       $ref: '#/definitions/CasaComponents'
+      
+ casaComponents:
+    properties:
+     componentName:
+      description: componentName
+      type: string
+     componentType:
+      description: componentType
+      type: string
+     chargeSlab:
+      type: array
+      items:
+       $ref: '#/definitions/CasaChargeSlab' 
+     casaUde:
+      type: array
+      items:
+       $ref: '#/definitions/CasaUdes' 
+ CasaChargeSlab:
+    properties:
+     chargeAmount:
+      description: chargeAmount
+      type: string
+     slabAmount:
+      description: slabAmount
+      type: string 
+ CasaUdes:
+    properties:
+     amount:
+      description: amount
+      type: string
+     condition:
+      description: conditionkey
+      type: string
+     rate:
+      description: rate
+      type: string
+     udeId:
+      description: UdeId
+      type: string
+     effectiveDate:
+      description: effectiveDate
+      type: string
+      
+ LiabilityDetailsModel:
+   description: " Liability Details Model"
+   type: object
+   properties:      
+     liabilityId:
+      description: Liability Id
+      type: string
+     liabilityName:
+      description: Liability Name
+      type: string
+     liabilityBranch:
+      description: Liability Branch
+      type: string
+     liabilityCCY:
+      description: Liability CCY
+      type: string
+     overallLimit:
+      description: Overall Limit
+      type: string
+ 

@@ -1,0 +1,323 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : AccountProductService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna 
+#  Reviewed By        :  Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      : 
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+ description: "This is service API document for account products operations. Pass appId = VAM"
+ version: "1.0.0"
+ title: "accountproducts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountproductsService"
+   description: "This service can create Corporate Specific Virtual Account products. These products are further used to create virtual accounts. Product level preferences must be enabled before enabling the preference for account."
+
+schemes:
+ - "https"
+
+paths:
+
+ # path to create a new record and fetch all valid records or by intent
+ #
+ #  supprorted http methods POST and GET
+ #
+ # path example ../accountproducts
+
+ /service/accountproducts:
+  get:
+   tags:
+    - "accountproductsService"
+   summary: "Gets all valid accountproducts."
+   description:  "This endpoint is used to get all valid accountproducts maintenance records."
+   operationId: "getAll"
+   parameters:
+    - name: sourceCode
+      in: header
+      description: "Source from which request is initiated"
+      required: true
+      type: string
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth must be set to fetch summary record. By default, the value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: Fetches the starting number of the offset.
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: Fetches the maximum limit of the record.
+      required: false
+      type: integer
+    - in: query
+      name: accCode
+      required: false
+      type: string
+    - in: query
+      name: codeDesc
+      required: false
+      type: string
+    - in: query
+      name: realCustomerNo
+      required: false
+      type: string
+    - in: query
+      name: recordStat
+      required: false
+      type: string
+    - in: query
+      name: authStat
+      required: false
+      type: string
+    - in: query
+      name: makerId
+      required: false
+      type: string
+    - in: query
+      name: checkerId
+      required: false
+      type: string
+    - in: query
+      name: limitCode
+      required: false
+      type: string
+   responses:
+    201:
+     description: "Returns Success or failure messages."
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+      $ref: "#/definitions/VirAccProductServiceCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Invalid input, method is not allowed"
+    500:
+     description: "Internal server error"
+definitions:
+ VirAccProductServiceDTO:
+  type: object
+  allOf:
+   - type: object
+     properties:
+      accCode:
+       type: string
+       description: "Unique Virtual Account Product"
+       minLength: 4
+       maxLength: 4
+       pattern: '[a-zA-Z0-9]+'
+      codeDesc:
+       type: string
+       description: "Description of Virtual Account Product"
+       minLength: 0
+       maxLength: 105
+      realCustomerNo:
+       type: string
+       description: "Real Customer Number for which Virtual Account Product is maintained"
+      interestCalcReq:
+       type: string
+       description: "Flag to indicate if Interest Calculation is required or not"
+       pattern: '[Y,N]'
+      debitTxnsAllowed:
+       type: string
+       description: "Flag to indicate if Debit Transaction is allowed or not"
+       pattern: '[Y,N]'
+      creditTxnsAllowed:
+       type: string
+       description: "Flag to indicate if Credit Transaction is allowed or not"
+       pattern: '[Y,N]'
+      overdraftAllowed:
+       type: string
+       description: "Flag to indicate if Overdraft is allowed or not"
+       pattern: '[Y,N]'
+      inactiveDays:
+       type: number
+       minimum: 0
+       description: "Number of days after which virtual accounts opened under this code will be deactivated in case of no transactions"
+      txnrestrAllowed:
+       type: string
+       description: "Indicates if the Transaction code list maintained is allowed or disallowed"
+       pattern: '[A,D]'
+      ccyRestrAllowed:
+       type: string
+       description: "Indicates if the Currency code list maintained is allowed or disallowed"
+       pattern: '[A,D]'
+      icAccGroupType:
+       type: string
+       description: "flag to indicate vam account product is linked to customer specific/bank level ic account group -possible values are C/B/null"
+      icGrpTemplate:
+       type: string
+       description: "IC group template"
+      makerId:
+       type: string
+      makerDateStamp:
+       type: string
+       #format: date
+      checkerId:
+       type: string
+      checkerDateStamp:
+       type: string
+       #format: date
+      modNo:
+       type: number
+      recordStatus:
+       type: string
+      authStatus:
+       type: string
+      onceAuth:
+       type: string
+      doerRemarks:
+       type: string
+      approverRemarks:
+       type: string
+      liqdAllowed:
+       type: string
+       description: "Flag to indicate if Liquidity Management is allowed"
+       pattern: '[Y,N]'
+       default: 'N'
+      limitCode:
+       type: string
+       description: "Limit Code mapped to the Account Product"
+      VirAccProdTxnRestrServiceDTO:
+       type: array
+       items:
+        $ref: '#/definitions/VirAccProdTxnRestrServiceDTO'
+      VirAccProdCcyRestrServiceDTO:
+       type: array
+       items:
+        $ref: '#/definitions/VirAccProdCcyRestrServiceDTO'
+     required:
+      - accCode
+      - realCustomerNo
+
+ VirAccProdTxnRestrServiceDTO:
+  type: object
+  properties:
+   accCode:
+    type: string
+    description: ""
+   realCustomerNo:
+    type: string
+    description: ""
+   trnCode:
+    type: string
+    description: ""
+
+ VirAccProdCcyRestrServiceDTO:
+  type: object
+  properties:
+   accCode:
+    type: string
+    description: ""
+   realCustomerNo:
+    type: string
+    description: ""
+   ccyCode:
+    type: string
+    description: ""
+
+ VirAccProductServiceResponseWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/VirAccProductServiceDTO"
+
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+
+ VirAccProductServiceCollection:
+  description: "Collection of accountproduct."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/VirAccProductServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer

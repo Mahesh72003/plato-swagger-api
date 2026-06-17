@@ -1,0 +1,1107 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : AccMapService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna 
+#  Reviewed By        :  Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      : 
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server accountstructures server."
+  version: "1.0.0"
+  title: "accountstructures Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "AccountStructuresService"
+    description: "Virtual Account Structure can be created using this service. Through this service, Virtual accounts can be mapped to a real account and the structure can be linked to various virtual accounts as per the customer requirement."
+
+schemes:
+  - "https"
+
+paths:
+  /service/accountstructures:
+    post:
+      tags:
+        - "AccountStructuresService"
+      summary: "Adds a new accountstructures."
+      description: "Adds a new accountstructures. Add additional information here for this endpoint."
+      operationId: "saveAccountStructure"
+      parameters:
+        - name: "accountstructures"
+          in: "body"
+          description: "Request Body that contains data required for creating a new accountstructures"
+          required: true
+          schema:
+            $ref: "#/definitions/AccountMapMasterSaveDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created accountstructures"
+              type: "string"
+          schema:
+            $ref: "#/definitions/AccountMapServiceResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+    get:
+      tags:
+        - "AccountStructuresService"
+      summary: "Get all valid accountstructures."
+      description:  "Get all valid accountstructures. This endpoints will be used to Get all valid accountstructures maintenance records."
+      operationId: "getAllAccountStructures"
+      parameters:
+        - name: includecloseandunauth
+          in: query
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: false
+          type: boolean
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - in: query
+          name: recordStat
+          required: false
+          type: string
+        - in: query
+          name: authStat
+          required: false
+          type: string
+        - in: query
+          name: realCustomerNo
+          required: false
+          type: string
+        - in: query
+          name: structureCode
+          required: false
+          type: string
+        - in: query
+          name: structureDesc
+          required: false
+          type: string
+        - in: query
+          name: virtualMainAcc
+          required: false
+          type: string
+        - in: query
+          name: realAccountNo
+          required: false
+          type: string
+        - in: query
+          name: accountGroupId
+          required: false
+          type: string
+        - in: query
+          name: realAccountBrn
+          required: false
+          type: string
+        - in: query
+          name: loggedinBrn
+          required: false
+          type: string
+        - in: query
+          name: customerName
+          required: false
+          type: string          
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/AccountMapMasterServiceCollection"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  /service/accountstructures/getByCustomer:
+    get:
+      tags:
+        - "AccountStructuresService"
+      summary: "Get all valid accountstructures by customer."
+      description:  "This endpoints will be used to Get all valid accountstructures maintenance records based on customer number."
+      operationId: "getAccountStructureByCustomer"
+      parameters:
+        - name: offset
+          in: query
+          description: offset is starting point of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - in: query
+          name: realCustomerNo
+          description: Real Customer No for which Account Structure is maintained
+          required: false
+          type: string
+        - in: query
+          name: structureCode
+          description: Account Structure Code of VAM customer
+          required: false
+          type: string
+        - in: query
+          name: structureDesc
+          description: Account Structure Code Description of VAM customer
+          required: false
+          type: string
+        - in: query
+          name: virtualMainAcc
+          description: Virtual Main Account no of a Structure Code.
+          required: false
+          type: string
+        - in: query
+          name: realAccountNo
+          description: Real Account No of a VAM customer which is mapped to Structure code.
+          required: false
+          type: string
+        - in: query
+          name: realAccountBrn
+          description: Branch Code of the Real Account Number
+          required: false
+          type: string
+        - in: query
+          name: accountGroupId
+          description: "Virtual Multi-Currency Account Number"
+          required: false
+          type: string
+        - in: query
+          name: accountLinkage
+          description: "Type of real account number to be linked. Account or group level."
+          required: false
+          type: string
+        - in: query
+          name: status
+          description: "Record Status of the Virtual Account Structure"
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/AccountMapViewCollection"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  /service/accountstructures/{virtualMainAcc}/close:
+    patch:
+      tags:
+        - "AccountStructuresService"
+      summary: "Close the AccountStructure by given Natural Key."
+      description:  "Close the AccountStructure identified by given Natural Key."
+      operationId: "closeRecord"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualMainAcc"
+          in: "path"
+          description: "Natural key of the accountstructures Maintenance"
+          required: true
+          type: "string"
+        - name: "AccMapCloseDto"
+          in: "body"
+          description: "Request body contain remarks"
+          required: true
+          schema:
+            $ref: "#/definitions/AccMapCloseDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/AccountMapServiceResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        500:
+          description: "Internal server error."
+
+  /service/accountstructures/{virtualMainAcc}:
+    put:
+      tags:
+        - "AccountStructuresService"
+      summary: "Update an existing accountstructures."
+      description:  "Update an existing accountstructures."
+      operationId: "modifyRecord"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualMainAcc"
+          in: "path"
+          description: "Natural key of the accountstructures Maintenance"
+          required: true
+          type: "string"
+        - name: "accountstructures"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing accountstructures"
+          required: true
+          schema:
+            $ref: "#/definitions/AccountMapMasterSaveDTO"
+      responses:
+        200:
+          description: "Returns updated accountstructures"
+          schema:
+            $ref: "#/definitions/AccountMapServiceResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  # path to get structure by id with balances of accounts belong to structure.
+  #
+  #  supprorted http methods GET
+  #
+  # path examples----
+  #   GET       .../accountstructures/{virtualMainAcc}/withAccountBalance
+
+  /service/accountstructures/{virtualMainAcc}/withAccountBalance:
+    get:
+      tags:
+        - "AccountStructuresService"
+      summary: "Retrieves the accountstructures by virtualMainAcc with account balances."
+      description:  "Retrieves the accountstructures by virtualMainAcc."
+      operationId: "getStructureWithAccountBalance"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualMainAcc"
+          in: "path"
+          description: "Natural key of the accountstructures Maintenance"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the accountstructures based on given id."
+          schema:
+            $ref: "#/definitions/AccountStructureWithBalanceServiceCollection"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        500:
+          description: "Internal server error."
+
+  # path to get list of Linked child account by virtualAccountNo
+  #
+  #  Supported http methods GET
+  #
+  /service/accountstructures/linkedChildAccounts/{virtualAccountNo}:
+    get:
+      tags:
+        - "AccountStructuresService"
+      summary: "Fetches the list of linked child account's Number by given Virtual Account Number"
+      description:  "Fetches the Linkage Accounts Number by given Virtual Account Number"
+      operationId: "getLinkedAccountsByVirtualAccount"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualAccountNo"
+          in: "path"
+          description: "Virtual Account Number"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns List of linked child virtual Account's number"
+          schema:
+            $ref: "#/definitions/VirtualAccNumberListDTO"
+        204:
+          description: "NO CONTENT. No records found"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  # path to view the accountStrucure by virtualAccountNo
+  #
+  #  Supported http methods GET
+  #
+  /service/accountstructures/{virtualMainAcc}/viewaccountstructure:
+    get:
+      tags:
+        - "AccountStructuresService"
+      summary: "Retrieves the accountstructures by virtualMainAcc with account balances and child count."
+      description:  "Retrieves the accountstructures by virtualMainAcc."
+      operationId: "viewAccountStructure"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: virtualMainAcc
+          in: "path"
+          description: "Natural key of the accountstructures Maintenance"
+          required: true
+          type: "string"
+        - name: parentAcc
+          in: query
+          description: "Parent Account of the VirtualAccount"
+          required: false
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+      responses:
+        200:
+          description: "Returns the accountstructures based on given id."
+          schema:
+            $ref: "#/definitions/AccountStructureWithBalanceServiceCollection"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        500:
+          description: "Internal server error."
+
+  /service/accountstructures/download:
+    get:
+      tags:
+       - "AccountStructuresService"
+      summary: "Retrieves the accountstructures by ID."
+      description:  "Retrieves the accountstructures by ID."
+      operationId: "downloadAccStructure"
+      parameters:
+       - name: "structureCode"
+         in: "query"
+         description: "structure code of the structure that needs to be fetched"
+         required: true
+         type: "string"
+       - name: "sourceCode"
+         in: "header"
+         description: "Source From which request is Initiated"
+         required: true
+         type: "string"
+      responses:
+       200:
+        description: "Returns the accountstructures based on given structure code."
+        schema:
+         $ref: "#/definitions/AccountMapDownloadWrapperDTO"
+       400:
+        description: "Malformed syntax."
+       401:
+        description: "Request does not have sufficient credentials."
+       403:
+        description: "Request is not authorized."
+       500:
+        description: "Internal error"  
+  
+  
+  # path to modify Virtual account Links and Delinks
+  #
+  #  Supported http methods PUT
+  #
+  
+  
+  /service/accountstructures/modifystructure:
+    put:
+      tags:
+        - "AccountStructuresService"
+      summary: "Linking or Delinking a virtualAccount in the existing AccountStrcuture.Linking and Delinking can be done at the Leaf Node."
+      description:  "Update an existing accountstructures to link or delink an virtual account."
+      operationId: "modifyStructure"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "accountLinkDelinkDto"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing accountstructures"
+          required: true
+          schema:
+            $ref: "#/definitions/AccountLinkDelinkRequestDTO"
+      responses:
+        200:
+          description: "Returns updated accountstructures"
+          schema:
+            $ref: "#/definitions/AccountMapServiceResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  /service/accountstructures/viewvainstructure:
+    get:
+      tags:
+       - "AccountStructuresService"
+      summary: "returns all VA that is part of the given customer and structure code"
+      description:  "returns all VA that is part of the given customer and structure code"
+      operationId: "viewVasinStructure"
+      parameters:
+       - name: "sourceCode"
+         in: "header"
+         description: "Source from which request is initiated"
+         required: true
+         type: "string"
+       - name: "realCustomerNo"
+         in: "query"
+         description: "Real customer number"
+         required: true
+         type: "string"
+       - name: "structureCode"
+         in: "query"
+         description: "Structure code for which VAs to be fetched"
+         required: true
+         type: "string"
+      responses:
+       200:
+        description: "Returns the accountstructures based on given id."
+        schema:
+          $ref: "#/definitions/VAinStrCollection"
+       400:
+        description: "Malformed syntax."
+       401:
+        description: "Request does not have sufficient credentials."
+       403:
+        description: "Request is not authorized."
+       500:
+        description: "Internal error"
+definitions:
+  AccountMapMasterSaveDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          realCustomerNo:
+            type: string
+            description: "Real Customer Number for which Virtual Account Structure is maintained"
+          structureCode:
+            type: string
+            description: "Code to identify Virtual Account Structure"
+            minLength: 1
+            maxLength: 20
+            pattern: '[a-zA-Z0-9]+'
+          structureDesc:
+            type: string
+            description: "Description of Virtual Account Structure"
+            minLength: 0
+            maxLength: 35
+            pattern: '([a-zA-Z0-9\s]+)?'
+          virtualMainAcc:
+            type: string
+            description: "Virtual Main/Header Account"
+          realAccountNo:
+            type: string
+            description: "Real Account Number for which the VA Structure is mapped"
+          realAccountBrn:
+            type: string
+            description: "Branch of the Real Account Number"
+          accountLinkage:
+            type: string
+            description: "Type of real account number to be linked. Account or group level."
+            pattern: '[A,G]'
+          accountGroupId:
+            type: string
+            description: "Virtual Multi-Currency Account Number"
+          interestCalcRequired:
+            type: string
+            description: "Flag to indicate if Interest Calculation is required or not"
+            pattern: '[Y,N]'
+          custChargeAcc:
+            type: string
+            description: "Customer charge account"
+            maxLength: 35
+          custChargeAccBrn:
+            type: string
+            description: "Customer charge account branch"
+            maxLength: 3
+          custChargeAccCcy:
+            type: string
+            description: "Customer charge account Currency"
+            maxLength: 3     
+          remarks:
+            type: string
+            description: Remarks of virtual account structure
+          AccountMapDetailSaveDTO:
+            type: array
+            items:
+              $ref: '#/definitions/AccountMapDetailSaveDTO'
+        required:
+          - realCustomerNo
+          - structureCode
+          - structureDesc
+          - virtualMainAcc
+          - accountLinkage
+  AccountMapDetailSaveDTO:
+    type: object
+    properties:
+      virtualParentAcc:
+        type: string
+        description: ""
+      virtualChildAcc:
+        type: string
+        description: ""
+  AccountMapMasterServiceDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          realCustomerNo:
+            type: string
+            description: "Real Customer Number for which Virtual Account Structure is maintained"
+          structureCode:
+            type: string
+            description: "Code to identify Virtual Account Structure"
+            minLength: 1
+            maxLength: 20
+            pattern: '[a-zA-Z0-9]+'
+          structureDesc:
+            type: string
+            description: "Description of Virtual Account Structure"
+            minLength: 0
+            maxLength: 35
+            pattern: '([a-zA-Z0-9\s]+)?'
+          virtualMainAcc:
+            type: string
+            description: "Virtual Main/Header Account"
+          realAccountNo:
+            type: string
+            description: "Real Account Number for which the VA Structure is mapped"
+          realAccountBrn:
+            type: string
+            description: "Branch of the Real Account Number"
+          accountLinkage:
+            type: string
+            description: "Type of real account number to be linked. Account or group level."
+            pattern: '[A,G]'
+          accountGroupId:
+            type: string
+            description: "Virtual Multi-Currency Account Number"
+          interestCalcRequired:
+            type: string
+            description: "Flag to indicate if Interest Calculation is required or not"
+            pattern: '[Y,N]'
+          creationDate:
+            type: string
+            description: "Structure creation date"
+          makerId:
+            type: string
+            description: "Maker ID of Virtual Account"
+          makerDateStamp:
+            type: string
+            description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+          checkerId:
+            type: string
+            description: "Checker ID of Virtual Account"
+          checkerDateStamp:
+            type: string
+            description: "Date and Time when some action on Virtual Account is authorized"
+          modNo:
+            type: integer
+            description: "Version number of Virtual Account"
+          recordStatus:
+            type: string
+            description: "Record Status of Virtual Account"
+          authStatus:
+            type: string
+            description: "Authorization Status of Virtual Account"
+          onceAuth:
+            type: string
+            description: "Flag that indicated if Virtual Account is authorized once or not"
+          doerRemarks:
+            type: string
+            description: "Remarks made by Maker"
+          approverRemarks:
+            type: string
+            description: "Remarks made by Approver"
+          AccountMapDetailServiceDTO:
+            type: array
+            items:
+              $ref: '#/definitions/AccountMapDetailServiceDTO'
+  AccountMapDetailServiceDTO:
+    type: object
+    properties:
+      virtualMainAcc:
+        type: string
+        description: ""
+      virtualParentAcc:
+        type: string
+        description: ""
+      virtualChildAcc:
+        type: string
+        description: ""
+  AccountMapServiceResponseWrapperDTO:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/AccountMapServiceResponseDto"
+      data:
+        $ref: "#/definitions/AccountMapMasterServiceDTO"
+  AccountMapServiceResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+  AccountMapServiceResponseDto:
+    type: object
+    properties:
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/AccountMapServiceResponseCode"
+
+  # AccountMapViewDTO is used as return data as part of
+  #  /accountstructures/getByCustomer
+  #
+  # /accountstructures/getByCustomer changes starts....
+  AccountMapViewDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: "id of a account structure"
+      realCustomerNo:
+        type: string
+        description: "Real Customer Number for which Virtual Account Structure is maintained"
+      realCustomerName:
+        type: string
+        description: "Real Customer name for which Virtual Account Structure is maintained"
+      structureCode:
+        type: string
+        description: "Code to identify Virtual Account Structure"
+      structureDesc:
+        type: string
+        description: "Description of Virtual Account Structure"
+      virtualMainAcc:
+        type: string
+        description: "Virtual Main/Header Account"
+      accountLinkage:
+        type: string
+        description: "Type of real account number to be linked. Account or group level."
+      realAccountNo:
+        type: string
+        description: "Real Account Number for which the VA Structure is mapped"
+      realAccountBrn:
+        type: string
+        description: "Branch code of the Real Account Number"
+      accountGroupId:
+        type: string
+        description: "Virtual Multi-Currency Account Number"
+      creationDate:
+        type: string
+        description: "Structure creation date"
+      status:
+        type: string
+        description: "Record Status of the Virtual Account Structure"
+      virtualMainAccCcy:
+        type: string
+        description: "Currency of Virtual Main Account"
+      count:
+        type: integer
+        description: "no of child account in structure"
+      balance:
+        type: number
+        description: "Effective balance of header account"
+  AccountMapViewCollection:
+    description: "Collection of accmap."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountMapViewDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+
+  AccountMapMasterServiceCollection:
+    description: "Collection of accmap."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountMapMasterServiceDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  AccMapCloseDto:
+    type: object
+    properties:
+      remarks:
+        type: string
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  BindingResult:
+    type: object
+  # /service/accountstructures/virtualMainAcc/withAccountBalance changes starts....
+  AccountStructureServiceWithBalanceDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          realCustomerNo:
+            type: string
+            description: "Real Customer Number for which Virtual Account Structure is maintained"
+          realCustomerName:
+            type: string
+            description: "Real Customer name for which Virtual Account Structure is maintained"
+          structureCode:
+            type: string
+            description: "Code to identify Virtual Account Structure"
+          structureDesc:
+            type: string
+            description: "Description of Virtual Account Structure"
+          virtualMainAcc:
+            type: string
+            description: "Virtual Main/Header Account"
+          realAccountNo:
+            type: string
+            description: "Real Account Number for which the VA Structure is mapped"
+          realAccountBrn:
+            type: string
+            description: "Real Account Branch for which the VA Structure is mapped"
+          virtualMainAccCcy:
+            type: string
+            description: "Currency of Virtual Main Account"
+          virtualMainAccName:
+            type: string
+            description: "Currency of Virtual Main Account Name"
+          accountLinkage:
+            type: string
+            description: "Linkage Type of the structure with Real Account"
+          virtualMCA:
+            type: string
+            description: "Virtual Multi currency Account linked to the Structure"
+          interestCalcRequired:
+            type: string
+            description: "Flag to indicate if Interest Calculation is required or not"
+            pattern: '[Y,N]'
+          balance:
+            type: number
+            description: "Effective balance of header account"
+          childCount:
+            type: integer
+            description: "Child Count for the header Account"
+          custChargeAcc:
+            type: string
+            description: "Customer charge account"
+            maxLength: 35
+          custChargeAccBrn:
+            type: string
+            description: "Customer charge account branch"
+            maxLength: 3
+          custChargeAccCcy:
+            type: string
+            description: "Customer charge account Currency"
+            maxLength: 3            
+          AccountMapServiceDetailWithBalanceDTO:
+            type: array
+            items:
+              $ref: '#/definitions/AccountMapServiceDetailWithBalanceDTO'
+
+  AccountMapServiceDetailWithBalanceDTO:
+    type: object
+    properties:
+      virtualMainAcc:
+        type: string
+        description: "Currency of Virtual Main Account"
+      virtualParentAcc:
+        type: string
+        description: "Main account of all the virtual account"
+      virtualChildAcc:
+        type: string
+        description: "Child account is virtual account, while creating structure it will be mapped to a parrent"
+      virtualAccountName:
+        type: string
+        description: "Name of the Virtual Account"
+      balance:
+        type: number
+        description: "Effective balance of virtual account"
+      currency:
+        type: string
+        description: "Currency of virtual account"
+      childCount:
+        type: integer
+        description: "Child Count for the Virtual Account"
+
+  AccountStructureWithBalanceServiceCollection:
+    description: "Collection of accmap."
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/AccountStructureServiceWithBalanceDTO"
+      messages:
+        $ref: "#/definitions/AccountMapServiceResponseDto"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  VirtualAccNumberListDTO:
+    type: object
+    properties:
+      virtualAccountNumber:
+        type: array
+        items:
+          type: string
+
+  AccountLinkDelinkRequestDTO:
+    description: "AccountStructure Link/Delink Request DTO"
+    type: object
+    properties:
+      virtualMainAcc:
+        description: "Virtual Main/Header Account"
+        type: string
+      interestCalcRequired:
+        description: "Flag to indicate if Interest Calculation is required or not"
+        type: string
+      structureCode:
+        description: "Structure Code"
+        type: string
+      structureDesc:
+        description: "Descripton about Virtual Account Structure"
+        type: string
+      custChargeAcc:
+        type: string
+        description: "Customer charge account"
+        maxLength: 35
+      custChargeAccBrn:
+        type: string
+        description: "Customer charge account branch"
+        maxLength: 3
+      custChargeAccCcy:
+        type: string
+        description: "Customer charge account Currency"
+        maxLength: 3        
+      linkAccountList:
+        description: "Virtual Account List to be Linked"
+        type: array
+        items:
+          $ref: "#/definitions/VirtualAccDetailsDTO"
+      delinkAccountList:
+        description: "Virtual Account List to be Delinked"
+        type: array
+        items:
+          $ref: "#/definitions/VirtualAccDetailsDTO"
+  VirtualAccDetailsDTO:
+    type: object
+    properties:
+      virtualParentAcc:
+       type: string
+       description: "Parent Account Number of the VirtualAccount"
+      virtualAccountNumber: 
+       type: string
+       description: "Virtual Account Number"
+  AccountMapServiceDownloadWrapperDTO:
+     type: object
+     properties:
+      messages:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      data:
+       type: array
+       items: 
+        $ref: "#/definitions/AccountMapDownloadDTO"
+  ResponseDtoWrapper:
+   type: object
+   properties:
+    messages:
+     $ref: "#/definitions/ResponseDto"
+    data:
+     $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+   type: object
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/ResponseCode"
+    requestId:
+     type: string
+  ResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+    args:
+     type: array
+     items:
+      type: object
+    arg:
+     type: string      
+  AccountMapDownloadDTO:
+     type: object
+     properties:
+        structureLevel:
+         type: integer
+         description: ""
+        virtualAccount:
+         type: string
+         description: ""
+        virtualAccountIBAN:
+         type: string
+         description: ""
+        virtualAccountName:
+         type: string
+         description: ""
+        virtualAccountCurrency:
+         type: string
+         description: ""
+        virtualAccountAvailableBalance:
+         type: number
+         description: ""
+        branchCode:
+         type: string
+         description: ""
+        branchName:
+         type: string
+         description: ""
+        entityID:
+         type: string
+         description: ""
+        entityName:
+         type: string
+         description: ""
+        parentAccount:
+         type: string
+         description: ""
+        parentAccountIBAN:
+         type: string
+         description: ""
+        parentAccountName:
+         type: string
+         description: ""     
+  VAinStrCollection: 
+     description: "Collection of va in structure."
+     type: "object"
+     properties:
+      data:
+       type: "array"
+       items: 
+        $ref: "#/definitions/StrVaDTO"
+      paging:
+       $ref: "#/definitions/PagingDto"
+  StrVaDTO:
+     type: object
+     properties:
+      strVaNumber:
+       type: string
+       description: "Virtual Account Number"     

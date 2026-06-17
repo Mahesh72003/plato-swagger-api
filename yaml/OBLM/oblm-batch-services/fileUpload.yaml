@@ -1,0 +1,2453 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Fileupload Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+- "application/xml"
+produces:
+- "application/json"
+- "application/xml"
+tags:
+- name: "FileUploadAPI"
+  description: "API for File Upload Operations"
+
+schemes:
+- "https"
+
+paths:
+  /fileupload:
+    post:
+      tags:
+      - "FileUploadAPI"
+      summary: "Adds a new file upload status record."
+      description: "Adds a new file upload status record. Add additional information here for this endpoint."
+      operationId: "save"
+      parameters:
+      - name: "fileupload"
+        in: "body"
+        description: "Request Body that contains data required for creating a new fileupload"
+        required: true
+        schema:
+          $ref: "#/definitions/LmbTmUploadMasterDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created fileupload"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "FileUploadAPI"
+      summary: "Retrieves the list of existing fileupload."
+      description:  "Retrieves the list of existing fileupload. Add additional information here for the this endpoint."
+      operationId: "getAll"
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: fileName
+        required: false
+        type: string
+      - in: query
+        name: functionId
+        required: false
+        type: string
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmbTmUploadMasterCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /fileupload/{id}:
+    get:
+      tags:
+      - "FileUploadAPI"
+      summary: "Retrieves the fileupload by ID."
+      description:  "Retrieves the fileupload by ID. Add additional information here for the this endpoint."
+      operationId: "getById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the user that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Returns the currencyliability based on given id."
+          schema:
+            $ref: "#/definitions/LmbTmUploadMasterWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /fileupload/upload:
+    post:
+      tags:
+      - "FileUploadAPI"
+      summary: "Adds a new file upload status record."
+      description: "Adds a new file upload status record. Add additional information here for this endpoint."
+      operationId: "upload"
+      parameters:
+      - name: "fileupload"
+        in: "body"
+        description: "Request Body that contains data required for creating a new fileupload"
+        required: true
+        schema:
+          $ref: "#/definitions/FileUploadDataDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created fileupload"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /fileupload/process:
+    post:
+      tags:
+      - "FileUploadAPI"
+      summary: "Adds a new file upload record."
+      description: "Adds a new file upload record. Add additional information here for this endpoint."
+      operationId: "process"
+      parameters:
+      - in: body
+        description: "Request Body that contains data required for creating a new fileupload"
+        required: true
+        name: process
+        schema:
+          $ref: "#/definitions/LmbTmUploadDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created fileupload"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /fileupload/fetchUploadDetails:     
+    post:
+      tags:
+      - "FileUploadAPI"
+      summary: "Get all valid upload details."
+      description:  "Get all valid upload details. This endpoints will be used to Get all valid  upload records."
+      operationId: "fetchUploadDetails"
+      parameters:
+      - name: FileUploadInputDTO
+        in: "body"
+        description: "Request Body that contains data required for creating a new oblm-batch-services" 
+        required: true
+        schema:
+         $ref: "#/definitions/FileUploadInputDTO"    
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+            Location:
+              description: ""
+              type: "string"
+          schema:
+           $ref: "#/definitions/LmbTmUploadMasterCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+  /fileupload/simulation/upload:
+    post:
+      tags:
+      - "FileUploadAPI"
+      summary: "Adds a new file upload status record."
+      description: "Adds a new file upload status record. Add additional information here for this endpoint."
+      operationId: "simulationUpload"
+      parameters:
+      - name: "fileupload"
+        in: "body"
+        description: "Request Body that contains data required for creating a new fileupload"
+        required: true
+        schema:
+          $ref: "#/definitions/FileUploadDataDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created fileupload"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /fileupload/processForSimulation:
+    post:
+      tags:
+      - "FileUploadAPI"
+      summary: "Adds a new file upload record."
+      description: "Adds a new file upload record. Add additional information here for this endpoint."
+      operationId: "processForSimulation"
+      parameters:
+      - in: body
+        description: "Request Body that contains data required for creating a new fileupload"
+        required: true
+        name: process
+        schema:
+          $ref: "#/definitions/LmbTmUploadDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created fileupload"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"                    
+definitions:
+  LmbTmUploadMasterDTO:
+    description: "FileUpload DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        fileIdentifier:
+          description: "fileIdentifier in FileUpload"
+          type: string
+        processedOn:
+          description: "processedOn in FileUpload"
+          type: string
+          format: timestamp
+        status:
+          description: "status  of the FileUpload"
+          type: string
+        statusMessage:
+          description: "statusMessage of the FileUpload"
+          type: string
+        fileName:
+          type: string
+          description: ""   
+        LmbTmUploadDetailsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmbTmUploadDetailsDTO'
+  LmbTmUploadDetailsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      processedOn:
+        type: string
+        format: timestamp
+        description: ""
+      recordIdentifer:
+        type: string
+        description: ""
+      status:
+        type: string
+        description: ""
+      statusMessage:
+        type: string
+        description: ""
+      uploadMasterId:
+        type: string
+        description: ""
+      userLoginId:
+        type: string
+        description: "" 
+      recordData:
+        type: string
+        description: ""    
+  FileUploadDataDTO:
+    type: object
+    properties:
+      functionId:
+        type: string
+      fileName:
+        type: string        
+      immediate:
+        type: boolean
+      data:
+        type: string
+  FileUploadInputDTO:
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       functionId:
+        type: string
+       status:
+        type: string
+       fromDate:
+        type: string
+        #format: date
+       toDate:
+        description: To Date of Exceptions
+        type: string
+        #format: date   
+       fileName:
+        type: string    
+  FileUploadDataCollection:
+    description: Collection of Upload data
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/FileUploadDataDTO'
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmbTmUploadMasterCollection:
+    description: Collection of Upload files
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmbTmUploadMasterDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmbTmUploadMasterWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmbTmUploadMasterDTO'
+  LmxTmAccountVdBalDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        currencyCode:
+          type: string
+          description: ""
+        availableBalance:
+          type: number
+          description: ""
+        valueDate:
+          type: string
+          description: ""
+        lastBalanceUpdate:
+          type: string
+          description: ""
+          format: date
+        source:
+          type: string
+          description: ""
+        sourceReference:
+          type: string
+          description: ""
+        vdBalance:
+          type: number
+          description: ""                     
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  LmxTmAccountVdBalCollection:
+    description: "Collection of balances."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/LmxTmAccountVdBalDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  LmxTmAccountVdBalWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmxTmAccountVdBalDTO"
+  LmbTmUploadDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        functionId:
+          type: string
+          description: ""
+  LmmTmSweepInstructionDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       instructionId:
+        type: string
+        description: ""
+       instructionDescription:
+        type: string
+        description: ""
+       productCode:
+        type: string
+        description: ""
+       LmmTmSweepInstructionDetailsDTO:
+        type: array
+        items:
+         $ref: '#/definitions/LmmTmSweepInstructionDetailsDTO'
+    required:
+     - instructionId
+     - productCode
+  LmmTmSweepInstructionDetailsDTO:
+    type: object
+    properties:
+     id:
+      type: string
+      description: ""
+     sweepInstructionId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+  LmmTmCustomerDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       customerId:
+        type: string
+        description: ""
+       customerName:
+        type: string
+        description: ""
+       parentCustomerId:
+        type: string
+        description: ""
+       address:
+        type: string
+        description: ""
+       bankCode:
+        type: string
+        description: ""
+       branchCode:
+        type: string
+        description: ""
+       sourceSystem:
+        type: string
+        description: ""
+       sourceSystemCustNo:
+        type: string
+        description: ""
+       closedStat:
+        type: string
+        description: ""
+       closedDtStamp:
+        type: string
+        format: date
+        description: ""
+       isForgotten:
+        type: string
+        description: ""
+       isProspect:
+        type: string
+        description: ""
+       addressLine1:
+        type: string
+        description: ""
+       addressLine2:
+        type: string
+        description: ""
+       addressLine3:
+        type: string
+        description: ""
+       addressLine4:
+        type: string
+        description: ""                
+      required:
+      - customerId
+      - customerName
+  LmmTmBankParametersDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       crossBorderSweep:
+        type: string
+        description: ""
+       crossBorderPool:
+        type: string
+        description: ""
+       crossBorderHybridSweep:
+        type: string
+        description: ""
+       crossBorderHybridPool:
+        type: string
+        description: ""
+       crossCcySweep:
+        type: string
+        description: ""
+       crossCcyPool:
+        type: string
+        description: ""
+       crossCcyHybridSweep:
+        type: string
+        description: ""
+       crossCcyHybridPool:
+        type: string
+        description: ""
+       sourceSystem:
+        type: string
+        description: ""
+       sourceSystemBankCode:
+        type: string
+        description: ""
+       bankCode:
+        type: string
+        description: ""
+       bankDescription:
+        type: string
+        description: ""
+       bankShortName:
+        type: string
+        description: ""
+       bankType:
+        type: string
+        description: ""
+       line1:
+        type: string
+        description: ""
+       line2:
+        type: string
+        description: ""
+       line3:
+        type: string
+        description: ""
+       line4:
+        type: string
+        description: ""
+       countryId:
+        type: string
+        description: ""
+       stateId:
+        type: string
+        description: ""
+       cityId:
+        type: string
+        description: ""
+       zip:
+        type: string
+        description: ""
+       phoneNumber:
+        type: string
+        description: ""
+       fax:
+        type: string
+        description: ""
+       isMbccAllowed:
+        type: string
+        description: ""
+       isBvtAllowed:
+        type: string
+        description: ""
+       sweep:
+        type: string
+        description: ""
+       pool:
+        type: string
+        description: ""
+       hybrid:
+        type: string
+        description: ""
+       domesticSweep:
+        type: string
+        description: ""
+       domesticPool:
+        type: string
+        description: ""
+       domesticHybridSweep:
+        type: string
+        description: ""
+       domesticHybridPool:
+        type: string
+        description: ""
+       LmmTmBankAddnParametersDTO:
+        type: array
+        items:
+         $ref: '#/definitions/LmmTmBankAddnParametersDTO'
+        required:
+        - bankCode
+        - bankType
+  LmmTmBankAddnParametersDTO:
+    type: object
+    properties:
+     id:
+      type: string
+      description: ""
+     bankParametersId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: "" 
+  LmmTmBranchParametersDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       bankCode:
+        type: string
+        description: ""
+       bicCode:
+        type: string
+        description: ""
+       branchCode:
+        type: string
+        description: ""
+       branchCurrency:
+        type: string
+        description: ""
+       branchName:
+        type: string
+        description: ""
+       cityId:
+        type: string
+        description: ""
+       countryId:
+        type: string
+        description: ""
+       crossBorderHybridPool:
+        type: string
+        description: ""
+       crossBorderHybridSweep:
+        type: string
+        description: ""
+       crossBorderPool:
+        type: string
+        description: ""
+       crossBorderSweep:
+        type: string
+        description: ""
+       crossCcyHybridPool:
+        type: string
+        description: ""
+       crossCcyHybridSweep:
+        type: string
+        description: ""
+       crossCcyPool:
+        type: string
+        description: ""
+       crossCcySweep:
+        type: string
+        description: ""
+       domesticHybridPool:
+        type: string
+        description: ""
+       domesticHybridSweep:
+        type: string
+        description: ""
+       domesticPool:
+        type: string
+        description: ""
+       domesticSweep:
+        type: string
+        description: ""
+       externalSystemId:
+        type: string
+        description: ""
+       fax:
+        type: string
+        description: ""
+       hybrid:
+        type: string
+        description: ""
+       isBalanceOnline:
+        type: string
+        description: ""
+       latitude:
+        type: number
+        description: ""
+       line1:
+        type: string
+        description: ""
+       line2:
+        type: string
+        description: ""
+       line3:
+        type: string
+        description: ""
+       line4:
+        type: string
+        description: ""
+       longitude:
+        type: number
+        description: ""
+       phoneNumber:
+        type: string
+        description: ""
+       pool:
+        type: string
+        description: ""
+       region:
+        type: string
+        description: ""
+       sourceSystem:
+        type: string
+        description: ""
+       sourceSystemBranchCode:
+        type: string
+        description: ""
+       stateId:
+        type: string
+        description: ""
+       sweep:
+        type: string
+        description: ""
+       timeZone:
+        type: string
+        description: ""
+       branchDate:
+        type: string
+        description: ""
+       isExternal:
+        type: string
+        description: ""
+       bankType:
+        type: string
+        description: "" 
+       localClearingCode:
+        type: string
+        description: ""
+       zip:
+        type: string
+        description: ""
+       LmmTmBranchAddnParametersDTO:
+        type: array
+        items:
+         $ref: '#/definitions/LmmTmBranchAddnParametersDTO'
+       LmmTmBranchExternalSystemDTO:
+        type: array
+        items:
+         $ref: '#/definitions/LmmTmBranchExternalSystemDTO'
+  LmmTmBranchAddnParametersDTO:
+    type: object
+    properties:
+     branchParametersId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+  LmmTmBranchExternalSystemDTO:
+    type: object
+    properties:
+     branchParametersId:
+      type: string
+      description: ""
+     externalSystemId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     messageType:
+      type: string
+      description: ""
+     methodName:
+      type: string
+      description: ""
+     networkType:
+      type: string
+      description: ""
+     serviceType:
+      type: string
+      description: ""
+  LmmTmAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        sourceSystem:
+          type: string
+          description: ''
+        sourceSystemAccNo:
+          type: string
+          description: ''
+        iban:
+          type: string
+          description: ''
+        logCode:
+          type: string
+          description: ''
+        accountNumber:
+          type: string
+          description: ''
+        accountDescription:
+          type: string
+          description: ''
+        branchCode:
+          type: string
+          description: ''
+        currency:
+          type: string
+          description: ''
+        customerId:
+          type: string
+          description: ''
+        accOpenDate:
+          type: string
+          format: date
+          description: ''
+        accClosedDate:
+          type: string
+          format: date
+          description: ''
+        acyAvailableBal:
+          type: number
+          description: ''
+        acyCurrentBal:
+          type: number
+          description: ''
+        lastBalUpdateTime:
+          type: string
+          format: date
+          description: ''
+        isActive:
+          type: string
+          description: ''
+        isExternal:
+          type: string
+          description: ''
+        isResident:
+          type: string
+          description: ''
+        isNotional:
+          type: string
+          description: ''
+        acyCasaBlockedAmt:
+          type: number
+          description: ''
+        accCategory:
+          type: string
+          description: ''
+        drLimit:
+          type: number
+          description: ''
+        crLimit:
+          type: number
+          description: ''
+        ilRouteCode:
+          type: string
+          description: ''
+        lineId:
+          type: string
+          description: ''
+        limitCcy:
+          type: string
+          description: ''
+        uncollFundsLimit:
+          type: number
+          description: ''
+        uncollAvailable:
+          type: number
+          description: ''
+        balCompParticipation:
+          type: string
+          description: ''
+        odLimit:
+          type: number
+          description: ''
+        isDebitUnlimited:
+          type: string
+          description: ''
+        region:
+          type: string
+          description: ''
+        isProspect:
+          type: string
+          description: ''                    
+        groupCode:
+          type: string
+          description: ''    
+        isICRequired:
+         type: string
+         description: ""                                 
+      required:
+      - accountNumber
+      - branchCode
+      - currency
+      - customerId      
+  LmmTmAccountCollection:
+    description: Collection of account.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'       
+  LmxTmInterfaceMasterDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        externalSystemDetailsId:
+         type: string
+         description: ""
+        externalSystemId:
+         type: string
+         description: ""
+        serviceName:
+         type: string
+         description: ""
+        LmxTmInterfaceDetailsDTO:
+         type: array
+         items:
+          $ref: '#/definitions/LmxTmInterfaceDetailsDTO'
+        LmxTmInterfaceServiceDetailsDTO:
+         type: array
+         items:
+          $ref: '#/definitions/LmxTmInterfaceServiceDetailsDTO'
+        LmxTmInterfaceEventDetailsDTO:
+         type: array
+         items:
+          $ref: '#/definitions/LmxTmInterfaceEventDetailsDTO'
+      required:
+      - externalSystemDetailsId
+  LmxTmInterfaceDetailsDTO:
+    type: object
+    properties:
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+  LmxTmInterfaceServiceDetailsDTO:
+    type: object
+    properties:
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+  LmxTmInterfaceEventDetailsDTO:
+    type: object
+    properties:
+     eventCode:
+      type: string
+      description: ""
+     eventDescription:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: "" 
+  LmmTmCustomerCollection: 
+    description: "Collection of customer."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LmmTmCustomerDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"    
+  LmmTmBankParametersCollection: 
+    description: "Collection of bankparameters."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LmmTmBankParametersDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"
+  LmmTmBranchParametersCollection:
+    description: Collection of branchparameters.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmBranchParametersDTO'
+      paging:
+        $ref: '#/definitions/PagingDto' 
+  LmxTmInterfaceMasterCollection:
+    description: "Collection of interface."
+    type: "object"
+    properties:
+      data:
+       type: "array"
+       items:
+        $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"      
+  LmxTmExternalSystemDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       externalSystemId:
+        type: string
+        description: ""
+       externalSystemName:
+        type: string
+        description: ""
+       isDda:
+        type: string
+        description: ""
+       LmxTmExternalSystemDetailsDTO:
+        type: array
+        items:
+         $ref: '#/definitions/LmxTmExternalSystemDetailsDTO'
+  LmxTmExternalSystemDetailsDTO:
+    type: object
+    properties:
+     externalSystemId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     integrationType:
+      type: string
+      description: ""
+     messageType:
+      type: string
+      description: ""
+     methodName:
+      type: string
+      description: ""
+     networkType:
+      type: string
+      description: ""
+     serviceDescription:
+      type: string
+      description: ""
+     serviceType:
+      type: string
+      description: ""
+  LmxTmExternalSystemCollection: 
+    description: "Collection of externalsystem."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LmxTmExternalSystemDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"
+  CmcTmCurrencyHolidayMasterCollection: 
+   description: "Collection of localholiday."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmCurrencyHolidayMasterDto"
+    paging:
+     $ref: "#/definitions/PagingDto"    
+  CmcTmCurrencyHolidayMasterDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       currency:
+        type: string
+        minLength: 0
+        maxLength: 3
+       year:
+        type: number
+        minLength: 0
+        maxLength: 4
+       weeklyHolidays:
+        type: string
+        minLength: 0
+        maxLength: 7
+       CmcTmCurrencyHolidayDto:
+        type: array
+        items:
+         $ref: '#/definitions/CmcTmCurrencyHolidayDto'
+  CmcTmCurrencyHolidayDto:
+    type: object
+    properties:
+      currency:
+       type: string
+       minLength: 0
+       maxLength: 3
+      year:
+       type: number
+       minLength: 0
+       maxLength: 4
+      month:
+       type: number
+       minLength: 0
+       maxLength: 2
+      holidayList:
+       type: string
+       minLength: 0
+       maxLength: 31
+      id:
+       type: string
+      currencyHolidayMasterId:
+       type: string
+  CmcTmCurrencyRateMasterDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       branchCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+        pattern: ^[A-Z0-9]*$
+       currency1:
+        type: string
+        minLength: 0
+        maxLength: 3
+       currency2:
+        type: string
+        minLength: 0
+        maxLength: 3
+       CmcTmCurrencyRateDto:
+        type: array
+        items:
+         $ref: '#/definitions/CmcTmCurrencyRateDto'
+  CmcTmCurrencyRateDto:
+    type: object
+    properties:
+     id:
+      type: string
+     currencyRateMasterId:
+      type: string
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z0-9]*$
+     currency1:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currency2:
+      type: string
+      minLength: 0
+      maxLength: 3
+     rateType:
+      type: string
+      minLength: 0
+      maxLength: 8
+     midRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     buySpread:
+      type: number
+     saleSpread:
+      type: number
+     buyRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     saleRate:
+      type: number
+     unauthMidRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     unauthBuySpread:
+      type: number
+     unauthSaleSpread:
+      type: number
+     unauthBuyRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     unauthSaleRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     intAuthStat:
+      type: string
+      minLength: 0
+      maxLength: 1
+     rateDate:
+      type: string
+     rateSerial:
+      type: number
+      minLength: 0
+      maxLength: 4
+     unauthRateDate:
+      type: string
+     unauthRateSerial:
+      type: number
+      minLength: 0
+      maxLength: 4     
+  CmcTmLocalHolidayMasterDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       branchCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+       year:
+        type: number
+        minLength: 0
+        maxLength: 4
+       weeklyHolidays:
+        type: string
+        minLength: 0
+        maxLength: 7
+       unexpHol:
+        type: string
+        minLength: 0
+        maxLength: 1
+       CmcTmLocalHolidayDto:
+        type: array
+        items:
+         $ref: '#/definitions/CmcTmLocalHolidayDto'
+  CmcTmLocalHolidayDto:
+    type: object
+    properties:
+     id:
+      type: string
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     year:
+      type: number
+      minLength: 0
+      maxLength: 4
+     month:
+      type: number
+      minLength: 0
+      maxLength: 2
+     holidayList:
+      type: string
+      minLength: 0
+      maxLength: 31
+     localHolidayMasterId:
+      type: string
+  CoreBankDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       daysToForgetCustomer:
+        type: number
+        description: "Number of days after which the data of customer will be deleted from the database."
+        maxLength: 4
+       hoBranch:
+        type: string
+        description: "head Office Branch."
+       bankName:
+        type: string
+        description: "Name of the Bank."
+        minLength: 0
+        maxLength: 35
+        pattern: ^[a-zA-Z0-9\s]+$
+       bankCode:
+        type: string
+        description: "Bank Code"
+        minLength: 4
+        maxLength: 4
+        pattern: ^[a-zA-Z0-9]+$
+  CoreBranchDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       sourceBranchCode:
+        type: string
+        description: "Branch code of the source system"
+        minLength: 0
+        maxLength: 20
+        pattern: '[a-zA-Z0-9]+'
+       sourceSystem:
+        type: string
+        description: "Name of the source system"
+       weekHol2:
+        type: string
+        description: "Weekly holiday of the branch."
+        pattern: '[1-7]'
+       weekHol1:
+        type: string
+        description: "Weekly holiday of the branch."
+        pattern: '[1-7]'
+       autoAuth:
+        type: string
+        description: "To facilitate auto authorization."
+       walkinCustomer:
+        type: string
+        description: "Customer number of the walk-in customer."
+       branchLcy:
+        type: string
+        description: "Local currency of the branch"
+       branchAddr3:
+        type: string
+        description: "Third line of the branch address"
+        minLength: 0
+        maxLength: 105
+       branchAddr2:
+        type: string
+        description: "Second line of the branch address"
+        minLength: 0
+        maxLength: 105
+       branchAddr1:
+        type: string
+        description: "First line of the branch address"
+        minLength: 0
+        maxLength: 105
+       branchName:
+        type: string
+        description: "Name of the branch."
+        minLength: 1
+        maxLength: 105
+        pattern: '[a-zA-Z0-9\s]+'
+       countryCode:
+        type: string
+        description: "Country code of the branch."
+       hostCode:
+        type: string
+        description: "Host code to which the branch belongs to."
+       branchCode:
+        type: string
+        description: "Branch code of the branch to be configured."
+        minLength: 3
+        maxLength: 3
+        pattern: '[a-zA-Z0-9]+'
+       CoreBranchPrefDTO:
+        $ref: '#/definitions/CoreBranchPrefDTO'
+       CoreSwiftAddressDTO:
+        type: array
+        items:
+         $ref: '#/definitions/CoreSwiftAddressDTO'
+  CoreBranchPrefDTO:
+    type: object
+    properties:
+     reportDsn:
+      type: string
+      description: "Report DSN details"
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     dsnName:
+      type: string
+      description: "DSN name"
+     hostName:
+      type: string
+      description: "Host name to which the branch belongs to."
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     branchCode:
+      type: string
+      description: "Branch code of the branch to be configured."
+     id:
+      type: string
+      description: "Primary Key"
+     coreBranchId:
+      type: string
+      description: "Master Table Reference."
+  CoreSwiftAddressDTO:
+    type: object
+    properties:
+     defaultBic:
+      type: string
+      description: "Checkbox to decide If default BIC is used or not"
+      pattern: '[Y,N]'
+     swiftAddress:
+      type: string
+      description: "Swift Address"
+     branchCode:
+      type: string
+      description: "Branch Code"
+     coreBranchId:
+      type: string
+      description: "Master Table Reference"
+     id:
+      type: string
+      description: "Primary Key"    
+  CoreCustomerDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       country:
+        type: string
+        description: "Country code of the customer?s address"
+        pattern: '([a-zA-Z0-9]+)?'
+       language:
+        type: string
+        description: "Customer's preferred language of communication"
+       nationality:
+        type: string
+        description: "Nationality of the customer"
+       deceased:
+        type: string
+        description: "Identifies that customer is deceased"
+       frozen:
+        type: string
+        description: "Identifies that the customer's account is frozen"
+        pattern: '[Y,N]'
+       whereaboutsUnknown:
+        type: string
+        description: "Identifies that the customer's whareabouts not known"
+        pattern: '[Y,N]'
+       rmId:
+        type: string
+        description: "Relational Manager's Id"
+        minLength: 0
+        maxLength: 12
+        pattern: '([a-zA-Z0-9]+)?'
+       sanctionsChecksRequired:
+        type: string
+        description: "Indicates that the sanction check should be done or not"
+        pattern: '[Y,N]'
+       walkinCustomer:
+        type: string
+        description: "Walkin Customer"
+       sourceSystem:
+        type: string
+        description: "Name of the source system"
+       sourceSystemCustNo:
+        type: string
+        description: "Customer identification details as per the source system."
+        minLength: 1
+        maxLength: 35
+        pattern: '[a-zA-Z0-9]+'
+       customerNo:
+        type: string
+        description: "Customer Number of the external customer"
+        minLength: 1
+        maxLength: 20
+        pattern: '[a-zA-Z0-9]+'
+       hostCode:
+        type: string
+        description: "Displays the host code that is linked to the transaction branch of the customer"
+       customerType:
+        type: string
+        description: "Customer type can be Individual,Corporate or Bank"
+        pattern: '[I,C,B]'
+       customerCategory:
+        type: string
+        description: "Category to which the customer belongs to"
+       customerName1:
+        type: string
+        description: "Name of the external customer"
+        minLength: 0
+        maxLength: 35
+        pattern: '([a-zA-Z0-9\s]+)?'
+       shortName:
+        type: string
+        description: "Short name of the custome"
+        minLength: 0
+        maxLength: 20
+        pattern: '([a-zA-Z0-9\s]+)?'
+       addressLine1:
+        type: string
+        description: "First line of the customer?s address"
+        minLength: 0
+        maxLength: 35
+       addressLine2:
+        type: string
+        description: "Second line of the customer?s address"
+        minLength: 0
+        maxLength: 35
+       addressLine3:
+        type: string
+        description: "Third line of the customer?s address"
+        minLength: 0
+        maxLength: 35
+       addressLine4:
+        type: string
+        description: "Fourth line of the customer?s address"
+        minLength: 0
+        maxLength: 35          
+       pincode:
+        type: string
+        description: "Pincode of the customer?s address"
+        minLength: 0
+        maxLength: 15
+        pattern: '([a-zA-Z0-9]+)?'
+  CoreAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       countryCode:
+        type: string
+        description: "Country Code"
+        minLength: 0
+        maxLength: 4
+       address4:
+        type: string
+        description: "Fourth line of the customer?s address"
+        minLength: 0
+        maxLength: 105
+       address3:
+        type: string
+        description: "Third line of the customer?s address"
+        minLength: 0
+        maxLength: 105
+       address2:
+        type: string
+        description: "Second line of the customer?s address"
+        minLength: 0
+        maxLength: 105
+       address1:
+        type: string
+        description: "First line of the customer?s address"
+        minLength: 0
+        maxLength: 105
+       ecaCheckReq:
+        type: string
+        description: "Indicates that ECA check is required for the external customer account"
+        minLength: 0
+        maxLength: 1
+        pattern: '[Y,N]'
+       accountClass:
+        type: string
+        description: "Account class of the external customer account. It can be Normal account or Nostro account"
+       acStatDormant:
+        type: string
+        description: "Indicates that the account status is dormant"
+        minLength: 1
+        maxLength: 1
+        pattern: '[Y,N]'
+       acStatFrozen:
+        type: string
+        description: "Indicate that the account status is frozen"
+        minLength: 0
+        maxLength: 1
+        pattern: '[Y,N]'
+       glStatBlocked:
+        type: string
+        description: "Indicates that the account status is blocked"
+        minLength: 0
+        maxLength: 1
+        pattern: '[Y,N]'
+       acStatNoDr:
+        type: string
+        description: "Indicates that the account does not have any debit facility"
+        minLength: 0
+        maxLength: 1
+        pattern: '[Y,N]'
+       acStatNoCr:
+        type: string
+        description: "Indicates that the account does not have any credit facility"
+        minLength: 0
+        maxLength: 1
+        pattern: '[Y,N]'
+       acOpenDate:
+        type: string
+        pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        description: "The date on which account is being opened"
+       custAcName:
+        type: string
+        description: "Name of the account holder"
+        minLength: 0
+        maxLength: 105
+        pattern: '[a-zA-Z0-9\s]+'
+       custAcCcy:
+        type: string
+        description: "Currency in which the account is being created"
+       customerNo:
+        type: string
+        description: "Customer number to which the account number is being linked"
+       sourceSystemAccBrn:
+        type: string
+        description: "Branch to which the account belongs to"
+       sourceSystemAccNo:
+        type: string
+        description: "Account number as in the source system"
+        minLength: 0
+        maxLength: 35
+        pattern: '[a-zA-Z0-9]+'
+       sourceSystem:
+        type: string
+        description: "Name of the source system"
+       custAcIban:
+        type: string
+        description: "IBAN that is linked to the customer"
+        minLength: 0
+        maxLength: 35
+        pattern: '[a-zA-Z0-9]+'
+       hostCode:
+        type: string
+        description: "The host code that is linked to the logged in user of the branch."
+       custAccountNo:
+        type: string
+        description: "Account number of the External customer"
+        minLength: 1
+        maxLength: 20
+        pattern: '[a-zA-Z0-9]+'      
+  CmcTmCurrencyDefinitionDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       currencyCode:
+        type: string
+        description: "currencyCode"
+        minLength: 0
+        maxLength: 3
+        pattern: ^[A-Z]*$
+       currencyName:
+        type: string
+        description: "currencyName"
+        minLength: 0
+        maxLength: 105
+        pattern: ^[A-Z]*$
+       country:
+        type: string
+        description: "country"
+        minLength: 0
+        maxLength: 3
+        pattern: ^[A-Z]*$
+       currencyDecimals:
+        type: number
+        description: "currencyDecimals"
+        minLength: 0
+        maxLength: 1
+       currencyRoundRule:
+        type: string
+        description: "Currency Round Rule"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:T|U|D|R)$"
+       currencyRoundUnit:
+        type: number
+        description: "Currency Round Unit"
+       currencyFormatMask:
+        type: string
+        description: "currencyFormatMask"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:I|N)$"
+       currencySpotDays:
+        type: number
+        description: "currencySpotDays"
+        minLength: 0
+        maxLength: 3
+       currencyIntMethod:
+        type: number
+        description: "Currency Interest Method"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:0|1|2|3|4|5|6|7|8|9)$"
+       positionGl:
+        type: string
+        description: "positionGl"
+        minLength: 0
+        maxLength: 9
+       positionEqvgl:
+        type: string
+        description: "Position Equivalent GL"
+        minLength: 0
+        maxLength: 9
+       currencyEurType:
+        type: string
+        description: "Currency Euro type"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:E|I|O|C)$"
+       currencyTolLimit:
+        type: number
+        description: "Currency Total Limits"
+       settlementMsgDays:
+        type: number
+        description: "Settlement Days"
+        minLength: 0
+        maxLength: 3
+       indexFlag:
+        type: string
+        description: "Index Flag"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       indexBaseCurrency:
+        type: string
+        description: "Index Base Currency"
+        minLength: 0
+        maxLength: 3
+       cutOffHr:
+        type: number
+        description: "Cut off Hours"
+        minLength: 0
+        maxLength: 2
+       cutOffMin:
+        type: number
+        description: "Cut off Minutes"
+        minLength: 0
+        maxLength: 2
+       altCurrencyCode:
+        type: string
+        description: "altCurrencyCode"
+        minLength: 0
+        maxLength: 10
+        pattern: ^[A-Z0-9]*$
+       eurConversionReqd:
+        type: string
+        description: "Euro Conversion Required"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       cutOffDays:
+        type: number
+        description: "cutOffDays"
+        minLength: 0
+        maxLength: 2
+       crAutoExRateLmt:
+        type: number
+        description: "Credit Auto Exchange Rate Limit"
+        minLength: 0
+        maxLength: 3
+       drAutoExRateLmt:
+        type: number
+        description: "Debit Auto Exchange Rate Limit"
+       currencyType:
+        type: string
+        description: "currencyType"
+        minLength: 0
+        maxLength: 3
+       gen103p:
+        type: string
+        description: "Generate 103+"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       clsCurrency:
+        type: string
+        description: "CLS Currency"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       fxNettingDays:
+        type: number
+        description: "Foreign Exchange Netting Days"
+        minLength: 0
+        maxLength: 3
+       isoNumCurrencyCode:
+        type: string
+        description: "isoNumCurrencyCode"
+        minLength: 0
+        maxLength: 3
+        pattern: ^[0-9]*$
+       genCustCov:
+        type: string
+        description: "genCustCov"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       validate50f:
+        type: string
+        description: "validate50f"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       maintenanceCountry:
+        type: string
+        description: "maintenanceCountry"
+        minLength: 0
+        maxLength: 3
+       commodityCode:
+        type: string
+        description: "commodityCode"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       CmcTmCurrencyCountryMapDto:
+        type: array
+        items:
+         $ref: '#/definitions/CmcTmCurrencyCountryMapDto'
+  CmcTmCurrencyCountryMapDto:
+    type: object
+    properties:
+     maintenanceCountry:
+      type: string
+      description: "maintenanceCountry"
+      minLength: 0
+      maxLength: 3
+     id:
+      type: string
+      description: "id"
+     countryCode:
+      type: string
+      description: "countryCode"
+      minLength: 0
+      maxLength: 3
+     countryDesc:
+      type: string
+      description: "countryDesc"
+      minLength: 0
+      maxLength: 105
+     currencyCode:
+      type: string
+      description: "currencyCode"
+      minLength: 0
+      maxLength: 3
+     currencyDefinitionId:
+      type: string
+      description: "currencyDefinitionId"      
+  LmmTmCurrencyParametersDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       currencyCode:
+        type: string
+        description: ""
+       currencyName:
+        type: string
+        description: ""
+       ieBenefit:
+        type: string
+        description: ""
+       ieParticipation:
+        type: string
+        description: ""    
+  CmcTmCountryDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       countryCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+        pattern: ^[A-Z0-9]*$
+       description:
+        type: string
+        minLength: 0
+        maxLength: 105
+       altCountryCode:
+        type: string
+        minLength: 2
+        maxLength: 10
+        pattern: ^[A-Z]*$
+       regionCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+       blacklisted:
+        type: string
+        minLength: 0
+        maxLength: 1
+        pattern: ^(?:Y|N)$
+       overallLimit:
+        type: number
+        minLength: 0
+        maxLength: 24
+       limitCcy:
+        type: string
+        minLength: 0
+        maxLength: 3
+       ibanCheckReqd:
+        type: string
+        minLength: 0
+        maxLength: 1
+        pattern: ^(?:Y|N)$
+       intraEuropean:
+        type: string
+        minLength: 0
+        maxLength: 1
+        pattern: ^(?:Y|N)$
+       clrCodeBic:
+        type: string
+        minLength: 0
+        maxLength: 1
+        pattern: ^(?:Y|N)$
+       clearingNetwork:
+        type: string
+        minLength: 0
+        maxLength: 1
+       isoNumCountryCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+       genMt205:
+        type: string
+        minLength: 0
+        maxLength: 1
+        pattern: ^(?:Y|N)$
+       isdCode:
+        type: number
+        minLength: 0
+        maxLength: 10
+       euCountry:
+        type: string
+        minLength: 0
+        maxLength: 1      
+  LmmTmCountryParametersDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       countryCode:
+        type: string
+        description: ""
+       countryName:
+        type: string
+        description: ""
+       currencyCode:
+        type: string
+        description: ""
+       allowedAccountType:
+        type: string
+        description: ""
+       sweep:
+        type: string
+        description: ""
+       pool:
+        type: string
+        description: ""
+       hybrid:
+        type: string
+        description: ""
+       domesticSweep:
+        type: string
+        description: ""
+       domesticPool:
+        type: string
+        description: ""
+       domesticHybridSweep:
+        type: string
+        description: ""
+       domesticHybridPool:
+        type: string
+        description: ""
+       crossBorderSweep:
+        type: string
+        description: ""
+       crossBorderPool:
+        type: string
+        description: ""
+       crossBorderHybridSweep:
+        type: string
+        description: ""
+       crossBorderHybridPool:
+        type: string
+        description: ""
+       crossCcySweep:
+        type: string
+        description: ""
+       crossCcyPool:
+        type: string
+        description: ""
+       crossCcyHybridSweep:
+        type: string
+        description: ""
+       crossCcyHybridPool:
+        type: string
+        description: ""
+       ieBenefitAllowed:
+        type: string
+        description: ""
+       ieParticipationAllowed:
+        type: string
+        description: ""
+  LmmTmCurrencyCutoffDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       bicCode:
+        type: string
+        description: ""
+       LmmTmCurrencyCutoffDetailsDTO:
+        type: array
+        items:
+         $ref: '#/definitions/LmmTmCurrencyCutoffDetailsDTO'
+  LmmTmCurrencyCutoffDetailsDTO:
+    type: object
+    properties:
+     currencyCode:
+      type: string
+      description: ""
+     currencyCutoffId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     incomingCutoffHr:
+      type: number
+      description: ""
+     incomingCutoffMin:
+      type: number
+      description: ""
+     messageType:
+      type: string
+      description: ""
+     outgoingCutoffHr:
+      type: number
+      description: ""
+     outgoingCutoffMin:
+      type: number
+      description: ""      
+  CmcTmLocalHolidayMasterCollection: 
+   description: "Collection of localholiday."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmLocalHolidayMasterDto"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  BICDirectoryDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       bicCode:
+        type: string
+        description: "BIC Code or Bank Code"
+        pattern: '[A-Za-z0-9_*-]+'
+       bankName:
+        type: string
+        description: "Name of the Bank"
+        minLength: 1
+        maxLength: 35
+        pattern: '[a-zA-Z0-9\s]+'
+       customerNo:
+        type: string
+        description: "If the bank is a customer of your bank, you can select the Customer No assigned to the bank"
+       skArrangement:
+        type: string
+        description: "Indicate whether a SK arrangement exists between your bank and the BIC entity"
+        pattern: '[Y,N]'
+       bankAddress1:
+        type: string
+        description: "Bank Address Line 1"
+        minLength: 0
+        maxLength: 35
+       bankAddress2:
+        type: string
+        description: "Bank Address Line 2"
+        minLength: 0
+        maxLength: 35
+       bankAddress3:
+        type: string
+        description: "Bank Address Line 3"
+        minLength: 0
+        maxLength: 90
+       relationship:
+        type: string
+        description: "the kind of relationship that exists between your bank and the BIC entity. Options are N - No, K - Keys, M - Mail"
+        pattern: '[N,K,M]'
+       swiftKey:
+        type: string
+        description: "If a SWIFT connectivity exists between your bank and the bank for which BIC details are maintained, relationship should be selected as Keys and SWIFT Key should be specified"
+        minLength: 0
+        maxLength: 50
+       telexKey:
+        type: string
+        description: "If a Telex connectivity exists between your bank and the bank for which BIC details are maintained, relationship should be selected as Keys and Telex Key should be specified"
+        minLength: 0
+        maxLength: 50
+       uploadFlag:
+        type: string
+        description: ""
+       uploadUpdate:
+        type: string
+        description: "Indicates whether update is required during upload"
+        pattern: '[Y,N]'
+       genMt103:
+        type: string
+        description: ""
+        pattern: '[Y,N]'
+       blacklisted:
+        type: string
+        description: "Indicates that the BIC entity is also black listed"
+        pattern: '[Y,N]'
+       cugMember:
+        type: string
+        description: "Indicates that the BIC entity is a Closed User Group member"
+        pattern: '[Y,N]'
+       genMt103p:
+        type: string
+        description: ""
+        pattern: '[Y,N]'
+       multiCustTransfer:
+        type: string
+        description: "Indicate whether or not a Multi Credit Transfer Feature [MT102 support] exists between your bank and the BIC entity"
+        pattern: '[Y,N]'
+       maxSize:
+        type: number
+        description: "Indicate the maximum size in bytes, agreed upon between the two parties for transmitting a MT102 message. A null value in this field signifies that there is no limit set on the size of the message"
+        pattern: '([0-9]+)?'
+       remitMember:
+        type: string
+        description: "Indicates that the customer is registered with MT 103 Extended Remittance Information Multi User Group"
+        pattern: '[Y,N]'
+       subTypeCode:
+        type: string
+        description: "Select the appropriate sub-type code to be mapped to the BIC"
+       genMt102p:
+        type: string
+        description: "Check this box to process MT102+ messages. Selecting this check box also required the ?Multi Customer Credit Transfer? checkbox to be selected"
+        pattern: '[Y,N]'
+       genMt101:
+        type: string
+        description: "Indicates whether an MT101 can be sent/received from this BIC. Select this option to generate MT101 message"
+        pattern: '[Y,N]'
+       transactionPerMsg:
+        type: number
+        description: "Indicate the no of transactions to be included in an MT101 message. If you do not specify a value it will be defaulted to 10"
+        pattern: '([0-9]+)?'
+       adbMember:
+        type: string
+        description: "Select a value to indicate membership of the specified BIC code in Asian Development Bank. Options are Y - Yes, N - No, X - Not Applicable"
+        pattern: '[Y,N,X]'
+       beIndicator:
+        type: string
+        description: "Identifies whether the BEI status for the chosen sub-type code is Yes or No"
+        pattern: '[Y,N]'
+       modificationFlag:
+        type: string
+        description: "This field indicates modification flag"
+       recordKey:
+        type: string
+        description: "The unique key of the record in the file"
+       officeType:
+        type: string
+        description: "This field indicates the type of the entity in the office hierarchy"
+       parentOfficeKey:
+        type: string
+        description: "This field indicates the RECORD KEY of the closest entity upwards in the office hierarchy"
+       headOfficeKey:
+        type: string
+        description: "This field indicates the RECORD KEY of the Head Office in the office hierarchy"
+       legalType:
+        type: string
+        description: "This field indicates the status of the entity in the legal hierarchy"
+       legalParentKey:
+        type: string
+        description: "This field indicates the RECORD KEY of the  Entity in the legal hierarchy"
+       groupType:
+        type: string
+        description: "Type of entity that identifies the group"
+       groupParentKey:
+        type: string
+        description: "The record key of the parent entity. This value identifies the set of entities (records) belonging to the group"
+       institutionStatus:
+        type: string
+        description: "This field indicates the license status of the institution"
+       cooperativeGroupKey:
+        type: string
+        description: "If record indicates a co-operative bank which belongs to a cooperative bank group, this field indicates the record key of the co-operative central bank for that group"
+       isoLeiCode:
+        type: string
+        description: "This is the Legal Entity Identifier as defined by ISO 17442. For future use"
+       bic8:
+        type: string
+        description: "This field indicates BIC (institution, country, and location code)"
+       branchBic:
+        type: string
+        description: "The BIC branch code associated with the BIC8 code"
+       chipsUid:
+        type: string
+        description: "This is the CHIPS Universal ID related to the institution"
+       nationalId:
+        type: string
+        description: "This is the National identifier of the institution/branch"
+       connectedBic:
+        type: string
+        description: "For a BIC code in the field BIC that is not connected to the SWIFT network. This is the connected BIC code of the same institution"
+       branchInformation:
+        type: string
+        description: "Branch Information as provided by the Financial Institution to which it belongs"
+       pobNumber:
+        type: string
+        description: "PO box number of the institution/branch"
+       streetAddress4:
+        type: string
+        description: "This field indicates about area of the institution/branch"
+       city:
+        type: string
+        description: "City name of the institution/branch"
+       cps:
+        type: string
+        description: "County, province, state or other administrative region of the owner institution/branch"
+       zipCode  :
+        type: string
+        description: "Zip code of the institution/branch"
+       countryName:
+        type: string
+        description: "The country name of the institution/branch as indicated in the ISO 3166"
+       isoCountryCode:
+        type: string
+        description: "The ISO 3166-1 alpha-2 code of the country of the institution/branch"  
+       timeZone:
+        type: string
+        description: "This field indicates about time zone of the institution/branch"
+       subTypeIndicator:
+        type: string
+        description: "The business type of the entity. Subtype Indicator is provided only for records with a BIC code"
+       networkConnectivity:
+        type: string
+        description: "This field is to be provided only for records containing a BIC code"
+       branchQualifiers:
+        type: string
+        description: "The operational type of the entity. Branch Qualifiers are provided only for records containing a BIC code"
+       serviceCodes:
+        type: string
+        description: "SWIFT FIN-Copy service codes (also called value-added service codes). Service Codes are provided only for records containing a BIC code"
+       ssiGroupKey:
+        type: string
+        description: "This field indicates which SSI Group the entity belongs to in the SSI Plus files"
+       ibanKey:
+        type: string
+        description: "It identifies the RECORD KEY in the IBAN PLUS TXT file that contains the IBAN data for this entity"
+       fieldA:
+        type: string
+        description: "This field is reserved for future use. In case values will be populated, the file structure and the field name will not change"
+       fieldB:
+        type: string
+        description: "This field is reserved for future use. In case values will be populated, the file structure and the field name will not change"   
+      required:
+       - bicCode
+       - bankName
+  CmcTmBicDirectoryCollection: 
+   description: "Collection of bicDirectory."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/BICDirectoryDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"     
+  CmcTmCoreBranchCollection: 
+   description: "Collection of core branches."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CoreBranchDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  UploadResponseCollection: 
+   description: "Collection of Upload Response."
+   type: "object"
+   properties:
+    messageTypeList:
+     type: "array"
+     items: 
+      $ref: "String"
+    messageDescList:
+     type: "array"
+     items: 
+      $ref: "String"   
+  CmcTmCurrencyRateMasterCollection: 
+    description: "Collection of currencyrate."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/CmcTmCurrencyRateMasterDto"
+     paging:
+      $ref: "#/definitions/PagingDto"    

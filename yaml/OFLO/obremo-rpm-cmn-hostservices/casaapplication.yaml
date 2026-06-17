@@ -1,0 +1,1944 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : savingAggregate.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: CaSA Application Service
+host: localhost:7001
+basePath: /casa-application-services
+tags:
+- name: CaSaAggregate
+  description: API for CaSaApplication Operations
+schemes:
+- http
+paths:
+   /web/v1/saving-aplication/createaccount:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - CasaAggregate
+      summary: Send the Saving application to host.
+      description: Submit Saving application aggregate.
+      operationId: createSavingAccount
+      parameters:
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string
+        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      - name: casaAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new SavingApplicationAggregateModel
+        required: true
+        schema:
+          $ref: '#/definitions/CasaAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error              
+definitions:
+ CasaAggregateModel:
+    description: CasaAggregateModel
+    type: object
+    properties:
+     applicationNo:
+       description: "Application reference number"
+       type: string
+       maxLength: 20 
+     processRefNo:
+       description: "Process reference number"
+       type: string
+       maxLength: 20
+     userId:
+       description: userId
+       type: string
+     accountClass:
+       description: "accountClass"
+       type: string
+       maxLength: 20 
+     custNo:
+       description: "custNo"
+       type: string
+       maxLength: 20
+     fundByMode:
+       description: "fundByMode"
+       type: string
+     mandateDetailsMasterModel:
+       $ref: '#/definitions/MandateDetailsMasterModel'
+     accServicesPrefDetailsModel:
+       $ref: '#/definitions/AccServicesPrefDetailsModel'
+     accServicesPrefMasterModel:
+       $ref: '#/definitions/AccServicesPrefMasterModel'
+     accountDetailsModel:
+       $ref: '#/definitions/AccountDetailsModel'
+     chargeDetailsMasterModel:
+       $ref: '#/definitions/ChargeDetailsMasterModel'
+     interestDetailsMasterModel:
+       $ref: '#/definitions/InterestDetailsMasterModel'
+     nomineeDetailsMasterModel:
+       $ref: '#/definitions/NomineeDetailsMasterModel' 
+     casaPayInDetails:       
+       $ref: '#/definitions/CasaPayInDetails'  
+     applicantDetailsMasterModel :
+       $ref: '#/definitions/ApplicantDetailsMasterModel'     
+     odAdvanceDetailsMasterModel:
+       $ref: "#/definitions/OdAdvanceDetailsMasterModel"
+     odUnsecuredDetailsMasterModel:
+       $ref: "#/definitions/OdUnsecuredDetailsMasterModel"
+     odUnsecuredTempDetailsMasterModel:
+       $ref: "#/definitions/OdUnsecuredTempDetailsMasterModel"
+     odSecuredDetailsMasterModel:
+       $ref: "#/definitions/OdSecuredDetailsMasterModel"
+     odAccountLimitDetailsMasterModel:
+       $ref: "#/definitions/OdAccountLimitDetailsMasterModel"
+     customObject:
+       type: object
+     additionalAttributes:
+       type: array
+       items:
+         type: object
+     documentsModel:
+       type: "array"
+       items:
+         $ref: '#/definitions/DocumentsModel'
+
+ DocumentsModel:
+   type: "object"
+   properties:
+     id:
+       type: string
+     documentId:
+       type: string
+     documentRefId:
+       type: string
+     documentName:
+       type: string
+     documentTypeId:
+       type: string
+     documentCatId:
+       type: string
+     documentDescription:
+       type: string
+     remarks:
+       type: string
+     documentExpiryDate:
+       type: string
+     documentUploadedDate:
+       type: string
+     documentReceivedDate:
+       type: string
+
+
+ InterestDetailsMasterModel:
+   type: object
+   allOf:
+     - $ref: '#/definitions/GenericDatasegmentModel'
+     - type: object
+       properties:
+         processRefNo:
+           description: Process reference Number of the InterestDetailsModel
+           type: string
+           maxLength: 20
+         productName:
+           type: string
+           description: Interest Product name
+         hostCode:
+           type: string
+           description: Host code
+         interestDetailsModel:
+           type: array
+           items:
+             $ref: '#/definitions/InterestDetailsModel'
+       required:
+         - stageCode
+         - processRefNo
+         - applicationNumber
+ InterestDetailsModel:
+   description: InterestDetails Model
+   type: object
+   properties:
+     id:
+       description: Id
+       type: string
+       maxLength: 36
+     processRefNo:
+       description: processRefNo
+       type: string
+     interestDetailsMasterId:
+       description: InterestDetailsMasterId
+       type: string
+     componentCode:
+       description: componentCode
+       type: string
+     mainComponent:
+       description: mainComponent
+       type: boolean
+     udeId:
+       description: udeId
+       type: string
+     interestType:
+       description: Interest Rate Type
+       type: string
+     interestRate:
+       description: Interest Rate
+       type: number
+       format: double
+     effectiveRate:
+       description: Effective Rate
+       type: number
+       format: double
+     customerMargin:
+       description: Margin
+       type: number
+       format: double
+     marginAllowed:
+       description: margin Allowed
+       type: boolean
+     seqNo:
+       description: Seq No
+       type: integer
+   required:
+     - processRefNo
+     - interestType
+     - interestRate
+     - effectiveRate
+     - mainComponent
+     - marginAllowed
+     - seqNo
+
+ MandateDetailsMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+#     dataSegmentCode:
+#      description: Data segment code
+#      type: string
+#     stageCode:
+#      description: stageCode
+#      type: string
+#      maxLength: 36        
+#     id:
+#      description: "Id of Mandate details master model"
+#      type: string
+#      maxLength: 36
+#     applicationNumber:
+#      description: "Application Number of Mandate details master model"
+#      type: string
+#      maxLength: 20
+     processRefNo:
+      description: "Process reference number of Mandate details master model"
+      type: string
+      maxLength: 20
+     applicationDate:
+      type: string
+      description: "Date of application"
+     modeOfOperation:
+      type: string
+      description: Mode of operation 
+     mandateDetailsModel:
+      type: array
+      items:
+       $ref: '#/definitions/MandateDetailsModel'
+    required:
+     - processRefNo
+     - applicationNumber
+     - mandateDetailsModel
+     - stageCode
+#     - modeOfOperation
+ 
+ CasaPayInDetails:
+   description: payInDetails
+   type: object
+   properties:
+    payInMode:
+     description: "payInMode"
+     type: string
+    branchCode:
+     description: "branch"
+     type: string
+    accountNumber:
+     description: "account"
+     type: string
+    accountName:
+     description: "accountName"
+     type: string
+    chequeNumber:
+     description: Cheque Number.
+     type: string
+    chequeDate:
+     description: Cheque date.
+     type: string      
+    chequeBankName:
+     description: Bank name on the cheque.
+     type: string
+    chequeBranchName:
+     description: Branch name on the cheque.
+     type: string
+    chequeRoutingNumber:
+     description: Routing Number on the cheque
+     type: string
+     pattern: '^\d{0,9}$'
+    valueDate:
+     description: "valueDate"
+     type: string  
+    amount:
+     description: Amount to be funded.
+     type: number   
+ MandateDetailsModel:
+   description: "MandateDetails Model"
+   type: object
+   properties:
+    id:
+     description: Id of the MandateDetailsModel
+     type: string
+     maxLength: 36
+    processRefNo:
+     description: "Process reference number of Mandate details"
+     type: string
+     maxLength: 20
+    mandateDetailsMasterId:
+     description: Id of master table
+     type: string
+     maxLength: 36
+    amountCcy:
+     type: string
+     maxLength: 4
+     description: Amount Currency
+    amountFrom:
+     type: number
+     description: From Amount
+     minimum: 0
+     exclusiveMinimum: false
+    amountTo:
+     type: number
+     description: To Amount
+     minimum: 0
+     exclusiveMinimum: false
+    reqNoOfSignatory:
+     type: number
+     description: Required number of signatory
+     minimum: 0
+     exclusiveMinimum: true
+    remarks:
+     type: string
+     description: Remarks
+ AccServicesPrefMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     action:
+      type: string
+      description: action
+     channel:
+      type: string
+      description: Channel 
+     processRefNo:
+      description: "Process reference number of Account Services Prefrences"
+      type: string
+      maxLength: 20
+     applicationDate:
+      type: string
+      description: "Application initition date of Account Service Prefrences"
+     passbook:
+      type: string
+      description: "Passbook facility applicable or not (Y/N)"          
+      pattern: '[Y,N]'
+     passBookAllowed:
+      type: boolean
+      description: "Passbook facility Allowed?"
+     chequeBook:
+      type: string
+      description: "Cheque book facility applicable or not (Y/N)"
+      pattern: '[Y,N]'
+     chequeBookAllowed:
+      type: boolean
+      description: "Cheque book facility Allowed?" 
+     accStatement:
+      type: string
+      description: "Account statement facility applicable or not (Y/N)"
+      pattern: '[Y,N]'
+     accStatementAllowed:
+      type: boolean
+      description: "Account Statement facility Allowed?" 
+     subscriptionModeEmail:
+      type: string
+      description: "Account Statement Mode Email (Y/N)?"
+      pattern: '[Y,N]'
+     subscriptionModePost:
+      type: string
+      pattern: '[Y,N]'
+      description: "Account Statement Mode Post (Y/N)?"
+     subscriptionFrequency:
+      type: string
+      description: "Account Statement Subscription Frequency"    
+     accServicesPrefDetailsModel:
+      type: array
+      items:
+       $ref: '#/definitions/AccServicesPrefDetailsModel'   
+ AccServicesPrefDetailsModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     processRefNo:
+      description: "Process reference number of Account Services Prefrences"
+      type: string
+      maxLength: 20
+     applicationDate:
+      type: string
+      description: "Application initition date of Account Service Prefrences" 
+     subscriptionMode:
+      type: string
+      description: "Subscription mode of Account statement" 
+     subscriptionFrequency:
+      type: string
+      description: "Subscription Frequency of Account statement"
+     facilities:
+      $ref: '#/definitions/Facilities'
+     bankingChnlSubscription:
+      $ref: '#/definitions/BankingChnlSubscription'
+     communicationChnlSubscription:
+      $ref: '#/definitions/CommunicationChnlSubscription'            
+    
+ Facilities:
+   description: "Facility details of account"
+   type: object
+   properties:
+    card:
+     type: string
+     description: "Card facility applicable or not (Y/N)"
+     pattern: '[Y,N]'
+    chequeBook:
+     type: string
+     description: "Cheque book facility applicable or not (Y/N)"
+     pattern: '[Y,N]'
+    dnd:
+     type: string
+     description: "Do not disturb facility applicable or not (Y/N)"
+     pattern: '[Y,N]'
+    passBook:
+     type: string
+     description: "Passbook facility applicable or not (Y/N)"          
+     pattern: '[Y,N]'         
+ BankingChnlSubscription:
+   description: "Banking channel subscription details of account"
+   type: object
+   properties:
+     internet:
+      type: string
+      description: "Internet banking channel subscription applicable or not (Y/N)"     
+      pattern: '[Y,N]'     
+     mobile:
+      type: string
+      description: "Mobile Banking Channel Subscription applicable or not (Y/N)"
+      pattern: '[Y,N]'
+     kiosk:
+      type: string
+      description: "KIOSK banking channel subscription applicable or not (Y/N)"
+      pattern: '[Y,N]'
+     telephone:
+      type: string
+      description: "Telephone banking channel subscription applicable or not (Y/N)"
+      pattern: '[Y,N]'
+ CommunicationChnlSubscription:
+   description: "Communication Channel Details of account"
+   type: object
+   properties:
+     email:
+      type: string
+      description: "E-Mail communication channel subscription applicable or not (Y/N)"
+      pattern: '[Y,N]'
+     post:
+      type: string
+      description: "Post communication channel subscription applicable or not (Y/N)"                        
+      pattern: '[Y,N]'                       
+     sms:
+      type: string
+      description: "SMS communication channel subscription applicable or not (Y/N)"
+      pattern: '[Y,N]'
+      
+ AccountDetailsModel:
+   description: AccountDetails model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+      processRefNo:
+        description: Process Reference Number
+        type: string
+        maxLength: 20       
+      accountType:
+        description: Type of the account , will be defualted from application initiation. 
+        type: string
+        maxLength: 35
+      accountBranch:
+        description: Branch of the account.
+        type: string
+        maxLength: 4
+      productCode:
+        description: Code of the product, which will be defaulted from the initiation.
+        type: string
+        maxLength: 30  
+      productName:
+        description: Name of the product, which will be defaulted from the initiation. 
+        type: string
+        maxLength: 100
+      accountCurrency:
+        description: Currency of the account. 
+        type: string
+        maxLength: 3
+      applicationDate:
+        description: Date of the application, Default to Current Date. 
+        type: string
+      accountName:
+        description: Name of the account.
+        type: string
+        maxLength: 100
+      holdingPattern:
+        description: Holding Pattern
+        type: string
+        maxLength: 30
+      otherHoldingPattern:
+        description: Holding pattern when existing values are not sufficient
+        type: string
+        maxLength: 30
+      ownership:
+        description: Ownership
+        type: string
+        maxLength: 30        
+      existingCustomer:
+        description: Is Existing Customer
+        type: boolean
+      modeOfOperation:
+        description: Mode of operation, Single (default value)/Jointly/Either or Survivor/Former or Survivor/As per mandan
+        type: string
+        maxLength: 35    
+      fundTheAccount:
+        description: Initial funding mode to the while account creation.
+        type: string
+        maxLength: 1
+      fundBy:
+        description: Funded by.
+        type: string
+        maxLength: 35
+      amount:
+        description: Amount to be funded.
+        type: number
+      accountNumber:
+        description: Account Number
+        type: string
+        maxLength: 105
+      overdraft:
+        description: Is over draft?
+        type: string
+        pattern: '[Y,N]'
+      chequeNumber:
+        description: Cheque Number.
+        type: string
+        maxLength: 50
+      chequeDate:
+        description: Cheque date.
+        type: string      
+      chequeBankName:
+        description: Bank name on the cheque.
+        type: string
+      chequeBranchName:
+        description: Branch name on the cheque.
+        type: string
+      chequeRoutingNumber:
+        description: Routing Number on the cheque
+        type: string
+        pattern: '^\d{0,9}$'
+      channel:
+        description: Channel of application initiation (Default RPM)
+        type: string
+      bankName:
+        type: string
+        description: Bank Name
+      bankCode:
+        type: string
+        description: Bank Code  
+      sourceSystemAccBrn:
+        type: string
+        description: Source System Account Branch                   
+      sourceEmpCode:
+        description: Source by employee Code
+        type: string
+      sourceEmpName:
+        description: Source by employee name
+        type: string           
+     required:
+      - stageCode
+      - processRefNo
+      - applicationNumber   
+      - accountName
+
+ ChargeDetailsMasterModel:
+   type: object
+   allOf:
+     - $ref: '#/definitions/GenericDatasegmentModel'
+     - type: object
+       properties:
+         processRefNo:
+           description: Process reference number of the ChargeDetailsMasterModel
+           type: string
+           maxLength: 20
+         hostCode:
+           description: Host Code
+           type: string
+         totalCharges:
+           description: Total Charges
+           type: number
+           maxLength: 50
+         chargeDetailsModel:
+           type: array
+           items:
+             $ref: '#/definitions/ChargeDetailsModel'
+       required:
+         - processRefNo
+         - applicationNumber
+         - chargeDetailsModel
+         - stageCode
+
+ ChargeDetailsModel:
+   description: "ChargeDetails Model"
+   type: object
+   properties:
+     id:
+       description: Id of the ChargeDetailsMasterModel
+       type: string
+       maxLength: 36
+     processRefNo:
+       description: Process reference Number of the ChargeDetailsModel
+       type: string
+       maxLength: 20
+     chargeDetailsMasterId:
+       description: Id of master table
+       type: string
+       maxLength: 36
+     amountCcy:
+       description: Currency of amount
+       type: string
+       maxLength: 4
+     componentCode:
+       description: Component Code
+       type: string
+     udeId:
+       description: udeId
+       type: string
+     chargeType:
+       description: Charge Type
+       type: string
+     amount:
+       description: Amount
+       type: number
+     waive:
+       description: Waive
+       type: boolean
+     waiveAllowed:
+       description: waiveAllowed
+       type: boolean
+     amendAllowed:
+       description: amendAllowed
+       type: boolean
+     seqNo:
+       description: Seq No
+       type: integer
+     slabDetailsModel:
+       type: array
+       items:
+         $ref: '#/definitions/SlabDetailsModel'
+   required:
+     - processRefNo
+     - componentCode
+     - chargeType
+     - seqNo
+
+ SlabDetailsModel:
+   description: "SlabDetails Model"
+   type: object
+   properties:
+     id:
+       description: Id of the SlabDetailsModel
+       type: string
+       maxLength: 36
+     processRefNo:
+       description: Process reference Number of the SlabDetailsModel
+       type: string
+       maxLength: 20
+     chargeDetailsId:
+       description: Id of master table
+       type: string
+       maxLength: 36
+     chargeAmountCcy:
+       description: Currency of charge amount
+       type: string
+       maxLength: 4
+     chargeAmount:
+       description: chargeAmount
+       type: number
+     chargeRate:
+       description: ChargeRate
+       type: number
+     slabAmount:
+       description: slabAmount
+       type: number
+   required:
+     - processRefNo
+      
+# ChargeDetailsMasterModel:
+#  type: object
+#  allOf:
+#  - $ref: '#/definitions/GenericDatasegmentModel'
+#  - type: object
+#    properties:
+#     processRefNo:
+#      description: Process reference number of the ChargeDetailsMasterModel
+#      type: string
+#      maxLength: 20
+#     applicationDate:
+#      type: string
+#      description: Date of application
+#     chargeProductName:
+#      type: string
+#      description: Charge product name
+#      maxLength: 50
+#     chargeDetailsModel:
+#      type: array
+#      items:
+#       $ref: '#/definitions/ChargeDetailsModel'
+#    required:
+#     - processRefNo
+#     - applicationNumber
+#     - chargeDetailsModel
+#     - stageCode
+# ChargeDetailsModel:
+#   description: "ChargeDetails Model"
+#   type: object
+#   properties:
+#    id:
+#     description: Id of the ChargeDetailsMasterModel
+#     type: string
+#     maxLength: 36
+#    processRefNo:
+#     description: Process reference Number of the ChargeDetailsModel
+#     type: string
+#     maxLength: 20
+#    chargeDetailsMasterId:
+#     description: Id of master table
+#     type: string
+#     maxLength: 36
+#    chargeName:
+#     type: string
+#     description: Charge name
+#     maxLength: 50
+#    chargeType:
+#     type: string
+#     description: Charge type
+#     maxLength: 30
+#    amountCcy:
+#     description: Currency of amount
+#     type: string
+#     maxLength: 4
+#    amount:
+#     type: number
+#     description: Amount
+#     minimum: 0
+#     exclusiveMinimum: true
+#    rate:
+#     type: number
+#     description: Rate of interest
+#     minimum: 0
+#     exclusiveMinimum: true
+#    feeWaiver:
+#     type: string
+#     maxLength: 1
+#     pattern: '[Y,N]'
+#     description: Fee waived?
+#    slabDetailsModel:
+#     type: array
+#     items:
+#      $ref: '#/definitions/SlabDetailsModel'
+#   required:
+#    - processRefNo
+# SlabDetailsModel:
+#   description: "SlabDetails Model"
+#   type: object
+#   properties:
+#    id:
+#     description: Id of the SlabDetailsModel
+#     type: string
+#     maxLength: 36
+#    processRefNo:
+#     description: Process reference Number of the SlabDetailsModel
+#     type: string
+#     maxLength: 20
+#    chargeDetailsId:
+#     description: Id of master table
+#     type: string
+#     maxLength: 36
+#    amountFromCcy:
+#     description: Currency of amount from
+#     type: string
+#     maxLength: 4
+#    amountFrom:
+#     type: number
+#     description: Amount from
+#     minimum: 0
+#     exclusiveMinimum: true
+#    amountUptoCcy:
+#     description: Currency of amount upto
+#     type: string
+#     maxLength: 4
+#    amountUpto:
+#     type: number
+#     description: Amount upto
+#     minimum: 0
+#     exclusiveMinimum: true
+#    amountCcy:
+#     description: Amount currency
+#     type: string
+#     maxLength: 4
+#    amount:
+#     type: number
+#     description: Amount
+#     minimum: 0
+#     exclusiveMinimum: true
+#    rate:
+#     type: number
+#     description: Rate of interest
+#     minimum: 0
+#     exclusiveMinimum: true
+#   required:
+#    - processRefNo
+#
+# InterestDetailsModel:
+#  type: object
+#  allOf:
+#  - $ref: '#/definitions/GenericDatasegmentModel'
+#  - type: object
+#    properties:
+#     processRefNo:
+#      description: Process reference Number of the InterestDetailsModel
+#      type: string
+#      maxLength: 20
+#     applicationDate:
+#      type: string
+#      description: Date of application
+#     interestProductName:
+#      type: string
+#      description: Interest Product name
+#     payoutFrequency:
+#      type: string
+#      description: Frequency of payout
+#     interestRate:
+#      type: number
+#      pattern: '([0-9]+)?'
+#      description: Rate of interest
+#     margin:
+#      type: number
+#      pattern: '([0-9]+)?'
+#      description: Margin rate
+#     netInterest:
+#      type: number
+#      pattern: '([0-9]+)?'
+#      description: Net interest rate
+#    required:
+#     - stageCode
+#     - processRefNo
+#     - applicationNumber
+#     - interestRate
+#     - netInterest
+#     - payoutFrequency
+#     - interestProductName
+ 
+ NomineeDetailsMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+#     dataSegmentCode:
+#      description: Data segment code
+#      type: string
+#     stageCode:
+#      description: stageCode
+#      type: string
+#      maxLength: 36             
+#     id:
+#      description: Id of the NomineeDetailsMasterModel
+#      type: string
+#      maxLength: 36
+#     applicationNumber:
+#      description: Application Number of the NomineeDetailsMasterModel
+#      type: string
+#      maxLength: 20
+     processRefNo:
+      description: Process Reference Number of the NomineeDetailsMasterModel
+      type: string
+      maxLength: 20      
+     applicationDate:
+      type: string
+      description: Date of application 
+     minorAge:
+      type: number
+      description: age of minor 
+     nomineeDetailsModel:
+      type: array
+      items:
+       $ref: '#/definitions/NomineeDetailsModel'
+    required:
+     - applicationNumber
+     - processRefNo
+     - nomineeDetailsModel
+     - stageCode
+ NomineeDetailsModel:
+   description: "NomineeDetails Model"
+   type: object
+   properties:
+    id:
+     description: Id of the NomineeDetailsModel
+     type: string
+     maxLength: 36
+    processRefNo:
+     description: "Process Reference Number of the NomineeDetailsModel"
+     type: string
+     maxLength: 20
+    nomineeDetailsMasterId:
+     description: Id of master table
+     type: string
+     maxLength: 36
+    dateOfBirth:
+     type: string
+     description: Date of birth
+    firstName:
+     type: string
+     description: First name
+    fullName:
+     type: string
+     description: Full name 
+    gender:
+     type: string
+     description: Gender
+    isMinor:
+     type: string
+     description: is Minor?
+    lastName:
+     type: string
+     description: Last name
+    middleName:
+     type: string
+     description: Middle name
+    percentage:
+     type: number
+     description: Percentage
+    relationType:
+     type: string
+     description: Relation type
+    title:
+     type: string
+     description: Title
+    address:
+     $ref: '#/definitions/Address'
+    guardianDetails:
+     $ref: '#/definitions/GuardianDetails'
+ GuardianDetails:
+   description: GuardianDetails Model
+   type: object
+   properties:
+    guardianDob:
+     type: string
+     description: Date of birth of guardian
+    guardianFirstName:
+     type: string
+     description: First name of guardian
+    fullName:
+     type: string
+     description: Full name of guardian  
+    guardianGender:
+     type: string
+     description: Gender of guardian
+    guardianLastName:
+     type: string
+     description: Last name of guardian
+    guardianMiddleName:
+     type: string
+     description: Middle name of guardian
+    guardianRelation:
+     type: string
+     description: Relation with guardian
+    guardianTitle:
+     type: string
+     description: Title of guardian
+    address:
+     $ref: '#/definitions/Address'
+ Address:
+   description: "Address Model"
+   type: object
+   properties:
+    state:
+     type: string
+     description: State
+     maxLength: 50
+    phoneIsd:
+     type: string
+     description: ISD of phone number
+     #pattern: ^\+[1-9]{0,3}$
+     maxLength: 10
+    phoneNo:
+     type: string
+     description: Phone number
+     maxLength: 10
+    pinCode:
+     type: string
+     description: Pin code
+     maxLength: 20
+    mobileIsd:
+     type: string
+     description: ISD of mobile number
+     #pattern: ^\+[1-9]{1,3}$
+     maxLength: 10
+    mobileNo:
+     type: string
+     description: Mobile number
+     maxLength: 10 
+    email:
+     type: string
+     description: Email address
+     #pattern: (^$|\w+?@\w+?\x2E.+)
+     maxLength: 50
+    city:
+     type: string
+     description: City
+     maxLength: 50
+    country:
+     type: string
+     description: Country            
+    buildingName:
+     type: string
+     description: buildingName
+     maxLength: 50
+    streetName:
+     type: string
+     description: streetName
+     maxLength: 50
+    localityName:
+     type: string
+     description: localityName
+     maxLength: 50                 
+ GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type
+ 
+# ApplicantDetailsMasterModel:
+#  type: object
+#  allOf:
+#  - $ref: '#/definitions/GenericDatasegmentModel'
+#  - type: object
+#    properties:
+##     id:
+##      description: Id of the ApplicantDetailsMasterModel
+##      type: string
+##      maxLength: 36
+##     applicationNumber:
+##      description: Application Number of the ApplicantDetailsMasterModel
+##      type: string
+##      maxLength: 20
+#     processRefNo:
+#      description: "Process Reference Number of the ApplicantDetailsMasterModel"
+#      type: string
+#      maxLength: 20
+#     channel:
+#      description: Channel from where Applicant got initiated
+#      type: string
+#      maxLength: 20
+#     applicationDate:
+#      description: Application Date of the ApplicantDetailsMasterModel
+#      type: string
+##     dataSegmentCode:
+##      description: Data segment code
+##      type: string
+##     stageCode:
+##      description: stageCode
+##      type: string
+##      maxLength: 36
+#     minorAge:
+#      type: number
+#      description: age of minor
+#     accountName:
+#      description: accountName
+#      type: string
+#     applicationType:
+#      description: Application Type
+#      type: string
+#     ownership:
+#      description: Ownership
+#      type: string
+#     modeOfOperation:
+#      description: Mode of operation
+#      type: string
+#     holdingPattern:
+#      description: Holding Pattern
+#      type: string
+#     numberOfApplicants:
+#      description: Number of Applicants
+#      type: number
+#     stageChanged:
+#      description: Stage changed?
+#      type: boolean
+#     applicantDetailsModel:
+#      type: array
+#      items:
+#       $ref: '#/definitions/ApplicantDetailsModel'
+##    required:
+##     - applicationNumber
+##     - applicantDetailsModel
+##     - processRefNo
+# ApplicantDetailsModel:
+#   description: "ApplicantDetailsModel"
+#   type: object
+#   properties:
+#    id:
+#     description: Id of the ApplicantDetailsModel
+#     type: string
+#     maxLength: 36
+#    applicantDetailsMasterId:
+#     description: Id of master table
+#     type: string
+#     maxLength: 36
+#    processRefNo:
+#     description: "Process Reference Number of the ApplicantDetailsMasterModel"
+#     type: string
+#     maxLength: 20
+#    applicationNumber:
+#     description: Application Number of the ApplicantDetailsMasterModel
+#     type: string
+#     maxLength: 20
+#    applicantId:
+#     description: Applicant Id
+#     type: string
+#    serialNo:
+#     description: Applicant sequence number
+#     type: integer
+#    custImgId:
+#     description: Customer Image Id
+#     type: string
+#    title:
+#     description: title
+#     type: string
+#     maxLength: 8
+#    firstName:
+#     description: firstName
+#     type: string
+#     maxLength: 25
+#    middleName:
+#     description: middleName
+#     type: string
+#     maxLength: 25
+#    lastName:
+#     description: lastName
+#     type: string
+#     maxLength: 25
+#    dateOfBirth:
+#     description: dateOfBirth
+#     type: string
+#    gender:
+#     description: gender
+#     type: string
+#    residentStatus:
+#     description : Resident/Non-Resident
+#     type: string
+#    countryOfResidence:
+#     description : Country of residence
+#     type: string
+#    dateOfIncorporation:
+#     description : Date of Incorporation
+#     type: string
+#    countryOfIncorporation:
+#     description : Country of Incorporation
+#     type: string
+#    citizenship:
+#     description : Country of Citizenship
+#     type: string
+#    birthPlace:
+#     description : place of birth
+#     type: string
+#    birthCountry:
+#     description : Country of birth
+#     type: string
+#    occupationType:
+#     description : Type of occupation
+#     type: string
+#    organizationType:
+#     description : Type of organization
+#     type: string
+#    demographicType:
+#     description : Demographic Type
+#     type: string
+#    sector:
+#     description : Sector
+#     type: string
+#    industryGroup:
+#     description : Industry Group
+#     type: string
+#    industry:
+#     description : Industry
+#     type: string
+#    subIndustry:
+#     description : Sub-Industry
+#     type: string
+#    maritalStatus:
+#     description: maritalStatus
+#     type: string
+#    uniqueIdType:
+#     description: uniqueIdType
+#     type: string
+#    uniqueIdNo:
+#     description: uniqueIdNo
+#     type: string
+#    uniqueIdExpiryDate:
+#     description: uniqueId Expiry date
+#     type: string
+#    existingCustomer:
+#     description: Is Existing Customer?
+#     type: boolean
+#    kycStatus:
+#     description: KYC status
+#     type: string
+#    kycModel:
+#     description: kyc model
+#     type: object
+#    primaryApplicant:
+#     description: Is PrimaryApplicant?
+#     type: boolean
+#    cifNumber:
+#     description: CIFNumber
+#     type: string
+#     maxLength: 15
+#    partyHandofftoHostStatus:
+#      description: partyHandofftoHostStatus
+#      type: string
+#    partyId:
+#      description: Party ID
+#      type: string
+#    shortName:
+#      type: string
+#      description: shortName for customer
+#    lastUpdatedOn:
+#      description: Last updated on
+#      type: string
+#    basicInfoAmend:
+#      description: Basic info Amend
+#      type: boolean
+#    contactAmend:
+#      description: Contact Amend
+#      type: boolean
+#    kycAmend:
+#      description: Kyc Amend
+#      type: boolean
+#    address:
+#     type: array
+#     items:
+#      $ref: '#/definitions/Address'
+#    authorizedSignatory:
+#     type: array
+#     items:
+#      $ref: '#/definitions/AuthorizedSignatory'
+##   required:
+##     - applicationNumber
+##     - address
+ Address:
+    description: "Address Model"
+    type: object
+    properties:
+     id:
+      description: Id of the Address model
+      type: string
+      maxLength: 36
+     applicantDetailsId:
+      description: Id of master table
+      type: string
+      maxLength: 36
+     processRefNo:
+      description: "Process Reference Number of the ApplicantDetailsMasterModel"
+      type: string
+      maxLength: 20
+     authorizedSignatoryId:
+      description: ID of the authorized signatory model
+      type: string
+      maxLength: 20
+     serialNo:
+      description: Applicant sequence number
+      type: integer
+     preferredMailAddress:
+      description: preferredMailAddress
+      type: boolean
+     streetName:
+      description: streetName
+      type: string
+     localityName:
+      description: localityName
+      type: string
+     landmark:
+      description: landmark
+      type: string
+     buildingName:
+      description: buildingName
+      type: string
+     areaDetails:
+      description: areaDetails
+      type: string
+     periodOfStay:
+      description: periodOfStay
+      type: string
+     addressType:
+      description: addressType
+      type: string
+      maxLength: 50
+     country:
+      description: country
+      type: string
+      maxLength: 50
+     state:
+      description: state
+      type: string
+      maxLength: 50
+     city:
+      description: city
+      type: string
+      maxLength: 50
+     pinCode:
+      description: pinCode
+      type: string
+      maxLength: 10
+     email:
+      description: email
+      type: string
+      maxLength: 255
+     mobileNo:
+      description: mobileNo
+      type: integer
+      format: int64
+     mobileIsd:
+      description: mobileIsd
+      type: string
+      maxLength: 5
+     phoneNo:
+      description: phoneNo
+      type: integer
+      format: int64
+     phoneIsd:
+      description: phoneIsd
+      type: string
+      maxLength: 5
+#    required:
+#    - country
+#    - addressLine1
+#    - pinCode
+#    - email
+#    - mobileNo
+#    - mobileIsd
+ AuthorizedSignatory:
+    description: "AuthorizedSignatory Model"
+    type: object
+    properties:
+     id:
+      description: Id of the Authorized signatory model
+      type: string
+      maxLength: 36
+     applicantDetailsId:
+      description: Id of master table
+      type: string
+      maxLength: 36
+     processRefNo:
+      description: "Process Reference Number of the ApplicantDetailsMasterModel"
+      type: string
+      maxLength: 20
+     applicantId:
+      description: Applicant Id
+      type: string
+     serialNo:
+      description: Applicant sequence number
+      type: integer 
+     custImgId:
+      description: Customer Image Id
+      type: string  
+     title:
+      description: title
+      type: string
+      maxLength: 8
+     firstName:
+      description: firstName
+      type: string
+      maxLength: 25
+     middleName:
+      description: middleName
+      type: string
+      maxLength: 25
+     lastName:
+      description: lastName
+      type: string
+      maxLength: 25
+     role:
+      description: Role of signatory
+      type: string
+      maxLength: 25
+     identificationNo:
+      description: Identification number of signatory
+      type: string
+      maxLength: 25
+     dateOfBirth:
+      description: dateOfBirth
+      type: string
+     gender:
+      description: gender
+      type: string
+     existingCustomer:
+      description: Is Existing Customer
+      type: boolean
+     kycStatus:
+      description: KYC status
+      type: string 
+     cifNumber:
+      description: CIFNumber
+      type: string
+      maxLength: 15
+     residentStatus:
+      description : Resident/Non-Resident
+      type: string
+     countryOfResidence:
+      description : Country of residence
+      type: string
+     citizenship:
+      description : Country of Citizenship
+      type: string 
+     uniqueIdType:
+      description: uniqueIdType
+      type: string
+     uniqueIdNo:
+      description: uniqueIdNo
+      type: string
+     uniqueIdExpiryDate:
+      description: uniqueId Expiry date
+      type: string
+     partyHandofftoHostStatus:
+      description: partyHandofftoHostStatus
+      type: string 
+     address:
+      type: array
+      items:
+       $ref: '#/definitions/Address' 
+#    required:
+#    - firstName
+#    - lastName
+#    - gender 
+#    - dateOfBirth
+#    - countryOfResidence
+#    - citizenship
+#    - uniqueIdNo
+ odAdvanceDetailsMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     processRefNo:
+      description: "Process reference number of Mandate details master model"
+      type: string
+      maxLength: 20         
+     channel:
+      type: string
+      description: Channel
+     action:
+      type: string
+      description: action 
+     applicationDate:
+      type: string
+      description: "Date of application"    
+     limitId:
+      type: string
+      description: limit unique id 
+     limitAmountCcy:
+      type: string
+      description: limit amount currency     
+     limitAmount:
+      type: number
+      description: limit amount
+     limitStartDate:
+      type: string
+      description: limit start date
+     limitEndDate:
+      type: string
+      description: limit end date       
+     addAufDetails:
+      type: boolean
+      description: Flag to check OD advance details validation
+ odAdvanceDetailsMasterCollection:
+    description: Collection of odAdvanceDetailsMasterModel.
+    type: object
+    properties:
+     odAdvanceDetailsMasterModelList:
+      type: array
+      items:
+       $ref: '#/definitions/odAdvanceDetailsMasterModel'
+ odUnsecuredDetailsMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     processRefNo:
+      description: "Process reference number of Mandate details master model"
+      type: string
+      maxLength: 20    
+     applicationDate:
+      type: string
+      description: "Date of application"    
+     channel:
+      type: string
+      description: Channel
+     action:
+      type: string
+      description: action
+     limitId:
+      type: string
+      description: limit unique id 
+     limitAmountCcy:
+      type: string
+      description: limit amount currency     
+     limitAmount:
+      type: number
+      description: limit amount
+     limitStartDate:
+      type: string
+      description: limit start date
+     limitEndDate:
+      type: string
+      description: limit end date
+     renewTod:
+      type: string
+      pattern: '[Y,N]'
+      description: renewTod
+     renewPeriodType:
+      type: string
+      description: Renew Period Type
+     renewPeriod:
+      type: number
+      description: Renew Period
+     nextRenewalLimitCcy:
+      type: string
+      description: Next Renewal Limit CCY
+     nextRenewalLimit:
+      type: number
+      description: Next Renewal Limit             
+ odUnsecuredDetailsMasterCollection:
+    description: Collection of odUnsecuredDetailsMasterModel.
+    type: object
+    properties:
+     odUnsecuredDetailsMasterModelList:
+      type: array
+      items:
+       $ref: '#/definitions/odUnsecuredDetailsMasterModel'
+ odUnsecuredTempDetailsMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     processRefNo:
+      description: "Process reference number of Mandate details master model"
+      type: string
+      maxLength: 20     
+     applicationDate:
+      type: string
+      description: "Date of application"    
+     channel:
+      type: string
+      description: Channel
+     action:
+      type: string
+      description: action
+     limitId:
+      type: string
+      description: limit unique id 
+     limitAmountCcy:
+      type: string
+      description: limit amount currency     
+     limitAmount:
+      type: number
+      description: limit amount
+     limitStartDate:
+      type: string
+      description: limit start date
+     limitEndDate:
+      type: string
+      description: limit end date
+     renewTod:
+      type: string
+      description: renewTod
+     renewPeriodType:
+      type: string
+      description: Renew Period Type
+     renewPeriod:
+      type: number
+      description: Renew Period
+     nextRenewalLimitCcy:
+      type: string
+      description: Next Renewal Limit CCY
+     nextRenewalLimit:
+      type: number
+      description: Next Renewal Limit       
+     addUnsecureTempDetails:
+      type: boolean
+      description: Flag to check Temporary OD Limit Details validation       
+ odUnsecuredTempDetailsMasterCollection:
+    description: Collection of odUnsecuredTempDetailsMasterModel.
+    type: object
+    properties:
+     odUnsecuredTempDetailsMasterModelList:
+      type: array
+      items:
+       $ref: '#/definitions/odUnsecuredTempDetailsMasterModel'
+ odSecuredDetailsMasterModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     processRefNo:
+      description: "Process reference number of ODSecured details master model"
+      type: string
+      maxLength: 20    
+     applicationDate:
+      type: string
+      description: "Date of application"    
+     channel:
+      type: string
+      description: Channel
+     action:
+      type: string
+      description: action
+     collateralType:
+      type: string
+      description: collateralType
+     collateralValueCcy:
+      type: string
+      description: collateralValueCcy 
+     collateralValue:
+      type: number
+      description: collateralValue
+     attributes:
+      type: string
+      description: attributes
+     dimensionType:
+      type: string
+      description: dimensionType
+     dimension:
+      type: number
+      description: dimension
+     thirdPartyCollateral:
+      type: string
+      description: thirdPartyCollateral      
+     securityReferenceNo:
+      type: string
+      description: securityReferenceNo
+     branchCode:
+      type: string
+      description: branchCode
+     avalLinkageAmountCcy:
+      type: string
+      description: avalLinkageAmountCcy
+     avalLinkageAmount:
+      type: number
+      description: avalLinkageAmount
+     odLimitAmountCcy:
+      type: string
+      description: odLimitAmountCcy
+     odLimitAmount:
+      type: number
+      description: odLimitAmount
+     linkagePercentage:
+      type: number
+      description: linkagePercentage
+     limitStartDate:
+      type: string
+      description: limitStartDate
+     limitEndDate:
+      type: string
+      description: limitEndDate
+     rateValue:
+      type: number
+      description: rateValue
+     rateType:
+      type: string
+      description: rateType
+     spread:
+      type: number
+      description: spread
+     finalRate:
+      type: number
+      description: finalRate
+     make:
+      type: string
+      description: make
+     model:
+      type: string
+      description: model
+     investmentType:
+      type: string
+      description: Investment Type
+     branch:
+      type: string
+      description: branch
+     bank:
+      type: string
+      description: bank
+     maturityDate:
+      type: string
+      description: maturity date
+     name:
+      type: string
+      description: name    
+ odSecuredDetailsMasterCollection:
+    description: Collection of odSecuredDetailsMasterModel.
+    type: object
+    properties:
+     odSecuredDetailsMasterModelList:
+      type: array
+      items:
+       $ref: '#/definitions/odSecuredDetailsMasterModel'
+ odAccountLimitDetailsMasterModel:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDatasegmentModel'
+      - type: object
+        properties:
+          processRefNo:
+            description: "Process reference number of ODAccountLimit details master model"
+            type: string
+            maxLength: 20
+          applicationDate:
+            type: string
+            description: "Date of application"
+          channel:
+            type: string
+            description: Channel
+          action:
+            type: string
+            description: action
+          odApplicantDetailsList:
+            type: array
+            items:
+              $ref: '#/definitions/odApplicantDetailsModel'
+ odApplicantDetailsModel:
+    description: Overdraft Applicant Details Model
+    type: object 
+    properties:
+      id:
+        description: Id of the Overdraft Applicant Details Model
+        type: string
+      odAccountLimitDetailsMasterId:
+        description: Id of OD Account Limit Details Master Table
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+        maxLength: 20
+      processRefNo:
+        description: Process Ref Number
+        type: string
+        maxLength: 20
+      rateValue:
+        type: number
+        description: rateValue
+      applicantId:
+        description: Applicant ID
+        type: string
+      partyId:
+        description: Party ID
+        type: string
+      customerId:
+        description: Customer ID
+        type: string
+      customerName:
+        description: Customer Name
+        type: string
+      primaryApplicant:
+        description: Primary Applicant Y/N
+        type: boolean
+      existingCustomer:
+        description: Existing Customer Y/N
+        type: boolean
+      dateOfBirth:
+        description: Date of Birth
+        type: string
+      email:
+        description: Email
+        type: string
+      mobileNumber:
+        description: Mobile Number
+        type: integer
+        format: int64
+      mobileIsd:
+        description: Mobile ISD
+        type: string
+      odAccountLimitDetailsList:
+        type: array
+        items:
+          $ref: '#/definitions/odAccountLimitDetailsModel'
+ odAccountLimitDetailsModel:
+    description: "odAccountLimitDetailsModel"
+    type: object
+    properties:
+      id:
+        description: account limit details ID
+        type: string
+      odApplicantDetailsId:
+        description: Id of Overdraft Applicant Details table
+        type: string
+      processRefNo:
+        description: "Process reference number of ODAccountLimit details master model"
+        type: string
+        maxLength: 20
+      applicationNumber:
+        type: string
+        description: "Application number"
+      channel:
+        type: string
+        description: Channel
+      action:
+        type: string
+        description: action
+      limitType:
+        type: string
+        description: limitType
+      linkageReference:
+        type: string
+        description: linkageReference
+      branchCode:
+        type: string
+        description: branchCode
+      branch:
+        type: string
+        description: branch
+      odLimitAmountCcy:
+        type: string
+        description: odLimitAmountCcy
+      odLimitAmount:
+        type: number
+        description: odLimitAmount
+      limitStartDate:
+        type: string
+        description: limitStartDate
+      limitEndDate:
+        type: string
+        description: limitEndDate
+      linkedAmount:
+        type: number
+        description: linkedAmount
+      rateValue:
+        type: number
+        description: rateValue
+      rateCode:
+        type: string
+        description: rateCode
+      margin:
+        type: number
+        description: spread
+      finalRate:
+        type: number
+        description: finalRate
+      avalLinkageAmountCcy:
+        type: string
+        description: avalLinkageAmountCcy
+      avalLinkageAmount:
+        type: number
+        description: avalLinkageAmount
+ odAccountLimitDetailsMasterCollection:
+    description: Collection of odAccountLimitDetailsMasterModel.
+    type: object
+    properties:
+      odAccountLimitDetailsMasterModelList:
+        type: array
+        items:
+          $ref: '#/definitions/odAccountLimitDetailsMasterModel'
+ GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type
+      

@@ -1,0 +1,484 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : collateralservices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Collateral Application Service
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-cmn-collateralservices
+tags:
+- name: CollateralDetailsServices
+  description: API for Collateral Operations
+schemes:
+- http
+paths:
+  /web/v1/collateralservices/submit:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Submit for the Collateral Aggregate.
+      description: Populate Collateral Aggregate and moves the latest data from all worktables to main tables or onboard collateral details
+      operationId: saveCollateralServices
+      parameters:
+      - name: CollateralServicesAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new CollateralAggregate
+        required: true
+        schema:
+          $ref: '#/definitions/CollateralServicesAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created CollateralAggregate
+          headers:
+            Location:
+              description: URL of newly created CollateralAggregate
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+  /web/v1/collateralservices/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Get data segment History Details.
+      description: Get data segment History Details.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application Number for which Collateral data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Ref number for which Collateral data needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode for History need to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns History details for the proccess number and datasegment code
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+ 
+  /web/v1/collateralservices/{applicationNumber}/{processRefNo}/stagesummary:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Get Stagesummary Details.
+      description: Get stagesummary Details.
+      operationId: getStageSummary
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber for which Collateral data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Reference number for which Collateral data needs to be fetched
+        required: true
+        type: string
+      - name: datasegments
+        in: query
+        description: comma seperated datasegments for the stage
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns summary details for the process ref no for the stage
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+  /web/v1/collateralservices/createcollateral:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Collateral Creation
+      description: create collateral
+      operationId: createCollateral
+      parameters:
+      - name: CreateCollateralModel
+        in: body
+        description: Request Body that contains data required for creating a Collateral
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCollateralModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Collateral
+          headers:
+            Location:
+              description: URL of newly created Collateral
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+  /web/v1/collateralservices/createliability:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Liability Creation With Linkage
+      description: create Liability And linkage
+      operationId: createLiability
+      parameters:
+      - name: CreateCollateralModel
+        in: body
+        description: Request Body that contains data required for creating a Liability
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCollateralModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Liability and linking it
+          headers:
+            Location:
+              description: URL of newly created Liability
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+  /web/v1/collateralservices/liabilitycreation:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Liability Creation
+      description: create Liability
+      operationId: liabilityCreation
+      parameters:
+      - name: CreateCollateralModel
+        in: body
+        description: Request Body that contains data required for creating a Liability
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCollateralModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Liability
+          headers:
+            Location:
+              description: URL of newly created Liability
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+  /web/v1/collateralservices/save:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Save and Submit for the collateral domain.
+      description: Save and Submit for the collateral domain
+      operationId: submitCollateralServices
+      parameters:
+      - name: CollateralServicesAggregateModel
+        in: body
+        description: Request Body that contains data required for saving collateralApplication
+        required: true
+        schema:
+          $ref: '#/definitions/CollateralServicesAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Collateral
+          headers:
+            Location:
+              description: URL of newly created Collateral
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+  /web/v1/collateralservices/{applicationNumber}/datasegment-details: 
+    get: 
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: Get the Details of Collateral Work Table.
+      description: Get the Work Table Details.
+      operationId: getCollateralServices
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Collateral data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNos
+        in: query
+        description: Process Reference number for which Collateral data needs to be fetched
+        required: true
+        type: array
+        items:
+         type: string
+      responses:
+        200:
+          description: Returns CollateralApplicationMasterModel for the application number
+          schema: 
+           $ref: '#/definitions/CollateralApplicationMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+ 
+  /web/v1/aggregatedetails:
+    get:     
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CollateralAggregate
+      summary: get each datasegment details.
+      description: get each datasegment details
+      operationId: getDataSegmentDetails
+      parameters:
+      - name: processRefNo
+        in: query
+        description: Process Reference number for which data segments details needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: Application number for which data segments details needs to be fetched
+        required: true
+        type: string        
+      responses:
+        201:
+          description: Returns the Id of the newly created Collateral          
+          schema:
+            $ref: '#/definitions/CollateralServicesAggregateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+ 
+definitions:
+  CollateralServicesAggregateModel:
+    description: CollateralServicesAggregateModel
+    type: object
+    properties:
+      id:
+        description: Collateral Application Id
+        type: string
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: ApplicationNumber
+        type: string
+#      collateralRefNo:
+#        description: Collateral Ref No
+#        type: string
+#      collateralId:
+#        description: Collateral Id
+#        type: string
+      action:
+        description: Save or Submit
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      channel: 
+        description: Channel
+        type: string
+      collateralDetails:
+        $ref: '#/definitions/CollateralDetailsMasterModel'
+      valuationDetails:
+        $ref: '#/definitions/ValuationDetailsMasterModel'
+      legalOpinionDetails:
+        $ref: '#/definitions/LegalOpinionDetailsMasterModel'
+      perfectionDetails:
+        $ref: '#/definitions/PerfectionDetailsMasterModel'
+    required:
+    - processRefNo
+    - applicationNumber
+ 
+  CreateCollateralModel:
+    description: Collateral Creation model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      userId:
+        description: User Id
+        type: string
+      branchCode:
+        description: Branch Code
+        type: string
+      handOffStatus:
+        description: Hand Off Status
+        type: string
+    required:
+    - processRefNo
+    - applicationNumber
+    - userId
+    - branchCode
+ 
+  CollateralApplicationMasterModel:
+    description: Collateral Application Master Model
+    type: object
+    properties:
+      data: 
+        type: array
+        items:
+         $ref: '#/definitions/CollateralApplicationModel' 
+  CollateralApplicationModel: 
+    description: Collateral Application Model
+    type: object
+    properties:
+      collateralDetails:
+        $ref: '#/definitions/CollateralDetailsMasterModel'

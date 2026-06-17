@@ -1,0 +1,885 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: BusinessProduct Services
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-businessproductdetails-services
+tags:
+  - name: BusinessProductAggregateWeb
+    description: API for data segment crud operations for UI
+  - name: BusinessProductAggregateService
+    description: API for data segment crud operations for Services
+schemes:
+  - http
+paths:
+  /web/v1/businessproduct:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Adds a new datasegment details.
+      description: Adds a new datasegment details.
+      operationId: createResource
+      parameters:
+        - name: businessProductWebModel
+          in: body
+          description: Request Body that contains data required for creating a new datasegment
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessProductWebModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created datasegment
+          headers:
+            Location:
+              description: URL of newly created datasegment
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+        - BusinessProductAggregateWeb
+      summary: "Get all valid master datasegment details"
+      description:  "Get all valid master datasegment. This endpoints will be used to Get all valid master datasegment maintenance records."
+      operationId: "getSummary"
+      parameters:
+        - name: includecloseandunauth
+          in: query
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: false
+          type: boolean
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: checkerId
+          in: query
+          description: checkerId is Checker of records to be fetched
+          required: false
+          type: string
+        - name: makerId
+          in: query
+          description: makerId is Maker of records to be fetched
+          required: false
+          type: string
+        - name: authStat
+          in: query
+          description: auth status of the records to be fetched
+          required: false
+          type: string
+        - name: recordStat
+          in: query
+          description: records status of the records to be fetched
+          required: false
+          type: string
+        - name: businessProductCode
+          in: query
+          description: businessProductCode is Business Product Code of records to be fetched
+          required: false
+          type: string
+        - name: productType
+          in: query
+          description: productType is Product Type of records to be fetched
+          required: false
+          type: string
+        - name: productSubType
+          in: query
+          description: Product Sub Type of records to be fetched
+          required: false
+          type: string
+        - name: channel
+          in: query
+          description: channel for which records to be fetched
+          required: false
+          type: string
+        - name: businessProductName
+          in: query
+          description: businessProductName for which records to be fetched
+          required: false
+          type: string
+        - name: productCategory
+          in: query
+          description: productCatgeory for which records to be fetched
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: '#/definitions/RpmTmBusinessProductDetailsCollection'
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        404:
+          description: "Not found"
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/businessproduct/{resourceId}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Retrieves the datasegment deatils by resourceId.
+      description: Retrieves the datasegment deatils by resourceId.
+      operationId: getByResourceId
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id of the datasegment that needs to be fetched
+          required: true
+          type: string
+        - name: datasegmentCode
+          in: query
+          description: datasegmentCode of the datasegment
+          type: string
+        - name: version
+          in: query
+          description: version of the datasegment
+          type: string
+        - name: latestAuthRecord
+          in: query
+          description: "provides only latest lates auth records if true"
+          required: false
+          default: false
+          type: boolean
+      responses:
+        200:
+          description: Returns the datasegment based on given resourceId.
+          schema:
+            $ref: '#/definitions/BusinessProductWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found
+        500:
+          description: Internal error
+    put:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Update an existing datasegment.
+      description: Update an existing datasegment.
+      operationId: updateResource
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id of the resource that need to be updated
+          required: true
+          type: string
+        - name: businessProductWebModel
+          in: body
+          description: Request Body that contains data required for updating an existing datasegment
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessProductWebModel'
+      responses:
+        202:
+          description: Returns updated datasegment Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/delete:
+    put:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Delete the resource based on the resourceId and version.
+      description: Deleting the resource.
+      operationId: deleteResource
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id of the resource that need to be deleted
+          required: true
+          type: string
+        - name: orchestratorDTO
+          in: body
+          description: Request body contains resource Id and resource mod numbers which need to be deleted
+          required: true
+          schema:
+            $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/isValid:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Validates the resource by Resource Id.
+      description: Validates the resource by Resource Id.
+      operationId: validateResource
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id that needs to be validated
+          required: true
+          type: string
+        - name: version
+          in: query
+          description: version for which validation is required
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/submit:
+    patch:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Submit for the Resource.
+      description: Validates datasegments and submits the resource.
+      operationId: submitResource
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id that needs to be submited
+          required: true
+          type: string
+        - name: orchestratorDTO
+          in: body
+          description: Request body contains resource Id and resource mod numbers
+          required: true
+          schema:
+            $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/unauthorized:
+    get:
+      tags:
+        - BusinessProductAggregateWeb
+      summary: "Retrives the unauthorized resource by given resource id"
+      description:  "Retrives the unauthorized resource identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/RpmTmBusinessProductDetailsCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/authorize:
+    put:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Authorize the resource.
+      description: Authorize the resource and moves the latest data from all worktables to main tables.
+      operationId: authorizeResource
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource id of the resource
+          required: true
+          type: string
+        - name: orchestratorDTO
+          in: body
+          description: Request body contains resource Id and resource mod numbers which need to be authorized
+          required: true
+          schema:
+            $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/unlock:
+    put:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: removes the advisory lock on the resource.
+      description: removes the advisory lock on the resource.
+      operationId: removeResourceLock
+      parameters:
+        - name: resourceId
+          in: path
+          description: resourceId of the resource
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/actions:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: provides action for Resource Id.
+      description: provides action for Resource Id.
+      operationId: getPermittedActionsOnRes
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id for which actions needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/history:
+    get:
+      tags:
+        - BusinessProductAggregateWeb
+      summary: "Retrives the history by given Resource Id"
+      description:  "Retrives the history by given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+        - name: resourceId
+          in: path
+          description: resourceId of the resource
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/RpmTmBusinessProductDetailsCollection'
+
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/close:
+    patch:
+      tags:
+        - BusinessProductAggregateWeb
+      summary: "Closes the resource by given Resource Id"
+      description:  "Closes the resource by given Resource Id"
+      operationId: "closeResource"
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id that needs to be closed
+          required: true
+          type: string
+        - name: orchestratorDTO
+          in: body
+          description: Request body contains resource Id and resource mod numbers which need to be closed
+          required: true
+          schema:
+            $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{resourceId}/reopen:
+    patch:
+      tags:
+        - BusinessProductAggregateWeb
+      summary: "reopen the resource by given Resource Id"
+      description:  "reopen the resource by given Resource Id"
+      operationId: "reopenResource"
+      parameters:
+        - name: resourceId
+          in: path
+          description: Resource Id that needs to be reopned
+          required: true
+          type: string
+        - name: orchestratorDTO
+          in: body
+          description: Request body contains resource Id and resource mod numbers which need to be reopened
+          required: true
+          schema:
+            $ref: "#/definitions/OrchestratorDTO"
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/businessproduct/{keyId}/aggregate:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceAggregate
+      parameters:
+        - name: keyId
+          in: path
+          description: keyId for which the data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/BusinessProductWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/products:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - BusinessProductAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceProductAggregate
+      parameters:
+        - name: productCodes
+          in: query
+          description: productCodes for which the data needs to be fetched
+          required: true
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/BusinessProductWebModelCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/businessproducts/catalogue:
+    get:
+      tags:
+        - productCatalogue
+      summary: "Get count of all valid businessproducts for a given product type"
+      description: "Get count of all valid businessproducts for a given product type. This endpoints will be used to Get all valid businessproduct maintenance records for a given product type."
+      operationId: getProductCatalogue
+      parameters:
+        - name: productType
+          in: query
+          description: "product type of the Business Products"
+          required: false
+          type: string
+        - name: productSubType
+          in: query
+          description: "product sub type of the Business Products"
+          required: false
+          type: string
+        - name: channel
+          in: query
+          description: "Channel"
+          required: true
+          type: string
+        - name: productCategory
+          in: query
+          description: "productCategory"
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/String"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /web/businessproducts:
+    get:
+      tags:
+        - productCatalogue
+      summary: "Get all valid businessproducts for a given product type"
+      description: "Get all valid businessproducts for a given product type. This endpoints will be used to Get all valid businessproduct maintenance records for a given product type."
+      operationId: "getByProductType"
+      parameters:
+        - name: "productType"
+          in: query
+          description: "product type of the Business Products"
+          required: false
+          type: string
+        - name: "productSubType"
+          in: query
+          description: "product sub type of the Business Products"
+          required: false
+          type: string
+        - name: "channel"
+          in: query
+          description: "Channel"
+          required: false
+          type: string
+        - name: "businessProductCode"
+          in: query
+          description: "Business Product Code"
+          required: false
+          type: string
+        - name: "ipaAllowed"
+          in: query
+          description: "IPA Applicable or not"
+          required: false
+          type: string
+        - name: "businessProductCodes"
+          in: query
+          description: "Business Product Codes"
+          required: false
+          type: array
+          items:
+            type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/BusProdAggregateWebModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/businessproduct/{id}/reject:
+    patch:
+      tags:
+        - BusinessProductAggregateWeb
+      summary: "Rejects the resource by given Resource Id"
+      description: "Rejects the resource by given Resource Id"
+      operationId: "reject"
+      parameters:
+        - name: id
+          in: path
+          description: Resource Id that needs to be closed
+          required: true
+          type: string
+        - name: orchestratorDTO
+          in: body
+          description: Request body contains resource Id and resource mod numbers which need to be rejected
+          required: true
+          schema:
+            $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+definitions:
+  BusinessProductAggregateModel:
+    description: BusinessProductAggregateModel
+    type: object
+    allOf:
+      - $ref: '#/definitions/BaseGenericModelDS'
+      - type: object
+        properties:
+          keyId:
+            description: key Id
+            type: string
+          rpmTmBussprodHostMaster:
+            $ref: '#/definitions/RpmTmBussprodHostMasterModel'
+          rpmTmBusinessProductDetails:
+            $ref: '#/definitions/RpmTmBusinessProductDetailsModel'
+          rpmTmProdAttrMaster:
+            $ref: '#/definitions/RpmTmProdAttrMasterModel'
+          rpmTmProdPrefMaster:
+            $ref: '#/definitions/RpmTmProdPrefMasterModel'
+
+          extendedDatasegments:
+            description: data for the extended datasegment operation
+            type: array
+            items:
+              type: object
+  BaseGenericModelDS:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  BusinessProductAggregateModelCollection:
+    description: Collection of  BusinessProductAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/BusinessProductAggregateModel'
+  BusinessProductWebModel:
+    description: BusinessProductWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      rpmTmBussprodHostMaster:
+        $ref: '#/definitions/RpmTmBussprodHostMasterModel'
+      rpmTmBusinessProductDetails:
+        $ref: '#/definitions/RpmTmBusinessProductDetailsModel'
+      rpmTmProdAttrMaster:
+        $ref: '#/definitions/RpmTmProdAttrMasterModel'
+      rpmTmProdPrefMaster:
+        $ref: '#/definitions/RpmTmProdPrefMasterModel'
+
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+      - resourceId
+      - operationType
+  BusinessProductWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/BusinessProductWebModel'
+
+  BusProdAggregateWebModel:
+    description: BusProdAggregateWebModel
+    type: object
+    properties:
+      businessProductDetails:
+        $ref: '#/definitions/RpmTmBusinessProductDetailsModel'
+      businessProductPreferences:
+        $ref: '#/definitions/RpmTmProdPrefMasterModel'
+      businessProductHost:
+        $ref: '#/definitions/RpmTmBussprodHostMasterModel'
+      businessProductAttr:
+        $ref: '#/definitions/RpmTmProdAttrMasterModel'
+
+  BusProdAggregateWebModelCollection:
+    description: "Collection of businessproduct."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/BusProdAggregateWebModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+
+      

@@ -1,0 +1,987 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBREMO
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server prodpreferences server." 
+ version: "1.0.0"
+ title: "prodpreferences Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "prodpreferences"
+   description: "This Service is responsible to maintain Business product preferences for Liability and Asset business products, one can configure different aspects of Asset, Liability and term deposit business products. This maintenance service provides different endpoints to create, modify, delete and authorize the records."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../prodpreferences
+
+ /prodpreferences:
+  post:
+   tags:
+    - "prodpreferences"
+   summary: "Adds a new prodpreferences."
+   description: "Adds a new prodpreferences. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "prodpreferences" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new prodpreferences" 
+      required: true
+      schema:
+       $ref: "#/definitions/RpmTmProdPrefMasterDTO"
+    #- name: "bindingResult" 
+    #  in: "body" 
+    #  description: "Request Body that contains data required for creating a new prodpreferences" 
+    #  required: false
+    #  schema:
+    #   $ref: "#/definitions/BindingResult"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created prodpreferences" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "prodpreferences"
+   summary: "Get all valid prodpreferences."
+   description:  "Get all valid prodpreferences. This endpoints will be used to Get all valid prodpreferences maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: businessProductCode
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/RpmTmProdPrefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../prodpreferences/xxx
+#   DELETE    .../prodpreferences/xxx
+#   GET       .../prodpreferences/xxx
+#   GET       .../prodpreferences/xxx?version=latestrecord
+#   GET       .../prodpreferences/xxx?version=1
+
+ /prodpreferences/{id}:
+  put:
+   tags:
+    - "prodpreferences"
+   summary: "Update an existing prodpreferences."
+   description:  "Update an existing prodpreferences."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the prodpreferences Maintenance"
+      required: true
+      type: "string"
+    - name: "prodpreferences"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing prodpreferences"
+      required: true
+      schema:
+       $ref: "#/definitions/RpmTmProdPrefMasterDTO"
+    #- name: "bindingResult" 
+    #  in: "body" 
+    #  description: "Request Body that contains data required for modify an existing record prodpreferences" 
+    #  required: false
+    #  schema:
+    #   $ref: "#/definitions/BindingResult"
+   responses:
+    200:
+     description: "Returns updated prodpreferences"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "prodpreferences"
+   summary: "Retrieves the prodpreferences by ID."
+   description:  "Retrieves the prodpreferences by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the prodpreferences based on given id."
+     schema:
+      $ref: "#/definitions/RpmTmProdPrefMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /prodpreferences/getbusinessProducts:
+  get:
+   consumes:
+   - application/json
+   - application/xml
+   produces:
+   - application/json
+   - application/xml  
+   tags:
+    - "prodpreferences"
+   summary: "Retrieves the prodpreferences by businessProductCode."
+   description:  "Retrieves the prodpreferences by businessProductCode."
+   operationId: "getByBusinessProductCodes"
+   parameters:
+    - name: "businessProductCodes"
+      in: query
+      description: "businessProductCodes of the record that needs to be fetched"
+      required: true
+      type: array
+      items:
+       type: string
+   responses:
+    200:
+     description: "Returns the prodpreferences based on given businessProductCodes."
+     schema:
+      $ref: "#/definitions/RpmTmProdPrefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /prodpreferences/{id}/delete:
+  patch:
+   tags:
+    - "prodpreferences"
+   summary: "Deletes the prodpreferences identified by given ID."
+   description:  "Deletes the prodpreferences identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the prodpreferences maintenance"
+      required: true
+      type: "string"
+    - name: "prodpreferences"
+      in: "body"
+      description: Request body contain prodpreferences and Modification no of prodpreferences maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../prodpreferences/xxx/approve
+
+ /prodpreferences/{id}/approve:
+  patch:
+   tags:
+    - "prodpreferences"
+   summary: "Authorize the prodpreferences by given ID."
+   description:  "Authorize the prodpreferences identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the prodpreferences maintenance"
+      required: true
+      type: "string"
+    - name: "prodpreferences"
+      in: "body"
+      description: Request body contain prodpreferences and Modification no of prodpreferences maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../prodpreferences/xxx/close
+ /prodpreferences/{id}/close:
+  patch:
+   tags:
+    - "prodpreferences"
+   summary: "Close the prodpreferences by given ID."
+   description:  "Close the prodpreferences identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the prodpreferences maintenance"
+      required: true
+      type: "string"
+    - name: "prodpreferences"
+      in: "body"
+      description: Request body contain prodpreferences and Modification no of prodpreferences maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../prodpreferences/xxx/reopen
+
+ /prodpreferences/{id}/reopen:
+  patch:
+   tags:
+    - "prodpreferences"
+   summary: "reopen the prodpreferences by given ID."
+   description:  "reopen the prodpreferences identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the prodpreferences maintenance"
+      required: true
+      type: "string"
+    - name: "prodpreferences"
+      in: "body"
+      description: Request body contain prodpreferences and Modification no of prodpreferences maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../prodpreferences/xxx/unauthorized
+
+ /prodpreferences/{id}/unauthorized:
+  get:
+   tags:
+    - "prodpreferences"
+   summary: "Retrives the prodpreferences by given ID."
+   description:  "Retrives the prodpreferences identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the prodpreferences based on given id."
+     schema:
+       $ref: "#/definitions/RpmTmProdPrefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../prodpreferences/xxx/history
+
+ /prodpreferences/{id}/history:
+  get:
+   tags:
+    - "prodpreferences"
+   summary: "Retrives the prodpreferences by given ID."
+   description:  "Retrives the prodpreferences by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the prodpreferences based on given id."
+     schema:
+       $ref: "#/definitions/RpmTmProdPrefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ RpmTmProdPrefMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Reference ID that is generated for every operation performed"
+     appRetentionPeriod:
+      type: number
+      description: ""
+     appRetentionType:
+      type: string
+      description: ""
+     minAgeBasis:
+      type: string
+      description: ""
+     minAge:
+      type: number
+      description: ""
+     maxAgeBasis:
+      type: string
+      description: ""
+     maxAge:
+      type: number
+      description: ""   
+     businessProductCode:
+      type: string
+      description: ""
+      minLength: 6
+      maxLength: 6
+     channelAllowed:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     comments:
+      type: string
+      description: ""
+     currencyAllowed:
+      type: array
+      items:
+       type: object
+     customerStatus:
+      type: string
+      description: ""
+     fintech:
+      type: array
+      items:
+       type: object 
+     fintechAllowed:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     productSubType:
+      type: string
+      description: ""
+     productType:
+      type: string
+      description: ""
+     residentialStatus:
+      type: string
+      description: ""
+     branchAllowed:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     branch:
+      type: array
+      items:
+       type: object
+     finDtvalPrd:
+      type: string
+      description: ""
+     finPeriod:
+      type: integer
+      description: ""
+     interestTolerancePercentage:
+      type: number
+      description: "" 
+     ipaAllowed:
+      type: string
+      description: Ipa Allowed or Not
+     RpmTmProdPrefCompDTO:
+       $ref: '#/definitions/RpmTmProdPrefCompDTO'
+    required:
+     - businessProductCode
+ RpmTmProdPrefCompDTO:
+  type: object
+  properties:
+     assesmentMethod:
+      type: array
+      items:
+       type: object 
+     assesUnsecuredLoans:
+      type: array
+      items:
+       type: object 
+     autoRollover:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     businessProductCode:
+      type: string
+      description: ""
+     chequebook:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     debitcard:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     directBanking:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     id:
+      type: string
+      description: ""
+     initFunding:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     intRateTreat:
+      type: string
+      description: ""
+     kioskBanking:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     mgnConsidered:
+      type: number
+      description: ""
+     minFundingAmt:
+      type: number
+      description: ""
+     minFundingCcy:
+      type: string
+      description: ""
+     moratoriumAllowed:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     mxApplcntHandling:
+      type: string
+      description: ""
+     mxDisbmt:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     odLimitAllowed:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     offerAccptMethod:
+      type: string
+      description: ""
+     offerAmendment:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     offerExpryPer:
+      type: string
+      description: ""
+     offerExpryPerType:
+      type: number
+      description: ""
+     passbook:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     peggedPeriod:
+      type: number
+      description: ""
+     peggedPeriodType:
+      type: string
+      description: ""
+     phoneBanking:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     prodPrefMasterId:
+      type: string
+      description: ""
+     qualScorecardDesc:
+      type: string
+      description: ""
+     qualScorecardId:
+      type: string
+      description: ""
+     quanScorecardDesc:
+      type: string
+      description: ""
+     quanScorecardId:
+      type: string
+      description: ""
+     repaymentType:
+      type: array
+      items:
+       type: object
+     scorecardType:
+      type: string
+      description: ""
+     scrOnlyPapplcnt:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     agency:
+      type: array
+      items:
+       type: object      
+     todAllowed:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     unclearedFunds:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     extScrOnlyPapplcnt:
+      type: string
+      description: ""
+      pattern: '[Y,N]'
+     extMxApplcntHandling:
+      type: string
+      description: ""
+     eligibilityCalculationMethod:
+      type: string 
+      description: Eligibility Calculation Method
+     foirPercentage:
+      type: number
+      description: FOIR Percentage
+     ltvPercentage:
+      type: number
+      description: LTV Percentage
+     ipaExpiryTerm:
+      type: string
+      description: Ipa Expiry Term
+     ipaExpiryPeriod:
+      type: integer
+      format: int64
+      description: IPA Expiry Period
+      minimum: 0 
+     RpmTmProdCcyConfigDTO:
+      type: array
+      items:
+       $ref: '#/definitions/RpmTmProdCcyConfigDTO'
+     QuanScrCrdDecnboxDTO:
+      type: array
+      items:
+       $ref: '#/definitions/RpmTmProdDecnboxDTO'
+     QualScrCrdDecnboxDTO:
+      type: array
+      items:
+       $ref: '#/definitions/RpmTmProdDecnboxDTO'
+     RpmTmProdCCardConfigDTO:
+       $ref: '#/definitions/RpmTmProdCCardConfigDTO'
+     RpmTmProdCCardTxnLmtDTO:
+      type: array
+      items:
+       $ref: '#/definitions/RpmTmProdCCardTxnLmtDTO'             
+  #required:
+  # - businessProductCode
+ RpmTmProdCcyConfigDTO:
+  type: object
+  properties:
+     currency:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     maxAmount:
+      type: number
+      description: ""
+     maxTerm:
+      type: number
+      description: ""
+     minAmount:
+      type: number
+      description: ""
+     minTerm:
+      type: number
+      description: ""
+     prodPrefCompId:
+      type: string
+      description: ""
+     minTermTenorBasis:
+      type: string
+      description: "" 
+     maxTermTenorBasis:
+      type: string
+      description: "" 
+ RpmTmProdDecnboxDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     scorecardType:
+      type: string
+      description: ""  
+     maxScore:
+      type: number
+      description: ""
+     minScore:
+      type: number
+      description: ""
+     outcome:
+      type: string
+      description: ""
+     prodPrefCompId:
+      type: string
+      description: ""
+     serialNo:
+      description: Decision Box sequence number
+      type: integer
+ RpmTmProdCCardConfigDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     assessmentMethodCC:
+      type: array
+      items:
+       type: object 
+     cardType:
+      type: array
+      items:
+       type: object 
+     ccyDisallowed:
+      type: array
+      items:
+       type: object
+     stmtGenDt:
+      type: array
+      items:
+       type: object
+     stmtType:
+      type: array
+      items:
+       type: object
+     stmtDelType:
+      type: array
+      items:
+       type: object     
+     internationalUsage:
+      type: string
+      description: "international usage"
+      pattern: '[Y,N]'
+     addonCard:
+      type: string
+      description: "add on card allowed"
+      pattern: '[Y,N]'
+     addonCardLimit:
+      type: string
+      description: "define add on card limit"
+      pattern: '[Y,N]'
+     pictureCard:
+      type: string
+      description: "picture card"
+      pattern: '[Y,N]'
+     nfc:
+      type: string
+      description: "NFC"
+      pattern: '[Y,N]'
+     affnityProgName:
+      type: string
+      description: "Affinity Program Name"
+     maxCardLimit:
+      type: number
+      description: "Max card Limit"
+     minCardLimit:
+      type: number
+      description: "Min Card Limit"
+     noofAddonCard:
+      type: integer
+      description: "Number of addon card"
+     prodPrefCompId:
+      type: string
+      description: ""
+ RpmTmProdCCardTxnLmtDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     prodPrefCompId:
+      type: string
+      description: "prod pref comp Id" 
+     lmtTyp:
+      type: string
+      description: "Limit Type"
+     maxAlwdLmt:
+      type: integer
+      description: "Maximum allowed Limit percentage"
+      minLength: 1
+      maxLength: 3
+     dlyLmt:
+      type: integer
+      description: "Daily Limit"          
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ RpmTmProdPrefMasterCollection: 
+  description: "Collection of prodpref."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/RpmTmProdPrefMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ RpmTmProdPrefMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/RpmTmProdPrefMasterDTO"         
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object

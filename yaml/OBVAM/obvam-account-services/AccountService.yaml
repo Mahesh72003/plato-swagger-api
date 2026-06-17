@@ -1,0 +1,1724 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : AccountService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna 
+#  Reviewed By        :  Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is virtual accounts service."
+  version: "1.0.0"
+  title: "accounts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "AccountService"
+    description: "This service is used to create Virtual Account for Virtual Entity. Virtual Account details such as IBAN and Debit/Credit restrictions, Interest, Overdraft, Real Account Linkage preferences are captured."
+
+schemes:
+  - "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supprorted http methods POST and GET
+  #
+  # path example ../accounts
+
+  /service/accounts:
+    post:
+      tags:
+        - "AccountService"
+      summary: "Adds a new accounts."
+      description: "This endpoint adds new accounts."
+      operationId: "saveVirtualAccount"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "accounts"
+          in: "body"
+          description: "Request body contains data required to create a new account."
+          required: true
+          schema:
+            $ref: "#/definitions/VirtualAccountSaveRequestDTO"
+        - name: fileRefId
+          description: "For H2H ,send fileRefId"
+          in: query
+          required: false
+          type: string
+        - name: recordRefId
+          description: "For H2H ,send RecordId"
+          in: query
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created accounts"
+              type: "string"
+          schema:
+            $ref: "#/definitions/VirtualAccountResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+    get:
+      tags:
+        - "AccountService"
+      summary: "Get all valid accounts."
+      description:  "This endpoint is used to get all valid accounts maintenance records."
+      operationId: "getAllAccounts"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: includecloseandunauth
+          in: query
+          description: includecloseandunauth must be set to fetch summary record. By default, the value is false
+          required: false
+          type: boolean
+        - name: offset
+          in: query
+          description: Fetches the starting number of the offset record
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: Fetches the maximum number of limit
+          required: false
+          type: integer
+        - in: query
+          name: virtualEntityId
+          required: false
+          type: string
+        - in: query
+          name: realCustomerNo
+          required: false
+          type: string
+        - in: query
+          name: defaultAccCcy
+          required: false
+          type: string
+        - in: query
+          name: virtualAccProduct
+          required: false
+          type: string
+        - in: query
+          name: virtualAccountNo
+          required: false
+          type: string
+        - in: query
+          name: ibanAccNo
+          required: false
+          type: string
+        - in: query
+          name: realAccountNo
+          required: false
+          type: string
+        - in: query
+          name: realAccLinkage
+          required: false
+          type: string
+        - in: query
+          name: realAccountBrn
+          required: false
+          type: string
+        - in: query
+          name: recordStat
+          required: false
+          type: string
+        - in: query
+          name: authStat
+          required: false
+          type: string
+        - in: query
+          name: makerId
+          required: false
+          type: string
+        - in: query
+          name: checkerId
+          required: false
+          type: string
+        - in: query
+          name: branchCode
+          required: false
+          type: string
+        - in: query
+          name: virtualAccountName
+          required: false
+          type: string
+        - in: query
+          name: odStartDate
+          required: false
+          type: string
+          pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        - in: query
+          name: odEndDate
+          required: false
+          type: string
+          pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        - in: query
+          name: includeTotalCount
+          required: false
+          type: boolean
+          default: true
+        - in: query
+          name: q
+          required: false
+          type: string
+          default: 'LIKE'
+        - in: query
+          name: sanctionChkStatus
+          required: false
+          type: string
+        - in: query
+          name: status
+          required: false
+          type: string
+          description: "Status of the Virtual Account,possible values are A  / I "                                         
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/VirtualAccountServiceCollection"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+
+  # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+  #
+  #  supprorted http methods PUT, DELETE and GET
+  #
+  # path examples----
+  #   PUT       .../accounts/xxx
+  #   DELETE    .../accounts/xxx
+  #   GET       .../accounts/xxx
+  #   GET       .../accounts/xxx?version=latestrecord
+  #   GET       .../accounts/xxx?version=1
+  /service/accounts/{virtualAccountNo}:
+    put:
+      tags:
+        - "AccountService"
+      summary: "Update an existing accounts."
+      description:  "Update an existing accounts."
+      operationId: "modifyRecord"
+      parameters:
+        - name: "virtualAccountNo"
+          in: "path"
+          description: "virtualAccountNo of the accounts Maintenance"
+          required: true
+          type: "string"
+        - name: "dto"
+          in: "body"
+          description: "Request body contains data required to update an existing account"
+          required: true
+          schema:
+            $ref: "#/definitions/VirtualAccountModifyRequestDTO"
+      responses:
+        200:
+          description: "Returns updated accounts"
+          schema:
+            $ref: "#/definitions/VirtualAccountResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+    get:
+      tags:
+        - "AccountService"
+      summary: "Fetches the details of input Virtual Account."
+      description:  "Fetches the details of input Virtual Account"
+      operationId: "getByNaturalKey"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualAccountNo"
+          in: "path"
+          description: "virtualAccountNo of the accounts Maintenance"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns updated accounts"
+          schema:
+            $ref: "#/definitions/VirtualAccountWrapperServiceDTO"
+        204:
+          description: "NO CONTENT. No records found"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+
+  /service/accounts/{virtualAccountNo}/reopen:
+    patch:
+      tags:
+        - "AccountService"
+      summary: "reopen account for given virtual account number"
+      description:  "reopen account for given virtual account number"
+      operationId: "reopenRecord"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualAccountNo"
+          in: "path"
+          description: "virtualAccountNo of the accounts Maintenance"
+          required: true
+          type: "string"
+        - name: "keyDto"
+          in: "body"
+          required: false
+          description: "Request body contain remarks for the virtual account which needs to be reopened"
+          schema:
+           $ref: "#/definitions/CloseDto"
+      responses:
+        200:
+          description: "Returns updated accounts"
+          schema:
+            $ref: "#/definitions/VirtualAccountResponseWrapperDTO"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."          
+
+  /service/accounts/getVAForStructure:
+    get:
+      tags:
+        - "AccountService"
+      summary: "Get all valid accounts."
+      description:  "This endpoint is used to get all valid accounts maintenance records."
+      operationId: "getVAForStructureCreation"
+      parameters:
+        - name: offset
+          in: query
+          description: Fetches the starting number of the offset records
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: Fetches the maximum number of the limit
+          required: false
+          type: integer
+        - in: query
+          name: realCustomerNo
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/VirtualAccountServiceCollection"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  /service/vaforlinkage:
+    get:
+      tags:
+        - "AccountService"
+      summary: "Get virtual accounts which are either directly linked to real account or the header accounts in a structure -that can take part in linkage"
+      description:  "This endpoint will get virtual accounts which are either directly linked to real account or the header accounts in a structure -that can take part in linkage."
+      operationId: "getvaforlinkage"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - in: query
+          name: realCustomerNo
+          required: true
+          type: string
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/VirtualAccountNumberServiceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/accounts/accountswithbalandstrcode:
+    get:
+      tags:
+        - "AccountService"
+      summary: "Retrives list of Accounts  with  Balance and  Structure Code."
+      description:  "Retrives list of Accounts  with  Balance and  Structure Code."
+      operationId: "getAccountsWithBalAndStrCode"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting point of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: "realCustomerNo"
+          in: "query"
+          description: "Real Customer Number for which facilty is provided"
+          required: true
+          type: "string"
+        - name: "realAccountNo"
+          in: "query"
+          description: "Real Account Number for which facilty is provided"
+          required: false
+          type: "string"
+        - name: "realAccLinkage"
+          in: "query"
+          description: "Real Account Linkage for which facilty is provided"
+          required: false
+          type: "string"
+        - name: "virtualEntityId"
+          in: "query"
+          description: "Virtual Entity ID is a Virtual ID of which can be maintained by the customer in OBVAM system"
+          required: false
+          type: "string"
+        - name: "virtualEntityName"
+          in: "query"
+          description: "Virtual Entity Name is a Virtual ID of which can be maintained by the customer in OBVAM system"
+          required: false
+          type: "string"
+        - name: "virtualAccountNo"
+          in: "query"
+          description: "virtual Account Number of a Virtual Entity or Virtual Customer"
+          required: false
+          type: "string"
+        - name: "virtualAccountName"
+          in: "query"
+          description: "virtual Account Name of a Virtual Entity or Virtual Customer"
+          required: false
+          type: "string"
+        - name: "currency"
+          in: "query"
+          description: "Currency of the Virtual Account belonging to a Customer"
+          required: false
+          type: "string"
+        - name: "status"
+          in: "query"
+          description: "Record Status of the Virtual Accounts belonging to a Customer"
+          required: false
+          type: "string"
+        - name: "virtualAccountProduct"
+          in: "query"
+          description: "Account Product for the Virtual Account"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Returns list of Accounts  with  Balance and  Structure Code."
+          schema:
+            $ref: "#/definitions/AccountsWithBalAndStrCodeServiceCollection"
+        204:
+          description: "NO CONTENT. No records found"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        500:
+          description: "Internal server error."
+
+  /service/accounts/virtualaccountsforclosure:
+    get:
+      tags:
+        - "AccountService"
+      summary: "Get all valid accounts for closure"
+      description:  "Get all valid accounts allowed for closure."
+      operationId: "getAllVAForClosure"
+      parameters:
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: realCustomerNo
+          in: query
+          description: Real customer number for which virtual accounts applicable for closure needs to be fetched
+          required: false
+          type: string
+        - name: virtualEntityId
+          in: query
+          description: Virtual entity ID for which virtual accounts applicable for closure needs to be fetched
+          required: false
+          type: string
+        - name: virtualAccountNo
+          in: query
+          description: Virtual account number
+          required: false
+          type: string
+        - name: virtualAccountName
+          in: query
+          description: Virtual account name
+          required: false
+          type: string
+        - name: branchCode
+          in: query
+          description: Branch code of the virtual account
+          required: false
+          type: string
+        - name: currency
+          in: query
+          description: Currency of the virtual account
+          required: false
+          type: string
+        - name: ibanAccNo
+          in: query
+          description: International Bank Account Number
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/VirtualAccountsForClosureCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/accounts/virtualaccountsfortransfer/{closureVirAcc}:
+    get:
+      tags:
+        - "AccountService"
+      summary: "Get all valid virtual accounts allowed as transfer account"
+      description:  "Get all valid virtual accounts allowed as transfer account"
+      operationId: "getAllTransferAccounts"
+      parameters:
+        - name: closureVirAcc
+          in: path
+          description: Virtual account for which siblings needs to be fetched
+          required: true
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: virtualAccountNo
+          in: query
+          description: Virtual account number to or from which funds can be transferred
+          required: false
+          type: string
+        - name: virtualAccountName
+          in: query
+          description: Description of the virtual Account
+          required: false
+          type: string
+        - name: ibanAccNo
+          in: query
+          description: International Bank Account Number
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/TransferVirtualAccountsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/accounts/ccysforaccountproduct:
+    get:
+      tags:
+        - "AccountService"
+      summary: "Get all Account Current for the given accountProuct"
+      description:  "Get all Account Current for the given accountProuct."
+      operationId: "getCcysForAccountProduct"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: realCustomerNo
+          in: query
+          description: Real customer number for which virtual accounts applicable for closure needs to be fetched
+          required: false
+          type: string
+        - name: accountProduct
+          in: query
+          description: Account Product under the Real Customer Number 
+          required: false
+          type: string 
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/CcyDtoCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+  VirtualAccountsForClosureCollection:
+    description: "Collection of virtual account allowed for closure"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/VAClosureResponseDTO"
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/VirtualAccountForClosureDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  VAServiceDTOListDetails:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          count:
+            type: number
+            description: "Total number of virtual account dto details with branch Name set for branch Code"
+          VirtualAccountServiceDTO:
+            type: array
+            items:
+              $ref: '#/definitions/VirtualAccountServiceDTO'
+
+  TransferVirtualAccountsCollection:
+    description: "Collection of virtual account allowed for closure"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/TransferVirtualAccountResponseDTO"
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/TransferVirtualAccountDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+
+  TransferVirtualAccountResponseDTO:
+    type: object
+    properties:
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/TransferVirtualAccountResponseCode"
+
+  TransferVirtualAccountResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+
+  VAClosureResponseDTO:
+    type: object
+    properties:
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/VAClosureResponseCode"
+
+  VAClosureResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+
+  AllowedVirAccToCloseDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          count:
+            type: number
+            description: "Number of virtual accounts allowed for closure"
+          VirtualAccountForClosureDTO:
+            type: array
+            items:
+              $ref: '#/definitions/VirtualAccountForClosureDTO'
+
+  AllowedTransferVirAccDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          count:
+            type: number
+            description: "Number of virtual accounts allowed as transfer account"
+          VirtualAccountDTO:
+            type: array
+            items:
+              $ref: '#/definitions/TransferVirtualAccountDTO'
+
+  VirtualAccountForClosureDTO:
+    type: "object"
+    properties:
+      keyId:
+        type: string
+        description: "KeyId of the Virtual Account"
+      realCustomerNo:
+        type: string
+        description: "Real Customer Number for whom Virtual Account is created"
+      virtualEntityId:
+        type: string
+        description: "Virtual Entity for which Virtual Account is created"
+      virtualEntityName:
+        type: string
+        description: "Virtual Entity Name for which Virtual Account is created"
+      virtualAccountNo:
+        type: string
+        description: "Virtual Account Number"
+      virtualAccountName:
+        type: string
+        description: "Name of the Virtual Account"
+      branchCode:
+        type: string
+        description: "Branch code of the Virtual Account"
+      defaultAccCcy:
+        type: string
+        description: "Currency of Virtual Account"
+      currentBalance:
+        type: number
+        description: "Current balance of virtual account"
+      interestCalcReq:
+        type: string
+        description: "Flag to indicate if Interest Calculation is required"
+      ibanAccNo:
+        type: string
+        description: "IBan Account Number"
+      branchName:
+        type: string
+        description: "Name of the Branch for Virtual Account"
+        minimum: 0
+        maximum: 105
+  TransferVirtualAccountDTO:
+    type: "object"
+    properties:
+      keyId:
+        type: string
+        description: "KeyId of the Virtual Account"
+      virtualAccountNo:
+        type: string
+        description: "Virtual Account Number"
+      virtualAccountName:
+        type: string
+        description: "Name of the Virtual Account"
+      branchCode:
+        type: string
+        description: "Branch code of the Virtual Account"
+      defaultAccCcy:
+        type: string
+        description: "Currency of Virtual Account"
+      ibanAccNo:
+        type: string
+        description: "International Bank Account Number"
+
+  AccountDetailDTO:
+    type: "object"
+    properties:
+      realCustomerNo:
+        type: "string"
+        description: "Real Customer Number to whom the Virtual Account Number, for which Closure was initiated, belongs"
+      virtualAccountNo:
+        type: "string"
+        description: "Virtual Account Number for which Closure was initiated"
+      virtualAccountName:
+        type: "string"
+        description: "Virtual Account Name for which Closure was initiated"
+      defaultAccCcy:
+        type: "string"
+        description: "Currency of Virtual Account for which Closure was initiated"
+      branchCode:
+        type: "string"
+        description: "Branch Code of Virtual Account for which Closure was initiated"
+      transferInVirAccNo:
+        type: "string"
+        description: "Virtual Account to which the funds will be transferred"
+      transferOutVirAccNo:
+        type: "string"
+        description: "Virtual Account from which the funds will be transferred"
+
+  VirtualAccountServiceDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          branchCode:
+            type: string
+            description: "Branch code of the Virtual Account"
+          virtualEntityId:
+            type: string
+            description: "Virtual Entity for which Virtual Account is created"
+          virtualEntityName:
+            type: string
+            description: "Virtual Entity Name for which Virtual Account is created"
+          realCustomerNo:
+            type: string
+            description: "Real Customer Number for whom Virtual Account is created"
+          defaultAccCcy:
+            type: string
+            description: "Currency of Virtual Account"
+          virtualAccProduct:
+            type: string
+            description: "Corporate Specific Virtual Account Product"
+          virtualAccountNo:
+            type: string
+            description: "Virtual Account Number"
+            minLength: 0
+            maxLength: 20
+          ibanRequired:
+            type: string
+            description: "Flag to indicate if IBAN is required"
+            pattern: '[Y,N]'
+            default: 'N'
+          ibanAccNo:
+            type: string
+            description: "IBAN Account Number"
+          realAccountNo:
+            type: string
+            description: "Real Account Number for which Virtual Account is created"
+          virtualAccountName:
+            type: string
+            description: "Name of the Virtual Account"
+            minLength: 1
+            maxLength: 105
+            pattern: '([a-zA-Z0-9\.\-\s]+)?'
+          addressLine1:
+            type: string
+            description: "Address Line 1"
+            minLength: 0
+            maxLength: 35
+          addressLine2:
+            type: string
+            description: "Address Line 2"
+            minLength: 0
+            maxLength: 35
+          addressLine3:
+            type: string
+            description: "Address Line 3"
+            minLength: 0
+            maxLength: 35
+          addressLine4:
+            type: string
+            description: "Address Line 4"
+            minLength: 0
+            maxLength: 35
+          pincode:
+            type: string
+            description: "Pincode"
+            pattern: '([a-zA-Z0-9]+)?'
+          countryCode:
+            type: string
+            description: "Country Code"
+          accountPurpose:
+            type: string
+            description: "Purpose of Virtual Account"
+            minLength: 0
+            maxLength: 105
+          interestCalcReq:
+            type: string
+            description: "Flag to indicate if Interest Calculation is required"
+            pattern: '[Y,N]'
+            default: 'N'
+          accountFrozen:
+            type: string
+            description: "Flag to indicate if Account is frozen"
+            pattern: '[Y,N]'
+            default: 'N'
+          balChkForDebits:
+            type: string
+            description: "Flag to indicate if Balance check is required for Debit Transactions"
+            pattern: '[Y,N]'
+            default: 'N'
+          balAvailabilityOptions:
+            type: string
+            description: "If Balance check is required then balance availability option needs to be selected"
+            pattern: '[O,P,B]'
+            default: 'O'
+          fixedAmtFromPool:
+            type: number
+            description: "Amount should be given if balance availability option is selected as Own Balance + Fixed Amount From Pool"
+            pattern: '([0-9]+)?'
+          overdraftAllowed:
+            type: string
+            description: "Flag to indicate if Overdraft is allowed"
+            pattern: '[Y,N]'
+            default: 'N'
+          fixedAmount:
+            type: number
+            description: "Amount should be given if overdraft is allowed"
+            pattern: '([0-9]+)?'
+          creditTxnsAllowed:
+            type: string
+            description: "Flag to indicate if Credit Transaction is allowed"
+            pattern: '[Y,N]'
+            default: 'N'
+          debitTxnsAllowed:
+            type: string
+            description: "Flag to indicate if Debit Transaction is allowed"
+            pattern: '[Y,N]'
+            default: 'N'
+          status:
+            type: string
+            description: "Status of the Virtual Account"
+            pattern: '[A,I]'
+          realAccLinkage:
+            type: string
+            description: "Indicates if Real Account Linkage is at Account level or Structure level"
+            pattern: '[A,S]'
+            default: 'A'
+          realAccountCcy:
+            type: string
+            description: "Currency of the Real Account Number"
+          realAccountBrn:
+            type: string
+            description: "Branch in which Real Account exists"
+          accOpenDate:
+            type: string
+            description: "Date in which Virtual Account is opened"
+          accClosureDate:
+            type: string
+            description: "Date in which Virtual Account is closed"
+          lastActivityDate:
+            type: string
+            description: "Last Activity Date"
+          makerId:
+            type: string
+            description: "Maker ID of Virtual Account"
+          makerDateStamp:
+            type: string
+            description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+          checkerId:
+            type: string
+            description: "Checker ID of Virtual Account"
+          checkerDateStamp:
+            type: string
+            description: "Date and Time when some action on Virtual Account is authorized"
+          modNo:
+            type: integer
+            description: "Version number of Virtual Account"
+          recordStatus:
+            type: string
+            description: "Record Status of Virtual Account"
+          authStatus:
+            type: string
+            description: "Authorization Status of Virtual Account"
+          onceAuth:
+            type: string
+            description: "Flag that indicated if Virtual Account is authorized once or not"
+          doerRemarks:
+            type: string
+            description: "Remarks made by Maker"
+          approverRemarks:
+            type: string
+            description: "Remarks made by Approver"
+          odStartDate:
+            type: string
+            pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            description: "Date from when OD amount can be included in calculating balance"
+          odEndDate:
+            type: string
+            pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            description: "Date till when OD amount can be included in calculating balance"
+          branchName:
+            type: string
+            description: "Name of the Branch for Virtual Account"
+            minimum: 0
+            maximum: 105
+          structureCode:
+            type: string
+            description: "Code to identify Virtual Account Structure"
+          virtualParentAcc:
+            type: string
+            description: "Parent Account for the virtual account"
+          sanctionChkStatus:
+            type: string
+            description: "Sanction check status"
+          accLiqdAllowed:
+            type: string
+            description: "Flag to indicate if Liquidity Management is allowed for a virtual account"
+            pattern: '[Y,N]'
+            default: 'N'             
+          StructuredAddressServiceDTO:
+            $ref: '#/definitions/StructuredAddressServiceDTO'
+
+  VirtualAccountSaveRequestDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          resourceId:
+            description: resource id
+            type: string
+          resourceName:
+            description: resource name
+            type: string
+          operationType:
+            description: operation type
+            type: string
+          branchCode:
+            type: string
+            description: "Branch code of the Virtual Account"
+          virtualEntityId:
+            type: string
+            description: "Virtual Entity for which Virtual Account is created"
+          realCustomerNo:
+            type: string
+            description: "Virtual Entity Name for which Virtual Account is created"
+          defaultAccCcy:
+            type: string
+            description: "Currency of Virtual Account"
+          virtualAccProduct:
+            type: string
+            description: "Corporate Specific Virtual Account Product"
+          virtualAccountNo:
+            type: string
+            description: "Virtual Account Number"
+            minLength: 0
+            maxLength: 20
+          ibanRequired:
+            type: string
+            description: "Flag to indicate if IBAN is required"
+            pattern: '[Y,N]'
+            default: 'N'
+          ibanAccNo:
+            type: string
+            description: "IBAN Account Number"
+          virtualAccountName:
+            type: string
+            description: "Name of the Virtual Account"
+            minLength: 1
+            maxLength: 105
+            pattern: '([a-zA-Z0-9\.\-\s]+)?'
+          addressLine1:
+            type: string
+            description: "Address Line 1"
+            minLength: 0
+            maxLength: 35
+          addressLine2:
+            type: string
+            description: "Address Line 2"
+            minLength: 0
+            maxLength: 35
+          addressLine3:
+            type: string
+            description: "Address Line 3"
+            minLength: 0
+            maxLength: 35
+          addressLine4:
+            type: string
+            description: "Address Line 4"
+            minLength: 0
+            maxLength: 35
+          pincode:
+            type: string
+            description: "Pincode"
+            pattern: '([a-zA-Z0-9]+)?'
+          countryCode:
+            type: string
+            description: "Country Code"
+          accountPurpose:
+            type: string
+            description: "Purpose of Virtual Account"
+            minLength: 0
+            maxLength: 105
+          interestCalcReq:
+            type: string
+            description: "Flag to indicate if Interest Calculation is required"
+            pattern: '[Y,N]'
+            default: 'N'
+          accountFrozen:
+            type: string
+            description: "Flag to indicate if Account is frozen"
+            pattern: '[Y,N]'
+            default: 'N'
+          balChkForDebits:
+            type: string
+            description: "Flag to indicate if Balance check is required for Debit Transactions"
+            pattern: '[Y,N]'
+            default: 'N'
+          balAvailabilityOptions:
+            type: string
+            description: "If Balance check is required then balance availability option needs to be selected"
+            pattern: '[O,P,B]'
+            default: 'O'
+          fixedAmtFromPool:
+            type: number
+            description: "Amount should be given if balance availability option is selected as Own Balance + Fixed Amount From Pool"
+            pattern: '([0-9]+)?'
+          overdraftAllowed:
+            type: string
+            description: "Flag to indicate if Overdraft is allowed"
+            pattern: '[Y,N]'
+            default: 'N'
+          fixedAmount:
+            type: number
+            description: "Amount should be given if overdraft is allowed"
+            pattern: '([0-9]+)?'
+          creditTxnsAllowed:
+            type: string
+            description: "Flag to indicate if Credit Transaction is allowed"
+            pattern: '[Y,N]'
+            default: 'N'
+          debitTxnsAllowed:
+            type: string
+            description: "Flag to indicate if Debit Transaction is allowed"
+            pattern: '[Y,N]'
+            default: 'N'
+          realAccLinkage:
+            type: string
+            description: "Indicates if Real Account Linkage is at Account level or Structure level"
+            pattern: '[A,S]'
+            default: 'A'
+          realAccountNo:
+            type: string
+            description: "Real Account Number for which Virtual Account is created"
+          realAccountCcy:
+            type: string
+            description: "Currency of the Real Account Number"
+          realAccountBrn:
+            type: string
+            description: "Branch in which Real Account exists"
+          odStartDate:
+            type: string
+            pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            description: "Date from when OD amount can be included in calculating balance"
+          odEndDate:
+            type: string
+            pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            description: "Date till when OD amount can be included in calculating balance"
+          structureCode:
+            type: string
+            description: "Code to identify Virtual Account Structure"
+          virtualParentAcc:
+            type: string
+            description: "Parent Account for the virtual account"
+          accLiqdAllowed:
+            type: string
+            description: "Flag to indicate if Liquidity Management is allowed for a virtual account"
+            pattern: '[Y,N]'
+            default: 'N'             
+          StructuredAddressServiceDTO:
+            $ref: '#/definitions/StructuredAddressServiceDTO'
+        required:
+          - branchCode
+          - virtualEntityId
+          - realCustomerNo
+          - defaultAccCcy
+          - virtualAccProduct
+          - virtualAccountName
+  VirtualAccountModifyRequestDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          resourceId:
+            description: resource id
+            type: string
+          resourceName:
+            description: resource name
+            type: string
+          operationType:
+            description: operation type
+            type: string
+          branchCode:
+            type: string
+            description: "Branch code of the Virtual Account"
+          virtualEntityId:
+            type: string
+            description: "Virtual Entity for which Virtual Account is created"
+          realCustomerNo:
+            type: string
+            description: "Virtual Entity Name for which Virtual Account is created"
+          defaultAccCcy:
+            type: string
+            description: "Currency of Virtual Account"
+          virtualAccProduct:
+            type: string
+            description: "Corporate Specific Virtual Account Product"
+          virtualAccountNo:
+            type: string
+            description: "Virtual Account Number"
+            minLength: 0
+            maxLength: 20
+          ibanRequired:
+            type: string
+            description: "Flag to indicate if IBAN is required"
+            pattern: '[Y,N]'
+ #           default: 'N'
+          ibanAccNo:
+            type: string
+            description: "IBAN Account Number"
+          virtualAccountName:
+            type: string
+            description: "Name of the Virtual Account"
+            minLength: 1
+            maxLength: 105
+            pattern: '([a-zA-Z0-9\.\-\s]+)?'
+          addressLine1:
+            type: string
+            description: "Address Line 1"
+            minLength: 0
+            maxLength: 35
+          addressLine2:
+            type: string
+            description: "Address Line 2"
+            minLength: 0
+            maxLength: 35
+          addressLine3:
+            type: string
+            description: "Address Line 3"
+            minLength: 0
+            maxLength: 35
+          addressLine4:
+            type: string
+            description: "Address Line 4"
+            minLength: 0
+            maxLength: 35
+          pincode:
+            type: string
+            description: "Pincode"
+            pattern: '([a-zA-Z0-9]+)?'
+          countryCode:
+            type: string
+            description: "Country Code"
+          accountPurpose:
+            type: string
+            description: "Purpose of Virtual Account"
+            minLength: 0
+            maxLength: 105
+          interestCalcReq:
+            type: string
+            description: "Flag to indicate if Interest Calculation is required"
+            pattern: '[Y,N]'
+ #           default: 'N'
+          accountFrozen:
+            type: string
+            description: "Flag to indicate if Account is frozen"
+            pattern: '[Y,N]'
+#            default: 'N'
+          balChkForDebits:
+            type: string
+            description: "Flag to indicate if Balance check is required for Debit Transactions"
+            pattern: '[Y,N]'
+ #           default: 'N'
+          balAvailabilityOptions:
+            type: string
+            description: "If Balance check is required then balance availability option needs to be selected"
+            pattern: '[O,P,B]'
+ #           default: 'O'
+          fixedAmtFromPool:
+            type: number
+            description: "Amount should be given if balance availability option is selected as Own Balance + Fixed Amount From Pool"
+            pattern: '([0-9]+)?'
+          overdraftAllowed:
+            type: string
+            description: "Flag to indicate if Overdraft is allowed"
+            pattern: '[Y,N]'
+ #           default: 'N'
+          fixedAmount:
+            type: number
+            description: "Amount should be given if overdraft is allowed"
+            pattern: '([0-9]+)?'
+          creditTxnsAllowed:
+            type: string
+            description: "Flag to indicate if Credit Transaction is allowed"
+            pattern: '[Y,N]'
+#            default: 'N'
+          debitTxnsAllowed:
+            type: string
+            description: "Flag to indicate if Debit Transaction is allowed"
+            pattern: '[Y,N]'
+ #           default: 'N'
+          realAccLinkage:
+            type: string
+            description: "Indicates if Real Account Linkage is at Account level or Structure level"
+            pattern: '[A,S]'
+#            default: 'A'
+          realAccountNo:
+            type: string
+            description: "Real Account Number for which Virtual Account is created"
+          realAccountCcy:
+            type: string
+            description: "Currency of the Real Account Number"
+          realAccountBrn:
+            type: string
+            description: "Branch in which Real Account exists"
+          remarks:
+            type: string
+            description: "remarks of Virtual Account"
+          odStartDate:
+            type: string
+            pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            description: "Date from when OD amount can be included in calculating balance"
+          odEndDate:
+            type: string
+            pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+            description: "Date till when OD amount can be included in calculating balance"
+          accLiqdAllowed:
+            type: string
+            description: "Flag to indicate if Liquidity Management is allowed for a virtual account"
+            pattern: '[Y,N]'
+ #           default: 'N'              
+          StructuredAddressModifyServiceDTO:
+            $ref: '#/definitions/StructuredAddressModifyServiceDTO'
+        required:
+          - branchCode
+          - virtualEntityId
+          - realCustomerNo
+          - defaultAccCcy
+          - virtualAccProduct
+          - virtualAccountNo
+  StructuredAddressServiceDTO:
+    type: object
+    properties:
+      department:
+        type: string
+        description: "Department"
+      subDepartment:
+        type: string
+        description: "Sub Department"
+      streetName:
+        type: string
+        description: "Street Name"
+      buildingNumber:
+        type: string
+        description: "Building Number"
+      buildingName:
+        type: string
+        description: "building Name"
+      floor:
+        type: string
+        description: "Floor"
+      postbox:
+        type: string
+        description: "postbox"
+      room:
+        type: string
+        description: "Room"
+      postcode:
+        type: string
+        description: "postcode"
+      townName:
+        type: string
+        description: "Town Name"
+      townLocationName:
+        type: string
+        description: "Town Location Name"
+      districtName:
+        type: string
+        description: "District name"
+      countrySubDivision:
+        type: string
+        description: "Country Sub Division"
+      strrCountry:
+        type: string
+        description: "country"
+        maxLength: 2
+      virtualAccountNo:
+        type: string
+        description: "Virtual Account Number"
+    required:
+      - townName
+      - strrCountry
+      - postcode
+  StructuredAddressModifyServiceDTO:
+    type: object
+    properties:
+      department:
+        type: string
+        description: "Department"
+      subDepartment:
+        type: string
+        description: "Sub Department"
+      streetName:
+        type: string
+        description: "Street Name"
+      buildingNumber:
+        type: string
+        description: "Building Number"
+      buildingName:
+        type: string
+        description: "building Name"
+      floor:
+        type: string
+        description: "Floor"
+      postbox:
+        type: string
+        description: "postbox"
+      room:
+        type: string
+        description: "Room"
+      postcode:
+        type: string
+        description: "postcode"
+      townName:
+        type: string
+        description: "Town Name"
+      townLocationName:
+        type: string
+        description: "Town Location Name"
+      districtName:
+        type: string
+        description: "District name"
+      countrySubDivision:
+        type: string
+        description: "Country Sub Division"
+      strrCountry:
+        type: string
+        description: "country"
+        maxLength: 2
+    required:
+      - townName
+      - strrCountry
+      - postcode
+  NKValuesDto:
+    type: object
+    properties:
+      id:
+        type: string
+      modNo:
+        type: integer
+      wrapper:
+        $ref: "#/definitions/ResponseDto"
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  BindingResult:
+    type: object
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  VirtualAccountServiceCollection:
+    description: "Collection of account."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/VirtualAccountServiceDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  VirtualAccountWrapperServiceDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/VirtualAccountServiceDTO"
+  VirtualAccountResponseWrapperDTO:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/VirtualAccountServiceResponseDto"
+      data:
+        $ref: "#/definitions/VirtualAccountServiceDTO"
+  VirtualAccountServiceResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+  VirtualAccountServiceResponseDto:
+    type: object
+    properties:
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/VirtualAccountServiceResponseCode"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  CloseDto:
+    type: object
+    properties:
+      remarks:
+        type: string
+  ResponseResourceSupport:
+    type: object
+  AccountsWithBalAndStrCodeServiceCollection:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/AccountWithBalAndStrCodeServiceDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+      messages:
+        $ref: "#/definitions/VirtualAccountServiceResponseDto"
+  VirtualAccountNumberServiceCollection:
+    description: "List of Virtual Account numbers."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/FetchVirtualAccountsServiceDTO"
+  FetchVirtualAccountsServiceDTO:
+    type: "object"
+    properties:
+      virtualAccountNumber:
+        type: "string"
+        description: "Virtual Account Number"
+      currency:
+        type: "string"
+        description: "Currency of virtual account"
+      virtualAccountName:
+        type: string
+        description: "Name of the Virtual Account"
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+  AccountWithBalAndStrCodeServiceDTO:
+    type: object
+    properties:
+      virtualAccountNo:
+        type: string
+        description: "Virtual account no, is a unique virtual no, which can be created for a entity"
+      virtualAccountName:
+        type: string
+        description: "Virtual account name of a virtual account"
+      currency:
+        type: string
+        description: "Currency of a virtual account"
+      availableBal:
+        type: number
+        description: "Available balance of a virtual account"
+      currentBalance:
+        type: number
+        description: "Current balance of the Virtual Account"
+      creationDate:
+        type: string
+        description: "Creation date of a virtual account"
+      strCode:
+        type: string
+        description: "Structure code of the virtual account"
+      status:
+        type: string
+        description: "Status of the virtual account"
+      realAccountNo:
+        type: string
+        description: "Real Account Number for which Virtual Account is created"
+      realAccountBrn:
+        type: string
+        description: "Real Account Branch for which Virtual Account is created"
+      realAccLinkage:
+        type: string
+        description: "Indicates if Real Account Linkage is at Account level or Structure level"
+      virtualEntityName:
+        type: string
+        description: "Virtual entity or customer name of entity id"
+      virtualEntityId:
+        type: string
+        description: "Virtual entity id is a unique no of virtual customer"
+      virtualAccountProduct:
+        type: string
+        description: "Account Product with which the Virtual Account is created"

@@ -1,0 +1,327 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server interface server." 
+ version: "1.0.0"
+ title: "Interface Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "interface"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../messagetype
+
+ /balanceFetch:
+  get:
+   tags:
+    - "balanceFetch"
+   summary: "Get all balances."
+   description:  "Get all balances. This endpoints will be used to Get all balances."
+   operationId: "getAll"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTmAccountVdBalCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  post:
+   tags:
+    - "balanceFetch"
+   summary: "Add a new balances"
+   description: "Adds a new balances. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "balanceFetch" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new balances" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmAccountVdBalDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created balances" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /balanceFetch/accounts:
+  post:
+   tags:
+    - "balanceFetch"
+   summary: "Retrieves the balance by ID."
+   description:  "Retrieves the balance by ID."
+   operationId: "getByAccounts"
+   parameters:
+    - name: "balanceRequest" 
+      in: "body" 
+      description: "Request Body that contains data required for fetching account balances" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmAccountVdBalCollection"
+   responses:
+    200:
+     description: "Returns the balance based on given id."
+     schema:
+      $ref: "#/definitions/LmxTmAccountVdBalCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+     
+
+
+ /balanceFetch/{id}:
+  put:
+   tags:
+    - "balanceFetch"
+   summary: "Update a balance."
+   description:  "Update a balance."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the balance"
+      required: true
+      type: "string"
+    - name: "balanceFetch"
+      in: "body"
+      description: "Request Body that contains data required for updating balanes"
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmAccountVdBalDTO"
+   responses:
+    200:
+     description: "Returns updated bank"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "balanceFetch"
+   summary: "Retrieves the balance by ID."
+   description:  "Retrieves the balance by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the balance based on given id."
+     schema:
+      $ref: "#/definitions/LmxTmAccountVdBalWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+     
+
+
+definitions:
+ LmxTmAccountVdBalDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     accountNumber:
+      type: string
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+     currencyCode:
+      type: string
+      description: ""
+     availableBalance:
+      type: integer
+      description: ""
+     valueDate:
+      type: string
+      description: ""
+     lastBalanceUpdate:
+      type: string
+      description: ""
+      format: date
+     source:
+      type: string
+      description: ""
+     balanceType:
+      type: string
+      description: ""
+     sourceReference:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmxTmAccountVdBalCollection: 
+  description: "Collection of balances."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmxTmAccountVdBalDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmxTmAccountVdBalWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmxTmAccountVdBalDTO"

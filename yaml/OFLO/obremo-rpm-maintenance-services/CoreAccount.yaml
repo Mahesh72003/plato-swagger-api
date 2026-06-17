@@ -1,0 +1,857 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : CoreAccount.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+ description: "This is a sample server coreaccounts server." 
+ version: "1.0.0"
+ title: "coreaccounts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "coreaccounts"
+   description: "This service is used to maintain external accounts for customers and maps the source system account number to external account maintained.It give us options to specify various parameters of the account like account is active or not credit or debit is allowed or not etc."
+ 
+schemes:
+- "https"
+ 
+paths:
+ 
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../coreaccounts
+ 
+ /coreaccounts:
+  get:
+   tags:
+    - "coreaccounts"
+   summary: "Get all valid coreaccounts."
+   description:  "Get all valid coreaccounts. This endpoints will be used to Get all valid coreaccounts maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: countryCode
+     required: false
+     type: string
+   - in: query
+     name: address1
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: accountClass
+     required: false
+     type: string
+   - in: query
+     name: acStatDormant
+     required: false
+     type: string
+   - in: query
+     name: acStatFrozen
+     required: false
+     type: string
+   - in: query
+     name: glStatBlocked
+     required: false
+     type: string
+   - in: query
+     name: acStatNoDr
+     required: false
+     type: string
+   - in: query
+     name: acStatNoCr
+     required: false
+     type: string
+   - in: query
+     name: custAcName
+     required: false
+     type: string
+   - in: query
+     name: custAcCcy
+     required: false
+     type: string
+   - in: query
+     name: customerNo
+     required: false
+     type: string
+   - in: query
+     name: sourceSystemAccBrn
+     required: false
+     type: string
+   - in: query
+     name: sourceSystemAccNo
+     required: false
+     type: string
+   - in: query
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query
+     name: custAcIban
+     required: false
+     type: string
+   - in: query
+     name: hostCode
+     required: false
+     type: string
+   - in: query
+     name: custAccountNo
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+
+
+definitions:
+ CoreAccountDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     countryCode:
+      type: string
+      description: "Country Code"
+      minLength: 0
+      maxLength: 4
+     address4:
+      type: string
+      description: "Fourth line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address3:
+      type: string
+      description: "Third line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address2:
+      type: string
+      description: "Second line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address1:
+      type: string
+      description: "First line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     ecaCheckReq:
+      type: string
+      description: "Indicates that ECA check is required for the external customer account"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     accountClass:
+      type: string
+      description: "Account class of the external customer account. It can be Normal account or Nostro account"
+     acStatDormant:
+      type: string
+      description: "Indicates that the account status is dormant"
+      minLength: 1
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatFrozen:
+      type: string
+      description: "Indicate that the account status is frozen"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     glStatBlocked:
+      type: string
+      description: "Indicates that the account status is blocked"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatNoDr:
+      type: string
+      description: "Indicates that the account does not have any debit facility"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatNoCr:
+      type: string
+      description: "Indicates that the account does not have any credit facility"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acOpenDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "The date on which account is being opened"
+     custAcName:
+      type: string
+      description: "Name of the account holder"
+      minLength: 0
+      maxLength: 105
+      #pattern: '[a-zA-Z0-9\s]+'
+     custAcCcy:
+      type: string
+      description: "Currency in which the account is being created"
+     customerNo:
+      type: string
+      description: "Customer number to which the account number is being linked"
+     sourceSystemAccBrn:
+      type: string
+      description: "Branch to which the account belongs to"
+     sourceSystemAccNo:
+      type: string
+      description: "Account number as in the source system"
+      minLength: 0
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     custAcIban:
+      type: string
+      description: "IBAN that is linked to the customer"
+      minLength: 0
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     hostCode:
+      type: string
+      description: "The host code that is linked to the logged in user of the branch."
+     custAccountNo:
+      type: string
+      description: "Account number of the External customer"
+      minLength: 1
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+    required:
+     - custAcName
+     - customerNo
+     - sourceSystemAccBrn
+     - sourceSystemAccNo
+     - hostCode
+     - custAccountNo
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CoreAccountCollection: 
+  description: "Collection of coreaccount."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CoreAccountDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CoreAccountWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CoreAccountDTO"
+ StepStatusUpdateDto:
+  type: object
+  properties:
+     id:
+      type: string
+     branchId:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currentDate:
+      type: string
+     jobId:
+      type: string
+     stepId:
+      type: string
+     action:
+      type: string
+     status:
+      type: string
+     statusDescription:
+      type: string
+ 
+ InvokeForgetBatchDTO:
+  type: object
+  properties:
+     retentionPeriod:
+      type: number
+     branchCode:
+      type: string
+     eodDate:
+      type: string
+     eodId:
+      type: string
+     eodJobId:
+      type: string
+     eodStepId:
+      type: string
+ 
+ CmcTmSystemDatesDto:
+  type: object
+  properties:
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     today:
+      type: string
+     prevWorkingDay:
+      type: string
+     nextWorkingDay:
+      type: string
+     modNo:
+      type: integer
+ 
+ CmcTmSystemDatesCollection:
+  description: "Collection of systemdates."
+  type: "object"
+  properties:
+     data:
+      type: "array"
+      items:
+       $ref: "#/definitions/CmcTmSystemDatesDto"
+ CoreAccountStfRestrictionCollection: 
+  description: "Collection of coreaccount."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CoreAccountStfRestrictionDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CoreCustomerDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     country:
+      type: string
+      description: "Country code of the customer?s address"
+      pattern: '([a-zA-Z0-9]+)?'
+     language:
+      type: string
+      description: "Customer's preferred language of communication"
+     nationality:
+      type: string
+      description: "Nationality of the customer"
+     locale:
+      type: string
+      description: "Locale of the customer"     
+     deceased:
+      type: string
+      description: "Identifies that customer is deceased"
+     frozen:
+      type: string
+      description: "Identifies that the customer's account is frozen"
+      pattern: '[Y,N]'
+     whereaboutsUnknown:
+      type: string
+      description: "Identifies that the customer's whareabouts not known"
+      pattern: '[Y,N]'
+     rmId:
+      type: string
+      description: "Relational Manager's Id"
+      minLength: 0
+      maxLength: 12
+      pattern: '([a-zA-Z0-9]+)?'
+     sanctionsChecksRequired:
+      type: string
+      description: "Indicates that the sanction check should be done or not"
+      pattern: '[Y,N]'
+     staff:
+      type: string
+     walkinCustomer:
+      type: string
+      description: "Walkin Customer"
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     sourceSystemCustNo:
+      type: string
+      description: "Customer identification details as per the source system."
+      minLength: 1
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     customerNo:
+      type: string
+      description: "Customer Number of the external customer"
+      minLength: 1
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+     hostCode:
+      type: string
+      description: "Displays the host code that is linked to the transaction branch of the customer"
+     customerType:
+      type: string
+      description: "Customer type can be Individual,Corporate or Bank"
+      pattern: '[I,C,B]'
+     customerCategory:
+      type: string
+      description: "Category to which the customer belongs to"
+     customerName1:
+      type: string
+      description: "Name of the external customer"
+      minLength: 0
+      maxLength: 105
+      #pattern: '([a-zA-Z0-9_\s]+)?'
+     shortName:
+      type: string
+      description: "Short name of the custome"
+      minLength: 0
+      maxLength: 20
+      #pattern: '([a-zA-Z0-9\s]+)?'
+     addressLine1:
+      type: string
+      description: "First line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine2:
+      type: string
+      description: "Second line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine3:
+      type: string
+      description: "Third line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine4:
+      type: string
+      description: "Fourth line of the customer?s address"
+      minLength: 0
+      maxLength: 35          
+     pincode:
+      type: string
+      description: "Pincode of the customer?s address"
+      minLength: 0
+      maxLength: 15
+      pattern: '([a-zA-Z0-9]+)?'
+    required:
+     - sourceSystem
+     - sourceSystemCustNo
+     - customerNo
+     - customerType
+     - customerName1
+ CoreCustomerCollection: 
+  description: "Collection of corecustomer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CoreCustomerDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ UserDto:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          startDate:
+            type: string
+          userStatus:
+            type: string
+            minLength: 0
+            maxLength: 1
+          endDate:
+            type: string
+          staffAccRestriction:
+            type: string
+          customerNo:
+            type: string
+          statusChangedOn:
+            type: string
+          userEmail:
+            type: string
+            minLength: 0
+            maxLength: 50
+          telephoneNumber:
+            type: string
+            minLength: 0
+            maxLength: 50
+          homePhone:
+            type: string
+            minLength: 0
+            maxLength: 50
+          userMobile:
+            type: string
+            minLength: 0
+            maxLength: 50
+            pattern: '^$|^\+[1-9]{1}[0-9]{3,14}$'
+          userFax:
+            type: string
+            minLength: 0
+            maxLength: 50
+            pattern: '^$|^\+?[0-9]{6,}$'
+          userLoginId:
+            type: string
+            minLength: 0
+            maxLength: 12
+          userName:
+            type: string
+            minLength: 0
+            maxLength: 100
+          isSupervisor:
+            type: string
+            minLength: 0
+            maxLength: 1
+          managerId:
+            type: string
+            minLength: 0
+            maxLength: 12
+          homeBranch:
+            type: string
+            minLength: 0
+            maxLength: 3
+          theme:
+            type: string
+            minLength: 0
+            maxLength: 100
+          locale:
+            type: string
+            minLength: 0
+            maxLength: 10
+          piiEnabled:
+            description: PII Enabled
+            type: boolean
+          languageCode:
+            type: string
+            minLength: 0
+            maxLength: 3
+          UserApplications:
+            type: array
+            items:
+              $ref: '#/definitions/UserApplications'
+          UserRoleBranches:
+            type: array
+            items:
+              $ref: '#/definitions/UserRoleBranches'
+ UserCollection:
+    description: Collection of user.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/UserDto'
+      paging:
+        $ref: '#/definitions/PagingDto'
+ UserRoleBranches:
+    type: object
+    properties:
+      branchCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+      id:
+        type: string
+        minLength: 0
+        maxLength: 36
+      userId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      roleId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      branchId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      roleCode:
+        type: string
+      roleDescription:
+        type: string
+ UserApplications:
+    type: object
+    properties:
+      id:
+        type: string
+        minLength: 0
+        maxLength: 36
+      userId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      applicationId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      applicationName:
+        description: Application name
+        type: string
+      applicationDescription:
+        description: Application description
+        type: string
+    required:
+      - applicationId
+ CoreAccountStfRestrictionDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     countryCode:
+      type: string
+      description: "Country Code"
+      minLength: 0
+      maxLength: 4
+     address4:
+      type: string
+      description: "Fourth line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address3:
+      type: string
+      description: "Third line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address2:
+      type: string
+      description: "Second line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address1:
+      type: string
+      description: "First line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     ecaCheckReq:
+      type: string
+      description: "Indicates that ECA check is required for the external customer account"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     accountClass:
+      type: string
+      description: "Account class of the external customer account. It can be Normal account or Nostro account"
+     acStatDormant:
+      type: string
+      description: "Indicates that the account status is dormant"
+      minLength: 1
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatFrozen:
+      type: string
+      description: "Indicate that the account status is frozen"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     glStatBlocked:
+      type: string
+      description: "Indicates that the account status is blocked"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatNoDr:
+      type: string
+      description: "Indicates that the account does not have any debit facility"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatNoCr:
+      type: string
+      description: "Indicates that the account does not have any credit facility"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acOpenDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "The date on which account is being opened"
+     custAcName:
+      type: string
+      description: "Name of the account holder"
+      minLength: 0
+      maxLength: 105
+      #pattern: '[a-zA-Z0-9\s]+'
+     custAcCcy:
+      type: string
+      description: "Currency in which the account is being created"
+     customerNo:
+      type: string
+      description: "Customer number to which the account number is being linked"
+     sourceSystemAccBrn:
+      type: string
+      description: "Branch to which the account belongs to"
+     sourceSystemAccNo:
+      type: string
+      description: "Account number as in the source system"
+      minLength: 0
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     custAcIban:
+      type: string
+      description: "IBAN that is linked to the customer"
+      minLength: 0
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     hostCode:
+      type: string
+      description: "The host code that is linked to the logged in user of the branch."
+     custAccountNo:
+      type: string
+      description: "Account number of the External customer"
+      minLength: 1
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+     staffType:
+      type: string
+    required:
+     - custAcName
+     - customerNo
+     - sourceSystemAccBrn
+     - sourceSystemAccNo
+     - hostCode
+     - custAccountNo

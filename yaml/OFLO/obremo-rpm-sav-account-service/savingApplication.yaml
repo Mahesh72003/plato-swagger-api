@@ -1,0 +1,794 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : savingaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Saving Application Service
+host: localhost:7001
+basePath: /saving-application-services
+tags:
+- name: SavingApplication
+  description: API for SavingApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/saving-aplication/submit:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - SavingApplication
+      summary: Submit for the Saving application domain.
+      description: Populates Saving application aggregate.
+      operationId: saveSavingApplication
+      parameters:
+      - name: savingApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new SavingApplicationAggregateModel
+        required: true
+        schema:
+          $ref: '#/definitions/SavingApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/saving-aplication/{applicationNumber}/{processRefNo}/stagesummary:
+     get:
+      produces:
+      - application/json
+      tags:
+      - SavingApplication
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getWorkDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which saving account application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: "processRefNo for which saving account application data needs to be fetched"
+        required: true
+        type: string      
+      - name: datasegments
+        in: query
+        description: List of data segment codes
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns SavingApplicationAggregateModel for the application number
+          schema:
+            $ref: "#/definitions/ResponseSummaryModel"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+          
+  /web/v1/saving-aplication/initialize:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SavingApplication
+      summary: initialize the Saving account application.
+      description: initialize the Saving account application.
+      operationId: InitaiteSavingApplication
+      parameters:
+      - name: SavingApplicationInitializeModel
+        in: body
+        description: Request Body that contains data required for initialize saving Application
+        required: true
+        schema:
+          $ref: '#/definitions/SavingApplicationInitializeModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Saving Application for the initiation stage
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error           
+  /web/v1/saving-aplication/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SavingApplication
+      summary: Get Saving application details
+      description: Get Saving application details. Add additional information here for the this endpoint.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Loan application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: "processRefNo for which saving account application data needs to be fetched"
+        required: true
+        type: string         
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode of the datasegment that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Datasegment history for the application number
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/saving-aplication/save:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SavingApplication
+      summary: Submit for the casa application domain.
+      description: Populates casa application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveOnlyCasaApplication
+      parameters:
+      - name: savingApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for saving Casa application
+        required: true
+        schema:
+          $ref: '#/definitions/SavingApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/saving-aplication/{applicationNumber}/datasegment-details: 
+    get: 
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SavingApplication
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getApplicationDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Casa application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNos
+        in: query
+        description: Process Reference number for which Casa application data needs to be fetched
+        required: true
+        type: array
+        items:
+         type: string
+      responses:
+        200:
+          description: Returns CasaApplicationMasterModel for the application number
+          schema: 
+           $ref: '#/definitions/CasaApplicationMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/saving-aplication/accountNumberInfo: 
+    get: 
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SavingApplication
+      summary: Get the info related to applicationNo and account type.
+      description: Get the info related to applicationNo and account type.
+      operationId: getAccountNumberInfo
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: Application number for which Casa application data needs to be fetched
+        required: true
+        type: string
+      - name: accountType
+        in: query
+        description: account type for which Casa application data needs to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns CasaApplicationMasterModel for the application number
+          schema: 
+           $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /saving-application/orchestrate/backoffice:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SavingApplication
+      summary: Call Back Office.
+      description: Hand-Off Process called from the workflow
+      operationId: callBackOffice
+      parameters:
+      - name: BackOfficeRequest
+        in: body
+        description: Request Body that contains data required for Back Office
+        required: true
+        schema:
+          $ref: '#/definitions/BackOfficeRequestModel'
+      responses:
+        201:
+          description: Returns response object for BackOfficeRequest
+          schema:
+            $ref: '#/definitions/BackOfficeResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/aggregatedetails:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - SavingApplication
+      summary: Get the aggregate response for saving application.
+      description: Get the aggregate response for saving application.
+      operationId: getAggregateResponse
+      parameters:
+        - name: applicationNumber
+          in: query
+          description: Application number for which Casa application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: Process Reference number for which Casa application data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns SavingApplicationAggregateModel for the application and process reference number
+          schema:
+            $ref: '#/definitions/SavingApplicationAggregateMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /saving-aplication/customerresponse:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - SavingApplication
+      summary: Retrieves the existing CustomerResponse.
+      description: Retrieves the existing CustomerResponseDetails. Add additional information here for the this endpoint.
+      operationId: getCustomerResponse
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/saving-aplication/{applicationNumber}/{processRefNo}/adviceData:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - SavingApplication
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getAdviceDetails
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which Saving application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Reference number for which Saving application data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns SavingApplicationAggregateModel for the application number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+definitions:
+  CustomerResponseModel:
+    description: Customer Response model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref Number
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      response:
+        description: Response
+        type: string
+  SavingApplicationAggregateMasterModel:
+    description: SavingApplicationAggregateMasterModel
+    type: object
+    properties:
+      applicationNumber:
+        description: ApplicationNumber
+        type: string
+      processRefNo:
+        description: Process Reference Number
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      accountNo:
+        description: accountNo
+        type: string
+      accountType:
+        description: accountType
+        type: string
+      accountBranch:
+        description: accountBranch
+        type: string
+      accountDetailsModel:
+        $ref: "#/definitions/AccountDetailsModel"
+      nomineeDetailsMasterModel:
+        $ref: "#/definitions/NomineeDetailsMasterModel"
+      mandateDetailsMasterModel:
+        $ref: "#/definitions/MandateDetailsMasterModel"
+      accServicesPrefMasterModel:
+        $ref: "#/definitions/AccServicesPrefMasterModel"
+      approvalDetailsModel:
+        $ref: "#/definitions/ApprovalDetailsModel"
+      initialFundingDetailsModel:
+        $ref: "#/definitions/IninitalFundingDetailsModel"
+      chargeDetailsMasterModel:
+        $ref: "#/definitions/ChargeDetailsMasterModel"
+      interestDetailsMasterModel:
+        $ref: "#/definitions/InterestDetailsMasterModel"
+#      assessmentDetailsMasterModel:
+#        $ref: "#/definitions/AssessmentDetailsMasterModel"
+#      odLimitDetailsModel:
+#        $ref: '#/definitions/ODLimitDetailsModel'
+      odAdvanceDetailsMasterModel:
+        $ref: "#/definitions/OdAdvanceDetailsMasterModel"
+#      odUnsecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdUnsecuredDetailsMasterModel"
+      odUnsecuredTempDetailsMasterModel:
+        $ref: "#/definitions/OdUnsecuredTempDetailsMasterModel"
+#      odSecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdSecuredDetailsMasterModel"
+      odAccountLimitDetailsMasterModel:
+        $ref: "#/definitions/OdAccountLimitDetailsMasterModel"
+      additionalAttributes:
+        type: array
+        items:
+          type: object
+    required:
+     - processRefNo
+     - applicationNumber
+
+  SavingApplicationAggregateModel:
+    description: SavingApplicationAggregateModel
+    type: object
+    properties:
+      action:
+        description: Action
+        type: string
+      channel:
+        description: Channel
+        type: string  
+      applicationNumber:
+        description: Application Number
+        type: string
+        maxLength: 20
+      processRefNo:
+        description: "processRefNo for which saving account application data needs to be fetched"
+        type: string  
+        maxLength: 20
+      id:
+        description: Loan Application Id
+        type: string
+      dataSegmentCode:
+        description: DataSegment List
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      lastCompletedStageCode:
+        description: Last Completed Stage Code
+        type: string
+      currentActiveStageCode:
+        description: Current Active Stage Code
+        type: string  
+      applicationStatus:
+        description: application status
+        type: string 
+      accountNo:
+        description: Account number
+        type: string
+      domainData:
+        description: Domain Specific data
+        type: string
+      accountType:
+        description: accountType
+        type: string
+      accountBranch:
+        description: accountBranch
+        type: string
+      branchName:
+        description: branchName
+        type: string
+      applicantDetails:
+        $ref: '#/definitions/ApplicantDetailsMasterModel'
+      primaryApplicantDetails:
+        $ref: '#/definitions/ApplicantDetailsModel'
+      financialDetailsMasterModel:
+        $ref: '#/definitions/FinancialDetailsMasterModel'
+      accountDetailsModel:
+        $ref: "#/definitions/AccountDetailsModel"
+      nomineeDetailsMasterModel:
+        $ref: "#/definitions/NomineeDetailsMasterModel"
+      mandateDetailsMasterModel:
+        $ref: "#/definitions/MandateDetailsMasterModel"
+      accServicesPrefMasterModel:
+        $ref: "#/definitions/AccServicesPrefMasterModel"
+      accServicesPrefDetailsModel:
+        $ref: "#/definitions/AccServicesPrefDetailsModel"
+      approvalDetailsModel:
+        $ref: "#/definitions/ApprovalDetailsModel"
+      initialFundingDetailsModel:
+        $ref: "#/definitions/IninitalFundingDetailsModel"
+#      assessmentDetailsMasterModel:
+#        $ref: "#/definitions/AssessmentDetailsMasterModel"
+      chargeDetailsMasterModel:
+        $ref: "#/definitions/ChargeDetailsMasterModel"  
+      interestDetailsMasterModel:
+        $ref: "#/definitions/InterestDetailsMasterModel"
+#      odLimitDetailsModel:
+#        $ref: '#/definitions/ODLimitDetailsModel'
+      odAdvanceDetailsMasterModel:       
+        $ref: "#/definitions/OdAdvanceDetailsMasterModel"
+#      odUnsecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdUnsecuredDetailsMasterModel"
+      odUnsecuredTempDetailsMasterModel:       
+        $ref: "#/definitions/OdUnsecuredTempDetailsMasterModel" 
+#      odSecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdSecuredDetailsMasterModel"
+      odAccountLimitDetailsMasterModel:
+        $ref: "#/definitions/OdAccountLimitDetailsMasterModel"
+      customObject:
+        description: Additional attribute
+        type: object
+    required:
+     - processRefNo
+     - applicationNumber
+  SavingApplicationAggregateCollection:
+   description: Collection of SavingApplicationAggregate
+   type: object
+   properties:
+    data:
+     type: array
+     items:
+      $ref: '#/definitions/SavingApplicationAggregateModel'           
+  SavingApplicationInitializeModel:
+   description: "SavingApplicationInitializeModel"
+   type: object
+   properties:
+    applicationNumber:
+     description: Application Number to Initialize SavingApplication
+     type: string
+     maxLength: 20
+    processRefNo:
+     description: "processRefNo for which saving account application data needs to be fetched"
+     type: string  
+     maxLength: 20     
+    initializationId:
+     description: initialization id to Initialize SavingApplication
+     type: string
+     maxLength: 20
+    channel:
+     description: source channel from where request came to Initialize SavingApplication
+     type: string
+     maxLength: 30
+   required:
+    - processRefNo
+    - initializationId     
+  InitiationDetailsModel:
+   description: "InitiationDetailsModel"
+   type: object
+   properties:
+    accountDetailsID:
+     description: id for account-Details
+     type: string
+     maxLength: 36
+    applicantDetailsID:
+     description: id for applicant-Details
+     type: string
+     maxLength: 36
+  DomainData:
+   description: "Domain Data from workflow"
+   type: object
+   properties:
+    sendToHost:
+     type: boolean
+     description: "Need to send to host?"
+    initiateFunding:
+     type: boolean
+     description: "Does it support Initial funding?"
+    initFundingStatus:
+     type: boolean
+     description: "Status of Initial Funding?"
+  AccountNumberModel:
+   description: "AccountNumberModel for account opening details"
+   type: object
+   properties:
+    customerId:
+     type: string
+     description: "Cif Number"
+    customerName:
+     type: string
+     description: "Customer Name"
+    accountNumber:
+     type: string
+     description: "accountNumber"
+    branchCode:
+     type: string
+     description: "branchCode"
+    processRefNo:
+     type: string
+     description: "processRefNo"
+    applicationNumber:
+     type: string
+     description: "applicationNumber" 
+    accountCurrency:
+     type: string
+     description: Account Currency        
+  CasaApplicationMasterModel:
+    description: Casa Application Master Model
+    type: object
+    properties:
+      data: 
+        type: array
+        items:
+         $ref: '#/definitions/CasaApplicationModel'
+  CasaApplicationModel: 
+    description: Casa Application Model
+    type: object
+    properties:
+      accountDetailsModel:
+        $ref: "#/definitions/AccountDetailsModel"
+      nomineeDetailsMasterModel:
+        $ref: "#/definitions/NomineeDetailsMasterModel"
+      mandateDetailsMasterModel:
+        $ref: "#/definitions/MandateDetailsMasterModel"
+      accServicesPrefMasterModel:
+        $ref: "#/definitions/AccServicesPrefMasterModel"
+#      odLimitDetailsModel:
+#        $ref: "#/definitions/ODLimitDetailsModel"
+      odAdvanceDetailsMasterModel:       
+        $ref: "#/definitions/OdAdvanceDetailsMasterModel"
+#      odUnsecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdUnsecuredDetailsMasterModel"
+      odUnsecuredTempDetailsMasterModel:       
+        $ref: "#/definitions/OdUnsecuredTempDetailsMasterModel"
+#      odSecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdSecuredDetailsMasterModel"
+      odAccountLimitDetailsMasterModel:
+        $ref: "#/definitions/OdAccountLimitDetailsMasterModel"
+  #  SavingApplicationAggregateSummaryModel:
+#    description: SavingApplicationAggregateSummaryModel
+#    type: object
+#    properties:
+#      applicationNumber:
+#        description: Application Number
+#        type: string
+#      fsgbu-ob-remo-rpm-ds-sav-account-service:
+#        $ref: "#/definitions/StageSummary"
+#      fsgbu-ob-remo-rpm-ds-sav-nominee-details:
+#        $ref: "#/definitions/StageSummary"
+#      fsgbu-ob-remo-rpm-ds-sav-interest-details:
+#        $ref: "#/definitions/StageSummary"
+#  SavingApplicationAggregateModelSummaryCollection:
+#    description: Collection of SavingApplicationAggregateModel
+#    type: object
+#    properties:
+#      data:
+#        $ref: '#/definitions/SavingApplicationAggregateSummaryModel'
+
+
+  BackOfficeRequestModel:
+    description: Back Office Request model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      customObject:
+        description: Additional attribute
+        type: object
+    required:
+    - processRefNo
+    - applicationNumber
+    - stageCode   
+  BackOfficeResponseModel:
+    description: Back Office Response model
+    type: object
+    properties:
+      field1:
+        description: field1
+        type: string
+      field2:
+        description: field2
+        type: string
+      field3:
+        description: field3
+        type: string
+      field4:
+        description: field4
+        type: string

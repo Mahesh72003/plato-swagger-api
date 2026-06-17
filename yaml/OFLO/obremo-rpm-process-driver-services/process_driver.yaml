@@ -1,0 +1,561 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : process_driver.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Process Driver Service
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-process-driver-services
+tags:
+- name: ProcessDriver
+  description: API for Orchestration of RPM Operations
+schemes:
+- http
+paths:
+  /web/v1/initiate:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDriver
+      summary: Initiate process, generates application number, updates Task controller & starts a workflow.
+      description: Initiate process, generates application number, updates Task controller & starts a workflow.
+      operationId: initiate
+      parameters:
+      - name: initiateModel
+        in: body
+        description: Request Body that contains data required for creating a new BasicApplicationDetails
+        required: true
+        schema:
+          $ref: '#/definitions/BasicApplicationDetailsModel'
+      responses:
+        201:
+          description: Returns the Application number of the newly created BasicApplicationDetails
+          headers:
+            Location:
+              description: URL of newly created BasicApplicationDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/stage/submit:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ProcessDriver
+      summary: Based on the application Number, posts the aggregates available for the application number and performs a stage movement
+      description: Based on the application Number, posts the aggregates available for the application number and performs a stage movement. Add additional information here for this endpoint.
+      operationId: updateStage
+      parameters:
+        - name: remarksModel
+          in: body
+          description: Request Body that contains data required for creating a the remarks for stage movement
+          required: true
+          schema:
+            $ref: '#/definitions/RemarksModel'
+      responses:
+        201:
+          description: Returns the Id of the stage movement
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/stagesummary/{stageCode}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ProcessDriver
+      summary: Get the Stage Summery Details
+      description: Get the Stage Summery Details
+      operationId: getStageSummary
+      parameters:
+        - name: stageCode
+          in: path
+          description: Stage Code
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: Process Reference number for which the Stage Summary Details
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: Application number for which the Stage Summary Details
+          required: true
+          type: string
+        - name: status
+          in: query
+          description: status
+          required: false
+          type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/auditdetails/{processRefNo}/{applicationNumber}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ProcessDriver
+      summary: Get the Audit Details
+      description: Get the Audit Details
+      operationId: getAuditDetails
+      parameters:
+        - name: processRefNo
+          in: path
+          description: Process Reference Number for which the Audit Details
+          required: true
+          type: string
+        - name: applicationNumber
+          in: path
+          description: Application Number for which the Audit Details
+          required: true
+          type: string
+        - name: stageCode
+          in: query
+          description: Stage Code
+          required: true
+          type: string
+        - name: datasegmentCode
+          in: query
+          description: Datasegment Code
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/processsummary:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ProcessDriver
+      summary: Get the Summery Details for
+      description: Get the Summery Details from all stages
+      operationId: getSummary
+      parameters:
+        - name: processRefNo
+          in: query
+          description: Process Ref number for which the Stage Summary Details
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: Application number for which the Stage Summary Details
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/previewadvice/{processRefNo}/{stageCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDriver
+      summary: Get the Preview Advice Details
+      description: Get the Preview Advice Details
+      operationId: getPreviewAdvice
+      parameters:
+      - name: processRefNo
+        in: path
+        description: Preview advice details for the application number for which the Advice Summery Details
+        required: true
+        type: string
+      - name: stageCode
+        in: path
+        description: stage Code
+        required: true
+        type: string
+      - name: adviceName
+        in: query
+        description: Advice Name
+        required: false
+        type: string
+      - name: previewAdvice
+        in: query
+        description: Preview Advice
+        required: false
+        type: string
+      - name: download
+        in: query
+        description: Download Advice
+        required: false
+        type: boolean
+        default: false
+      responses:
+        200:
+          description: Returns Preview Advice details for the application number and advice name
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/processStatus/{applicationNumber}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ProcessDriver
+      summary: Get list of all the process part of the given applicantion no
+      description: Get list of all the process part of the given applicantion no
+      operationId: getAllProcesses
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application Number
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/heavyInitiate:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDriver
+      summary: Initiate process, updates Task controller .
+      description:  Initiate process, updates Task controller .
+      operationId: fullInitiate
+      parameters:
+      - name: initiateModel
+        in: body
+        description: Request Body that contains data required for creating a new BasicApplicationDetails
+        required: true
+        schema:
+          $ref: '#/definitions/BasicApplicationDetailsModel'
+      responses:
+        201:
+          description: Returns the Application number of the newly created BasicApplicationDetails
+          headers:
+            Location:
+              description: URL of newly created BasicApplicationDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/validatestage:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ProcessDriver
+      summary: validate stage
+      description: validate stage
+      operationId: validateStage
+      parameters:
+        - name: applicationNumber
+          in: query
+          description: Application Number
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: ProcessReference Number
+          required: true
+          type: string
+        - name: stageCode
+          in: query
+          description: Stage Code
+          required: true
+          type: string        
+      responses:
+        201:
+          description: validate stage
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/handoffRetry:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDriver
+      summary: Handoff Retry after customer is created
+      description:  Handoff Retry after customer is created
+      operationId: handoffRetry
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: Application Number
+        required: true
+        type: string
+      responses:
+        201:
+          description: Retry Handoff task
+          headers:
+            Location:
+              description: URL of newly created BasicApplicationDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  ApplicationInitiationDetailsModel:
+    description: BasicApplicationDetails model
+    type: object
+    required:
+      - businessProductCode
+    properties:
+      applicationNumber:
+        description: Application Number of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 20
+      businessProductCode:
+        description: ApplicationCategory Name of the BasicApplicationDetails
+        type: string
+        maxLength: 36
+      lifeCycleCode:
+        description: LifeCycleCode
+        type: string
+        maxLength: 20
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeader'
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    allOf:
+      - type: object
+        discriminator: resouce_type
+  RemarksModel:
+    description: Remarks model
+    type: object
+    properties:
+      id:
+        description: Id of the Remarks
+        type: string
+      outcomesForValidate:
+        description: outcomesFor Validate
+        type: string
+      rejectOutcomes:
+        description: All possible reject outcomes available
+        type: array
+        items:
+          $ref: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      processRefNo:
+        description: Process reference ID
+        type: string
+      dataSegmentCode:
+        description: Data segment code
+        type: string
+      remarks:
+        description: Remarks
+        type: string
+      taskID:
+        description: Task ID
+        type: string
+      workflowID:
+        description: Workflow ID
+        type: string
+      businessProductCode:
+        description: ApplicationCategory Name of the BasicApplicationDetails
+        type: string
+      lifeCycleCode:
+        description: LifeCycleCode
+        type: string
+      workflowStatus:
+        description: Workflow Status
+        type: string
+      initiateFunding:
+        description: Initiate Funding
+        type: boolean
+        default: false
+      initFundingStatus:
+        description: Initiate funding status flag
+        type: boolean
+        default: false
+      sendToHost:
+        description: Send to Host
+        type: boolean
+        default: false
+      appPriority:
+        description: Application Priority
+        type: string
+      domainData:
+        description: Domain specific data
+        type: string
+      custDetailsComplete:
+        description: Customer details is complete
+        type: boolean
+        default: false
+      cancelPartyCall:
+        description: Ignore party calls
+        type: boolean
+        default: false
+      automation:
+        description: Stage Submit automation
+        type: boolean
+        default: false
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeader'

@@ -1,0 +1,205 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : savingAggregate.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Saving Application Service
+host: localhost:7001
+basePath: /saving-application-services
+tags:
+- name: SavingAggregate
+  description: API for SavingApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/saving-aplication/submittohost:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - SavingAggregate
+      summary: Send the Saving application to host.
+      description: Submit Saving application aggregate.
+      operationId: saveSavingApplication
+      parameters:
+      - name: savingApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new SavingApplicationAggregateModel
+        required: true
+        schema:
+          $ref: '#/definitions/SavingAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error              
+definitions:
+  SavingAggregateModel:
+    description: SavingAggregateModel
+    type: object
+    properties:
+      applicationNo:
+        description: "Application Number"
+        type: string
+        maxLength: 20
+      processRefNo:
+        description: "processRefNo for which saving account application data needs to be fetched"
+        type: string  
+        maxLength: 20
+      fundByMode:
+          description: "fundByMode"
+          type: string
+#      stageCode:
+#        description: "Stage Code"
+#        type: string  
+#      branchCode:
+#        description: "Branch code"
+#        type: string       
+#      accountName:
+#        description: "Account name"
+#        type: string
+      custNo:
+        description: "Customer Number"
+        type: string
+      accountClass:
+        description: "Account class"
+        type: string
+#      currency:
+#        description: "Currency code"
+#        type: string
+#      location:
+#        description: "location"
+#        type: string
+#      media:
+#        description: "media"
+#        type: string
+      accServicesPrefMasterModel:
+        $ref: '#/definitions/AccServicesPrefMasterModel'
+      accServicesPrefDetailsModel:
+        $ref: '#/definitions/AccServicesPrefDetailsModel'
+      accountDetailsModel:
+        $ref: '#/definitions/AccountDetailsModel'
+      chargeDetailsMasterModel:
+        $ref: '#/definitions/ChargeDetailsMasterModel'  
+      interestDetailsMasterModel:
+        $ref: '#/definitions/InterestDetailsMasterModel'    
+      mandateDetailsMasterModel:
+        $ref: '#/definitions/MandateDetailsMasterModel'
+      nomineeDetailsMasterModel:
+        $ref: '#/definitions/NomineeDetailsMasterModel'
+      applicantDetailsMasterModel:
+        $ref: '#/definitions/ApplicantDetailsMasterModel'
+      odAdvanceDetailsMasterModel:       
+        $ref: "#/definitions/OdAdvanceDetailsMasterModel"
+#      odUnsecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdUnsecuredDetailsMasterModel"
+      odUnsecuredTempDetailsMasterModel:       
+        $ref: "#/definitions/OdUnsecuredTempDetailsMasterModel"
+#      odSecuredDetailsMasterModel:
+#        $ref: "#/definitions/OdSecuredDetailsMasterModel"
+      odAccountLimitDetailsMasterModel:
+        $ref: "#/definitions/OdAccountLimitDetailsMasterModel"
+      casaPayInDetails:
+        $ref: "#/definitions/CasaPayInDetails"
+      customObject:
+        type: object
+      additionalAttributes:
+        type: array
+        items:
+          type: object
+
+    required:
+#     - branchCode
+     - custNo
+     - accountClass
+#     - currency                    
+  CasaPayInDetails:
+    description: payInDetails
+    type: object
+    properties:
+      payInMode:
+        description: "payInMode"
+        type: string
+      branchCode:
+        description: "branch"
+        type: string
+      accountNumber:
+        description: "account"
+        type: string
+      accountName:
+        description: "accountName"
+        type: string
+      chequeNumber:
+        description: Cheque Number.
+        type: string
+      chequeDate:
+        description: Cheque date.
+        type: string      
+      chequeBankName:
+        description: Bank name on the cheque.
+        type: string
+      chequeBranchName:
+        description: Branch name on the cheque.
+        type: string
+      chequeRoutingNumber:
+        description: Routing Number on the cheque
+        type: string
+        pattern: '^\d{0,9}$'
+      valueDate:
+        description: "valueDate"
+        type: string  
+      amount:
+        description: Amount to be funded.
+        type: number  
+      fundByMode:
+        description: "fundByMode"
+        type: string  

@@ -1,0 +1,328 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "IC Input Service." 
+ version: "1.0.0"
+ title: "IC Input Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "icInput"
+   description: "This Service is used to save and IC Inputs from external services"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../intRule
+
+ /intInput/vdBalLM:
+  post:
+   tags:
+    - "vdBalLM"
+   summary: "Save and Auth VD Bal"
+   description: "Save and Auth VD Bal .."
+   operationId: "saveVdBal"
+   parameters:
+    - name: "vdBal" 
+      in: "body" 
+      description: "Request Body that contains data required for saving VD bal " 
+      required: true
+      schema:
+       $ref: "#/definitions/VDBalDetailsDTO"
+    - name: "branchCode"
+      in: "header"
+      description: "Transaction Branch"
+      required: true
+      type: "string"
+    - name: "userId"
+      in: "header"
+      description: "User ID"
+      required: true
+      type: "string"
+    - name: "source"
+      in: "header"
+      description: "Source Code"
+      required: true
+      type: "string"
+    - name: "destAppId"
+      in: "header"
+      description: "Application ID"
+      required: true
+      type: "string"
+    - name: "checkerId"
+      in: "header"
+      description: "Checker ID"
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Returns message of succes or failure " 
+     schema:
+       $ref: "#/definitions/VDBalResponseDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /intInput/icAccnt:
+  post:
+   tags:
+    - "icAccnt"
+   summary: "Save and Auth IC Account"
+   description: "Save and Auth IC Account"
+   operationId: "saveIcAccnt"
+   parameters:
+    - name: "vdBal" 
+      in: "body" 
+      description: "Request Body that contains data required for saving VD bal " 
+      required: true
+      schema:
+       $ref: "#/definitions/IcAccntDetailsDTO"
+    - name: "branchCode"
+      in: "header"
+      description: "Transaction Branch"
+      required: true
+      type: "string"
+    - name: "userId"
+      in: "header"
+      description: "User ID"
+      required: true
+      type: "string"
+    - name: "source"
+      in: "header"
+      description: "Source Code"
+      required: true
+      type: "string"
+    - name: "destAppId"
+      in: "header"
+      description: "Application ID"
+      required: true
+      type: "string"
+    - name: "checkerId"
+      in: "header"
+      description: "Checker ID"
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Returns message of succes or failure " 
+     schema:
+       $ref: "#/definitions/IcAccntResponseDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+    
+definitions:
+ VDBalResponseDTO:
+  description: "VDBalResponseDTO."
+  type: "object"
+  properties:
+   warnings:
+    description: "Warning Code List"
+    type: "array"
+    items:
+     $ref: "#/definitions/WarningCodeDTO"
+   errors:
+    description: "Error Code List"
+    type: "array"
+    items:
+     $ref: "#/definitions/ErrorCodeDTO"
+ IcAccntResponseDTO:
+  description: "IcAccntResponseDTO."
+  type: "object"
+  properties:
+   warnings:
+    description: "Warning Code List"
+    type: "array"
+    items:
+     $ref: "#/definitions/WarningCodeDTO"
+   errors:
+    description: "Error Code List"
+    type: "array"
+    items:
+     $ref: "#/definitions/ErrorCodeDTO"
+ VDBalDetailsDTO:
+  type: "object"
+  properties:
+    acc:
+      type: string
+      description: ""
+    bal:
+      type: number
+      description: ""
+    brn:
+      type: string
+      description: ""
+    ccy:
+      type: string
+      description: ""
+    crTur:
+      type: number
+      description: ""
+    drTur:
+      type: number
+      description: ""
+    hasTov:
+      type: string
+      description: ""
+    icBal:
+      type: number
+      description: ""
+    icLcyBal:
+      type: number
+      description: ""
+    lcyBal:
+      type: number
+      description: ""
+    valDt:
+      type: string
+      format: date
+      description: ""
+    positiveContribution:
+      type: number
+      description: ""
+    negativeContribution:
+      type: number
+      description: ""
+    creditCoverageRatio:
+      type: number
+      description: ""
+    creditResidualRatio:
+      type: number
+      description: ""
+    debitCoverageRatio:
+      type: number
+      description: ""
+    debitResidualRatio:
+      type: number
+      description: ""
+    netPoolPostion:
+      type: number
+      description: ""
+    poolAccBrn:
+      type: string
+      description: ""
+    poolAccCcy:
+      type: string
+      description: ""
+    poolAccNo:
+      type: string
+      description: ""
+    poolAcBal:
+      type: number
+      description: ""
+ IcAccntDetailsDTO:
+  type: "object"
+  properties:
+    acc:
+      type: string
+      description: "Account number"
+    accountClass:
+      type: string
+      description: "Account Group"
+    accType:
+      type: string
+      description: "Type of Account"
+    acOpenDate:
+      type: string
+      format: date
+      description: "Account Open Date"
+    bookAcc:
+      type: string
+      description: "Interest Booking account"
+    bookBrn:
+      type: string
+      description: "Interest Booking Branch"
+    bookCcy:
+      type: string
+      description: "Interest Booking CCY"
+    brn:
+      type: string
+      description: "Branch"
+    calcAcc:
+      type: string
+      description: "Interest Calculation Account"
+    ccy:
+      type: string
+      description: "Interest Calculation Account CCY"
+    custNo:
+      type: string
+      description: "Customer/Entity"
+    intStartDate:
+      type: string
+      format: date
+      description: "Interest Start Date"
+    sourceSystem:
+      type: string
+      description: "Source system invoking the service"
+ WarningCodeDTO:
+  type: "object"
+  properties:
+   warningCode:
+    type: "string"
+   warningDesc:
+    type: "string"
+ ErrorCodeDTO:
+  type: "object"
+  properties:
+   errorCode:
+    type: "string"
+   errorDesc:
+    type: "string"

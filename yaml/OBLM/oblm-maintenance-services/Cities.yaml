@@ -1,0 +1,214 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: '2.0'
+info:
+  description: This is a sample server sweepproducts server.
+  version: 1.0.0
+  title: World Cities Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: cities
+  description: ''
+schemes:
+- https
+paths:
+  /cities:
+    get:
+      tags:
+      - cities
+      summary: Get all valid world cities.
+      description: Get all valid world cities. This endpoints will be used to Get all valid world cities maintenance records.
+      operationId: getAll
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: cityName
+        required: false
+        type: string
+      - in: query
+        name: countryCode
+        required: false
+        type: string             
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ""
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmCitiesCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /cities/{countryCode}:
+    get:
+     tags:
+      - "branch"
+     summary: "Retrieves the city by Country."
+     description:  "Retrieves the branch by Country."
+     operationId: "getByCountry"
+     parameters:
+      - name: "countryCode"
+        in: "path"
+        description: "country of the city that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "cityName"
+        in: "query"
+        description: "country of the city that needs to be fetched"
+        required: false
+        type: "string"
+     responses:
+      200:
+       description: "Returns the city based on given country."
+       schema:
+        $ref: "#/definitions/LmmTmCitiesCollection"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"          
+definitions:
+  LmmTmCitiesDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        cityName:
+          type: string
+          description: ""
+        countryName:
+          type: string
+          description: ""
+        countryIso2:
+          type: string
+          description: ""
+        countryIso3:
+          type: string
+          description: ""
+        latitude:
+          type: string
+          description: ""
+        longitude:
+          type: string
+          description: ""
+        region:
+          type: string
+          description: ""
+        timeZone:
+          type: string
+          description: ""                    
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmmTmCitiesCollection:
+    description: Collection of cities.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmCitiesDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmmTmCitiesWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmmTmCitiesDTO'

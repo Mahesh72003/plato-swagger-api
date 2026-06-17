@@ -1,0 +1,286 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : VA
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server creditlineutil server." 
+ version: "1.0.0"
+ title: "creditlineutil ServiceApi"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "creditlineutilService"
+   description: "This Service API is used to track internal credit limit utilization and de-utilization for a virtual account at both contract/transaction and account level. Also this provides the maximum available line amount for a given Line ID."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../creditlineutil
+
+ 
+ /service/lineUtilizationDetails:   
+  get:
+   tags:
+    - "creditlineutilService"
+   summary: "Get Credit Limit utilization details for the given Real Customer Number and Line ID"
+   description:  "This endpoint will be used to Get Credit Limit utilization details for the given Real Customer Number and Line ID."
+   operationId: "getLineUtilizationDetails"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - in: query
+      name: realCustomerNo
+      required: true
+      type: string    
+    - in: query
+      name: lineId
+      required: true
+      type: string    
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LineUtilizationWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/lineAccountUtilizationDetails:   
+  get:
+   tags:
+    - "creditlineutilService"
+   summary: "Get Credit Limit utilization details at Account level for the given Real Customer Number and Line ID"
+   description:  "This endpoint will be used to Get Credit Limit utilization details at Account level for the given Real Customer Number and Line ID."
+   operationId: "getLineAccountUtilizationDetails"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: virtualAccountNo
+     description: "Virtual Account Number"
+     in: query     
+     required: false
+     type: string   
+   - in: query
+     name: realCustomerNo
+     required: true
+     type: string    
+   - in: query
+     name: lineId
+     required: true
+     type: string    
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LineAccountUtilizationWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+
+definitions: 
+ VamTbAccLimitUtilizationDTO:
+  type: object
+  properties:
+     exchRateLine:
+      type: number
+      description: "Exchange rate between line currency and virtual account currency"
+     id:
+      type: string
+      description: "unique Id"
+     lastUpdatedBy:
+      type: string
+      description: "Last updated by"
+     latestTxnDate:
+      type: string
+      format: date
+      description: "Latest Transaction Date on which utilization/deutilization happened on the line for the virtual Account"
+     lineId:
+      type: string
+      description: "Line Id"
+      minLength: 3
+      maxLength: 20
+      pattern: '([A-Z0-9\s]+)?'
+     lineLimitUtilizationId:
+      type: string
+      description: "Line utilization Id"
+     realCustomerNo:
+      type: string
+      description: "Real customer number associated to the line"
+     lineBranch:
+      type: string
+      description: "Line Branch"
+     utilAmtInAccCcy:
+      type: number
+      description: "Utilized amount in Account Currency"
+     utilAmtInLineCcy:
+      type: number
+      description: "Utilized Amount in Line currency"
+     version:
+      type: number
+      description: "version"
+     virtualAccountCcy:
+      type: string
+      description: "Virtual Account Currency"
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account Number"
+ LineUtilDetailsDto:
+  type: object
+  properties:
+     utilizedAmount:
+      type: number
+      description: "Utilized credit limit amount"
+     availableAmount:
+      type: number
+      description: "Available credit limit amount"
+     maxAvailableAmount:
+      type: number
+      description: "Maximum available credit limit amount"
+     amtUtilizedToday:
+      type: number
+      description: "Credit limit amount utilized today"     
+     firstUtilDate:
+      type: string      
+      description: "Date of first credit limit utilization"
+     lastUtilDate:
+      type: string      
+      description: "Date of last credit limit utilization"
+ 
+ 
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ 
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+
+ LineUtilizationWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/LineUtilDetailsDto"
+ LineAccountUtilizationWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/VamTbAccLimitUtilizationDTO"

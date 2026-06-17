@@ -1,0 +1,316 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ApprovalDetails.yaml
+#  **
+#  ** Module     : 
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: approvalDetails Service
+host: "api-plato.us.oracle.com:8080"
+basePath: /approvaldetails
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+- name: SavingApplication
+  description: API for Approval Details Data segment Operations
+schemes:  
+- http
+paths:
+  /web/v1/approvaldetails:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - approvalDetails
+      summary: Adds a new approvaldetails.
+      description: Adds a new Approvaldetails. Add additional information here for this endpoint.
+      operationId: addApprovalDetails
+      parameters:
+      - name: approvaldetails
+        in: body
+        description: Request Body that contains data required for creating a new Approvaldetails
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created ApprovalDetails.
+          headers:
+            Location:
+              description: URL of newly created ApprovalDetails.
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      tags:
+      - ApprovalDetails
+      summary: Retrieves the list of existing ApprovalDetails.
+      description: Retrieves the list of existing ApprovalDetails. Add additional information here for the this endpoint.
+      operationId: getAllApprovalDetails
+      parameters:
+      - name: processRefNo
+        in: query
+        description: process reference number of the Approval details that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the Approval Details that needs to be fetched
+        required: true
+        type: string  
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/approvaldetails/{id}:          
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - ApprovalDetails
+      summary: Update an existing ApprovalDetails.
+      description: Update an existing ApprovalDetails. Add additional information here for the this endpoint.
+      operationId: updateApprovalDetails
+      parameters:
+      - name: id
+        in: path
+        description: id of the ApprovalDetails that need to be updated
+        required: true
+        type: string
+      - name: ApprovalDetails
+        in: body
+        description: Request Body that contains data required for updating an existing ApprovalDetails
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalDetailsModel'
+      responses:
+        200:
+          description: Returns updated ApprovalDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+definitions:
+ ApprovalDetailsModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     processRefNo:
+      description: Process reference Number of the ApprovalDetailsModel
+      type: string
+      maxLength: 20
+     stageCode:
+      description: Stage Code of the ApprovalDetailsModel
+      type: string
+     dataSegmentCode:
+      description: dataSegmentCode Code of the ApprovalDetailsModel
+      type: string 
+     applicationDate:
+      type: string
+      description: Date of application 
+     accountType:
+      description: Type of the account , will be defualted from application initiation. 
+      type: string
+      maxLength: 35
+     accountBranch:
+      description: Branch of the account.
+      type: string
+      maxLength: 4
+     productCode:
+      description: Code of the product, which will be defaulted from the initiation.
+      type: string
+      maxLength: 30  
+     productName:
+      description: Name of the product, which will be defaulted from the initiation. 
+      type: string
+      maxLength: 100
+     accountCurrency:
+      description: Currency of the account. 
+      type: string
+      maxLength: 4
+     userRecommendation:
+      description: Recommended for approval?
+      type: string        
+     submitToHost:
+      description: submit to host?
+      type: string
+    required:
+      - stageCode
+      - processRefNo
+      - applicationNumber
+      - dataSegmentCode
+ CustomerInfoModel:
+   description: "CustomerInfoModel"
+   type: object
+   properties:
+    id:
+     description: Id of the ApplicantDetailsModel
+     type: string
+     maxLength: 36     
+    processRefNo:
+     description: "Process Reference Number of the ApplicantDetailsMasterModel"
+     type: string
+     maxLength: 20
+    applicationNumber:
+     description: Application Number of the ApplicantDetailsMasterModel
+     type: string
+     maxLength: 20
+    customerType:
+      description: customerType
+      type: string
+    applicantId:
+      description: Applicant Id
+      type: string   
+    title:
+     description: title
+     type: string
+     maxLength: 8
+    firstName:
+     description: firstName
+     type: string
+     maxLength: 25
+    middleName:
+     description: middleName
+     type: string
+     maxLength: 25
+    lastName:
+     description: lastName
+     type: string
+     maxLength: 25
+    existingCustomer:
+     description: Is Existing Customer
+     type: boolean
+    kycStatus:
+     description: KYC status
+     type: string 
+    primaryApplicant:
+     description: Is PrimaryApplicant
+     type: boolean
+    cifNumber:
+     description: CIFNumber
+     type: string
+     maxLength: 15     
+    authSignatoryModel:
+     type: array
+     items:
+      $ref: '#/definitions/AuthSignatoryModel'    
+ AuthSignatoryModel:
+   description: "AuthSignatoryModel"
+   type: object
+   properties:
+    applicantId:
+      description: Applicant Id
+      type: string   
+    title:
+     description: title
+     type: string
+     maxLength: 8
+    firstName:
+     description: firstName
+     type: string
+     maxLength: 25
+    middleName:
+     description: middleName
+     type: string
+     maxLength: 25
+    lastName:
+     description: lastName
+     type: string
+     maxLength: 25
+    existingCustomer:
+     description: Is Existing Customer
+     type: boolean
+    kycStatus:
+     description: KYC status
+     type: string 
+    role:
+     description: Role
+     type: string
+    primaryApplicant:
+     description: Is PrimaryApplicant
+     type: boolean
+    cifNumber:
+     description: CIFNumber
+     type: string
+     maxLength: 15      
+ ApprovalDetailsCollection:
+    description: Collection of ApprovalDetailsModel.
+    type: object
+    properties:
+     approvalDetailsModelList:
+      type: array
+      items:
+       $ref: '#/definitions/ApprovalDetailsModel'
+ GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type

@@ -1,0 +1,285 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : batchProcess.yaml
+#  **
+#  ** Module     : batch
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server batch server."
+  version: "1.0.0"
+  title: "batch Process"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+tags:
+- name: "batchprocess"
+  description: ""
+
+schemes:
+- "https"
+
+paths:
+  /batchprocess:
+    post:
+      tags:
+      - "batchprocess"
+      summary: "Adds a new batch instance."
+      description: "Adds a new batch instance."
+      operationId: "saveRecord"
+      parameters:
+      - name: "batchProcessDTO"
+        in: "body"
+        description: "Request Body that contains data required for creating a new batch"
+        required: true
+        schema:
+          $ref: "#/definitions/LmbTbBatchProcessDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created batch"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "batchprocess"
+      summary: "Get all valid batch."
+      description:  "Get all valid batch. This endpoints will be used to Get all valid batch maintenance records."
+      operationId: "getAll"
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: string
+      - name: instanceId
+        in: query
+        description: Batch instance id need to be set to fetch batch instance details
+        required: false
+        type: string    
+      - name: jobType
+        in: query
+        description: Job type
+        required: false
+        type: string          
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/LmbTbBatchProcessCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /batchprocess/{id}:
+    get:
+      tags:
+      - "batchprocess"
+      summary: "Retrieves the batch by ID."
+      description:  "Retrieves the batch by ID."
+      operationId: "getById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the user that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Id of the user that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Returns the batch based on given id."
+          schema:
+            $ref: "#/definitions/LmbTbBatchProcessWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /batchprocess/updateBatchInstance:          
+    post:
+      tags:
+      - batchprocess
+      summary: Update batch instance.
+      description: Update batch instance.
+      operationId: updateBatchInstance
+      parameters:
+      - name: lmBatchProcessDTO
+        in: body
+        description: Request Body that contains structure details for next run date update
+        required: true
+        schema:
+          $ref: "#/definitions/LmbTbBatchProcessDTO"
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created structure
+              type: string
+          schema:
+            $ref: '#/definitions/LmbTbBatchProcessWrapperDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+definitions:
+  LmbTbBatchProcessDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        instanceId:
+          type: string
+          description: ""
+        jobType:
+          type: string
+          description: ""
+        isLocked:
+          type: string
+          description: ""
+        lockTime:
+          type: string
+          description: ""
+        lockedBy:
+          type: string
+          description: ""
+  LmbTbBatchProcessCollection:
+    description: "Collection of batch process."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/LmbTbBatchProcessDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  LmbTbBatchProcessWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmbTbBatchProcessDTO"
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type     
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string      
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string        

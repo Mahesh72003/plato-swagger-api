@@ -1,0 +1,218 @@
+swagger: "2.0"
+info:
+  description: "This service provides the centralized PLATO Batch Server features."
+  version: "1.0.0"
+  title: "PLATO Batch Server"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PLATO Batch Server"
+    description: "This is the PLATO Batch Server."
+schemes:
+- "http"
+
+paths:
+  /jobTriggerRegistry/register/:
+    get:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Retrieves the list of existing Trigger Tasks"
+      description: "Retrieves the list of existing Trigger Tasks."
+      operationId: "triggerDefinitions"
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "#/definitions/TriggerTaskCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    post:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Creates a new Trigger task."
+      description: "Creates a new Trigger task."
+      operationId: "register"
+      parameters:
+        - name: "triggerTask"
+          in: "body"
+          description: "Request Body that contains data required for creating a new trigger task"
+          required: true
+          schema:
+            $ref: "#/definitions/TriggerTaskModel"
+      responses:
+        201:
+          description: "Success Message"
+          schema:
+              $ref: "#/definitions/ResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /jobTriggerRegistry/register/{jobTriggerDefinitionsName}:
+    delete:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Deletes the trigger task specified by given jobTriggerDefinitionName."
+      description:  "Deletes the trigger task specified by given jobTriggerDefinitionName."
+      operationId: "deleteTask"
+      parameters:
+        - name: "jobTriggerDefinitionsName"
+          in: "path"
+          description: "jobName of the task that needs to be deleted"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /jobTriggerRegistry/triggers:
+    put:
+      tags:
+        - "PLATO Batch Server"
+      summary:  "Starts the scheduling/eventing of the existing trigger tasks whose scheduling/eventing were stopped."
+      description:  "Starts the scheduling/eventing of the existing trigger tasks given by the parameters whose scheduling/eventing were stopped."
+      operationId: "scheduleExistingDefinition"
+      parameters:
+        - name: "jobDefinitions"
+          in: "query"
+          description: "jobDefinitions of the task that needs to be triggered"
+          required: true
+          type: "array"
+          items:
+            type: "string"
+        - name: "origin"
+          in: "query"
+          description: "Request Source"
+          type: "string"
+      responses:
+        201:
+          description: "Success Message"
+          schema:
+              $ref: "#/definitions/ResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      tags:
+        - "PLATO Batch Server"
+      summary:  "Stops the triggering of task whose definations are provided in parameters."
+      description:  "Stops the triggering of task whose definations are provided in parameters."
+      operationId: "removeFromSchedule"
+      parameters:
+        - name: "jobDefinitions"
+          in: "query"
+          description: "jobDefinitions of the tasks whose triggering needs to be stopped"
+          required: true
+          type: "array"
+          items:
+            type: "string"
+        - name: "origin"
+          in: "query"
+          description: "Request Source"
+          type: "string"
+      responses:
+        200:
+          description: "Success Message"
+          schema:
+              $ref: "#/definitions/ResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+      
+definitions:
+  TriggerTaskModel:
+    description: "Task model"
+    type: "object"
+    properties:
+      definitionName:
+        description: "Name of Trigger Task"
+        type: "string"
+      definition:
+        description: "Definition of Trigger Task"
+        type: "string"
+  TriggerTaskCollection:
+    description: "Collection of tasks."
+    type: "object"
+    properties:
+      jobTriggerDefinitionDTOs:
+        type: "array"
+        items:
+          $ref: "#/definitions/TriggerTaskModel"
+  ResponseCode:
+    type: object
+    properties:
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+      information:
+        type: boolean
+      override:
+        type: boolean
+      error:
+        type: boolean
+      overrideAuthLevelsReqd:
+        type: string
+      type:
+        type: string
+      desc:
+        type: string
+      code:
+        type: string
+      language:
+        type: string
+  ResponseDto:
+    description: "Response entity model"
+    type: "object"
+    properties:
+      keyId:
+        type: "string"
+      status:
+        type: "string"
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: "string"
+      httpStatusCode:
+        type: "string"
+      overrideAuthLevelsReqd:
+        type: "string"

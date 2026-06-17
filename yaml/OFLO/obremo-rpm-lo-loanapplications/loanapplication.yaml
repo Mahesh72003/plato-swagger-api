@@ -1,0 +1,1696 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : loanapplication.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+  - name: LoanApplication
+    description: API for LoanApplication Operations
+schemes:
+  - http
+paths:
+  /web/v1/loanapplications/submit:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Submit for the loan application domain.
+      description: Populates loan application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveLoanApplication
+      parameters:
+        - name: loanApplicationAggregateModel
+          in: body
+          description: Request Body that contains data required for creating a new LoanApplicationAggregate
+          required: true
+          schema:
+            $ref: '#/definitions/LoanApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/save:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Submit for the loan application domain.
+      description: Populates loan application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveOnlyLoanApplication
+      parameters:
+        - name: loanApplicationAggregateModel
+          in: body
+          description: Request Body that contains data required for saving loanApplication
+          required: true
+          schema:
+            $ref: '#/definitions/LoanApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/{applicationNumber}/datasegment-details:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getApplicationDetails
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNos
+          in: query
+          description: Process Reference number for which Loan application data needs to be fetched
+          required: true
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: Returns LoanApplicationMasterModel for the application number
+          schema:
+            $ref: '#/definitions/LoanApplicationMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/{applicationNumber}/{processRefNo}/adviceData:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getAdviceDetails
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Reference number for which Loan application data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns LoanApplicationAggregateModel for the application number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/{applicationNumber}/{processRefNo}/stagesummary:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Get stagesummary Details.
+      description: Get stagesummary Details.
+      operationId: getStageSummary
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: applicationNumber  for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Reference number for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: datasegments
+          in: query
+          description: coma seperated datasegments for the stage
+          required: false
+          type: string
+      responses:
+        200:
+          description: Returns summary details for the application number for the stage
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Get data segment History Details.
+      description: Get data segment History Details.
+      operationId: getHistory
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Ref number for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: datasegmentCode
+          in: path
+          description: datasegmentCode for History need to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns History details for the proccess number and datasegment code
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/{applicationNumber}/{processRefNo}/{applicantId}/attributeValues:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Get AttributeValue Details.
+      description: Get AttributeValue Details.
+      operationId: getValueOfAttribute
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: applicationNumber  for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Ref number for which Loan application data needs to be fetched
+          required: true
+          type: string
+        - name: attributes
+          in: query
+          description: comma seperated attributes for the stage
+          required: true
+          type: string
+        - name: applicantId
+          in: path
+          description: applicantId
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the value for the attribute based on process Reference Number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/loanapplications/initialize:
+    post:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: initialize the loan application.
+      description: initialize the loan application.
+      operationId: initiateLoanApplication
+      parameters:
+        - name: initializationDetails
+          in: body
+          description: initializationDetails for the loan
+          required: true
+          schema:
+            $ref: '#/definitions/InitializationDetails'
+      responses:
+        201:
+          description: Returns initialization status
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /service/v1/assessmentdetails/repaymentschedule:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - RepaymentScheduleMaster
+      summary: Adds a new RepaymentScheduleDetails.
+      description: Adds a new RepaymentScheduleDetails. Add additional information here for this endpoint.
+      operationId: addSchedules
+      parameters:
+        - name: ScheduleDetails
+          in: body
+          description: Request Body that contains data required for creating a new ScheduleDetails
+          required: true
+          schema:
+            $ref: '#/definitions/ScheduleDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created RepaymentScheduleDetails
+          headers:
+            Location:
+              description: URL of newly created RepaymentScheduleDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - RepaymentScheduleMaster
+      summary: Retrieves the list of existing RepaymentScheduleDetails.
+      description: Retrieves the list of existing RepaymentScheduleDetails. Add additional information here for the this endpoint.
+      operationId: getSchedules
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/RepaymentScheduleMainModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/v1/accountdetail:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - RepaymentScheduleMaster
+      summary: update Account Details.
+      description: update Account Details. Add additional information here for this endpoint.
+      operationId: updateAccountDetails
+      parameters:
+        - name: updateAccountDetails
+          in: body
+          description: Request Body that contains data for account Deatials
+          required: true
+          schema:
+            $ref: '#/definitions/accountUpdateDetailsModel'
+      responses:
+        201:
+          description: updated account Details
+          headers:
+            Location:
+              description: URL of newly created RepaymentScheduleDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/loanapplications/customeraccounts/{applicationNumber}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Retrieves the list of customer accounts
+      description: Retrieves the list of customer accounts. Add additional information here for the this endpoint.
+      operationId: getCustomerAccounts
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+        - name: customerNo
+          in: query
+          description: comma seperated customerNo for the stage
+          required: false
+          type: string
+        - name: accountCurrency
+          in: query
+          description: Account Currency
+          type: string
+          required: false
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: customerId
+          in: query
+          description: Customer Id
+          required: false
+          type: string
+        - name: accountNumber
+          in: query
+          description: Account Number
+          required: false
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerAccountMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /loanapplications/customerresponse:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Retrieves the existing CustomerResponse.
+      description: Retrieves the existing CustomerResponseDetails. Add additional information here for the this endpoint.
+      operationId: getCustomerResponse
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /service/v1/loanapplications/approvaldetails:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Retrieves the Approval Status in Supervisior Approval
+      description: Retrieves the  Approval Status in Supervisior Approval
+      operationId: getApprovalDecision
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /service/v1/loanapplications/accountapproval:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Retrieves the Approval Status in Final Account Approval
+      description: Retrieves the  Approval Status in Final Account Approval
+      operationId: getFinalApprovalDecision
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /service/v1/loanapplications/accountconfiguration:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Retrieves the Configuration Status in Interest Details
+      description: Retrieves the Configuration Status in Interest Details
+      operationId: getAccountConfigurationDecision
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /loanapplications/orchestrate/backoffice:
+    post:
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Call Back Office.
+      description: Hand-Off Process called from the workflow
+      operationId: callBackOffice
+      parameters:
+        - name: BackOfficeRequest
+          in: body
+          description: Request Body that contains data required for Back Office
+          required: true
+          schema:
+            $ref: '#/definitions/BackOfficeRequestModel'
+      responses:
+        201:
+          description: Returns response object for BackOfficeRequest
+          schema:
+            $ref: '#/definitions/BackOfficeResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/aggregatedetails:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - LoanApplicationAggregate
+      summary: Get loan application aggregate details
+      description: Get loan application aggregate details. Add additional information here for the this endpoint.
+      operationId: getLoanAggregateDetails
+      parameters:
+        - name: processRefNo
+          in: query
+          description: processRefNo of the user that needs to be fetched
+          required: true
+          type: string
+        - name: applicationNumber
+          in: query
+          description: applicationNumber of the user that needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns LoanApplication data for the process Ref No
+          schema:
+            $ref: '#/definitions/LoanApplicationAggregateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+definitions:
+  LoanApplicationAggregateModel:
+    description: LoanApplicationAggregateModel
+    type: object
+    properties:
+      id:
+        description: Loan Application Id
+        type: string
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      validateModel:
+        description: Validate Model
+        type: string  
+      action:
+        description: Save or Submit
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      channel:
+        description: Channel
+        type: string
+      sumOfLoanAndCustomerContributionAmount:
+        description: sum of loan amount and customer contribution amount
+        type: number
+      applicationType:
+        description: Application Type
+        type: string
+      noOfApplicants:
+        description: No Of Applicants
+        type: integer
+      applicantDetails:
+        $ref: '#/definitions/ApplicantDetailsMasterModel'
+      primaryApplicantDetails:
+        $ref: '#/definitions/ApplicantDetailsModel'
+      loanDetails:
+        $ref: '#/definitions/LoanDetailsModel'
+      disbursementDetails:
+        $ref: '#/definitions/DisbursementDetailsModel'
+      accountDetails:
+        $ref: '#/definitions/AccountDetailsModel'
+      interestDetails:
+        $ref: '#/definitions/InterestDetailsModel'
+      chargeDetails:
+        $ref: '#/definitions/ChargeDetailsModel'
+      mortgageInsuranceDetails:
+        $ref: '#/definitions/MortgageInsuranceModel'
+      offerissueDetails:
+        $ref: '#/definitions/IssueOfferDetailsModel'
+      repaymentDetails:
+        $ref: '#/definitions/RepaymentDetailsModel'
+      mandateDetails:
+        $ref: '#/definitions/MandateDetailsMasterModel'
+      accountService:
+        $ref: '#/definitions/AccountServicesMasterModel'
+      guarantorDetails:
+        $ref: '#/definitions/GuarantorDetailsMasterModel'
+      repaymentSchedule:
+        $ref: '#/definitions/RepaymentScheduleMainModel'
+      updatedLoanDetailsModel:
+        $ref: '#/definitions/UpdatedLoanModel'
+      customerDecisionModel:
+        $ref: '#/definitions/CustomerDecisionModel'
+      admissionDetails:
+        $ref: '#/definitions/AdmissionDetailsModel'
+      parentGuardianDetails:
+        $ref: '#/definitions/ParentDetailsModel'
+      creditRatingDetails:
+        $ref: '#/definitions/CreditRatingDetailsModel'
+      interestDetailsMaster:
+        $ref: '#/definitions/InterestDetailsMasterModel'
+      approvalDetails:
+        $ref: '#/definitions/ApprovalDetailsModel'
+      loanSummaryDetails:
+        $ref: '#/definitions/LoanSummaryModel'
+      postAmendmentDetails:
+        $ref: '#/definitions/PostAmendmentModel'
+      financialDetailsMaster:
+        $ref: '#/definitions/FinancialDetailsMasterModel'
+      collateralservices:
+        $ref: '#/definitions/CollateralDetailsMasterModel'
+      customObject:
+        description: custom attributes
+        type: object
+      additionalAttributes:
+        type: array
+        items:
+          type: object
+    required:
+      - processRefNo
+      - applicationNumber
+
+  InitializationDetails:
+    description: InitializationDetails model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No to Initialize SavingApplication
+        type: string
+        maxLength: 20
+      initializationId:
+        description: initialization id to Initialize SavingApplication
+        type: string
+        maxLength: 20
+      channel:
+        description: source channel from where request came to Initialize SavingApplication
+        type: string
+        maxLength: 30
+
+  ScheduleDetailsModel:
+    description: ScheduleDetails model
+    type: object
+    properties:
+      processRefNo:
+        description: processRefNo
+        type: string
+      applicationNumber:
+        description: applicationNumber
+        type: string
+
+  RepaymentScheduleMainModel:
+    description: RepaymentScheduleMainModel model
+    type: object
+    properties:
+      id:
+        description: Id
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: Application Number of the RepaymentScheduleMainModel
+        type: string
+        maxLength: 20
+      processRefNo:
+        description: Process Reference Number
+        type: string
+        maxLength: 20
+      version:
+        description: version
+        type: integer
+      totalPrincipal:
+        description: totalPrincipal
+        type: number
+      totalInterest:
+        description: totalInterest
+        type: number
+      repaymentScheduleModel:
+        type: array
+        items:
+          $ref: '#/definitions/RepaymentScheduleModel'
+  RepaymentScheduleModel:
+    description: "RepaymentScheduleModel Model"
+    type: object
+    properties:
+      id:
+        description: id
+        type: string
+      repaymentMasterId:
+        description: repaymentMasterId
+        type: string
+      dueDate:
+        description: Due Date
+        type: string
+      principleAmount:
+        description: Principle Amount
+        type: number
+      interestAmount:
+        description: Interest Amount
+        type: number
+      emiAmount:
+        description: Emi Amount
+        type: number
+      outstandingBalance:
+        description: Outstanding Balance
+        type: number
+
+  LoanApplicationMasterModel:
+    description: Loan Application Master Model
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LoanApplicationModel'
+  LoanApplicationModel:
+    description: Loan Application Model
+    type: object
+    properties:
+      loanDetails:
+        $ref: '#/definitions/LoanDetailsModel'
+      repaymentDetails:
+        $ref: '#/definitions/RepaymentDetailsModel'
+      mandateDetails:
+        $ref: '#/definitions/MandateDetailsMasterModel'
+      accountService:
+        $ref: '#/definitions/AccountServicesMasterModel'
+      guarantorDetails:
+        $ref: '#/definitions/GuarantorDetailsMasterModel'
+      admissionDetails:
+        $ref: '#/definitions/AdmissionDetailsModel'
+      parentGuardianDetails:
+        $ref: '#/definitions/ParentDetailsModel'
+      disbursementDetails:
+        $ref: '#/definitions/DisbursementDetailsModel'
+
+  CustomerAccountMasterModel:
+    description: Customer Account Master Model
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerAccountModel'
+      paging:
+        type: object
+        properties:
+          totalResults:
+            description: totalResults
+            type: integer
+  accountUpdateDetailsModel:
+    description: "accountUpdateDetailsModel"
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      amount:
+        description: amount
+        type: number
+      tenureYears:
+        description: tenureYears
+        type: integer
+        format: int64
+        minimum: 0
+      tenureMonths:
+        description: tenureMonths
+        type: integer
+        format: int64
+        minimum: 0
+      tenureDays:
+        type: integer
+        format: int64
+        minimum: 0
+      loanDetailsUpdated:
+        description: loanDetailsUpdated
+        type: boolean
+  CustomerAccountModel:
+    description: "CustomerAccountModel Model"
+    type: object
+    properties:
+      customerId:
+        description: Customer Id
+        type: string
+      customerName:
+        description: Customer Name
+        type: string
+      branch:
+        description: Branch
+        type: string
+      accountNumber:
+        description: Account Number
+        type: string
+      accountCurrency:
+        description: Account Currency
+        type: string
+
+  BackOfficeRequestModel:
+    description: Back Office Request model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      customObject:
+        description: custom attributes
+        type: object
+    required:
+      - processRefNo
+      - applicationNumber
+      - stageCode
+
+  CustomerResponseModel:
+    description: Customer Response model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref Number
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      response:
+        description: Response
+        type: string
+
+  BackOfficeResponseModel:
+    description: Back Office Response model
+    type: object
+    properties:
+      field1:
+        description: field1
+        type: string
+      field2:
+        description: field2
+        type: string
+      field3:
+        description: field3
+        type: string
+      field4:
+        description: field4
+        type: string
+
+  AdviceGenerationModel:
+    description: Advice Generation model
+    type: object
+    properties:
+      referenceNumber:
+        description: Reference Number
+        type: string
+      customerId:
+        description: Customer Id
+        type: string
+      documentArchival:
+        description: Document Archival
+        type: string
+      adviceName:
+        description: Advice Name
+        type: string
+      previewAdvice:
+        description: Preview Advice
+        type: string
+      adviceData:
+        description: advicedata
+        type: object
+      mediaPreferences:
+        type: array
+        items:
+          $ref: '#/definitions/MediaPreferencesModel'
+
+  MediaPreferencesModel:
+    description: Media Preferences model
+    type: object
+    properties:
+      mediaType:
+        description: Media Type
+        type: string
+      addresses:
+        type: array
+        items:
+          $ref: '#/definitions/AddressModel'
+
+  AddressModel:
+    description: Address Model
+    type: object
+    properties:
+      email:
+        description: email
+        type: string
+  FinancialDetailsModel:
+    description: "FinancialDetailsModel Model"
+    type: object
+    properties:
+      id:
+        description: Id of the FinancialDetailsModel
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+        maxLength: 20
+      financialMasterId:
+        description: Id of master table
+        type: string
+        maxLength: 36
+      existingCustomer:
+        description: existingCustomer
+        type: boolean
+      cifNumber:
+        description: CIF Number of ExistingCustomer
+        type: string
+      customerType:
+        description: customerType
+        type: string
+      onboarded:
+        description: Customer Onboarded
+        type: boolean
+        default: false
+      totalIncomeAmount:
+        description: totalIncomeAmount
+        type: number
+      totalIncomeCurrencyCode:
+        description: totalIncomeCurrencyCode
+        type: string
+        maxLength: 4
+      totalExpenseAmount:
+        description: totalExpenseAmount
+        type: number
+      totalExpenseCurrencyCode:
+        description: totalExpenseCurrencyCode
+        type: string
+        maxLength: 4
+      totalAssetAmount:
+        description: totalAssetAmount
+        type: number
+      totalAssetCurrencyCode:
+        description: totalAssetCurrencyCode
+        type: string
+        maxLength: 4
+      totalLiabilityAmount:
+        description: totalLiabilityAmount
+        type: number
+      totalLiabilityCurrencyCode:
+        description: totalLiabilityCurrencyCode
+        type: string
+        maxLength: 4
+      netAmount:
+        description: netAmount
+        type: number
+      netCurrencyCode:
+        description: netCurrencyCode
+        type: string
+        maxLength: 4
+      applicantId:
+        description: applicantId
+        type: string
+        maxLength: 36
+      applicantName:
+        description: applicantName
+        type: string
+        maxLength: 75
+      deleteFinancial:
+        description: deleteFinancial
+        type: boolean
+      primaryApplicant:
+        description: primaryApplicant
+        type: boolean
+      financeAmend:
+        description: Is Finance Amend
+        type: boolean
+        default: false
+      lastUpdatedOn:
+        description: Last Updated On
+        type: string
+
+      financialModel:
+        type: array
+        items:
+          $ref: '#/definitions/FinancialModel'
+      incomeModel:
+        type: array
+        items:
+          $ref: '#/definitions/IncomeModel'
+      expenseModel:
+        type: array
+        items:
+          $ref: '#/definitions/ExpenseModel'
+      assetModel:
+        type: array
+        items:
+          $ref: '#/definitions/AssetModel'
+      liabilityModel:
+        type: array
+        items:
+          $ref: '#/definitions/LiabilityModel'
+      financialProfile:
+        type: array
+        items:
+          $ref: '#/definitions/FinancialProfile'
+  FinancialModel:
+    description: "FinancialModel Model"
+    type: object
+    properties:
+      id:
+        description: Id of the FinancialModel
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      financialSummaryMasterId:
+        description: Id of summary table
+        type: string
+        maxLength: 36
+      incomeType:
+        description: incomeType
+        type: string
+      employmentType:
+        description: employmentType
+        type: string
+      employmentCategory:
+        description: employment category
+        type: string
+      employeeType:
+        description: Employee Type
+        type: string
+      employeeNumber:
+        description: employeeNumber
+        type: string
+      organizationCategory:
+        type: string
+      demographics:
+        type: string
+      grade:
+        type: string
+      industryType:
+        type: string
+      empAgreement:
+        type: string
+      employmentTenure:
+        type: string
+      industry:
+        description: industry
+        type: string
+      officeName:
+        description: officeName
+        type: string
+      educationQualification:
+        description: educationQualification
+        type: string
+      designation:
+        description: designation
+        type: string
+      employmentStartDate:
+        description: employmentStartDate
+        type: string
+      employmentEndDate:
+        description: employmentEndDate
+        type: string
+      addressType:
+        description: addressType
+        type: string
+      seqFinancialNo:
+        description: seqFinancialNo
+        type: integer
+      address:
+        $ref: '#/definitions/Address'
+  Address:
+    description: "Address Model"
+    type: object
+    properties:
+      country:
+        description: country
+        type: string
+        maxLength: 50
+      state:
+        description: state
+        type: string
+        maxLength: 50
+      city:
+        description: city
+        type: string
+        maxLength: 50
+      addressLine1:
+        description: addressLine1
+        type: string
+        maxLength: 100
+      addressLine2:
+        description: addressLine2
+        type: string
+        maxLength: 100
+      addressLine3:
+        description: addressLine3
+        type: string
+        maxLength: 100
+      pinCode:
+        description: pinCode
+        type: string
+        maxLength: 10
+      email:
+        description: email
+        type: string
+        maxLength: 30
+      mobileNo:
+        description: mobileNo
+        type: integer
+        format: int64
+      mobileIsd:
+        description: mobileIsd
+        type: string
+        maxLength: 5
+      phoneNo:
+        description: phoneNo
+        type: integer
+        format: int64
+      phoneIsd:
+        description: phoneIsd
+        type: string
+        maxLength: 5
+  IncomeModel:
+    description: "IncomeModel Model"
+    type: object
+    properties:
+      id:
+        description: Id of the IncomeModel
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      financialSummaryMasterId:
+        description: Id of summary table
+        type: string
+        maxLength: 36
+      incomeType:
+        description: incomeType
+        type: string
+      incomeAmount:
+        description: incomeAmount
+        type: number
+      incomeCurrencyCode:
+        description: incomeCurrencyCode
+        type: string
+        maxLength: 4
+      seqIncomeNo:
+        description: seqIncomeNo
+        type: integer
+  ExpenseModel:
+    description: "ExpenseModel Model"
+    type: object
+    properties:
+      id:
+        description: Id of the ExpenseModel
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      financialSummaryMasterId:
+        description: Id of summary table
+        type: string
+        maxLength: 36
+      expenseType:
+        description: expenseType
+        type: string
+      expenseAmount:
+        description: expenseAmount
+        type: number
+      expenseCurrencyCode:
+        description: expenseCurrencyCode
+        type: string
+        maxLength: 4
+      seqExpenseNo:
+        description: seqExpenseNo
+        type: integer
+  AssetModel:
+    description: "AssetModel Model"
+    type: object
+    properties:
+      id:
+        description: Id of the AssetModel
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      financialSummaryMasterId:
+        description: Id of summary table
+        type: string
+        maxLength: 36
+      assetType:
+        description: assetType
+        type: string
+      assetAmount:
+        description: assetAmount
+        type: number
+      assetCurrencyCode:
+        description: assetCurrencyCode
+        type: string
+        maxLength: 4
+      seqAssetNo:
+        description: seqAssetNo
+        type: integer
+  LiabilityModel:
+    description: "LiabilityModel Model"
+    type: object
+    properties:
+      id:
+        description: Id of the LiabilityModel
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      financialSummaryMasterId:
+        description: Id of summary table
+        type: string
+        maxLength: 36
+      liabilityType:
+        description: liabilityType
+        type: string
+      liabilityAmount:
+        description: liabilityAmount
+        type: number
+      liabilityCurrencyCode:
+        description: liabilityCurrencyCode
+        type: string
+        maxLength: 4
+      seqLiabilityNo:
+        description: seqLiabilityNo
+        type: integer
+  FinancialProfile:
+    description: "FinancialProfile Model"
+    type: object
+    properties:
+      id:
+        description: Id of the FinacialProfile
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      financialSummaryMasterId:
+        description: Id of master table
+        type: string
+        maxLength: 36
+      financialYear:
+        description: incomeType
+        type: integer
+      currency:
+        description: currency
+        type: string
+      balanceSheetSize:
+        description: employment category
+        type: number
+      operatingProfit:
+        description: operatingProfit
+        type: number
+      netProfit:
+        description: employeeNumber
+        type: number
+      yoyGrowth:
+        description: yoyGrowth
+        type: number
+      returnOnInvestment:
+        description: returnOnInvestment
+        type: number
+      returnOnEquity:
+        description: returnOnEquity
+        type: number
+      returnOnAsset:
+        description: returnOnAsset
+        type: number
+  GenericDatasegmentModel:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  CollateralDetailsMasterModel:
+    description: CollateralDetailsMaster model
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDatasegmentModel'
+      - type: object
+        properties:
+          processRefNo:
+            description: Process Ref No of the CollateralDetailsMasterModel
+            type: string
+            maxLength: 20
+          accountCurrency:
+            description: accountCurrency
+            type: string
+          channel:
+            description: Channel
+            type: string
+          accountBranch:
+            description: accountBranch
+            type: string
+          accountType:
+            description: accountType
+            type: string
+          accountSubType:
+            description: accountSubType
+            type: string
+          collateralApplicantDetailsList:
+            type: array
+            items:
+              $ref: '#/definitions/CollateralApplicantDetailsModel'
+
+  CollateralApplicantDetailsModel:
+    description: CollateralApplicantDetailsModel model
+    type: object
+    properties:
+      processRefNo:
+          description: Process Ref No of the CollateralApplicantDetailsModel
+          type: string
+          maxLength: 20
+      collateralDetailsMasterId:
+          description: collateralDetailsMasterId
+          type: string
+      id:
+          description: id
+          type: string
+      applicantId:
+          description: applicantId
+          type: string
+      partyId:
+          description: partyId
+          type: string
+      customerId:
+          description: customerId
+          type: string
+      customerName:
+          description: customerName
+          type: string
+      isLiabilityCreated:
+          description: isLiabilityCreated
+          type: boolean
+      custLiabilityId:
+          description: custLiabilityId
+          type: string
+      custLiabilityDesc:
+          description: custLiabilityDesc
+          type: string
+      primaryApplicant:
+          description: primaryApplicant
+          type: boolean
+      existingCustomer:
+          description: custLiabilityDesc
+          type: boolean
+      deleteCollateral:
+          description: custLiabilityDesc
+          type: boolean
+      dateOfBirth:
+          description: dateOfBirth
+          type: string
+      totalCollateralCCY:
+          description: totalCollateralCCY
+          type: string
+      coverAvailableCCY:
+          description: coverAvailableCCY
+          type: string
+      coverAvailable:
+          description: coverAvailable
+          type: number
+      totalCollateralValue:
+          description: totalCollateralValue
+          type: number
+      email:
+          description: email
+          type: string
+      collateralDetailsList:
+          type: array
+          items:
+            $ref: '#/definitions/CollateralDetailModel'
+
+  CollateralDetailModel:
+    description: CollateralDetailsModel model
+    type: object
+    properties:
+      id:
+        description: id
+        type: string
+      collateralApplicantDetailsId:
+        description: collateralApplicantDetailsId
+        type: string
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      processRefNo:
+        description: Process Ref No of the CollateralDetailsModel
+        type: string
+        maxLength: 20
+      collateralCode:
+        description: collateralCode
+        type: string
+      collateralRefNo:
+        description: collateralRefNo
+        type: string
+      collateralOnboard:
+        description: collateralOnboard
+        type: boolean
+      collateralDesc:
+        description: collateralDesc
+        type: string
+      collateralType:
+        description: collateralType
+        type: string
+      collateralCategory:
+        description: collateralCategory
+        type: string
+      collateralTypeName:
+        description: collateralTypeName
+        type: string
+      collateralCategoryName:
+        description: collateralCategoryName
+        type: string
+      collateralBranch:
+        description: collateralBranch
+        type: string
+      primaryCollateral:
+        description: primaryCollateral
+        type: boolean
+      isCollateralCreated:
+        description: isCollateralCreated
+        type: boolean
+      liabilityId:
+        description: liabilityId
+        type: string
+      liabilityDesc:
+        description: liabilityDesc
+        type: string
+      totalCollateralCCY:
+        description: totalCollateralCCY
+        type: string
+      collateralAmountCCY:
+        description: collateralAmountCCY
+        type: string
+      collateralAmount:
+        description: collateralAmount
+        type: number
+      hairCut:
+        description: hairCut
+        type: number
+      amountConsideredCCY:
+        description: amountConsideredCCY
+        type: string
+      amountConsidered:
+        description: amountConsidered
+        type: number
+      collateralAvlFromDate:
+        description: collateralAvlFromDate
+        type: string
+      collateralAvlToDate:
+        description: collateralAvlToDate
+        type: string

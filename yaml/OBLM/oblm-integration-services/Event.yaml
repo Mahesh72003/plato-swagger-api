@@ -1,0 +1,210 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+ description: "This is a sample server eventLog server." 
+ version: "1.0.0"
+ title: "EventLog Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "eventLog"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../event
+
+ /eventLog:
+  get:
+   tags:
+    - "eventLog"
+   summary: "Get all events."
+   description:  "Get all event logs. This endpoints will be used to Get all event logs."
+   operationId: "getAll"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTbEventLogCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  post:
+   tags:
+    - "eventLog"
+   summary: "Add a new event Logs"
+   description: "Adds a new event logs. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "eventLog" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new event logs" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTbEventLogDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created events" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /eventLog/publish:
+  get:
+   tags:
+    - "eventLog"
+   summary: "Publish all events."
+   description:  "Publish all event logs. This endpoints will be used to Publish all event logs."
+   operationId: "publishEventLog"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+definitions:
+ LmxTbEventLogCollection:
+    description: Collection of eventlog.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmxTbEventLogDTO'
+ LmxTbEventLogDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     evtCode:
+      type: string
+      description: ""
+     evtKey:
+      type: string
+      description: ""
+     evtTopic:
+      type: string
+      description: ""
+     logType:
+      type: string
+      description: ""
+     logDescription:
+      type: string
+      description: ""
+     logTime:
+      type: string
+      description: ""
+     serviceData:
+      type: string
+      description: ""
+     publishedTime:
+      type: string
+      description: ""
+     isPublished:
+      type: string
+      description: ""
+     retryCount:
+      type: integer
+      description: ""
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+ ResponseResourceSupport:
+    type: object
+ ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+ ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string

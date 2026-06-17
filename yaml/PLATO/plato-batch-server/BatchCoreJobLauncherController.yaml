@@ -1,0 +1,70 @@
+swagger: "2.0"
+info:
+  description: "This service provides the centralized PLATO Batch Core features."
+  version: "1.0.0"
+  title: "PLATO Batch Core"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PLATO Batch Core"
+    description: "This is the PLATO Batch Core."
+schemes:
+- "http"
+
+paths:
+  /jobLauncher/run/:
+    post:
+      tags:
+        - "PLATO Batch Core"
+      summary: "Launches a new job with the parameters specified in the body."
+      description: "Launches a new job with the parameters specified in the body and returns the status of an Execution in the response."
+      operationId: "run"
+      parameters:
+        - name: "job"
+          in: "body"
+          description: "Request Body containing the jobName and the jobParameters required for launching the job"
+          required: true
+          schema:
+            $ref: "#/definitions/JobDetailModel"
+      responses:
+        200:
+          description: "Ok."
+          schema:
+              type: string
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  
+definitions:
+  JobParameterModel:
+    description: "Job Parameter model"
+    type: "object"
+    properties:
+      key:
+        description: "Key of Job Parameter"
+        type: "string"
+      value:
+        description: "Value of Job Parameter"
+        type: "string"
+  JobDetailModel:
+    description: "Details of jobs."
+    type: "object"
+    properties:
+      jobName:
+        description: "Name of Job"
+        type: "string"
+      jobParameters:
+        type: "array"
+        items:
+          $ref: "#/definitions/JobParameterModel"      

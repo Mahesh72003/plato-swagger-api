@@ -1,0 +1,286 @@
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Ketki
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server InterestAccrual server." 
+ version: "1.0.0"
+ title: "Interest Reallocation report Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "interest Reallocation report"
+   description: "Interest Reallocation report creation and retrieving"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../interestaccrualreport
+
+ /interestreallocationreport/generateReport:     
+  post:
+   tags:
+    - "interestreallocationreport"
+   summary: "Get all valid interestreallocationreport."
+   description:  "Get all valid interestreallocationreport. This endpoints will be used to Get all valid interestreallocationreport maintenance records."
+   operationId: "generateInterestReallocationReport"
+   parameters:
+     - name: InterestReallocationReportInputDTO
+       in: "body"
+       description: "Request Body that contains data required for creating a new oblm-report-services" 
+       required: true
+       schema:
+         $ref: "#/definitions/InterestReallocationReportInputDTO"   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/InterestReallocationReportDTOCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+
+
+definitions:
+ InterestReallocationReportInputDTO:
+  type: "object"
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     customerId:
+      type: string
+     structureId:
+      type: string
+     accountType:
+      type: string
+     fromDate:
+      type: string
+      format: date
+     toDate:
+      description: To Date of Exceptions
+      type: string
+      format: date
+ InterestReallocationHeaderDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     headerAccountNumber:
+      type: string
+      description: ""
+     headerAccountBranch:
+      type: string
+      description: ""
+     headerAccountCurrency:
+      type: string
+      description: ""
+     totalInterestAmountPaid:
+      type: number
+      description: ""
+     interestAmountCurrency:
+      type: string
+      description: ""
+     interestPaymentDate:
+      type: string
+      #format: date
+      description: "" 
+ InterestReallocationBodyDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     parentAccountNumber:
+      type: string
+      description: ""
+     parentAccountBranch:
+      type: string
+      description: ""
+     parentAccountCurrency:
+      type: string
+      description: ""
+     childAccountNumber:
+      type: string
+      description: ""
+     childAccountBranch:
+      type: string
+      description: ""
+     childAccountCurrency:
+      type: string
+      description: "" 
+     exchangeRate:
+      type: number
+      description: ""
+     interestAmountReallocated:
+      type: number
+      description: ""
+     valueDate:
+      type: string
+      #format: date
+      description: ""
+     reallocationType:
+      type: string
+      description: ""       
+     
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ InterestReallocationReportDTOCollection: 
+  description: "Collection of InterestRealloc."
+  type: "object"
+  properties:
+   data:
+    $ref: "#/definitions/ReportResponse"
+   messages:
+    $ref: "#/definitions/ResponseDto"
+ UserInformationDTO:
+   type: object
+   properties: 
+      userId:
+       type: string
+       description: Generated By user id
+      dateAndTime:
+       type: string
+       description: Generated At time   
+ InterestReallocationDTOCollection: 
+  description: "Collection of entries."
+  type: "object"
+  properties:
+   userInfo:
+     type: object
+     items:
+      $ref: "#/definitions/UserInformationDTO"
+   datahead:
+     type: "array"
+     items:
+      $ref: "#/definitions/InterestReallocationHeaderDTO"     
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/InterestReallocationBodyDTO"
+   messages:
+    $ref: "#/definitions/ResponseDto"  
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ InterestReallocationWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/InterestReallocationBodyDTO"
+    

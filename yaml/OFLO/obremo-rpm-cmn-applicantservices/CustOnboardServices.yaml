@@ -1,0 +1,239 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : CustOnboardServices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Applicant Service
+host: "api-plato.us.oracle.com:8080"
+basePath: /obremo-rpm-cmn-applicantservices
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+- name: CustOnboardService
+  description: API for CustOnboardService Operations
+schemes:
+- http
+paths:
+  /web/v1/custonboarddetails:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CustOnboardDetails
+      summary: Adds a new CustOnboardDetails.
+      description: Adds a new CustOnboardModel. Add additional information here for this endpoint.
+      operationId: addCustOnboardDetails
+      parameters:
+      - name: CustOnboardDetails
+        in: body
+        description: Request Body that contains data required for creating a new CustOnboardModel
+        required: true
+        schema:
+          $ref: '#/definitions/CustOnboardDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created CustOnboardDetailsModel
+          headers:
+            Location:
+              description: URL of newly created CustOnboardDetailsModel
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CustOnboardDetails
+      summary: Retrieves the list of existing CustOnboardService by id.
+      description: Retrieves the list of existing CustOnboardDetailsModel by id. Add additional information here for the this endpoint.
+      operationId: getAllCustOnboardDetails
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the CustOnboardDetails that needs to be fetched
+        required: true
+        type: string
+      - name: applicantId
+        in: query
+        description: applicantId of the CustOnboardDetails that needs to be fetched
+        required: false
+        type: string             
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+          
+  /web/v1/partyhandoffnotification:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CustOnboardDetails
+      summary: Notify Party Module to Handoff the newly created Party 
+      description: Notify Party Module to Handoff the newly created Party.
+      operationId: partyHandoff
+      parameters:
+      - name: PartyHandoffModel
+        in: body
+        description: Request Body that contains data required to Notify Party Module for Handoff
+        required: true
+        schema:
+          $ref: '#/definitions/PartyHandoffModel'
+      responses:
+        201:
+          description: ApplicationNumber for which Party Handoff Notification is being sent
+          headers:
+            Location:
+              description: URL of newly created CustOnboardDetailsModel
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+definitions:
+ CustOnboardDetailsModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     applicantId:
+      description: Application Id of the CustOnboardDetails
+      type: string
+      maxLength: 36   
+     customerId:
+      description: Customer Id for the Applicant
+      type: string
+      maxLength: 20 
+     cifNumber:
+      description: cifNumber
+      type: string
+      maxLength: 36
+     ownership:
+      description: Ownership
+      type: string       
+     onboarded:
+      description: onboarded
+      type: string
+     kycStatus:
+      description: kycStatus
+      type: string
+     handoffNotified:
+      description: handoffNotified
+      type: string
+     handoffNotifiedDomain:
+      description: handoffNotifiedDomain
+      type: string    
+     partyHandofftoHostStatus:
+      description: partyHandofftoHostStatus
+      type: string
+     kycLastUpdateDate:
+      description: kycLastUpdateDate
+      type: string  
+    required:
+     - customerId
+    # - applicationNumber
+    # - applicantId
+ CustOnboardDetailsCollection:
+    description: Collection of CustOnboardDetails.
+    type: object
+    properties:
+      custOnboardDetailsModel:
+        type: array
+        items:
+          $ref: '#/definitions/CustOnboardDetailsModel'
+ GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type    
+          
+ PartyHandoffModel:
+    description: "PartyHandoffModel Model"
+    type: object
+    properties:
+     applicationNumber:
+      type: string
+      description: Application Number of the Application
+     domain:
+      type: string
+      description: domain name
+     subDomain:
+      type: string
+      description: subDomain from which Party Handoff initiated   
+     stageName:
+      type: string
+      description: subDomain from which Party Handoff initiated      
+    required:
+     - applicationNumber

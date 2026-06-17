@@ -1,0 +1,157 @@
+swagger: "2.0"
+info:
+  description: "This service provides the centralized PLATO Batch Server features."
+  version: "1.0.0"
+  title: "PLATO Batch Server"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PLATO Batch Server"
+    description: "This is the PLATO Batch Server."
+schemes:
+- "http"
+
+paths:
+  /jobRegistry/tasks/:
+    get:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Retrieves the list of existing tasks"
+      description: "Retrieves the list of existing tasks."
+      operationId: "jobNames"
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "#/definitions/TaskCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    post:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Creates a new task."
+      description: "Creates a new task."
+      operationId: "createTask"
+      parameters:
+        - name: "task"
+          in: "body"
+          description: "Request Body that contains data required for creating a new task"
+          required: true
+          schema:
+            $ref: "#/definitions/TaskModel"
+      responses:
+        201:
+          description: "Success Message"
+          schema:
+              $ref: "#/definitions/ResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /jobRegistry/tasks/{jobName}:
+    delete:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Deletes the task specified by given jobName."
+      description:  "Deletes the task specified by given jobName."
+      operationId: "deleteTask"
+      parameters:
+        - name: "jobName"
+          in: "path"
+          description: "jobName of the task that needs to be deleted"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  TaskModel:
+    description: "Task model"
+    type: "object"
+    properties:
+      jobName:
+        description: "Name of Job"
+        type: "string"
+      jobDefinition:
+        description: "Definition of Job"
+        type: "string"
+      jobDescription:
+        description: "End time"
+        type: "string"
+  TaskCollection:
+    description: "Collection of tasks."
+    type: "object"
+    properties:
+      tasks:
+        type: "array"
+        items:
+          $ref: "#/definitions/TaskModel"
+  ResponseCode:
+    type: object
+    properties:
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+      information:
+        type: boolean
+      override:
+        type: boolean
+      error:
+        type: boolean
+      overrideAuthLevelsReqd:
+        type: string
+      type:
+        type: string
+      desc:
+        type: string
+      code:
+        type: string
+      language:
+        type: string
+  ResponseDto:
+    description: "Response entity model"
+    type: "object"
+    properties:
+      keyId:
+        type: "string"
+      status:
+        type: "string"
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: "string"
+      httpStatusCode:
+        type: "string"
+      overrideAuthLevelsReqd:
+        type: "string"

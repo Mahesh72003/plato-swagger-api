@@ -1,0 +1,492 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : VA
+#  ** 
+#  ** This source is part of the Oracle Banking  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2018-2019 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server internalcreditlimit server." 
+ version: "1.0.0"
+ title: "internalcreditlimitService"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "internalcreditlimitsService"
+   description: "Internal Credit Limit is a facility provided at Real customer level. Through this service, a customer can offer credit line facility to its subsidiaries. A Credit line facility can be linked to multiple virtual accounts that belong to same real customer number."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../internalcreditlimit
+
+ /service/internalcreditlimits:
+  post:
+   tags:
+    - "internalcreditlimitsService"
+   summary: "Adds a new internalcreditlimit."
+   description: "Adds a new internalcreditlimit. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "internalcreditlimit" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new internalcreditlimit" 
+      required: true
+      schema:
+       $ref: "#/definitions/VamTmInternalCreditLimitServiceDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created internalcreditlimit" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VamTmInternalCreditLimitServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "internalcreditlimitsService"
+   summary: "Get all valid internalcreditlimit."
+   description:  "Get all valid internalcreditlimit. This endpoints will be used to Get all valid internalcreditlimit maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string   
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: lineId
+     in: query
+     description: line id which is linked to virtual account
+     required: false
+     type: string
+   - name: lineBranch
+     in: query
+     description: line Branch which is linked to virtual account
+     required: false
+     type: string
+   - name: lineDescription
+     in: query
+     description: line description 
+     required: false
+     type: string
+   - name: realCustomerNo
+     in: query
+     description: Real Customer Number
+     required: false
+     type: string
+   - name: lineCcy
+     in: query
+     description: Line currency
+     required: false
+     type: string
+   - name: recordStat
+     required: false
+     type: string
+     in: query
+     description: Record Status
+   - name: authStat
+     required: false
+     type: string
+     in: query
+     description: Auth Status
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VamTmInternalCreditLimitServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/internalcreditlimits/{lineId}:
+  put:
+   tags:
+    - "internalcreditlimitsService"
+   summary: "Update an existing internalcreditlimits."
+   description:  "Update an existing internalcreditlimits."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "lineId"
+      in: "path"
+      description: "virtualAccountNo of the accounts Maintenance"
+      required: true
+      type: "string"
+    - name: "dto"
+      in: "body"
+      description: "Request body contains data required to update an existing account"
+      required: true
+      schema:
+       $ref: "#/definitions/VamTmInternalCreditLimitServiceDTO"
+   responses:
+    200:
+     description: "Returns updated accounts"
+     schema:
+      $ref: "#/definitions/VamTmInternalCreditLimitServiceWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."    
+ /service/internalcreditlimits/{lineId}/close:
+  patch:
+   tags:
+    - "internalcreditlimitsService"
+   summary: "Close the internalcreditlimit by given ID."
+   description:  "Close the internalcreditlimit identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string  
+    - name: "lineId"
+      in: "path"
+      description: "lineId internalcreditlimit maintenance"
+      required: true
+      type: "string"
+    - name: "LineCloseDto"
+      in: "body"
+      description: Request body contain internalcreditlimit and Modification no of internalcreditlimit maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/LineCloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VamTmInternalCreditLimitServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ VamTmInternalCreditLimitServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string
+     availStatus:
+      type: string
+      description: "Availability Status of the Line"
+     limitAmount:
+      type: number
+      description: "Limit Amount"
+     limitExpiryDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date after which Line is inactive"
+     limitStartDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date from which Line is considered"
+     lineCcy:
+      type: string
+      description: "Line currency"
+     lineDescription:
+      type: string
+      description: "Description for the Line"
+     lineId:
+      type: string
+      description: "Line Id"
+      minLength: 3
+      maxLength: 20
+      pattern: '([A-Z0-9\s]+)?'
+     lineBranch:
+      type: string
+      description: "Line Branch"
+     realCustomerName:
+      type: string
+      description: ""
+     realCustomerNo:
+      type: string
+      description: "Real Customer No for which the line is created"
+    required:
+     - limitStartDate
+     - limitExpiryDate
+     - lineCcy
+     - lineId
+     - lineBranch
+     - realCustomerNo
+     - limitAmount
+ VamTmInternalCreditLimitServiceGetDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     availStatus:
+      type: string
+      description: "Availability Status of the Line"
+     limitAmount:
+      type: number
+      description: "Limit Amount"
+     limitExpiryDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date after which Line is inactive"
+     limitStartDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date from which Line is considered"
+     lineCcy:
+      type: string
+      description: "Line currency"
+     lineDescription:
+      type: string
+      description: "Description for the Line"
+     lineId:
+      type: string
+      description: "Line Id"
+      minLength: 3
+      maxLength: 20
+      pattern: '([A-Z0-9\s]+)?'
+     lineBranch:
+      type: string
+      description: "Line Branch"
+     realCustomerName:
+      type: string
+      description: ""
+     realCustomerNo:
+      type: string
+      description: "Real Customer No for which the line is created"
+     makerId:
+      type: string
+      description: "Maker ID of Linkage"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Linkage is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of linkage"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Linkage is authorized"
+     modNo:
+      type: integer
+      description: "Version number of linkage"
+     recordStatus: 
+      type: string
+      description: "Record Status of linkage"
+     authStatus:
+      type: string
+      description: "Authorization Status of Virtual Account"
+     onceAuth:
+      type: string
+      description: "Flag that indicated if linkage is authorized once or not"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string 
+      description: "Remarks made by Approver"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VamTmInternalCreditLimitServiceCollection: 
+  description: "Collection of internalcreditlimit."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VamTmInternalCreditLimitServiceGetDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ 
+ VamTmInternalCreditLimitServiceWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VamTmInternalCreditLimitServiceResponseDto"
+   data:
+    $ref: "#/definitions/VamTmInternalCreditLimitServiceDTO"
+ LineCloseDto:
+  type: object
+  properties:
+   remarks:
+    type: string 
+ VamTmInternalCreditLimitServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ VamTmInternalCreditLimitServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VamTmInternalCreditLimitServiceResponseCode"     
+

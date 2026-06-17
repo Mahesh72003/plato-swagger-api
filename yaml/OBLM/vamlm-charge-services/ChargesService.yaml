@@ -1,0 +1,206 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ChargesService.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2018-2022 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "charge defintions view." 
+ version: "1.0.0"
+ title: "chargedefinition Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargedefinitionService"
+   description: "charge definition query"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../chargedefinition
+
+ /service/chargedefinition:
+  get:
+   tags:
+    - "chargedefinitionService"
+   summary: "Get all valid chargedefinition."
+   description:  "Get all valid chargedefinition. This endpoints will be used to Get all valid chargedefinition maintenance records."
+   operationId: "getAllCharges"
+   parameters:
+   - name: sourceCode
+     in: header
+     description: Source from which request is initiated
+     required: true
+     type: string
+   - name: applicationCode
+     in: query
+     description: Application for which the data is processed -VAMCHG/LMCHG
+     required: true  
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: chargeCategory
+     required: false
+     type: string
+   - in: query
+     name: chargeCode
+     required: false
+     type: string
+   - in: query
+     name: chargeCodeDesc
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VlcTmChargesServiceCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request.."
+    405:
+     description: "Request denied, invalid input"
+    500:
+     description: "Internal server error."
+definitions:
+ VlcTmChargesServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     chargeCategory:
+      type: string
+      description: "value can be TAX or STANDARD "
+     chargeCode:
+      type: string
+      description: "charge Code"
+      minLength: 3
+      maxLength: 20
+      pattern: '([a-zA-Z0-9]+)?'
+     chargeCodeDesc:
+      type: string
+      description: "Charge code description"
+     chargeCreditAcc:
+      type: string
+      description: "charge credit account"
+     creditTxnCode:
+      type: string
+      description: "credit transaction code"
+     debitTxnCode:
+      type: string
+      description: "debit transaction code"
+     applicationCode:
+      type: string
+      description: "Appication for which this data is used. Possible values VAMCHG/LMCHG"      
+     makerId:
+      type: string
+      description: "Maker ID of Virtual Account"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of Virtual Account"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Virtual Account is authorized"
+     modNo:
+      type: integer
+      description: "Version number of Virtual Account"
+     recordStatus:
+      type: string
+      description: "Record Status of Virtual Account"
+     authStatus:
+      type: string
+      description: "Authorization Status of Virtual Account"
+     onceAuth:
+      type: string
+      description: "Flag that indicated if Virtual Account is authorized once or not"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string
+      description: "Remarks made by Approver"     
+ VlcTmChargesServiceCollection: 
+  description: "Collection of charges."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargesServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer

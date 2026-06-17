@@ -1,0 +1,136 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+#
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : CurrencyWiseBalanceService.yaml
+#  **
+#  ** Module     : VAP
+#  **
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Keith D'Souza
+#  Reviewed By        :
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+swagger: "2.0"
+info:
+  description: "This is the API documentation for Currency wise balance part of the read-only Projection Service"
+  version: "1.0.0"
+  title: "Currency Wise Balance"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "currencyWiseBalanceService"
+    description: "API for fetching currency wise balance for virtual account numbers for a real customer number"
+
+schemes:
+  - "https"
+
+paths:
+
+  # path fetch all valid records or by intent
+  #
+  # supported http method GET
+  #
+  # path example ../currencyWiseBalance
+
+  /service/currencyWiseBalance:
+    get:
+      tags:
+        - "currencyWiseBalanceService"
+      summary: "Fetches currency wise balance for virtual account numbers for real customer number"
+      description:  "This endpoint will be used to fetch the currency wise balance for virtual account numbers for a real customer number"
+      operationId: "getCurrencyWiseBalanceService"
+      parameters:
+        - in: header
+          description: "Source from which request is initiated"
+          name: sourceCode
+          required: true
+          type: string
+        - in: query
+          name: realCustomerNo
+          description: "Customer Number"
+          required: true
+          type: string
+        - in: query
+          name: virtualEntityId
+          description: "Virtual Entity ID"
+          required: false
+          type: string
+        - in: query
+          name: currency
+          description: "Currency Code"
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Returns list of currencies, count of virtual accounts and corresponding sum of current balances"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/CurrencyWiseBalanceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+definitions:
+  CurrencyWiseBalanceDTO:
+    type: object
+    properties:
+      currency:
+        type: string
+        description: "Virtual Account Currency"
+      virtualAccountCount:
+        type: integer
+        description: "Count of Virtual Accounts"
+      currentBalances:
+        type: number
+        description: "Sum of Current Balance of Virtual Accounts"
+  CurrencyWiseBalanceCollection:
+    description: "Collection of currencies, count of virtual accounts and corresponding sum of current balances"
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CurrencyWiseBalanceDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer

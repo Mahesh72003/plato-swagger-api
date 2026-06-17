@@ -1,0 +1,383 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Flexcube Onboarding Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ipaservices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Ipa Configuration
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-cmn-ipaservices
+tags:
+- name: IpaServices
+  description: API for In-Principle Approval Details Services Operations
+schemes:
+- http
+paths:
+  /web/v1/ipaservices/submit:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - IpaServicesAggregate
+      summary: Submit for the In-Principle Approval domain.
+      description: Populates In-Principle Approval aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveIpaServices
+      parameters:
+      - name: ipaServicesAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new In-Principle Approval Aggregate
+        required: true
+        schema:
+          $ref: '#/definitions/IpaServicesAggregateModel'
+      responses:
+        201:
+          description: Returns the Id
+          headers:
+            Location:
+              description: URL
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/ipaservices/{applicationNumber}/{processRefNo}/stagesummary:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - IpaServicesAggregate
+      summary: Get stagesummary Details.
+      description: Get stagesummary Details.
+      operationId: getStageSummary
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber for which In-Principle Approval data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Ref number for which In-Principle Approval data needs to be fetched
+        required: true
+        type: string
+      - name: datasegments
+        in: query
+        description: comma seperated datasegments for the stage
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns summary details for the process ref No for the stage
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+          
+  /web/v1/ipaservices/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - IpaServicesAggregate
+      summary: Get data segment History Details.
+      description: Get data segment History Details.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application Number for which In-Principle Approval data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Reference Number for which In-Principle Approval data needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode for History need to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns History details for the process number and datasegment code
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+          
+  /web/v1/ipaservices/{applicationNumber}/{processRefNo}/adviceData:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - IpaServicesAggregate
+      summary: Get Advice Details
+      description: Get Advice Details
+      operationId: getAdviceDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which advice data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Reference number for which advice data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns In-Principle Approval Aggregate Model for the application number
+          schema:
+           $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+   
+  /web/v1/ipaservices/save:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - IpaServicesAggregate
+      summary: submit for the In-Principle Approval Application domain.
+      description: Populates In-Principle Approval application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveIpaDetails
+      parameters:
+      - name: IpaAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new In-Principle Approval Details
+        required: true
+        schema:
+          $ref: '#/definitions/IpaServicesAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created In-Principle Approval Details
+          headers:
+            Location:
+              description: URL of newly created In-Principle Approval Details
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/ipaservices/{applicationNo}/datasegment-details:
+   get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - IpaServicesAggregate
+      summary: Retrieves the list of existing In-Principle Approval Details.
+      description: Retrieves the list of existing In-Principle Approval Details. Add additional information here for the this endpoint.
+      operationId: getIpaDetails
+      parameters:      
+      - name: applicationNo
+        in: path
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      - name: processRefNos
+        in: query
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/IpaDetailsMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error 
+          
+definitions:
+  IpaServicesAggregateModel:
+    description: In-Principle Approval Aggregate Model
+    type: object
+    properties:
+      id:
+        description: In-Principle Approval Application Id
+        type: string
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      applicants:
+        description: Applicant Names
+        type: string
+      action:
+        description: Save or Submit
+        type: string
+      channel: 
+        description: Channel
+        type: string
+      applicantDetails: 
+        $ref: '#/definitions/ApplicantDetailsModel'
+      ipaDetails:
+        $ref: '#/definitions/IpaDetailsModel'
+      generateIpaDetails:
+        $ref: '#/definitions/GenerateIpaDetailsModel'
+    required:
+    - processRefNo
+    - applicationNumber
+
+  AdviceGenerationModel:
+    description: Advice Generation model
+    type: object
+    properties:
+      referenceNumber:
+        description: Reference Number
+        type: string
+      customerId:
+        description: Customer Id
+        type: string
+      documentArchival:
+        description: Document Archival
+        type: string
+      adviceName:
+        description: Advice Name
+        type: string
+      previewAdvice:
+        description: Preview Advice
+        type: string
+      adviceData:
+        $ref: '#/definitions/IpaServicesAggregateModel'
+      mediaPreferences:
+        type: array
+        items:
+          $ref: '#/definitions/MediaPreferencesModel'
+  MediaPreferencesModel:
+    description: Media Preferences model
+    type: object
+    properties:
+      mediaType:
+        description: Media Type
+        type: string
+      addresses:
+        type: array
+        items:
+          $ref: '#/definitions/AddressModel'
+  AddressModel:
+    description: Address Model
+    type: object
+    properties:
+      email:
+        description: email
+        type: string
+  IpaDetailsMasterModel:
+    description: In-Principle Approval Master Details model
+    type: object
+    properties:
+      data: 
+        type: array
+        items:
+         $ref: '#/definitions/IpaApplicationModel'
+  IpaApplicationModel: 
+    description: In-Principle Approval Application Model
+    type: object
+    properties:
+      ipaDetails:
+        $ref: '#/definitions/IpaDetailsModel'
+      

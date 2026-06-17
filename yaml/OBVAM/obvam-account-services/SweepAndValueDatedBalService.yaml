@@ -1,0 +1,192 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : SweepAndValueDatedBalService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :   
+#  Reviewed By        :  
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a service for fetching value dated Balance details and sweep eligilbe balance for a given virtual account and its value date." 
+ version: "1.0.0"
+ title: "VD Balance and sweep eligible balance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "getsweepandVDBalanceService"
+   description: "API for VD Balance Operations."
+
+schemes:
+- "https"
+
+paths:
+
+# path to fetch value dated and sweep eligible balance records
+#
+#  supprorted http methods POST
+#
+# path example ../sweepandvaluedatedbalance
+
+ /service/sweepandvaluedatedbalance:
+  post:
+   tags:
+    - "getsweepandVDBalanceService"
+   summary: "Service API that gets valid value dated balances details and sweep eligible balance for the specified virtual account and value date"
+   description:  "Sweep Eligible balance for a virtual account is account's own balance without accounting child's contributions, unauth debits and blocked amount"
+   operationId: "getSweepandVDBalanceService"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: sweepandVDBalanceServiceRequestDTO
+     in: body
+     description: Request Body that contains data required for fetching Balance for Virtual Accounts
+     required: true
+     schema:
+       $ref: "#/definitions/SweepAndVDBalanceServiceRequestDtoList"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/SweepandVDBalanceServiceWrapperDTO"
+    204:
+     description: "NO CONTENT. No records found"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."   
+definitions:
+ SweepandVDBalanceServiceWrapperDTO:
+   type: object
+   properties:
+    messages:
+     $ref: "#/definitions/SweepandVDBalanceServiceResponseDto"   
+    data:
+     type: array
+     items:
+       $ref: "#/definitions/SweepVDBalanceDTO"
+# SweepandVDBalanceServiceWrapperDTO:
+#  type: object
+#  properties:
+#   data:
+#    $ref: "#/definitions/SweepVDBalanceDTO"
+#   paging:
+#    $ref: "#/definitions/PagingDto"
+ SweepAndVDBalanceServiceRequestDtoList:
+   type: object
+   properties:
+     sweepandVDBalanceServiceRequestDto:
+       type: array
+       items:
+         $ref: "#/definitions/SweepAndVDBalanceServiceRequestDto"    
+ SweepAndVDBalanceServiceRequestDto:
+  type: object
+  properties:
+   virtalAccountNumber:
+    type: string
+   valueDate:
+    type: string
+
+ SweepandVDBalanceServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ SweepandVDBalanceServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/SweepandVDBalanceServiceResponseCode"  
+ SweepVDBalanceDTO:
+  type: object
+  properties:
+   virtualAccountNumber:
+    type: string
+    description: "Virtual account number for which balance has to be fetched"
+   virtualAccountCcy:
+    type: string
+    maxLength: 3
+    description: "Currency of the virtual account number"
+   valuedate:
+    type: string
+    pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+    description: "Value date for which value dated balance is being fetched"
+   valueDatedBalance:
+    type: number
+    description: "Value dated balance for the date speficied" 
+   sweepEligibleBalance:
+    type: number
+    description: "Sweep Eligible balance for a virtual account is account's own balance without accounting child's contributions, unauth debits and blocked amount" 
+ SweepVDBalanceDetailsDTO:
+  type: object
+  properties:
+   virtualAccountNumber:
+    type: string
+    description: "Virtual account number for which balance has to be fetched"
+   virtualAccountCcy:
+    type: string
+    maxLength: 3
+    description: "Currency of the virtual account number"
+   valuedate:
+    type: string
+    pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+    description: "Value date for which value dated balance is being fetched"
+   valueDatedBalance:
+    type: number
+    description: "Value dated balance for the date speficied" 
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer

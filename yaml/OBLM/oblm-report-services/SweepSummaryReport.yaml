@@ -1,0 +1,365 @@
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Ketki
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "SweepSummaryReport Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "SweepSummaryReportAPI"
+    description: "API for SweepSummaryReport's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /sweepSummaryReport/generateReport:
+    post:
+      tags:
+        - "SweepSummaryReportAPI"
+      summary: "Get all valid oblm-report-services."
+      description: "Get all valid oblm-report-services. This endpoints will be used to Get all valid oblm-report-services maintenance records."
+      operationId: "generateReport"
+      parameters:
+        - name: "SweepSummaryReportInDTO" 
+          in: "body" 
+          description: "Request Body that contains data required for creating a new oblm-report-services" 
+          required: true
+          schema:
+            $ref: "#/definitions/SweepSummaryReportInDTO"
+      responses:
+        201:
+          description: "Returns the Id of the customer"
+          headers:
+            Location:
+              description: "URL of customer report"
+              type: "string"
+          schema:
+              $ref: "#/definitions/SweepSummaryReportDTOCollection"  
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /sweepSummaryReport/save:
+    post:
+      tags:
+        - "SweepSummaryReportAPI"
+      summary: Adds a new SweepSummaryReport data.
+      description: Adds a new SweepSummaryReport data. Add additional information here for this endpoint.
+      operationId: save
+      parameters:
+        - name: SweepSummaryDTO
+          in: body
+          description: Request Body that contains data required for creating a new exception
+          required: true
+          schema:
+            $ref: '#/definitions/SweepSummaryDTO'
+      responses:
+        201:
+          description: 'Returns message of success or failure '
+          headers:
+            Location:
+              description: URL of newly created exception
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+definitions:
+  SweepSummaryReportInDTO:
+   type: "object"
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      customerId:
+       type: string
+       description: "Id of the customer"
+      structureId:
+       type: string
+       description: "Id of the structure"
+      fromDate:
+       description: "starting Date"
+       type: string
+       #format: date
+      toDate:
+       description: "ending Date"
+       type: string
+       #format: date
+      template:
+       description: "summary/reject"
+       type: string
+      status:
+       type: string
+       description: "status of sweep"
+  SweepSummaryDTO:
+   type: object
+   properties:
+    SweepSummaryReportheaderDTO:
+     $ref: "#/definitions/SweepSummaryReportHeaderDTO"
+    SweepSummaryReportbodyDTO:
+     type: "array"
+     items: 
+      $ref: "#/definitions/SweepSummaryReportBodyDTO"
+  SweepSummaryReportHeaderDTO:
+   type: object
+   properties:
+    toDate:
+     description: "ending Date"
+     type: string
+     #format: date
+    fromDate:
+     description: "starting Date"
+     type: string
+     #format: date
+    structureID:
+     type: string
+    CustomerID:
+     type: string
+    userId:
+     type: string
+     description: Generated By user id
+    dateAndTime:
+     type: string
+     description: Generated At time 
+  LmdTbEventsDTO:
+    description: "Events DTO"
+    type: "object"
+    allOf:
+    - $ref: "#/definitions/GenericDto"
+    - type: object
+      properties:
+       eventDate:
+        description: "Date of Events"
+        type: string
+        format: date
+       eventType:
+        description: "Type of Events"
+        type: string
+       eventCode:
+        description: "Code for Events"
+        type: string 
+       eventSource:
+        description: "Source for Events"
+        type: string
+       eventDescription:
+        description: "Description for Events"
+        type: string
+       customerId:
+        description: "Customer Id in Events"
+        type: string
+       isActive:
+        description: "Is Active in Events"
+        type: string 
+       createdBy:
+        description: "Created by for Events"
+        type: string
+       startDate:
+        description: "Start Date for Events"
+        type: string
+        format: date
+       closeDate:
+        description: "Close Date for Events"
+        type: string
+        format: date
+       transactionId:
+        description: "Transaction Id for Events"
+        type: string 
+       fromAccountNumber:
+        description: "From Account Number for Events"
+        type: string      
+       toAccountNumber:
+        description: "To Account Number for Events"
+        type: string
+       structureId:
+        description: "Structure Id for Events"
+        type: string    
+  LmdTbEventsCollection:
+    description: Collection of Events
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/LmdTbEventsDTO"   
+  SweepSummaryReportBodyDTO:
+   type: object
+   properties:
+    LogID:
+     type: string
+    customerid:
+     type: string
+    structureid:
+     type: string
+    structureDesc:
+     type: string 
+    childAccNo:
+     type: string
+    childAccDesc:
+     type: string
+    childBranchCode:
+     type: string
+    childBranchName:
+     type: string
+    childCurrencyCode:
+     type: string
+    childExtAccount:
+     type: string
+    childExtBranch:
+     type: string
+    parentAccNo:
+     type: string
+    parentAccDesc:
+     type: string 
+    parentBrCode:
+     type: string
+    parentBrName:
+     type: string
+    parentCurrCode:
+     type: string
+    parentExtAcc:
+     type: string
+    parentExtBr:
+     type: string
+    prodDesc:
+     type: string
+    sweepAmt:
+     type: integer
+    sweepLocaleAmt:
+     type: string
+    sweepDirec:
+     type: string
+    valueDt:
+     type: string
+     #format: date
+    statusMsg:
+     type: string
+    sweepMode:
+     type: string
+    logTime:
+     type: string
+    balTime:
+     type: string
+    revFreqCheck:
+     type: string
+    fxRate:
+     type: integer
+    isBVT:
+     type: string
+    bvtID:
+     type: string
+    custExtRef:
+     type: string
+    status:
+     type: string
+    user:
+     type: string
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/ResponseCode"
+    requestId:
+      type: string
+  ResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+    args:
+     type: array
+     items:
+      type: object
+    arg:
+     type: string  
+  GenericDto:
+   allOf:
+    - type: object
+      discriminator: resource_type
+  SweepSummaryDTOCollection: 
+   description: "Collection of entries."
+   type: "object"
+   properties:
+    data:
+     $ref: "#/definitions/SweepSummaryDTO"
+    messages:
+     $ref: "#/definitions/ResponseDto"
+  SweepSummaryReportDTOCollection: 
+   description: "Collection of entries."
+   type: "object"
+   properties:
+    data:
+     $ref: "#/definitions/ReportResponse"
+    messages:
+     $ref: "#/definitions/ResponseDto"
+  LmdTbEventsWrapperDTO:
+   type: object
+   properties:
+    data:
+        $ref: "#/definitions/LmdTbEventsDTO"
+  

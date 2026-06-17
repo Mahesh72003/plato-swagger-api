@@ -1,0 +1,238 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ValueDatedBalanceService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna 
+#  Reviewed By        :  Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a server for hosting VD Balance services." 
+ version: "1.0.0"
+ title: "VD Balance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "getVDBalanceService"
+   description: "API for VD Balance Operations."
+
+schemes:
+- "https"
+
+paths:
+
+# path to fetch value dated balance records
+#
+#  supprorted http methods POST
+#
+# path example ../getVDBalance
+
+ /service/getVDBalance:
+  post:
+   tags:
+    - "getVDBalanceService"
+   summary: "Get all valid value dated balances for the specified virtual account."
+   description:  "This endpoint is used to get all valid value dated balances for a specified virtual account."
+   operationId: "getValueDatedBalance"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "vdBalanceDetails" 
+      in: "body" 
+      description: "Request Body that contains data required for fetching balances of the speficied virtual accounts" 
+      required: true
+      schema:
+       $ref: "#/definitions/VDBalanceRequestDTO"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VDBalanceServiceWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+  get:
+   tags:
+    - "getVDBalanceService"
+   summary: "Service API that Get all valid value dated balances for the specified virtual account."
+   description:  "This service is used to get all valid value dated balances for a specified virtual account."
+   operationId: "getSignleVDBalanceService"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: virtualAccountNumber
+     in: query
+     description: Virtual account number for which balances has to be fetched
+     required: false
+     type: string
+   - name: valueDate
+     in: query
+     description: Value date for which records are to be fetched 
+     required: false
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VDBalanceServiceWrapperDTO"
+    204:
+     description: "NO CONTENT. No records found"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."   
+definitions:
+ VDBalanceServiceWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VDBalanceServiceResponseDto"
+   data:
+    $ref: "#/definitions/VDBalanceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto" 
+ VDBalanceServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ VDBalanceServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VDBalanceServiceResponseCode"  
+ VDBalanceRequestDTO:
+  type: object
+  properties:
+   virtualAccountRequestDetails:
+    type: array
+    items:
+     $ref: "#/definitions/VDBalanceRequestDetailsDTO"
+  required:
+    - virtualAccountRequestDetails
+ VDBalanceRequestDetailsDTO:
+  type: object
+  properties:
+   virtualAccountNumber:
+    type: string
+    description: "Virtual account number for which balance has to be fetched"
+   fromDate:
+    type: string
+    pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+    description: "From date for which value dated balance is being fetched"
+   toDate:
+    type: string
+    pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+    description: "To date for which value dated balance is being fetched"
+  required:
+    - virtualAccountNumber
+    - fromDate
+    - toDate 
+ VDBalanceDTO:
+  type: object
+  properties:
+   valueDatedBalanceDetails:
+    type: array
+    items:
+     $ref: "#/definitions/VDBalanceDetailsDTO"
+ VDBalanceDetailsDTO:
+  type: object
+  properties:
+   virtualAccountNumber:
+    type: string
+    description: "Virtual account number for which balance has to be fetched"
+   virtualAccountCcy:
+    type: string
+    maxLength: 3
+    description: "Currency of the virtual account number"
+   valuedate:
+    type: string
+    pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+    description: "Value date for which value dated balance is being fetched"
+   valueDatedBalance:
+    type: number
+    description: "Value dated balance for the date speficied" 
+ BindingResult:
+  type: object
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer

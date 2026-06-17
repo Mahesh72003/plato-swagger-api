@@ -1,0 +1,216 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Legal Opinion server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "5.8.0"
+  title: "obpy-Party-Kyc-Services"
+host: "HOST:PORT"
+basePath: "/obpy-party-kyc-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PartyKYCAPI"
+    description: "API for Party  Operations"
+
+schemes:
+  - "http"
+  
+paths:
+  /web/v1/retail/kycreferencecheck:
+    post:
+      tags:
+        - "kycReferenceCheck"
+      summary: "Adds a new Kyc Reference Check."
+      description: "Adds a new Kyc Reference Check."
+      operationId: "createReferenceCheck"
+      parameters:
+        - name: "kycReference"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Party Demographics"
+          required: true
+          schema:
+             $ref: "#/definitions/KycReferenceCheckMasterModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully created a new Party Demographic Details"
+          headers:
+            Location:
+              description: "URL of newly created Party Demographics"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/retail/kycStatusCheck/{partyId}:
+    get:
+      tags:
+        - "kycStatusService"
+      summary: "API to find the kyc status for the given partyId."
+      description:  "API to find the kyc status for the given partyId."
+      operationId: "getKYCStatus"
+      parameters:
+        - name: "partyId"
+          in: "path"
+          description: "partyId for which the kyc status needs to be fetched"
+          required: true
+          type: "string"
+        - name: "applicationNumber"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  
+definitions:
+  KycReferenceCheckDetailsModel:
+     allOf:
+      # - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        #  required:
+        #   - partyId
+        description: "EducationDetails Retail Master Model"
+        properties:
+          id:
+            type: "string"
+          parentId:
+            type: "string"
+          partyId:
+            type: "string"
+          referenceName:
+            type: "string"
+          buidingName:
+            type: "string"
+            
+  KycReferenceCheckMasterModel:
+     allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        #   required:
+        #    - partyId
+        description: "Retail EducationMaster Model"
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          partyId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          kycReferenceCheckList:
+            type: "array"
+            items:  { $ref: '#/definitions/KycReferenceCheckDetailsModel'}
+  ResponseModel:
+    properties:
+      errors:
+        type: object
+      data:
+        type: object
+      paging:
+        type: object 
+          
+    
+  

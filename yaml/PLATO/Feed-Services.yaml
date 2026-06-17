@@ -1,0 +1,1053 @@
+swagger: "2.0"
+info:
+ description: "" 
+ version: "1.0.0"
+ title: "Feed Services"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "FileController"
+   description: ""
+ - name: "TbFeedController"
+   description: ""
+ - name: "PlatoTbFeedDetailController"
+   description: ""
+ - name: "TbFeedRejectedController"
+   description: ""
+ - name: "TmFeedController"
+   description: ""
+ 
+schemes:
+- "https"
+ 
+paths:
+ /downloadFile/{fileName}:
+  get:
+   tags:
+    - "TbFeedController"
+   summary: "Download the file"
+   description: "Download the file"
+   operationId: "downloadFileByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: ""
+      type: "string"
+   responses:
+    200: 
+     description: "File gets downloaded."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fetchFileStatus:
+  get:
+   tags:
+    - "TbFeedController"
+   summary: "Retrieve status info of all the files"
+   description: "Retrieve status info of all the files/selected file"
+   operationId: "fetchAllUiData"
+   parameters:
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "fileName"
+      in: "query"
+      description: ""
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/TbFeedUiDtoCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fetchRecords/{fileName}:
+  get:
+   tags:
+    - "TbFeedController"
+   summary: "Fetch the records of a file"
+   description: "Fetch the records of an unprocessed file"
+   operationId: "fetchRecordsByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/RecordApprovalDto"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fetchViewRecords/{fileName}:
+  get:
+   tags:
+    - "TbFeedController"
+   summary: "Fetch the records of a file"
+   description: "Fetch the records of a processed/approved/failed file"
+   operationId: "fetchViewRecordsByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/RecordApprovalDto"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fileRecord/{fileName}:
+  get:
+   tags:
+    - "PlatoTbFeedDetailController"
+   summary: "Get Status details of all the records in a file"
+   description: "Get Status details of all the records in a file"
+   operationId: "getPlatoTbFeedDetailByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/PlatoTbFeedDetailCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /uploadFiles:
+  post:
+   tags:
+    - "FileController"
+   summary: "Upload file/files of single feed or multiple feeds"
+   description: "Upload file/files of single feed or multiple feeds"
+   operationId: "receiveFileData"
+   consumes:
+   - "multipart/form-data"
+   parameters:
+    - name: "files" 
+      in: "query" 
+      description: ""
+      required: true
+      type: "string"
+      default: "multipart/form-data"
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "feedSourceCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: ""
+      type: "string"
+    - name: "Content-Type" 
+      in: "header" 
+      default: "multipart/form-data"
+      description: ""
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation "
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /uploadAndApprove:
+  post:
+   tags:
+    - "FileController"
+   summary: "Upload and automatically approve file/files of single feed or multiple feeds"
+   description: "Upload and automatically approve file/files of single feed or multiple feeds"
+   operationId: "receiveFileAndApprove"
+   consumes:
+   - "multipart/form-data"
+   parameters:
+    - name: "files" 
+      in: "query" 
+      description: ""
+      required: true
+      type: "string"
+      default: "multipart/form-data"
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "feedSourceCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: ""
+      type: "string"
+    - name: "Content-Type" 
+      in: "header" 
+      default: "multipart/form-data"
+      description: ""
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation "
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /uploadFilesUI:
+  post:
+   tags:
+    - "FileController"
+   summary: "Upload file/files of single feed or multiple feeds through UI"
+   description: "Upload file/files of single feed or multiple feeds through UI"
+   operationId: "receiveFileUI"
+   consumes:
+   - "application/json"
+   parameters:
+    - name: "files" 
+      in: "query" 
+      description: ""
+      required: true
+      type: "string"
+      default: "application/json"
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "feedSourceCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: ""
+      type: "string"
+    - name: "Content-Type" 
+      in: "header" 
+      default: "multipart/form-data"
+      description: ""
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation "
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /approveFile/{fileName}:
+  post:
+   tags:
+    - "FileController"
+   summary: "Approve the processing of an uploaded file"
+   description: "Approve the processing of an uploaded file"
+   operationId: "approveFile"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: "" 
+      required: false
+      type: "string"
+    - name: "remarks" 
+      in: "body" 
+      description: "" 
+      required: false
+      schema:
+        type: "string"
+        properties:
+          remarks:
+            type: "object"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          default: "Initiated"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /rejectFile/{fileName}:
+  post:
+   tags:
+    - "FileController"
+   summary: "Reject the processing of an uploaded file"
+   description: "Reject the processing of an uploaded file"
+   operationId: "rejectFile"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: "" 
+      required: false
+      type: "string"
+    - name: "remarks" 
+      in: "body" 
+      description: "" 
+      required: false
+      schema:
+        type: "string"
+        properties:
+          remarks:
+            type: "object"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          default: "File is rejected"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /approveRecords/{fileName}:
+  post:
+   tags:
+    - "FileController"
+   summary: "Approve the record level processing of an uploaded file"
+   description: "Approve the record level processing of an uploaded file"
+   operationId: "approveRecords"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "branchCode" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: "" 
+      required: false
+      type: "string"
+    - name: "feedRecordsDto" 
+      in: "body" 
+      description: "" 
+      required: true
+      schema:
+        $ref: "#/definitions/RecordApprovalDto"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          default: "Initiated"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /downloadRejectedFile/{fileName}:
+  get:
+   tags:
+    - "TbFeedRejectedController"
+   summary: "Download the rejected file"
+   description: "Download the rejected file"
+   operationId: "downloadRejectedFileByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "env" 
+      in: "header" 
+      description: "" 
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "File gets downloaded."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fetchFileInformation:
+  get:
+   tags:
+    - "TbFeedRejectedController"
+   summary: "Retrieve status info of all the rejected files"
+   description: "Retrieve status info of all the rejected files"
+   operationId: "fetchRejectedUiData"
+   parameters:
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/TbFeedRejectedUiDtoCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /getTmFeed/{id}:
+  get:
+   tags:
+    - "TmFeedController"
+   summary: "Retrieve status info of all the rejected files"
+   description: "Retrieve status info of all the rejected files"
+   operationId: "getTmFeedById"
+   parameters:
+    - name: "id" 
+      in: "path" 
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/TmFeed"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /getTmFeedByName/{name}:
+  get:
+   tags:
+    - "TmFeedController"
+   summary: "Retrieve status info of all the rejected files"
+   description: "Retrieve status info of all the rejected files"
+   operationId: "getTmFeedByName"
+   parameters:
+    - name: "name" 
+      in: "path" 
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/TmFeed"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /updateTmFeedHeaders/{feedName}:
+  post:
+   tags:
+    - "TmFeedController"
+   summary: "Update the processor headers of a Tm Feed given the feed name"
+   description: "Update the processor headers of a Tm Feed given the feed name"
+   operationId: "updateTmFeedHeaders"
+   parameters:
+    - name: "feedName" 
+      in: "path" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "processorHeadersDto" 
+      in: "body" 
+      description: "" 
+      required: true
+      schema:
+        $ref: "#/definitions/ProcessorHeadersDto"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          default: "Updated"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /getHeaders:
+  get:
+   tags:
+    - "TmFeedController"
+   summary: "Get the Processor Headers for a given source code and feed name"
+   description: "Get the Processor Headers for a given source code and feed name"
+   operationId: "getHeaders"
+   parameters:
+    - name: "sourceCode" 
+      in: "query" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "feedName" 
+      in: "query" 
+      description: "" 
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+       $ref: "#/definitions/ProcessorHeadersDto"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /getAllHeaders:
+  get:
+   tags:
+    - "TmFeedController"
+   summary: "Get all source code - feed name combinations from the processor headers table"
+   description: "Get all source code - feed name combinations from the processor headers table"
+   operationId: "getAllHeaders"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        headers:
+          type: array
+          items:
+            type: "object"
+            properties:
+              sourceCode:
+                type: "string"
+              feedName:
+                type: "string"
+              id:
+                type: "string"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /getAllFeeds:
+  get:
+   tags:
+    - "TmFeedController"
+   summary: "Get the list of all feeds/ feeds matching the filter value of feed name"
+   description: "Get the list of all feeds/ feeds matching the filter value of feed name"
+   operationId: "getAllFeeds"
+   parameters:
+    - name: "feedName" 
+      in: "query" 
+      description: ""
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        data:
+          type: array
+          items:
+            type: "object"
+            properties:
+              feedName:
+                type: "string"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+  TbFeedUiDtoCollection:
+    type: "array"
+    items:
+      $ref: "#/definitions/TbFeedUiDto"
+  TbFeedUiDto:
+    description: ""
+    type: "object"
+    properties:
+     id:
+      type: "string"
+      description: "" 
+     platoTmFeedId:
+      type: "string"
+      description: "" 
+     feedStatusIn:
+      type: "string"
+      description: "" 
+     inputFileName:
+      type: "string"
+      description: "" 
+     makerId:
+      type: "string"
+      description: "" 
+     totalRecords:
+      type: "string"
+      description: "" 
+     successfulRecords:
+      type: "string"
+      description: "" 
+     failedRecords:
+      type: "string"
+      description: "" 
+     approvedRecords:
+      type: "string"
+      description: "" 
+     checkerId:
+      type: "string"
+      description: "" 
+     remarks:
+      type: "string"
+      description: "" 
+     makerDtStamp:
+      type: "string"
+      description: "" 
+     checkerDtStamp:
+      type: "string"
+      description: "" 
+     approveByRecordsReqd:
+      type: "boolean"
+      description: "" 
+  TbFeedRejectedUiDtoCollection:
+    type: "array"
+    items:
+      $ref: "#/definitions/TbFeedRejectedUiDto"
+  TbFeedRejectedUiDto:
+    description: ""
+    type: "object"
+    properties:
+     id:
+      type: "string"
+      description: ""     
+     platoTmFeedId:
+      type: "string"
+      description: ""     
+     feedStatusIn:
+      type: "string"
+      description: ""     
+     inputFileName:
+      type: "string"
+      description: ""     
+     makerId:
+      type: "string"
+      description: ""    
+     version:
+      type: "number"
+      description: ""     
+     checkerId:
+      type: "string"
+      description: ""     
+     remarks:
+      type: "string"
+      description: ""     
+     makerDtStamp:
+      type: "string"
+      description: ""     
+     checkerDtStamp:
+      type: "string"
+      description: ""
+  TmFeed:
+    description: ""
+    type: "object"
+    properties:
+     id:
+      type: "string"
+      description: ""
+     feedName:
+      type: "string"
+      description: ""
+     feedDescription:
+      type: "string"
+      description: ""
+     bulkProcess:
+      type: "string"
+      description: ""
+     chunkSize:
+      type: "string"
+      description: ""
+     delimeterId:
+      type: "string"
+      description: ""
+     readerBean:
+      type: "string"
+      description: ""
+     processHandler:
+      type: "string"
+      description: ""
+     discriminator:
+      type: "string"
+      description: ""
+     sortRequired:
+      type: "string"
+      description: ""
+     feedExtension:
+      type: "string"
+      description: ""
+     threadSize:
+      type: "integer"
+      description: ""
+     asyncProcessFlag:
+      type: "string"
+      description: ""
+  PlatoTbFeedDetailCollection:
+    description: ""
+    type: "array"
+    items:
+      $ref: "#/definitions/PlatoTbFeedDetail"
+  PlatoTbFeedDetail:
+    description: ""
+    type: "object"  
+    properties:
+     id:
+      type: "string"
+      description: ""
+     platoTmFeedHandlerId:
+      type: "string"
+      description: ""
+     tbFeedRecordData:
+      type: "string"
+      description: ""
+     recordStatus:
+      type: "string"
+      description: ""
+     statusDescription:
+      type: "string"
+      description: ""
+     inputFileName:
+      type: "string"
+      description: ""
+     recordId:
+      type: "string"
+      description: ""
+     makerDtStamp:
+      type: "string"
+      description: ""
+     checkerDtStamp: 
+      type: "string"
+      description: ""
+  RecordApprovalDto:
+    description: ""
+    type: "object"  
+    properties:
+     fileName:
+      type: "string"
+      description: ""
+     tmFeedId:
+      type: "string"
+      description: ""
+     feedDelimeter:
+      type: "string"
+      description: ""
+     remarks:
+      type: "string"
+      description: ""
+     recordList:
+      type: "array"
+      description: ""
+      items:
+        type: object
+     fields:
+      type: "array"
+      description: ""
+      items:
+        type: object
+     filedDataTypes:
+      type: "string"
+      description: ""
+  ProcessorHeadersDto:
+    description: ""
+    type: "object"
+    properties:
+     sourceCode:
+      type: "string"
+      description: ""
+     feedName:
+      type: "string"
+      description: ""
+     headers:
+      type: "array"
+      description: ""
+      items:
+        $ref: "#/definitions/TmHeadersDto"
+  TmHeadersDto:
+    description: ""
+    type: "object"  
+    properties:
+     headerKey:
+      type: "string"
+      description: ""
+     headerValue:
+      type: "string"
+      description: ""

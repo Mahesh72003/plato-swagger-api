@@ -1,0 +1,1110 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : LMX
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server withholdingtax server." 
+ version: "1.0.0"
+ title: "withholdingtax Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "withholdingtax"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../withholdingtax
+
+ /withholdingtax:
+  post:
+   tags:
+    - "withholdingtax"
+   summary: "Adds a new withholdingtax."
+   description: "Adds a new withholdingtax. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "withholdingtax" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new withholdingtax" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmInterestmapDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created withholdingtax" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "withholdingtax"
+   summary: "Get all valid withholdingtax."
+   description:  "Get all valid withholdingtax. This endpoints will be used to Get all valid withholdingtax maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTmInterestmapCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../withholdingtax/xxx
+#   DELETE    .../withholdingtax/xxx
+#   GET       .../withholdingtax/xxx
+#   GET       .../withholdingtax/xxx?version=latestrecord
+#   GET       .../withholdingtax/xxx?version=1
+
+ /withholdingtax/{id}:
+  put:
+   tags:
+    - "withholdingtax"
+   summary: "Update an existing withholdingtax."
+   description:  "Update an existing withholdingtax."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the withholdingtax Maintenance"
+      required: true
+      type: "string"
+    - name: "withholdingtax"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing withholdingtax"
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmInterestmapDTO"
+   responses:
+    200:
+     description: "Returns updated withholdingtax"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "withholdingtax"
+   summary: "Retrieves the withholdingtax by ID."
+   description:  "Retrieves the withholdingtax by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the withholdingtax based on given id."
+     schema:
+      $ref: "#/definitions/LmxTmInterestmapWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "withholdingtax"
+   summary: "Deletes the withholdingtax identified by given ID."
+   description:  "Deletes the withholdingtax identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the withholdingtax maintenance"
+      required: true
+      type: "string"
+    - name: "withholdingtax"
+      in: "body"
+      description: Request body contain withholdingtax and Modification no of withholdingtax maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../withholdingtax/xxx/approve
+
+ /withholdingtax/{id}/approve:
+  patch:
+   tags:
+    - "withholdingtax"
+   summary: "Authorize the withholdingtax by given ID."
+   description:  "Authorize the withholdingtax identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the withholdingtax maintenance"
+      required: true
+      type: "string"
+    - name: "withholdingtax"
+      in: "body"
+      description: Request body contain withholdingtax and Modification no of withholdingtax maintenance which need to be approved"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../withholdingtax/xxx/close
+ /withholdingtax/{id}/close:
+  patch:
+   tags:
+    - "withholdingtax"
+   summary: "Close the withholdingtax by given ID."
+   description:  "Close the withholdingtax identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the withholdingtax maintenance"
+      required: true
+      type: "string"
+    - name: "withholdingtax"
+      in: "body"
+      description: Request body contain withholdingtax and Modification no of withholdingtax maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../withholdingtax/xxx/reopen
+
+ /withholdingtax/{id}/reopen:
+  patch:
+   tags:
+    - "withholdingtax"
+   summary: "reopen the withholdingtax by given ID."
+   description:  "reopen the withholdingtax identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the withholdingtax maintenance"
+      required: true
+      type: "string"
+    - name: "withholdingtax"
+      in: "body"
+      description: Request body contain withholdingtax and Modification no of withholdingtax maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../withholdingtax/xxx/unauthorized
+
+ /withholdingtax/{id}/unauthorized:
+  get:
+   tags:
+    - "withholdingtax"
+   summary: "Retrives the withholdingtax by given ID."
+   description:  "Retrives the withholdingtax identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the withholdingtax based on given id."
+     schema:
+       $ref: "#/definitions/LmxTmInterestmapCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../withholdingtax/xxx/history
+
+ /withholdingtax/{id}/history:
+  get:
+   tags:
+    - "withholdingtax"
+   summary: "Retrives the withholdingtax by given ID."
+   description:  "Retrives the withholdingtax by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the withholdingtax based on given id."
+     schema:
+       $ref: "#/definitions/LmxTmInterestmapCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /withholdingtax/buildadvantageinterestpool/{todayDate}: 
+  post:
+   tags:
+    - "withholdingtax"
+   summary: "Save the total child amount in ICTBLmChildSumInt table."
+   description:  "Save the total child amount in ICTBLmChildSumInt table."
+   operationId: "buildAdvantageInterestPool"
+   parameters:
+    - name: "todayDate"
+      in: "path"
+      description: "Today Date of the header branch"
+      required: true
+      type: "string"   
+    - name: "LmmTmStructureDto" 
+      in: "body" 
+      description: "Request Body that contains StructureMasterDTO" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmStructureDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created withholdingtax" 
+       type: "string"
+     schema:
+      $ref: "#/definitions/ICTBLmChildSumIntDTOCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"     
+definitions:
+ LmxTmInterestmapDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     headerAc:
+      type: string
+      description: ""
+     headerAcIcgrp:
+      type: string
+      description: ""
+     internalIcgrp:
+      type: string
+      description: ""
+     structureId:
+      type: string
+      description: ""
+     LmxTmInterestmapDetDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterestmapDetDTO'
+ LmxTmInterestmapDetDTO:
+  type: object
+  properties:
+     childAcIcprd:
+      type: string
+      description: ""
+     childFormulaNo:
+      type: number
+      description: ""
+     drcr:
+      type: string
+      description: ""
+     headerAcIcprd:
+      type: string
+      description: ""
+     headerFormulaNo:
+      type: number
+      description: ""
+     id:
+      type: string
+      description: ""
+     interestmapMasterId:
+      type: string
+      description: ""
+     childAccountNo:
+      type: string
+      description: ""      
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmxTmInterestmapCollection: 
+  description: "Collection of interestmap."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmxTmInterestmapDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmxTmInterestmapWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmxTmInterestmapDTO"
+ LmxTmInterestmapDetDTOCollection:
+  description: "Collection of InterestMapDetails."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmxTmInterestmapDetDTO"
+ ICTBLmChildSumIntDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""  
+     headerAcc:
+      type: string
+      description: ""
+     valueDate:
+      type: string
+      description: ""
+     frmNo:
+      type: number
+      description: ""
+     drcr:
+      type: string
+      description: ""
+     childSum:
+      type: number
+      description: ""
+ LmmTmStructureDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     structureId:
+      type: string
+      description: ''
+     structureDescription:
+      type: string
+      description: ''
+     customerId:
+      type: string
+      description: ''
+     customerName:
+      type: string
+      description: ''
+     numberOfAccountsLinked:
+      type: integer
+      description: ''
+     structureType:
+      type: string
+      description: ''
+     struturePriority:
+      type: integer
+      description: ''
+      minimum: 1
+      maximum: 99
+     effectiveDate:
+      type: string
+      description: ''
+     endDate:
+      type: string
+      description: ''
+     headerAccountNumber:
+      type: string
+      description: ''
+     headerBranchCode:
+      type: string
+      description: ''
+     headerCurrency:
+      type: string
+      description: ''
+     multiBankFlag:
+      type: string
+      description: ''
+     crossBorderFlag:
+      type: string
+      description: ''
+     crossCurrencyFlag:
+      type: string
+      description: ''
+     balanceType:
+      type: string
+      description: ''
+     structureFrequency:
+      type: string
+      description: ''
+     currencyRateType:
+      type: string
+      description: ''
+     allowSweepOnCurrencyHol:
+      type: string
+      description: ''
+     interestMethod:
+      type: string
+      description: ''
+     ratePickUp:
+      type: string
+      description: ''
+     nextRunDate:
+      type: string
+      description: ''
+     eodExecution:
+      type: string
+      description: ''
+     reverseFrequency:
+      type: string
+      description: ''
+     instructionType:
+      type: string
+      description: ''
+     reallocationMethod:
+      type: string
+      description: ''
+     holidayTreatment:
+      type: string
+      description: ''
+     maxBackwardDays:
+      type: integer
+      description: ''
+     backwardTreatment:
+      type: string
+      description: ''
+     centralAccountNumber:
+      type: string
+      description: ''
+     centralAccountBranch:
+      type: string
+      description: ''
+     centralAccountCurrency:
+      type: string
+      description: ''
+     nextRunDateReverse:
+      type: string
+      description: ''
+     prevRunDateReverse:
+      type: string
+      description: ''
+     structureStatus:
+      type: string
+      description: ''
+     investmentSweep:
+      type: string
+      description: ''
+     considerPostSweepBalance:
+      type: string
+      description: ''
+     fxRatePickup:
+      type: string
+      description: ''
+     limitTrackingFlag:
+      type: string
+      description: ''
+     sourceSystem:
+      type: string
+      description: ''
+     systemAccountNumber:
+      type: string
+      description: ''
+     systemAccountBranch:
+      type: string
+      description: ''
+     systemAccountCurrency:
+      type: string
+      description: ''
+     pauseStartDate:
+      type: string
+      description: ''
+     pauseEndDate:
+      type: string
+      description: ''
+     LmmTmStructureDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmStructureDetailsDTO'
+     LmmTmStructureAccountsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmStructureAccountsDTO'
+      required:
+      - id
+      - structureId
+ LmmTmStructureDetailsDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureMasterId:
+    type: string
+    description: ''
+   accountNumber:
+    type: string
+    description: ''
+   branchCode:
+    type: string
+    description: ''
+   accountCurrency:
+    type: string
+    description: ''
+   isExternal:
+    type: string
+    description: ''
+   acyAvailableBal:
+    type: number
+    description: ''
+   bankCode:
+    type: string
+    description: ''
+   countryId:
+    type: string
+    description: ''
+   cityId:
+    type: string
+    description: ''
+   isNotional:
+    type: string
+    description: ''
+   accCategory:
+    type: string
+    description: ''
+   parentAccountNumber:
+    type: string
+    description: ''
+   parentAccountBranch:
+    type: string
+    description: ''
+   parentAccountCurrency:
+    type: string
+    description: ''
+   bookingAccountNumber:
+    type: string
+    description: ''
+   bookingAccountBranch:
+    type: string
+    description: ''
+   bookingAccountCurrency:
+    type: string
+    description: ''
+   rateType:
+    type: string
+    description: ''
+   accountType:
+    type: string
+    description: ''
+   sweepPriority:
+    type: integer
+    description: ''
+   isTwoWay:
+    type: string
+    description: ''
+   reverseSweepFrequency:
+    type: string
+    description: ''
+   twowaySweepPriority:
+    type: integer
+    description: ''
+   onlineBalanceFetch:
+    type: string
+    description: ''
+   partialReverseSweep:
+    type: string
+    description: ''
+   isHold:
+    type: string
+    description: ''
+   eodExecution:
+    type: string
+    description: ''
+   ratePickUp:
+    type: string
+    description: ''
+   reallocationRequired:
+    type: string
+    description: ''
+   reallocationMethod:
+    type: string
+    description: ''
+   allowReverseSweep:
+    type: string
+    description: ''
+   isNominatedAccount:
+    type: string
+    description: ''
+   accountLevel:
+    type: integer
+    description: ''
+   centralAccountNumber:
+    type: string
+    description: ''
+   centralAccountBranch:
+    type: string
+    description: ''
+   centralAccountCurrency:
+    type: string
+    description: ''
+   percentageShare:
+    type: integer
+    description: ''
+   percentageChildShare:
+    type: integer
+    description: ''
+   partialTransferAllowed:
+    type: string
+    description: ''
+   oneWayAccountGroup:
+    type: string
+    description: ''
+   twoWayAccountGroup:
+    type: string
+    description: ''
+   LmmTmStructureInstructionDTO:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmStructureInstructionDTO'
+   LmmTmStructurePaymentDTO:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmStructurePaymentDTO'
+   LmmTmStructureAccPriorityDTO:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmStructureAccPriorityDTO'
+    required:
+    - structureMasterId
+ LmmTmStructureAccountsDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureMasterId:
+    type: string
+    description: ''
+   accountNumber:
+    type: string
+    description: ''
+   accountBranch:
+    type: string
+    description: ''
+   accountCurrency:
+    type: string
+    description: ''
+   isExternal:
+    type: string
+    description: ''
+   isNotional:
+    type: string
+    description: ''
+   accCategory:
+    type: string
+    description: ''
+   accountType:
+    type: string
+    description: ''
+   acyAvailableBal:
+    type: number
+    description: ''
+   bankCode:
+    type: string
+    description: ''
+   countryId:
+    type: string
+    description: ''
+   cityId:
+    type: string
+    description: ''
+   region:
+    type: string
+    description: ''
+   isSelected:
+    type: string
+    description: ''
+ LmmTmStructureAccPriorityDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureId:
+    type: string
+    description: ''
+   accountNumber:
+    type: string
+    description: ''
+   structureDetailsId:
+    type: string
+    description: ''
+   structureMasterId:
+    type: string
+    description: ''
+   structurePriority:
+    type: integer
+    description: ''
+   versionNo:
+    type: integer
+    description: ''
+ LmmTmStructureAccPrtyCollection:
+  description: Collection of externalsystem.
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmStructureAccPriorityDTO'
+   paging:
+     $ref: '#/definitions/PagingDto'
+ LmmTmStructureInstructionDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureDetailsId:
+    type: string
+    description: ''
+   instructionId:
+    type: string
+    description: ''
+   instrDesc:
+    type: string
+    description: ''
+   instructionPriority:
+    type: integer
+    description: ''
+ LmmTmStructureInstructionFrequencyDTO:
+  type: array
+  items:
+   $ref: '#/definitions/LmmTmStructureInstructionFrequencyDTO'
+ LmmTmStructureInstructionDetDTO:
+  type: array
+  items:
+   $ref: '#/definitions/LmmTmStructureInstructionDetDTO'
+   required:
+   - structureDetailsId
+ LmmTmStructureInstructionFrequencyDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureInstructionId:
+    type: string
+    description: ''
+   frequencyId:
+    type: string
+    description: ''
+   freqDesc:
+    type: string
+    description: ''
+    required:
+    - structureInstructionId
+ LmmTmStructureInstructionDetDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureInstructionId:
+    type: string
+    description: ''
+   paramName:
+    type: string
+    description: ''
+   paramValue:
+    type: string
+    description: ''
+    required:
+    - structureInstructionId
+ LmmTmStructurePaymentDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureDetailsId:
+    type: string
+    description: ''
+   sweepDirection:
+    type: string
+    description: ''
+   interfaceMasterId:
+    type: string
+    description: ''
+ LmmTmStructurePaymentDetailDTO:
+  type: array
+  items:
+   $ref: '#/definitions/LmmTmStructurePaymentDetailDTO'
+   required:
+    - structureDetailsId
+ LmmTmStructurePaymentDetailDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structurePaymentId:
+    type: string
+    description: ''
+   paramName:
+    type: string
+    description: ''
+   paramValue:
+    type: string
+    description: ''
+    required:
+    - structurePaymentId
+ ICTBLmChildSumIntDTOCollection: 
+  description: "Collection of interestmap."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ICTBLmChildSumIntDTO"

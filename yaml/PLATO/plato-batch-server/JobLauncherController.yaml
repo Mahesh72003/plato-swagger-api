@@ -1,0 +1,177 @@
+swagger: "2.0"
+info:
+  description: "This service provides the centralized PLATO Batch Server features."
+  version: "1.0.0"
+  title: "PLATO Batch Server"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PLATO Batch Server"
+    description: "This is the PLATO Batch Server."
+schemes:
+- "http"
+
+paths:
+  /jobLauncher/launch/:
+    post:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Launches a new job with given parameters as specified in the body."
+      description: "Launches a new job with given parameters as specified in the body."
+      operationId: "run"
+      parameters:
+        - name: "job"
+          in: "body"
+          description: "Request Body that contains data required for launching a new job"
+          required: true
+          schema:
+            $ref: "#/definitions/JobDetailModel"
+      responses:
+        201:
+          description: "Success Message"
+          schema:
+              $ref: "#/definitions/ResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /jobLauncher/launch/{taskName}:
+    post:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Launches the existing task specified in the path parameter."
+      description: "Launches the existing task specified in the path parameter."
+      parameters:
+        - name: "taskName"
+          in: "path"
+          description: "jobName of the task that needs to be launched"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "Success Message"
+          schema:
+              $ref: "#/definitions/ResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /jobLauncher/callback:
+    post:
+      tags:
+        - "PLATO Batch Server"
+      summary: "Gives the status of jobs launced."
+      description: "Gives the status of jobs launced."
+      operationId: "callback"
+      parameters:
+        - name: "job"
+          in: "body"
+          description: "Request Body that contains data required for updating a job"
+          required: true
+          schema:
+            $ref: "#/definitions/JobDetailModel"
+      responses:
+        200:
+          description: "Success Message"
+          schema:
+            $ref: "#/definitions/CustomResponseDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  JobParameterModel:
+    description: "Job Parameter model"
+    type: "object"
+    properties:
+      key:
+        description: "Key of Job Parameter"
+        type: "string"
+      value:
+        description: "Value of Job Parameter"
+        type: "string"
+  JobDetailModel:
+    description: "Details of jobs."
+    type: "object"
+    properties:
+      jobName:
+        description: "Name of Job"
+        type: "string"
+      jobParameters:
+        type: "array"
+        items:
+          $ref: "#/definitions/JobParameterModel"
+  ResponseCode:
+    type: object
+    properties:
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+      information:
+        type: boolean
+      override:
+        type: boolean
+      error:
+        type: boolean
+      overrideAuthLevelsReqd:
+        type: string
+      type:
+        type: string
+      desc:
+        type: string
+      code:
+        type: string
+      language:
+        type: string
+  ResponseDto:
+    description: "Response entity model"
+    type: "object"
+    properties:
+      keyId:
+        type: "string"
+      status:
+        type: "string"
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: "string"
+      httpStatusCode:
+        type: "string"
+      overrideAuthLevelsReqd:
+        type: "string"
+  CustomResponseDTO:
+    description: "CustomResponseDTO model"
+    type: "object"
+    properties:
+      status:
+        description: "Status of Job"
+        type: "string"
+      message:
+        description: "Error message if failed"
+        type: "string"
+      errorCode:
+        description: "Error code if failed"
+        type: "string"

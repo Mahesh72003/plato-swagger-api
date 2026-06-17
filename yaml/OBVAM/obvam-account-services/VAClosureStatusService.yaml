@@ -1,0 +1,432 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Service API for Virtual Account Closure Request Status." 
+ version: "1.0.0"
+ title: "virtual account closure request status"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "vaclosurestatusservice"
+   description: "This Service API is used to track the status of Virtual Account Closure Request"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supported http methods POST and GET
+#
+# path example ../vaclosurestatus
+
+ /service/vaclosurestatus:
+  get:
+   tags:
+    - "vaclosurestatusservice"
+   summary: "Get all the Virtual account closure request status records"
+   description:  "This endpoint will be used to Get all the virtual accounts for which closure request is initiated"
+   operationId: "getVAClosureStatus"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: customerID
+     required: false
+     type: string    
+   - in: query
+     name: virtualAccountNo
+     required: false
+     type: string
+   - in: query
+     name: virtualAccountName
+     required: false
+     type: string
+   - in: query
+     name: ibanAccNo
+     required: false
+     type: string
+   - in: query
+     name: fromDate
+     required: false
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+   - in: query
+     name: toDate
+     required: false
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"   
+   - in: query
+     name: closureStatus
+     required: false
+     type: string
+   - in: query
+     name: sourceReferenceNo
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns virtual account closure request status records"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VAClosureStatusServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error" 
+
+ /service/vaclosurestatus/process:
+   get:
+     tags:
+       - "vaclosurestatusservice"
+     summary: "Get the sequence of processes happened as part of virtual account closure"
+     description:  "Get the sequence of process and the status of each process involved in account closure for the given virtual account number"
+     operationId: "getVAClosureProcessLog"
+     parameters:
+       - name: virtualAccountNo
+         in: query
+         description: virtual account number for which latest closure status should be fetched
+         required: false
+         type: string
+       - in: query
+         description: IBAN number for which latest closure status should be fetched
+         name: ibanAccNo
+         required: false
+         type: string
+     responses:
+       201:
+         description: "Returns the list of processes involved in virtual account closure for the given virtual account"
+         headers:
+           Location:
+             description: ""
+             type: "string"
+         schema:
+           $ref: "#/definitions/VAClosureStatusDetailWrapperDTO"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+
+ /service/vaclosurestatus/{sourceReferenceNo}/{virtualAccountNo}/retry:
+  patch:
+   tags:
+    - "vaclosurestatusservice"
+   summary: "Retry virtual account closure request"
+   description:  "If any virtual account closure request is failed, the same can be retried using this endpoint"
+   operationId: "retryClose"
+   parameters:
+    - name: "sourceReferenceNo"
+      in: "path"
+      description: "Source reference number of virtual account closure request"
+      required: true
+      type: "string"  
+    - name: "virtualAccountNo"
+      in: "path"
+      description: "Virtual account number for which closure request is retried"
+      required: true
+      type: "string"  
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VAClosureStatusServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/vaclosurestatus/{sourceReferenceNo}/{virtualAccountNo}/abort:
+  patch:
+   tags:
+    - "vaclosurestatusservice"
+   summary: "Abort virtual account closure request"
+   description:  "Virtual account closure request can be aborted using this endpoint"
+   operationId: "abortClosure"
+   parameters:
+    - name: "sourceReferenceNo"
+      in: "path"
+      description: "Source reference number of virtual account closure request"
+      required: true
+      type: "string"  
+    - name: "virtualAccountNo"
+      in: "path"
+      description: "Virtual account number for which closure request is retried"
+      required: true
+      type: "string"  
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VAClosureStatusServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+             
+definitions:      
+ VAClosureStatusServiceDTO:
+  type: object
+  properties:     
+     referenceNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request submission"
+     sourceReferenceNo:
+      type: string
+      description: "Source reference number of Virtual Account Closure Request submission"     
+     customerID:
+      type: string
+      description: "Customer ID of the virtual account number"
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which closure is requested"
+     virtualAccountName:
+      type: string
+      description: "Name of the virtual account number"
+     ibanAccNo:
+      type: string
+      description: "International Bank Account Number"      
+     closureStatus:
+      type: string
+      description: "Closure status of virtual account number" 
+     initDate:
+      type: string
+      description: "If any process fails during virtual account closure, then reason for failure will be captured"
+     branchName:
+      type: string
+      description: "Name of the Branch for Virtual Account"
+      minimum: 0
+      maximum: 105
+ 
+ VAClosureStatusDetailDTO:
+  type: object
+  properties:
+     keyId:
+      type: string
+      description: "ID of Virtual Account Closure Request Status"
+     referenceNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request submission"
+     sourceReferenceNo:
+      type: string
+      description: "Source reference number of Virtual Account Closure Request submission"     
+     customerID:
+      type: string
+      description: "Customer ID of the virtual account number"
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which closure is requested"
+     virtualAccountName:
+      type: string
+      description: "Name of the virtual account number"
+     ibanAccNo:
+      type: string
+      description: "International Bank Account Number"      
+     nextProcess:
+      type: string
+      description: "Next process in virtual account closure procedure"
+     closureStatus:
+      type: string
+      description: "Closure status of virtual account number"
+     initDate:
+      type: string
+      description: "Date on which account closure request is initiated"     
+     VAClosureStatusLogDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VAClosureStatusLogDTO'
+       
+ VAClosureStatusLogDTO:
+  type: object
+  properties:    
+     id:
+      type: string
+      description: "ID of Virtual Account Closure Status Log"  
+     referenceNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request"
+     virtualAccountNo:
+      type: string
+      description: "Virtual account number for which closure is initiated"
+     process:
+      type: string
+      description: "Process that executed as part of virtual account closure procedure"
+     processName:
+       type: string
+       description: "Process that executed as part of virtual account closure procedure"
+     processStatus:
+      type: string
+      description: "Allowed values for process status is success, failed or waiting"
+     VAClosureStatusError:
+      type: array
+      items:
+       $ref: '#/definitions/VAClosureStatusErrorDTO'
+       
+ VAClosureStatusErrorDTO:
+  type: object
+  properties:    
+     errorCode:
+      type: string
+      description: "Error code"
+     errorDesc:
+      type: string
+      description: "Error Description"
+     addtionalDescription:
+       type: string
+       description: "Additional description for the error"
+       
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type 
+ 
+ VAClosureStatusDetailWrapperDTO: 
+  description: "Collection of Virtual Account Closure Status log."
+  type: "object"
+  properties:
+   messages:
+    $ref: "#/definitions/VAClosureStatusServiceResponseDTO"
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VAClosureStatusDetailDTO"
+     
+ VAClosureStatusServiceCollection: 
+  description: "Collection of Virtual Account Closure Status records."
+  type: "object"
+  properties:
+   messages:
+    $ref: "#/definitions/VAClosureStatusServiceResponseDTO"
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VAClosureStatusServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ VAClosureStatusServiceWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VAClosureStatusServiceResponseDTO"
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/VAClosureStatusServiceDTO"
+ VAClosureStatusServiceResponseDTO:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VAClosureStatusServiceResponseCode"
+ VAClosureStatusServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string

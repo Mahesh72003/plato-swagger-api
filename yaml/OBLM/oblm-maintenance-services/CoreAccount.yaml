@@ -1,0 +1,776 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server coreaccounts server." 
+ version: "1.0.0"
+ title: "coreaccounts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "coreaccounts"
+   description: "This service is used to maintain external accounts for customers and maps the source system account number to external account maintained.It give us options to specify various parameters of the account like account is active or not credit or debit is allowed or not etc."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../coreaccounts
+
+ /coreaccounts:
+  post:
+   tags:
+    - "coreaccounts"
+   summary: "Adds a new coreaccounts."
+   description: "Adds a new coreaccounts. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "coreaccounts" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new coreaccounts" 
+      required: true
+      schema:
+       $ref: "#/definitions/CoreAccountDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created coreaccounts" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "coreaccounts"
+   summary: "Get all valid coreaccounts."
+   description:  "Get all valid coreaccounts. This endpoints will be used to Get all valid coreaccounts maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: countryCode
+     required: false
+     type: string
+   - in: query
+     name: address1
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: accountClass
+     required: false
+     type: string
+   - in: query
+     name: acStatDormant
+     required: false
+     type: string
+   - in: query
+     name: acStatFrozen
+     required: false
+     type: string
+   - in: query
+     name: glStatBlocked
+     required: false
+     type: string
+   - in: query
+     name: acStatNoDr
+     required: false
+     type: string
+   - in: query
+     name: acStatNoCr
+     required: false
+     type: string
+   - in: query
+     name: custAcName
+     required: false
+     type: string
+   - in: query
+     name: custAcCcy
+     required: false
+     type: string
+   - in: query
+     name: customerNo
+     required: false
+     type: string
+   - in: query
+     name: sourceSystemAccBrn
+     required: false
+     type: string
+   - in: query
+     name: sourceSystemAccNo
+     required: false
+     type: string
+   - in: query
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query
+     name: custAcIban
+     required: false
+     type: string
+   - in: query
+     name: hostCode
+     required: false
+     type: string
+   - in: query
+     name: custAccountNo
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../coreaccounts/xxx
+#   DELETE    .../coreaccounts/xxx
+#   GET       .../coreaccounts/xxx
+#   GET       .../coreaccounts/xxx?version=latestrecord
+#   GET       .../coreaccounts/xxx?version=1
+
+ /coreaccounts/{id}:
+  put:
+   tags:
+    - "coreaccounts"
+   summary: "Update an existing coreaccounts."
+   description:  "Update an existing coreaccounts."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the coreaccounts Maintenance"
+      required: true
+      type: "string"
+    - name: "coreaccounts"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing coreaccounts"
+      required: true
+      schema:
+       $ref: "#/definitions/CoreAccountDTO"
+   responses:
+    200:
+     description: "Returns updated coreaccounts"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "coreaccounts"
+   summary: "Retrieves the coreaccounts by ID."
+   description:  "Retrieves the coreaccounts by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the coreaccounts based on given id."
+     schema:
+      $ref: "#/definitions/CoreAccountWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "coreaccounts"
+   summary: "Deletes the coreaccounts identified by given ID."
+   description:  "Deletes the coreaccounts identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the coreaccounts maintenance"
+      required: true
+      type: "string"
+    - name: "coreaccounts"
+      in: "body"
+      description: Request body contain coreaccounts and Modification no of coreaccounts maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coreaccounts/xxx/approve
+
+ /coreaccounts/{id}/approve:
+  patch:
+   tags:
+    - "coreaccounts"
+   summary: "Authorize the coreaccounts by given ID."
+   description:  "Authorize the coreaccounts identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the coreaccounts maintenance"
+      required: true
+      type: "string"
+    - name: "coreaccounts"
+      in: "body"
+      description: Request body contain coreaccounts and Modification no of coreaccounts maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coreaccounts/xxx/close
+ /coreaccounts/{id}/close:
+  patch:
+   tags:
+    - "coreaccounts"
+   summary: "Close the coreaccounts by given ID."
+   description:  "Close the coreaccounts identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the coreaccounts maintenance"
+      required: true
+      type: "string"
+    - name: "coreaccounts"
+      in: "body"
+      description: Request body contain coreaccounts and Modification no of coreaccounts maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coreaccounts/xxx/reopen
+
+ /coreaccounts/{id}/reopen:
+  patch:
+   tags:
+    - "coreaccounts"
+   summary: "reopen the coreaccounts by given ID."
+   description:  "reopen the coreaccounts identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the coreaccounts maintenance"
+      required: true
+      type: "string"
+    - name: "coreaccounts"
+      in: "body"
+      description: Request body contain coreaccounts and Modification no of coreaccounts maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../coreaccounts/xxx/unauthorized
+
+ /coreaccounts/{id}/unauthorized:
+  get:
+   tags:
+    - "coreaccounts"
+   summary: "Retrives the coreaccounts by given ID."
+   description:  "Retrives the coreaccounts identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the coreaccounts based on given id."
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../coreaccounts/xxx/history
+
+ /coreaccounts/{id}/history:
+  get:
+   tags:
+    - "coreaccounts"
+   summary: "Retrives the coreaccounts by given ID."
+   description:  "Retrives the coreaccounts by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the coreaccounts based on given id."
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /coreaccounts/unauthorizedcount:
+  get:
+   tags:
+    - "coreaccounts"
+   summary: "Retrives the unauthorized core account records."
+   description:  "Retrives the unauthorized core account records."
+   operationId: "getUnauthorizedCount"
+   responses:
+    200:
+     description: "Returns unauthorized core account records."
+     schema:
+       type: integer
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CoreAccountDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     countryCode:
+      type: string
+      description: "Country Code"
+      minLength: 0
+      maxLength: 4
+     address4:
+      type: string
+      description: "Fourth line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address3:
+      type: string
+      description: "Third line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address2:
+      type: string
+      description: "Second line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     address1:
+      type: string
+      description: "First line of the customer?s address"
+      minLength: 0
+      maxLength: 105
+     ecaCheckReq:
+      type: string
+      description: "Indicates that ECA check is required for the external customer account"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     accountClass:
+      type: string
+      description: "Account class of the external customer account. It can be Normal account or Nostro account"
+     acStatDormant:
+      type: string
+      description: "Indicates that the account status is dormant"
+      minLength: 1
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatFrozen:
+      type: string
+      description: "Indicate that the account status is frozen"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     glStatBlocked:
+      type: string
+      description: "Indicates that the account status is blocked"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatNoDr:
+      type: string
+      description: "Indicates that the account does not have any debit facility"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acStatNoCr:
+      type: string
+      description: "Indicates that the account does not have any credit facility"
+      minLength: 0
+      maxLength: 1
+      pattern: '[Y,N]'
+     acOpenDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "The date on which account is being opened"
+     custAcName:
+      type: string
+      description: "Name of the account holder"
+      minLength: 0
+      maxLength: 105
+      pattern: '[a-zA-Z0-9\s]+'
+     custAcCcy:
+      type: string
+      description: "Currency in which the account is being created"
+     customerNo:
+      type: string
+      description: "Customer number to which the account number is being linked"
+     sourceSystemAccBrn:
+      type: string
+      description: "Branch to which the account belongs to"
+     sourceSystemAccNo:
+      type: string
+      description: "Account number as in the source system"
+      minLength: 0
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     custAcIban:
+      type: string
+      description: "IBAN that is linked to the customer"
+      minLength: 0
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     hostCode:
+      type: string
+      description: "The host code that is linked to the logged in user of the branch."
+     custAccountNo:
+      type: string
+      description: "Account number of the External customer"
+      minLength: 1
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+    required:
+     - custAcName
+     - customerNo
+     - sourceSystemAccBrn
+     - sourceSystemAccNo
+     - sourceSystem
+     - hostCode
+     - custAccountNo
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CoreAccountCollection: 
+  description: "Collection of coreaccount."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CoreAccountDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CoreAccountWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CoreAccountDTO"
+ StepStatusUpdateDto:
+  type: object
+  properties:
+     id:
+      type: string
+     branchId:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currentDate:
+      type: string
+     jobId:
+      type: string
+     stepId:
+      type: string
+     action:
+      type: string
+     status:
+      type: string
+     statusDescription:
+      type: string
+      
+ InvokeForgetBatchDTO:
+  type: object
+  properties:
+     retentionPeriod:
+      type: number
+     branchCode:
+      type: string
+     eodDate:
+      type: string
+     eodId:
+      type: string
+     eodJobId:
+      type: string
+     eodStepId:
+      type: string

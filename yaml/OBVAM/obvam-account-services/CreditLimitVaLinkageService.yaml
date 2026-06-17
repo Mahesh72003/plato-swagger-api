@@ -1,0 +1,479 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server creditlimitlinkage server." 
+ version: "1.0.0"
+ title: "creditlimitlinkage"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "creditlimitlinkageService"
+   description: "This Web API is used to link Internal credit limit to a virtual account. Limit amount can either be mentioned in amount or percentage. During balance calculation, this maintenance will also be included to arrive at effective available balance."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../creditlimitlinkage
+
+ /service/creditlimitlinkage:
+  post:
+   tags:
+    - "creditlimitlinkageService"
+   summary: "Adds a new creditlimitlinkage."
+   description: "Adds a new creditlimitlinkage. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "creditlimitlinkage" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new creditlimitlinkage" 
+      required: true
+      schema:
+       $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created creditlimitlinkage" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "creditlimitlinkageService"
+   summary: "Get all valid creditlimitlinkage."
+   description:  "Get all valid creditlimitlinkage. This endpoints will be used to Get all valid creditlimitlinkage maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: creditLimitLinkage
+     in: query
+     description: credit limit linkage option Percentage or Amount - P/A
+     required: false
+     type: string
+   - name: lineId
+     in: query
+     description: line id which is linked to virtual account
+     required: false
+     type: string
+   - name: linkageValue
+     in: query
+     description: linkage value
+     required: false
+     type: number
+   - name: realCustomerNo
+     in: query
+     description: Real Customer Number
+     required: false
+     type: string
+   - name: virtualAccountNo
+     in: query
+     description: Virtual Account Number
+     required: false
+     type: string
+   - name: recordStat
+     required: false
+     type: string
+     in: query
+     description: Record Status
+   - name: authStat
+     required: false
+     type: string
+     in: query
+     description: Auth Status
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/creditlimitlinkage/{lineId}/{virtualAccountNo}:
+  put:
+   tags:
+    - "creditlimitlinkageService"
+   summary: "Update an existing creditlimitlinkage."
+   description:  "Update an existing creditlimitlinkage."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string    
+    - name: "lineId"
+      in: "path"
+      description: "the line id of the credit linkage"
+      required: true
+      type: "string"
+    - name: "virtualAccountNo"
+      in: "path"
+      description: "the virtual account number defined for the linkage"
+      required: true
+      type: "string"
+    - name: "dto"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing creditlimitlinkage"
+      required: true
+      schema:
+       $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceDTO"
+   responses:
+    200:
+     description: "Returns updated creditlimitlinkage"
+     schema:
+      $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/creditlimitlinkage/{lineId}/{virtualAccountNo}/close:
+  patch:
+   tags:
+    - "creditlimitlinkageService"
+   summary: "Close the creditlimitlinkage by given ID."
+   description:  "Close the creditlimitlinkage identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string    
+    - name: "lineId"
+      in: "path"
+      description: "the line id of the credit linkage"
+      required: true
+      type: "string"
+    - name: "virtualAccountNo"
+      in: "path"
+      description: "the virtual account number defined for the linkage"
+      required: true
+      type: "string"
+    - name: "LinkageCloseDto"
+      in: "body"
+      description: Request body contain creditlimitlinkage and Modification no of creditlimitlinkage maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/LinkageCloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ VamTmCreditLimitVaLinkageServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string
+     creditLimitLinkage:
+      type: string
+      description: ""
+      pattern: '[A,P]'
+      default: 'A'
+     lineId:
+      type: string
+      description: "Line Id"
+      minLength: 3
+      maxLength: 20
+      pattern: '([A-Z0-9\s]+)?'
+     lineCcy:
+      type: string
+      description: ""
+     linkageValue:
+      type: number
+      description: ""
+     realCustomerNo:
+      type: string
+      description: ""
+     virtualAccountNo:
+      type: string
+      description: ""
+     virtualAccCcy:
+      type: string
+      description: ""
+    required:
+     - realCustomerNo
+     - virtualAccountNo
+     - lineId
+     - creditLimitLinkage
+ VamTmCreditLimitVaLinkageGetServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     creditLimitLinkage:
+      type: string
+      description: ""
+      pattern: '[A,P]'
+      default: 'A'
+     lineId:
+      type: string
+      description: "Line Id"
+      minLength: 3
+      maxLength: 20
+      pattern: '([A-Z0-9\s]+)?'
+     lineCcy:
+      type: string
+      description: "Line Currency"
+     linkageValue:
+      type: number
+      description: "Linkage Value"
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number"
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account Number"
+     virtualAccCcy:
+      type: string
+      description: "Virtual Account Currency"
+     makerId:
+      type: string
+      description: "Maker ID of Linkage"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Linkage is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of linkage"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Linkage is authorized"
+     modNo:
+      type: integer
+      description: "Version number of linkage"
+     recordStatus: 
+      type: string
+      description: "Record Status of linkage"
+     authStatus:
+      type: string
+      description: "Authorization Status of Virtual Account"
+     onceAuth:
+      type: string
+      description: "Flag that indicated if linkage is authorized once or not"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string 
+      description: "Remarks made by Approver"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VamTmCreditLimitVaLinkageServiceCollection: 
+  description: "Collection of creditlimitvalinkage."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VamTmCreditLimitVaLinkageGetServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ LinkageCloseDto:
+  type: object
+  properties:
+   remarks:
+    type: string
+ ResponseResourceSupport:
+  type: object
+ VamTmCreditLimitVaLinkageServiceWrapperDTO:
+  type: object
+  properties:
+    messages:
+     $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceResponseDto"
+    data:
+     $ref: "#/definitions/VamTmCreditLimitVaLinkageGetServiceDTO"
+ VamTmCreditLimitVaLinkageServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ VamTmCreditLimitVaLinkageServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VamTmCreditLimitVaLinkageServiceResponseCode"

@@ -1,0 +1,691 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ECABlockService.yaml
+#  **
+#  ** Module     : obvam amount block
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  swetha hp
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+ 
+ 
+swagger: "2.0"
+info:
+ description: "This is the service API used to Create, Delete, Query, Release ECA Block. ECA Block blocks/holds certain amount for further use" 
+ version: "1.0.0"
+ title: "ecaBlock Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ECABlockService"
+   description: "ecablock Service allows to block amount on virtual accounts"
+ 
+schemes:
+- "https"
+ 
+paths:
+ 
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../ecablock
+ 
+ /service/ecablock:
+  post:
+   tags:
+    - "ECABlockService"
+   summary: "Adds a new ecaBlock."
+   description: "Adds a new ECA block. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "ecablock" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new ecaBlock" 
+      required: true
+      schema:
+       $ref: "#/definitions/ECABlockServiceMasterDTO"
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created ecaBlock" 
+       type: "string"
+     schema:
+       #$ref: "#/definitions/ResponseDtoWrapper"
+       $ref: "#/definitions/ECABlockServiceResponseDTO"
+    202:
+     description: "Accepted"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+  get:
+   tags:
+    - "ECABlockService"
+   summary: "Get all ecablock."
+   description:  "Get all ecablock. This endpoints will be used to Get all valid ecaBlock records."
+   operationId: "getAll"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: offset
+     in: query
+     description: "offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - in: query
+     description: "block reference number"
+     name: blockRefNo
+     required: false
+     type: string
+   - in: query
+     description: "date on which the block expires"
+     name: expiryDate
+     required: false
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+   - in: query
+     description: "date on which the block starts"
+     name: effectiveDate
+     required: false
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+   - in: query
+     description: "Auth Status of the Record"
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     description: "Transaction Status of the Block"
+     name: transactionStatus
+     required: false
+     type: string
+   - in: query
+     description: "Approver User name or Id"
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     description: "Maker User name or Id"
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     description: "Source Reference Number"
+     name: sourceRefNo
+     required: false
+     type: string
+   - in: query
+     description: "Transaction Branch"
+     name: txnBranch
+     required: false
+     type: string
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ECABlockMasterServiceCollection"
+    204:
+     description: "No Content."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+     
+ /service/ecablock/{blockRefNo}:
+  get:
+   tags:
+    - "ECABlockService"
+   summary: "Retrieves the ecablock by block reference number."
+   description:  "Retrieves the ecablock by ID."
+   operationId: "getByNaturalKey"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "blockRefNo"
+      in: "path"
+      description: "blockRefNo that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ecablock based on given id."
+     schema:
+      $ref: "#/definitions/ECABlockMasterServiceWrapperDTO"
+    204:
+     description: "No Content."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "ECABlockService"
+   summary: "Deletes the ecablock identified by given block reference number."
+   description:  "Deletes the ecablock identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "blockRefNo"
+      in: "path"
+      description: "blockRefNo of the ecablock maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ECABlockServiceResponseDTO"
+    202:
+     description: "Accepted"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/ecablock/{blockRefNo}/release:
+  patch:
+   tags:
+    - "ECABlockService"
+   summary: "Release the ecablock by given blockRefNo."
+   description:  "Release the ecablock identified by given blockRefNo."
+   operationId: "release"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "blockRefNo"
+      in: "path"
+      description: "blockRefNo of the ecablock maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ECABlockServiceResponseDTO"
+    202:
+     description: "Accepted"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"    
+ 
+
+definitions:
+ ECABlockServiceResponseDTO:
+  type: object
+  properties:
+    messages:
+      $ref: "#/definitions/ECAServiceResponseDto"
+    data:
+      $ref: "#/definitions/ECABlockServiceQueryMasterDTO"
+ 
+ 
+ ECAServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ ECAServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   httpStatusCode:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ECAServiceResponseCode"          
+      
+ ECABlockMasterServiceWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/ECABlockServiceQueryMasterDTO"
+      
+ ECABlockServiceQueryMasterDTO:
+  type: object
+  properties:
+     blockRefNo:
+      type: string
+      description: "Block Reference Number ECA number"
+     sourceCode:
+      type: string
+      description: "Source from which request for placing block amounts on these accounts"
+      minLength: 1
+      maxLength: 50
+     sourceRefNo:
+      type: string
+      description: "Reference number from the source"
+      minLength: 1
+      maxLength: 50
+     effectiveDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Effective Date from which block is valid"
+     expiryDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Expiry Date till which block is valid"
+     authStatus:
+      type: string
+      description: "Approval Status"
+      minLength: 1
+      maxLength: 1
+     transactionStatus:
+      type: string
+      description: "Block transaction status"
+      minLength: 1
+      maxLength: 1
+     txnBranch:
+      type: string
+      description: "Branch where this ECA block is created"
+      minLength: 1
+      maxLength: 3
+     failAllOnErr:
+      type: string
+      description: "Flag indicating whether to fail all accounts block processing if any one fails"
+      minLength: 1
+      maxLength: 1
+     checkerDtStamp:
+      type: string
+      description: "DateStamp of Authorization"
+     makerDtStamp:
+      type: string
+      description: "DateStamp of Making of the Transaction"
+     checkerId:
+      type: string
+      description: "User id of Authorizer"
+     makerId:
+      type: string
+      description: "User id of Maker"
+     amtBlkQueueReq:
+      type: string
+      description: "Flag to indicate if queue is required for Amount Block"
+     ECABlockServiceQueryDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ECABlockServiceQueryDetailDTO'
+  required:
+     - sourceCode
+     - effectiveDate
+     - expiryDate
+ ECABlockServiceQueryDetailDTO:
+  type: object
+  properties:
+     blockRefNo:
+      type: string
+      description: ""
+     virtualAccount:
+      type: string
+      description: "Virtual Account number for which block amount will be placed"
+      minLength: 1
+      maxLength: 50
+     virtualAccountCcy:
+      type: string
+      description: "Currency of the Virtual Account"
+      minLength: 3
+      maxLength: 3
+     requestedAmtInVaCcy:
+      type: number
+      description: "Requested Block Amount based on virtual account details"
+     approvedAmtInVaCcy:
+      type: number
+      description: "Approved Block Amount based on virtual account details"
+     excRateBlockccyVaccy:
+      type: number
+      description: "Exchange Rate specific to virtual Account Currency"
+     blockCcy:
+      type: string
+      description: "Currency in which block amount is placed on this account"
+      minLength: 1
+      maxLength: 3
+     requestedAmount:
+      type: number
+      description: "Requested amount for placing block on account"
+     approvedAmount:
+      type: number
+      description: "Approved amount for placing block on account"
+     releasedAmount:
+      type: number
+      description: "Released amount for placing block on account"
+     userInputRemarks:
+      type: string
+      description: "User input remarks"
+      minLength: 1
+      maxLength: 50
+     custAccBrn:
+      type: string
+      description: "Virtual Account branch for which block amount will be placed"
+      minLength: 1
+      maxLength: 3
+     outstandingBlockAmount:
+      type: number
+      description: "Current outstanding block amount on account"
+     partialBlockRequired:
+      type: string
+      description: "Flag describing if partial block is required or not "
+      minLength: 1
+      maxLength: 1
+     partialReleaseAllowed:
+      type: string
+      description: "Flag describing if partial release is allowed or not"
+      minLength: 1
+      maxLength: 1
+      default: Y
+     ecaBlkStatus:
+      type: string
+      description: ""
+      minLength: 1
+      maxLength: 10
+     lockedBy:
+      type: string
+      description: "Id of user who is holding the lock on this record currently"
+      minLength: 1
+      maxLength: 30
+     realAccountNo:
+      type: string
+      description: "Real account number of corresponding Virtual Account"
+     realAccountBrn:
+      type: string
+      description: "Real account branch of corresponding Virtual Account"
+     realAccCcy:
+      type: string
+      description: "Real account Currency of corresponding Virtual Account"
+     realAccClass:
+      type: string
+      description: "Real account class"
+     amtInRealAccCcy:
+      type: number
+      description: "Amount based on real account details"
+     excRateBlockccyRaccy:
+      type: number
+      description: "Exchange Rate specific to Real Account Currency"
+     accountType:
+      type: string
+      description: "Type of an account" 
+     ddaEcaRefNo:
+      type: string
+      description: "DDA ECA Reference Number"
+      minLength: 1
+      maxLength: 50
+     ecaSystemName:
+      type: string
+      description: "DDA System Name"
+      minLength: 1
+      maxLength: 50
+  required:
+   - virtualAccount
+   - custAccBrn
+   - blockCcy
+   - requestedAmount
+   
+ ECABlockServiceMasterDTO:
+  type: object
+  properties:
+     sourceCode:
+      type: string
+      description: "Source from which request for placing block amounts on these accounts"
+      minLength: 1
+      maxLength: 50
+     sourceRefNo:
+      type: string
+      description: "Reference number from the source"
+      minLength: 1
+      maxLength: 50
+     effectiveDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Effective Date from which block is valid"
+     expiryDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Expiry Date till which block is valid"
+     txnBranch:
+      type: string
+      description: "Branch where this ECA block is created"
+      minLength: 1
+      maxLength: 3
+     failAllOnErr:
+      type: string
+      description: "Flag indicating whether to fail all accounts block processing if any one fails"
+      minLength: 1
+      maxLength: 1
+     amtBlkQueueReq:
+      type: string
+      description: "Flag to indicate if queue is required for Amount Block"
+     ECABlockServiceDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ECABlockServiceDetailDTO'
+  required:
+     - sourceCode
+     - effectiveDate
+     - expiryDate
+ ECABlockServiceDetailDTO:
+  type: object
+  properties:
+     virtualAccount:
+      type: string
+      description: "Virtual Account number for which block amount will be placed"
+      minLength: 1
+      maxLength: 50
+     virtualAccountCcy:
+      type: string
+      description: "Currency of the Virtual Account"
+      minLength: 3
+      maxLength: 3
+     requestedAmtInVaCcy:
+      type: number
+      description: "Requested Block Amount based on virtual account details"
+     approvedAmtInVaCcy:
+      type: number
+      description: "Approved Block Amount based on virtual account details"
+     excRateBlockccyVaccy:
+      type: number
+      description: "Exchange Rate specific to virtual Account Currency"
+     blockCcy:
+      type: string
+      description: "Currency in which block amount is placed on this account"
+      minLength: 1
+      maxLength: 3
+     requestedAmount:
+      type: number
+      description: "Requested amount for placing block on account"
+     approvedAmount:
+      type: number
+      description: "Approved amount for placing block on account"
+     releasedAmount:
+      type: number
+      description: "Released amount for placing block on account"
+     userInputRemarks:
+      type: string
+      description: "User input remarks"
+      minLength: 1
+      maxLength: 50
+     custAccBrn:
+      type: string
+      description: "Virtual Account branch for which block amount will be placed"
+      minLength: 1
+      maxLength: 3
+     outstandingBlockAmount:
+      type: number
+      description: "Current outstanding block amount on account"
+     partialBlockRequired:
+      type: string
+      description: "Flag describing if partial block is required or not "
+      minLength: 1
+      maxLength: 1
+     partialReleaseAllowed:
+      type: string
+      description: "Flag describing if partial release is allowed or not"
+      minLength: 1
+      maxLength: 1
+      default: Y
+     ecaBlkStatus:
+      type: string
+      description: ""
+      minLength: 1
+      maxLength: 10
+     amtInRealAccCcy:
+      type: number
+      description: "Amount based on real account details"
+     excRateBlockccyRaccy:
+      type: number
+      description: "Exchange Rate specific to Real Account Currency"
+     accountType:
+      type: string
+      description: "Type of an account" 
+     ecaSystemName:
+      type: string
+      description: "DDA System Name"
+      minLength: 1
+      maxLength: 50
+  required:
+   - virtualAccount
+   - custAccBrn
+   - blockCcy
+   - requestedAmount
+
+ ECABlockMasterServiceCollection: 
+  description: "Collection of ecablock."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ECABlockServiceQueryMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+    
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string

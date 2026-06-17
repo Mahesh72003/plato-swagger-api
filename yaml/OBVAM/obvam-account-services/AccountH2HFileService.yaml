@@ -1,0 +1,586 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : AccountH2HFileService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna 
+#  Reviewed By        :  Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      : 
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is service API document for account products operations. Pass appId = VAM" 
+ version: "1.0.0"
+ title: "Account H2H File Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountH2HFileService"
+   description: "This service can create Corporate Specific Virtual Account products. These products are further used to create virtual accounts. Product level preferences must be enabled before enabling the preference for account."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../accountproducts
+
+ /service/account/parsefile:  
+  post:
+   consumes:
+   - multipart/form-data
+   - application/json
+   tags:
+     - AccountFileUpload
+   summary: Adds a new datasegment details.
+   description: Adds a new datasegment details.
+   operationId: parseFile
+   parameters:
+   - in: formData
+     name: upfile
+     type: file
+     description: The file to upload.
+   - name: fileDetailsDTO
+     in: formData
+     description: Request Body that contains data required for creating a new datasegment
+     required: true
+     type: string
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created accounts" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/account/parsefileAsync:  
+  post:
+   consumes:
+   - multipart/form-data
+   - application/json
+   tags:
+     - AccountFileUploadAsync
+   summary: Adds a new datasegment details.
+   description: Adds a new datasegment details.
+   operationId: parseFileAsync
+   parameters:
+   - in: formData
+     name: upfile
+     type: file
+     description: The file to upload.
+   - name: fileDetailsDTO
+     in: formData
+     description: Request Body that contains data required for creating a new datasegment
+     required: true
+     type: string
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created accounts" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/account/handoffProcess:  
+    post:
+      tags:
+        - HostAccount
+      summary: Adds a new File to obvam
+      description: Adds a new File to obvam. Add additional information here for this
+        endpoint.
+      operationId: processFile
+      parameters:
+        - name: fileDto
+          in: body
+          description: Fetches the starting number of the offset records
+          required: true
+          schema:
+            $ref: '#/definitions/FileDetailsDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: File Received
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+ /service/account/handoffAsync:  
+    post:
+      tags:
+        - HostAccountAsync
+      summary: Adds a new File to obvam
+      description: Adds a new File to obvam. Add additional information here for this
+        endpoint.
+      operationId: processFileAsync
+      parameters:
+        - name: fileDto
+          in: body
+          description: Fetches the starting number of the offset records
+          required: true
+          schema:
+            $ref: '#/definitions/FileDetailsDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: File Received
+              type: string
+          schema:
+            $ref: '#/definitions/FileDetailsDTO'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+ /service/account/h2hAckFile:
+   post:
+     tags:
+       - HostAckFileProcessing
+     summary: Adds a new File to obvam
+     description: Adds a new File to obvam. Add additional information here for this
+       endpoint.
+     operationId: processAckFile
+     parameters:
+       - name: fileDto
+         in: body
+         description: Fetches the starting number of the offset records
+         required: true
+         schema:
+           $ref: '#/definitions/AckFileDTO'
+     responses:
+       '201':
+         description: 'Returns message of success or failure '
+         headers:
+           Location:
+             description: File Received
+             type: string
+         schema:
+           $ref:  "#/definitions/ResponseDtoWrapper"
+       '400':
+         description: Malformed syntax.
+       '401':
+         description: Request does not have sufficient credentials.
+       '403':
+         description: Request is not authorized.
+       '405':
+         description: Invalid input
+       '500':
+         description: Internal error
+ 
+ /service/account/h2hAckFileAsync:
+   post:
+     tags:
+       - HostAckFileProcessingAsync
+     summary: Adds a new File to obvam
+     description: Adds a new File to obvam. Add additional information here for this
+       endpoint.
+     operationId: processAckFileAsync
+     parameters:
+       - name: fileDto
+         in: body
+         description: Fetches the starting number of the offset records
+         required: true
+         schema:
+           $ref: '#/definitions/AckFileDTO'
+     responses:
+       '201':
+         description: 'Returns message of succes or failure '
+         headers:
+           Location:
+             description: File Received
+             type: string
+         schema:
+           $ref:  "#/definitions/ResponseDtoWrapper"
+       '400':
+         description: Malformed syntax.
+       '401':
+         description: Request does not have sufficient credentials.
+       '403':
+         description: Request is not authorized.
+       '405':
+         description: Invalid input
+       '500':
+         description: Internal error
+ 
+definitions:
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ FileDetailsDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     fileRefId:
+      type: number
+      description: "File Reference ID"
+     internalRefId:
+      type: string
+      description: "Internal Reference Id"
+     workflowInstanceId:
+      type: string
+      description: "Workflow Instance Id"
+     fileStatus:
+      type: string
+      description: "Status of File"
+     cacheVersion:
+      type: integer
+      description: "Cache Version"
+     fileOriginalName:
+      type: string
+      description: "File Original Name"
+     fileModifiedName:
+      type: string
+      description: "File modified Name"
+     fileSize:
+      type: integer
+      format: int64
+      description: "Size of file for parsing"
+     formatName:
+      type: string
+     createdBy:
+      type: string
+      description: "Indicates the system who have created the file"
+     createdDate:
+      type: string
+      format: date
+      description: "File Creation Date"
+     modifiedBy:
+      type: string
+      description: "Indicate the user who modified the file"
+     modifiedDate:
+      type: string
+      format: date
+     transactionId:
+      type: string
+     transactionName:
+      type: string
+     transactionModNo:
+      type: integer
+     formatId:
+      type: string
+     formatModNo:
+      type: integer
+     channelId:
+      type: string
+     channelModNo:
+      type: integer
+     corporateId:
+      type: string
+     corporateModNo:
+      type: integer
+     corporateRef: 
+      type: string
+     totalRecords:
+      type: integer
+     successRecords:
+      type: integer
+     failedRecords:
+      type: integer
+     totalAmount:
+      type: number
+     totalAmountCurrency:
+      type: string
+     messageId:
+      type: string
+      description: ""
+     initiatingPartyName:
+      type: string
+      description: ""
+     initiatingPartyId:
+      type: string
+      description: ""
+     initiatingPartyCD:
+      type: string
+      description: ""
+     initiatingPartyAddress:
+      type: object
+      description: ""
+      additionalProperties:
+        type: string
+     groupStatus:
+      type: string
+      description: ""
+     groupStatusReasonCode:
+      type: string
+      description: ""
+     noOfHandoff:
+      type: integer
+      description: ""
+     handoffId:
+      type: string
+      description: ""
+     corelationLevel:
+      type: string
+      description: ""
+     recordPersist:
+      type: boolean
+      description: ""
+     chunkSize:
+      type: number
+      description: ""
+     chunkIndex:
+      type: number
+      description: ""
+     totalChunks:
+      type: number
+      description: ""
+     retryCount:
+      type: integer
+      description: ""
+     retryForChunk:
+      type: array
+      items:
+       type: integer
+     fieldData:
+      type: object
+      description: ""
+      additionalProperties:
+        type: string
+     recordList:
+      type: array
+      items:
+       $ref: '#/definitions/RecordDTO'
+     exceptionList:
+      type: array
+      items:
+       $ref: '#/definitions/ExceptionDetailDTO'
+    required:
+     - fileRefId
+     - initiatingPartyId
+     
+ RecordDTO:
+  type: object
+  properties:   
+     recordId:
+      type: number
+#      format: int64
+      description: ""
+     fileRefId:
+      type: number
+      description: ""
+     modifiedBy:
+      type: string
+      description: ""
+     modifiedDate:
+      type: string
+      format: date
+     txnStatus:
+      type: string
+      description: ""
+     statusCodes:
+      type: string
+      description: ""
+     transactionId:
+      type: string
+      description: ""
+     transactionModNo:
+      type: integer
+      description: ""
+     createdDate:
+      type: string
+      format: date
+     createdBy:
+      type: string
+      description: ""
+     fxRate:
+      type: number
+      description: ""
+     convertedCurrency:
+      type: string
+      description: ""
+     convertedAmount:
+      type: number
+      description: ""
+     fieldData:
+      type: object
+      description: ""
+      additionalProperties:
+        type: string
+     exceptionList:
+      type: array
+      items:
+       $ref: '#/definitions/ExceptionDetailDTO'
+      
+ ExceptionDetailDTO:
+  type: object
+  properties:   
+     exceptionCode:
+      type: string
+      description: ""
+     exceptionArgs:
+      type: string
+      description: ""
+     lineNo:
+      type: integer
+      description: ""
+     CreatedDate:
+      type: string
+      format: date
+      description: "" 
+ 
+ AckFileDTO:
+   type: object
+   allOf:
+     - type: object
+       properties:
+         fileRefId:
+           type: number
+           description: "File Reference ID"
+         ackfileRefId:
+           type: number
+           description: "Ack File Reference ID"
+         ackfileName:
+           type: string
+           description: "Ack File Name"
+         ackfileChannelName:
+           type: string
+           description: "Ack File Channel Name"              
+         ackResponseIdentifier:
+           type: string
+           description: "Ack Response Identifier"
+         ackfileStatus:
+           type: string
+           description: "Ack File Status"
+         chunkSize:
+           type: number
+           description: ""
+         chunkIndex:
+           type: number
+           description: ""
+         totalChunks:
+           type: number
+           description: ""
+         totalRecords:
+           type: integer
+         recordList:
+           type: array
+           items:
+             $ref: '#/definitions/AckRecordDTO'
+       required:
+         - fileRefId
+         - ackfileRefId
+         - ackfileName
+ AckRecordDTO:
+   type: object
+   properties:
+     recordId:
+       type: number
+       description: ""
+     lineNo:
+       type: number
+       description: ""
+     status:
+       type: string
+       description: ""
+     exceptionList:
+       type: array
+       items:
+         $ref: '#/definitions/ExceptionDetailDTO'
+ 

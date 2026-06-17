@@ -1,0 +1,598 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : accountService.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: This is a sample server account maintenance server.
+  version: 1.0.0
+  title: Account Maintenance Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: AccountService
+  description: ''
+schemes:
+- https
+paths:
+  /service/account/virtualRealAccountfetch:
+    get:
+      tags:
+        - AccountService
+      summary: gets the list of  virtual and real accounts
+      description:  gets the list of virtual and real accounts
+      operationId: getVirtualRealAccounts
+      parameters:
+      - in: query
+        name: accountNumber
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: currencyCode
+        required: false
+        type: string
+      - in: query
+        name: customerId
+        required: false
+        type: string
+      - in: query
+        name: iban
+        required: false
+        type: string
+      - in: query
+        name: virtualOrRealAccount
+        required: false
+        type: string
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/VirtualRealAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/account:
+    post:
+      tags:
+      - AccountService
+      summary: Adds a new account.
+      description: Adds a new account. Add additional information here for this endpoint.
+      operationId: saveRecord
+      parameters:
+      - name: sourceCode
+        description: "Source from which request is initiated"
+        in: header
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      responses:
+        201:
+          description: 'Returns message of success or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/AccountServiceDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+      - AccountService
+      summary: Get all valid account.
+      description: Get all valid account. This endpoints will be used to Get all valid account maintenance records.
+      operationId: getAll
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: accountNumber
+        required: false
+        type: string
+      - in: query
+        name: accountDescription
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: currency
+        required: false
+        type: string
+      - in: query
+        name: customerId
+        required: false
+        type: string
+      - in: query
+        name: isActive
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      - in: query
+        name: isResident
+        required: false
+        type: string
+      - in: query
+        name: isNotional
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: sourceSystemAccNo
+        required: false
+        type: string
+      - in: query
+        name: dataStartDate
+        required: false
+        type: string
+      - in: query
+        name: dataEndDate
+        required: false
+        type: string
+      - in: query
+        name: isOffline
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/account/{accountNumber}/{branchCode}/{currency}:
+    put:
+      tags:
+      - AccountService
+      summary: Update an existing account.
+      description: Update an existing account.
+      operationId: modifyRecord
+      parameters:
+      - name: sourceCode
+        description: "Source from which request is initiated"
+        in: header
+        required: true
+        type: string
+      - name: accountNumber
+        in: path
+        description: accountNumber of the account Maintenance
+        required: true
+        type: string
+      - name: branchCode
+        in: path
+        description: branchCode of the account Maintenance
+        required: true
+        type: string
+      - name: currency
+        in: path
+        description: currency of the account Maintenance
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request Body that contains data required for updating an existing account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      responses:
+        200:
+          description: Returns updated account
+          schema:
+            $ref: '#/definitions/AccountServiceDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+        - AccountService
+      summary: Retrieves the account by ID.
+      description: Retrieves the account by ID.
+      operationId: getById
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: accountNumber
+          in: path
+          description: accountNumber of the account Maintenance
+          required: true
+          type: string
+        - name: branchCode
+          in: path
+          description: branchCode of the account Maintenance
+          required: true
+          type: string
+        - name: currency
+          in: path
+          description: currency of the account Maintenance
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the account based on given id.
+          schema:
+            $ref: '#/definitions/AccountServiceDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/account/{accountNumber}/{branchCode}/{currency}/close:
+    patch:
+      tags:
+        - AccountService
+      summary: Close the account by given ID.
+      description: Close the account identified by given ID.
+      operationId: closeRecord
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: accountNumber
+          in: path
+          description: accountNumber of the account Maintenance
+          required: true
+          type: string
+        - name: branchCode
+          in: path
+          description: branchCode of the account Maintenance
+          required: true
+          type: string
+        - name: currency
+          in: path
+          description: currency of the account Maintenance
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/account/{accountNumber}/{branchCode}/{currency}/reopen:
+    patch:
+      tags:
+        - AccountService
+      summary: reopen the account by given ID.
+      description: reopen the account identified by given ID.
+      operationId: reopenRecord
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: accountNumber
+          in: path
+          description: accountNumber of the account Maintenance
+          required: true
+          type: string
+        - name: branchCode
+          in: path
+          description: branchCode of the account Maintenance
+          required: true
+          type: string
+        - name: currency
+          in: path
+          description: currency of the account Maintenance
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  VirtualRealAccountDTO:
+    type: object
+    allOf:
+    - type: object
+      properties:
+        sourceSystem:
+          type: string
+          description: ''
+        sourceSystemAccNo:
+          type: string
+          description: ''
+        iban:
+          type: string
+          description: ''
+        accountNumber:
+          type: string
+          description: ''
+        accountDescription:
+          type: string
+          description: ''
+        accountOpenDate:
+          type: string
+          description: ''
+        branchCode:
+          type: string
+          description: ''          
+        currencyCode:
+          type: string
+          description: ''
+        customerId:
+          type: string
+          description: ''
+        isNoCredit:
+          type: string
+          description: ""
+        isNoDebit:
+          type: string
+          description: ""
+        isBlocked:
+          type: string
+          description: ""
+        isDormant:
+          type: string
+          description: "" 
+        isFrozen:
+          type: string
+          description: "" 
+        accountType:
+          type: string
+          description: "" 
+        isVirtual:
+          type: string
+          description: "" 
+        accountClass:
+          type: string
+          description: ""
+  VirtualRealAccountCollection:
+    description: Collection of account.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/VirtualRealAccountDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ICAccountCollection:
+    description: Collection of IC accounts.
+    type: object
+    properties:
+      accMasterList:
+        type: array
+        items:
+          $ref: '#/definitions/ICAccountRequestDTO'
+  ICAccountRequestDTO:
+    description: IC Account request DTO object
+    allOf:
+    - type: object
+      properties:
+        acc:
+          type: string
+          description: 'Account Number'
+        accountClass:
+          type: string
+          description: 'Account Group'
+        accType:
+          type: string
+          description: 'Type of Account'
+        acOpenDate:
+          type: string
+          description: 'Account Open Date'
+        bookAcc:
+          type: string
+          description: 'Interest Booking account'
+        bookBrn:
+          type: string
+          description: 'Interest Booking branch'
+        bookCcy:
+          type: string
+          description: 'Interest Booking currency'
+        brn:
+          type: string
+          description: 'Branch'
+        calcAcc:
+          type: string
+          description: 'Interest Calculation Account'
+        ccy:
+          type: string
+          description: 'Interest Calculation Account currency'
+        custNo:
+          type: string
+          description: 'Customer/Entity'
+        intStartDate:
+          type: string
+          description: 'Interest Start Date'
+        chgbookacc:
+          type: string
+          description: 'Charge Booking Account'
+        chgbookbrn:
+          type: string
+          description: 'Charge Booking branch'
+        chgbookccy:
+          type: string
+          description: 'Charge Booking currency'
+        chgsrtdt:
+          type: string
+          description: 'Charge Start Date'
+        sourceSystem:
+          type: string
+          description: 'Source System'
+      required:
+      - acc
+      - accountClass
+      - acOpenDate
+      - brn
+      - ccy
+      - custNo
+      - sourceSystem
+  ICResponseDTO:
+    description: IC Account response DTO object
+    allOf: 
+    - type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/definitions/ICWarningDTO'
+        errors:
+          type: array
+          items:
+            $ref: '#/definitions/ICErrorDTO'
+  ICWarningDTO:
+    description: IC response Warning DTO
+    allOf:
+    - type: object
+      properties:
+        warningCode:
+          type: string
+          description: 'Warning Code'
+        warningDesc:
+          type: string
+          description: 'Warning Description'
+  ICErrorDTO:
+    description: IC response Error DTO
+    allOf:
+    - type: object
+      properties:
+        errorCode:
+          type: string
+          description: 'Error Code'
+        errorDesc:
+          type: string
+          description: 'Error Description'
+  NKValuesDto:
+    type: object
+    properties:
+      id:
+        type: string
+      modNo:
+        type: integer
+      authStatus:
+        type: string
+  AccountServiceDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/LmmTmAccountDTO'          
+  

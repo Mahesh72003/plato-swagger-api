@@ -1,0 +1,236 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+ 
+ 
+swagger: "2.0"
+info:
+ description: "This is a sample server onliq server." 
+ version: "1.0.0"
+ title: "onliq Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "onliq"
+   description: "This Service is used to maintain Core Branch Parameters.This Service will allow us to maintain the parameters for branch that are common across the services using the branch service.Branch Code Uniquely Distinguishes a Branch."
+ 
+schemes:
+- "https"
+ 
+paths:
+ 
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../onliq
+ 
+ /onliq:
+  get:
+   tags:
+    - "onliq"
+   summary: "Get all valid onliq."
+   description:  "Get all valid onliq. This endpoints will be used to Get all valid onliq maintenance records."
+   operationId: "getService"
+   parameters:
+   - name: testService
+     in: query
+     description: Test Flag - Defult Value is FALSE
+     required: false
+     type: boolean
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/OnliqResponseDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+ /onliq/liquidateOnline:
+  post:
+   tags:
+    - "onliq"
+   summary: "Liquidate Online"
+   description: "Online Liquidation"
+   operationId: "liquidateOnline"
+   parameters:
+    - name: "onliq" 
+      in: "body" 
+      description: "Request Body that contains data required for calculating " 
+      required: true
+      schema:
+       $ref: "#/definitions/OnliqWrapperDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly calculate charges" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/OnliqResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+ /onliq/liquidateOnlineUBS:
+  post:
+   tags:
+    - "onliq"
+   summary: "Liquidate Online for UBS"
+   description: "Online Liquidation for UBS"
+   operationId: "liquidateOnlineUBS"
+   parameters:
+    - name: "onliq" 
+      in: "body" 
+      description: "Request Body that contains data required for calculating " 
+      required: true
+      schema:
+       $ref: "#/definitions/OnliqWrapperDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly calculate charges" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/FCUIResponseModel"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+definitions:
+ OnliqResponseWrapperDTO:     
+  description: "OnliqResponseDTO"
+  type: "object"
+  properties:
+   onliq:
+    description: "IC Liquidation Details"
+    type: "array"
+    items:
+     $ref: "#/definitions/OnliqResponseDTO"
+ OnliqResponseDTO:
+  description: "OnliqResponseDTO."
+  type: "object"
+  properties:
+   msgStat:
+     type: "string"
+   onliq:
+    description: "IC Calculation Details"
+    type: "object"
+    items:
+     $ref: "#/definitions/OnliqDetailsDTO"
+   warnings:
+    description: "Warning Code List"
+    type: "array"
+    items:
+     $ref: "#/definitions/WarningCodeDTO"
+   errors:
+    description: "Error Code List"
+    type: "array"
+    items:
+     $ref: "#/definitions/ErrorCodeDTO"
+ OnliqWrapperDTO:     
+  description: "OnliqWrapperDTO"
+  type: "object"
+  properties:
+   onliq:
+    description: "IC Liquidation Details"
+    type: "array"
+    items:
+     $ref: "#/definitions/OnliqDetailsDTO"
+ OnliqDetailsDTO:
+  type: "object"
+  properties:
+   branchCode:
+    type: "string"
+   accountNumber:
+    type: "string"
+   productCode:
+    type: "string"
+   liquidationDate:
+    type: "string"
+ HandoffOnlineDTO:
+  type: "object"
+  required:
+   - branchCode
+   - acc
+  properties:
+   branchCode:
+    type: "string"
+   acc:
+    type: "string"
+   prod:
+    type: "string"    
+ WarningCodeDTO:
+  type: "object"
+  properties:
+   warningCode:
+    type: "string"
+   warningDesc:
+    type: "string"
+ ErrorCodeDTO:
+  type: "object"
+  properties:
+   errorCode:
+    type: "string"
+   errorDesc:
+    type: "string"

@@ -1,0 +1,368 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Plato API Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "PlatoAPI"
+    description: ""
+    
+schemes:
+- "https"
+
+paths:
+  /platojwtauth:
+    post:
+      tags:
+        - "PlatoAPI"
+      summary: "Creates Plato Jwt Token"
+      description: "Creates Plato Jwt Token"
+      operationId: "createAuthenticationToken"
+      parameters:
+        - name: "authenticationRequest"
+          in: "body"
+          description: "Request Body that contains data required for creating Jwt Token"
+          required: false
+          schema:
+            $ref: "#/definitions/JwtAuthenticationRequest"
+        - name: "tenantId" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "sourceCode" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns token and other parameters"
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+              token_type:
+                type: "string"
+              expires_in:
+                type: "string"
+              scope:
+                type: "string"
+              entity_id:
+                type: "string"
+              super_user:
+                type: "string"
+              super_user_locale:
+                type: "string"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+  /oauthtokenrefresh:
+    post:
+      tags:
+        - "PlatoAPI"
+      summary: ""
+      description: ""
+      operationId: "refreshOAuthToken"
+      parameters:
+        - name: "authenticationRequest"
+          in: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/JwtAuthenticationRequest"
+        - name: "sourceCode" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns token and other parameters of the given username"
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+              token_type:
+                type: "string"
+              expires_in:
+                type: "string"
+              scope:
+                type: "string"
+              entity_id:
+                type: "string"
+              super_user:
+                type: "string"
+              super_user_locale:
+                type: "string"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+  /modifyvalidity:
+    post:
+      tags:
+        - "PlatoAPI"
+      summary: ""
+      description: ""
+      operationId: "modifyValidity"
+      parameters:
+        - name: "modifyRequest"
+          in: "body"
+          description: ""
+          required: true
+          schema:
+            properties:
+              client_id:
+                type: "string"
+              validity:
+                type: "string"
+        - name: "sourceCode" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Success/Failure response"
+          schema:
+            $ref: '#/definitions/JwtSimpleResponse'
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+  /platojwtauthrefresh:
+    get:
+      tags:
+        - "PlatoAPI"
+      summary: ""
+      description: ""
+      operationId: "refreshAndGetAuthenticationToken"
+      parameters:
+        - name: "sourceCode" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns token and other parameters"
+          schema:
+            $ref: '#/definitions/JwtAuthenticationResponse'
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+  /platojwtlogout:
+    get:
+      tags:
+        - "PlatoAPI"
+      summary: ""
+      description: ""
+      operationId: "logout"
+      parameters:
+        - name: "sourceCode" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Success/Failure response"
+          schema:
+            $ref: '#/definitions/JwtSimpleResponse'
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+  /createOauthUsers:
+    post:
+      tags:
+        - "PlatoAPI"
+      summary: ""
+      description: ""
+      operationId: "createOauthUser"
+      parameters:
+        - name: "x" 
+          in: "body" 
+          description: "" 
+          required: true
+          schema:
+            type: "object"
+            description: ""
+            properties:
+              UserList:
+                type: "object"
+                properties:
+                  clientSecret:
+                    type: "object"
+                  clientId:
+                    type: "object"
+        - name: "tenantId" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Success/Failure response"
+          schema:
+            $ref: "#/definitions/JwtSimpleResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+  /changePassword:
+    post:
+      tags:
+        - "PlatoAPI"
+      summary: ""
+      description: ""
+      operationId: "passwordChangeLdap"
+      parameters:
+        - name: "authenticationRequest" 
+          in: "body" 
+          description: "" 
+          required: true
+          schema:
+            $ref: "#/definitions/ChangePasswordAuthenticationRequest"
+        - name: "tenantId" 
+          in: "header" 
+          description: "" 
+          required: false
+          type: "string"
+        - name: "appId" 
+          in: "header" 
+          description: "" 
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Success/Failure response"
+          schema:
+            $ref: "#/definitions/JwtSimpleResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Bad Credentials/Bad Token"
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Method Not Allowed"
+        500:
+          description: "Internal server error"
+definitions:
+  JwtAuthenticationRequest:
+    type: "object"
+    description: "username and password of the user"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+  JwtAuthenticationResponse:
+    type: "object"
+    description: "JwtAuthenticationResponse"
+    properties:
+      token:
+        type: "string"
+      userAlreadyLoggedIn:
+        type: "string"
+      expires_in:
+        type: "integer"
+        description: "Signed 64-bit integers (long type)"
+      home_entity_id:
+        type: "string"
+      multi_entity_admin:
+        type: "string"
+      multi_entity_admin_locale:
+        type: "string"
+  JwtSimpleResponse:
+    type: "object"
+    description: "JwtSimpleResponse"
+    properties:
+      message:
+        type: "string"
+  ChangePasswordAuthenticationRequest:
+    type: "object"
+    description: ""
+    properties:
+      currentPassword:
+        type: "string"
+      newPassword:
+        type: "string"

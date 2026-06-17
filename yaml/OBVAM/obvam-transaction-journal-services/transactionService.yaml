@@ -1,0 +1,712 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : transactionService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Santosh Varma Ch 
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description : Update the API document with latest changes and incorporated the document review comments. 
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is the API for Transaction Operations in OBVAM" 
+ version: "1.0.0"
+ title: "Transaction Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "TxnsService"
+   description: "This is the API for Transaction Operations in OBVAM"
+
+schemes:
+- "https"
+
+paths:
+
+ /service/txns:
+  post:
+   tags:
+    - "TxnsService"
+   summary: "Adds a new txn."
+   description: "Adds a new txn and authorize it."
+   operationId: "doTransaction"
+   parameters:
+    - name: "txnRequestDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/VatRequestMastServiceDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created txn" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/TransactionResponseDTOWrapper"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+ /service/txnPostingWithSkipDda:
+  post:
+   tags:
+    - "TxnsService"
+   summary: "Adds a new txn with  skip dda"
+   description: "Adds a new txn and authorize it."
+   operationId: "doTransactionWithSkipDda"
+   parameters:
+    - name: sourceCode     
+      in: header
+      description: "Source from which request is initiated"     
+      required: true
+      type: string
+    - name: "txnRequestServiceDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/VatRequestMastServiceDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created txn" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/TransactionResponseDTOWrapper"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+ /service/realaccountforvirtual:
+  get:
+   tags:
+    - "TxnsService"
+   summary: "Retrieves the Real account for given Virtual Account/Virtual Identifier/Virtual Account IBAN"
+   description:  "This end point is used to retrieve the Real Account details of given Virtual Account/Virtual Identifier/Virtual Account IBAN"
+   operationId: "getrealaccountforvirtual"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "virtualAccountIdentifier"
+      in: "query"
+      description: "Virtual Account/Identifier/Virtual Account IBAN for which we have to get the Real Account"
+      required: true
+      type: "string"
+    - name: "txnAccountBrn"
+      in: "query"
+      description: "Virtual Account Branch/Identifier Transacion Branch. The transaction branch is mandatory in case the iput is a virtual identifier"
+      required: false
+      type: "string"
+    - name: "transactionCurrency"
+      in: "query"
+      description: "transaction currency in case of virtual Identifier. In case of an identifier linked to real account using virtual multi currency account group, if this field value is given as input, and the VMCA has a real account with same Ccy, then that real account will be returned, otherwise if default account exists, it will be returned"
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Returns message of success and data containing Real Account Details or failure with messages." 
+     headers:
+      Location:
+       description: "Returns real account details of given Virtual Account/Identifier" 
+       type: "string"
+     schema:
+      $ref: "#/definitions/RealAcountWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    500:
+     description: "Internal server error"
+     
+ /service/realcustomermapping:
+  put:
+   tags:
+    - "TxnsService"
+   summary: "Updates the real customer number agains txn account"
+   description:  "This end point is used to update the real customer number against txn_account fetched from Account Services "
+   operationId: "updateRealCustomerNo"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "virtualAccounts" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/VirtualAccountsMappingDTO"
+   responses:
+    200: 
+     description: "Returns message of success or failure" 
+     headers:
+      Location:
+       description: "Returns message of Sucess or Failure" 
+       type: "string"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    500:
+     description: "Internal server error"
+              
+# path to do External Account Check.
+#
+#  supprorted http methods POST
+#
+# path examples----
+#   POST       .../EAC
+ /service/eac:
+  post:
+   tags:
+    - "TxnsService"
+   summary: "URL for virtual account check from external systems."
+   description: "Validates the given list of virtual accounts."
+   operationId: "eacCheck"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "eacRequestMastDTO" 
+      in: "body" 
+      description: "Request Body contains data that is required to create a validate list of accounts." 
+      required: true
+      schema:
+       $ref: "#/definitions/EACRequestMastDTO"
+   responses:
+    201: 
+     description: "Returns message of success and data containing request body or failure with messages." 
+     headers:
+      Location:
+       description: "URL of the External Account Check" 
+       type: "string"
+     schema:
+      $ref: "#/definitions/EACServiceResponseDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have adequate credentials"
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to Reverse/rollback an existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../txns/xxx/xxx
+
+ /service/txns/{txnRefNo}/{action}:
+  patch:
+   tags:
+    - "TxnsService"
+   summary: "Reverse/Rollback the txn by given txnRefNo."
+   description:  "Reverse/rollback the transaction identified by given txnRefNo."
+   operationId: "reverseTxn"
+   parameters:
+    - name: sourceCode     
+      in: header
+      description: "Source from which request is initiated"     
+      required: true
+      type: string
+    - name: "txnRefNo"
+      in: "path"
+      description: "txnRefNo of the transaction to be reversed."
+      required: true
+      type: "string"
+    - name: "action"
+      in: "path"
+      description: "action(reverse/rollback) to be performed on specified txnRefNo."
+      required: true
+      type: "string"      
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ 
+ VatRequestMastServiceDTO:
+  type: object
+  properties:
+     sourceCode:
+      type: string
+     sourceReferenceNo:
+      type: string
+     vatRequestDetServiceDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VatRequestDetServiceDTO'
+  required:
+    - sourceCode
+    - vatRequestDetServiceDTO       
+ VatRequestDetServiceDTO:
+  type: object
+  properties:
+     drCrInd:
+      type: string
+      maxLength: 1
+      pattern: '[D,C]'
+     txnAccount:
+      type: string
+     txnAccountBrn:
+      type: string
+      maxLength: 3
+     txnCcy:
+      type: string
+      maxLength: 3
+     txnAccountCcy:
+      type: string
+      maxLength: 3
+     amtInTxnAccCcy:
+      type: number
+     txnAmount:
+      type: number     
+     txnCode:
+      type: string
+     valueDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     exchRate:
+      type: number
+     reconRefNo:
+      type: string
+     addlText:
+      type: string
+      description: "Customer narrative information received from External System or User can also enter the addl text"
+      minLength: 0
+      maxLength: 4000
+     ecaOrBlockRefNo:
+      type: string
+     ddaOffset:
+      type: string
+     forceDebit:
+      type: string
+      maxLength: 1
+      pattern: '[Y,N]'
+      default: 'N'
+     blkReleaseStatus:
+      type: string
+      maxLength: 1
+      pattern: '[P,F]'
+  required:
+    - drCrInd
+    - txnAccount
+    - txnAccountBrn
+    - txnCcy
+    - txnAmount
+    - txnCode
+ 
+ TransactionMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/ResourceSupport'
+  - type: object
+    properties:
+     keyId:
+      type: string
+     txnRefNo:
+      type: string
+     sourceCode:
+      type: string
+     sourceReferenceNo:
+      type: string
+     bookingDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     initiationDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     authStatus:
+      type: string
+     transactionStatus:
+      type: string
+     originalReferenceNo:
+      type: string
+     checkerDtStamp:
+      type: string
+      format: date
+     checkerId:
+      type: string
+     makerDtStamp:
+      type: string
+      format: date
+     makerId:
+      type: string
+     initialMaker:
+      type: string
+     initialChecker:
+      type: string     
+     transactionDetailsDTOList:
+      type: array
+      items:
+       $ref: '#/definitions/TransactionDetailsDTO'
+ TransactionDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+     txnMasterId:
+      type: string
+     txnRefNo:
+      type: string
+     entrySerialNo:
+      type: number
+     drCrInd:
+      type: string
+     txnAccount:
+      type: string
+     txnAccountBrn:
+      type: string
+     txnCcy:
+      type: string
+     txnAmount:
+      type: number
+     txnCode:
+      type: string
+     valueDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     txnAccountCcy:
+      type: string
+     amtInTxnAccCcy:
+      type: number
+     exchRate:
+      type: number
+     realAccCcy:
+      type: string
+     amtInRealAccCcy:
+      type: number
+     realAccClass:
+      type: string
+     excRateTxccyRaccy:
+      type: number
+     reconRefNo:
+      type: string
+     addlText:
+      type: string
+      description: "Customer narrative information received from External System or User can also enter the addl text"
+      minLength: 0
+      maxLength: 4000
+     reportingInfo:
+      type: string
+     accountType:
+      type: string
+     realAccountNo:
+      type: string
+     realAccountBrn:
+      type: string
+     ecaOrBlockRefNo:
+      type: string
+     ddaOffset:
+      type: string
+     forceDebit:
+      type: string
+     skipDDAEntries:
+      type: string
+     blkReleaseStatus:
+      type: string
+      maxLength: 1
+      pattern: '[P,F]'
+     realCustomerNo:
+      type: string
+     restrictionId:
+      type: string   
+      
+ RealAcountWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDtoForGet"
+   data:
+    $ref: "#/definitions/RealAccountServiceDTO"     
+ RealAccountServiceDTO:
+  type: object  
+  properties:     
+     realAccNo:
+      type: string
+      description: "Real Account number as per DDA system"          
+     realAccBrn:
+      type: string
+      description: "Real Account branch as per DDA system"     
+     corecustAccountNo:
+      type: string
+      description: "Real Account Number as stored in OBVAM"      
+     corecustAcName:
+      type: string
+      description: "Real Account Name as stored in OBVAM"
+     custAcCcy:
+      type: string
+      description: "Real Account currency as stored in OBVAM"      
+     customerNo:
+      type: string
+      description: "Real Customer Number" 
+     corecustAcIban:
+      type: string
+      description: "IBAN of the Real Account"    
+     accountClass:
+      type: string
+      description: "Account class of the Real Account. It can be Normal account or Multi Currency account" 
+     sourceSystem:
+      type: string
+      description: "Source Code"                  
+     countryCode:
+      type: string
+      description: "Country Code"      
+     address1:
+      type: string
+      description: "First line of the customer address"     
+     address2:
+      type: string
+      description: "Second line of the customer address"    
+     address3:
+      type: string
+      description: "Third line of the customer address"     
+     address4:
+      type: string
+      description: "Fourth line of the customer address"    
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseDtoForGet:
+  type: object
+  properties:
+   keyId:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ ResourceSupport:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ TransactionResponseDTOWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   transactionData:
+    $ref: "#/definitions/TransactionMasterDTO"
+ EACServiceResponseDTO:
+  type: object
+  properties:
+    response:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    eacdata:
+      $ref: "#/definitions/EACResponseMastDTO"
+ EACResponseMastDTO:
+  type: object
+  properties:
+     sourceReferenceNo:
+      type: string
+     eacResponseDetDTO:
+      type: array
+      items:
+       $ref: '#/definitions/EACResponseDetDTO'
+  required:
+    - sourceReferenceNo
+    - eacResponseDetDTO
+ EACResponseDetDTO:
+  type: object
+  properties:
+     drCrInd:
+      type: string
+      maxLength: 1
+      pattern: '[D,C]'
+      description: "Debit or a credit transaction"
+     txnAccount:
+      type: string
+      description: "Transaction Account"
+     txnAccountBrn:
+      type: string
+      maxLength: 3
+      description: "For Virtual Account, it will be Virtual Account Branch and for Virtual Identifier, it will be Transaction branch"
+     txnCcy:
+      type: string
+      maxLength: 3
+      description: "Transaction currency"
+     txnAmount:
+      type: number
+      description: "Transaction Amount"
+     accName:
+      type: string
+      maxLength: 105
+      description: "For Virtual Account, it will be Virtual Account Name and for Virtual Identifier it will be Identifier Description"
+     accCcy:
+      type: string
+      maxLength: 3
+      description: "For Virtual Account it will be Virtual Account Currency and for Virtual Identifier it will be Real Account Currency"
+     accBranch:
+      type: string
+      maxLength: 3
+      description: "For Virtual Account it will be Virtual Account Branch and for Virtual Identifier it will be the Identifier branch"
+  required:
+    - drCrInd
+    - txnAccount
+    - txnAccountBrn
+    - txnCcy
+    - txnAmount
+ EACRequestMastDTO:
+  type: object
+  properties:
+     sourceReferenceNo:
+      type: string
+     eacRequestDetDTO:
+      type: array
+      items:
+       $ref: '#/definitions/EACRequestDetDTO'
+  required:
+    - sourceReferenceNo
+    - eacRequestDetDTO
+ EACRequestDetDTO:
+  type: object
+  properties:
+     drCrInd:
+      type: string
+      maxLength: 1
+      pattern: '[D,C]'
+     txnAccount:
+      type: string
+     txnAccountBrn:
+      type: string
+      maxLength: 3
+     txnCcy:
+      type: string
+      maxLength: 3
+     txnAmount:
+      type: number
+  required:
+    - drCrInd
+    - txnAccount
+    - txnCcy
+    - txnAmount
+    
+ VirtualAccountsMappingDTO:
+  type: object
+  properties:
+     accountCustomerPairDTO:
+      type: array
+      items:
+       $ref: '#/definitions/AccountCustomerPairDTO'
+ AccountCustomerPairDTO:
+  type: object
+  properties:
+     accountNumber:
+      type: string
+     realCustomerNumber:
+      type: string  
+    
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseDtoWrapperForGet:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDtoForGet"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object

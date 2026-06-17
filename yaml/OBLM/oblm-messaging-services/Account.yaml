@@ -1,0 +1,1346 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+swagger: '2.0'
+info:
+  description: This is a sample server account maintenance server.
+  version: 1.0.0
+  title: Account Maintenance Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: account
+  description: ''
+schemes:
+- https
+paths:
+  /account:
+    post:
+      tags:
+      - account
+      summary: Adds a new account.
+      description: Adds a new account. Add additional information here for this endpoint.
+      operationId: saveRecord
+      parameters:
+      - name: account
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      - name: bindingResult
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: false
+        schema:
+          $ref: '#/definitions/BindingResult'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+      - account
+      summary: Get all valid account.
+      description: Get all valid account. This endpoints will be used to Get all valid account maintenance records.
+      operationId: getAll
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: accountNumber
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: currency
+        required: false
+        type: string
+      - in: query
+        name: customerId
+        required: false
+        type: string
+      - in: query
+        name: acyAvailableBal
+        required: false
+        type: integer
+      - in: query
+        name: isActive
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      - in: query
+        name: isResident
+        required: false
+        type: string
+      - in: query
+        name: isNotional
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query        
+        name: sourceSystemAccNo
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /account/modifyAutoAuth:
+    post:
+      tags:
+      - account
+      summary: update account
+      description: update account. Add additional information here for this endpoint.
+      operationId: modifyAutoAuth
+      parameters:
+      - name: account
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      - name: bindingResult
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: false
+        schema:
+          $ref: '#/definitions/BindingResult'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error           
+  /account/{id}:
+    put:
+      tags:
+      - account
+      summary: Update an existing account.
+      description: Update an existing account.
+      operationId: modifyRecord
+      parameters:
+      - name: id
+        in: path
+        description: key of the account Maintenance
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request Body that contains data required for updating an existing account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      - name: bindingResult
+        in: body
+        description: Request Body that contains data required for modify an existing record account
+        required: false
+        schema:
+          $ref: '#/definitions/BindingResult'
+      responses:
+        200:
+          description: Returns updated account
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+      - account
+      summary: Retrieves the account by ID.
+      description: Retrieves the account by ID.
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the account based on given id.
+          schema:
+            $ref: '#/definitions/LmmTmAccountWrapperDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    delete:
+      tags:
+      - account
+      summary: Deletes the account identified by given ID.
+      description: Deletes the account identified by given ID. Add additional information here for the this endpoint.
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        description: Key of the account maintenance
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request body contain account and Modification no of account maintenance which need to be deleted"
+        required: true
+        schema:
+          $ref: '#/definitions/ModListKeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/{id}/approve:
+    patch:
+      tags:
+      - account
+      summary: Authorize the account by given ID.
+      description: Authorize the account identified by given ID.
+      operationId: authorize
+      parameters:
+      - name: id
+        in: path
+        description: Key of the account maintenance
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request body contain account and Modification no of account maintenance which need to be deleted"
+        required: true
+        schema:
+          $ref: '#/definitions/ModListKeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/{id}/close:
+    patch:
+      tags:
+      - account
+      summary: Close the account by given ID.
+      description: Close the account identified by given ID.
+      operationId: closeRecord
+      parameters:
+      - name: id
+        in: path
+        description: Key of the account maintenance
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request body contain account and Modification no of account maintenance which need to be closed"
+        required: true
+        schema:
+          $ref: '#/definitions/KeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/{id}/reopen:
+    patch:
+      tags:
+      - account
+      summary: reopen the account by given ID.
+      description: reopen the account identified by given ID.
+      operationId: reopenRecord
+      parameters:
+      - name: id
+        in: path
+        description: Key of the account maintenance
+        required: true
+        type: string
+      - name: account
+        in: body
+        description: Request body contain account and Modification no of account maintenance which need to be reopen"
+        required: true
+        schema:
+          $ref: '#/definitions/KeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/{id}/unauthorized:
+    get:
+      tags:
+      - account
+      summary: Retrives the account by given ID.
+      description: Retrives the account identified by given ID.
+      operationId: authQuery
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the account based on given id.
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/{id}/history:
+    get:
+      tags:
+      - account
+      summary: Retrives the account by given ID.
+      description: Retrives the account by ID.
+      operationId: getHistory
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the account based on given id.
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/createLmAccount:
+    post:
+      tags:
+      - account
+      summary: Adds a new account.
+      description: Adds a new account. Add additional information here for this endpoint.
+      operationId: createLmAccount
+      parameters:
+      - name: lmaccount
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      - name: bindingResult
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: false
+        schema:
+          $ref: '#/definitions/BindingResult'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /account/bulkLmAccount:
+    post:
+      tags:
+      - account
+      summary: Adds a new multiple accounts.
+      description: Adds a new multiple accounts. Add additional information here for this endpoin.
+      operationId: bulkLmAccount
+      parameters:
+      - name: bulklmaccount
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTOList'
+      - name: bindingResult
+        in: body
+        description: Request Body that contains data required for creating a new account
+        required: false
+        schema:
+          $ref: '#/definitions/BindingResult'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /account/updateAccountForMt942:
+    put:
+      tags:
+      - account
+      summary: Update an existing account.
+      description: Update an existing account.
+      operationId: updateAccountForMt942
+      parameters:
+      - name: account
+        in: body
+        description: Request Body that contains data required for updating an existing account
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      responses:
+        200:
+          description: Returns updated account
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /account/updateBalances:          
+    post:
+      tags:
+      - account
+      summary: Update Balance for given account.
+      description: Update Balance for given account.
+      operationId: updateBalances
+      parameters:
+      - name: accountNumber 
+        in: query
+        description: accountNumber of the user that needs to be fetched
+        required: true
+        type: string
+      - name: currency
+        in: query
+        description: currency of the user that needs to be fetched
+        required: true
+        type: string
+      - name: accBalances 
+        in: query
+        description: balances of the user that needs to be fetched
+        required: true
+        type: string
+      - name: lastUpdatedDate
+        in: query
+        description: lastUpdatedDate of the user that needs to be fetched
+        required: true
+        type: string  
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /account/external:
+    get:
+      tags:
+        - account
+      summary: gets the list of  external accounts
+      description:  gets the list of external accounts
+      operationId: getExternalAccounts
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: accountNumber
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: currency
+        required: false
+        type: string
+      - in: query
+        name: customerId
+        required: false
+        type: string
+      - in: query
+        name: acyAvailableBal
+        required: false
+        type: integer
+      - in: query
+        name: isActive
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      - in: query
+        name: isResident
+        required: false
+        type: string
+      - in: query
+        name: isNotional
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query        
+        name: sourceSystemAccNo
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/internal:
+    get:
+      tags:
+        - account
+      summary: gets the list of  external accounts
+      description:  gets the list of external accounts
+      operationId: getInternalAccounts
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: accountNumber
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: currency
+        required: false
+        type: string
+      - in: query
+        name: customerId
+        required: false
+        type: string
+      - in: query
+        name: acyAvailableBal
+        required: false
+        type: integer
+      - in: query
+        name: isActive
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      - in: query
+        name: isResident
+        required: false
+        type: string
+      - in: query
+        name: isNotional
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query        
+        name: sourceSystemAccNo
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /account/getLinkedAccounts:
+    get:
+      tags:
+      - account
+      summary: Get List of Accounts for the given customer collection.
+      description: Get List of Accounts for the given customer collection.
+      operationId: getLinkedAccounts
+      parameters:
+      - in: query
+        name: customerId
+        required: false
+        type: string
+      - in: query        
+        name: accountNumber
+        required: false
+        type: string
+      - in: query        
+        name: branchCode
+        required: false
+        type: string
+      - in: query        
+        name: currency
+        required: false
+        type: string
+      - in: query        
+        name: isExternal
+        required: false
+        type: string
+      - in: query        
+        name: isNotional
+        required: false
+        type: string  
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created account
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmAccountCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+definitions:
+  LmmTmAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/ExtensibleGenericDto'
+    - type: object
+      properties:
+        sourceSystem:
+          type: string
+          description: ''
+        sourceSystemAccNo:
+          type: string
+          description: ''
+        iban:
+          type: string
+          description: ''
+        logCode:
+          type: string
+          description: ''
+        accountNumber:
+          type: string
+          description: ''
+        accountDescription:
+          type: string
+          description: ''
+        branchCode:
+          type: string
+          description: ''
+        bankCode:
+          type: string
+          description: ''
+        cityId:
+          type: string
+          description: ''
+        countryId:
+          type: string
+          description: ''          
+        currency:
+          type: string
+          description: ''
+        customerId:
+          type: string
+          description: ''
+        customerName:
+          type: string
+          description: ''
+        accCreatedDate:
+          type: string
+          format: date
+          description: ''            
+        accOpenDate:
+          type: string
+          format: date
+          description: ''
+        accClosedDate:
+          type: string
+          format: date
+          description: ''
+        acyAvailableBal:
+          type: number
+          description: ''
+        acyCurrentBal:
+          type: number
+          description: ''
+        lastBalUpdateTime:
+          type: string
+          format: date
+          description: ''
+        isActive:
+          type: string
+          description: ''
+        isExternal:
+          type: string
+          description: ''
+        isResident:
+          type: string
+          description: ''
+        isNotional:
+          type: string
+          description: ''
+        acyCasaBlockedAmt:
+          type: number
+          description: ''
+        accCategory:
+          type: string
+          description: ''
+        drLimit:
+          type: number
+          description: ''
+        crLimit:
+          type: number
+          description: ''
+        ilRouteCode:
+          type: string
+          description: ''
+        lineId:
+          type: string
+          description: ''
+        limitCcy:
+          type: string
+          description: ''
+        region:
+          type: string
+          description: ''
+        uncollFundsLimit:
+          type: number
+          description: ''
+        uncollAvailable:
+          type: number
+          description: ''
+        balCompParticipation:
+          type: string
+          description: ''
+        odLimit:
+          type: number
+          description: ''
+        isDebitUnlimited:
+          type: string
+          description: ''
+        groupCode:
+          type: string
+          description: ""
+        groupDescription:
+          type: string
+          description: ""
+        isNoCredit:
+          type: string
+          description: ""
+        isNoDebit:
+          type: string
+          description: ""
+        isFrozen:
+          type: string
+          description: ""
+        isBlocked:
+          type: string
+          description: ""
+        isDormant:
+          type: string
+          description: ""
+        countryCode:
+          type: string
+          description: Country Code
+          minLength: 0
+          maxLength: 4
+        address4:
+          type: string
+          description: Fourth line of the customer?s address
+          minLength: 0
+          maxLength: 35
+          pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+        address3:
+          type: string
+          description: Third line of the customer?s address
+          minLength: 0
+          maxLength: 35
+          pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+        address2:
+          type: string
+          description: Second line of the customer?s address
+          minLength: 0
+          maxLength: 35
+          pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+        address1:
+          type: string
+          description: First line of the customer?s address
+          minLength: 0
+          maxLength: 35
+          pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+        noBalanceHandling:
+          type: string
+          description: ''
+      required:
+      - accountNumber
+      - branchCode
+      - currency
+      - customerId
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  BindingResult:
+    type: object
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmmTmAccountCollection:
+    description: Collection of account.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmAccountDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmmTmAccountWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmmTmAccountDTO'
+  LmdTbEventsDTO:
+    description: Events DTO
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        eventDate:
+          description: Date of Events
+          type: string
+          format: date
+        eventType:
+          description: Type of Events
+          type: string
+        eventCode:
+          description: Code for Events
+          type: string
+        eventSource:
+          description: Source for Events
+          type: string
+        eventDescription:
+          description: Description for Events
+          type: string
+        customerId:
+          description: Customer Id in Events
+          type: string
+        isActive:
+          description: Is Active in Events
+          type: string
+        createdBy:
+          description: Created by for Events
+          type: string
+        startDate:
+          description: Start Date for Events
+          type: string
+          format: date
+        closeDate:
+          description: Close Date for Events
+          type: string
+          format: date
+        transactionId:
+          description: Transaction Id for Events
+          type: string
+        fromAccountNumber:
+          description: From Account Number for Events
+          type: string
+        toAccountNumber:
+          description: To Account Number for Events
+          type: string
+        structureId:
+          description: Structure Id for Events
+          type: string
+      required:
+      - id
+      - eventCode
+  LmmTmAccountDTOList:
+    type: object
+    properties:
+      lmmTmAccountDTOList:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmAccountDTO'
+  CoreAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        countryCode:
+          type: string
+          description: Country Code
+          minLength: 0
+          maxLength: 4
+        address4:
+          type: string
+          description: Fourth line of the customer?s address
+          minLength: 0
+          maxLength: 105
+        address3:
+          type: string
+          description: Third line of the customer?s address
+          minLength: 0
+          maxLength: 105
+        address2:
+          type: string
+          description: Second line of the customer?s address
+          minLength: 0
+          maxLength: 105
+        address1:
+          type: string
+          description: First line of the customer?s address
+          minLength: 0
+          maxLength: 105
+        ecaCheckReq:
+          type: string
+          description: Indicates that ECA check is required for the external customer account
+          minLength: 0
+          maxLength: 1
+          pattern: '[Y,N]'
+        accountClass:
+          type: string
+          description: Account class of the external customer account. It can be Normal account or Nostro account
+        acStatDormant:
+          type: string
+          description: Indicates that the account status is dormant
+          minLength: 1
+          maxLength: 1
+          pattern: '[Y,N]'
+        acStatFrozen:
+          type: string
+          description: Indicate that the account status is frozen
+          minLength: 0
+          maxLength: 1
+          pattern: '[Y,N]'
+        glStatBlocked:
+          type: string
+          description: Indicates that the account status is blocked
+          minLength: 0
+          maxLength: 1
+          pattern: '[Y,N]'
+        acStatNoDr:
+          type: string
+          description: Indicates that the account does not have any debit facility
+          minLength: 0
+          maxLength: 1
+          pattern: '[Y,N]'
+        acStatNoCr:
+          type: string
+          description: Indicates that the account does not have any credit facility
+          minLength: 0
+          maxLength: 1
+          pattern: '[Y,N]'
+        acOpenDate:
+          type: string
+          pattern: '[0-9]{4}[-][0-9]{2}[-][0-9]{2}'
+          description: The date on which account is being opened
+        custAcName:
+          type: string
+          description: Name of the account holder
+          minLength: 0
+          maxLength: 105
+          pattern: '[a-zA-Z0-9\s]+'
+        custAcCcy:
+          type: string
+          description: Currency in which the account is being created
+        customerNo:
+          type: string
+          description: Customer number to which the account number is being linked
+        sourceSystemAccBrn:
+          type: string
+          description: Branch to which the account belongs to
+        sourceSystemAccNo:
+          type: string
+          description: Account number as in the source system
+          minLength: 0
+          maxLength: 35
+          pattern: '[a-zA-Z0-9]+'
+        sourceSystem:
+          type: string
+          description: Name of the source system
+        custAcIban:
+          type: string
+          description: IBAN that is linked to the customer
+          minLength: 0
+          maxLength: 35
+          pattern: '[a-zA-Z0-9]+'
+        hostCode:
+          type: string
+          description: The host code that is linked to the logged in user of the branch.
+        custAccountNo:
+          type: string
+          description: Account number of the External customer
+          minLength: 1
+          maxLength: 20
+          pattern: '[a-zA-Z0-9]+'
+  CoreAccountCollection:
+    description: Collection of coreaccount.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CoreAccountDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  #DTOs for Additional Attributes
+  ExtensibleGenericDto:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          additionalAttributes:
+            $ref: '#/definitions/ExtensibleDTO'
+          additionalFields:
+            $ref: '#/definitions/ExtensibleInputDTO'
+  ExtensibleResponseModel:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          ExtensibleDTO:
+            items:
+              $ref: "#/definitions/ExtensibleDTO"
+            type: array
+    xml: 
+      name: ExtensibleResponseModel
+  ExtensibleDTO:  
+    properties: 
+      id: 
+        type: string
+      uiKey: 
+        type: string
+      dataReferenceKey: 
+        type: string
+      fieldMetaDataVersion: 
+        type: string
+      fieldData: 
+        items: 
+          $ref: "#/definitions/ExtensibleFieldModel"
+        type: array
+      applicationId: 
+        type: string
+    type: object
+    xml: 
+      name: ExtensibleDTO
+  ExtensibleFieldModel: 
+    properties: 
+      id: 
+        type: string
+      label: 
+        type: string
+      type: 
+        type: string
+      value: 
+        type: string
+    type: object
+    xml: 
+      name: ExtensibleFieldModel
+  ExtensibleInputDTO:  
+    properties: 
+      id: 
+        type: string
+      uiKey: 
+        type: string
+      dataReferenceKey: 
+        type: string
+      fieldMetaDataVersion: 
+        type: string
+      fieldData: 
+        type: string
+      applicationId: 
+        type: string
+    required: 
+      - uiKey
+      - dataReferenceKey
+    type: object
+    xml: 
+      name: ExtensibleInputDTO

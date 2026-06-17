@@ -1,0 +1,561 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server frequency server." 
+ version: "1.0.0"
+ title: "frequency Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "frequency"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../frequency
+
+ /frequency:
+  post:
+   tags:
+    - "frequency"
+   summary: "Adds a new frequency."
+   description: "Adds a new frequency. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "frequency" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new frequency" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmFrequencyDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created frequency" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "frequency"
+   summary: "Get all valid frequency."
+   description:  "Get all valid frequency. This endpoints will be used to Get all valid frequency maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: frequencyId
+     required: false
+     type: string
+   - in: query
+     name: description
+     required: false
+     type: string
+   - in: query
+     name: frequencyType
+     required: false
+     type: string
+   - in: query
+     name: frequencyCategory
+     required: false
+     type: string
+   - in: query
+     name: isEod
+     required: false
+     type: string
+   - in: query
+     name: isBod
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmFrequencyCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../frequency/xxx
+#   DELETE    .../frequency/xxx
+#   GET       .../frequency/xxx
+#   GET       .../frequency/xxx?version=latestrecord
+#   GET       .../frequency/xxx?version=1
+
+ /frequency/{id}:
+  put:
+   tags:
+    - "frequency"
+   summary: "Update an existing frequency."
+   description:  "Update an existing frequency."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the frequency Maintenance"
+      required: true
+      type: "string"
+    - name: "frequency"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing frequency"
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmFrequencyDTO"
+   responses:
+    200:
+     description: "Returns updated frequency"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "frequency"
+   summary: "Retrieves the frequency by ID."
+   description:  "Retrieves the frequency by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the frequency based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmFrequencyWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "frequency"
+   summary: "Deletes the frequency identified by given ID."
+   description:  "Deletes the frequency identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the frequency maintenance"
+      required: true
+      type: "string"
+    - name: "frequency"
+      in: "body"
+      description: Request body contain frequency and Modification no of frequency maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../frequency/xxx/approve
+
+ /frequency/{id}/approve:
+  patch:
+   tags:
+    - "frequency"
+   summary: "Authorize the frequency by given ID."
+   description:  "Authorize the frequency identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the frequency maintenance"
+      required: true
+      type: "string"
+    - name: "frequency"
+      in: "body"
+      description: Request body contain frequency and Modification no of frequency maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../frequency/xxx/close
+ /frequency/{id}/close:
+  patch:
+   tags:
+    - "frequency"
+   summary: "Close the frequency by given ID."
+   description:  "Close the frequency identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the frequency maintenance"
+      required: true
+      type: "string"
+    - name: "frequency"
+      in: "body"
+      description: Request body contain frequency and Modification no of frequency maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../frequency/xxx/reopen
+
+ /frequency/{id}/reopen:
+  patch:
+   tags:
+    - "frequency"
+   summary: "reopen the frequency by given ID."
+   description:  "reopen the frequency identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the frequency maintenance"
+      required: true
+      type: "string"
+    - name: "frequency"
+      in: "body"
+      description: Request body contain frequency and Modification no of frequency maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../frequency/xxx/unauthorized
+
+ /frequency/{id}/unauthorized:
+  get:
+   tags:
+    - "frequency"
+   summary: "Retrives the frequency by given ID."
+   description:  "Retrives the frequency identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the frequency based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmFrequencyCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../frequency/xxx/history
+
+ /frequency/{id}/history:
+  get:
+   tags:
+    - "frequency"
+   summary: "Retrives the frequency by given ID."
+   description:  "Retrives the frequency by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the frequency based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmFrequencyCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ LmmTmFrequencyDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     frequencyId:
+      type: string
+      description: ""
+     description:
+      type: string
+      description: ""
+     expression:
+      type: string
+      description: ""
+     frequencyType:
+      type: string
+      description: ""
+     frequencyCategory:
+      type: string
+      description: ""
+     isEod:
+      type: string
+      description: ""
+     isBod:
+      type: string
+      description: ""
+    required:
+     - id
+     - frequencyId
+     - expression
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmFrequencyCollection: 
+  description: "Collection of frequency."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmFrequencyDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmFrequencyWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmFrequencyDTO"

@@ -1,0 +1,1657 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : EntityService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Rahul
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This service is used to maintain virtual entity and is responsible for validating provided data and maintaining valid virtual entity account to the mask maintained for a bank parameter." 
+ version: "1.0.0"
+ title: "virtualentities Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "virtualentityService"
+   description: "This service is used to maintain virtual entity and is responsible for validating provided data and maintaining valid virtual entity account to the mask maintained for a bank parameter."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../service/virtualentities
+
+ /service/virtualentities:
+  post:
+   tags:
+    - "virtualentityService"
+   summary: "Adds a new virtualentities."
+   description: "Adds a new virtualentities. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "virtualentities" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new virtualentities" 
+      required: true
+      schema:
+       $ref: "#/definitions/EntityMasterSaveRequestDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created virtualentities" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VirtualEntityServiceResponseWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+  get:
+   tags:
+    - "virtualentityService"
+   summary: "Get all valid virtualentities."
+   description:  "Get all valid virtualentities. This endpoints will be used to Get all valid virtualentities maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: entityType
+     required: false
+     type: string
+   - in: query
+     name: virtualEntityName
+     required: false
+     type: string
+   - in: query
+     name: virtualEntityId
+     required: false
+     type: string
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/EntityMasterServiceCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+
+# path to modify existing record by virtualEntityId and get the existing record identified by virtualEntityId
+#
+#  supprorted http methods PUT, GET
+#
+# path examples----
+#   PUT       .../service/virtualentities/xxx
+
+ /service/virtualentities/{virtualEntityId}:
+  put:
+   tags:
+    - "virtualentityService"
+   summary: "Update an existing virtualentities."
+   description:  "Update an existing virtualentities."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "virtualEntityId"
+      in: "path"
+      description: "Id of the virtualentities Maintenance"
+      required: true
+      type: "string"
+    - name: "dto"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing virtualentities"
+      required: true
+      schema:
+       $ref: "#/definitions/EntityMasterModifyRequestDTO"
+   responses:
+    200:
+     description: "Returns updated virtualentities"
+     schema:
+      $ref: "#/definitions/VirtualEntityServiceResponseWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+  get:
+   tags:
+    - "virtualentityService"
+   summary: "Get the virtualentities by given virtualEntityId."
+   description:  "Get the virtualentities identified by given virtualEntityId."
+   operationId: "getByVirtualEntityId"
+   parameters:
+    - name: "virtualEntityId"
+      in: "path"
+      description: "Key of the virtualentities maintenance"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      type: "string"
+      required: false
+      description: version of the virtualentities maintenance"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/EntityMasterServiceWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    500:
+     description: "Internal server error."
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../service/virtualentities/xxx/close
+ /service/virtualentities/{virtualEntityId}/close:
+  patch:
+   tags:
+    - "virtualentityService"
+   summary: "Close the virtualentities by given virtualEntityId."
+   description:  "Close the virtualentities identified by given virtualEntityId."
+   operationId: "closeRecord"
+   parameters:
+    - name: "virtualEntityId"
+      in: "path"
+      description: "Key of the virtualentities maintenance"
+      required: true
+      type: "string"
+    - name: "keyDto"
+      in: "body"
+      required: false
+      description: Request body contain virtualentities and Modification no of virtualentities maintenance which need to be closed"
+      schema:
+       $ref: "#/definitions/CloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VirtualEntityServiceResponseWrapperDTO"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request."
+    500:
+     description: "Internal server error."
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../service/virtualentities/entitieswithaccountdetails
+
+ /service/virtualentities/entitieswithaccountdetails:
+  get:
+   tags:
+    - "virtualentityService"
+   summary: "Retrives the virtual entities with Details of accounts under that entity for a given real customer."
+   description:  "Retrives the virtual entities with Details of accounts under that entity for a given real customer."
+   operationId: "getEntitiesWithAccountDetails"
+   parameters:
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer  
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer	  
+    - name: "realCustomerNo"
+      in: "query"
+      description: "real customer number whose entities needs to be fetched"
+      required: true
+      type: "string"
+    - name: "virtualEntityId"
+      in: "query"
+      description: "virtual Entity Id"
+      required: false
+      type: "string"
+    - name: "virtualEntityName"
+      in: "query"
+      description: "virtual Entity Name"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the virtualentities based on given id."
+     schema:
+       $ref: "#/definitions/EntityServiceWithAccountDetailsCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    500:
+     description: "Internal server error."
+ /service/virtualentities/idWithModNos/{virtualEntityId}:
+  get:
+   tags:
+    - "virtualentityService"
+   summary: "Retrives the id  by given virtualEntityId."
+   description:  "Retrives the id by virtualEntityId."
+   operationId: "idWithModNos"
+   parameters:
+    - name: "virtualEntityId"
+      in: "path"
+      description: "virtualEntityId of the entity whose id needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the accounts based on given id."
+     schema:
+       $ref: "#/definitions/IdWithModNoDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ 
+definitions:
+ EntityMasterServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string
+     sanctionCheckRequired:
+      type: string
+      description: "Specify Sanction check required here"
+      maxLength: 1
+     fatcaResponsible:
+      type: string
+      description: "Specify Fatca Responsible here"
+      maxLength: 1
+     amlCustomerGroup:
+      type: string
+      description: "Maintain Aml Customer Group here"
+      maxLength: 105
+     amlRequired:
+      type: string
+      description: "Specify AML Required Status  here"
+      maxLength: 1
+     lastKycDate:
+      type: string
+      description: "Specify last Date for KYC  here"
+     kycReference:
+      type: string
+      description: "Specify KYC Reference  here"
+      maxLength: 100
+     kycStatus:
+      type: string
+      description: "Specify KYC Status  here"
+      maxLength: 1
+     taxIdentificationNo:
+      type: string
+      description: "Specify Tax Identification Number here"
+      maxLength: 100
+     identificationNo:
+      type: string
+      description: "Specify Identification Number  here"
+      maxLength: 100
+     identificationType:
+      type: string
+      description: "Specify Identification Type here"
+      maxLength: 1
+     registeredPincode:
+      type: string
+      description: "Specify Registered PIN Code here"
+      maxLength: 15
+     registeredCountry:
+      type: string
+      description: "Specify Registered Country Code here"
+      maxLength: 3
+     registeredAddressLine4:
+      type: string
+      description: "Specify Address Line Number-4 here"
+      maxLength: 105
+     registeredAddressLine3:
+      type: string
+      description: "Specify Address Line Number-3 here"
+      maxLength: 105
+     registeredAddressLine2:
+      type: string
+      description: "Specify Address Line Number-2 here"
+      maxLength: 105
+     registeredAddressLine1:
+      type: string
+      description: "Specify Address Line Number-1 here"
+      maxLength: 105
+     correspondencePincode:
+      type: string
+      description: "Specify Correspondence PIN Code here"
+      maxLength: 15
+     correspondenceCountry:
+      type: string
+      description: "Specify Correspondence Country Code here"
+      maxLength: 3
+     correspondenceAddressLine4:
+      type: string
+      description: "Specify Correspondence Address Line Number-4 here"
+      maxLength: 105
+     correspondenceAddressLine3:
+      type: string
+      description: "Specify Correspondence Address Line Number-3 here"
+      maxLength: 105
+     correspondenceAddressLine2:
+      type: string
+      description: "Specify Correspondence Address Line Number-2 here"
+      maxLength: 105
+     correspondenceAddressLine1:
+      type: string
+      description: "Specify Correspondence Address Line Number-1 here"
+      maxLength: 105
+     entityType:
+      type: string
+      description: "Specify Entity Type here"
+      maxLength: 1
+     virtualEntityName:
+      type: string
+      description: "Specify Virtual Entity Type here"
+      minLength: 1
+      maxLength: 105
+      pattern: '([a-zA-Z0-9\s]+)?'
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Entity Identification Number here"
+      minLength: 1
+      maxLength: 12
+     creationDate:
+      type: string
+      readOnly : true
+      description: "Date of account creation"
+     realCustomerNo:
+      type: string
+      description: "Specify Real Customer Number here"
+     defaultEntity:
+      type: string
+      maxLength: 1
+      description: "Specify whether the entity is being generated default from account facility domain"
+     makerId:
+      type: string
+      description: "Maker ID of Virtual Account"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of Virtual Account"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Virtual Account is authorized"
+     modNo:
+      type: integer
+      description: "Version number of Virtual Account"
+     recordStatus: 
+      type: string
+      description: "Record Status of Virtual Account"
+     authStatus:
+      type: string
+      description: "Authorization Status of Virtual Account"
+     onceAuth:
+      type: string
+      description: "Flag that indicated if Virtual Account is authorized once or not"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string 
+      description: "Remarks made by Approver"      
+     EntityIndividualDetailsServiceDTO:
+       $ref: '#/definitions/EntityIndividualDetailsServiceDTO'
+     EntityCorporateDetailsServiceDTO:
+       $ref: '#/definitions/EntityCorporateDetailsServiceDTO'
+     StatementPreferencesServiceDTO:
+       $ref: '#/definitions/StatementPreferencesServiceDTO'
+     StructuredAddressServiceDTO:
+       $ref: '#/definitions/StructuredAddressServiceDTO'
+
+    required:
+     - virtualEntityId
+     - realCustomerNo
+     - virtualEntityName
+     - entityType
+     - registeredCountry
+     - correspondenceCountry
+     - correspondenceAddressLine1
+     - registeredAddressLine1
+ EntityMasterSaveRequestDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string
+     sanctionCheckRequired:
+      type: string
+      description: "Specify Sanction check required here"
+      maxLength: 1
+     fatcaResponsible:
+      type: string
+      description: "Specify Fatca Responsible here"
+      maxLength: 1
+     amlCustomerGroup:
+      type: string
+      description: "Maintain Aml Customer Group here"
+      maxLength: 105
+     amlRequired:
+      type: string
+      description: "Specify AML Required Status  here"
+      maxLength: 1
+     lastKycDate:
+      type: string
+      description: "Specify last Date for KYC  here"
+     kycReference:
+      type: string
+      description: "Specify KYC Reference  here"
+      maxLength: 100
+     kycStatus:
+      type: string
+      description: "Specify KYC Status  here"
+      default: "P"
+      maxLength: 1
+     taxIdentificationNo:
+      type: string
+      description: "Specify Tax Identification Number here"
+      maxLength: 100
+     identificationNo:
+      type: string
+      description: "Specify Identification Number  here"
+      maxLength: 100
+     identificationType:
+      type: string
+      description: "Specify Identification Type here"
+      maxLength: 1
+     registeredPincode:
+      type: string
+      description: "Specify Registered PIN Code here"
+      maxLength: 15
+     registeredCountry:
+      type: string
+      description: "Specify Registered Country Code here"
+      maxLength: 3
+     registeredAddressLine4:
+      type: string
+      description: "Specify Address Line Number-4 here"
+      maxLength: 105
+     registeredAddressLine3:
+      type: string
+      description: "Specify Address Line Number-3 here"
+      maxLength: 105
+     registeredAddressLine2:
+      type: string
+      description: "Specify Address Line Number-2 here"
+      maxLength: 105
+     registeredAddressLine1:
+      type: string
+      description: "Specify Address Line Number-1 here"
+      maxLength: 105
+     correspondencePincode:
+      type: string
+      description: "Specify Correspondence PIN Code here"
+      maxLength: 15
+     correspondenceCountry:
+      type: string
+      description: "Specify Correspondence Country Code here"
+      maxLength: 3
+     correspondenceAddressLine4:
+      type: string
+      description: "Specify Correspondence Address Line Number-4 here"
+      maxLength: 105
+     correspondenceAddressLine3:
+      type: string
+      description: "Specify Correspondence Address Line Number-3 here"
+      maxLength: 105
+     correspondenceAddressLine2:
+      type: string
+      description: "Specify Correspondence Address Line Number-2 here"
+      maxLength: 105
+     correspondenceAddressLine1:
+      type: string
+      description: "Specify Correspondence Address Line Number-1 here"
+      maxLength: 105
+     entityType:
+      type: string
+      description: "Specify Entity Type here"
+      maxLength: 1
+     virtualEntityName:
+      type: string
+      description: "Specify Virtual Entity Type here"
+      minLength: 1
+      maxLength: 105
+      pattern: '([a-zA-Z0-9\s]+)?'
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Entity Identification Number here"
+      minLength: 1
+      maxLength: 12
+     creationDate:
+      type: string
+      readOnly : true
+      description: "Date of account creation"
+     realCustomerNo:
+      type: string
+      description: "Specify Real Customer Number here"
+     defaultEntity:
+      type: string
+      maxLength: 1
+      description: "Specify whether the entity is being generated default from account facility domain"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string 
+      description: "Remarks made by Approver"
+            
+     EntityIndividualDetailsServiceDTO:
+       $ref: '#/definitions/EntityIndividualDetailsServiceDTO'
+     EntityCorporateDetailsServiceDTO:
+       $ref: '#/definitions/EntityCorporateDetailsServiceDTO'
+     StatementPreferencesServiceDTO:
+       $ref: '#/definitions/StatementPreferencesServiceDTO'
+     StructuredAddressServiceDTO:
+       $ref: '#/definitions/StructuredAddressServiceDTO'
+    required:
+     - virtualEntityId
+     - realCustomerNo
+     - virtualEntityName
+     - entityType
+ EntityIndividualDetailsServiceDTO:
+  type: object
+  properties:
+     preferredMode:
+      type: string
+      description: "Specify Preferred Mode  here"
+      maxLength: 1
+     email:
+      type: string
+      description: "Specify Email Id of Customer here"
+      maxLength: 255
+      pattern: (^$|[A-Za-z0-9+_.-]+@\w+?\x2E.+)
+     workPhoneNo:
+      type: string
+      description: "Specify Working Phone/Mobile Number of Customer here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     workPhoneIsd:
+      type: string
+      description: "Specify Working International Subscriber Dailing of Customer here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     homePhoneNo:
+      type: string
+      description: "Specify Home Phone/Mobile Number of Customer here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     homePhoneIsd:
+      type: string
+      description: "Specify Home International Subscriber Dailing of Customer here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNoIsd:
+      type: string
+      description: "Specify Mobile Number Country Code here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNo:
+      type: string
+      description: "Specify Mobile Number here"
+      maxLength: 10
+     nationalId:
+      type: string
+      description: "Specify Nationality Identification Number  of Customer here"
+      maxLength: 35
+     nationality:
+      type: string
+      description: "Specify Nationality of Customer here"
+      maxLength: 3
+     gender:
+      type: string
+      description: "Specify Gender of Customer here"
+      maxLength: 1
+     dateOfBirth:
+      type: string
+      description: "Specify Date Of Birth of Customer here"
+     lastName:
+      type: string
+      description: "Specify Last Name of Customer here"
+      maxLength: 105
+     middleName:
+      type: string
+      description: "Specify Middle Name of Customer here"
+      maxLength: 105
+     firstName:
+      type: string
+      description: "Specify First Name of Customer here"
+      maxLength: 105
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Entity Identification Number here"
+  required:
+   - virtualEntityId
+   - firstName
+   - lastName
+#   - dateOfBirth
+#   - gender
+#   - nationality
+ StructuredAddressServiceDTO:
+  type: object
+  properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string
+     department:
+      type: string
+      description: "Department"
+      maxLength: 70
+     subDepartment:
+      type: string
+      description: "Sub Department"
+      maxLength: 70      
+     streetName:
+      type: string
+      description: "Street Name"
+      maxLength: 70
+     buildingNumber:
+      type: string
+      description: "Building Number"
+      maxLength: 16
+     buildingName:
+      type: string
+      description: "building Name"
+      maxLength: 35
+     floor:
+      type: string
+      description: "Floor"
+      maxLength: 70
+     postbox:
+      type: string
+      description: "postbox"
+      maxLength: 16
+     room:
+      type: string
+      description: "Room"
+      maxLength: 70
+     postcode:
+      type: string
+      description: "postcode"
+      maxLength: 16
+     townName:
+      type: string
+      description: "Town Name"
+      maxLength: 35
+     townLocationName:
+      type: string
+      description: "Town Location Name"
+      maxLength: 35
+     districtName:
+      type: string
+      description: "District name"
+      maxLength: 35
+     countrySubDivision:
+      type: string
+      description: "Country Sub Division"
+      maxLength: 35
+     strrCountry:
+      type: string
+      description: "country"
+      maxLength: 2
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Entity Identification Number here"
+  required:
+   - virtualEntityId
+   - townName
+   - strrCountry
+   - postcode
+ EntityCorporateDetailsServiceDTO:
+  type: object
+  properties:
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Identification Number here"
+     dateOfIncorporation:
+      type: string
+      description: "Specify Date of Incorporation here"
+     countryOfIncorporation:
+      type: string
+      description: "Specify Country of Incorporation here"
+      maxLength: 105
+     uniqueId:
+      type: string
+      description: "Specify Unique Identification Number here"
+      maxLength: 35
+     workPhoneIsd1:
+      type: string
+      description: "Specify ISD Code for First Working Phone Number here"
+      maxLength: 4
+     workPhoneNo1:
+      type: string
+      description: "Specify First Working Phone Number here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     workPhoneIsd2:
+      type: string
+      description: "Specify ISD Code for Second Working Phone Number here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     workPhoneNo2:
+      type: string
+      description: "Specify Second Working Phone Number here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     mobileNoIsd:
+      type: string
+      description: "Specify Mobile Number Country Code here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNo:
+      type: string
+      description: "Specify Mobile Number here"
+      maxLength: 10
+     email:
+      type: string
+      description: "Specify Email Id here"
+      maxLength: 255
+      pattern: (^$|[A-Za-z0-9+_.-]+@\w+?\x2E.+)
+     preferredMode:
+      type: string
+      description: "Specify Preferred Mode here"
+      maxLength: 1
+     corporateEntityType:
+      type: string
+      description: "Specify corporate EntityType here"
+      maxLength: 1
+     bicCode:
+      type: string
+      description: "Specify corporate bic code here"
+  required:
+   - virtualEntityId
+#   - dateOfIncorporation
+#   - countryOfIncorporation
+   - corporateEntityType
+   
+#StatementPreferencesServiceDTO details starts 
+ StatementPreferencesServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Identification Number here"
+     statementType:
+      type: string
+      description: "Type of the statement - Consolidated/Account level"
+      pattern: '[A,C]'
+     frequency:
+      type: string
+      description: "Frequency of statement - Daily/Weekly/Monthly/Quarterly/half yearly/Yearly"
+      pattern: '[D,W,M,Q,H,Y]'
+     dueOn:
+      type: number
+      description: "Statement due date"
+      pattern: '([0-9]+)?'
+     lastStmntGenDate:
+      type: string
+      description: "Last statement generation date"
+    #swift changes begin
+     generateMt940:
+      type: string
+      description: "Generate MT940 during EOD"
+      pattern: '[Y,N]'
+     generateMt950:
+      type: string
+      description: "Generate MT950 during EOD"
+      pattern: '[Y,N]'
+     displayIban:
+      type: string
+      description: "Display Virtual IBAN in Swift Messages"
+      pattern: '[Y,N]'
+     #swift changes end
+     #camt changes start
+     generatePdf:
+      type: string
+      description: "Generate PDF statement during EOD"
+      pattern: '[Y,N]'
+     generateCamt053:
+      type: string
+      description: "Generate CAMT.053 during EOD"
+      pattern: '[Y,N]'
+     #camt changes end
+     #sprint-11 starts
+     generateMt942:
+      type: string
+      description: "Generate MT942"
+      pattern: '[Y,N]'
+     genMt942OnMovement:
+      type: string
+      description: "Generate MT942 on movement"
+      pattern: '[Y,N]'
+     mt942RepTxnSince:
+      type: string
+      description: "Report transactions since for MT942"
+     mt942GenTime:
+      type: string
+      description: "Comma separated time for generating MT942"
+     generateCamt052:
+      type: string
+      description: "Generate CAMT.052"
+      pattern: '[Y,N]'
+     genCamt052OnMovement:
+      type: string
+      description: "Generate CAMT.052 on movement"
+      pattern: '[Y,N]'
+     camt052RepTxnSince:
+      type: string
+      description: "Report transactions since for CAMT.052"
+     camt052GenTime:
+      type: string
+      description: "Comma separated time for generating CAMT.052"
+  required:
+   - virtualEntityId
+   - statementType
+   - frequency
+   - dueOn
+#StatementPreferencesServiceDTO details Ends
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+     $ref: "#/definitions/ResponseDto"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ EntityMasterServiceCollection: 
+  description: "Collection of entity."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/EntityMasterServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ VirtualEntityServiceResponseWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VirtualEntityServiceResponseDto"
+   data:
+    $ref: "#/definitions/EntityMasterServiceDTO"
+ VirtualEntityServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ VirtualEntityServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VirtualEntityServiceResponseCode"
+ ResponseResourceSupport:
+  type: object
+ EntityMasterServiceWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/EntityMasterServiceDTO"
+ StepStatusUpdateServiceDto:
+  type: object
+  properties:
+     id:
+      type: string
+     branchId:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currentDate:
+      type: string
+     jobId:
+      type: string
+     stepId:
+      type: string
+     action:
+      type: string
+     status:
+      type: string
+     statusDescription:
+      type: string
+      
+ InvokeForgetBatchServiceDTO:
+  type: object
+  properties:
+     retentionPeriod:
+      type: number
+     branchCode:
+      type: string
+     eodDate:
+      type: string
+     eodId:
+      type: string
+     eodJobId:
+      type: string
+     eodStepId:
+      type: string
+ EntityWithAccountDetailsServiceDTO:
+  type: object
+  properties:     
+     virtualEntityId:
+      type: string
+      description: "Virtual entity id or virtual customer id of a real customer"
+     virtualEntityName:
+      type: string
+      description: "Virtual entity name or virtual customer name of a real customer"
+     entityType:
+      type: string
+      description: "type of the virtual entiity e.g Individual, Corporate etc"     
+     childAccounts:
+      type: integer
+      description: "Available balance of a virtual enitty"
+     status:
+      type: string
+      description: "status of a virtual enitty"
+     creationDate:
+      type: string
+      description: "creation date of a virtual enitty"
+     realCustomerNo:
+      type: string
+      description: "real customer no of a virtual enitty"     
+ EntityServiceWithAccountDetailsCollection:
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: "#/definitions/EntityWithAccountDetailsServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ AccountDetailsForEntitiesServiceDTO:
+  type: object
+  properties:
+     virtualEntityId:
+      type: string
+     availableBal:
+      type: number
+     childAccounts:
+      type: integer
+     defaultAccCcy:
+      type: string 
+ 
+ AccountDetailsForEntitiesServiceCollection:
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: "#/definitions/AccountDetailsForEntitiesServiceDTO"  
+ StatementPreferencesServiceCollection:
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: "#/definitions/StatementPreferencesServiceDTO"
+ CloseDto:
+  type: object
+  properties:
+   remarks:
+    type: string 
+ IdWithModNoDTO:
+  type: "object"
+  properties:
+   accountId:
+    type: "string"
+    description: "Virtual Account Number"
+   modNos:
+    type: "array"
+    items:
+     type: integer
+    description: "modNos"
+    
+ EntityMasterModifyRequestDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string
+     sanctionCheckRequired:
+      type: string
+      description: "Specify Sanction check required here"
+      maxLength: 1
+     fatcaResponsible:
+      type: string
+      description: "Specify Fatca Responsible here"
+      maxLength: 1
+     amlCustomerGroup:
+      type: string
+      description: "Maintain Aml Customer Group here"
+      maxLength: 105
+     amlRequired:
+      type: string
+      description: "Specify AML Required Status  here"
+      maxLength: 1
+     lastKycDate:
+      type: string
+      description: "Specify last Date for KYC  here"
+     kycReference:
+      type: string
+      description: "Specify KYC Reference  here"
+      maxLength: 100
+     kycStatus:
+      type: string
+      description: "Specify KYC Status  here"
+#      default: "P"
+      maxLength: 1
+     taxIdentificationNo:
+      type: string
+      description: "Specify Tax Identification Number here"
+      maxLength: 100
+     identificationNo:
+      type: string
+      description: "Specify Identification Number  here"
+      maxLength: 100
+     identificationType:
+      type: string
+      description: "Specify Identification Type here"
+      maxLength: 1
+     registeredPincode:
+      type: string
+      description: "Specify Registered PIN Code here"
+      maxLength: 15
+     registeredCountry:
+      type: string
+      description: "Specify Registered Country Code here"
+      maxLength: 3
+     registeredAddressLine4:
+      type: string
+      description: "Specify Address Line Number-4 here"
+      maxLength: 105
+     registeredAddressLine3:
+      type: string
+      description: "Specify Address Line Number-3 here"
+      maxLength: 105
+     registeredAddressLine2:
+      type: string
+      description: "Specify Address Line Number-2 here"
+      maxLength: 105
+     registeredAddressLine1:
+      type: string
+      description: "Specify Address Line Number-1 here"
+      maxLength: 105
+     correspondencePincode:
+      type: string
+      description: "Specify Correspondence PIN Code here"
+      maxLength: 15
+     correspondenceCountry:
+      type: string
+      description: "Specify Correspondence Country Code here"
+      maxLength: 3
+     correspondenceAddressLine4:
+      type: string
+      description: "Specify Correspondence Address Line Number-4 here"
+      maxLength: 105
+     correspondenceAddressLine3:
+      type: string
+      description: "Specify Correspondence Address Line Number-3 here"
+      maxLength: 105
+     correspondenceAddressLine2:
+      type: string
+      description: "Specify Correspondence Address Line Number-2 here"
+      maxLength: 105
+     correspondenceAddressLine1:
+      type: string
+      description: "Specify Correspondence Address Line Number-1 here"
+      maxLength: 105
+     virtualEntityName:
+      type: string
+      description: "Specify Virtual Entity Type here"
+      minLength: 1
+      maxLength: 105
+      pattern: '([a-zA-Z0-9\s]+)?'
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Entity Identification Number here"
+      minLength: 1
+      maxLength: 12
+     creationDate:
+      type: string
+      readOnly : true
+      description: "Date of account creation"
+     realCustomerNo:
+      type: string
+      description: "Specify Real Customer Number here"
+     defaultEntity:
+      type: string
+      maxLength: 1
+      description: "Specify whether the entity is being generated default from account facility domain"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string 
+      description: "Remarks made by Approver"
+            
+     EntityIndividualDetailsModifyServiceDTO:
+       $ref: '#/definitions/EntityIndividualDetailsModifyServiceDTO'
+     EntityCorporateDetailsModifyServiceDTO:
+       $ref: '#/definitions/EntityCorporateDetailsModifyServiceDTO'
+     StatementPreferencesModifyServiceDTO:
+       $ref: '#/definitions/StatementPreferencesModifyServiceDTO'
+     StructuredAddressModifyServiceDTO:
+       $ref: '#/definitions/StructuredAddressModifyServiceDTO'
+    required:
+     - virtualEntityId
+     - realCustomerNo
+     - virtualEntityName
+     - entityType
+ EntityIndividualDetailsModifyServiceDTO:
+  type: object
+  properties:
+     preferredMode:
+      type: string
+      description: "Specify Preferred Mode  here"
+      maxLength: 1
+     email:
+      type: string
+      description: "Specify Email Id of Customer here"
+      maxLength: 255
+      pattern: (^$|[A-Za-z0-9+_.-]+@\w+?\x2E.+)
+     workPhoneNo:
+      type: string
+      description: "Specify Working Phone/Mobile Number of Customer here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     workPhoneIsd:
+      type: string
+      description: "Specify Working International Subscriber Dailing of Customer here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     homePhoneNo:
+      type: string
+      description: "Specify Home Phone/Mobile Number of Customer here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     homePhoneIsd:
+      type: string
+      description: "Specify Home International Subscriber Dailing of Customer here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNoIsd:
+      type: string
+      description: "Specify Mobile Number Country Code here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNo:
+      type: string
+      description: "Specify Mobile Number here"
+      maxLength: 10
+     nationalId:
+      type: string
+      description: "Specify Nationality Identification Number  of Customer here"
+      maxLength: 35
+     nationality:
+      type: string
+      description: "Specify Nationality of Customer here"
+      maxLength: 3
+     gender:
+      type: string
+      description: "Specify Gender of Customer here"
+      maxLength: 1
+     dateOfBirth:
+      type: string
+      description: "Specify Date Of Birth of Customer here"
+     lastName:
+      type: string
+      description: "Specify Last Name of Customer here"
+      maxLength: 105
+     middleName:
+      type: string
+      description: "Specify Middle Name of Customer here"
+      maxLength: 105
+     firstName:
+      type: string
+      description: "Specify First Name of Customer here"
+      maxLength: 105
+  required:
+   - firstName
+   - lastName
+#   - dateOfBirth
+#   - gender
+#   - nationality
+ StructuredAddressModifyServiceDTO:
+  type: object
+  properties:
+     department:
+      type: string
+      description: "Department"
+      maxLength: 70
+     subDepartment:
+      type: string
+      description: "Sub Department"
+      maxLength: 70      
+     streetName:
+      type: string
+      description: "Street Name"
+      maxLength: 70
+     buildingNumber:
+      type: string
+      description: "Building Number"
+      maxLength: 16
+     buildingName:
+      type: string
+      description: "building Name"
+      maxLength: 35
+     floor:
+      type: string
+      description: "Floor"
+      maxLength: 70
+     postbox:
+      type: string
+      description: "postbox"
+      maxLength: 16
+     room:
+      type: string
+      description: "Room"
+      maxLength: 70
+     postcode:
+      type: string
+      description: "postcode"
+      maxLength: 16
+     townName:
+      type: string
+      description: "Town Name"
+      maxLength: 35
+     townLocationName:
+      type: string
+      description: "Town Location Name"
+      maxLength: 35
+     districtName:
+      type: string
+      description: "District name"
+      maxLength: 35
+     countrySubDivision:
+      type: string
+      description: "Country Sub Division"
+      maxLength: 35
+     strrCountry:
+      type: string
+      description: "country"
+      maxLength: 2
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+   
+  required:
+   - townName
+   - strrCountry
+   - postcode
+ EntityCorporateDetailsModifyServiceDTO:
+  type: object
+  properties:
+     dateOfIncorporation:
+      type: string
+      description: "Specify Date of Incorporation here"
+     countryOfIncorporation:
+      type: string
+      description: "Specify Country of Incorporation here"
+      maxLength: 105
+     uniqueId:
+      type: string
+      description: "Specify Unique Identification Number here"
+      maxLength: 35
+     workPhoneIsd1:
+      type: string
+      description: "Specify ISD Code for First Working Phone Number here"
+      maxLength: 4
+     workPhoneNo1:
+      type: string
+      description: "Specify First Working Phone Number here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     workPhoneIsd2:
+      type: string
+      description: "Specify ISD Code for Second Working Phone Number here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     workPhoneNo2:
+      type: string
+      description: "Specify Second Working Phone Number here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     mobileNoIsd:
+      type: string
+      description: "Specify Mobile Number Country Code here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNo:
+      type: string
+      description: "Specify Mobile Number here"
+      maxLength: 10
+     email:
+      type: string
+      description: "Specify Email Id here"
+      maxLength: 255
+      pattern: (^$|[A-Za-z0-9+_.-]+@\w+?\x2E.+)
+     preferredMode:
+      type: string
+      description: "Specify Preferred Mode here"
+      maxLength: 1
+     corporateEntityType:
+      type: string
+      description: "Specify corporate EntityType here"
+      maxLength: 1
+     bicCode:
+      type: string
+      description: "Specify corporate bic code here"
+  required:
+#   - dateOfIncorporation
+#   - countryOfIncorporation
+   - corporateEntityType
+   
+#StatementPreferencesModifyServiceDTO details starts 
+ StatementPreferencesModifyServiceDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     statementType:
+      type: string
+      description: "Type of the statement - Consolidated/Account level"
+      pattern: '[A,C]'
+     frequency:
+      type: string
+      description: "Frequency of statement - Daily/Weekly/Monthly/Quarterly/half yearly/Yearly"
+      pattern: '[D,W,M,Q,H,Y]'
+     dueOn:
+      type: number
+      description: "Statement due date"
+      pattern: '([0-9]+)?'
+     lastStmntGenDate:
+      type: string
+      description: "Last statement generation date"
+    #swift changes begin
+     generateMt940:
+      type: string
+      description: "Generate MT940 during EOD"
+      pattern: '[Y,N]'
+     generateMt950:
+      type: string
+      description: "Generate MT950 during EOD"
+      pattern: '[Y,N]'
+     displayIban:
+      type: string
+      description: "Display Virtual IBAN in Swift Messages"
+      pattern: '[Y,N]'
+     #swift changes end
+     #camt changes start
+     generatePdf:
+      type: string
+      description: "Generate PDF statement during EOD"
+      pattern: '[Y,N]'
+     generateCamt053:
+      type: string
+      description: "Generate CAMT.053 during EOD"
+      pattern: '[Y,N]'
+     #camt changes end
+     #sprint-11 starts
+     generateMt942:
+      type: string
+      description: "Generate MT942"
+      pattern: '[Y,N]'
+     genMt942OnMovement:
+      type: string
+      description: "Generate MT942 on movement"
+      pattern: '[Y,N]'
+     mt942RepTxnSince:
+      type: string
+      description: "Report transactions since for MT942"
+     mt942GenTime:
+      type: string
+      description: "Comma separated time for generating MT942"
+     generateCamt052:
+      type: string
+      description: "Generate CAMT.052"
+      pattern: '[Y,N]'
+     genCamt052OnMovement:
+      type: string
+      description: "Generate CAMT.052 on movement"
+      pattern: '[Y,N]'
+     camt052RepTxnSince:
+      type: string
+      description: "Report transactions since for CAMT.052"
+     camt052GenTime:
+      type: string
+      description: "Comma separated time for generating CAMT.052"
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+  required:
+   - statementType
+   - frequency
+   - dueOn 

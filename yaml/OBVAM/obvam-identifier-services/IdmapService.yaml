@@ -1,0 +1,148 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : IdmapService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is the service api yaml" 
+ version: "1.0.0"
+ title: "idmaps Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "idmapservice"
+   description: "service yaml to expose the service api to get list of identifier and its detail for a given customer."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../idmaps
+
+ /service/idmaps/fetchIdentifier:
+  get:
+   tags:
+    - "idmapservice"
+   summary: "Get all valid virtual identifier for a given customer."
+   description:  "This endpoint is used to get all valid virtual identifier for a given customer and the identifier details"
+   operationId: "virtualIdentifierDetailFetch"
+   parameters:
+   - in: query
+     name: realCustomerNo
+     description: "Real Customer No of remittance list id"
+     required: true
+     type: string
+   - in: query
+     name: virtualIdentifier
+     description: "virtual identifier for which details to be checked" 
+     required: false
+     type: string
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/IdentifierMapLOVDTOServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ IdentifierMapLOVServiceDTO:
+  type: object
+  properties:
+     realCustomerNo:
+      type: string
+      description: "Real Customer Name"
+     virtualIdentifier:
+      type: string
+      description: "virtual identifier"
+     virtualIdentifierDesc:
+      type: string
+      description: "identifier Description"
+     virtualIdentifierBranch:
+      type: string
+      description: "virtual Identifier branch"
+     branchName:
+      type: string
+      description: "branch name"
+     realAccountNo:
+      type: string
+      description: "real account number"
+     accountGroupId:
+      type: string
+      description: "VMCA"
+     remitteridMask:
+      type: string
+      description: "Remitter Id mask at branch level"   
+     remitterListId:
+      type: string
+      description: "Remitter List Id"
+     remitterListIdDesc:
+      type: string
+      description: "Remitter List Description"
+     validationRuleId:
+      type: string
+      description: "corporate rule of the identifier"
+     minLength:
+      type: number
+      description: "Minimum length of VI account number as per rule"
+     maxLength:
+      type: number
+      description: "maximum length of VI account number as per rule"
+ IdentifierMapLOVDTOServiceCollection: 
+  description: "Collection of idmap."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/IdentifierMapLOVServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"

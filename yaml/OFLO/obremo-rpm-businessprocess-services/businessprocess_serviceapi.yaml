@@ -1,0 +1,171 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : businessprocess_webapi.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Business Process Service
+host: 10.184.157.121:9000
+basePath: /business-process-service
+tags:
+- name: BusinessProcessAPI
+  description: API for business Process Operations
+schemes:
+- http
+paths:
+  /service-api/v1/businessprocess/summary:
+    get:
+      tags:
+        - "BusinessProcessServiceSummary"
+      summary: "Get all valid business process with only id and name values."
+      description:  " Get all valid business process with only id and name values..This endpoints will be used to Get all valid business process maintanence records."
+      operationId: "getBusinessProcesses"
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          schema:
+           type: object
+           $ref: "#/definitions/BusinessProcessServiceSummaryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service-api/v1/businessprocess/datasegments/{businessProductCode}/{lifeCycleCode}:
+    get:
+      tags:
+        - "BusinessProcessServiceSummary"
+      summary: "Returns all data segments of the process corresponding to given product  and life cycles codes as  json string "
+      description:  "Returns all data segments of the process corresponding to given product  and life cycles codes "
+      operationId: "getDataSegmentDetails"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessProductCode"
+          in: "path"
+          description: "businessProductCode of the process for which all  data segments to be fetched"
+          required: true
+          type: "string" 
+        - name: "lifeCycleCode"
+          in: "path"
+          description: "lifeCycleCode of the process for which all  data segments to be fetched"
+          required: true
+          type: "string"  
+        - name: "includeStageInfo"
+          in: "query"
+          description: "Flag to indicate if stage information is required in the response"
+          required: false
+          type: boolean         
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          schema:
+           type: object
+           $ref: "#/definitions/String"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"          
+definitions:          
+ BusinessProcessServiceSummaryCollection:
+  description: "Collection of business process summary."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/BusinessProcessServiceSummaryModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ BusinessProcessServiceSummaryModel:
+    description: "BusinessProcessService Summary Model"
+    type: "object"
+    required:
+    - businessProcessName
+    - businessProcessDesc
+    properties:
+      businessProcessName:
+       description: "business Process Name"
+       type: "string"
+       minLength: 0
+       maxLength: 60
+      businessProcessDesc:
+       description: "business Process Description"
+       type: "string"
+       minLength: 0
+       maxLength: 60
+      lifecycleCode:
+       description: "Life Cycle Code"
+       type: "string"
+       minLength: 0
+       maxLength: 20
+      lifecycleDescription:
+       description: "Life Cycle Description"
+       type: "string"
+       minLength: 0
+       maxLength: 105
+      businessProductCode:
+       type: array
+       items:
+         type: object
+      businessProductName:
+       type: array
+       items:
+         type: object
+       
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer      

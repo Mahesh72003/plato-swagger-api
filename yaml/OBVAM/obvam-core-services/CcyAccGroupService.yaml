@@ -1,0 +1,556 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018, 2021, Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : CcyAccGroupService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         : System
+#  Reviewed By        : Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      :  
+# 
+#  -------------------------------------------------------------------------------------------------------
+
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample service multiccyaccountgroups. Pass appId = VAC" 
+ version: "1.0.0"
+ title: "multiccyaccountgroups Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "multiccyaccountgroupservice"
+   description: "This service is used to maintain multi-currency account group. It permits linking a real customer with its account and currency with a unique combination of account currency pair. In an account group, currency cannt be repeated."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../multiccyaccountgroups
+
+ /service/multiccyaccountgroups:
+  get:
+   tags:
+    - "multiccyaccountgroupservice"
+   summary: "Get all valid multiccyaccountgroups."
+   description:  "Get all valid multiccyaccountgroups. This endpoints will be used to Get all valid multiccyaccountgroups maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: "offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - in: query
+     name: virtualMCA
+     required: false
+     type: string
+     description: "Virtual Multi Currency Account Number"
+   - in: query
+     name: virtualMCADesc
+     required: false
+     type: string
+     description: "Virtual Multi Currency Account Number Description"
+   - in: query
+     name: authStat
+     required: false
+     type: string
+     description: "Auth Status"
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+     description: "Checker ID"
+   - in: query
+     name: makerId
+     required: false
+     type: string
+     description: "Maker ID"
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+     description: "Real Customer Number for which VMCA is created"
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+     description: "Record Status"
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VacTmCcyAccGroupMasterServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  post:
+   tags:
+    - "multiccyaccountgroupservice"
+   summary: "Adds a new multiccyaccountgroups."
+   description: "This endpoint is used to add a new multiccyaccountgroups."
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "vacTmCcyAccGroupMasterSaveDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new multiccyaccountgroups" 
+      required: true
+      schema:
+       $ref: "#/definitions/VacTmCcyAccGroupMasterSaveDTO"
+    
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created multiccyaccountgroups" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VacTmCcyAccGroupResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/multiccyaccountgroups/{realCustomerNo}/{virtualMCA}:
+  get:
+   tags:
+    - "multiccyaccountgroupservice"
+   summary: "Retrieves the multiccyaccountgroups by ID."
+   description:  "Retrieves the multiccyaccountgroups by ID."
+   operationId: "getByNaturalKey"
+   parameters:
+    - name: "realCustomerNo"
+      in: "path"
+      description: "Real Customer Number"
+      required: true
+      type: "string"
+    - name: "virtualMCA"
+      in: "path"
+      description: "virtualMCA"
+      required: true
+      type: "string"
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+   responses:
+    200:
+     description: "Returns the multiccyaccountgroups based on given id."
+     schema:
+      $ref: "#/definitions/VacTmCcyAccGroupMasterWrapperServiceDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  put:
+   tags:
+    - "multiccyaccountgroupservice"
+   summary: "Retrieves the multiccyaccountgroups by ID."
+   description:  "Retrieves the multiccyaccountgroups by ID."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "realCustomerNo"
+      in: "path"
+      description: "Real Customer Number"
+      required: true
+      type: "string"
+    - name: "virtualMCA"
+      in: "path"
+      description: "virtualMCA"
+      required: true
+      type: "string"
+    - name: "vacTmCcyAccGroupMasterSaveDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new multiccyaccountgroups" 
+      required: true
+      schema:
+       $ref: "#/definitions/VacTmCcyAccGroupMasterSaveDTO"
+    
+   responses:
+    200:
+     description: "Returns the multiccyaccountgroups based on given id."
+     schema:
+      $ref: "#/definitions/VacTmCcyAccGroupResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/multiccyaccountgroups/{realCustomerNo}/{virtualMCA}/close:
+  patch:
+   tags:
+    - "multiccyaccountgroupservice"
+   summary: "Close the virtualMCA by given Natural Composite Key."
+   description:  "Close the accounts identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "realCustomerNo"
+      in: "path"
+      description: "Real Customer Number"
+      required: true
+      type: "string"
+    - name: "virtualMCA"
+      in: "path"
+      description: "virtual Multi-currency Account"
+      required: true
+      type: "string"
+    - name: "mCACloseDto"
+      in: "body"
+      description: Request body contain accounts and Modification no of accounts maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/MCACloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VacTmCcyAccGroupResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ VacTmCcyAccGroupMasterServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     virtualMCADesc:
+      type: string
+      description: "Virtual Multi-Currency Account Description"
+      maxLength: 500
+     virtualMCA:
+      type: string
+      description: "Virtual Multi-Currency Account Number"
+      minLength: 3
+      maxLength: 8
+      pattern: ^[a-zA-Z0-9]*$
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number for which VMCA is created"
+      minLength: 1
+      maxLength: 20
+     makerId:
+      type: string
+      description: "Maker ID"
+     makerDateStamp:
+      type: string
+      description: "Maker Date Stamp"
+     checkerId:
+      type: string
+      description: "Checker Id"
+     checkerDateStamp:
+      type: string
+      description: "Checker Date Stamp"
+     modNo:
+      type: number
+      format: int64
+      description: "Modification Number"
+     recordStatus: 
+      type: string
+      description: "Record Status"
+     authStatus:
+      type: string
+      description: "Auth Status"
+     onceAuth:
+      type: string
+      description: "Once Authorized"
+     doerRemarks:
+      type: string
+      description: "Maker Remarks"
+     approverRemarks:
+      type: string  
+      description: "Checker Remarks"
+     VacTmCcyAccGroupDetailServiceDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VacTmCcyAccGroupDetailServiceDTO'
+    required:
+     - virtualMCA
+     - realCustomerNo
+ VacTmCcyAccGroupDetailServiceDTO:
+  type: object
+  properties:
+     virtualMCA:
+      type: string
+      description: "Virtual Multi-Currency Account Number"
+      minLength: 3
+      maxLength: 8
+      pattern: ^[a-zA-Z0-9]*$
+     defaultAccount:
+      type: string
+      description: "default Account flag"
+      minLength: 1
+      maxLength: 1
+      pattern: '[Y,N]'
+     realAccountBrn:
+      type: string
+      description: "Branch of the Real Account"
+      minLength: 3
+      maxLength: 3
+     realAccountCcy:
+      type: string
+      description: "Currency for the Real Account"
+      minLength: 3
+      maxLength: 3
+     realAccountNo:
+      type: string
+      description: "Real Account Number for the Customer"
+      minLength: 1
+      maxLength: 34
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number"
+      minLength: 1
+      maxLength: 20
+  required:
+   - realCustomerNo
+   - realAccountBrn
+   - realAccountCcy
+   - realAccountNo
+   - virtualMCA
+   
+ VacTmCcyAccGroupMasterSaveDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     virtualMCADesc:
+      type: string
+      description: "Virtual Multi-Currency Account Description"
+      maxLength: 500
+     virtualMCA:
+      type: string
+      description: "Virtual Multi-Currency Account Number"
+      minLength: 3
+      maxLength: 8
+      pattern: ^[a-zA-Z0-9]*$
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number "
+      minLength: 1
+      maxLength: 20
+     makerRemarks:
+      type: string
+      maxLength: 50
+      description: "Maker ID"
+     checkerRemarks:
+      type: string
+      maxLength: 50
+      description: "Checker Remarks"
+     VacTmCcyAccGroupDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VacTmCcyAccGroupDetailSaveDTO'
+    required:
+     - virtualMCA
+     - realCustomerNo
+ VacTmCcyAccGroupDetailSaveDTO:
+  type: object
+  properties:
+     defaultAccount:
+      type: string
+      description: "default Account flag"
+      minLength: 1
+      maxLength: 1
+      pattern: '[Y,N]'
+     realAccountBrn:
+      type: string
+      description: "Branch of the Real Account"
+      minLength: 3
+      maxLength: 3
+     realAccountCcy:
+      type: string
+      description: "Currency for the Real Account"
+      minLength: 3
+      maxLength: 3
+     realAccountNo:
+      type: string
+      description: "Real Account Number"
+      minLength: 1
+      maxLength: 34
+  required:
+   - realAccountBrn
+   - realAccountCcy
+   - realAccountNo
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+
+ VacTmCcyAccGroupMasterServiceCollection: 
+  description: "Collection of ccyaccgroup."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VacTmCcyAccGroupMasterServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ VacTmCcyAccGroupMasterWrapperServiceDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VacTmCcyAccGroupMasterServiceDTO"
+ VacTmCcyAccGroupResponseWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VacTmCcyAccGroupServiceResponseDto"
+   data:
+    $ref: "#/definitions/VacTmCcyAccGroupMasterServiceDTO" 
+ VacTmCcyAccGroupServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ VacTmCcyAccGroupServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VacTmCcyAccGroupServiceResponseCode"
+ MCACloseDto:
+  type: object
+  properties:
+   remarks:
+    type: string  
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+     $ref: "#/definitions/ResponseDto"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+

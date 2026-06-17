@@ -1,0 +1,1308 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+  description: 'IC Input Service.'
+  version: 1.0.0
+  title: 'IC Input Service'
+host: 'api-plato.us.oracle.com:8080'
+basePath: /api/1.0
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  -
+    name: icInput
+    description: 'This Service is used to save IC Inputs from external services'
+schemes:
+  - https
+paths:
+  /rateBrnDef/rateCode:
+    get:
+      tags:
+        - rateBrnDef
+      summary: 'Get all rateCodes'
+      description: 'Get all rateCodes'
+      operationId: fetchRateCode
+      responses:
+        '200':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/RateCodesDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /vdBalMaster:
+    post:
+      tags:
+        - vdBalMaster
+      summary: 'Save VD Bal'
+      description: 'Save VD Bal ..'
+      operationId: saveVdBal
+      parameters:
+        -
+          name: vdBal
+          in: body
+          description: 'Request Body that contains data required for saving VD bal '
+          required: true
+          schema:
+            $ref: '#/definitions/VDBalMasterDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/VDBalResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /accrLiqDetails:
+    post:
+      tags:
+        - vdBalMaster
+      summary: 'accrual liquidation details'
+      description: 'accrual liquidation details'
+      operationId: accrLiqDetails
+      parameters:
+        -
+          name: accrLiqDetails
+          in: body
+          description: 'Request Body that contains data required for accrual liquidation details '
+          required: true
+          schema:
+            $ref: '#/definitions/AccrLiqDetailsDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/AccrLiqDetailsResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /vdBal:
+    get:
+      tags:
+        - vdBal
+      summary: 'Get VD Bal'
+      description: 'Get VD Bal'
+      operationId: getVdBal
+      parameters:
+        -
+          name: brn
+          in: query
+          description: 'Fetch Based on Branch Code, defult value is true'
+          required: true
+          type: string
+        -
+          name: acc
+          in: query
+          description: 'Fetch Based on Account Number, defult value is true'
+          required: true
+          type: string
+        -
+          name: valDt
+          in: query
+          description: 'Fetch Based on Value Date, defult value is true'
+          required: true
+          type: string
+        -
+          name: ccy
+          in: query
+          description: 'Fetch Based on Currency, defult value is true'
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/VDBalDetailsDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /accruedAmt:
+    get:
+      tags:
+        - accruedAmt
+      summary: 'Get Accured Amount'
+      description: 'Get Accured Amount'
+      operationId: getAccruedAmt
+      parameters:
+        -
+          name: brn
+          in: query
+          description: 'Fetch Based on Branch Code, defult value is true'
+          required: true
+          type: string
+        -
+          name: acc
+          in: query
+          description: 'Fetch Based on Account Number, defult value is true'
+          required: true
+          type: string
+        -
+          name: source
+          in: query
+          description: 'Fetch Based on Account Number, defult value is true'
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/AccruedAmtResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /icAccntMaster:
+    post:
+      tags:
+        - icAccntMaster
+      summary: 'Save and Auth IC Accounts'
+      description: 'Save and Auth IC Accounts'
+      operationId: saveIcAccnts
+      parameters:
+        -
+          name: icAccnt
+          in: body
+          description: 'Request Body that contains data required for saving IC Accnt '
+          required: true
+          schema:
+            $ref: '#/definitions/IcAccntMasterDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/IcAccntResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /icAccntModify:
+    post:
+      tags:
+        - icAccntMaster
+      summary: 'modify IC Accounts'
+      description: 'modify IC Accounts'
+      operationId: modifyIcAccnts
+      parameters:
+        -
+          name: icAccnt
+          in: body
+          description: 'Request Body that contains data required for modifying IC Accnt '
+          required: true
+          schema:
+            $ref: '#/definitions/IcAccntModifyDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/IcAccntResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /icAccntMaster/recState:
+    post:
+      tags:
+        - icAccntMaster
+      summary: 'close account'
+      description: 'update recordState to C conditions met'
+      operationId: closeAccnt
+      parameters:
+        -
+          name: accDetails
+          in: body
+          description: 'source, sourceBranch, sourceAcc, currency'
+          required: true
+          schema:
+            $ref: '#/definitions/SrcBrnAccCcyDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/GenericResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /icAccnt/intliqd:
+    post:
+      tags:
+        - icAccntMaster
+      summary: 'account close pre-process'
+      description: 'IC account close pre-processing: maintQueue population'
+      operationId: prepareAccountClose
+      parameters:
+        -
+          name: maintQueueDetails
+          in: body
+          description: 'Request Body that contains data required for maintQueue population'
+          required: true
+          schema:
+            $ref: '#/definitions/maitQueuDetailsDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/GenericResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'      
+
+
+
+          
+  /icOtherBalMaster:
+    post:
+      tags:
+        - icOtherBalMaster
+      summary: 'Save and Auth IC Other Balances'
+      description: 'Save and Auth IC Other Balances'
+      operationId: saveIcOtherBal
+      parameters:
+        -
+          name: icOtherBal
+          in: body
+          description: 'Request Body that contains data required for saving IC Other Balances '
+          required: true
+          schema:
+            $ref: '#/definitions/IcOtherBalMasterDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/IcOtherBalResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /udeVals/genCondn:
+    get:
+      tags:
+        - genCondnUdeVals
+      summary: 'Get for genCondnUdeVals'
+      description: 'Get genCondnUdeVals'
+      operationId: fetchGenCondnUdeVals
+      parameters:
+        -
+          name: productCode
+          in: query
+          description: ''
+          required: false
+          type: string
+        -
+          name: aClass
+          in: query
+          description: ''
+          required: false
+          type: string
+        -
+          name: extAccGrpDesc
+          in: query
+          description: ''
+          required: false
+          type: string
+        -
+          name: ccyCode
+          in: query
+          description: ''
+          required: false
+          type: string
+        -
+          name: udeEffDt
+          in: query
+          description: ''
+          required: false
+          type: string
+        -
+          name: branchCode
+          in: query
+          description: ''
+          required: false
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/GenUdeValsDTOList'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+    post:
+      tags:
+        - genCondnUdeVals
+      summary: 'Save udevals'
+      description: 'Save udeVals'
+      operationId: saveUdeValues
+      parameters:
+        -
+          name: genCondnUdeVals
+          in: body
+          description: 'udevals to be saved'
+          required: true
+          schema:
+            $ref: '#/definitions/GenUdeValsDTOList'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/UdeValResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /udeVals/spCondn:
+    get:
+      tags:
+        - specialCondnUdeVals
+      summary: 'Get for specialCondnUdeVals'
+      description: 'Get specialCondnUdeVals'
+      operationId: fetchSpCondnUdeVals
+      parameters:
+        -
+          name: brn
+          in: query
+          description: 'Fetch Based on Branch Code, defult value is true'
+          required: true
+          type: string
+        -
+          name: acc
+          in: query
+          description: 'Fetch Based on Account Number, defult value is true'
+          required: true
+          type: string
+        -
+          name: prod
+          in: query
+          description: 'Fetch Based on Value Date, defult value is false'
+          required: false
+          type: string
+        -
+          name: udeEffDt
+          in: query
+          description: 'Fetch Based on Currency, defult value is false'
+          required: false
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of success or failure '
+          schema:
+            $ref: '#/definitions/SpUdeValsDTOList'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+    post:
+      tags:
+        - specialCondnUdeVals
+      summary: 'special condn udevals'
+      description: 'Special condition udeVals'
+      operationId: saveSpUdeValues
+      parameters:
+        -
+          name: spCondnUdeVals
+          in: body
+          description: 'special condition udevals to be saved'
+          required: true
+          schema:
+            $ref: '#/definitions/SpUdeValsDTOList'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/UdeValResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+  /charge/splCondn:
+    post:
+      tags:
+        - charge
+      summary: 'Save AccPr and AccChgSlab'
+      description: 'Save AccPr and AccChgSlab'
+      operationId: saveChgSplCondn
+      parameters:
+        -
+          name: chgSplCondnDto
+          in: body
+          description: 'Request Body that contains data required for saving Save AccPr and AccChgSlab'
+          required: true
+          schema:
+            $ref: '#/definitions/ChgSplCondnDto'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/GenericResponseDTO'
+        '400':
+          description: 'Malformed syntax.'
+        '401':
+          description: 'Request does not have sufficient credentials.'
+        '403':
+          description: 'Request is not authorized.'
+        '405':
+          description: 'Invalid input'
+        '500':
+          description: 'Internal error'
+definitions:
+  maitQueuDetailsDTO:
+    type: object
+    properties:
+      branch:
+        type: string
+        minLength: 3
+        maxLength: 3
+      acc:
+        type: string
+        minLength: 1
+        maxLength: 20
+      liqDate:
+        type: string
+        description: 'liquidationDate'        
+  SrcBrnAccCcyDTO:
+    type: object
+    properties:
+      source:
+        type: string
+        minLength: 1
+        maxLength: 35
+      branch:
+        type: string
+        minLength: 3
+        maxLength: 3
+      acc:
+        type: string
+        minLength: 1
+        maxLength: 20
+      currency:
+        type: string
+        minLength: 3
+        maxLength: 3
+  RateCodesDTO:
+    type: object
+    properties:
+      rateCodeList:
+        description: "all rate codes"
+        type: array
+        items:
+          type: string
+  ChgSplCondnDto:
+    type: object
+    properties:
+     brn:
+      type: string
+      description: ""
+     acc:
+      type: string
+     chgProdList:
+      type: array
+      items:
+        type: object
+        properties:
+          prod:
+            type: string
+          accPr:
+            type: object
+            properties:
+             process:
+              type: number
+             waive:
+              type: string
+             genUca:
+              type: string
+             recordStat:
+              type: string
+             onceAuth:
+              type: string
+             udeCcy:
+              type: string
+             minAmt:
+              type: number
+             maxAmt:
+              type: number
+             freeTxn:
+              type: number
+             contVarRoll:
+              type: string
+             extPricingReqd:
+              type: string
+          accChgSlabList:
+            type: array
+            items:
+             type: object
+             properties:
+              process:
+                type: number
+              slabAmt:
+                type: number
+              chargeAmt:
+                type: number
+              chargeRate:
+                type: number
+              floorBasisAmt:
+                type: number
+              floorAmt:
+                type: number 
+  SpUdeValsDTOList:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          brn:
+            type: string
+            description: ""
+          acc:
+            type: string
+            description: ""
+          SpProdList:
+            type: array
+            items:
+              $ref: '#/definitions/SpProdList'
+  SpProdList:
+    type: object
+    properties:
+      prod:
+        type: string
+        description: ""
+      udeEffDt:
+        type: string
+      SpUdeValList:
+        type: array
+        items:
+          $ref: '#/definitions/SpUdeValList'
+  SpUdeValList:
+    type: object
+    properties:
+      udeId:
+        type: string
+      udeDesc:
+        type: string
+      udeType:
+        type: string
+      udeValue:
+        type: number
+      udeVariance:
+        type: number
+      process:
+        type: number
+      rateCode:
+        type: string
+      baseRate:
+        type: number
+      baseSpread:
+        type: number
+      tdRateCode:
+        type: string
+  GenUdeValsDTOList:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          GenProdList:
+            type: array
+            items:
+              $ref: '#/definitions/GenProdList'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  GenProdList:
+    type: object
+    properties:
+      productCode:
+        type: string
+        description: ""
+      aClass:
+        type: string
+      ccyCode:
+        type: string
+      udeEffDt:
+        type: string
+      extAccGrp:
+        type: string
+      branchCode:
+        type: string
+      GenUdeValList:
+        type: array
+        items:
+          $ref: '#/definitions/GenUdeValList'
+  GenUdeValList:
+    type: object
+    properties:
+      udeId:
+        type: string
+      udeDesc:
+        type: string
+      udeType:
+        type: string
+      udeValue:
+        type: number
+      rateCode:
+        type: string
+      tdRateCode:
+        type: string
+  UdeValResponseDTO:
+    description: UdeValResponseDTO
+    type: object
+    properties:
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  VDBalResponseDTO:
+    description: VDBalResponseDTO.
+    type: object
+    properties:
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  AccrLiqDetailsResponseDTO:
+    description: Accrual Liquidation Details ResponseDTO.
+    type: object
+    properties:
+      accrLiqDetList:
+        type: array
+        items:
+          $ref: '#/definitions/AccrLiqDetDTO'
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  AccrLiqDetDTO:
+    type: object
+    properties:
+      date:
+        type: string
+        description: ""
+      product:
+        type: string
+        description: ""
+      prodDesc:
+        type: string
+        description: ""
+      frmNo:
+        type: number
+        description: ""
+      event:
+        type: string
+        description: ""
+      eventDesc:
+        type: string
+        description: ""
+      ccy:
+        type: string
+        description: ""
+      drcr:
+        type: string
+        description: ""
+      amount:
+        type: number
+        description: ""
+  AccruedAmtResponseDTO:
+    description: AccruedAmtResponseDTO.
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/AccruedAmtMasterDTO'
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  IcAccntResponseDTO:
+    description: IcAccntResponseDTO.
+    type: object
+    properties:
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  GenericResponseDTO:
+    description: GenericResponseDTO.
+    type: object
+    properties:
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'  
+  IcOtherBalResponseDTO:
+    description: IcOtherBalResponseDTO.
+    type: object
+    properties:
+      warnings:
+        description: 'Warning Code List'
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: 'Error Code List'
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  VDBalMasterDTO:
+    description: 'VD Bal Master DTO'
+    type: object
+    properties:
+      type:
+        type: string
+        description: ""
+      extRefNo:
+        type: string
+        description: ""
+      sourceCode:
+        type: string
+        description: ""
+      vdBalList:
+        type: array
+        items:
+          $ref: '#/definitions/VDBalDetailsDTO'
+  VDBalDetailsDTO:
+    type: object
+    properties:
+      acc:
+        type: string
+        description: ""
+      bal:
+        type: number
+        description: ""
+      brn:
+        type: string
+        description: ""
+      ccy:
+        type: string
+        description: ""
+      crTur:
+        type: number
+        description: ""
+      drTur:
+        type: number
+        description: ""
+      hasTov:
+        type: string
+        description: ""
+      icBal:
+        type: number
+        description: ""
+      icLcyBal:
+        type: number
+        description: ""
+      lcyBal:
+        type: number
+        description: ""
+      valDt:
+        type: string
+        description: ""
+      accRatio:
+        $ref: '#/definitions/AccRatioDTO'
+  AccRatioDTO:
+    type: object
+    properties:
+      positiveContribution:
+        type: number
+        description: ""
+      negativeContribution:
+        type: number
+        description: ""
+      creditCoverageRatio:
+        type: number
+        description: ""
+      creditResidualRatio:
+        type: number
+        description: ""
+      debitCoverageRatio:
+        type: number
+        description: ""
+      debitResidualRatio:
+        type: number
+        description: ""
+      netPoolPostion:
+        type: number
+        description: ""
+      poolAccBrn:
+        type: string
+        description: ""
+      poolAccCcy:
+        type: string
+        description: ""
+      poolAccNo:
+        type: string
+        description: ""
+      poolAcBal:
+        type: number
+        description: ""
+  AccrLiqDetailsDTO:
+    description: 'Accrual Liquidation Details DTO'
+    type: object
+    properties:
+      source:
+        type: string
+        description: ""
+      acc:
+        type: string
+        description: ""
+      brn:
+        type: string
+        description: ""
+      accountCcy:
+        type: string
+        description: ""
+      type:
+        type: string
+        description: ""
+      fromDt:
+        type: string
+        description: ""
+      toDt:
+        type: string
+        description: ""
+  AccruedAmtMasterDTO:
+    description: 'Accrued Amt Master DTO'
+    type: object
+    properties:
+      brn:
+        type: string
+        description: ""
+      acc:
+        type: string
+        description: ""
+      source:
+        type: string
+        description: ""
+      totalAccrDr:
+        type: number
+        description: ""
+      totalAccrCr:
+        type: number
+        description: ""
+      accruedAmtList:
+        type: array
+        items:
+          $ref: '#/definitions/AccruedAmtDetailsDTO'
+  AccruedAmtDetailsDTO:
+    type: object
+    properties:
+      acc:
+        type: string
+        description: ""
+      brn:
+        type: string
+        description: ""
+      prod:
+        type: string
+        description: ""
+      frmNo:
+        type: number
+        description: ""
+      accruedAmt:
+        type: number
+        description: ""
+      drcr:
+        type: string
+        description: ""
+  IcAccntMasterDTO:
+    type: object
+    properties:
+      accMasterList:
+        type: array
+        description: 'IC Accounts'
+        items:
+          $ref: '#/definitions/ICAccountDTO'
+  IcAccntModifyDTO:
+    type: object
+    properties:
+      accModifyList:
+        type: array
+        description: 'IC Accounts modify'
+        items:
+          $ref: '#/definitions/ICAccountWithRecordStatDTO'
+  ICAccountWithRecordStatDTO:
+    type: object
+    properties:
+      recordStat:
+        type: string
+        description: 'Set record stat as C or O'
+      acc:
+        type: string
+        description: 'Account number'
+      childAcc:
+        type: string
+        description: 'Child Account Number'
+      accountClass:
+        type: string
+        description: 'Account Group'
+      accType:
+        type: string
+        description: 'Type of Account'
+      acOpenDate:
+        type: string
+        description: 'Account Open Date'
+      bookAcc:
+        type: string
+        description: 'Interest Booking account'
+      bookBrn:
+        type: string
+        description: 'Interest Booking Branch'
+      bookCcy:
+        type: string
+        description: 'Interest Booking CCY'
+      brn:
+        type: string
+        description: Branch
+      calcAcc:
+        type: string
+        description: 'Interest Calculation Account'
+      ccy:
+        type: string
+        description: 'Interest Calculation Account CCY'
+      custNo:
+        type: string
+        description: Customer/Entity
+      consolChgAcc:
+        type: string
+        description: 'Consol Charge Account'
+      intStartDate:
+        type: string
+        description: 'Interest Start Date'
+      sourceSystem:
+        type: string
+        description: 'Source system invoking the service'
+      sourceSystemBrn:
+        type: string
+        description: 'Source system Branch of invoking the service'
+      sourceSystemAcc:
+        type: string
+        description: 'Source system Account of invoking the service'
+      chargeBookAcc:
+        type: string
+        description: 'Charge Book Account'
+      chargeBookBrn:
+        type: string
+        description: 'Charge Book Branch'
+      chargeBookCcy:
+        type: string
+        description: 'Charge Book Currency'
+      chgStartDate:
+        type: string
+        description: 'Charge Start Date'
+  ICAccountDTO:
+    type: object
+    properties:
+      acc:
+        type: string
+        description: 'Account number'
+      childAcc:
+        type: string
+        description: 'Child Account Number'
+      accountClass:
+        type: string
+        description: 'Account Group'
+      accType:
+        type: string
+        description: 'Type of Account'
+      acOpenDate:
+        type: string
+        description: 'Account Open Date'
+      bookAcc:
+        type: string
+        description: 'Interest Booking account'
+      bookBrn:
+        type: string
+        description: 'Interest Booking Branch'
+      bookCcy:
+        type: string
+        description: 'Interest Booking CCY'
+      brn:
+        type: string
+        description: Branch
+      calcAcc:
+        type: string
+        description: 'Interest Calculation Account'
+      ccy:
+        type: string
+        description: 'Interest Calculation Account CCY'
+      custNo:
+        type: string
+        description: Customer/Entity
+      consolChgAcc:
+        type: string
+        description: 'Consol Charge Account'
+      intStartDate:
+        type: string
+        description: 'Interest Start Date'
+      sourceSystem:
+        type: string
+        description: 'Source system invoking the service'
+      sourceSystemBrn:
+        type: string
+        description: 'Source system Branch of invoking the service'
+      sourceSystemAcc:
+        type: string
+        description: 'Source system Account of invoking the service'
+      chargeBookAcc:
+        type: string
+        description: 'Charge Book Account'
+      chargeBookBrn:
+        type: string
+        description: 'Charge Book Branch'
+      chargeBookCcy:
+        type: string
+        description: 'Charge Book Currency'
+      chgStartDate:
+        type: string
+        description: 'Charge Start Date'
+  IcOtherBalMasterDTO:
+    description: 'Ic Other Bal Master DTO'
+    type: object
+    properties:
+      acc:
+        type: string
+        description: 'Account Number'
+      source:
+        type: string
+        description: 'Source Code'
+      brn:
+        type: string
+        description: 'Branch Code'
+      ccy:
+        type: string
+        description: 'Currency Code'
+      chgValList:
+        type: array
+        items:
+          $ref: '#/definitions/ChgValDetailsDTO'
+      itmTovList:
+        type: array
+        items:
+          $ref: '#/definitions/ItmTovDetailsDTO'
+  ChgValDetailsDTO:
+    type: object
+    properties:
+      acc:
+        type: string
+        description: 'Account number'
+      brn:
+        type: string
+        description: 'Branch Code'
+      elem:
+        type: string
+        description: Element
+      itmDt:
+        type: string
+        description: 'Item Date'
+      elemVal:
+        type: number
+        description: 'Element Value'
+      elemCcy:
+        type: string
+        description: 'Element Currency'
+      elemType:
+        type: string
+        description: 'Element Type'
+      prod:
+        type: string
+        description: Product
+  ItmTovDetailsDTO:
+    type: object
+    properties:
+      acc:
+        type: string
+        description: 'Account number'
+      brn:
+        type: string
+        description: 'Branch Code'
+      itmTyp:
+        type: string
+        description: 'Item Type'
+      dt:
+        type: string
+        description: Date
+      drTur:
+        type: number
+        description: 'Debit Turnover'
+      crTur:
+        type: number
+        description: 'Credit Turnover'
+      drItm:
+        type: number
+        description: 'Debit Item'
+      crItm:
+        type: number
+        description: 'Credit Item'
+      penalty:
+        type: number
+        description: Penalty
+  WarningCodeDTO:
+    type: object
+    properties:
+      warningCode:
+        type: string
+      warningDesc:
+        type: string
+  ErrorCodeDTO:
+    type: object
+    properties:
+      errorCode:
+        type: string
+      errorDesc:
+        type: string

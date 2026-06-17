@@ -1,0 +1,1055 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : collateralenquiry.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Collateral Enquiry Services
+host: localhost:7001
+basePath: /collateral-enquiry-services
+tags:
+- name: CollateralEnquiryServices
+  description: API for Collateral Enquiry Operations
+schemes:
+- http
+paths:
+  /web/v1/collateralsummary/{customerId}:
+    get:
+      produces:
+      - application/json
+      tags:
+      - CollateralEnquiry
+      summary: get list of collateral for a customer
+      description: getCollateralSummary
+      operationId: getCollateralSummary
+      parameters:
+      - description: "Customer Id"
+        in: path
+        name: customerId
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: "Source Code"
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Returns the list of collateral for a given customer code.
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/collateral/onboarding:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - CollateralEnquiry
+      summary: onboard Collatteral .
+      description: onboard Collatteral.
+      operationId: onBoardCollateral
+      parameters:
+        - description: "User Id"
+          in: header
+          name: userId
+          required: true
+          type: string
+        - description: "Branch Code"
+          in: header
+          name: branchCode
+          required: true
+          type: string
+        - description: Source
+          in: header
+          name: sourceCode
+          required: false
+          type: string
+          default: "OBREMO"
+        - description: appId
+          in: header
+          name: appId
+          required: true
+          type: string
+        - name: CollateralDetailsModel
+          in: body
+          description: Request Body that contains data required for creating a new CollateralAggregateModel
+          required: true
+          schema:
+            $ref: '#/definitions/CollateralDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created collateral
+          headers:
+            Location:
+              description: URL of newly created collateral
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/collateralCatagory:
+    get:
+      produces:
+        - application/json
+      tags:
+        - CollateralEnquiry
+      summary: get collateral Catagory
+      description: get collateral Catagory
+      operationId: getCollateralCatagory
+      parameters:
+        - description: "User Id"
+          in: header
+          name: userId
+          required: true
+          type: string
+        - description: "Branch Code"
+          in: header
+          name: branchCode
+          required: true
+          type: string
+        - description: appId
+          in: header
+          name: appId
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the list of collateral Catagory.
+          schema:
+            $ref: '#/definitions/KeyValueCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/collateralSubCatagory/{catagory}:
+    get:
+      produces:
+        - application/json
+      tags:
+        - CollateralEnquiry
+      summary: get Collateral Sub Catagory
+      description: get Collateral Sub Catagory
+      operationId: getCollateralSubCatagory
+      parameters:
+        - description: "catagory"
+          in: path
+          name: catagory
+          required: true
+          type: string
+        - description: "User Id"
+          in: header
+          name: userId
+          required: true
+          type: string
+        - description: "Branch Code"
+          in: header
+          name: branchCode
+          required: true
+          type: string
+        - description: appId
+          in: header
+          name: appId
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the list of subcatatogory  for a given Collataral  Catagory.
+          schema:
+            $ref: '#/definitions/KeyValueCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/collateralLov/{type}:
+    get:
+      produces:
+        - application/json
+      tags:
+        - CollateralEnquiry
+      summary: get lov values
+      description: get lov values
+      operationId: getCollateralLov
+      parameters:
+        - description: "Type"
+          in: path
+          name: type
+          required: true
+          type: string
+        - description: "User Id"
+          in: header
+          name: userId
+          required: true
+          type: string
+        - description: "Branch Code"
+          in: header
+          name: branchCode
+          required: true
+          type: string
+        - description: appId
+          in: header
+          name: appId
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the list of values for a type.
+          schema:
+            $ref: '#/definitions/KeyValueCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error 
+  /web/v1/collateraldetails:
+    get:
+      produces:
+      - application/json
+      tags:
+      - CollateralEnquiry
+      summary: get details of a collateral
+      description: getCollateralDetails
+      operationId: getCollateralDetails
+      parameters:
+      - description: "Collateral Type"
+        in: query
+        name: collateralType
+        required: true
+        type: string
+      - description: "Collateral Category"
+        in: query
+        name: collateralCtg
+        type: string
+      - description: "Collateral Code"
+        in: query
+        name: collateralCode
+        required: true
+        type: string
+      - description: "Liability Id"
+        in: query
+        name: liabilityId
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string	
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string        
+      - description: "Source Code"
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Returns the collateral details based on given collateral code.
+          schema: 
+           $ref: '#/definitions/CollateralDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+                    
+definitions:
+ CollateralSummaryModel:  
+   description: "Collateral Summary Model"
+   type: object
+   properties:
+    collateralCode:
+     description: Collateral Code
+     type: string
+    collateralDesc:
+     description: Collateral Description
+     type: string
+    collateralType:
+     description: Collateral Type
+     type: string
+    collateralCtg:
+     description: Collateral Category
+     type: string
+    liabilityId:
+     description: Liability Id
+     type: string
+    collateralCCY:
+     description: Collateral Currency
+     type: string
+    collateralVal:
+     description: Collateral Value
+     type: number
+    utilizedAmtCCY:
+     description: Previously Utilized Amount Currency
+     type: string
+    utilizedAmt:
+     description: Previously Utilized Amount
+     type: number
+    coverAvailableCCY:
+     description: Cover Available CCY
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number
+    collateralAvlFromDate:
+     description: Collateral Start Date
+     type: string
+    collateralAvlToDate:
+     description: Collateral End Date
+     type: string
+    collateralStatus:
+     description: Collateral Status
+     type: string
+ CollateralAggregateModel:
+   description: CollateralAggregateModel
+   type: object
+   properties:
+    applicationNo:
+     description: "Application reference number"
+     type: string
+     maxLength: 20
+    processRefNo:
+     description: "Process reference number"
+     type: string
+     maxLength: 20    
+ KeyValueCollection:
+   description: "KeyValueCollection"
+   type: object
+   properties:
+     keyValues:
+       description: list of Collateral lov
+       type: array
+       items:
+         $ref: '#/definitions/keyValue'
+ keyValue:
+   description: " keyValue"
+   type: object
+   properties:
+     value:
+       description: key
+       type: string
+     description:
+       description: value
+       type: string
+ CollateralSummaryModelCollection:  
+   description: "Collection of Collateral Summary Model"
+   type: object
+   properties:
+    collateralSummaryList:
+     description: List of Collateral Summary Model
+     type: array
+     items:
+      $ref: '#/definitions/CollateralSummaryModel'
+      
+ CollateralDetailsModel:
+   description: "Collateral Details Model"
+   type: object
+   properties:
+    applicationNo:
+       description: "Application reference number"
+       type: string
+       maxLength: 20 
+    processRefNo:
+       description: "Process reference number"
+       type: string
+       maxLength: 20
+    collateralCode:
+     description: Collateral Code
+     type: string
+    collateralDesc:
+     description: Collateral Description
+     type: string
+    collateralType:
+     description: Collateral Type
+     type: string
+    collateralCtg:
+     description: Collateral Category
+     type: string
+    collateralBranch:
+     description: Collateral Branch
+     type: string
+    collateralStatus:
+     description: Collateral Status
+     type: string
+    liabilityId:
+     description: Liability Id
+     type: string
+    liabilityDesc:
+     description: Liability Description
+     type: string
+    utilizedAmtCCY:
+     description: Previously Utilized Amount Currency
+     type: string
+    utilizedAmt:
+     description: Previously Utilized Amount
+     type: number
+    collateralAvlFromDate:
+     description: Collateral Available From Date
+     type: string
+    collateralAvlToDate:
+     description: Collateral Available To Date
+     type: string
+    priorCharge:
+     description: Priority of Charge
+     type: string
+    chargeType:
+     description: Charge Type
+     type: string
+    paperInvestments:
+     $ref: '#/definitions/PaperInvestmentsModel'
+    vehicleDetails:
+     $ref: '#/definitions/VehicleDetailsModel'
+    assetDetails: 
+     $ref: '#/definitions/AssetDetailsModel'
+    guarantorDetails:
+     $ref: '#/definitions/GuarantorDetailsModel'
+    insuranceDetails:
+     $ref: '#/definitions/InsuranceDetailsModel'
+    preciousMetal:
+     $ref: '#/definitions/PreciousMetalDetailsModel'
+    depositDetails:
+     $ref: '#/definitions/DepositDetailsModel'
+ 
+ AssetDetailsModel:  
+   description: "Asset Details Model"
+   type: object
+   properties:
+    assetType:
+     description: Asset Type
+     type: string
+    homeType:
+     description: Home Type
+     type: string
+    dimensionMeasureType:
+     description: Dimension Measure Type
+     type: string
+    dimension:
+     description: Dimension
+     type: number
+    collateralCCY:
+     description: Collateral Currency
+     type: string
+    collateralVal:
+     description: Collateral Value
+     type: number
+    marketValue:
+     description: Market Value
+     type: number
+    marketCCY:
+     description: Market Currency
+     type: string
+    assetStatus:
+     description: Asset Status
+     type: string
+    hairCut:
+     description: Haircut Percentage
+     type: number
+    coverAvailableCCY:
+     description: Cover Available CCY
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number
+    floodZone:
+     description: Flood Zone
+     type: string
+    floodZoneType:  
+     description: Flood Zone Type
+     type: string        
+    seismicZone:
+     description: Seismic Zone
+     type: string
+    seismicZoneType:  
+     description: Seismic Zone Type
+     type: string
+    address:
+     $ref: '#/definitions/AddressDetailsModel'
+    constructionDetails:
+     $ref: '#/definitions/ConstructionDetailsModel'
+     
+ AddressDetailsModel:
+   description: "Address Details Model"
+   type: object
+   properties:
+    buildingName:
+     description: Building Name
+     type: string
+    streetName:
+     description: Street Name
+     type: string
+    localityName:
+     description: Locality Name
+     type: string
+    city:
+     description: City
+     type: string
+    state:
+     description: State
+     type: string
+    country:
+     description: Country
+     type: string
+    pinCode:
+     description: PinCode
+     type: string
+     
+ ConstructionDetailsModel:
+   description: "Construction Details Model"
+   type: object
+   properties:
+    yearofConstruction:
+     description: year of Construction
+     type: number
+    noofRoom:
+     description: Number of Room
+     type: number
+    datePurchased:
+     description: date of purchase
+     type: string
+    builderName:
+     description: Builder Name
+     type: string
+    contactDetails:
+     description: builder contact details
+     type: string
+    ucstartDate:
+     description: Under Construction Start Date
+     type: string
+    ucexpectedCompletionDate:
+     description: Expected Completion date
+     type: string
+    ucStage:
+     description: Current Stage Of Construction
+     type: string
+    uclandValCCY:
+     description: Under Construction Land Value CCY
+     type: string
+    uclandVal:
+     description: Under Construction Land Value
+     type: number
+    ucProjectName:
+     description: Under Construction Project Name
+     type: string
+    ucContactDetails:
+     description: Under Construction Contact Details
+     type: string
+     
+ PaperInvestmentsModel:
+   description: "Paper Investments Model"
+   type: object
+   properties:
+    collateralCCY:
+     description: Collateral Currency
+     type: string 
+    collateralVal:
+     description: Collateral Value
+     type: number
+    hairCut:
+     description: Haircut Percentage
+     type: number
+    issuerName:
+     description: Issuer Name
+     type: string
+    issuerCode:
+     description: Issuer Code
+     type: string
+    issuerDesc:
+     description: Issuer Description
+     type: string
+    issueDate:
+     description: Issue date
+     type: string
+    issuerRefno:
+     description: Issuer Reference No
+     type: string
+    folioNo:
+     description: Folio number
+     type: string
+    unitValCCY:
+     description: Unit value Currency
+     type: string
+    unitVal:
+     description: Unit value
+     type: number
+    noofUnit:
+     description: Number of unit 
+     type: number  
+    qtyShares:
+     description: Quantity of shares
+     type: number
+    tenure:
+     description: Tenure
+     type: string
+    maturityCCY:
+     description: Maturity Currency
+     type: string
+    maturityAmt:
+     description: Maturity Amount
+     type: number
+    maturityDate:
+     description: Maturity Date
+     type: string
+    thirdpartyCollateral:
+     description: Third Party Collateral
+     type: string
+    coverAvailableCCY:
+     description: Cover Available Currency
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number  
+
+ VehicleDetailsModel:
+   description: "Vehicle Details Model"
+   type: object
+   properties:
+    vehicleCategory:
+     description: Vehicle Category
+     type: string
+    collateralCCY:
+     description: Collateral Currency
+     type: string
+    collateralVal:
+     description: Collateral Value 
+     type: number
+    hairCut:
+     description: Haircut Percentage
+     type: number
+    productName:
+     description: productName
+     type: string
+    hypothecatedBranch:
+     description: hypothecatedBranch
+     type: string
+    vehicleClass:
+     description: vehicleClass
+     type: string
+    make:
+     description: make
+     type: string
+    model:
+     description: model
+     type: string
+    modelYear:
+     description: Model Year
+     type: string
+    chasisNumber:
+     description: Chasis Number
+     type: string
+    engineNumber:
+     description: Engine Number
+     type: string      
+    registrationNumber:
+     description: Registration Number
+     type: string      
+    registeredState:
+     description: Registered State
+     type: string
+    registeredCity:
+     description: Registered City
+     type: string
+    fuelType:
+     description: Fuel Type
+     type: string
+    distanceUnit:
+     description: Distance Unit
+     type: string
+    distanceRun:
+     description: Distance Run
+     type: string
+    thirdpartyCollateral:
+     description: Third Party Collateral
+     type: string
+    amtConsideredCCY:
+     description: Amount to be Considered Currency
+     type: string
+    amtConsidered:
+     description: Amount to be Considered
+     type: string
+    coverAvailableCCY:
+     description: Cover Available Currency
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number          
+    expectedSellingPrice:
+     description: Expected Selling Price
+     type: number
+    expectedSellingPriceCCY:
+     description: Expected Selling Price Currency
+     type: string
+    insuranceCompany:
+     description: insuranceCompany
+     type: string      
+    policyNumber:
+     description: policyNumber
+     type: string
+    policyCommencementDate:
+     description: policyCommencementDate
+     type: string        
+    premiumAmount:
+     description: premiumAmount
+     type: number
+    premiumAmountCCY:
+     description: premium Amount Currency
+     type: string
+    premiumFrequency:
+     description: premiumFrequency
+     type: string
+    policyRenewalDate:
+     description: policyRenewalDate
+     type: string
+     
+ GuarantorDetailsModel:
+   description: "Guarantor Details Model"
+   type: object
+   properties:
+    relationship:
+     description: Relationship with Customer
+     type: string
+    title:
+     description: Title
+     type: string
+    firstName:
+     description: First Name
+     type: string
+    middleName:
+     description: Middle Name
+     type: string
+    lastName:
+     description: Last Name
+     type: string
+    dateOfBirth:
+     description: Date of Birth
+     type: string
+    gender:
+     description: Gender
+     type: string
+    countryofResidence:
+     description: Country of Residence
+     type: string
+    citizenship:
+     description: CitizenShip
+     type: string
+    occupationType:
+     description: Occupation Type
+     type: string
+    idType:
+     description: Id Type
+     type: string
+    uniqueIdNumber:
+     description: Unique Id Number
+     type: string
+    validTillDate:
+     description: Valid Till Date
+     type: string
+    guaranteeAmt:
+     description: Guarantee Amount
+     type: number
+    guaranteeCCY:
+     description: Guarantee Currency
+     type: string
+    hairCut:
+     description: Haircut Percentage
+     type: number
+    coverAvailableCCY:
+     description: Cover Available CCY
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number
+    email:
+     description: email
+     type: string
+    mobileNo:
+     description: mobileNo
+     type: integer
+     format: int64
+    mobileIsd:
+     description: mobileIsd
+     type: string
+     maxLength: 5
+    phoneNo:
+     description: phoneNo
+     type: integer
+     format: int64
+    phoneIsd:
+     description: phoneIsd
+     type: string
+    address:
+     $ref: '#/definitions/AddressDetailsModel'
+     
+ InsuranceDetailsModel:
+   description: Insurance detail model
+   type: object
+   properties:
+    collateralCCY:
+     description: Collateral Currency
+     type: string
+    collateralVal:
+     description: Collateral Value
+     type: number
+    hairCut:
+     description: Haircut Percentage
+     type: number
+    policyNo:
+     description: Policy Number
+     type: string
+    policyStatus:
+     description: Policy Status 
+     type: string
+    insuranceProvider:
+     description: Insurance Provider name 
+     type: string
+    insurerAddress:
+     description: Insurer address
+     type: string
+    insuranceType:
+     description: Insurance type
+     type: string
+    beneficiary:
+     description: Beneficiary
+     type: string
+    insuredAmtCCY:
+     description: Insured Amount Currency
+     type: string
+     maxLength: 4
+    insuredAmt:
+     description: Insured Amount
+     type: number
+    premiumAmtCCY:
+     description: Premium Amount Currency
+     type: string
+     maxLength: 4
+    premiumAmt:
+     description: Premium Amount
+     type: number
+    premiumFreq:
+     description: Premium Frequency
+     type: string
+    surrenderCCY:
+     description: Surrender Currency
+     type: string
+     maxLength: 4
+    surrenderAmt:
+     description: Surrender Amount  
+     type: number
+    policyStartDate:
+     description: Policy Start Date
+     type: string
+    policyEndDate:
+     description: Policy End Date
+     type: string
+    policyTenure:
+     description: Policy Tenure
+     type: number
+    coverAvailableCCY:
+     description: Cover Available CCY
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number  
+    remarks:
+     description: remarks
+     type: string
+     
+ PreciousMetalDetailsModel:
+   description: Precious Metal Details
+   type: object
+   properties:
+    collateralCCY:
+     description: Collateral Currency
+     type: string
+     maxLength: 4  
+    collateralVal:
+     description: Collateral Value 
+     type: number
+    hairCut:
+     description: Haircut Percentage
+     type: number
+    purchaseCCY:
+     description: Purchase Currency
+     type: string
+     maxLength: 4
+    purchaseVal:
+     description: Purchase Value
+     type: number
+    weight:
+     description: Weight in gms
+     type: number
+    purityCarat:
+     description: Purity or Carat
+     type: string
+    unitOfWeight:
+     description: Unit of Weight
+     type: string
+    units:
+     description: Units
+     type: number
+    unitRate:
+     description: Unit rate
+     type: number
+    unitRateCCY:
+     description: Unit Rate Currency
+     type: string
+    valuationCCY:
+     description: Valuation Currency
+     type: string
+     maxLength: 4
+    valuationAmt:
+     description: Valuation Amount
+     type: number
+    details:
+     description: details
+     type: string
+    thirdpartyCollateral:
+     description: Third party Collateral
+     type: string
+     maxLength: 1
+    coverAvailableCCY:
+     description: Cover Available CCY
+     type: string
+    coverAvailableAmt:
+     description: Cover Available Amount
+     type: number
+     
+ DepositDetailsModel:
+    description: Deposit Details Model
+    type: object
+    properties:
+     collateralCCY:
+      description: Collateral Currency
+      type: string
+      maxLength: 4  
+     collateralVal:
+      description: Collateral Value 
+      type: number
+     branch:
+      description: Branch
+      type: string
+     bank:
+      description: Bank
+      type: string
+     depositAccNo:
+      description: Deposit Account Number
+      type: string
+     depositCCY:
+      description: Deposit Currency
+      type: string
+      maxLength: 4 
+     depositAmt:
+      description: Deposit Amount 
+      type: number  
+     noticeCollateralExpDays:
+      description: Notice of Collateral Expiry Days
+      type: number
+     maturityCCY:
+      description: Maturity Currency
+      type: string
+      maxLength: 4
+     maturityAmt:
+      description: Maturity Amount
+      type: number
+     maturityDate:
+      description: Maturity Date
+      type: string
+     hairCut:
+      description: Haircut Percentage
+      type: number
+     thirdPartyCollateral:
+      description: Third Party Collateral
+      type: string
+      maxLength: 1
+     coverAvailableCCY:
+      description: Cover Available CCY
+      type: string
+     coverAvailableAmt:
+      description: Cover Available Amount
+      type: number

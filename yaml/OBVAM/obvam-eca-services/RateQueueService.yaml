@@ -1,0 +1,346 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : RateQueueService.yaml
+#  **
+#  ** Module     : obvam amount block Queue
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Swetha HP
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+ 
+ 
+swagger: "2.0"
+info:
+ description: "This is a sample server amountBlock server." 
+ version: "1.0.0"
+ title: "amountBlock Queue Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "amountBlockSerQueues"
+   description: "Amount blocks Service allows to block amount on virtual accounts and it allows to input user rate from an exchange queue"
+ 
+schemes:
+- "https"
+ 
+paths:
+
+# path to approve existing record
+#
+#  supprorted http methods POST
+#
+# path examples----
+#   POST       .../amountBlockSerQueues
+ 
+ /service/amountBlockSerQueues:
+  post:
+   tags:
+     - "amountBlockSerQueues"
+   summary: "Authorize the amountBlocks by given ID."
+   description:  "Authorize the amountBlocks identified by given ID."
+   operationId: "updateExchangeRate"
+   parameters:
+    - name: "amountBlockSerQueues" 
+      in: "body" 
+      description: "Request Body that contains data required for updating a amount block echange rate queue record." 
+      required: true
+      schema:
+       $ref: "#/definitions/AmtBlkSerMasterDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+ AmtBlkSerMasterDTO:
+  type: object
+  properties:
+     blockRefNo:
+      type: string
+      description: "Block Reference Number ECA number"
+     sourceCode:
+      type: string
+      description: "Source from which request for placing block amounts on these accounts"
+      minLength: 1
+      maxLength: 50
+     sourceRefNo:
+      type: string
+      description: "Reference number from the source"
+      minLength: 1
+      maxLength: 50
+     effectiveDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Effective Date from which block is valid"
+     expiryDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Expiry Date till which block is valid"
+     blockType:
+      type: string
+      description: "Type of block telling Resident or not"
+      minLength: 1
+      maxLength: 1
+     ddaEcaRefNo:
+      type: string
+      description: "DDA ECA Reference Number"
+      minLength: 1
+      maxLength: 50
+     authStatus:
+      type: string
+      description: "Approval Status"
+      minLength: 1
+      maxLength: 1
+     transactionStatus:
+      type: string
+      description: "Block transaction status"
+      minLength: 1
+      maxLength: 1
+     txnBranch:
+      type: string
+      description: "Branch where this ECA block is created"
+      minLength: 1
+      maxLength: 3
+     failAllOnErr:
+      type: string
+      description: "Flag indicating whether to fail all accounts block processing if any one fails"
+      minLength: 1
+      maxLength: 1
+     checkerDtStamp:
+      type: string
+      format: date
+      description: "DateStamp of Authorization"
+     makerDtStamp:
+      type: string
+      format: date
+      description: "DateStamp of Making of the Transaction"
+     checkerId:
+      type: string
+      description: "User id of Authorizer"
+     makerId:
+      type: string
+      description: "User id of Maker"
+     amtBlkQueueReq:
+      type: string
+      description: "Flag to indicate if queue is required for Amount Block"
+     amtBlkSerDetailDTOList:
+      type: array
+      items:
+       $ref: '#/definitions/AmtBlkSerDetailDTO'
+  required:
+     - blockRefNo
+     - effectiveDate
+     - expiryDate
+     - blockType
+ AmtBlkSerDetailDTO:
+  type: object
+  properties:
+     blockRefNo:
+      type: string
+      description: ""
+     virtualAccount:
+      type: string
+      description: "Virtual Account number for which block amount will be placed"
+      minLength: 1
+      maxLength: 50
+     blockCcy:
+      type: string
+      description: "Currency in which block amount is placed on this account"
+      minLength: 1
+      maxLength: 3
+     requestedAmount:
+      type: number
+      description: "Requested amount for placing block on account"
+     approvedAmount:
+      type: number
+      description: "Approved amount for placing block on account"
+     releasedAmount:
+      type: number
+      description: "Released amount for placing block on account"
+     userInputRemarks:
+      type: string
+      description: "User input remarks"
+      minLength: 1
+      maxLength: 50
+     custAccBrn:
+      type: string
+      description: "Virtual Account branch for which block amount will be placed"
+      minLength: 1
+      maxLength: 3
+     outstandingBlockAmount:
+      type: number
+      description: "Current outstanding block amount on account"
+     partialBlockRequired:
+      type: string
+      description: "Flag describing if partial block is required or not "
+      minLength: 1
+      maxLength: 1
+     partialReleaseAllowed:
+      type: string
+      description: "Flag describing if partial release is allowed or not"
+      minLength: 1
+      maxLength: 1
+     lockedBy:
+      type: string
+      description: "Id of user who is holding the lock on this record currently"
+      minLength: 1
+      maxLength: 30
+     ecaBlkStatus:
+      type: string
+      description: ""
+      minLength: 1
+      maxLength: 10
+     realAccountNo:
+      type: string
+      description: "Real account number of corresponding Virtual Account"
+     realAccountBrn:
+      type: string
+      description: "Real account branch of corresponding Virtual Account"
+     realAccCcy:
+      type: string
+      description: "Real account Currency of corresponding Virtual Account"
+     realAccClass:
+      type: string
+      description: "Real account class"
+     amtInRealAccCcy:
+      type: number
+      description: "Amount based on real account details"
+     excRateBlockccyRaccy:
+      type: number
+      description: "Exchange Rate specific to Real Account Currency"
+     accountType:
+      type: string
+      description: "Type of an account"   
+     amtBlkSerExchRateQueueDTO:
+       $ref: '#/definitions/AmtBlkSerExchRateQueueDTO'
+  required:
+   - virtualAccount
+   - blockCcy
+ AmtBlkSerExchRateQueueDTO:
+  type: object
+  properties:
+     blockRefNo:
+      type: string
+      description: "reference number of the amount block which is in queue"
+     virtualAccount:
+      type: string
+      description: "Virtual Account number for which block amount will be placed"
+      minLength: 1
+      maxLength: 50
+     excRateBlockccyRaccy:
+      type: number
+      description: "Currency in which block amount is placed on this account"
+     amtInRealAccCcy:
+      type: number
+      description: "Amount calculated out of the exchange rate"
+     newExchRate:
+      type: number
+      description: "allows user to enter the new exchange rate"
+     updatedExchRateAmt:
+      type: number
+      description: "based on Exch rate, amount will be calculated from currency conversion"
+     makerDtStamp:
+      type: string
+      format: date
+      description: "DateStamp of Making of the Transaction"
+     makerId:
+      type: string
+      description: "User id of Maker"
+     checkerDtStamp:
+      type: string
+      format: date
+      description: "DateStamp of Authorization"
+     checkerId:
+      type: string
+      description: "User id of Authorizer"
+     authStatus:
+      type: string
+      description: "Approval Status"
+      minLength: 1
+      maxLength: 1
+  required:
+   - blockRefNo
+   - newExchRate
+   - virtualAccount
+  discriminator: resource_type
+ 
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+    
+

@@ -1,0 +1,406 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : applicantAggregateServices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Applicant Service
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-cmn-applicantservices
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: ApplicantAggregateServices
+    description: API for ApplicantService Operations
+schemes:
+  - http
+paths:
+  /web/v1/applicantdetails/{applicationNumber}/{processRefNo}/stagesummary:
+    get:
+      produces:
+        - application/json
+      tags:
+        - ApplicantAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getSummary
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: "applicationNumber for which stage summary needs to be fetched"
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: "processRefNo for which saving account application data needs to be fetched"
+          required: true
+          type: string
+        - name: datasegments
+          in: query
+          description: List of data segment codes
+          required: false
+          type: string
+      responses:
+        200:
+          description: Returns ResponseSummaryModel for the application number
+          schema:
+            $ref: "#/definitions/ResponseSummaryModel"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicantdetails/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ApplicantAggregate
+      summary: Get History details
+      description: Get History details. Add additional information here for the this endpoint.
+      operationId: getHistory
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which history needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: "processRefNo for which saving account application data needs to be fetched"
+          required: true
+          type: string
+        - name: datasegmentCode
+          in: path
+          description: datasegmentCode of the datasegment that need to be retrieved
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns Datasegment history for the application number
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicantdetails/submit:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - ApplicantAggregate
+      summary: Submit for the ApplicantDetails domain.
+      description: Populates ApplicantDetails aggregate.
+      operationId: saveApplicantDetails
+      parameters:
+        - name: applicantAggregateModel
+          in: body
+          description: Request Body that contains data required for creating a new ApplicantDetailsSubmitModel
+          required: true
+          schema:
+            $ref: '#/definitions/ApplicantAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/SubmitResponseDTOWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicantdetails/save:
+    post:
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - ApplicantAggregate
+      summary: Submit for the ApplicantDetails domain for OBDX.
+      description: Saves Applicant details domain data coming from OBDX channel.
+      operationId: saveAggregateData
+      parameters:
+        - name: applicantAggregateModel
+          in: body
+          description: Request Body that contains data required for saving ObdxSubmitModel
+          required: true
+          schema:
+            $ref: '#/definitions/ApplicantAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created data
+          headers:
+            Location:
+              description: URL of newly created data
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicantdetails/{applicationNumber}/datasegment-details:
+    get:
+      produces:
+        - application/json
+      tags:
+        - ApplicantAggregate
+      summary: Get the AggregateResponseModel.
+      description: Get the AggregateResponseModel.
+      operationId: getAggregateResponseModel
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: "applicationNumber for which AggregateResponseModel needs to be fetched"
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: "processRefNo for which AggregateResponseModel needs to be fetched"
+          required: false
+          type: string
+      responses:
+        200:
+          description: Returns ResponseSummaryModel for the application number
+          schema:
+            $ref: "#/definitions/AggregateResponseModel"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/aggregatedetails:
+    get:
+      produces:
+        - application/json
+      tags:
+        - ApplicantAggregate
+      summary: Get the AggregateResponseModel.
+      description: Get the AggregateResponseModel.
+      operationId: getAggregateModelResponse
+      parameters:
+        - name: applicationNumber
+          in: query
+          description: "applicationNumber for which AggregateResponseModel needs to be fetched"
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: "processRefNo for which AggregateResponseModel needs to be fetched"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns ResponseSummaryModel for the application number
+          schema:
+            $ref: "#/definitions/MasterModels"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicantdetails/{applicationNumber}/{processRefNo}/{applicantId}/attributeValues:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - ApplicantAggregate
+      summary: Get AttributeValue Details.
+      description: Get AttributeValue Details.
+      operationId: getValueOfAttribute
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: applicationNumber  for which applicant data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Ref number for which applicant data needs to be fetched
+          required: true
+          type: string
+        - name: attributes
+          in: query
+          description: comma seperated attributes for the stage
+          required: true
+          type: string
+        - name: applicantId
+          in: path
+          description: applicantId
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the value for the attribute based on process Reference Number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  ApplicantAggregateModel:
+    description: ApplicantAggregateModel
+    type: object
+    properties:
+      action:
+        description: Action (Save/Submit)
+        type: string
+      channel:
+        description: Channel
+        type: string
+      sendToCustomer:
+        description: Application Number
+        type: boolean
+        maxLength: 20
+      applicationNumber:
+        description: Application Number
+        type: string
+        maxLength: 20
+      processRefNo:
+        description: "processRefNo for which saving account application data needs to be fetched"
+        type: string
+        maxLength: 20
+      id:
+        description: Loan Application Id
+        type: string
+      dataSegmentCode:
+        description: DataSegment List
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      lastCompletedStageCode:
+        description: Last Completed Stage Code
+        type: string
+      currentActiveStageCode:
+        description: Current Active Stage Code
+        type: string
+      applicationStatus:
+        description: application status
+        type: string
+      accountNo:
+        description: Account number
+        type: string
+      applicantDetailsMasterModel:
+        $ref: "#/definitions/ApplicantDetailsMasterModel"
+      financialDetailsMasterModel:
+        $ref: "#/definitions/FinancialDetailsMasterModel"
+      stakeHolderDetailsMasterModel:
+        $ref: "#/definitions/StakeHolderDetailsMasterModel"
+    required:
+      - applicationNumber
+  AggregateResponseModel:
+    description: AggregateResponseModel
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/MasterModels"
+  MasterModels:
+    description:
+    type: object
+    properties:
+      applicantDetailsMasterModel:
+        $ref: "#/definitions/ApplicantDetailsMasterModel"
+      financialDetailsMasterModel:
+        $ref: "#/definitions/FinancialDetailsMasterModel"
+      creditRatingDetailsMasterModel:
+        $ref: "#/definitions/CreditRatingDetailsMasterModel"
+      stakeHolderDetailsMasterModel:
+        $ref: "#/definitions/StakeHolderDetailsMasterModel"
+  SubmitResponseDTOWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseDataModel'

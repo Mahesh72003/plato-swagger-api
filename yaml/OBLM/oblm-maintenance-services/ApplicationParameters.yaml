@@ -1,0 +1,634 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server application server." 
+ version: "1.0.0"
+ title: "Application Parameters Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "application"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../application
+
+ /application:
+  post:
+   tags:
+    - "application"
+   summary: "Adds a new application parameters."
+   description: "Adds a new application parameters. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "applicationparameters" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new application parameters" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmApplicationParametersDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created application parameters" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "applicationparameters"
+   summary: "Get all valid application parameters."
+   description:  "Get all valid application parameters. This endpoints will be used to Get all valid application parameters maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: applicationInstanceId
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query   
+     name: applicationReleaseVersion
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmApplicationParametersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../application/xxx
+#   DELETE    .../application/xxx
+#   GET       .../application/xxx
+#   GET       .../application/xxx?version=latestrecord
+#   GET       .../application/xxx?version=1
+
+ /application/{id}:
+  put:
+   tags:
+    - "applicationparameters"
+   summary: "Update an existing application parameters."
+   description:  "Update an existing application parameters."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the application parameters Maintenance"
+      required: true
+      type: "string"
+    - name: "applicationparameters"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing application parameters"
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmApplicationParametersDTO"
+   responses:
+    200:
+     description: "Returns updated application parameters"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "applicationparameters"
+   summary: "Retrieves the application parameters by ID."
+   description:  "Retrieves the application parameters by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the application parameters based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmApplicationParametersWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "applicationparameters"
+   summary: "Deletes the application parameters identified by given ID."
+   description:  "Deletes the application parameters identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the application parameters maintenance"
+      required: true
+      type: "string"
+    - name: "applicationparameters"
+      in: "body"
+      description: Request body contain application parameters and Modification no of application parameters maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../application/xxx/approve
+
+ /application/{id}/approve:
+  patch:
+   tags:
+    - "applicationparameters"
+   summary: "Authorize the application parameters by given ID."
+   description:  "Authorize the application parameters identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the application parameters maintenance"
+      required: true
+      type: "string"
+    - name: "applicationparameters"
+      in: "body"
+      description: Request body contain application parameters and Modification no of application parameters maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../application/xxx/close
+ /application/{id}/close:
+  patch:
+   tags:
+    - "applicationparameters"
+   summary: "Close the application parameters by given ID."
+   description:  "Close the application parameters identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the application parameters maintenance"
+      required: true
+      type: "string"
+    - name: "applicationparameters"
+      in: "body"
+      description: Request body contain application parameters and Modification no of application parameters maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../application/xxx/reopen
+
+ /application/{id}/reopen:
+  patch:
+   tags:
+    - "applicationparameters"
+   summary: "reopen the application parameters by given ID."
+   description:  "reopen the application parameters identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the application parameters maintenance"
+      required: true
+      type: "string"
+    - name: "applicationparameters"
+      in: "body"
+      description: Request body contain application parameters and Modification no of application parameters maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../application/xxx/unauthorized
+
+ /application/{id}/unauthorized:
+  get:
+   tags:
+    - "applicationparameters"
+   summary: "Retrives the application parameters by given ID."
+   description:  "Retrives the application parameters identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the application parameters based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmApplicationParametersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../application/xxx/history
+
+ /application/{id}/history:
+  get:
+   tags:
+    - "applicationparameters"
+   summary: "Retrives the application parameters by given ID."
+   description:  "Retrives the application parameters by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the application parameters based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmApplicationParametersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ LmmTmApplicationParametersDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     applicationId:
+      type: string
+      description: ""
+     applicationInstanceId:
+      type: string
+      description: ""
+     applicationInstanceName:
+      type: string
+      description: ""
+     applicationReleaseVersion:
+      type: string
+      description: ""
+     applicationDate:
+      type: string
+      format: date
+      description: ""
+     hostCountryCode:
+      type: string
+      description: ""
+     hostCountryName:
+      type: string
+      description: ""
+     timeZone:
+      type: string
+      description: ""
+     isMbccAllowed:
+      type: string
+      description: ""
+     isBvtAllowed:
+      type: string
+      description: ""
+     sweep:
+      type: string
+      description: ""
+     pool:
+      type: string
+      description: ""
+     hybrid:
+      type: string
+      description: ""
+     domesticSweep:
+      type: string
+      description: ""
+     domesticPool:
+      type: string
+      description: ""
+     domesticHybridSweep:
+      type: string
+      description: ""
+     domesticHybridPool:
+      type: string
+      description: ""
+     crossBorderSweep:
+      type: string
+      description: ""
+     crossBorderPool:
+      type: string
+      description: ""
+     crossBorderHybridSweep:
+      type: string
+      description: ""
+     crossBorderHybridPool:
+      type: string
+      description: ""
+     crossCcySweep:
+      type: string
+      description: ""
+     crossCcyPool:
+      type: string
+      description: ""
+     crossCcyHybridSweep:
+      type: string
+      description: ""
+     crossCcyHybridPool:
+      type: string
+      description: ""
+     allowMultipleStructure:
+      type: string
+      description: ""
+     skipOnAccountPairFail:
+      type: string
+      description: ""
+     skipOnStructureFail:
+      type: string
+      description: ""
+     useMultiCcyAccNumber:
+      type: string
+      description: ""
+     skipAccountPair:
+      type: string
+      description: "" 
+     sweepBasis:
+      type: string
+      description: ""
+     txnFailRetryCount:
+      type: integer
+      description: ""       
+     allowNettingForReverseSweep:
+      type: string
+      description: ""
+     allowNettingForReallocation:
+      type: string
+      description: ""
+    required:
+     - id
+     - applicationInstanceId
+     - applicationReleaseVersion
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmApplicationParametersCollection: 
+  description: "Collection of application parameters."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmApplicationParametersDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmApplicationParametersWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmApplicationParametersDTO"

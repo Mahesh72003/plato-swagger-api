@@ -1,0 +1,313 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : scorecardservices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Scorecard Configuration
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-cmn-scorecardservices
+tags:
+- name: ScorecardServices
+  description: API for Scorecard Services Operations
+schemes:
+- http
+paths:
+  /web/v1/scorecardservices/submit:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ScorecardServicesAggregate
+      summary: Submit for the Scorecard domain.
+      description: Populates scorecard aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveScorecardServices
+      parameters:
+      - name: scorecardServicesAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new ScorecardServicesAggregate
+        required: true
+        schema:
+          $ref: '#/definitions/ScorecardServicesAggregateModel'
+      responses:
+        201:
+          description: Returns the Id
+          headers:
+            Location:
+              description: URL
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/scorecardservices/{applicationNumber}/{processRefNo}/stagesummary:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ScorecardServicesAggregate
+      summary: Get stagesummary Details.
+      description: Get stagesummary Details.
+      operationId: getStageSummary
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber for which Scorecard data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Application number for which Scorecard data needs to be fetched
+        required: true
+        type: string
+      - name: datasegments
+        in: query
+        description: comma seperated datasegments for the stage
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns summary details for the process ref No for the stage
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+          
+  /web/v1/scorecardservices/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ScorecardServicesAggregate
+      summary: Get data segment History Details.
+      description: Get data segment History Details.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application Number for which Scorecard data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Reference Number for which Scorecard data needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode for History need to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns History details for the process number and datasegment code
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+
+  /service/v1/scorecardservices/assessmentdecision:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ScorecardServicesAggregate
+      summary: Retrieves the Recommendation Status in Assessment Details
+      description: Retrieves the  Recommendation Status in Assessment Details
+      operationId: getAssessmentDecision
+      parameters:
+      - name: processRefNo
+        in: query
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error 
+          
+  /service/v1/scorecardservices/manualassessment:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ScorecardServicesAggregate
+      summary: Retrieves the Manual Assessment Status in Manual Assessment Details
+      description: Retrieves the Manual Assessment Status in Manual Assessment Details
+      operationId: getManualAssessmentDecision
+      parameters:
+      - name: processRefNo
+        in: query
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error  
+          
+  /service/v1/scorecardservices/manualdecision:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ScorecardServicesAggregate
+      summary: Retrieves the Manual Decision Status in Manual Decision Details
+      description: Retrieves the  Manual Decision Status in Manual Decision Details
+      operationId: getManualDecision
+      parameters:
+      - name: processRefNo
+        in: query
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/CustomerResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error           
+
+definitions:
+  ScorecardServicesAggregateModel:
+    description: ScorecardServicesAggregateModel
+    type: object
+    properties:
+      id:
+        description: Scorecard Application Id
+        type: string
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+ 
+  CustomerResponseModel:
+    description: Customer Response model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref Number
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      response:
+        description: Response
+        type: string

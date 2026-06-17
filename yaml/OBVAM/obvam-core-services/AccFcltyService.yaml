@@ -1,0 +1,855 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : AccFcltyService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is the Service API document for Account Facility operations.Pass appId = VAC"
+ version: "1.0.0"
+ title: "accfcltys Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accfcltysService"
+   description: "This is the Service for Account Facility Creation and maintenance. This function is used to define the real customer and its real accounts for which virtual accounts can be created. It has a Real Customer LOV field which has one to many Relation with Real Accounts of that customer."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../accountfacility
+
+ /service/accountfacility:
+  get:
+   tags:
+    - "accfcltysService"
+   summary: "Get all valid accfcltys."
+   description:  "Get all the valid accfcltys. This endpoint will be used to Get all valid accfcltys maintenance records."
+   operationId: "getAllFacility"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: "offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - in: query
+     name: defaultVirtualEntity
+     required: false
+     type: string
+     description: "virtual entity id"
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+     description: "real customer number"
+   - in: query
+     name: makerId
+     required: false
+     type: string
+     description: "maker of the record"
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+     description: "checker of the record"
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+     description: "record status"
+   - in: query
+     name: authStat
+     required: false
+     type: string
+     description: "auth status"
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/AccountFacilityMasterServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+# path to get Facility Enabled Accounts for a Customer
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       ...service/accountfacility/vaenabledaccounts
+
+ /service/accountfacility/vaenabledaccounts:
+  get:
+   tags:
+    - "accfcltysService"
+   summary: "Retrieves the accfcltys for the realCustomerNo."
+   description:  "Retrieves the accfcltys for the realCustomerNo."
+   operationId: "getVAEnabledAccounts"
+   parameters:
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "realCustomerNo"
+      in: "query"
+      description: "realCustomerNo of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "realAccountNo"
+      in: "query"
+      description: "Real account number that needs to be fetched"
+      required: false
+      type: "string"
+    - name: "branchCode"
+      in: "query"
+      description: "Branch code of the real account number"
+      required: false
+      type: "string"
+    - name: "accountClass"
+      in: "query"
+      description: "Account class of real account number"
+      required: false
+      type: "string"
+    - name: "sourceSystem"
+      in: "query"
+      description: "sourceSystem of real account number"
+      required: false
+      type: "string"
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+         
+   responses:
+    200:
+     description: "Returns the accfcltys based on given id."
+     schema:
+      $ref: "#/definitions/AccountFacilityDetailServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/accountfacility/vaenabledaccountswithDesc:
+  get:
+   tags:
+    - "accfcltysService"
+   summary: "Retrieves the accfcltys for the realCustomerNo."
+   description:  "Retrieves the accfcltys for the realCustomerNo."
+   operationId: "getVAEnabledAccountsWithDesc"
+   parameters:
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "realCustomerNo"
+      in: "query"
+      description: "realCustomerNo of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "realAccountNo"
+      in: "query"
+      description: "Real account number that needs to be fetched"
+      required: false
+      type: "string"
+    - name: "branchCode"
+      in: "query"
+      description: "Branch code of the real account number"
+      required: false
+      type: "string"
+    - name: "accountClass"
+      in: "query"
+      description: "Account class of real account number"
+      required: false
+      type: "string"
+    - name: "sourceSystem"
+      in: "query"
+      description: "sourceSystem of real account number"
+      required: false
+      type: "string"
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "realAccountCcy"
+      in: "query"
+      description: "currency of the real account"
+      required: false
+      type: "string"      
+         
+   responses:
+    200:
+     description: "Returns the accfcltys based on given id."
+     schema:
+      $ref: "#/definitions/AccountFacilityDetailDescServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /service/sanctionCheckParameters/{customerNumber}:
+  get:
+   tags:
+    - "accfcltysService"
+   summary: "Get all parameter related to sanction check"
+   description:  "Get all parameter related to sanction check. This endpoint will be used to Get all parameters related to sanction check"
+   operationId: "getSanctionChkParameters"
+   parameters:
+   - name: customerNumber
+     in: path
+     description: customer number for which sanction check status need to be determined and other parameters need to be fetched 
+     required: true
+     type: string
+   responses:
+    201:
+     description: "Returns sanction check parameters"
+     schema:
+       $ref: "#/definitions/SanctionCheckParametersDto"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/accfcltybankparams/{keyId}:
+  get:
+   tags:
+    - "accfcltysService"
+   summary: "Get all parameter related to sanction check"
+   description:  "Get parameter related to bank and default virtual entity. This endpoint will be used to Get all parameters related to sanction check"
+   operationId: "getAccFacAndBankParameters"
+   parameters:
+   - name: keyId
+     in: path
+     description: 'KeyId for which bank and facility parameters need to be determined' 
+     required: true
+     type: string
+   responses:
+    201:
+     description: "Returns sanction check parameters"
+     schema:
+       $ref: "#/definitions/AccFcltyBankParamDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"        
+definitions:
+ AccountFacilityServiceMasterDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     defaultVirtualEntity:
+      type: string
+      description: "Default Virtual Entity"
+      minLength: 1
+      maxLength: 12
+     realCustomerNo:
+      type: string
+      description: "Valid Real Customer Number from common core"
+      minLength: 1
+      maxLength: 20
+     makerId:
+      type: string
+      description: "Maker Id"
+     makerDateStamp:
+      type: string
+      description: "Maker Date Stamp"
+     checkerId:
+      type: string
+      description: "Checker Id"
+     checkerDateStamp:
+      type: string
+      description: "Checker Date Stamp"
+     modNo:
+      type: number
+      description: "Modification Number"
+     recordStatus: 
+      type: string
+      description: "Record Status"
+     authStatus:
+      type: string
+      description: "Auth Status"
+     onceAuth:
+      type: string
+      description: "Once Authorized"
+     doerRemarks:
+      type: string
+      description: "Maker Remarks"
+     approverRemarks:
+      type: string
+      description: "Checker Remarks"
+     sanctionChkExempted:
+      type: string
+      description: "Sanction check exempted"
+      pattern: '[Y,N]' 
+     AccountFacilityServiceDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/AccountFacilityServiceDetailDTO'
+     AccountFacilityDetailDescServiceDTO:
+      type: array
+      items:
+       $ref: '#/definitions/AccountFacilityDetailDescServiceDTO'       
+     EntityServiceMasterDTO:
+       $ref: '#/definitions/EntityServiceMasterDTO'
+    required:
+     - realCustomerNo
+ AccountFacilityServiceDetailDTO:
+  type: object
+  properties:
+     branchCode:
+      type: string
+      description: "Branch Code"
+      minLength: 3
+      maxLength: 3
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number "
+      minLength: 1
+      maxLength: 20
+     realAccountNo:
+      type: string
+      description: "Real Account Number for the Customer"
+      minLength: 1
+      maxLength: 34
+     realAccountCcy:
+      type: string
+      description: "Real Account Number Currency"
+      minLength: 3
+      maxLength: 3
+     accountClass:
+      type: string
+      description: "Account Class of Real Account Number"
+     sourceSystem:
+      type: string
+      description: "Source System of Real Account Number"
+  required:
+   - realCustomerNo
+   - realAccountNo
+   - sourceSystem
+ AccountFacilityDetailDescServiceDTO:
+  type: object
+  properties:
+     branchCode:
+      type: string
+      description: "Branch Code"
+      minLength: 3
+      maxLength: 3
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number "
+      minLength: 1
+      maxLength: 20
+     realAccountNo:
+      type: string
+      description: "Real Account Number for the Customer"
+      minLength: 1
+      maxLength: 34
+     realAccountName:
+      type: string
+      description: "Real Account Name for the Customer"
+      minLength: 1
+      maxLength: 105   
+     realAccountCcy:
+      type: string
+      description: "Real Account Number Currency"
+      minLength: 3
+      maxLength: 3
+     accountClass:
+      type: string
+      description: "Account Class of Real Account Number"
+     sourceSystem:
+      type: string
+      description: "Source System of Real Account Number"
+  required:
+   - realCustomerNo
+   - realAccountNo
+   - sourceSystem
+ EntityServiceMasterDTO:
+  type: object
+  properties:
+   sanctionCheckRequired:
+    type: string
+    description: "Specify Sanction check required here"
+    maxLength: 1
+   fatcaResponsible:
+    type: string
+    description: "Specify Fatca Responsible here"
+    maxLength: 1
+   amlCustomerGroup:
+    type: string
+    description: "Maintain Aml Customer Group here"
+    maxLength: 105
+   amlRequired:
+    type: string
+    description: "Specify AML Required Status  here"
+    maxLength: 1
+   lastKycDate:
+    type: string
+  #  format: date
+    description: "Specify last Date for KYC  here"
+   kycReference:
+    type: string
+    description: "Specify KYC Reference  here"
+    maxLength: 100
+   kycStatus:
+    type: string
+    description: "Specify KYC Status  here"
+    maxLength: 1
+   taxIdentificationNo:
+    type: string
+    description: "Specify Tax Identification Number here"
+    maxLength: 100
+   identificationNo:
+    type: string
+    description: "Specify Identification Number  here"
+    maxLength: 100
+   identificationType:
+    type: string
+    description: "Specify Identification Type here"
+    maxLength: 1
+   registeredPincode:
+    type: string
+    description: "Specify Registered PIN Code here"
+    maxLength: 15
+   registeredCountry:
+    type: string
+    description: "Specify Registered Country Code here"
+    maxLength: 3
+   registeredAddressLine4:
+    type: string
+    description: "Specify Address Line Number-4 here"
+    maxLength: 105
+   registeredAddressLine3:
+    type: string
+    description: "Specify Address Line Number-3 here"
+    maxLength: 105
+   registeredAddressLine2:
+    type: string
+    description: "Specify Address Line Number-2 here"
+    maxLength: 105
+   registeredAddressLine1:
+    type: string
+    description: "Specify Address Line Number-1 here"
+    maxLength: 105
+   correspondencePincode:
+    type: string
+    description: "Specify Correspondence PIN Code here"
+    maxLength: 15
+   correspondenceCountry:
+    type: string
+    description: "Specify Correspondence Country Code here"
+    maxLength: 3
+   correspondenceAddressLine4:
+    type: string
+    description: "Specify Correspondence Address Line Number-4 here"
+    maxLength: 105
+   correspondenceAddressLine3:
+    type: string
+    description: "Specify Correspondence Address Line Number-3 here"
+    maxLength: 105
+   correspondenceAddressLine2:
+    type: string
+    description: "Specify Correspondence Address Line Number-2 here"
+    maxLength: 105
+   correspondenceAddressLine1:
+    type: string
+    description: "Specify Correspondence Address Line Number-1 here"
+    maxLength: 105
+   entityType:
+    type: string
+    description: "Specify Entity Type here"
+    maxLength: 1
+   virtualEntityName:
+    type: string
+    description: "Specify Virtual Entity Type here"
+    minLength: 1
+    maxLength: 105
+   virtualEntityId:
+    type: string
+    description: "Specify Virtual Entity Identification Number here"
+    minLength: 1
+    maxLength: 12
+   realCustomerNo:
+    type: string
+    description: "Specify Real Customer Number here"
+   defaultEntity:
+    type: string
+    maxLength: 1
+    description: "Specify whether the entity is being generated default from account facility domain"
+   makerId:
+      type: string
+      description: "Maker Id"
+   makerDateStamp:
+      type: string
+      description: "Maker Date Stamp"
+   checkerId:
+      type: string
+      description: "Checker Id"
+   checkerDateStamp:
+      type: string
+      description: "Checker Date Stamp"
+   modNo:
+      type: number
+      description: "Modification Number"
+   recordStatus: 
+      type: string
+      description: "Record Status"
+   authStatus:
+      type: string
+      description: "Auth Status"
+   onceAuth:
+      type: string
+      description: "Once Authorized"
+   doerRemarks:
+      type: string
+      description: "Maker Remarks"
+   approverRemarks:
+      type: string
+      description: "Checker Remarks"
+   EntityIndividualServiceDetailsDTO:
+    $ref: '#/definitions/EntityIndividualServiceDetailsDTO'
+   EntityCorporateServiceDetailsDTO:
+    $ref: '#/definitions/EntityCorporateServiceDetailsDTO'
+  required:
+   - virtualEntityId
+   - realCustomerNo
+   - virtualEntityName
+   - entityType
+   - registeredCountry
+   - correspondenceCountry
+   - correspondenceAddressLine1
+   - registeredAddressLine1
+ EntityIndividualServiceDetailsDTO:
+  type: object
+  properties:
+     preferredMode:
+      type: string
+      description: "Specify Preferred Mode  here"
+      maxLength: 1
+     email:
+      type: string
+      description: "Specify Email Id of Customer here"
+      maxLength: 255
+      pattern: (^$|\w+?@\w+?\x2E.+)
+     workPhoneNo:
+      type: string
+      description: "Specify Working Phone/Mobile Number of Customer here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     workPhoneIsd:
+      type: string
+      description: "Specify Working International Subscriber Dailing of Customer here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     homePhoneNo:
+      type: string
+      description: "Specify Home Phone/Mobile Number of Customer here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     homePhoneIsd:
+      type: string
+      description: "Specify Home International Subscriber Dailing of Customer here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNoIsd:
+      type: string
+      description: "Specify Mobile Number Country Code here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNo:
+      type: string
+      description: "Specify Mobile Number here"
+      maxLength: 10
+     nationalId:
+      type: string
+      description: "Specify Nationality Identification Number  of Customer here"
+      maxLength: 35
+     nationality:
+      type: string
+      description: "Specify Nationality of Customer here"
+      maxLength: 3
+     gender:
+      type: string
+      description: "Specify Gender of Customer here"
+      maxLength: 1
+     dateOfBirth:
+      type: string
+   #   format: date
+      description: "Specify Date Of Birth of Customer here"
+     lastName:
+      type: string
+      description: "Specify Last Name of Customer here"
+      maxLength: 105
+     middleName:
+      type: string
+      description: "Specify Middle Name of Customer here"
+      maxLength: 105
+     firstName:
+      type: string
+      description: "Specify First Name of Customer here"
+      maxLength: 105
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Entity Identification Number here"
+  required:
+   - virtualEntityId
+   - firstName
+   - lastName
+   - dateOfBirth
+   - gender
+   - nationality
+ EntityCorporateServiceDetailsDTO:
+  type: object
+  properties:
+     virtualEntityId:
+      type: string
+      description: "Specify Virtual Identification Number here"
+     dateOfIncorporation:
+   #   format: date
+      type: string
+      description: "Specify Date of Incorporation here"
+     countryOfIncorporation:
+      type: string
+      description: "Specify Country of Incorporation here"
+      maxLength: 105
+     uniqueId:
+      type: string
+      description: "Specify Unique Identification Number here"
+      maxLength: 35
+     workPhoneIsd1:
+      type: string
+      description: "Specify ISD Code for First Working Phone Number here"
+      maxLength: 4
+     workPhoneNo1:
+      type: string
+      description: "Specify First Working Phone Number here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     workPhoneIsd2:
+      type: string
+      description: "Specify ISD Code for Second Working Phone Number here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     workPhoneNo2:
+      type: string
+      description: "Specify Second Working Phone Number here"
+      maxLength: 10
+      pattern: ^[0-9]*$
+     mobileNoIsd:
+      type: string
+      description: "Specify Mobile Number Country Code here"
+      maxLength: 4
+      pattern: ^[0-9]*$
+     mobileNo:
+      type: string
+      description: "Specify Mobile Number here"
+      maxLength: 10
+     email:
+      type: string
+      description: "Specify Email Id here"
+      maxLength: 255
+      pattern: (^$|\w+?@\w+?\x2E.+)
+     preferredMode:
+      type: string
+      description: "Specify Preferred Mode here"
+      maxLength: 1
+     corporateEntityType:
+      type: string
+      description: "Specify corporate EntityType here"
+  required:
+   - virtualEntityId
+   - dateOfIncorporation
+   - countryOfIncorporation
+   - corporateEntityType  
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ AccountFacilityMasterServiceCollection: 
+  description: "Collection of accfclty."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/AccountFacilityServiceMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ AccountFacilityDetailServiceCollection: 
+  description: "Collection of accfclty Detail."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/AccountFacilityServiceDetailDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ AccountFacilityDetailDescServiceCollection: 
+  description: "Collection of accfclty Detail."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/AccountFacilityDetailDescServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"    
+ SanctionCheckParametersDto:
+  type: object
+  properties:
+   sanctionCheckStatus:
+    type: string
+    description: 'Sanction check status derived from other parameters'
+   sanctionCheckRequired:
+    type: string
+    pattern: '[Y,N]'
+    description: 'Sanction check required parameter from bank parameters'
+   sanctionCheckExempted:
+    type: string
+    pattern: '[Y,N]'
+    description: 'Sanction check exempted parameter from account facility parameters'
+ AccFcltyBankParamDTO:
+  type: object
+  properties:
+   defaultVirtualEntity:
+    type: string
+    description: 'Default Virtual Entity ID'
+   structuredAddrReqd:
+    type: string
+    pattern: '[Y,N]'
+    description: 'Structured address required??'
+   recordExists:
+    type: boolean
+    description: 'Record exists for particular keyId or not?'    
+    

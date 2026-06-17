@@ -1,0 +1,227 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is the YAML file for the service that will maintain Account Number Range for a specific Corporate in a Branch." 
+ version: "1.0.0"
+ title: "Corporate Specific Account Number Range Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountrangeservice"
+   description: "Service API for fetching the necessary details of Corporate Specific Account Number Range"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+# supprorted http methods GET
+#
+# path example ../accountrange
+
+ /service/accountrange:
+  get:
+   tags:
+    - "accountrangeservice"
+   summary: "Get all valid accountrange."
+   description: "Fetches all valid records that have been maintained."
+   operationId: "getAll"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth needs to be set to fetch record that are unauthorized and/or closed, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is the starting number of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is the maximum number of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: branchCode
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VamTmAccountRangeServiceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+definitions:
+ VamTmAccountRangeServiceMasterDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     realCustomerNo:
+      type: string
+      description: "Branch Code for which the Real Customer will have an Account Number Range"
+      minLength: 1
+      maxLength: 20
+     branchCode:
+      type: string
+      description: "Branch Code for which the Real Customer will have an Account Number Range"
+      minLength: 3
+      maxLength: 3
+      pattern: ^[a-zA-Z0-9]+$
+     makerId:
+      type: string
+     makerDateStamp:
+      type: string
+     checkerId:
+      type: string
+     checkerDateStamp:
+      type: string
+     modNo:
+      type: number
+     recordStatus: 
+      type: string
+     authStatus:
+      type: string
+     onceAuth:
+      type: string
+     doerRemarks:
+      type: string
+     approverRemarks:
+      type: string
+     VamTmAccountRangeServiceDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VamTmAccountRangeServiceDetailDTO'
+
+ VamTmAccountRangeServiceDetailDTO:
+  type: object
+  properties:
+     realCustomerNo:
+      type: string
+      description: "Branch Code for which the Real Customer will have an Account Number Range"
+      minLength: 1
+      maxLength: 20  
+     branchCode:
+      type: string
+      description: "Branch Code for which the Real Customer will have an Account Number Range"
+      minLength: 3
+      maxLength: 3
+      pattern: ^[a-zA-Z0-9]+$
+     startAccountNo:
+      type: number
+      description: "Start Account Number of the Corporate Specific Range"
+      minLength: 0
+      maxLength: 20
+      pattern: ^[0-9]*$
+     endAccountNo:
+      type: number
+      description: "End Account Number of the Corporate Specific Range"
+      minLength: 0
+      maxLength: 20
+      pattern: ^[0-9]*$    
+ VamTmAccountRangeServiceMasterCollection: 
+  description: "Collection of accountrange."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VamTmAccountRangeServiceMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ OrchestratorDTO:
+  type: object

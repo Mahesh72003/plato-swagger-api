@@ -1,0 +1,180 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ApplicantTypeServices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Applicant Service
+host: "api-plato.us.oracle.com:8080"
+basePath: /obremo-rpm-cmn-applicantservices
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+- name: ApplicantTypeService
+  description: API for ApplicantService Operations
+schemes:
+- http
+paths:
+  /web/v1/applicanttypes:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicantTypes
+      summary: Adds a new ApplicantDetails.
+      description: Adds a new ApplicantTypeModel. Add additional information here for this endpoint.
+      operationId: addApplicantTypes
+      parameters:
+      - name: ApplicantTypes
+        in: body
+        description: Request Body that contains data required for creating a new ApplicantTypeModel
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicantTypesModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created ApplicantTypesModel
+          headers:
+            Location:
+              description: URL of newly created ApplicantDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicantTypes
+      summary: Retrieves the list of existing ApplicantDetails by id.
+      description: Retrieves the list of existing ApplicantDetails by id. Add additional information here for the this endpoint.
+      operationId: getAllApplicantTypes
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the ApplicantTypes that needs to be fetched
+        required: true
+        type: string        
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+ ApplicantTypesModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     id:
+      description: Id of the ApplicantTypesModel
+      type: string
+      maxLength: 36
+     applicationNumber:
+      description: Application Number of the Application
+      type: string
+      maxLength: 20
+     applicationDate:
+      description: Application Date of the ApplicantTypesModel
+      type: string  
+     domainName:
+      description: domainName from where Application got initiated
+      type: string
+      maxLength: 20 
+     applicationType:
+      description: Application Type
+      type: string
+     dataSegmentCode:
+      description: Data segment code
+      type: string
+     stageCode:
+      description: stageCode
+      type: string
+      maxLength: 36
+     ownership:
+      description: Ownership
+      type: string
+     accountName:
+      description: accountName
+      type: string
+     modeOfOperation:
+      description: Mode Of Operation
+      type: string
+     holdingPattern:
+      description: Holding Pattern
+      type: string 
+     channel:
+      description: Channel
+      type: string  
+    required:
+     - applicationNumber
+ ApplicantTypesCollection:
+    description: Collection of ApplicantTypes.
+    type: object
+    properties:
+      applicantTypesModel:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantTypesModel'
+ GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type    
+    

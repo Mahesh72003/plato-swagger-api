@@ -1,0 +1,297 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ExternalChgPosting.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2021 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Customer External charge Query and Posting." 
+ version: "1.0.0"
+ title: "Customer External charge Query and Posting"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ExternalChgPosting"
+   description: "API that facilitates enquiry of all charges associated to a customer within an application based on the selected filters "
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../web/v1/charges
+
+ /service/queryExternalCharge:
+  post:
+   tags:
+    - "ExternalChgPosting"
+   summary: "Query charge amount for external posting"
+   description:  "Query charge amount for External Posting"
+   operationId: "getChargePostingDetails"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: queryInputList
+     in: body
+     description: "request body contains application code and customer/list of customer for which external posting entry details to be shared"
+     required: true
+     schema:
+       $ref: "#/definitions/QueryInputListDTO"     
+   responses:
+    200:
+     description: "Returns the charge maintenance actions based on given id."
+     schema:
+      $ref: '#/definitions/ExternalChgPostingCollection'
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/updateExternalChargePosting:
+  post:
+   tags:
+    - "ExternalChgPosting"
+   summary: "Update External charge posting status"
+   description:  "Update External charge posting status"
+   operationId: "updateChargePostingStatus"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: postingInput
+     in: body
+     description: "request body contains details of external posting and posting status"
+     required: true
+     schema:
+       $ref: "#/definitions/PostingInputDTO"     
+   responses:
+    200:
+     description: "Returns the charge maintenance actions based on given id."
+     schema:
+      $ref: '#/definitions/ChgPostingResponseWrapperDTO'
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+
+definitions:
+  ChgPostingResponseWrapperDTO:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ChgPostingResponseDto"
+  ChgPostingResponseDto:
+    type: object
+    properties:
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ChgPostingResponseCode" 
+  ChgPostingResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string                 
+  PostingInputDTO:
+   type: object
+   allOf:
+   - type: object
+     properties:
+      applicationCode:
+       type: string
+       description: "application code"
+      chgRefno:
+       type: string
+       description: "charge reference number"
+      collectionDate:
+       type: string
+       description: "collection Date"
+      chgPostingStatus:
+       type: string
+       description: "Collection Status." 
+      chgPostingError:
+       type: string
+       description: "Error Description in case charge error."                   
+      ddaSystem:
+       type: string
+       description: "dda system"
+      accountccy:
+       type: string
+       description: "Account currency"
+      chargeCcy:
+       type: string
+       description: "charge currency"                
+      chgPostedAmount:
+       type: number
+       description: "chg Amnt In Account curreny that got posted"              
+      exchgRate:
+       type: number
+       description: "exchange rate"
+     required:
+      - chgRefno
+      - collectionDate
+      - chgPostingStatus
+      - ddaSystem                            
+  QueryInputListDTO:
+   type: object
+   allOf:
+    - type: object
+   properties:
+      applicationCode:
+       type: string
+       description: "application code"
+      QueryInputDto:
+       type: array
+       items:
+          $ref: '#/definitions/QueryInputDto'
+   required:
+     - realCustomerNo
+     - QueryInputDto     
+              
+  QueryInputDto:
+    type: object
+    properties:
+      realCustomerNo:
+        type: string
+        description: "real customer no"
+    required:
+      - realCustomerNo
+        
+  PagingDto:
+   type: object
+   properties:
+    totalResults:
+     type: integer
+  ExternalChgPostingCollection: 
+   description: "Collection of Charge Details."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ExternalChgPostingEntriesDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+    messages:
+     $ref: "#/definitions/ChgPostingResponseDto"
+  ExternalChgPostingEntriesDTO:
+   description: "External charge posting details"
+   type: object
+   allOf:
+   - type: object
+     properties:
+      applicationCode:
+       type: string
+       description: "application code"
+      realCustomerNo:
+       type: string
+       description: "real customer number"      
+      chgRefno:
+       type: string
+       description: "charge reference number"
+      txnBranch:
+       type: string
+       description: "Transaction Branch"
+      accountingEntry:
+       type: array
+       items:
+          $ref: '#/definitions/AccountingEntryDto'
+  AccountingEntryDto:
+   description: "Accounting Entry details"
+   type: object
+   properties:
+      eventserialNo:
+       type: string
+       description: "event serial number"
+      chargeCode:
+       type: string
+       description: "charge code"
+      chargeCodeDesc:
+       type: string
+       description: "charge code description"              
+      debitCreditInd:
+       type: string
+       description: "debit credit indicator"      
+      accountNumber:
+       type: string
+       description: "Account number"
+      accountBranch:
+       type: string
+       description: "Account Branch"       
+      accountccy:
+       type: string
+       description: "Account currency"       
+      amntInAccCcy:
+       type: number
+       description: "Amount in account currency"
+      chargeCcy:
+       type: string
+       description: "charge currency"
+      amntInChgCcy:
+       type: number
+       description: "amount in charge currency"
+      valueDate:
+       type: string
+       description: "Value Date"
+      txnCode:
+       type: string
+       description: "Transaction Code"        
+      addlInfo:
+       type: string
+       description: "Additional Information"

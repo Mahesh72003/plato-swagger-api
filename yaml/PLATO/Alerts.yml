@@ -1,0 +1,192 @@
+swagger: "2.0"
+info:
+ description: "" 
+ version: "1.0.0"
+ title: "Alerts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "plato-alerts-management-services"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+ /getOpenDashboardAlertsByUserId/{userId}:
+  get:
+   tags:
+    - "plato-alerts-management-services"
+   summary: ""
+   description: ""
+   operationId: "getOpenDashboardAlertsByUserId"
+   parameters:
+    - name: "userId"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Returns message of succes or failure "
+     schema:
+        $ref: "#/definitions/PlatoTbAlertsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /eventProcess:
+  post:
+   tags:
+    - "plato-alerts-management-services"
+   summary: "Publish alerts to dynamically configured topics."
+   description: "Publish alerts to dynamically configured topics."
+   operationId: "eventProcess"
+   parameters:
+    - name: "event" 
+      in: "body" 
+      description: "Request Body that contains data required to be sent." 
+      required: true
+      schema:
+        $ref: "#/definitions/PlatoAlertsEventDTO" 
+    - name: "branchCode" 
+      in: "header" 
+      description: ""
+      required: false
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: "" 
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     headers:
+      Location:
+       description: "" 
+       type: "string"
+     schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+  PlatoTbAlertsCollection:
+    type: "array"
+    items:
+      $ref: "#/definitions/PlatoTbAlerts"
+  PlatoTbAlertsChannel:
+    description: "Tb Alerts Channel model"
+    type: "object"
+    properties:
+     userId:
+      type: "string"
+      description: ""
+     key:
+      type: "string"
+      description: ""
+     mode:
+      type: "string"
+      description: ""
+     shortMessage:
+      type: "string"
+      description: ""
+     message:
+      type: "string"
+      description: ""
+     sentStatus:
+      type: "string"
+      description: ""
+  PlatoTbAlerts:
+    description: "Tb Alerts model"
+    type: "object"
+    properties:
+     alertName:
+      type: "string"
+      description: ""
+      default: "Test Alert"
+     alertStatus:
+      type: "string"
+      description: ""
+      default: "True"
+     alertDate:
+      type: "string"
+      format: date
+      description: ""
+      default: null
+     functionalIdentifier:
+      type: "string"
+      description: ""
+      default: "RandomID"
+     alertsChannels:
+      description: ""
+      type: "array"
+      items:
+        $ref: "#/definitions/PlatoTbAlertsChannel"
+  PlatoAlertsEventDTO:
+    description: "Event model"
+    type: "object"
+    properties:
+     messageBody:
+      type: "object"
+      description: ""
+     eventId:
+      type: "string"
+      description: ""
+  ResponseDtoWrapper:
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport" 
+  ResponseResourceSupport:
+    type: "object"
+  ResponseDto:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      status:
+        type: "string"
+      codes:
+        type: "array"
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: "string"
+  ResponseCode:
+    type: "object"
+    properties:
+      Code:
+        type: "string"
+      Desc:
+        type: "string"
+      Type:
+        type: "string"
+      Language:
+        type: "string"
+      args:
+        type: "array"
+        items:
+          type: "object"
+      arg:
+       type: "string"       

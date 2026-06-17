@@ -1,0 +1,707 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+ description: "This is a sample server paymentinterface server."
+ version: "1.0.0"
+ title: "paymentinterface Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "paymentinterface"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../paymentinterface
+
+ /paymentinterface:
+  post:
+   tags:
+    - "paymentinterface"
+   summary: "Adds a new paymentinterface."
+   description: "Adds a new paymentinterface. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "paymentinterface"
+      in: "body"
+      description: "Request Body that contains data required for creating a new paymentinterface"
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+   responses:
+    201:
+     description: "Returns message of succes or failure "
+     headers:
+      Location:
+       description: "URL of newly created paymentinterface"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Get all valid paymentinterface."
+   description:  "Get all valid paymentinterface. This endpoints will be used to Get all valid paymentinterface maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: externalSystemDetailsId
+     required: false
+     type: string
+   - in: query
+     name: externalSystemId
+     required: false
+     type: string
+   - in: query
+     name: serviceName
+     required: false
+     type: string
+   - in: query
+     name: templateName
+     required: false
+     type: string     
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../paymentinterface/xxx
+#   DELETE    .../paymentinterface/xxx
+#   GET       .../paymentinterface/xxx
+#   GET       .../paymentinterface/xxx?version=latestrecord
+#   GET       .../paymentinterface/xxx?version=1
+
+ /paymentinterface/{id}:
+  put:
+   tags:
+    - "paymentinterface"
+   summary: "Update an existing paymentinterface."
+   description:  "Update an existing paymentinterface."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the paymentinterface Maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing paymentinterface"
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+   responses:
+    200:
+     description: "Returns updated paymentinterface"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves the paymentinterface by ID."
+   description:  "Retrieves the paymentinterface by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface based on given id."
+     schema:
+      $ref: "#/definitions/LmxTmInterfaceMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "paymentinterface"
+   summary: "Deletes the paymentinterface identified by given ID."
+   description:  "Deletes the paymentinterface identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../paymentinterface/xxx/approve
+
+ /paymentinterface/{id}/approve:
+  patch:
+   tags:
+    - "paymentinterface"
+   summary: "Authorize the paymentinterface by given ID."
+   description:  "Authorize the paymentinterface identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../paymentinterface/xxx/close
+ /paymentinterface/{id}/close:
+  patch:
+   tags:
+    - "paymentinterface"
+   summary: "Close the paymentinterface by given ID."
+   description:  "Close the paymentinterface identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../paymentinterface/xxx/reopen
+
+ /paymentinterface/{id}/reopen:
+  patch:
+   tags:
+    - "paymentinterface"
+   summary: "reopen the paymentinterface by given ID."
+   description:  "reopen the paymentinterface identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../paymentinterface/xxx/unauthorized
+
+ /paymentinterface/{id}/unauthorized:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrives the paymentinterface by given ID."
+   description:  "Retrives the paymentinterface identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface based on given id."
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../paymentinterface/xxx/history
+
+ /paymentinterface/{id}/history:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrives the paymentinterface by given ID."
+   description:  "Retrives the paymentinterface by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface based on given id."
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /paymentinterface/interfacedetails/{externalSystemId}/{methodName}:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves the paymentinterface details by external system id and method name."
+   description:  "Retrieves the paymentinterface details by external system id and method name."
+   operationId: "getInterfaceDetails"
+   parameters:
+    - name: "externalSystemId"
+      in: "path"
+      description: "External System Id"
+      required: true
+      type: "string"
+    - name: "methodName"
+      in: "path"
+      description: "External system id method name"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "version"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface details by external system id and method name."
+     schema:
+      $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /paymentinterface/interfacetemplate/{externalSystemId}/{methodName}:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves the paymentinterface templates based on external system id."
+   description:  "Retrieves the paymentinterface templates based on external system id and base method name."
+   operationId: "getInterfaceListBySystem"
+   parameters:
+    - name: "externalSystemId"
+      in: "path"
+      description: "External System Id"
+      required: true
+      type: "string"
+    - name: "methodName"
+      in: "path"
+      description: "External system id method name"
+      required: true
+      type: "string"      
+    - name: "version"
+      in: "query"
+      description: "version"
+      #required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface details by external system id and method name."
+     schema:
+      $ref: "#/definitions/LmmTmBrnExternalSysDetailsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+definitions:
+ LmxTmInterfaceMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     externalSystemDetailsId:
+      type: string
+      description: ""
+     externalSystemId:
+      type: string
+      description: ""
+     serviceName:
+      type: string
+      description: ""
+     templateName:
+      type: string
+      description: ""
+     LmxTmInterfaceDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterfaceDetailsDTO'
+     LmxTmInterfaceServiceDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterfaceServiceDetailsDTO'
+     LmxTmInterfaceEventDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterfaceEventDetailsDTO'
+    required:
+     - externalSystemDetailsId
+ LmxTmInterfaceDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+ LmxTmInterfaceServiceDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+ LmxTmInterfaceEventDetailsDTO:
+  type: object
+  properties:
+     eventCode:
+      type: string
+      description: ""
+     eventDescription:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmxTmInterfaceMasterCollection:
+  description: "Collection of interface."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmxTmInterfaceMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+ LmmTmBrnExternalSysDetailsDTO:
+  type: object
+  properties:
+   branchCode:
+    type: string
+    description: ''
+   externalSystemId:
+    type: string
+    description: ''
+   methodName:
+    type: string
+    description: ''
+   messageType:
+    type: string
+    description: ''
+   networkType:
+    type: string
+    description: ''
+   interfaceMasterId:
+    type: string
+    description: ''        
+ LmmTmBrnExternalSysDetailsCollection:
+  description: Collection of branch and external system details.
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmBrnExternalSysDetailsDTO'

@@ -1,0 +1,715 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : TermDepositApplication.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Term Deposit Service
+host: localhost:7001
+basePath: /obremo-rpm-term-deposit-service
+tags:
+- name: termDepositApplication
+  description: API for termDepositApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/termdeposit-application/submit:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - TermDepositApplication
+      summary: Submit for the Saving application domain.
+      description: Populates Saving application aggregate.
+      operationId: saveTermDepositApplication
+      parameters:
+      - name: termDepositAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new TermDepositAggregateModel
+        required: true
+        schema:
+          $ref: '#/definitions/TermDepositAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/termdeposit-application/{applicationNumber}/{processRefNo}/stagesummary:
+     get:
+      produces:
+      - application/json
+      tags:
+      - TermDepositApplication
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getWorkDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Term deposit account application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: "processRefNo for which term deposit account application data needs to be fetched"
+        required: true
+        type: string      
+      - name: datasegments
+        in: query
+        description: List of data segment codes
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns TermDepositAggregateModel for the application number
+          schema:
+            $ref: "#/definitions/ResponseSummaryModel"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+          
+  /web/v1/termdeposit-application/initialize:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TermDepositApplication
+      summary: initialize the Saving Term Deposit application.
+      description: initialize the Term Deposit account application.
+      operationId: InitaiteTermDepositApplication
+      parameters:
+      - name: termDepositInitializeModel
+        in: body
+        description: Request Body that contains data required for initialize Term Deposit Application
+        required: true
+        schema:
+          $ref: '#/definitions/TermDepositInitializeModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Term Deposit Application for the initiation stage
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error           
+  /web/v1/termdeposit-application/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TermDepositApplication
+      summary: Get Term Deposit application details
+      description: Get Term Deposit application details. Add additional information here for the this endpoint.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Term Deposit application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: "processRefNo for which saving Term Deposit application data needs to be fetched"
+        required: true
+        type: string         
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode of the datasegment that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Datasegment history for the application number
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/termdeposit-application/save:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TermDepositApplication
+      summary: Submit for the Term Deposit application domain.
+      description: Populates Term Deposit application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveOnlyTermDepositApplication
+      parameters:
+      - name: termDepositAggregateModel
+        in: body
+        description: Request Body that contains data required for saving Term Deposit application
+        required: true
+        schema:
+          $ref: '#/definitions/TermDepositAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/termdeposit-application/{applicationNumber}/datasegment-details: 
+    get: 
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TermDepositApplication
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getApplicationDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Casa application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNos
+        in: query
+        description: Process Reference number for which Casa application data needs to be fetched
+        required: true
+        type: array
+        items:
+         type: string
+      responses:
+        200:
+          description: Returns TermDepositAggregateModelMasterModel for the application number
+          schema: 
+           $ref: '#/definitions/TermDepositMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/termdeposit-application/accountNumberInfo: 
+    get: 
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TermDepositApplication
+      summary: Get the info related to applicationNo and account type.
+      description: Get the info related to applicationNo and account type.
+      operationId: getAccountNumberInfo
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: Application number for which Term Deposit application data needs to be fetched
+        required: true
+        type: string
+      - name: accountType
+        in: query
+        description: account type for which Term Deposit application data needs to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns TermDepositMasterModel for the application number
+          schema: 
+           $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                      
+   
+# path to call Backoffice for Term deposit Account creation
+#
+#  supprorted http methods POST
+#
+# path examples----
+#   POST       .../termdeposit-application/orchestrate/backoffice
+  /termdeposit-application/orchestrate/backoffice:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TermDepositApplication
+      summary: Call Back Office.
+      description: Hand-Off Process called from the workflow
+      operationId: callBackOffice
+      parameters:
+      - name: BackOfficeRequest
+        in: body
+        description: Request Body that contains data required for Back Office
+        required: true
+        schema:
+          $ref: '#/definitions/BackOfficeRequestModel'
+      responses:
+        201:
+          description: Returns response object for BackOfficeRequest
+          schema:
+            $ref: '#/definitions/BackOfficeResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/termdeposit-application/{applicationNumber}/{processRefNo}/adviceData:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - TermDepositApplication
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getAdviceDetails
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which Saving application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Reference number for which Saving application data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns TermDepositAggregateModel for the application number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/aggregatedetails:
+    get:
+      produces:
+        - application/json
+      tags:
+        - TermDepositApplication
+      summary: Get the AggregateMasterResponseModel.
+      description: Get the AggregateMasterResponseModel.
+      operationId: getAggregateMasterResponseModel
+      parameters:
+        - name: applicationNumber
+          in: query
+          description: "applicationNumber for which AggregateMasterResponseModel needs to be fetched"
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: "processRefNo for which AggregateMasterResponseModel needs to be fetched"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns ResponseSummaryModel for the application number
+          schema:
+            $ref: "#/definitions/AggregateMasterResponseModel"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+definitions:
+#  TDApplicationAggregateModel:
+#    description: TDApplicationAggregateModel
+#    type: object
+#    properties:
+#      applicationNo:
+#        description: applicationNo
+#        type: string
+#      processRefNo:
+#        description: processRefNo
+#        type: string
+#      dataSegmentCode:
+#        description: dataSegmentCode
+#        type: string
+#      accountNo:
+#        description: accountNo
+#        type: string
+#      accountType:
+#        description: accountType
+#        type: string
+#      accountBranch:
+#        description: accountBranch
+#        type: string
+
+  AggregateMasterResponseModel:
+    description: AggregateMasterResponseModel
+    type: object
+    properties:
+      applicationNo:
+        description: applicationNo
+        type: string
+      processRefNo:
+        description: processRefNo
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      accountNo:
+        description: accountNo
+        type: string
+      accountType:
+        description: accountType
+        type: string
+      accountBranch:
+        description: accountBranch
+        type: string
+      accountDetailsModel:
+        $ref: "#/definitions/AccountDetailsModel"
+      nomineeDetailsMasterModel:
+        $ref: "#/definitions/NomineeDetailsMasterModel"
+      mandateDetailsMasterModel:
+        $ref: "#/definitions/MandateDetailsMasterModel"
+      accServicesPrefMasterModel:
+        $ref: "#/definitions/AccServicesPrefMasterModel"
+#      accServicesPrefDetailsModel:
+#        $ref: "#/definitions/AccServicesPrefDetailsModel"
+      interestDetailsMasterModel:
+        $ref: "#/definitions/InterestDetailsMasterModel"
+      initialFundingDetailsModel:
+        $ref: "#/definitions/IninitalFundingDetailsModel"
+      approvalDetailsModel:
+        $ref: "#/definitions/ApprovalDetailsModel"
+      additionalAttributes:
+        type: array
+        items:
+          type: object
+    required:
+      - processRefNo
+      - applicationNumber
+
+
+  TermDepositAggregateModel:
+    description: TermDepositAggregateModel
+    type: object
+    properties:
+      action:
+        description: Action
+        type: string
+      channel:
+        description: Channel
+        type: string  
+      applicationNumber:
+        description: Application Number
+        type: string
+        maxLength: 20
+      processRefNo:
+        description: "processRefNo for which term deposit account application data needs to be fetched"
+        type: string  
+        maxLength: 20
+      id:
+        description: Loan Application Id
+        type: string
+      dataSegmentCode:
+        description: DataSegment List
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      lastCompletedStageCode:
+        description: Last Completed Stage Code
+        type: string
+      currentActiveStageCode:
+        description: Current Active Stage Code
+        type: string  
+      applicationStatus:
+        description: application status
+        type: string 
+      accountNo:
+        description: Account number
+        type: string
+      domainData:
+        description: Domain Specific data
+        type: string
+      accountBranch:
+        description: accountBranch
+        type: string
+      accountType:
+        description: accountType
+        type: string
+      applicationType:
+        description: Application Type
+        type: string
+      branchName:
+        description: branchName
+        type: string
+      applicantDetails:
+        $ref: '#/definitions/ApplicantDetailsMasterModel'
+      primaryApplicantDetails:
+        $ref: '#/definitions/ApplicantDetailsModel'          
+      accountDetailsModel:
+        $ref: "#/definitions/AccountDetailsModel"
+      nomineeDetailsMasterModel:
+        $ref: "#/definitions/NomineeDetailsMasterModel"
+      mandateDetailsMasterModel:
+        $ref: "#/definitions/MandateDetailsMasterModel"
+      accServicesPrefMasterModel:
+        $ref: "#/definitions/AccServicesPrefMasterModel"
+      accServicesPrefDetailsModel:
+        $ref: "#/definitions/AccServicesPrefDetailsModel"  
+      interestDetailsMasterModel:
+        $ref: "#/definitions/InterestDetailsMasterModel"  
+      initialFundingDetailsModel:
+        $ref: "#/definitions/IninitalFundingDetailsModel"
+      approvalDetailsModel:
+        $ref: "#/definitions/ApprovalDetailsModel"
+      additionalAttributes:
+        type: array
+        items:
+          type: object
+    required:
+     - processRefNo
+     - applicationNumber
+  TermDepositAggregateModelCollection:
+   description: Collection of TermDepositAggregateModel
+   type: object
+   properties:
+    data:
+     type: array
+     items:
+      $ref: '#/definitions/TermDepositAggregateModel'           
+  TermDepositInitializeModel:
+   description: "TermDepositInitializeModel"
+   type: object
+   properties:
+    applicationNumber:
+     description: Application Number to Initialize TermDepositApplication
+     type: string
+     maxLength: 20
+    processRefNo:
+     description: "processRefNo for which TermDeposit account application data needs to be fetched"
+     type: string  
+     maxLength: 20     
+    initializationId:
+     description: initialization id to Initialize TermDepositApplication
+     type: string
+     maxLength: 20
+    channel:
+     description: source channel from where request came to Initialize SavingApplication
+     type: string
+     maxLength: 30
+   required:
+    - processRefNo
+    - initializationId     
+  InitiationDetailsModel:
+   description: "InitiationDetailsModel"
+   type: object
+   properties:
+    accountDetailsID:
+     description: id for account-Details
+     type: string
+     maxLength: 36
+    applicantDetailsID:
+     description: id for applicant-Details
+     type: string
+     maxLength: 36
+  DomainData:
+   description: "Domain Data from workflow"
+   type: object
+   properties:
+    sendToHost:
+     type: boolean
+     description: "Need to send to host?"
+    initiateFunding:
+     type: boolean
+     description: "Does it support Initial funding?"
+    initFundingStatus:
+     type: boolean
+     description: "Status of Initial Funding?"
+  AccountNumberModel:
+   description: "AccountNumberModel for account opening details"
+   type: object
+   properties:
+    customerId:
+     type: string
+     description: "Cif Number"
+    customerName:
+     type: string
+     description: "Customer Name"
+    accountNumber:
+     type: string
+     description: "accountNumber"
+    branchCode:
+     type: string
+     description: "branchCode"
+    processRefNo:
+     type: string
+     description: "processRefNo"
+    applicationNumber:
+     type: string
+     description: "applicationNumber"        
+  TermDepositMasterModel:
+    description: Term Deposit Application Master Model
+    type: object
+    properties:
+      data: 
+        type: array
+        items:
+         $ref: '#/definitions/TermDepositModel'
+  TermDepositModel: 
+    description: Term Deposit Application Model
+    type: object
+    properties:
+      accountDetailsModel:
+        $ref: "#/definitions/AccountDetailsModel"       
+      nomineeDetailsMasterModel:
+        $ref: "#/definitions/NomineeDetailsMasterModel"
+      mandateDetailsMasterModel:
+        $ref: "#/definitions/MandateDetailsMasterModel"
+      accServicesPrefMasterModel:
+        $ref: "#/definitions/AccServicesPrefMasterModel"
+        
+        
+  BackOfficeRequestModel:
+    description: Back Office Request model
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      customObject:
+        type: object
+    required:
+    - processRefNo
+    - applicationNumber
+    - stageCode   
+  BackOfficeResponseModel:
+    description: Back Office Response model
+    type: object
+    properties:
+      field1:
+        description: field1
+        type: string
+      field2:
+        description: field2
+        type: string
+      field3:
+        description: field3
+        type: string
+      field4:
+        description: field4
+        type: string      

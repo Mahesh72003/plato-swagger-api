@@ -1,0 +1,183 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ChargesInqService.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  pranav.pandey@oracle.com
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "customer charge enquiry." 
+ version: "1.0.0"
+ title: "Charge enquiry "
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ChargesInqService"
+   description: "API that facilitates enquiry of all charges associated to a customer within an application based on the selected filters "
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../web/v1/charges
+
+ /service/chargeInquiry:
+  get:
+   tags:
+    - "ChargesInqService"
+   summary: "Charges Inquiry"
+   description:  "Charges Inquiry"
+   operationId: "getChargeDetails"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: chargeCode
+     required: false
+     type: string
+   - in: query
+     name: collectionStatus
+     required: false
+     type: string
+   - in: query
+     name: fromDate
+     required: true
+     type: string
+   - in: query
+     name: toDate
+     required: true
+     type: string
+   - in: query
+     name: realCustomerNo
+     required: true
+     type: string
+   - name: applicationCode
+     in: query
+     required: true
+     type: string     
+   responses:
+    200:
+     description: "Returns the charge maintenance actions based on given id."
+     schema:
+      $ref: '#/definitions/ChargeInquiryDetailCollection'
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+ ChargeInquiryServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     chargeFromDate:
+      type: string
+      description: "charge from Date."
+     chargeToDate:
+      type: string
+      description: "charge to Date"
+     chargeCode:
+      type: string
+      description: "Charge Code."         
+     chargeDescription:
+      type: string
+      description: "charge Description"            
+     additionalInfo:
+      type: string
+      description: "Additional Information on charge."
+     chargeCCY:
+      type: string
+      description: "Charge Currency."
+     chargeAmount:
+      type: number
+      description: "Charge Amount."
+     chargeAccountCCY:
+      type: string
+      description: "Charge Account Currency"      
+     chargeAccount:
+      type: string
+      description: "Charge Account."
+     exchangeRate:
+      type: number
+      description: "Exchange Rate"
+     postedAmount:
+      type: number
+      description: "Posted Amount."
+     collectionDate:
+      type: string
+      description: "collection Date"
+     collectionStatus:
+      type: string
+      description: "Collection Status."
+     errorDesc:
+      type: string
+      description: "Error Description in case charge error."            
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ChargeInquiryDetailCollection: 
+  description: "Collection of Charge Details."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ChargeInquiryServiceDTO"
+   paging:
+     $ref: "#/definitions/PagingDto"  

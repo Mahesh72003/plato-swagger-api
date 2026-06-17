@@ -1,0 +1,485 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : creditcardservices.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Credit Card Application Service
+host: 10.184.157.121:9000
+basePath: /creditcardapplication-services
+tags:
+- name: CreditCardApplication
+  description: API for CreditCardApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/creditcardapplication/submit:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: Submit for the Credit card application domain.
+      description: Populates CreditCard application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveCreditCardApplication
+      parameters:
+      - name: creditCardApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new CreditCardApplicationAggregate
+        required: true
+        schema:
+          $ref: '#/definitions/CreditCardApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/creditcardapplication/save:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: Submit for the credit card application domain.
+      description: Populates credit card application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveOnlyCreditCardApplication
+      parameters:
+      - name: creditCardApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for saving CreditCardApplication
+        required: true
+        schema:
+          $ref: '#/definitions/CreditCardApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/creditcardapplication/{applicationNumber}/datasegment-details: 
+    get: 
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getApplicationDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNos
+        in: query
+        description: Process Reference number for which CreditCard application data needs to be fetched
+        required: true
+        type: array
+        items:
+         type: string
+      responses:
+        200:
+          description: Returns CreditCardApplicationMasterModel for the application number
+          schema: 
+           $ref: '#/definitions/CreditCardApplicationMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error   
+               
+  /web/v1/creditcardapplication/{applicationNumber}/{processRefNo}/stagesummary:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: Get stagesummary Details.
+      description: Get stagesummary Details.
+      operationId: getStageSummary
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber  for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Reference number for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: datasegments
+        in: query
+        description: coma seperated datasegments for the stage
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns summary details for the application number for the stage
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  
+  /web/v1/creditcardapplication/{applicationNumber}/{processRefNo}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: Get data segment History Details.
+      description: Get data segment History Details.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Ref number for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode for History need to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns History details for the proccess number and datasegment code
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  
+  /web/v1/creditcardapplication/{applicationNumber}/{processRefNo}/{applicantId}/attributeValues:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: Get AttributeValue Details.
+      description: Get AttributeValue Details.
+      operationId: getValueOfAttribute
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber  for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNo
+        in: path
+        description: Process Ref number for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      - name: attributes
+        in: query
+        description: comma seperated attributes for the stage
+        required: true
+        type: string
+      - name: applicantId
+        in: path
+        description: applicantId
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the value for the attribute based on process Reference Number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/savealldatasegmentdetails/{processRefNo}/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CreditCardApplicationAggregate
+      summary: save all DS details
+      description: save all DS details
+      operationId: saveAllDatasegmentDetails
+      parameters:
+      - name: processRefNo
+        in: path
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: path
+        description: applicationNumber  for which CreditCard application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        201:
+          description: Returns the the status
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/aggregatedetails:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - CreditCardApplicationAggregate
+      summary: Get the aggregate response for credit card application.
+      description: Get the aggregate response for credit card application.
+      operationId: getAggregateResponse
+      parameters:
+        - name: applicationNumber
+          in: query
+          description: Application number for which creditcard application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: query
+          description: Process Reference number for which creditcard application data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns CreditCardApplicationAggregateModel for the application and process reference number
+          schema:
+            $ref: '#/definitions/CreditCardApplicationAggregateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/creditcardapplication/{applicationNumber}/{processRefNo}/adviceData:
+    get:
+      produces:
+        - application/json
+        - application/xml
+      tags:
+        - CreditCardApplicationAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getAdviceDetails
+      parameters:
+        - name: applicationNumber
+          in: path
+          description: Application number for which Credit Card application data needs to be fetched
+          required: true
+          type: string
+        - name: processRefNo
+          in: path
+          description: Process Reference number for which Credit Card application data needs to be fetched
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns CreditCardApplicationAggregateModel for the application number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  
+definitions:
+  CreditCardApplicationAggregateModel:
+    description: CreditCardApplicationAggregateModel
+    type: object
+    properties:
+      id:
+        description: CreditCard Application Id
+        type: string
+      processRefNo:
+        description: Process Ref No
+        type: string
+      applicationNumber:
+        description: applicationNumber
+        type: string
+      action:
+        description: Save or Submit
+        type: string
+      dataSegmentCode:
+        description: dataSegmentCode
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      channel: 
+        description: Channel
+        type: string 
+      applicantDetails:
+        $ref: '#/definitions/ApplicantDetailsMasterModel'
+      primaryApplicantDetails:
+        $ref: '#/definitions/ApplicantDetailsModel'     
+      creditCardDetailsModel:
+        $ref: '#/definitions/CreditCardDetailsModel'
+      addoncardHolderMasterModel:
+        $ref: '#/definitions/AddoncardHolderMasterModel'
+      cardPreferenceModel:
+        $ref: '#/definitions/CardPreferenceModel'
+      interestDetailsModel:
+        $ref: '#/definitions/InterestDetailsMasterModel'
+      chargeDetailsModel:
+        $ref: '#/definitions/ChargeDetailsMasterModel'
+      additionalAttributes:
+        type: array
+        items:
+          type: object
+    required:
+    - processRefNo
+    - applicationNumber
+        
+  CreditCardApplicationMasterModel:
+    description: CreditCard Application Master Model
+    type: object
+    properties:
+      data: 
+        type: array
+        items:
+         $ref: '#/definitions/CreditCardApplicationModel' 
+  CreditCardApplicationModel: 
+    description: CreditCard Application Model
+    type: object
+    properties:
+      creditCardDetailsModel:
+        $ref: '#/definitions/CreditCardDetailsModel'
+      addoncardHolderMasterModel:
+        $ref: '#/definitions/AddoncardHolderMasterModel'
+      cardPreferenceModel:
+        $ref: '#/definitions/CardPreferenceModel'
+      interestDetailsModel:
+        $ref: '#/definitions/InterestDetailsMasterModel'
+      chargeDetailsModel:
+        $ref: '#/definitions/ChargeDetailsMasterModel'
+      additionalAttributes:
+        type: array
+        items:
+          type: object

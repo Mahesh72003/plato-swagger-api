@@ -1,0 +1,221 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : product_details.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Product Details Service
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-process-driver-services
+tags:
+- name: ProductDetails
+  description: API for Orchestration of RPM Operations
+schemes:
+- http
+paths:
+  /web/v1/updateDsStatus/{processRefNo}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProductDetails
+      summary: Update Product Details datasegment status
+      description: Update Product Details datasegment status
+      operationId: updateDsStatus
+      parameters:
+      - name: processRefNo
+        in: path
+        description: processRefNo
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: datasegmentCode
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns the Application number of the newly created BasicApplicationDetails
+          headers:
+            Location:
+              description: URL of newly created BasicApplicationDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/productdetails:
+    get:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProductDetails
+      summary: Get Product Details
+      description: Get Product Details
+      operationId: getProductDetails
+      parameters:
+      - name: processRefNo
+        in: query
+        description: processRefNo
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns data
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/productdetailslist/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProductDetails
+      summary: Fetches product details list by application Number
+      description:  Fetches product details list by application Number
+      operationId: getProductDetailsListByApplicationNumber
+      parameters:
+      - name: applicationNumber
+        in: path
+        description:  Application Number
+        required: true
+        type: string
+      responses:
+        200:
+          description: returns JsonObject containing Application Transaction Master details
+          schema:
+            $ref: '#/definitions/ProductDetailsListModelCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  ProductDetailsListModel:
+    description: ProductDetailsListModel
+    type: object
+    required:
+    - applicationNumber
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+        maxLength: 36
+      processRefNumber:
+        description: Process Reference Number
+        type: string
+        maxLength: 36
+      initRefNumber:
+        description: Initiation Reference Number
+        type: string
+        maxLength: 36
+      channel:
+        description: Channel
+        type: string
+        maxLength: 10
+      initiatedDtStamp:
+        description: Initiated Date Stamp
+        type: string
+      lifeCycleCode:
+        description: Life Cycle Code
+        type: string
+        maxLength: 20 
+      status:
+        description: Status of the Application
+        type: string
+      domain:
+        description: Domain
+        type: string
+      productType:
+        description: Product Type
+        type: string
+      subProductType:
+        description: Sub Product Type
+        type: string
+      businessProductCode:
+        description: businessProductCode
+        type: string
+      businessProductName:
+        description: businessProcessName
+        type: string
+      allowedChannel:
+        description: allowed channels
+        type: string
+      applicationEntryMandatory:
+        description: Flag to specify if Full Initiation (Application Entry) should be mandatory
+        type: boolean
+        default: false
+      sourceStageCode:
+        description: Source Stage Code
+        type: string
+  ProductDetailsListModelCollection:
+    description: ProductDetailsListModelCollection
+    type: object
+    properties:
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/ProductDetailsListModel"

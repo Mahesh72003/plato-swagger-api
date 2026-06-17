@@ -1,0 +1,337 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : balanceServices.yaml
+#  **
+#  ** Module     : OBVAM
+#  **
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#  Reviewed By        :  Marianne George
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "Virtual account Balance related services."
+  version: "1.0.0"
+  title: "balance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "balance"
+    description: "API for Virtual Account Balance Operations"
+
+schemes:
+  - "https"
+
+paths:
+
+  # path to fetch account balance detials, to update balances and validate balances
+  #
+  #  supprorted http methods POST, PUT and GET
+  #
+  # path example ../balance
+
+  /service/balance:
+    get:
+      tags:
+        - "balanceService"
+      summary: "getting the balance"
+      description: "getting balance details of a given virtual account"
+      operationId: "getBalance"
+      parameters:
+        - name: "virtualAccountNo"
+          in: "query"
+          description: "Account Number for which balance check is done"
+          required: true
+          type: "string"
+        - name: "virtualAccountCcy"
+          in: "query"
+          description: "Currency of the account"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/BalanceWrapperServiceDto"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+
+  /service/balance/{virtualAccountNo}:
+    get:
+      tags:
+        - "balanceService"
+      summary: "Getting current balance of virtual account"
+      description: "Getting current balance of a given virtual account"
+      operationId: "getCurrentBalance"
+      parameters:
+        - name: "virtualAccountNo"
+          in: "path"
+          description: "Virtual account Number for which current balance is retrieved"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/CurrentBalanceWrapperServiceDto"
+        400:
+          description: "Bad request error, the server is unable to process the request"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+  /service/structureaccountbalances:
+    get:
+      tags:
+        - "balanceService"
+      summary: "for any input account, getting the balance for all the virtual accounts of a structure"
+      description: "getting the balance for all the virtual accounts of a structure"
+      operationId: "getBalanceOfStructureAccounts"
+      parameters:
+        - name: "virtualAccountNo"
+          in: "query"
+          description: "Account Number for which balance check is done"
+          required: true
+          type: "string"
+        - name: "virtualAccountCcy"
+          in: "query"
+          description: "Currency of the account"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          schema:
+               $ref: "#/definitions/BalanceWrapperServiceListDto"
+        202:
+          description: "Error message or validations that occur"
+        401:
+          description: "Unauthorized request error, invalid credentials"
+        403:
+          description: "Request denied, no permission to access the request."
+        405:
+          description: "Request denied, invalid input."
+        500:
+          description: "Internal server error."
+
+definitions:
+
+  VamsTbAccountBalanceServiceDTO:
+    type: object
+    properties:
+      lastUpdatedRefNo:
+        type: string
+      lastUpdatedBy:
+        type: string
+      lastUpdatedOn:
+        type: string
+        format: date
+      parentVirtualAccount:
+        type: string
+      amountBlocked:
+        type: number
+      unauthCr:
+        type: number
+      unauthDr:
+        type: number
+      unutilizedOdAmount:
+        type: number
+      currentBalance:
+        type: number
+      virtualAccountCcy:
+        type: string
+      virtualAccountNo:
+        type: string
+      effectiveBal:
+        type: number
+      version:
+        type: number
+      childBlock:
+        type: number
+      childContributions:
+        type: number
+      benifitFromPool:
+        type: number
+      availableBal:
+        type: number
+      availableLineAmount:
+        type: number
+      tankedBalance:
+        type: number
+      virtualAccountDesc:
+        type: string
+      unAuthAmtBlk:
+        type: number
+      uncollectedAmt:
+        type: number
+      contributionDtoList:
+        type: array
+        items:
+          $ref: "#/definitions/ContributionDTO"
+      childContributionList:
+        type: array
+        items:
+          $ref: "#/definitions/CcyWiseContributionDTO"
+      blockedChildContributionList:
+        type: array
+        items:
+          $ref: "#/definitions/CcyWiseContributionDTO"
+      ccyWiseAmount:
+        type: object
+        additionalProperties:
+          $ref: "#/definitions/ChildAccountBalance"
+  CurrentBalanceServiceDTO:
+    type: object
+    properties:
+      currentBalance:
+        type: number
+
+  BalanceWrapperServiceDto:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/BalanceServiceResponseDto"
+      data:
+        $ref: "#/definitions/VamsTbAccountBalanceServiceDTO"
+  BalanceWrapperServiceListDto:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/BalanceServiceResponseDto"
+      data:
+        type: array
+        items:
+         $ref: "#/definitions/VamsTbAccountBalanceServiceDTO"        
+
+  CurrentBalanceWrapperServiceDto:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/CurrentBalanceServiceDTO"
+
+  BalanceServiceResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+
+  BalanceServiceResponseDto:
+    type: object
+    properties:
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/BalanceServiceResponseCode"
+
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  ContributionDTO:
+    type: object
+    properties:
+      ccy:
+        type: string
+      amount:
+        type: number
+  CcyWiseContributionDTO:
+    description: "Cross Currency Contribution Details"
+    type: object
+    properties:
+      currency:
+        description: "Child Currency"
+        type: string
+      amount:
+        description: "Child Contribution Amount"
+        type: number
+      exchangeRate:
+        description: "Exchange Rate for Child Currency to Account Currency"
+        type: number
+      accountCurrency:
+        description: "VirtualAccount Currency"
+        type: string
+      amountInAccCurrency:
+        description: "Amount in VirtualAccount Currency"
+        type: number

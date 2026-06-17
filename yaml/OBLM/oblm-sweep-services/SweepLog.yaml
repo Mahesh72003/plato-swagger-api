@@ -1,0 +1,1235 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+swagger: '2.0'
+info:
+  description: This is a sample server sweepmonitor server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Sweep Monitor
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: SweepMonitorAPI
+  description: API for sweepmonitor Operations
+schemes:
+- https
+paths:
+  /sweepmonitor/modifySweepLog:
+    post:
+      tags:
+      - sweepmonitor
+      summary: Update an existing sweep log data.
+      description: Update an existing sweep log data.
+      operationId: modifySweepLog
+      parameters:
+      - name: sweepLog
+        in: body
+        description: Request Body that contains data required for updating an existing sweepLog
+        required: true
+        schema:
+          $ref: '#/definitions/LmsTbSweepLogDTO'
+      responses:
+        200:
+          description: Returns updated sweep log
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /sweepmonitor/modifySweepStatus:
+    post:
+      tags:
+      - sweepmonitor
+      summary: Update list of existing sweep log data.
+      description: Update list of existing sweep log data.
+      operationId: modifySweepStatus
+      parameters:
+      - name: sweepLogList
+        in: body
+        description: Request Body that contains list of data required for updating an existing sweepLog
+        required: true
+        schema:
+           $ref: '#/definitions/LmsTbSweepLogCollection'
+      responses:
+        200:
+          description: Returns updated sweep log
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /sweepmonitor/authSweepStatus:
+    post:
+      tags:
+      - sweepmonitor
+      summary: Update list of existing sweep log data.
+      description: Update list of existing sweep log data.
+      operationId: authSweepStatus
+      parameters:
+      - name: sweepLogList
+        in: body
+        description: Request Body that contains list of data required for updating an existing sweepLog
+        required: true
+        schema:
+           $ref: '#/definitions/LmsTbSweepLogCollection'
+      responses:
+        200:
+          description: Returns updated sweep log
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+  /sweepmonitor:
+    get:
+      tags:
+      - sweepmonitor
+      summary: Get all valid sweepmonitor.
+      description: Get all valid sweepmonitor. This endpoints will be used to Get all valid sweepmonitor maintenance records.
+      operationId: getAll
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: executionId
+        in: query
+        required: false
+        type: string
+      - name: interfaceMasterId
+        in: query
+        required: false
+        type: string
+      - name: sweepId
+        in: query
+        required: false
+        type: string
+      - name: bookDateFrom
+        in: query
+        required: false
+        type: string
+      - name: bookDateTo
+        in: query 
+        required: false
+        type: string
+      - name: valueDateFrom
+        in: query
+        required: false
+        type: string
+      - name: valueDateTo
+        in: query
+        required: false
+        type: string
+      - name: customerId
+        in: query
+        required: false
+        type: string
+      - name: structureId
+        in: query
+        required: false
+        type: string
+      - name: filterBy
+        in: query
+        required: false
+        type: string
+      - name: toCcy
+        in: query
+        required: false
+        type: string
+      - name: crossCcy
+        in: query
+        required: false
+        type: boolean
+      - name: fromAccount
+        in: query
+        required: false
+        type: string
+      - name: toAccount
+        in: query
+        required: false
+        type: string        
+      - name: isReverseSweep
+        in: query
+        required: false
+        type: string
+      - name: extSysRefId
+        in: query
+        required: false
+        type: string 
+      - name: isExtSysFilter
+        in: query
+        description: isExtSysFilter need to be set to fetch non null isExtSysFilter
+        required: false
+        type: string
+      - name: onlyLinkedCustomers
+        in: query
+        description: onlyLinkedCustomers need to be set to fetch sweep log based on only Linked Customers
+        required: false
+        type: string           
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmsTbSweepLogCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    post:
+      tags:
+      - sweepmonitor
+      summary: Add new data for sweep monitor.
+      description: Adds a new sweep monitor. Add additional information here for this endpoint.
+      operationId: save
+      parameters:
+      - name: sweepLogDTO
+        in: body
+        description: Request Body that contains data required for creating a new sweep monitor
+        required: true
+        schema:
+          $ref: '#/definitions/LmsTbSweepLogDTO'
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: URL of newly created sweep monitor data
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /sweepmonitor/{id}:
+    put:
+      tags:
+      - sweepmonitor
+      summary: Update an existing sweep log data.
+      description: Update an existing sweep log data.
+      operationId: modifyRecord
+      parameters:
+      - name: id
+        in: path
+        description: key of the sweep log data
+        required: true
+        type: string
+      - name: sweepLog
+        in: body
+        description: Request Body that contains data required for updating an existing sweepLog
+        required: true
+        schema:
+          $ref: '#/definitions/LmsTbSweepLogDTO'
+      responses:
+        200:
+          description: Returns updated sweep log
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /sweepmonitor/pendingsweeps:
+    get:
+      tags:
+      - sweepmonitor
+      summary: Get all pending sweep logs.
+      description: Get all pending sweep logs. This endpoints will be used to Get all pending sweep records.
+      operationId: getPendingSweeps
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmsTbSweepLogCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /sweepmonitor/eod-validation:
+    get:
+      tags:
+      - sweepmonitor
+      summary: for a given branch and branch date, validates whether sweep log contains pending sweeps.
+      description: for a given branch and branch date, validates whether sweep log contains pending sweeps.
+      operationId: validateBranchForEod
+      parameters:
+      - name: branchCode
+        in: query
+        description: branch code to validate sweeps
+        required: true
+        minLength: 3
+        maxLength: 4
+        type: string
+      responses:
+        200:
+          description: Returns true or false
+          headers:
+            Location:
+              description: ''
+              type: string
+          
+          schema:
+            type: boolean
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /sweepmonitor/sweepValidation:
+    get:
+      tags:
+      - sweepmonitor
+      summary: for a given account, check sweep in-progress for that day
+      description: for a given account, check sweep in-progress for that day
+      operationId: validateSweepCheck
+      parameters:
+      - name: accountNumber
+        in: query
+        description: account number to validate sweep check
+        required: true
+        type: string
+      - name: messageLogTime
+        in: query
+        description: messageLogTime to validate sweep check
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns true or false
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/SweepCheckResponseDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+     
+definitions:
+  LmsTbSweepLogDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        amount:
+          type: number
+          description: ''
+        fromAccLcyAmount:
+          type: number
+          description: ''
+        toAccLcyAmount:
+          type: number
+          description: ''  
+        fromAccFcyAmount:
+          type: number
+          description: ''
+        toAccFcyAmount:
+          type: number
+          description: ''          
+        balanceTimestamp:
+          type: string
+          description: ''
+        customerId:
+          type: string
+          description: ''
+        executionId:
+          type: string
+          description: ''
+        sweepId:
+          type: string
+          description: ''
+        extTransactionNo:
+          type: string
+          description: ''
+        fromAccountBalance:
+          type: number
+          description: ''
+        fromAccountNumber:
+          type: string
+          description: ''
+        fromAccPostBal:
+          type: number
+          description: ''
+        fromAmount:
+          type: number
+          description: ''
+        fromBicCode:
+          type: string
+          description: ''
+        fromBranchCode:
+          type: string
+          description: ''
+        fromCurrencyCode:
+          type: string
+          description: ''
+        fromAccountLcy:
+          type: string
+          description: ''          
+        fxRate:
+          type: number
+          description: ''
+        instructionId:
+          type: string
+          description: ''
+        isTwoway:
+          type: string
+          description: ''
+        logTime:
+          type: string
+          description: ''
+        utcLogTime:
+          type: string
+          description: ''
+        status:
+          type: string
+          description: ''
+        statusMessage:
+          type: string
+        errorReference:
+          type: string
+          description: ''
+        structureId:
+          type: string
+          description: ''
+        sweepMode:
+          type: string
+          description: ''
+        sweepProduct:
+          type: string
+          description: ''
+        toAccountBalance:
+          type: number
+          description: ''
+        toAccountNumber:
+          type: string
+          description: ''
+        toAccPostBal:
+          type: number
+          description: ''
+        toAmount:
+          type: number
+          description: ''
+        toBicCode:
+          type: string
+          description: ''
+        toBranchCode:
+          type: string
+          description: ''
+        toCurrencyCode:
+          type: string
+          description: ''
+        toAccountLcy:
+          type: string
+          description: ''          
+        valueDate:
+          type: string
+          description: ''
+        fromExtAccno:
+         type: string
+         description: ''
+        fromIBanForAccno:
+         type: string
+         description: ''
+        fromAccnoDesc:
+         type: string
+         description: ''
+        fromExtBranchRef:
+         type: string
+         description: ''
+        fromAccBranchAdddr1:
+         type: string
+         description: ''
+        fromAccBranchAdddr2:
+         type: string
+         description: ''
+        fromAccBranchAdddr3:
+         type: string
+         description: ''
+        fromAccBranchAdddr4:
+         type: string
+         description: ''
+        fromAccBranchAdddr5:
+         type: string
+         description: ''
+        fromAccIsExternal:
+         type: boolean
+         description: ''
+        toExtAccno:
+         type: string
+         description: ''
+        toIBanForAccno:
+         type: string
+         description: ''
+        toAccnoDesc:
+         type: string
+         description: ''
+        toExtBranchRef:
+         type: string
+         description: ''
+        toAccBranchAdddr1:
+         type: string
+         description: ''
+        toAccBranchAdddr2:
+         type: string
+         description: ''
+        toAccBranchAdddr3:
+         type: string
+         description: ''
+        toAccBranchAdddr4:
+         type: string
+         description: ''
+        toAccBranchAdddr5:
+         type: string
+         description: ''
+        toAccIsExternal:
+         type: boolean
+         description: ''
+        versionNo:
+         type: number
+         description: ''
+        customerExtRef:
+         type: string
+         description: ''
+        customerName:
+         type: string
+         description: ''
+        headerBranch:
+         type: string
+         description: ''
+        headerBranchExtRef:
+         type: string
+         description: ''
+        balanceTimeStamp:
+         type: string
+         format: date
+         description: '' 
+        childExtAcc:
+         type: boolean
+         description: ''
+        interfaceMasterId:
+         type: string
+         description: ''  
+        structureMasterId:
+         type: string
+         description: ''
+        sweepLogID:
+         type: string
+         description: ''
+        toCountryCode:
+         type: string
+         description: ''
+        fromCountryCode:
+         type: string
+         description: ''
+        fromHostCode:
+         type: string
+         description: ''
+        toHostCode:
+         type: string
+         description: ''
+        headerHostCode:
+         type: string
+         description: ''
+        isSimulate:
+         type: string
+         description: ''
+        user:
+         type: string
+         description: ''
+        retryCount:
+         type: integer
+         description: ''
+        extSysRefId:
+         type: string
+         description: ''
+        newStatus:
+         type: string
+         description: ''
+        authStatus:
+         type: string
+         description: ''
+        makerId:
+         type: string
+         description: ''
+        makerRemark:
+         type: string
+         description: ''
+        checkerId:
+         type: string
+         description: ''
+        checkerRemark:
+         type: string
+         description: ''
+        makerDtStamp:
+         type: string
+         description: ''
+        checkerDtStamp:
+         type: string
+         description: ''
+        pmtInitiated: 
+         type: string
+         description: ''
+        pmtAckTime: 
+         type: string
+         description: ''
+        pmtMessage: 
+         type: string
+         description: ''
+        errorCode: 
+         type: string
+         description: ''
+        structureSweep:
+          type: boolean
+          description: ''
+        fromAccIsVirtual:
+         type: boolean
+         description: ''
+        toAccIsVirtual:
+         type: boolean
+         description: ''    
+        isReverseSweep:
+         type: string
+         description: ''                                                   
+        fromAcForcePost:
+         type: string
+         description: ''   
+        toAcForcePost:
+         type: string
+         description: ''
+        toCustomerNo: 
+         type: string
+         description: ''
+        toCustomerName: 
+         type: string
+         description:  ''
+        fromCustomerNo: 
+         type: string
+         description:  ''
+        fromCustomerName: 
+         type: string
+         description: ''                                                                   
+  LmsTbSweepLogReqDTO:
+      type: object
+      properties:
+        interfaceMasterId:
+          type: string
+          description: ''
+        statCode:
+          type: string
+          description: ''
+        statusMessage:
+          type: string
+          description: ''
+        status:
+          type: string
+          description: ''
+        msgType:
+          type: string
+          description: ''
+        executionId:
+          type: string
+          description: ''
+        pmtInitiated: 
+         type: string
+         description: ''
+        pmtAckTime: 
+         type: string
+         description: ''
+        pmtMessage: 
+         type: string
+         description: ''                
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmsTbSweepLogCollection:
+    description: Collection of sweeplog.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmsTbSweepLogDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  SweepCheckResponseDTO:
+    type: object
+    properties:
+      sweepInProgress:
+        type: boolean
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  RMCustomerDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+      customerName:
+        type: string
+  RMCustomerCollection:
+    type: object
+    properties:
+      allCustomers:
+        type: boolean
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/RMCustomerDTO'
+  IclTbLoanDTO:
+    type: object
+    properties:
+      autoSettleOnMaturity:
+        type: string
+        description: ""
+      bookingMode:
+        type: string
+        description: ""
+      borrowingCustomerId:
+        type: string
+        description: ""
+      borrowingCustomerName:
+        type: string
+        description: ""
+      creditDisbursementAccount:
+        type: string
+        description: ""
+      creditDisbursementAccountDesc:
+        type: string
+        description: ""
+      creditDisbursementAmount:
+        type: number
+        description: ""
+      creditDisbursementCurrency:
+        type: string
+        description: ""
+      debitDisbursementAccount:
+        type: string
+        description: ""
+      debitDisbursementAmount:
+        type: number
+        description: ""
+      debitDisbursementCurrency:
+        type: string
+        description: ""
+      debitDisbursementDesc:
+        type: string
+        description: ""
+      exchangeLoanRate:
+        type: number
+        description: ""
+      iclBookingReport:
+        type: string
+        description: ""
+      iclReference:
+        type: string
+        description: ""
+      iclSettlementReport:
+        type: string
+        description: ""
+      interestAccrualFrequency:
+        type: string
+        description: ""
+      interestAccrued:
+        type: number
+        description: ""
+      interestLiquidationFrequency:
+        type: string
+        description: ""
+      interestOs:
+        type: number
+        description: ""
+#      isReportingRequired:
+#        type: string
+#        description: ""
+      lendingCustomerId:
+        type: string
+        description: ""
+      lendingCustomerName:
+        type: string
+        description: ""
+      liquidateInterest:
+        type: string
+        description: ""
+      loanDate:
+        type: string
+        description: ""
+      loanIcProductCode:
+        type: string
+        description: ""
+      loanInterestRate:
+        type: number
+        description: ""
+      loanMaturityDate:
+        type: string
+        description: ""
+      loanOs:
+        type: number
+        description: ""
+      loanReference:
+        type: string
+        description: ""
+      loanStatus:
+        type: string
+        description: ""
+      loanType:
+        type: string
+        description: ""
+      parentCustomerId:
+        type: string
+        description: ""
+      parentCustomerName:
+        type: string
+        description: ""
+      settlementDate:
+        type: string
+        description: ""
+      settlementReference:
+        type: string
+        description: ""
+      structureId:
+        type: string
+        description: ""
+      structureDesc:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      structureMasterVersionNo:
+        type: integer
+        description: ""
+      sweepId:
+        type: string
+        description: ""
+      sweepLogId:
+        type: string
+        description: ""
+      IclTbLoanTransactionDTO:
+        type: array
+        items:
+          $ref: '#/definitions/IclTbLoanTransactionDTO'
+  IclTbLoanListDTO:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/IclTbLoanDTO'
+  IclTbLoanTransactionDTO:
+    type: object
+    properties:
+      basicAmount:
+        type: number
+        description: ""
+      currency:
+        type: string
+        description: ""
+      days:
+        type: number
+        description: ""
+      endDate:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      interestMethod:
+        type: string
+        description: ""
+      interestPaid:
+        type: number
+        description: ""
+      loanId:
+        type: string
+        description: ""
+      principalPaid:
+        type: number
+        description: ""
+      rate:
+        type: number
+        description: ""
+      startDate:
+        type: string
+        description: ""
+      valueDate:
+        type: string
+        description: ""
+  CmcTmCoreVirtualAccountResponseDTO:
+   type: object
+   allOf:
+   - type: object
+     properties:
+      accountClass:
+       type: string
+       description: "Account class of the external virtual account"
+      acOpenDate:
+       type: string
+       description: "The date on which virtual account is being opened"
+      acStatFrozen:
+       type: string
+       description: "Indicates that the virtual account status is frozen"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      acStatNoCr:
+       type: string
+       description: "Indicates that the virtual account does not have any credit facility"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      acStatNoDr:
+       type: string
+       description: "Indicates that the virtual account does not have any debit facility"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      address1:
+       type: string
+       description: "First line of the address"
+       minLength: 0
+       maxLength: 105
+      address2:
+       type: string
+       description: "Second line of the address"
+       minLength: 0
+       maxLength: 105
+      address3:
+       type: string
+       description: "Third line of the address"
+       minLength: 0
+       maxLength: 105
+      address4:
+       type: string
+       description: "Fourth line of the address"
+       minLength: 0
+       maxLength: 105
+      countryCode:
+       type: string
+       description: "Country Code"
+       minLength: 0
+       maxLength: 4
+      customerNo:
+       type: string
+       description: "Customer number to which the virtual account number is being linked"
+       minLength: 0
+       maxLength: 20
+      ecaCheckReq:
+       type: string
+       description: "Indicates that ECA check is required for the external virtual account"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      hostCode:
+       type: string
+       description: "The host code that is linked to the logged in user of the branch"
+      isForgotten:
+       type: string
+       description: "Indicates that the customer is forgotten"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      sourceSystem:
+       type: string
+       description: "Name of the source system"
+      sourceSystemAccBrn:
+       type: string
+       description: "Branch to which the account belongs to"
+      sourceSystemAccNo:
+       type: string
+       description: "Virtual account number as in the source system"
+      virtualAccountNo:
+       type: string
+       description: "External virtual account number"
+       minLength: 1
+       maxLength: 35
+       pattern: '[a-zA-Z0-9]+'
+      virtualAcCcy:
+       type: string
+       description: "Currency in which the virtual account is being created"
+       minLength: 1
+       maxLength: 3
+      virtualAcName:
+       type: string
+       description: "Name of the virtual account holder"
+       minLength: 0
+       maxLength: 105
+       pattern: '[a-zA-Z0-9\s]+'
+      virtualIban:
+       type: string
+       description: "Virtual IBAN as in the source system"
+       minLength: 0
+       maxLength: 35
+       pattern: '[a-zA-Z0-9]+' 
+      makerId:
+       type: string
+       description: "Maker ID of Virtual Account"
+      makerDateStamp:
+       type: string
+       description: "Date and Time when Virtual Account is created or modified or closed or  reopened"
+      checkerId:
+       type: string
+       description: "Checker ID of Virtual Account"
+      checkerDateStamp:
+       type: string
+       description: "Date and Time when some action on Virtual Account is authorized"
+      modNo:
+       type: integer
+       description: "Version number of Virtual Account"
+      recordStatus: 
+       type: string
+       description: "Record Status of Virtual Account"
+      authStatus:
+       type: string
+       description: "Authorization Status of Virtual Account"
+      onceAuth:
+       type: string
+       description: "Flag that indicated if Virtual Account is authorized once or not"
+      doerRemarks:
+       type: string
+       description: "Remarks made by Maker"
+      approverRemarks:
+       type: string 
+       description: "Remarks made by Approver"  
+  CmcTmCoreVirtualAccountServiceCollection: 
+   description: "Collection of corevirtualaccount."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmCoreVirtualAccountResponseDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  CmcTmCoreVirtualAccountResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+  CmcTmCoreVirtualAccountResponseWrapperDTO:
+   type: object
+   properties:
+    messages:
+     $ref: "#/definitions/CmcTmCoreVirtualAccountResDto"
+    data:
+     $ref: "#/definitions/CmcTmCoreVirtualAccountResponseDTO" 
+  CmcTmCoreVirtualAccountWrapperServiceDTO:
+   type: object
+   properties:
+    data:
+     $ref: "#/definitions/CmcTmCoreVirtualAccountResponseDTO"    
+  CmcTmCoreVirtualAccountResDto:
+   type: object
+   properties:
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/CmcTmCoreVirtualAccountResponseCode"
+  IclRepayLoanDTO:
+   type: object
+   properties:
+    principalPaidLC:
+     type: number
+     description: 'Principal paid in Lender currency'
+    interestPaidLC:
+     type: number
+     description: 'Interest paid in Lender currency'
+    principalPaidBC:
+     type: number
+     description: 'Principal paid in Borrower currency'
+    interestPaidBC:
+     type: number
+     description: 'Interest paid in Borrower currency'
+    lenderCurrency:
+     type: string
+     description: ''
+    borrowerCurrency:
+     type: string
+     description: ''
+    paymentDate:
+     type: string
+     description: ''
+    lenderAccountNumber:
+     type: string
+     description: 'Loan lender'
+    borrowerAccountNumber:
+     type: string
+     description: 'Loan borrower'
+    days:
+     type: number
+     description: ""
+    endDate:
+     type: string
+     description: ""
+    interestMethod:
+     type: string
+     description: ""
+    rate:
+     type: number
+     description: ""
+    startDate:
+     type: string
+     description: ""
+    checkForSettlement:
+     type: string
+     description: ""
+    repaymentSource:
+     type: string
+     description: ""
+    reverseSweepId:
+     type: string
+     description: ""
+    reverseSweepLogId:
+     type: string
+     description: ""
+    transactionReference:
+     type: string
+     description: ""

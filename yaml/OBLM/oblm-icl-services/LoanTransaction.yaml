@@ -1,0 +1,264 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : LoanTransaction.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server Loan Transaction server." 
+ version: "1.0.0"
+ title: "LoanTransaction Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "laonTransaction"
+   description: ""
+schemes:
+- "https"
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../loan/{loanId}/transactions
+
+ /loan/{loanId}/transactions:
+  post:
+   tags:
+    - "transaction"
+   summary: "Adds a new new loan."
+   description: "Adds a new trx in existing loan."
+   operationId: "saveTransaction"   
+   parameters:
+    - name: "loanId"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"   
+    - name: "transactionDetail" 
+      in: "body" 
+      description: "Request Body that contains data required for adding a new trx under existing loan" 
+      required: true
+      schema:
+       $ref: "#/definitions/IclTbLoanTransactionDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created loan" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "transaction"
+   summary: "Get all valid trx of an existing loan."
+   description:  "Get all valid trxs of an existing loan"
+   operationId: "getTransactions"
+   parameters:
+    - name: "loanId"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"   
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: currency
+      in: query
+      description: debit disbursement currency
+      required: false
+      type: string
+    - name: transactionDate
+      in: query
+      description: trx date
+      required: false
+      type: string
+    - name: startDate
+      in: query
+      description: trx date from
+      required: false
+      type: string
+    - name: endDate
+      in: query
+      description: trx date to
+      required: false
+      type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/IclTbLoanTransactionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+ IclTbLoanTransactionDTO:
+  type: object
+  properties:
+     currency:
+      type: string
+      description: ""
+     days:
+      type: number
+      description: ""
+     endDate:
+      type: string
+      description: ""
+     fromAccount:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     interestMethod:
+      type: string
+      description: ""
+     interestPaid:
+      type: number
+      description: ""
+     loanId:
+      type: string
+      description: ""
+     principalPaid:
+      type: number
+      description: ""
+     rate:
+      type: number
+      description: ""
+     startDate:
+      type: string
+      description: ""
+     toAccount:
+      type: string
+      description: ""
+     transactionAmount:
+      type: number
+      description: ""
+     transactionDate:
+      type: string
+      description: ""
+     transactionReference:
+      type: string
+      description: ""
+     transactionType:
+      type: string
+      description: ""
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ IclTbLoanTransactionCollection: 
+  description: "Collection of transactions of a loan."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/IclTbLoanTransactionDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object

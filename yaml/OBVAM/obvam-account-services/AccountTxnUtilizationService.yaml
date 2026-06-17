@@ -1,0 +1,161 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018, 2022, Oracle and/or its affiliates.  All rights reserved.
+#
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+#
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : AccountTxnUtilization.yaml
+#  **
+#  ** Module     : obvam
+#  **
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Keith & Sampada
+#  Reviewed By        :
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+ 
+ 
+swagger: "2.0"
+info:
+ description: "This is the service API document for Virtual Account Transaction Utilization. Please pass appId as VAM"
+ version: "1.0.0"
+ title: "accountTxnUtil Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountTxnUtilService"
+   description: "This service can retrieve the Transaction Utilization for a given Virtual Account"
+ 
+schemes:
+ - "https"
+ 
+paths:
+ 
+ # path to retrieve valid records or by intent
+ #
+ # supprorted http methods GET
+ #
+ # path example ../service/accountTxnUtil
+ 
+ /service/accountTxnUtil:
+  get:
+   tags:
+    - AccountTxnUtilService
+   summary: "Gets the Transaction Utilization for a Virtual Account"
+   description:  "This endpoint is used to get the list of restrictions attached to a Virtual Account along with the total and utilized counts for those restrictions"
+   operationId: "getUtilForVA"
+   parameters:
+    - name: sourceCode
+      in: header
+      description: "Source from which request is initiated"
+      required: true
+      type: string
+    - name: offset
+      in: query
+      description: "Fetches the starting number of the offset."
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: "Fetches the maximum limit of the record."
+      required: false
+      type: integer
+    - name: virtualAccountNo
+      in: query
+      description: "Virtual Account for which the Transaction Utilization is to be retrieved."
+      required: true
+      type: string
+   responses:
+    201:
+     description: "Returns Success or failure messages."
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+      $ref: "#/definitions/TxnUtilizationServiceCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Invalid input, method is not allowed"
+    500:
+     description: "Internal server error"
+ 
+definitions:
+ TxnUtilizationServiceDTO:
+  type: object
+  allOf:
+   - type: object
+     properties:
+      virtualAccountNo:
+       type: string
+       description: "Virtual Account Number"
+      limitCode:
+       type: string
+       description: "Limit Code attached to the Virtual Account"
+      limitDescription:
+        type: string
+        description: "Limit Code Description"
+      restrictionId:
+       type: string
+       description: "Restriction ID belonging to the attached Limit Code"
+      restrictionDescription:
+       type: string
+       description: "Restriction ID Description"
+      startDate:
+       type: string
+       description: "Date from which the restriction is applicable"
+      endDate:
+       type: string
+       description: "Date on which the restriction expires"
+      totalCount:
+       type: number
+       description: "Total count of transactions that are allowed for the restriction"
+      utilizedCount:
+       type: number
+       description: "Count of transactions already performed on this Virtual Account for the restriction"
+     required:
+      - virtualAccountNo
+ 
+ TxnUtilizationServiceCollection:
+  description: "Collection of Transaction Utilization."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/TxnUtilizationServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ 
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ 

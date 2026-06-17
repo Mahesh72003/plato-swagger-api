@@ -1,0 +1,269 @@
+swagger: '2.0'
+info:
+  description: This is a sample server Legal Opinion server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 5.9.0
+  title: Party-Maintenance-Service
+host: "HOST:PORT"
+basePath: /obpy-party-maintenance-service
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: PartyMaintenanceApi
+  description: API for Party  Operations
+schemes:
+- http
+paths:
+  /service/v1/retail/getAll:
+    get:
+      tags:
+        - "partyMaintenance"
+      summary: "Retrieves the latest list of existing partyMaintenance for Retail flow."
+      description:  "Retrieves the latest list of existing partyMaintenance for Retail flow."
+      operationId: "getpartyMaintenanceMain"
+      parameters:
+        - name: "entityCode"
+          in: "query"
+          required: false
+          description: "EntityCode"
+          type: "string"
+        - name: "language"
+          in: "query"
+          required: false
+          description: "language"
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error."
+
+  /web/v1/sector:
+    get:
+      tags:
+      - sector
+      summary: Retrieves the existing sector for the given agency code.
+      description: Retrieves the existing sector for the given agency code.
+      operationId: getSectorDetails
+      parameters:
+      - name: userId
+        in: header
+        type: string
+        required: true
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+      - name: authToken
+        in: header
+        type: string
+        required: true
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: tenantId
+        in: header
+        type: string
+        required: false
+      - name: contentType
+        in: header
+        type: string
+        required: false
+      - name: branchDate
+        in: header
+        type: string
+        format: date-time
+        required: false
+      - name: limit
+        in: query
+        required: false
+        description: limit to be fetched
+        type: integer
+      - name: offset
+        in: query
+        required: false
+        description: offset of the limit
+        type: integer
+      - name: sectorCode
+        in: query
+        required: false
+        description: sector code of the details that needs to be fetched
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error          
+
+definitions:
+  MaintenanceDetailModel:
+    type : "object"
+    properties :
+     entityCode:
+      type: "string"
+     subEntityCode:
+      type: "string"
+     subEntityDesc:
+      type: "string"
+
+  MaintenanceMasterModel:
+    type : "object"
+    properties:
+      entityCode:
+        type: "string"
+      entityDescription:
+        type: "string"
+      language:
+        type: "string"
+      maintenanceDetailList:
+        type : "array"
+        items :
+          $ref: '#/definitions/MaintenanceDetailModel'
+
+  MaintenanceMasterCollectionModel:
+    type: "object"
+    properties:
+      maintenanceMasterList:
+        type : "array"
+        items :
+          $ref: '#/definitions/MaintenanceMasterModel'
+          
+  SectorsCollection:
+    description: Collection of Sector.
+    type: object
+    properties:
+      SectorList:
+        type: array
+        items:
+          $ref: '#/definitions/SectorModel'
+  SectorModel:
+    allOf:
+    - $ref: '#/definitions/RepresentationModel'
+    - type: object
+      properties:
+        recordId:
+          type: string
+        sectorCode:
+          type: string
+        sectorDescription:
+          type: string
+        authStat:
+          type: string
+        modNo:
+          type: string
+        onceAuth:
+          type: string
+        makerId:
+          type: string
+        checkerDateStamp:
+          type: string
+          format: date-time
+        makerDateStamp:
+          type: string
+          format: date-time
+        checkerId:
+          type: string
+        recordStat:
+          type: string
+        industryGroup:
+          type: array
+          items:
+            $ref: '#/definitions/IndustryGroupModel'            
+  IndustryGroupModel:
+    type: object
+    properties:
+      id:
+        type: string
+      parentId:
+        type: string
+      industryGrpCode:
+        type: string
+      industryGrpDesc:
+        type: string
+      industryDetails:
+          type: array
+          items:
+            $ref: '#/definitions/IndustriesModel'          
+  IndustriesModel:
+    type: object
+    properties:
+      id:
+        type: string
+      parentId:
+        type: string
+      industryCode:
+        type: string
+      industryDescription:
+        type: string
+      subIndustryDetails:
+        type: array
+        items:
+          $ref: '#/definitions/SubIndustriesModel'
+  SubIndustriesModel:
+    type: object
+    properties:
+      id:
+        type: string
+      parentId:
+        type: string
+      subIndustryCode:
+        type: string
+      subIndustryDescription:
+        type: string
+  ResponseModel:
+    properties:
+      errors:
+        type: object
+      data:
+        type: object
+      paging:
+        type: object                   

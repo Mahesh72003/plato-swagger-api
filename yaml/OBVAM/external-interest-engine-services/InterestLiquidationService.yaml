@@ -1,0 +1,279 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : InterestLiquidationService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+ 
+ 
+swagger: "2.0"
+info:
+ description: "External Interest Engine Server"
+ version: "1.0.0"
+ title: "Interest Liquidation Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "interestLiqService"
+   description: "Interest accrued for a virtual account can be liquidated using this service."
+schemes:
+- "https"
+ 
+paths: 
+ /service/interestLiq:
+  post:
+   tags:
+    - "interestLiqService"
+   summary: "Initiate interest liquidation for a virtual account"
+   description:  "Save a transaction request that initiates interest liquidation for a virtual account"
+   operationId: "saveInterestLiquidation"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "interestLiquidationSaveDTO"
+      in: "body"
+      description: "Request body that contains details required to create interest liquidation request for a virtual account"
+      required: true
+      schema:
+       $ref: "#/definitions/InterestLiquidationSaveDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/InterestLiquidationWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "interestLiqService"
+   summary: "Get all the transactions initiated for liquidating interest for virtual account"
+   description:  "Get all the transactions initiated for liquidating interest for virtual account"
+   operationId: "getAllInterestLiquidation"
+   parameters:   
+   - in: query
+     name: sourceCode
+     required: true
+     type: string
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: referenceNo
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string   
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string   
+   - in: query
+     name: virtualAccountNo
+     required: false
+     type: string
+   - in: query
+     name: sourceReferenceNo
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/InterestLiquidationRequestCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+ 
+ /service/interestLiq/{sourceReferenceNo}:
+  get:
+   tags:
+    - "interestLiqService"
+   summary: "Get Interest Liquidation for the given Source reference number"
+   description:  "Get  Interest Liquidation for the given Source reference number"
+   operationId: "getInterestLiquidationById"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "sourceReferenceNo"
+      in: "path"
+      description: "Source reference number of Interest Liquidation that needs to be fetched"
+      required: true
+      type: "string"      
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/InterestLiquidationServiceDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ 
+definitions: 
+ InterestLiquidationSaveDTO:
+  type: object  
+  properties:     
+     sourceReferenceNo:
+      type: string
+      description: "Source Reference number of Virtual Account Interest Liquidation Request"     
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which Interest Liquidation is requested"     
+     liquidationAmount:
+      type: number
+      description: "Amount to be liquidated"
+ 
+ InterestLiquidationServiceDTO:
+  type: object  
+  properties:
+     referenceNo: 
+      type: string
+      description: "Source Reference number of Virtual Account Interest Liquidation Request"   
+     sourceReferenceNo:
+      type: string
+      description: "Source Reference number of Virtual Account Interest Liquidation Request"     
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which Interest Liquidation is requested"
+     branchCode:
+      type: string
+      description: "BranchCode number of the VirtualAccount"
+     accountCurrency:
+      type: string
+      description: "Account Currency Type of the Interest"     
+     liquidationAmount:
+      type: number
+      description: "Liquidated interest amount"
+     makerId:
+      type: string
+      description: "Maker of Virtual Account Interest Liquidation Request"
+     CheckerId:
+      type: string
+      description: "Checker of Virtual Account Interest Liquidation Request"
+     makerDateStamp:
+      type: string
+      format: date
+      description: "Maker Date time stamp of Virtual Account Interest Liquidation Request"
+     checkerDateStamp:
+      type: string
+      format: date
+      description: "Checker Date time stamp of Virtual Account Interest Liquidation Request"
+     authStatus:
+      type: string
+      description: "Authorization status of Virtual Account Interest Liquidation Request"
+ 
+ InterestLiquidationServiceCollection: 
+  description: "Collection of account."
+  type: object
+  properties:
+   messages:
+     $ref: "#/definitions/InterestLiquidationResponseDTO"
+   data:
+    type: array
+    items: 
+     $ref: "#/definitions/InterestLiquidationServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ 
+ InterestLiquidationWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/InterestLiquidationResponseDTO"
+   data:
+    $ref: "#/definitions/InterestLiquidationServiceDTO" 
+ 
+ InterestLiquidationResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ InterestLiquidationResponseDTO:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/InterestLiquidationResponseCode"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer  

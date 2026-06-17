@@ -1,0 +1,316 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+
+
+swagger: "2.0"
+info:
+  description: "This is Reports Microservice"
+  version: "1.0.0"
+  title: "Report Service"
+host: ofss220245:7001
+basePath: "/report-service"
+tags:
+  - name: "ReportAPI"
+    description: "API for Report Operations"
+schemes:
+  - "http"
+paths:
+  /reports/reports:
+    post:
+      tags:
+        - "ReportAPI"
+      summary: "Run a Report"
+      description: "Run a Report."
+      operationId: "runReport"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "ReportRequestDto"
+          in: body
+          description: "Request Body that contains data required for running report."
+          required: true
+          schema:
+            $ref: "#/definitions/ReportRequestDto"
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"  
+        - name: "appId"
+          in: "header"
+          description: "appId"
+          type: "string"
+          required: true 
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/ReportResponse"
+        201:
+          description: "Successful run"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /reports/emails:
+    post:
+      tags:
+        - "SendEmail"
+      summary: "Send an email" 
+      description: "Send an email to the user."
+      operationId: "sendEmail"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "EmailRequestDto"
+          in: "body"
+          description: "Data required for sending an email to the user" 
+          required: true
+          schema:
+            $ref: "#/definitions/EmailRequest"
+      responses:
+        200:
+          description: "Returns the customer based on given id."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal Server error"
+definitions:
+  ReportRequestDto:
+    description: "ReportRequestDto"
+    type: "object"
+    required:
+     - "reportId"
+     - "reportParameters"
+     - "attributeFormat"
+    properties:
+      reportAttributeLocale:
+        description: "Report Attribute Locale"
+        type: "string"
+      reportAbsolutePath:
+        description: "Report Absolute path"
+        type: "string"
+      reportParameters:
+        description: "Report Parameters for the document"
+        type: "string"
+      attributeFormat:
+        description: "Attribute Format for the document"
+        type: "string"
+      documentManagementRequest:
+        description: "Data required for uploading the document in DMS"
+        type: "object"
+        $ref: "#/definitions/DocumentManagementRequest"
+      reportPreview:
+        description: Report Preview for the document
+        type: string  
+  ReportResponse:
+     description: "Report Response"
+     type: "object"
+     properties:
+      documentId:
+        description: "Document Id for the document"
+        type: "string"
+      documentInbase64:
+        description: "Document in Base64"
+        type: "string"
+      reportContentType:
+        description: "Report Content Type for the document"
+        type: "string"
+  EmailRequest:
+    description: "Data required for sending a mail to the user"
+    type: "object"
+    required:
+     - "emailFrom"
+     - "emailTo"
+     - "documentInBase64"
+     - "reportContentType"
+    properties:
+      serviceName:
+        description: "Service Name"
+        type: "string"
+      emailBCC:
+        description: "Email-BCC"
+        type: "string"
+      emailBody:
+        description: "Email-Body"
+        type: "string"
+      emailCC:
+        description: "Email-CC"
+        type: "string"
+      emailFrom:
+        description: "Email-From"
+        type: "string"
+      emailReplyTo:
+        description: "Email-Reply-To"
+        type: "string"
+      emailSubject:
+        description: "Email-Subject"
+        type: "string"
+      emailTo:
+        description: "Email-To"
+        type: "string"
+      contentType:
+        description: "Content-Type"
+        type: "string"
+      documentInBase64: 
+        description: "Document in Base64"
+        type: "string"
+      reportContentType: 
+        description: "reportContentType"
+        type: "string"
+  DocumentManagementRequest: 
+    description: "documents upload model"
+    type: "object"
+    required:
+      - customerId
+      - documentName
+      - documentNature
+      - documentAuthor
+      - applicationRefNo
+      - documentAccount
+      - documentContent
+      - documentTitle
+    properties:
+      id:
+        type: "string"
+      documentId:
+        type: "integer"
+        format: "int64"
+      customerId:
+        type: "string"
+      createdBy:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        type: "string"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      documentAcceptanceDate:
+        type: "string"
+        format: "date-time"
+      documentCatId:
+        type: "string"
+      documentDescription:
+        type: "string"
+      documentExpiryDate:
+        type: "string"
+        format: "date-time"
+      documentGeneratedDate:
+        type: "string"
+        format: "date-time"
+      documentName:
+        type: "string"
+      documentNature:
+        type: "string"
+      documentReceivedBy:
+        type: "string"
+      documentReceivedDate:
+        type: "string"
+        format: "date-time"
+      documentRefId:
+        type: "string"
+      documentStatus:
+        type: "string"
+      documentTitle:
+        type: "string"
+      documentTypeId:
+        type: "string"
+      documentUploadedBy:
+        type: "string"
+      documentUploadedDate:
+        type: "string"
+        format: "date-time"
+      documentAuthor:
+        type: "string"
+      documentAccount:
+        type: "string"
+      documentContent:
+        type: "string"
+      applicationRefNo:
+        type: "string"
+      entityRefNo:
+        type: "string"
+      processId:
+        type: "string"
+      remarks:
+        type: "string"
+      stageId:
+        type: "string"
+      outcome:
+        type: "string"
+      documentIndexList:
+         type: "array"
+         items:
+          $ref: "#/definitions/DocumentIndexModel"
+  DocumentIndexModel:
+    type: "object"
+    required:
+      - indexName
+      - indexType
+      - indexValue 
+    properties:
+      id:
+        type: "string"
+      documentId:
+        type: "integer"
+        format: "int64"
+      indexName:
+        type: "string"
+      indexType:
+        type: "string"
+      indexValue:
+        type: "string"
+      createdBy:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        type: "string"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"

@@ -1,0 +1,248 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ExternalChgCalculation.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server External Charge Calculation server." 
+ version: "1.0.0"
+ title: "External Charge Calculation Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "externalChgCalculation"
+   description: "External Charge Calculation is used to get charge basis for the given customer"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../externalChgCalculation
+
+ /service/externalChgCalculation:
+  post:
+   tags:
+    - "externalChgCalculation"
+   summary: "Fetches Charge Basis for External Charge Calculation."
+   description: "Fetches Charge Basis for External Charge Calculation."
+   operationId: "getChargeBasis"
+   parameters:
+    - name: "chargeCalculation"
+      in: "body" 
+      description: "Request Body that contains data required for fetching chargeBasis" 
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargeBasisMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created chargedecision" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VlcTmChargeBasisCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+ VlcTmChargeBasisMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     applicationCode:
+      type: string
+      description: "Appication for which this data is used. Possible values VAMCHG/LMCHG"          
+     VlcTmChargeBasisDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VlcTmChargeBasisDetailDTO'
+    required:
+     - applicationCode
+ VlcTmChargeBasisDetailDTO:
+  type: object
+  properties:
+     realCustomerNo:
+      type: string
+      description: ""
+     fromDate:
+      type: string
+      description: ""
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     toDate:
+      type: string
+      description: ""
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     chargeCode:
+      type: string
+      description: ""
+  required:
+   - realCustomerNo
+   - fromDate
+   - toDate
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VlcTmChargeBasisCollection: 
+  description: "Collection of charge basis."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargeBasisResponseDTO"
+   messages:
+    $ref: "#/definitions/ResponseDto"   
+ VlcTmChargeBasisResponseDTO: 
+  description: "Collection of charge basis."
+  type: "object"
+  properties:
+   realCustomerNo:
+    type: string
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargeBasisDTO"     
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ VlcTmChargeBasisDTO:
+  type: object
+  properties: 
+     chgTypeId:
+      type: string
+      description: ""  
+     calcFreq:
+      type: string
+      description: ""
+     chgCode:
+      type: string
+      description: ""
+      minLength: 3
+      maxLength: 20
+     chargeDescription:
+      type: string
+      description: "charge Description"      
+     chgCriteria:
+      type: string
+      description: ""
+     chgCriteriaValue:
+      type: number
+      description: ""
+     chargeCategory:
+      type: string
+      description: ""           
+     chgCalcStartDate:
+      type: string
+      description: ""
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     chgCalcEndDate:
+      type: string
+      description: ""
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"

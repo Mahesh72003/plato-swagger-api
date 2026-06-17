@@ -1,0 +1,634 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : financialdetails.yaml
+#  **
+#  ** Module     : 
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Common Applicant Services
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-cmn-applicantservices
+tags:
+- name: ApplicantServices
+  description: API for ApplicantServices Operations
+schemes:
+- http
+paths:
+  /web/v1/financialdetails:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - FinancialDetails
+      summary: Adds a new FinancialDetails.
+      description: Adds a new FinancialDetails. Add additional information here for this endpoint.
+      operationId: addFinancialDetails
+      parameters:
+      - name: FinancialDetails
+        in: body
+        description: Request Body that contains data required for creating a new FinancialDetails
+        required: true
+        schema:
+          $ref: '#/definitions/FinancialDetailsMasterModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created FinancialDetails
+          headers:
+            Location:
+              description: URL of newly created FinancialDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - FinancialDetails
+      summary: Retrieves the list of existing FinancialDetails.
+      description: Retrieves the list of existing FinancialDetails. Add additional information here for the this endpoint.
+      operationId: getAllFinancialDetails
+      parameters:
+      - name: processRefNo
+        in: query
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      - name: ipaReferenceNumber
+        in: query
+        description: ipa Reference Number of Applicant that needs to be fetched
+        required: false
+        type: string  
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/financialdetails/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - FinancialDetails
+      summary: Retrieves the FinancialDetails by id.
+      description: Retrieves the FinancialDetails by id. Add additional information here for the this endpoint.
+      operationId: getFinancialDetailsById
+      parameters:
+      - name: id
+        in: path
+        description: Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the FinancialDetails based on given id.
+          schema:
+            $ref: '#/definitions/FinancialDetailsMasterModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - FinancialDetails
+      summary: Update an existing FinancialDetails.
+      description: Update an existing FinancialDetails. Add additional information here for the this endpoint.
+      operationId: updateFinancialDetails
+      parameters:
+      - name: id
+        in: path
+        description: id of the FinancialDetails that need to be updated
+        required: true
+        type: string
+      - name: FinancialDetails
+        in: body
+        description: Request Body that contains data required for updating an existing FinancialDetails
+        required: true
+        schema:
+          $ref: '#/definitions/FinancialDetailsMasterModel'
+      responses:
+        200:
+          description: Returns updated FinancialDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ 
+definitions:
+ FinancialDetailsMasterModel:
+  description: FinancialDetailsMaster model
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     id:
+      description: Id of the FinancialDetailsMasterModel
+      type: string
+      maxLength: 36
+     applicationNumber:
+      description: applicationNumber
+      type: string
+     processRefNo:
+      description: processRefNo
+      type: string
+     loanCurrency:
+      description: loanCurrency
+      type: string
+     accountType:
+      description: accountType
+      type: string
+     finDtvalPrd:
+      description: Financial Details Validity Period
+      type: string
+     finPeriod:
+      description: Financial Details Period
+      type: integer
+      format: int32
+      default: 0
+     channel:
+      description: channel
+      type: string
+     action:
+      description: Action
+      type: string
+     remarks:
+      description: remarks
+      type: string 
+     financialDetailsModel:
+      type: array
+      items:
+       $ref: '#/definitions/FinancialDetailsModel'
+ FinancialDetailsModel:
+   description: "FinancialDetailsModel Model"
+   type: object
+   properties:
+    id:
+     description: Id of the FinancialDetailsModel
+     type: string
+     maxLength: 36
+    applicationNumber:
+     description: applicationNumber
+     type: string
+     maxLength: 20
+    financialMasterId:
+     description: Id of master table
+     type: string
+     maxLength: 36
+    existingCustomer: 
+     description: existingCustomer
+     type: boolean 
+    cifNumber: 
+     description: CIF Number of ExistingCustomer
+     type: string
+    customerType:
+     description: customerType
+     type: string
+    onboarded:
+     description: Customer Onboarded
+     type: boolean
+     default: false
+    totalIncomeAmount:
+     description: totalIncomeAmount
+     type: number
+    totalIncomeCurrencyCode:
+     description: totalIncomeCurrencyCode
+     type: string
+     maxLength: 4
+    totalExpenseAmount:
+     description: totalExpenseAmount
+     type: number
+    totalExpenseCurrencyCode:
+     description: totalExpenseCurrencyCode
+     type: string
+     maxLength: 4
+    totalAssetAmount:
+     description: totalAssetAmount
+     type: number
+    totalAssetCurrencyCode:
+     description: totalAssetCurrencyCode
+     type: string
+     maxLength: 4
+    totalLiabilityAmount:
+     description: totalLiabilityAmount
+     type: number
+    totalLiabilityCurrencyCode:
+     description: totalLiabilityCurrencyCode
+     type: string
+     maxLength: 4
+    netAmount:
+     description: netAmount
+     type: number
+    netCurrencyCode:
+     description: netCurrencyCode
+     type: string
+     maxLength: 4
+    applicantId:
+     description: applicantId
+     type: string
+     maxLength: 36
+    applicantName:
+     description: applicantName
+     type: string
+     maxLength: 75
+    deleteFinancial:
+     description: deleteFinancial
+     type: boolean
+    primaryApplicant:
+     description: primaryApplicant
+     type: boolean
+    financeAmend:
+     description: Is Finance Amend
+     type: boolean
+     default: false
+    lastUpdatedOn:
+     description: Last Updated On
+     type: string
+    financialModel:
+      type: array
+      items:
+       $ref: '#/definitions/FinancialModel'
+    incomeModel:
+      type: array
+      items:
+       $ref: '#/definitions/IncomeModel'
+    expenseModel:
+      type: array
+      items:
+       $ref: '#/definitions/ExpenseModel'
+    assetModel:
+      type: array
+      items:
+       $ref: '#/definitions/AssetModel'
+    liabilityModel:
+      type: array
+      items:
+       $ref: '#/definitions/LiabilityModel'
+    financialProfile:
+      type: array
+      items:
+        $ref: '#/definitions/FinancialProfile'
+ FinancialModel:
+   description: "FinancialModel Model"
+   type: object
+   properties:
+    id:
+     description: Id of the FinancialModel
+     type: string
+     maxLength: 36
+    applicationNumber:
+     description: applicationNumber
+     type: string
+    financialSummaryMasterId:
+     description: Id of summary table
+     type: string
+     maxLength: 36
+    incomeType:
+     description: incomeType
+     type: string
+    employmentType:
+     description: employmentType
+     type: string
+    employmentCategory:
+     description: employment category
+     type: string
+    employeeType:
+     description: Employee Type
+     type: string
+    employeeNumber:
+     description: employeeNumber
+     type: string
+    organizationCategory:
+     type: string
+    demographics:
+     type: string
+    grade:
+     type: string
+    industryType:
+     type: string
+    empAgreement:
+     type: string
+    employmentTenure:
+     type: string
+    industry:
+     description: industry
+     type: string
+    officeName:
+     description: officeName
+     type: string
+    educationQualification:
+     description: educationQualification
+     type: string
+    designation:
+     description: designation
+     type: string
+    employmentStartDate:
+     description: employmentStartDate
+     type: string
+    employmentEndDate:
+     description: employmentEndDate
+     type: string
+    addressType:
+     description: addressType
+     type: string
+    seqFinancialNo:
+     description: seqFinancialNo
+     type: integer
+    address:
+     $ref: '#/definitions/Address'
+ Address:
+   description: "Address Model"
+   type: object
+   properties:
+    country:
+     description: country
+     type: string
+     maxLength: 50
+    state:
+     description: state
+     type: string
+     maxLength: 50
+    city:
+     description: city
+     type: string
+     maxLength: 50
+    addressLine1:
+     description: addressLine1
+     type: string
+     maxLength: 100
+    addressLine2:
+     description: addressLine2
+     type: string
+     maxLength: 100
+    addressLine3:
+     description: addressLine3
+     type: string
+     maxLength: 100
+    pinCode:
+     description: pinCode
+     type: string
+     maxLength: 10
+    email:
+     description: email
+     type: string
+     maxLength: 30
+    mobileNo:
+     description: mobileNo
+     type: integer
+     format: int64
+    mobileIsd:
+     description: mobileIsd
+     type: string
+     maxLength: 5
+    phoneNo:
+     description: phoneNo
+     type: integer
+     format: int64
+    phoneIsd:
+     description: phoneIsd
+     type: string
+     maxLength: 5
+ IncomeModel:
+   description: "IncomeModel Model"
+   type: object
+   properties:
+    id:
+     description: Id of the IncomeModel
+     type: string
+     maxLength: 36
+    applicationNumber:
+     description: applicationNumber
+     type: string
+    financialSummaryMasterId:
+     description: Id of summary table
+     type: string
+     maxLength: 36
+    incomeType:
+     description: incomeType
+     type: string
+    incomeAmount:
+     description: incomeAmount
+     type: number
+    incomeCurrencyCode:
+     description: incomeCurrencyCode
+     type: string
+     maxLength: 4
+    seqIncomeNo:
+     description: seqIncomeNo
+     type: integer
+ ExpenseModel:
+   description: "ExpenseModel Model"
+   type: object
+   properties:
+    id:
+     description: Id of the ExpenseModel
+     type: string
+     maxLength: 36
+    applicationNumber:
+     description: applicationNumber
+     type: string
+    financialSummaryMasterId:
+     description: Id of summary table
+     type: string
+     maxLength: 36
+    expenseType:
+     description: expenseType
+     type: string
+    expenseAmount:
+     description: expenseAmount
+     type: number
+    expenseCurrencyCode:
+     description: expenseCurrencyCode
+     type: string
+     maxLength: 4
+    seqExpenseNo:
+     description: seqExpenseNo
+     type: integer
+ AssetModel:
+   description: "AssetModel Model"
+   type: object
+   properties:
+    id:
+     description: Id of the AssetModel
+     type: string
+     maxLength: 36
+    applicationNumber:
+     description: applicationNumber
+     type: string
+    financialSummaryMasterId:
+     description: Id of summary table
+     type: string
+     maxLength: 36
+    assetType:
+     description: assetType
+     type: string
+    assetAmount:
+     description: assetAmount
+     type: number
+    assetCurrencyCode:
+     description: assetCurrencyCode
+     type: string
+     maxLength: 4
+    seqAssetNo:
+     description: seqAssetNo
+     type: integer
+ LiabilityModel:
+   description: "LiabilityModel Model"
+   type: object
+   properties:
+    id:
+     description: Id of the LiabilityModel
+     type: string
+     maxLength: 36
+    applicationNumber:
+     description: applicationNumber
+     type: string
+    financialSummaryMasterId:
+     description: Id of summary table
+     type: string
+     maxLength: 36
+    liabilityType:
+     description: liabilityType
+     type: string
+    liabilityAmount:
+     description: liabilityAmount
+     type: number
+    liabilityCurrencyCode:
+     description: liabilityCurrencyCode
+     type: string
+     maxLength: 4
+    seqLiabilityNo:
+     description: seqLiabilityNo
+     type: integer
+ FinancialProfile:
+   description: "FinancialProfile Model"
+   type: object
+   properties:
+     id:
+       description: Id of the FinacialProfile
+       type: string
+       maxLength: 36
+     applicationNumber:
+       description: applicationNumber
+       type: string
+     financialSummaryMasterId:
+       description: Id of master table
+       type: string
+       maxLength: 36
+     financialYear:
+       description: incomeType
+       type: integer
+     currency:
+       description: currency
+       type: string
+     balanceSheetSize:
+       description: employment category
+       type: number
+     operatingProfit:
+       description: operatingProfit
+       type: number
+     netProfit:
+       description: employeeNumber
+       type: number
+     yoyGrowth:
+       description: yoyGrowth
+       type: number
+     returnOnInvestment:
+       description: returnOnInvestment
+       type: number
+     returnOnEquity:
+       description: returnOnEquity
+       type: number
+     returnOnAsset:
+       description: returnOnAsset
+       type: number
+
+ FinancialDetailsMasterCollection:
+    description: Collection of FinancialDetailsMasterModel.
+    type: object
+    properties:
+     financialDetailsMasterModelList:
+      type: array
+      items:
+       $ref: '#/definitions/FinancialDetailsMasterModel'
+ GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type 

@@ -1,0 +1,253 @@
+swagger: "2.0"
+info:
+ description: "" 
+ version: "1.0.0"
+ title: "Feed Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "plato-feed-services"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+ /downloadFile/{fileName}:
+  get:
+   tags:
+    - "plato-feed-services"
+   summary: "Download the file"
+   description: "Download the file"
+   operationId: "downloadFileByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "File gets downloaded."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fetchFileStatus:
+  get:
+   tags:
+    - "plato-feed-services"
+   summary: "Retrieve status info of all the files"
+   description: "Retrieve status info of all the files"
+   operationId: "fetchAllUiData"
+   parameters:
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/TbFeedUiDtoCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /fileRecord/{fileName}:
+  get:
+   tags:
+    - "plato-feed-services"
+   summary: "Get Status details of all the records in a file"
+   description: "Get Status details of all the records in a file"
+   operationId: "getPlatoTbFeedDetailByFileName"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+        $ref: "#/definitions/PlatoTbFeedDetail"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /uploadFiles:
+  post:
+   tags:
+    - "plato-feed-services"
+   summary: "Upload file/files of single feed or multiple feeds"
+   description: "Upload file/files of single feed or multiple feeds"
+   operationId: "receiveFile"
+   consumes:
+   - "multipart/form-data"
+   parameters:
+    - name: "files" 
+      in: "query" 
+      description: ""
+      required: true
+      type: "string"
+      default: "multipart/form-data"
+    - name: "appId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: ""
+      required: true
+      type: "string"
+    - name: "Content-Type" 
+      in: "header" 
+      default: "multipart/form-data"
+      description: ""
+      required: false
+      type: "string"
+   responses:
+    200: 
+     description: "Successful operation "
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /approveFile/{fileName}:
+  get:
+   tags:
+    - "plato-feed-services"
+   summary: "Approve the processing of an uploaded file"
+   description: "Approve the processing of an uploaded file"
+   operationId: "approveFile"
+   parameters:
+    - name: "fileName"
+      in: "path"
+      description: ""
+      required: true
+      type: "string"
+    - name: "appId" 
+      in: "header" 
+      description: "" 
+      required: true
+      type: "string"
+    - name: "approverId" 
+      in: "header" 
+      description: "" 
+      required: false
+      type: "string"
+    - name: "remarks" 
+      in: "body" 
+      description: "" 
+      required: false
+      schema:
+        type: "string"
+        properties:
+          remarks:
+            type: "object"
+   responses:
+    200: 
+     description: "Successful operation " 
+     schema:
+      type: "object"
+      properties:
+        status:
+          type: "string"
+          default: "Initiated"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+  TbFeedUiDtoCollection:
+    type: "array"
+    items:
+      $ref: "#/definitions/TbFeedUiDto"
+  TbFeedUiDto:
+    description: ""
+    type: "object"
+    properties:
+     id:
+      type: "string"
+      description: ""
+     platoTmFeedId:
+      type: "string"
+      description: ""
+     feedStatusIn:
+      type: "string"
+      description: ""
+     inputFileName:
+      type: "string"
+      description: ""
+     makerId:
+      type: "string"
+      description: ""
+  PlatoTbFeedDetail:
+    description: ""
+    type: "object"
+    properties:
+     id:
+      type: "string"
+      description: ""
+     platoTmFeedHandlerId:
+      type: "string"
+      description: ""
+     tbFeedRecordData:
+      type: "string"
+      description: ""
+     recordStatus:
+      type: "string"
+      description: ""
+     statusDescription:
+      type: "string"
+      description: ""
+     inputFileName:
+      type: "string"
+      description: ""

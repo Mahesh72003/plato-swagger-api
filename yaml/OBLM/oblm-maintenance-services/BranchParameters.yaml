@@ -1,0 +1,1208 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: This is a sample server branch server.
+  version: 1.0.0
+  title: branch Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: branch
+  description: for creating branch module in oblm project of oracle.this will help user to create bank for the project.there no of bank you can create in the following project of oblm.this will in all ways for creating new project of oblm in new architecture
+schemes:
+- https
+paths:
+  /branch:
+    post:
+      tags:
+      - branch
+      summary: Adds a new branch.
+      description: Adds a new branch. Add additional information here for this endpoint.
+      operationId: saveRecord
+      parameters:
+      - name: branch
+        in: body
+        description: Request Body that contains data required for creating a new branch
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmBranchParametersDTO'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created branch
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+      - branch
+      summary: Get all valid branch.
+      description: Get all valid branch. This endpoints will be used to Get all valid branch maintenance records.
+      operationId: getAll
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: bankCode
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query      
+        name: branchName
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      - in: query
+        name: externalSystemId
+        required: false
+        type: string
+      - in: query
+        name: isBalanceOnline
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /branch/biccode:
+    get:
+      tags:
+      - biccode
+      summary: Get all valid BIC Codes.
+      description: Get all valid getAllBICCodes. This endpoints will be used to Get all valid branch biccodemaintenance records.
+      operationId: getAllBICCodes
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: bicCode
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /branch/{id}:
+    put:
+      tags:
+      - branch
+      summary: Update an existing branch.
+      description: Update an existing branch.
+      operationId: modifyRecord
+      parameters:
+      - name: id
+        in: path
+        description: key of the branch Maintenance
+        required: true
+        type: string
+      - name: branch
+        in: body
+        description: Request Body that contains data required for updating an existing branch
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmBranchParametersDTO'
+      responses:
+        200:
+          description: Returns updated branch
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      tags:
+      - branch
+      summary: Retrieves the branch by ID.
+      description: Retrieves the branch by ID.
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: Id of the user that needs to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns the branch based on given id.
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersWrapperDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    delete:
+      tags:
+      - branch
+      summary: Deletes the branch identified by given ID.
+      description: Deletes the branch identified by given ID. Add additional information here for the this endpoint.
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        description: Key of the branch maintenance
+        required: true
+        type: string
+      - name: branch
+        in: body
+        description: Request body contain branch and Modification no of branch maintenance which need to be deleted"
+        required: true
+        schema:
+          $ref: '#/definitions/ModListKeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/{id}/approve:
+    patch:
+      tags:
+      - branch
+      summary: Authorize the branch by given ID.
+      description: Authorize the branch identified by given ID.
+      operationId: authorize
+      parameters:
+      - name: id
+        in: path
+        description: Key of the branch maintenance
+        required: true
+        type: string
+      - name: branch
+        in: body
+        description: Request body contain branch and Modification no of branch maintenance which need to be deleted"
+        required: true
+        schema:
+          $ref: '#/definitions/ModListKeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/{id}/close:
+    patch:
+      tags:
+      - branch
+      summary: Close the branch by given ID.
+      description: Close the branch identified by given ID.
+      operationId: closeRecord
+      parameters:
+      - name: id
+        in: path
+        description: Key of the branch maintenance
+        required: true
+        type: string
+      - name: branch
+        in: body
+        description: Request body contain branch and Modification no of branch maintenance which need to be closed"
+        required: true
+        schema:
+          $ref: '#/definitions/KeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/{id}/reopen:
+    patch:
+      tags:
+      - branch
+      summary: reopen the branch by given ID.
+      description: reopen the branch identified by given ID.
+      operationId: reopenRecord
+      parameters:
+      - name: id
+        in: path
+        description: Key of the branch maintenance
+        required: true
+        type: string
+      - name: branch
+        in: body
+        description: Request body contain branch and Modification no of branch maintenance which need to be reopen"
+        required: true
+        schema:
+          $ref: '#/definitions/KeyDto'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/{id}/unauthorized:
+    get:
+      tags:
+      - branch
+      summary: Retrives the branch by given ID.
+      description: Retrives the branch identified by given ID.
+      operationId: authQuery
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the branch based on given id.
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/{id}/history:
+    get:
+      tags:
+      - branch
+      summary: Retrives the branch by given ID.
+      description: Retrives the branch by ID.
+      operationId: getHistory
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the branch based on given id.
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/externalSystemDetails/{branchCode}:
+    get:
+      tags:
+      - branch
+      summary: Retrieves the externalSystem Details by branchCode.
+      description: Retrieves the externalSystem Details by branchCode.
+      operationId: getExtSystemDetails
+      parameters:
+      - name: branchCode
+        in: path
+        description: Branch Code
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: version
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the externalSystem Details by branchCode.
+          schema:
+            $ref: '#/definitions/LmmTmBrnExternalSysDetailsCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/flipDate/{branchCode}:
+    get:
+      tags:
+      - branch
+      summary: Flips the date of a branch
+      description: Flips the date of a branch
+      operationId: flipDate
+      parameters:
+      - name: branchCode
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: Date flipped successfully.
+          schema:
+            $ref: boolean
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/internal:
+    get:
+      tags:
+      - branch
+      summary: gets the list of internal or external branches  based on banktype
+      description:  gets the list of internal or external branches
+      operationId: getInternalBranches
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: bankCode
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query      
+        name: branchName
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /branch/external:
+    get:
+      tags:
+      - branch
+      summary: gets the list of internal or external branches  based on banktype
+      description:  gets the list of internal or external branches
+      operationId: getExternalBranches
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: bankCode
+        required: false
+        type: string
+      - in: query
+        name: branchCode
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query      
+        name: branchName
+        required: false
+        type: string
+      - in: query
+        name: isExternal
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/LmmTmBranchParametersCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error          
+definitions:
+  LmmTmBranchParametersDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        bankCode:
+          type: string
+          description: ''
+        bicCode:
+          type: string
+          description: ''
+        branchCode:
+          type: string
+          description: ''
+        branchCurrency:
+          type: string
+          description: ''
+        branchName:
+          type: string
+          pattern: '[A-Za-z0-9 `@#$%&*()_+{}\[\]|;:''"\<,>.?\/-]+'
+          description: ''
+        cityId:
+          type: string
+          description: ''
+        countryId:
+          type: string
+          description: ''
+        crossBorderHybridPool:
+          type: string
+          description: ''
+        crossBorderHybridSweep:
+          type: string
+          description: ''
+        crossBorderPool:
+          type: string
+          description: ''
+        crossBorderSweep:
+          type: string
+          description: ''
+        crossCcyHybridPool:
+          type: string
+          description: ''
+        crossCcyHybridSweep:
+          type: string
+          description: ''
+        crossCcyPool:
+          type: string
+          description: ''
+        crossCcySweep:
+          type: string
+          description: ''
+        domesticHybridPool:
+          type: string
+          description: ''
+        domesticHybridSweep:
+          type: string
+          description: ''
+        domesticPool:
+          type: string
+          description: ''
+        domesticSweep:
+          type: string
+          description: ''
+        entityID:
+          type: string
+          description: ''
+        entityName:
+          type: string
+          description: ''
+        externalSystemId:
+          type: string
+          description: ''
+        fax:
+          type: string
+          description: ''
+        hybrid:
+          type: string
+          description: ''
+        isBalanceOnline:
+          type: string
+          description: ''
+        latitude:
+          type: number
+          description: ''
+        line1:
+          type: string
+          description: ''
+        line2:
+          type: string
+          description: ''
+        line3:
+          type: string
+          description: ''
+        line4:
+          type: string
+          description: ''
+        longitude:
+          type: number
+          description: ''
+        phoneNumber:
+          type: string
+          description: ''
+        pool:
+          type: string
+          description: ''
+        region:
+          type: string
+          description: ''
+        sourceSystem:
+          type: string
+          description: ''
+        sourceSystemBranchCode:
+          type: string
+          description: ''
+        stateId:
+          type: string
+          description: ''
+        sweep:
+          type: string
+          description: ''
+        timeZone:
+          type: string
+          description: ''
+        branchDate:
+          type: string
+          description: ''
+        localClearingCode:
+          type: string
+          description: ''
+        isExternal:
+          type: string
+          description: ''
+        bankType:
+          type: string
+          description: ''
+        zip:
+          type: string
+          description: ''
+        hostCode:
+           type: string
+           description: ""
+        balanceUpdateOffset:
+          type: integer
+          description: ""
+        isMt942:
+           type: string
+           description: ""
+        mt942MsgType:
+           type: string
+           description: ""
+        LmmTmBranchAddnParametersDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmBranchAddnParametersDTO'
+        LmmTmBranchExternalSystemDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmBranchExternalSystemDTO'
+      required:
+      - bankCode
+      - branchCode
+      - branchCurrency
+      - branchName
+      - cityId
+  LmmTmBranchAddnParametersDTO:
+    type: object
+    properties:
+      branchParametersId:
+        type: string
+        description: ''
+      id:
+        type: string
+        description: ''
+      parameterName:
+        type: string
+        description: ''
+      parameterValue:
+        type: string
+        description: ''
+  LmmTmBranchExternalSystemDTO:
+    type: object
+    properties:
+      branchParametersId:
+        type: string
+        description: ''
+      externalSystemId:
+        type: string
+        description: ''
+      extSysMasterId:
+        type: string
+        description: ''
+      id:
+        type: string
+        description: ''
+      messageType:
+        type: string
+        description: ''
+      methodName:
+        type: string
+        description: ''
+      networkType:
+        type: string
+        description: ''
+      serviceType:
+        type: string
+        description: ''
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmmTmBranchParametersCollection:
+    description: Collection of branchparameters.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmBranchParametersDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmmTmBranchParametersWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmmTmBranchParametersDTO'
+  LmmTmBrnExternalSysDetailsDTO:
+    type: object
+    properties:
+      branchCode:
+        type: string
+        description: ''
+      externalSystemId:
+        type: string
+        description: ''
+      methodName:
+        type: string
+        description: ''
+      messageType:
+        type: string
+        description: ''
+      networkType:
+        type: string
+        description: ''
+      interfaceMasterId:
+        type: string
+        description: ''        
+  LmmTmBrnExternalSysDetailsCollection:
+    description: Collection of branch and external system details.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmBrnExternalSysDetailsDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  LmxTmInterfaceMasterDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        externalSystemDetailsId:
+          type: string
+          description: ''
+        externalSystemId:
+          type: string
+          description: ''
+        externalSystemName:
+          type: string
+          description: ''
+        serviceName:
+          type: string
+          description: ''
+        templateName:
+          type: string
+          description: ''
+        LmxTmInterfaceDetailsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmxTmInterfaceDetailsDTO'
+        LmxTmInterfaceServiceDetailsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmxTmInterfaceServiceDetailsDTO'
+        LmxTmInterfaceEventDetailsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmxTmInterfaceEventDetailsDTO'
+      required:
+      - externalSystemDetailsId
+  LmxTmInterfaceDetailsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      interfaceMasterId:
+        type: string
+        description: ''
+      parameterName:
+        type: string
+        description: ''
+      parameterValue:
+        type: string
+        description: ''
+  LmxTmInterfaceServiceDetailsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      interfaceMasterId:
+        type: string
+        description: ''
+      parameterName:
+        type: string
+        description: ''
+      parameterValue:
+        type: string
+        description: ''
+  LmxTmInterfaceEventDetailsDTO:
+    type: object
+    properties:
+      eventCode:
+        type: string
+        description: ''
+      eventDescription:
+        type: string
+        description: ''
+      id:
+        type: string
+        description: ''
+      interfaceMasterId:
+        type: string
+        description: ''
+  LmxTmInterfaceMasterCollection:
+    description: Collection of interface.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmxTmInterfaceMasterDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  LmxTmExternalSystemDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        externalSystemId:
+          type: string
+          description: ''
+        externalSystemName:
+          type: string
+          description: ''
+        isDda:
+          type: string
+          description: ''
+        LmxTmExternalSystemDetailsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmxTmExternalSystemDetailsDTO'
+      required:
+      - externalSystemId
+      - externalSystemName
+  LmxTmExternalSystemDetailsDTO:
+    type: object
+    properties:
+      externalSystemId:
+        type: string
+        description: ''
+      id:
+        type: string
+        description: ''
+      integrationType:
+        type: string
+        description: ''
+      messageType:
+        type: string
+        description: ''
+      methodName:
+        type: string
+        description: ''
+      networkType:
+        type: string
+        description: ''
+      serviceDescription:
+        type: string
+        description: ''
+      serviceType:
+        type: string
+        description: ''
+  LmxTmExternalSystemCollection:
+    description: Collection of externalsystem.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmxTmExternalSystemDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'        
+  CmcTmSystemDatesCollection:
+    description: "Collection of systemdates."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CmcTmSystemDatesDto"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  CmcTmSystemDatesDto:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          branchCode:
+            type: string
+            minLength: 0
+            maxLength: 3
+          today:
+            type: string
+          prevWorkingDay:
+            type: string
+          nextWorkingDay:
+            type: string
+          modNo:
+            type: integer
+        required:
+          - branchCode
+  CmcTmLocalHolidayMasterDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       branchCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+       year:
+        type: number
+        minLength: 0
+        maxLength: 4
+       weeklyHolidays:
+        type: string
+        minLength: 0
+        maxLength: 7
+       unexpHol:
+        type: string
+        minLength: 0
+        maxLength: 1
+       CmcTmLocalHolidayDto:
+        type: array
+        items:
+         $ref: '#/definitions/CmcTmLocalHolidayDto'
+  CmcTmLocalHolidayDto:
+    type: object
+    properties:
+     id:
+      type: string
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     year:
+      type: number
+      minLength: 0
+      maxLength: 4
+     month:
+      type: number
+      minLength: 0
+      maxLength: 2
+     holidayList:
+      type: string
+      minLength: 0
+      maxLength: 31
+     localHolidayMasterId:
+      type: string        
+  CmcTmLocalHolidayMasterCollection: 
+   description: Collection of localholiday.
+   type: object
+   properties:
+    data:
+     type: array
+     items: 
+      $ref: '#/definitions/CmcTmLocalHolidayMasterDto'
+    paging:
+     $ref: '#/definitions/PagingDto'          
+  LmbTbJobSchedulerDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       branchcode:
+        type: string
+        description: ""
+       endtime:
+        type: string
+        description: ""
+       executiondate:
+        type: string
+        description: ""
+       jobName:
+        type: string
+        description: ""
+       recordsprocessed:
+        type: string
+        description: ""
+       recordstoprocess:
+        type: string
+        description: ""
+       starttime:
+        type: string
+        description: ""
+       status:
+        type: string
+        description: ""
+       errorCode:
+        type: string
+        description: ""
+       errorMessage:
+        type: string
+        description: "" 

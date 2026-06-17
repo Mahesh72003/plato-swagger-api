@@ -1,0 +1,262 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Vaarunya
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is Virtual Account Closure Service" 
+ version: "1.0.0"
+ title: ""
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountClosureService"
+   description: "This service is used to create Virtual Account Closure for Virtual Entity."
+
+schemes:
+- "https"
+
+paths:
+ /service/accountclosure:
+  post:
+   tags:
+    - "AccountClosureService"
+   summary: "Creates a new transaction request for Virtual Account Closure."
+   description: "A new transaction is created to initiate the closure for a set of Virtual Accounts"
+   operationId: "saveRecord"
+   parameters:
+    - name: "vaclosurerequest"
+      in: "body"
+      description: "Request Body that contains data required for initiating a new Virtual Account Closure request"
+      required: true
+      schema:
+       $ref: "#/definitions/VAClosureRequestDTO"
+    - name: "sourceCode"
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: "string"
+   responses:
+    201:
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of newly created Virtual Account Closure Request"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ClosureDetailsServiceDTOWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error" 
+ /service/accountclosure/{sourceReferenceNo}:
+  get:
+   tags:
+    - "AccountClosureService"
+   summary: "Request to get details of the Virtual Account Closure."
+   description: "Retrieves the Virtual Account Closure request with Account Details"
+   operationId: "fetchVAClosureRequest"
+   parameters:
+    - name: "sourceReferenceNo"
+      description: "Source from which request is initiated"
+      in: "path"  
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      description: "Source from which request is initiated"
+      in: "header"  
+      required: true
+      type: "string" 
+   responses:
+    201:
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of newly created Virtual Account Closure Request"
+       type: "string"
+     schema:
+      $ref: "#/definitions/ClosureRequestDetailsServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+definitions:
+ VAClosureRequestDTO:
+  type: object
+  properties:   
+     resourceId:
+      description: resource id
+      type: string
+     resourceName:
+      description: resource name
+      type: string
+     operationType:
+      description: operation type
+      type: string  
+     sourceReferenceNo:
+      type: string
+      description: "Source Reference number of Virtual Account Closure Request"
+     TransferDetailsDTO:
+      type: array
+      items:
+       $ref: "#/definitions/TransferDetailsDTO"
+ TransferDetailsDTO:
+  type: object
+  properties:     
+     virtualAccountNumber:
+      type: string
+      description: "Virtual Account number for which closure is requested"
+     transferInVirAccNo:
+      type: string
+      description: "Virtual Account number from where the funds will be transferred"
+     transferOutVirAccNo:
+      type: string
+      description: "Virtual Account number to which the funds will be transferred"
+  required:
+   - virtualAccountNumber
+ ClosureDetailsServiceDTOWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ClosureReqDetailsResponseDto"
+   data:
+    $ref: "#/definitions/ClosureRequestDetailsServiceDTO" 
+    
+ ClosureReqDetailsResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ClosureReqDetailsResponseCode" 
+     
+ ClosureReqDetailsResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string 
+    
+ ClosureRequestDetailsServiceCollection:
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ClosureRequestDetailsServiceDTO"
+ ClosureRequestDetailsServiceDTO:
+  type: "object"
+  properties:
+   sourceReferenceNo:
+    type: "string"
+    description: "External Reference Number"
+   obvamRequestRefNo:
+    type: "string"
+    description: "Request Reference Number"
+   sourceCode:
+    type: "string"
+    description: "Source Code"
+   makerId:
+    type: string
+    description: "Maker of Virtual Account Closure Request"
+   CheckerId:
+    type: string
+    description: "Checker of Virtual Account Closure Request"
+   makerDateStamp:
+    type: string
+    format: date
+    description: "Maker Date time stamp of Virtual Account Closure Request"
+   checkerDateStamp:
+    type: string
+    format: date
+    description: "Checker Date time stamp of Virtual Account Closure Request"
+   authStatus:
+    type: string
+    description: "Authorization status of Virtual Account Closure Request"  
+   AccountDetailDTO:
+    type: "array"
+    items:
+     $ref: "#/definitions/AccountDetailDTO"
+ AccountDetailDTO:
+  type: "object"
+  properties:
+    requestRefNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request"
+    sourceRefNo:
+      type: string
+      description: "Source Reference number of Virtual Account Closure Request"
+    virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which closure is requested"
+    realCustomerNo:
+     type: "string"
+     description: "Real Customer Number to whom the Virtual Account Number, for which Closure was initiated, belongs"
+    virtualAccountName:
+     type: "string"
+     description: "Virtual Account Name for which Closure was initiated"
+    defaultAccCcy:
+     type: "string"
+     description: "Currency of Virtual Account for which Closure was initiated"
+    branchCode:
+     type: "string"
+     description: "Branch Code of Virtual Account for which Closure was initiated"
+    vaClosureRefNum:
+      type: string
+      description: "Reference Number for Virtual Account Number"
+    transferInVirAccNo:
+      type: string
+      description: "Virtual Account number from where the funds will be transferred"
+    transferOutVirAccNo:
+      type: string
+      description: "Virtual Account number to which the funds will be transferred"
+    
+    
+   

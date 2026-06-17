@@ -1,0 +1,242 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : StatementPreferenceService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server statementprefs server." 
+ version: "1.0.0"
+ title: "statementprefs Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "statementprefservice"
+   description: "Statement Preferences can be defined for a virtual entity using this service. Depending on statement type, frequency and due on values virtual account statements which contains a list of financial transactions will get generated."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  Supported http methods POST,PUT
+#
+# path example ../service/statementprefs
+
+ /service/statementprefs:
+  post:
+   tags:
+    - "statementprefservice"
+   summary: "Adds a new statement preference."
+   description: "Adds a new statement preference. Add additional information here for this endpoint."
+   operationId: "saveStatementPref"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "statementprefs" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new statement preference" 
+      required: true
+      schema:
+       $ref: "#/definitions/StatementPreferencesDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created statement preference" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/StatementPrefResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/statementprefs/{entityId}:
+  put:
+   tags:
+    - "statementprefservice"
+   summary: "Update a statement preference by Entity ID."
+   description: "Modify a statement preference. Add additional information here for this endpoint."
+   operationId: "modifyStatementPref"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "statementprefs" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new statement preference" 
+      required: true
+      schema:
+       $ref: "#/definitions/StatementPreferencesDTO"
+    - name: "entityId"
+      in: "path"
+      description: "Entity ID of the statement prefs Maintenance"
+      required: true
+      type: "string"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created statement preference" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/StatementPrefResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+         
+# path examples----
+#   PATCH       .../statementprefs/xxx/close
+ /service/statementprefs/{entityId}/close:
+  patch:
+   tags:
+    - "statementprefservice"
+   summary: "Close a statement preference by Entity ID."
+   description: "Close a statement preference. Add additional information here for this endpoint."
+   operationId: "closeStatementPref"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "keyDto"
+      in: "body"
+      description: Request body contain statementprefs and Modification no of statementprefs maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+    - name: "entityId"
+      in: "path"
+      description: "Entity ID of the statement prefs Maintenance"
+      required: true
+      type: "string"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created statement preference" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/StatementPrefResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+ StatementPrefResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/StatementPreferencesDTO" 
+
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+    
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ 
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+      
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type

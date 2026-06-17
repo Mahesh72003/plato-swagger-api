@@ -1,0 +1,263 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server sweepproducts server." 
+ version: "1.0.0"
+ title: "sweepproducts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "sweepproducts"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../sweepproducts
+
+ /sweepproducts:
+  get:
+   tags:
+    - "sweepproducts"
+   summary: "Get all valid sweepproducts."
+   description:  "Get all valid sweepproducts. This endpoints will be used to Get all valid sweepproducts maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: productCode
+     required: false
+     type: string
+   - in: query
+     name: productDescription
+     required: false
+     type: string   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmSweepProductsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../sweepproducts/xxx
+#   DELETE    .../sweepproducts/xxx
+#   GET       .../sweepproducts/xxx
+#   GET       .../sweepproducts/xxx?version=latestrecord
+#   GET       .../sweepproducts/xxx?version=1
+
+ /sweepproducts/{id}:
+  get:
+   tags:
+    - "sweepproducts"
+   summary: "Retrieves the sweepproducts by ID."
+   description:  "Retrieves the sweepproducts by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the sweepproducts based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmSweepProductsWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+
+definitions:
+ LmmTmSweepProductsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     productCode:
+      type: string
+      description: ""
+     productDescription:
+      type: string
+      description: ""
+     LmmTmSweepProductDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmSweepProductDetailsDTO'
+    required:
+     - id
+     - productCode
+ LmmTmSweepProductDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     sweepProductId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterType:
+      type: string
+      description: ""
+     mandatory:
+      type: string
+      description: ""
+  required:
+   - sweepProductId 
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmSweepProductsCollection: 
+  description: "Collection of sweepproducts."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmSweepProductsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmSweepProductsWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmSweepProductsDTO"

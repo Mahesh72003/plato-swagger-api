@@ -1,0 +1,456 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : uncollectedAmountReleaseService.yaml
+#  **
+#  ** Module     : OBVAM
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "Uncollected Amount Manual Release Service API"
+  version: "1.0.0"
+  title: "Uncollected Amount Manual Release Service API"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "uncollectedamtservice"
+    description: "Service API for Releasing uncollected Amount"
+
+schemes:
+  - "https"
+
+paths:
+
+  # path to fetch account balance detials, to update balances and validate balances
+  #
+  #  supprorted http methods POST, PUT and GET
+  #
+  # path example ../balance
+
+  /service/uncollectedamt/{id}/approve:
+    patch:
+      tags:
+        - "uncollectedamtservice"
+      summary: "API to authorize the manually released uncollected amount"
+      description: "API to authorize the manually released uncollected amount"
+      operationId: "authorize"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "id"
+          in: "path"
+          description: "Key Id for releasing uncollected Amount for an Account"
+          required: true
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/UncollectedResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/uncollectedamt:
+    post:
+      tags:
+        - "uncollectedamtservice"
+      summary: "Releases uncollected amount manually"
+      description: "Releases uncollected amount manually"
+      operationId: "saveReleaseAmounts"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "uncollectedReleaseServiceDto"
+          in: "body"
+          description: "Request Body that contains data required for releasing uncollected Amount for an Account"
+          required: true
+          schema:
+            $ref: "#/definitions/UncollectedReleaseServiceDto"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/UncollectedResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"    
+  /service/uncollectedAmtTxns:        
+    get:
+      tags:
+        - "uncollectedamtservice"
+      summary: "Retrieves the list of uncollected amount transactions"
+      description: "Retrieves the list of uncollected amount transactions"
+      operationId: "uncollectedAmtsForRelease"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "virtualAccountNo"
+          in: "query"
+          description: "Virtual Account Number"
+          required: false
+          type: "string"
+        - name: "txnRefNo"
+          in: "query"
+          description: "Transaction Reference Number"
+          required: false
+          type: "string" 
+        - name: "entrySerialNo"
+          in: "query"
+          description: "Entry Serial number"
+          required: false
+          type: number
+        - name: "startDate"
+          in: "query"
+          description: "Start Date"
+          required: false
+          type: "string"
+        - name: "endDate"
+          in: "query"
+          description: "End Date"
+          required: false
+          type: "string"          
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/UncollectedAmtServiceDtoCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /service/releasedUncollectedAmtTxns/{referenceNo}:
+    delete:
+      tags:
+        - "uncollectedamtservice"
+      summary: "Retrieves the list of manually released uncollected amount transactions by reference number"
+      description: "Retrieves the list of manually released uncollected amount transactions by reference number"
+      operationId: "delete"
+      parameters:
+        - name: "referenceNo"
+          in: "path"
+          description: "Reference No for releasing uncollected Amount for an Account"
+          required: true
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    get:
+      tags:
+        - "uncollectedamtservice"
+      summary: "API to manually release uncollected amount"
+      description: "API to manually release uncollected amount"
+      operationId: "getByNK"
+      parameters:
+        - name: "referenceNo"
+          in: "path"
+          description: "Reference No for getting uncollected Amount for an Account"
+          required: true
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/UncollectedReleaseMasterServiceDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"                    
+  /service/releasedUncollectedAmtTxns/getAll:
+    get:
+      tags:
+        - "uncollectedamtservice"
+      summary: "Retrieves the list of manually released uncollected amount transactions"
+      description: "Retrieves the list of manually released uncollected amount transactions"
+      operationId: "getAll"
+      parameters:
+        - name: "referenceNo"
+          in: "query"
+          description: "Reference Number"
+          required: false
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer          
+        - name: "sourceCode"
+          in: "query"
+          description: "Source Code"
+          required: false
+          type: string
+        - name: "authStatus"
+          in: "query"
+          description: "Auth Status"
+          required: false
+          type: string     
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created balance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/UncollectedReleaseMasterServiceDtoCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"            
+definitions:
+  UncollectedReleaseServiceDto:
+    type: object
+    properties:
+      sourceCode:
+        type: string
+      uncollectedReleaseServiceDtoList:
+        type: array
+        items:
+         $ref: "#/definitions/UncollectedReleaseServiceDtoList"
+  UncollectedReleaseServiceDtoList:
+     type: object
+     properties:
+       txnRefNo:
+         type: string
+       entrySerialNo:
+         type: number
+     required:
+     - txnRefNo
+     - entrySerialNo
+ 
+  UncollectedReleaseMasterServiceDtoCollection:
+    type: object
+    properties:
+     data:
+      type: array
+      items:
+        $ref: "#/definitions/UncollectedReleaseMasterServiceDto"
+     paging:
+        $ref: "#/definitions/PagingDto"    
+  UncollectedReleaseMasterServiceDto:
+    type: object
+    properties:
+     referenceNo:
+      type: string
+     sourceCode:
+      type: string
+     makerId:
+      type: string
+      description: "Maker ID of Virtual Account"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of Virtual Account"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Virtual Account is authorized"    
+     authStatus:
+      type: string
+     uncollectedReleaseDetailDtoList:
+        type: array
+        items:
+         $ref: '#/definitions/UncollectedReleaseDetailServiceDto'  
+  UncollectedReleaseDetailServiceDto:
+    type: object
+    properties:
+     referenceNo:
+      type: string
+     txnRefNo:
+      type: string
+     virtualAccountNo:
+      type: string
+     vaCcy:
+      type: string 
+     valueDate:
+      type: string    
+     uncollectedAmount:
+      type: number
+     expectedReleaseDate:
+      type: string
+  UncollectedAmtServiceDto:
+    type: object
+    properties:
+      txnRefNo:
+        type: string
+      expectedReleaseDate:
+        type: string
+      actualReleaseDate:
+        type: string
+      releaseType:
+        type: string
+      uncollectedAmount:
+        type: number
+      valueDate:
+        type: string
+      vaCcy:
+        type: string
+      virtualAccount:
+        type: string
+      sourceRefNo:
+        type: string
+      entrySerialNo:
+        type: number
+  UncollectedAmtServiceDtoCollection:
+    type: object
+    properties:
+      UncollectedAmtDtoList:
+        type: array
+        items:
+          $ref: "#/definitions/UncollectedAmtServiceDto"        
+  UncollectedResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      data:
+        $ref: "#/definitions/UncollectedReleaseMasterDto"
+
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string

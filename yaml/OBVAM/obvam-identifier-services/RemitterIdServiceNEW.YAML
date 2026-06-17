@@ -1,0 +1,728 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : remitterservice.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is maintenance for remitterids" 
+ version: "1.0.0"
+ title: "remitterids Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "remitterservice"
+   description: "Remitter ID Configuration service helps in the creation of Remitter ID records for a Remitter List ID"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../remitterids
+
+ /service/remitters:
+  post:
+   tags:
+    - "remitterservice"
+   summary: "Adds a new remitterids."
+   description: "Adds a new remitterids. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "remitterids" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new remitterids" 
+      required: true
+      schema:
+       $ref: "#/definitions/RemitterIdServiceRequestDataDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created remitterids" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/RemitterIdServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+  get:
+   tags:
+    - "remitterservice"
+   summary: "Get all valid remitters."
+   description:  "Get all valid remitters. This endpoints will be used to Get all valid remitters maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: true
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: customerNo
+     required: true
+     type: string
+   - in: query
+     name: remitterListId
+     required: false
+     type: string
+   - in: query
+     name: remitterId
+     required: false
+     type: string
+   - in: query
+     name: ibanReqd
+     required: false
+     type: string
+   - in: query
+     name: identiferAccNo
+     required: false
+     type: string
+   - in: query
+     name: virtualIdentifier
+     required: true
+     type: string
+   - in: query
+     name: ibanAccNo
+     required: false
+     type: string
+   - in: query
+     name: reconInfo
+     required: false
+     type: string
+   - in: query
+     name: additionalInfo
+     required: false
+     type: string   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/RemitterIdServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+   
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../remitterids/xxx
+#   DELETE    .../remitterids/xxx
+#   GET       .../remitterids/xxx
+#   GET       .../remitterids/xxx?version=latestrecord
+#   GET       .../remitterids/xxx?version=1
+
+ /service/remitters/{virtualIdentifier}/{remitterId}:
+  put:
+   tags:
+    - "remitterservice"
+   summary: "Update an existing remitterids."
+   description:  "Update an existing remitterids."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "virtualIdentifier"
+      in: "path"
+      description: "key of the remitterids Maintenance"
+      required: true
+      type: "string"
+    - name: "remitterId"
+      in: "path"
+      description: "key of the remitterids Maintenance"
+      required: true
+      type: "string"
+    - name: "remitterids"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing remitterids"
+      required: true
+      schema:
+       $ref: "#/definitions/RemitterIdServiceRequestModifyDTO"
+   responses:
+    200:
+     description: "Returns updated remitterids"
+     schema:
+      $ref: "#/definitions/RemitterIdServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../remitterids/xxx/close
+ /service/remitters/{virtualIdentifier}/{remitterId}/close:
+  patch:
+   tags:
+    - "remitterservice"
+   summary: "Close the remitterids by given ID."
+   description:  "Close the remitterids identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "virtualIdentifier"
+      in: "path"
+      description: "key of the remitterids Maintenance"
+      required: true
+      type: "string"
+    - name: "remitterId"
+      in: "path"
+      description: "key of the remitterids Maintenance"
+      required: true
+      type: "string"   
+    - name: "remitterids"
+      in: "body"
+      description: Request body contain remitterids and Modification no of remitterids maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/RemittersKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/RemitterIdServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../remitterids/xxx/reopen
+
+ /service/remitters/{virtualIdentifier}/{remitterId}/reopen:
+  patch:
+   tags:
+    - "remitterservice"
+   summary: "reopen the remitterids by given ID."
+   description:  "reopen the remitterids identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "virtualIdentifier"
+      in: "path"
+      description: "key of the remitterids Maintenance"
+      required: true
+      type: "string"
+    - name: "remitterId"
+      in: "path"
+      description: "key of the remitterids Maintenance"
+      required: true
+      type: "string"   
+    - name: "remitterids"
+      in: "body"
+      description: Request body contain remitterids and Modification no of remitterids maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/RemittersKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/RemitterIdServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/remitterids/getremittercountforvi:
+  get:
+   tags:
+    - "remitterservice"
+   summary: "Get count of valid remittanceids per identifier for a given customer ."
+   description:  "This endpoint is used to get count of valid remittanceids per identifier for a given customer."
+   operationId: "getRemitterCountForVI"
+   parameters:
+   - name: sourceCode
+     in: header
+     description: "Source Code"
+     required: true
+     type: string
+   - in: query     
+     name: realCustomerNo
+     description: "Real Customer No of remittance list id"
+     required: true
+     type: string
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/RemitterIdcountServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/remitters/downloadremitter/{realCustomerNo}/{virtualIdentifier}:
+  get:
+   tags:
+    - "remitterservice"
+   summary: "Get count of valid remittanceids per identifier for a given customer ."
+   description:  "This endpoint is used to download valid remittanceids for a given customer and identifier."
+   operationId: "downloadremitters"
+   parameters:
+   - name: sourceCode
+     in: header
+     description: "Source Code"
+     required: true
+     type: string
+   - in: path     
+     name: realCustomerNo
+     description: "Real Customer No of remittance list id"
+     required: true
+     type: string
+   - in: path     
+     name: virtualIdentifier
+     description: "Virtual identifier"
+     required: true
+     type: string
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/RemitterIdDownloadCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ RemitterIdServiceRequestDataDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     realCustomerNo:
+      type: string
+      description: "Customer number for which Remitter list id is maintained"
+      minLength: 1
+      maxLength: 20
+     virtualIdentifier:
+      type: string
+      description: "Virtual Identifier"
+      minLength: 1
+      maxLength: 15
+     remitterId:
+      type: string
+      description: "Identification number of the Remitter which is the second part of the VAI account number"
+      minLength: 1
+      maxLength: 35
+      pattern: ^[a-zA-Z0-9]+$
+     ibanReqd:
+      type: string
+      description: "Flag that indicates if IBAN is to be generated or not"
+     additionalInfo:
+      type: string
+      description: "Additional information provided by corporate for further use "
+     reconInfo:
+      type: string
+      description: "Reference number provided by corporate for reconciliation purpose"
+     validityStartDate:
+      type: string
+      description: "Date from which Remitter id will be active"
+     validityEndDate:
+      type: string
+      description: "Date till which Remitter id will be active"
+    required:
+     - realCustomerNo
+     - remitterId
+     - virtualIdentifier
+ RemitterIdServiceRequestModifyDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     remitterListId:
+      type: string
+      description: "Unique identification number to identify Remitter list"
+      minLength: 1
+      maxLength: 35
+      pattern: ^[a-zA-Z0-9]+$
+     additionalInfo:
+      type: string
+      description: "Additional information provided by corporate for further use "
+     reconInfo:
+      type: string
+      description: "Reference number provided by corporate for reconciliation purpose"
+     validityStartDate:
+      type: string
+      description: "Date from which Remitter id will be active"
+     validityEndDate:
+      type: string
+      description: "Date till which Remitter id will be active"
+ RemitterIdServiceResponseDataDto:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     realCustomerNo:
+      type: string
+      description: "Customer number for which Remitter list id is maintained"
+      minLength: 1
+      maxLength: 20
+     virtualIdentifier:
+      type: string
+      description: "Virtual Identifier"
+      minLength: 1
+      maxLength: 15
+     remitterListId:
+      type: string
+      description: "Unique identification number to identify Remitter list"
+      minLength: 1
+      maxLength: 35
+      pattern: ^[a-zA-Z0-9]+$
+     remitterId:
+      type: string
+      description: "Identification number of the Remitter which is the second part of the VAI account number"
+      minLength: 1
+      maxLength: 35
+      pattern: ^[a-zA-Z0-9]+$
+     identifierAccountNo:
+      type: string
+      description: "Identifier Account which is VirtualIdentifier + remitterId"
+     ibanReqd:
+      type: string
+      description: "Flag that indicates if IBAN is to be generated or not"
+     ibanAccountNo:
+      type: string
+      description: "IBAN for the Identifier"
+     additionalInfo:
+      type: string
+      description: "Additional information provided by corporate for further use "
+     reconInfo:
+      type: string
+      description: "Reference number provided by corporate for reconciliation purpose"
+     validityStartDate:
+      type: string
+      description: "Date from which Remitter id will be active"
+     validityEndDate:
+      type: string
+      description: "Date till which Remitter id will be active"
+     makerId:
+      type: string
+      description: "Maker ID of Virtual Account"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of Virtual Account"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Virtual Account is authorized"
+     modNo:
+      type: integer
+      description: "Version number of Virtual Account"
+     recordStatus:
+      type: string
+      description: "Record Status of Virtual Account"
+     authStatus:
+      type: string
+      description: "Authorization Status of Virtual Account"
+     onceAuth:
+      type: string
+      description: "Flag that indicated if Virtual Account is authorized once or not"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+     
+ RemitterIdsServiceDtoCollection: 
+  description: "Collection of remitterid."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/RemitterIdServiceResponseDataDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+    
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+    
+ RemitterIdServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/RemitterIdServiceResponseCode"
+ RemitterIdServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ RemitterIdServiceCollection: 
+  description: "Collection of remitterid."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/RemitterIdServiceResponseDataDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+    
+ RemitterIdServiceResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/RemitterIdServiceResponseDto"
+   data:
+    $ref: "#/definitions/RemitterIdServiceResponseDataDto"
+    
+ ResponseResourceSupport:
+  type: object
+ RemitterIdServiceWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/RemitterIdServiceResponseDataDto"
+ RemitterIdDownloadCollection:
+  description: "Collection of Remitter download."
+  type: object
+  properties:
+   data:
+    type: object
+    items:
+     $ref: "#/definitions/RemitterIdDownloadDTO"
+   messages:
+    $ref: "#/definitions/RemitterIdServiceResponseDto"
+ RemitterIdcountServiceCollection:
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: "#/definitions/RemitterIdcountServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ RemitterIdDownloadDTO:
+  type: object
+  properties:
+     realCustomerNo:
+      description: "Real Customer"
+      type: string     
+     virtualIdentifier:
+      description: "Virtual Identifier"
+      type: string
+     remitterData:
+      type: string
+      description: "remitter details for the real customer and identifier"
+ RemitterIdcountServiceDTO:
+  type: object
+  properties:     
+     virtualIdentifier:
+      description: "Virtual Identifier"
+      type: string
+     remitterIdCount:
+      type: integer
+      description: "count of active remitter ids for the identifier"
+ RemittersKeyDto:
+    type: object
+    properties:
+      remarks:
+        type: string

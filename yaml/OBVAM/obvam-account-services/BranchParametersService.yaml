@@ -1,0 +1,412 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : BranchParametersService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna 
+#  Reviewed By        :  Marianne George
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server account branch parameters service." 
+ version: "1.0.0"
+ title: "accountbranchparameters Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountbranchparametersservice"
+   description: "This services is used to maintain the parameters that are controlled at branch. OBVAM maintains account and IBAN parameters for a branch. It has various parameters to validate the generated account number such as account mask, start and end account number for auto generation, and to validate IBAN format mask for BBAN format mask and data type."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../accountbranchparameters
+
+ /service/accountbranchparameters:  
+  get:
+   tags:
+    - "accountbranchparametersservice"
+   summary: "Get all valid accountbranchparameters."
+   description:  "This enpoint is used to get all valid accountbranchparameters maintenance records."
+   operationId: "getAllBranchParameters"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header     
+     required: true
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: branchCode
+     required: false
+     type: string
+   - in: query
+     name: virtualAccountMask
+     required: false
+     type: string
+   - in: query
+     name: checksumAlgorithm
+     required: false
+     type: string
+   - in: query
+     name: startAccNumber
+     required: false
+     type: integer
+   - in: query
+     name: endAccNumber
+     required: false
+     type: integer
+   - in: query
+     name: accAutoGenerate
+     required: false
+     type: string
+   - in: query
+     name: corporateSpecificRangeRequired
+     required: false
+     type: string
+   - in: query
+     name: ibanCntryCd
+     required: false
+     type: string
+   - in: query
+     name: ibanChkDigAlgo
+     required: false
+     type: string
+   - in: query
+     name: bbanFormatMsk
+     required: false
+     type: string
+   - in: query
+     name: bbanDataType
+     required: false
+     type: string
+   - in: query
+     name: bbanBankCode
+     required: false
+     type: string
+   - in: query
+     name: bbanBrnCode
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: fixedValue
+     required: false
+     type: string
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+   - in: query
+     name: branchGroup
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/BranchParametersServiceCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+
+definitions:
+ BranchParametersServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     branchCode:
+      type: string
+      description: "Branch code in which virtual account is created."
+      minLength: 3
+      maxLength: 3
+      pattern: ^[a-zA-Z0-9]+$
+     virtualAccountMask:
+      type: string
+      description: "Mask for virtual account number"
+      minLength: 0
+      maxLength: 20
+      pattern: ^[bcvtnsfd\$]*$
+     checksumAlgorithm:
+      type: string
+      description: "Algorithm required to generate checksum."
+     startAccNumber:
+      type: number
+      description: "Start serial number of the account"
+      minLength: 0
+      maxLength: 20
+      pattern: ^[0-9]*$
+     endAccNumber:
+      type: number
+      description: "End serial number of the account."
+      minLength: 0
+      maxLength: 20
+      pattern: ^[0-9]*$
+     accAutoGenerate:
+      type: string
+      description: "Enable/disable auto generation of account number."
+      minLength: 0
+      maxLength: 1
+      pattern: ^[Y,N]$
+     ibanCntryCd:
+      type: string
+      description: "Country Code."
+      minLength: 0
+      maxLength: 3
+      pattern: ^$|^[a-zA-Z0-9]+$
+     ibanChkDigAlgo:
+      type: string
+      description: "Algorithm required for IBAN check digit generation"
+      minLength: 0
+      maxLength: 30
+     bbanFormatMsk:
+      type: string
+      description: "BBAN format mask."
+      minLength: 0
+      maxLength: 30
+      pattern: ^[bszdthli]*$
+     bbanDataType:
+      type: string
+      description: "Data type of each field defined as part of BBAN mask"
+      minLength: 0
+      maxLength: 30
+      pattern: ^[anc]*$
+     bbanChkDigAlgo:
+      type: string
+      description: "Algorithm required for BBAN check digit generation"
+      minLength: 0
+      maxLength: 30
+     bbanBankCode:
+      type: string
+      description: "Bank code should be given if bank code is part of BBAN mask."
+      minLength: 0
+      maxLength: 20
+      pattern: ^[a-zA-Z0-9]+$
+     bbanBrnCode:
+      type: string
+      description: "Branch code should be given if branch code is part of BBAN mask"
+      minLength: 0
+      maxLength: 20
+      pattern: ^[a-zA-Z0-9]+$
+     fixedValue:
+      type: string
+      description: ""
+      minLength: 0
+      maxLength: 1
+      pattern: ^$|^[a-zA-Z0-9]+$
+     rateType:
+      type: string
+      description: "Rate Type"
+     rateCode:
+      type: string
+      description: "Rate Code can be Mid Rate(M) or Buy/Sell Rate(B)"
+      pattern: '[M,B]'
+      minLength: 0
+      maxLength: 1
+     normalVariance:
+      type: number
+      description: "Variance that is allowed for Exchange Rate (percentage)"
+      minimum: 0
+      maximum: 100
+     maxVariance:
+      type: number
+      description: "Maximum variance allowed for Exchange Rate (percentage)"
+      minimum: 0
+      maximum: 100
+     amtBlkQueueReq:
+      type: string
+      description: "Flag to indicate if queue is required for Amount Block"
+      pattern: '[Y,N]'
+     txnJnlQueueReq:
+      type: string
+      description: "Flag to indicate if queue is required for Transaction Journal"
+      pattern: '[Y,N]'
+     vaRateType:
+      type: string
+      description: "Rate Type for Child Contributions"
+     vaRateCode:
+      type: string
+      description: "Rate Code for Child Contributions can be Mid Rate(M) or Buy/Sell Rate(B)"
+      pattern: '[M,B]'
+      minLength: 0
+      maxLength: 1  
+     makerId:
+      type: string
+      description: "Maker ID of Virtual Account"
+     makerDateStamp:
+      type: string
+      description: "Date and Time when Virtual Account is created or modified or closed or reopened"
+     checkerId:
+      type: string
+      description: "Checker ID of Virtual Account"
+     checkerDateStamp:
+      type: string
+      description: "Date and Time when some action on Virtual Account is authorized"
+     modNo:
+      type: integer
+      description: "Version number of Virtual Account"
+     recordStatus: 
+      type: string
+      description: "Record Status of Virtual Account"
+     authStatus:
+      type: string
+      description: "Authorization Status of Virtual Account"
+     onceAuth:
+      type: string
+      description: "Flag that indicated if Virtual Account is authorized once or not"
+     doerRemarks:
+      type: string
+      description: "Remarks made by Maker"
+     approverRemarks:
+      type: string 
+      description: "Remarks made by Approver"   
+     corporateSpecificRangeRequired:
+      type: string
+      description: "Flag to indicate if corporate specific account number range is required or not for the branch"
+      pattern: '[Y,N]'
+      minLength: 0
+      maxLength: 1
+     extAccNumberGeneration:
+      type: string
+      description: "External Account number Generation Required?"
+      pattern: '[Y,N]'
+     extIBANGeneration:
+      type: string
+      description: "External IBAN Generation Required?"
+      pattern: '[Y,N]'
+     branchName:
+      type: string
+      description: "Name of the Branch for Virtual Account"
+      minimum: 0
+      maximum: 105
+     branchGroup:
+      type: string
+      description: "Branch Group code" 
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type 
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ BranchParametersServiceCollection: 
+  description: "Collection of account."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/BranchParametersServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"

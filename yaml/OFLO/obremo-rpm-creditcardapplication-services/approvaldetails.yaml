@@ -1,0 +1,277 @@
+#
+#  Copyright (C) 2021 Oracle and/or its affiliates. All rights reserved.
+#
+swagger: '2.0'
+info:
+  title: Credit Card Approval Details Service
+  description: API for Credit Card Approval Details
+  version: 1.0.0
+host: localhost:7001
+basePath: /obremo-rpm-creditcardapplication-services
+schemes:
+- http
+tags:
+- name: ApprovalDetails
+  description: API for Credit Card Approval Details Operations
+paths:
+  /web/v1/approvaldetails:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApprovalDetails
+      summary: Adds a new Approval Detail.
+      operationId: addApprovalDetails
+      parameters:
+      - name: ApprovalDetails
+        in: body
+        description: Request Body that contains data required for creating a new Approval Detail.
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Approval Detail.
+          headers:
+            Location:
+              description: URL of the newly created Approval Detail.
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input.
+        500:
+          description: Internal error.
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApprovalDetails
+      summary: Retrieves the list of existing Approval Details.
+      operationId: getAllApprovalDetails
+      parameters:
+      - name: processRefNo
+        in: query
+        description: Process Reference Number for which Approval Details are to be fetched.
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: Application Number for which Approval Details are to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the list of existing Approval Details.
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error.
+  /web/v1/approvaldetails/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApprovalDetails
+      summary: Retrieves the Approval Detail by id.
+      operationId: getApprovalDetailsById
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Approval Detail to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the Approval Detail based on given Id.
+          schema:
+            $ref: '#/definitions/ApprovalDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error.
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApprovalDetails
+      summary: Update an existing Approval Detail.
+      operationId: updateApprovalDetails
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Approval Detail to be updated.
+        required: true
+        type: string
+      - name: ApprovalDetails
+        in: body
+        description: Request Body that contains data required for updating an existing Approval Detail.
+        required: true
+        schema:
+          $ref: '#/definitions/ApprovalDetailsModel'
+      responses:
+        200:
+          description: Returns updated Approval Detail
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input.
+        500:
+          description: Internal error.
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApprovalDetails
+      summary: Deletes the Approval Detail identified by given Id.
+      operationId: deleteApprovalDetails
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Approval Detail to be deleted
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error.
+definitions:
+  ApprovalDetailsModel:
+    description: ApprovalDetailsModel
+    type: object
+    properties:
+      id:
+        description: Id of the Approval Detail
+        type: string
+        maxLength: 36
+      dataSegmentCode:
+        description: Data segment code
+        type: string
+      createdBy:
+        description: Created By
+        type: string
+        maxLength: 36
+      createdTimeStamp:
+        description: Created Time Stamp
+        type: string
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+        maxLength: 36
+      status:
+        description: Status
+        type: string
+        maxLength: 36
+      processRefNo:
+        description: Process Reference Number
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      cardType:
+        description: Card Type
+        type: string
+      productCode:
+        description: Product Code
+        type: string
+      productName:
+        description: Product Name
+        type: string
+      approvedCardLimit:
+        description: Approved Card Limit
+        type: number
+      approvedCardLimitCurrency:
+        description: Approved Card Limit Currency
+        type: string
+      revisedCardLimit:
+        description: Revised Card Limit
+        type: number
+      revisedCardLimitCurrency:
+        description: Revised Card Limit Currency
+        type: string
+      revisionNeeded:
+        description: Revision Needed
+        type: boolean
+      userRecommendation:
+        description: User Recommendation
+        type: string
+      remarks:
+        description: Remarks
+        type: string
+      version:
+        description: Version
+        type: integer
+      recordStat:
+        description: Record Stat
+        type: string
+      applicantModel:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicantModel'
+  ApplicantModel:
+    description: Applicant Model
+    type: object
+    properties:
+      applicantName:
+        description: Applicant Name
+        type: string
+      primaryApplicant:
+        description: Primary Applicant
+        type: boolean
+      seqNo:
+        description: Seq No
+        type: integer
+  ApprovalDetailsCollection:
+    description: Collection of ApprovalDetails.
+    type: object
+    properties:
+      ApprovalDetailsList:
+        type: array
+        items:
+          $ref: '#/definitions/ApprovalDetailsModel'

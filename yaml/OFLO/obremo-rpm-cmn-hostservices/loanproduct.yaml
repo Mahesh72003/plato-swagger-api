@@ -1,0 +1,1573 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2019 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : savingAggregate.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Product Services
+host: localhost:7001
+basePath: /loan-product-services
+tags:
+- name: LoanProductServices
+  description: API for loan product Operations
+schemes:
+- http
+paths:
+  /web/v1/loanproducts/{productcode}:
+    get:
+      produces:
+      - application/json
+      tags:
+      - LoanProduct
+      summary: get the productDetails from Host.
+      description: getLoanProductDetails.
+      operationId: getLoanProduct
+      parameters:
+      - description: "productCode"
+        in: path
+        name: productcode
+        required: true
+        type: string
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string
+        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      
+      responses:
+        200:
+          description: Returns the product Details based on given productCode.
+          schema:
+            $ref: '#/definitions/ProductDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /web/v1/loanproducts:
+    get:
+      produces:
+      - application/json
+      tags:
+      - LoanProduct
+      summary: get the list of Loan product from Host.
+      description: getLoanProductsList.
+      operationId: getLoanProductList
+      parameters:
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      - description: productType
+        in: query
+        name: productType
+        required: false
+        type: string  
+      
+      responses:
+        200:
+          description: Returns the list of loan product from host.
+          schema:
+            $ref: '#/definitions/LoanProductLovCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+          
+          
+  /web/v1/loanproducts/create:
+    post:
+      produces:
+      - application/json
+      tags:
+      - LoanProduct
+      summary: create loan form  from Host.
+      description: get created loan.
+      operationId: loanCreate
+      parameters:
+      - name: loanDetails
+        in: body
+        description: Request Body that contains data required for creating a new LoanDetails
+        required: true
+        schema:
+          $ref: '#/definitions/loanRequestModel'
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string
+        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+                    
+  /web/v1/loanproducts/simulate:
+    post:
+      produces:
+      - application/json
+      tags:
+      - LoanProduct
+      summary: simulate loan form  from Host.
+      description: get simulated loan details.
+      operationId: loanSimulate
+      parameters:
+      - name: loanDetails
+        in: body
+        description: Request Body that contains data required for creating a new LoanDetails
+        required: true
+        schema:
+          $ref: '#/definitions/loanRequestModel'
+      - description: "User Id"
+        in: header
+        name: userId
+        required: true
+        type: string
+      - description: "Branch Code"
+        in: header
+        name: branchCode
+        required: true
+        type: string
+        
+      - description: Source
+        in: header
+        name: sourceCode
+        required: false
+        type: string
+        default: "OBREMO"
+      - description: appId
+        in: header
+        name: appId
+        required: true
+        type: string
+      
+      responses:
+        200:
+          description: Returns the product Details based on given productCode.
+          schema:
+            $ref: '#/definitions/LoanResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error          
+definitions:
+ loanResponseModel:  
+   description: "loan Response Model"
+   type: object
+   properties:
+    accountNo:
+     description: account No
+     type: string
+    productCode:
+     description: product Code
+     type: string
+    productCatagory:
+     description: product Catagory
+     type: string
+    branchCode:
+     description: branch Code
+     type: string
+    bookDate:
+     description: bookDate
+     type: string
+    valueDate:
+     description: valueDate
+     type: string
+    customerId:
+     description: customer Id
+     type: string
+    loanAmount:
+     description: loan Amount
+     type: string
+    loanCurrency:
+     description: loan Currency
+     type: string
+    repaymentSchedule:
+     type: array
+     items:
+      $ref: '#/definitions/RepaymentSchedule'
+    chargeComponents:
+     type: array
+     items:
+      $ref: '#/definitions/ChargeComponent'
+    effectiveDate:
+      $ref: '#/definitions/EffectiveDate' 
+    components:
+     type: array
+     items:
+      $ref: '#/definitions/InterestComponent'
+    maturityDate:
+     description: Maturity Date
+     type: string
+ EffectiveDate:  
+   description: "EffectiveDate"
+   type: object
+   properties:
+    effectDate:
+     description: effectDate
+     type: string
+    udeValues:
+     type: array
+     items:
+      $ref: '#/definitions/UdeValue'
+ UdeValue:  
+   description: "UdeValue"
+   type: object
+   properties:
+    udeId:
+     description: udeId
+     type: string
+    udeValue:
+     description: udeValue
+     type: string
+    resolvedValue:
+     description: resolvedValue
+     type: string
+    rateBasis:
+     description: rateBasis
+     type: string
+    rateCode:
+      description: rateCode
+      type: string
+    codeToUse:
+      description: codeToUse
+      type: string
+ ChargeComponent:  
+   description: "ChargeComponent"
+   type: object
+   properties:
+    irrapplicable:
+     description: irrapplicable
+     type: string
+    fundduringInit:
+     description: fundduringInit
+     type: string
+    fundduringRoll:
+     description: fundduringRoll
+     type: string
+    componentCurrency:
+     description: componentCurrency
+     type: string
+    debitAccBranch:
+     description: debitAccBranch
+     type: string
+    creditAccBranch:
+     description: creditAccBranch
+     type: string
+    settlementCrrency:
+     description: settlementCrrency
+     type: string
+    mainComponent:
+     description: mainComponent
+     type: string
+    splint:
+     description: splint
+     type: string
+    debitPaymentMode:
+     description: debitPaymentMode
+     type: string
+    creditPaymentMode:
+     description: creditPaymentMode
+     type: string
+    capitalized:
+     description: capitalized
+     type: string
+    liqidationMode:
+     description: liqidationMode
+     type: string
+    defcharge:
+     description: defcharge
+     type: string
+    crProductAccount:
+     description: crProductAccount
+     type: string
+    drProductAccount:
+     description: drProductAccount
+     type: string
+    componentType:
+     description: componentType
+     type: string
+    componentName:
+     description: componentName
+     type: string
+    schedules:
+     type: array
+     items:
+      $ref: '#/definitions/Schedule'
+    
+ InterestComponent:  
+   description: "Component"
+   type: object
+   properties:
+    irrapplicable:
+     description: irrapplicable
+     type: string
+    fundduringInit:
+     description: fundduringInit
+     type: string
+    fundduringRoll:
+     description: fundduringRoll
+     type: string
+    componentCurrency:
+     description: componentCurrency
+     type: string
+    debitAccBranch:
+     description: debitAccBranch
+     type: string
+    creditAccBranch:
+     description: creditAccBranch
+     type: string
+    waive:
+     description: waive
+     type: string
+    verifyFunds:
+     description: verifyFunds
+     type: string
+    settlementCrrency:
+     description: settlementCrrency
+     type: string
+    mainComponent:
+     description: mainComponent
+     type: string
+    splint:
+     description: splint
+     type: string
+    debitPaymentMode:
+     description: debitPaymentMode
+     type: string
+    creditPaymentMode:
+     description: creditPaymentMode
+     type: string
+    liqidationMode:
+     description: liqidationMode
+     type: string
+    expflag:
+     description: expflag
+     type: string
+    crProductAccount:
+     description: crProductAccount
+     type: string
+    drProductAccount:
+     description: drProductAccount
+     type: string
+    componentType:
+     description: componentType
+     type: string
+    componentName:
+     description: componentName
+     type: string
+    schedules:
+     type: array
+     items:
+      $ref: '#/definitions/Schedule'
+    disbursals:
+     type: array
+     items:
+      $ref: '#/definitions/Disbursal'
+ Disbursal:  
+   description: "Disbursal"
+   type: object
+   properties:
+    accountNo:
+     description: accountNo
+     type: string
+    branch:
+     description: branch
+     type: string
+    componentName:
+     description: componentName
+     type: string
+    scheduleStartDate:
+     description: scheduleStartDate
+     type: string
+    scheduleDueDate:
+     description: scheduleDueDate
+     type: string
+    totalDisbursement:
+     description: totalDisbursement
+     type: string   
+    scheduleLinkDate:
+     description: scheduleLinkDate
+     type: string
+    currentDisbursement:
+     description: currentDisbursement
+     type: string
+    amountDisbursed:
+     description: amountDisbursed
+     type: string
+   
+ Schedule:  
+   description: "Schedule"
+   type: object
+   properties:
+    unit:
+     description: unit
+     type: string
+    amount:
+     description: amount
+     type: string
+    sceduleEndDate:
+     description: sceduleEndDate
+     type: string
+    capitalized:
+     description: capitalized
+     type: string
+    firstDueDate:
+     description: firstDueDate
+     type: string
+    waiverFlag:
+     description: waiverFlag
+     type: string
+    frequency:
+     description: frequency
+     type: string
+    formulaName:
+     description: formulaName
+     type: string
+    scheduleStartDate:
+     description: scheduleStartDate
+     type: string
+    noOfSchedule:
+     description: noOfSchedule
+     type: string
+    scheduleType:
+     description: scheduleType
+     type: string 
+    scheduleFlag:
+     description: scheduleFlag
+     type: string     
+ RepaymentSchedule:  
+   description: "RepaymentSchedule"
+   type: object
+   properties:
+    dueDate:
+     description: Due Date
+     type: string
+    principleAmount:
+     description: principle Amount
+     type: string
+    interestAmount:
+     description: interest Amount
+     type: string
+    emiAmount:
+     description: EMI Amount
+     type: string
+    outstandingBalance:
+     description: outstanding Balance
+     type: string
+    
+ loanRequestModel:  
+   description: "loan Request Model"
+   type: object
+   properties:
+    userId:
+     description: userId
+     type: string
+    productCode:
+     description: product Code
+     type: string
+    provisionMode:
+      description: provisionMode
+      type: string
+    customerId:
+     description: customer Id
+     type: string
+    frequencyUnit:
+     description: frequency Unit
+     type: string
+    noOfInstallment:
+     description: noOfInstallment
+     type: string
+    frequency:
+     description: frequency
+     type: string
+    repaymentDayOfMonth:
+     description: repaymentDayOfMonth
+     type: string
+    repaymentType:
+     description: repaymentType
+     type: string
+    valuedate:
+     description: valueDate
+     type: string
+    requestType:
+     description: requestType
+     type: string
+    moratoriumPeriod:
+     description: moratoriumPeriod
+     type: string
+    moratoriumStartDate:
+     description: moratoriumStartDate
+     type: string
+    productUdes:
+     type: array
+     items:
+      $ref: '#/definitions/ProductUdes'
+    disbursementDetails:
+     type: array
+     items:
+      $ref: '#/definitions/DisbursementDetails'
+    applicantDetails:
+     type: array
+     items:
+      $ref: '#/definitions/ApplicantDetails'
+    repaymentSettlement:
+      $ref: '#/definitions/SettlementAccountDetails'
+    disbursementSettlement:
+      $ref: '#/definitions/SettlementAccountDetails'
+    loanresponse:
+      $ref: '#/definitions/loanResponseModel'
+    collateralservices:
+      $ref: '#/definitions/CollateralDetailsMasterModel'
+    accountPreference:
+       $ref: '#/definitions/AccountServicesMasterModel'
+    valuationDetails:
+      type: array
+      items:
+       $ref: '#/definitions/ValuationApplicantDetailsModel'
+    referenceId:
+     description: referenceId
+     type: string
+    installmentStartDate:
+     description: installmentStartDate
+     type: string
+    loanAmount:
+     description: loan Amount
+     type: string
+    loanCurrency:
+     description: loan Currency
+     type: string
+    maturityDate:
+     description: Maturity Date
+     type: string
+    applicationNo:
+     description: applicationNo
+     type: string
+    customObject:
+      type: object
+ SettlementAccountDetails:  
+   description: "SettlementAccountDetails"
+   type: object
+   properties:
+    accountNo:
+     description: accountNo
+     type: string
+    accountName:
+     description: accountName
+     type: string
+    accountCurrency:
+     description: accountCurrency
+     type: string
+    branch:
+     description: branch
+     type: string
+    settlementMode:
+     description: settlementMode
+     type: string
+    branchName:
+     description: branchName
+     type: string
+    payeeName:
+     description: payeeName
+     type: string
+    address1:
+     description: address1
+     type: string
+    address2:
+     description: address2
+     type: string
+    address3:
+     description: address3
+     type: string
+    ifscCode:
+     description: ifscCode
+     type: string
+    bankName:
+     description: bankName
+     type: string
+    bankCode:
+     description: bankCode
+     type: string
+    payeeBranch:
+     description: payeeBranch
+     type: string
+    payeeBranchName:
+     description: payeeBranchName
+     type: string
+   
+ LoanProductLovModel:  
+   description: "Loan Product LOV Model"
+   type: object
+   properties:
+    productCode:
+     description: product Code
+     type: string
+    productDescription:
+     description: product Description
+     type: string
+    productType:
+     description: product type
+     type: string
+    productcategory:
+     description: product category
+     type: string
+    moduleCode:
+     description: module code
+     type: string
+    authstat:
+     description: auth status
+     type: string
+    recordno:
+     description: record no
+     type: string
+    recordstatus:
+     description: record status
+     type: string
+    rollallowed:
+     description: rollover allowed
+     type: string
+
+ LoanProductLovCollection:  
+   description: "Collection of Loan Product LOV Model"
+   type: object
+   properties:
+    loanProductLovList:
+     description: list of loans product lov 
+     type: array
+     items:
+      $ref: '#/definitions/LoanProductLovModel'
+ 
+ 
+ 
+ ApplicantDetails: 
+   description: "ApplicantDetails"
+   type: object
+   properties:
+    customerId:
+     description: customerId
+     type: string
+    primaryApplicant:
+     description: primaryApplicant
+     type: string
+    applicantResponsibility:
+     description: applicantResponsibility
+     type: string
+    applicantliability:
+     description: applicantliability
+     type: string
+ DisbursementDetails: 
+   description: "DisbursementDetails"
+   type: object
+   properties:
+    disbursementDate:
+     description: disbursementDate
+     type: string
+    disbursementAmount:
+     description: disbursementAmount
+     type: string      
+ ProductUdes: 
+   description: "product Ude"
+   type: object
+   properties:
+    udeName:
+     description: udeName
+     type: string
+    rateCode:
+     description: rateCode
+     type: string
+    codeToUse:
+      description: codeToUse
+      type: string
+    udeValue:
+      description: udeValue
+      type: string
+ ProductDetailsModel:  
+   description: "Product Details Model"
+   type: object
+   properties:
+    productCode:
+     description: product Code
+     type: string
+    productDescription:
+     description: product Description
+     type: string
+    provisionMode:
+      description: provisionMode
+      type: string
+    productSlogan:
+     description: product Slogan
+     type: string
+    productRemarks:
+     description: product Remarks
+     type: string
+    startdateoftheProduct:
+     description: startdateoftheProduct
+     type: string
+    revolvingLoan:
+     description: revolving Loan
+     type: string
+    ratetoUse:
+     description: ratetoUse
+     type: string
+    rateCode:
+     description: rateCode
+     type: string
+    normalVariance:
+     description: normalVariance
+     type: string
+    maxVariance:
+     description: maxVariance
+     type: string
+    currencyRestrictionflag:
+     description: currencyRestrictionflag
+     type: string
+    customerCategoryflag:
+     description: customerCategoryflag
+     type: string
+    branchRestrictionflag:
+     description: branchRestrictionflag
+     type: string
+    liquidationMode:
+     description: liquidationMode
+     type: string
+    disbursementMode:
+     description:  disbursementMode
+     type: string
+    partialLiquidation:
+     description: partialLiquidation
+     type: string
+    tenorUnits:
+     description: tenorUnits
+     type: string
+    minimumTenor:
+     description: minimumTenor
+     type: string
+    standardTenor:
+     description: standardTenor
+     type: string
+    adhocHolidayTreatementreqd:
+     description: adhocHolidayTreatementreqd
+     type: string
+    ignoreHoliday:
+     description: ignoreHoliday
+     type: string
+    holidayCurrencyforSchedule:
+     description: holidayCurrencyforSchedule
+     type: string
+    moveAcrossMonth:
+     description: moveAcrossMonth
+     type: string
+    scheduleMovement:
+     description: scheduleMovement
+     type: string
+    holidayCheck:
+     description: holidayCheck
+     type: string
+    cascadeSchedule:
+     description: cascadeSchedule
+     type: string
+    ignoreHolidayforMaturity:
+     description: ignoreHolidayforMaturity
+     type: string
+    moveMaturityDateAcrossMonth:
+     description: moveMaturityDateAcrossMonth
+     type: string
+    scheduleMovementofMaturity:
+     description: scheduleMovementofMaturity
+     type: string
+    holidayCurrencyforMaturity:
+     description: holidayCurrencyforMaturity
+     type: string
+    holidayCheckofMaturity:
+     description: holidayCheckofMaturity
+     type: string
+    productSummary:
+     $ref: '#/definitions/ProductSummary'
+    productUdes:
+     type: array
+     items:
+      $ref: '#/definitions/ProductUde'
+    components:
+     type: array
+     items:
+      $ref: '#/definitions/ProductComponent'
+ ProductSummary:
+   description: "productSummary Model"
+   type: object
+   properties:
+    moduleCode:
+     description: moduleCode
+     type: string
+    productCode:
+     description: productCode
+     type: string
+    productDescription:
+     description: productDescription
+     type: string
+    productType:
+     description: productType
+     type: string
+    rolloverAllowed:
+     description: rolloverAllowed
+     type: string
+   
+ ProductUde:
+   description: "ProductUde"
+   type: object
+   properties:
+    rateChangeRestriction:
+     description: rateChangeRestriction
+     type: string
+    udeId:
+     description: udeId
+     type: string
+    udeDescripition:
+     description: udeDescripition
+     type: string
+    udeType:
+     description: udeType
+     type: string
+    rateBasis:
+     description: rateBasis
+     type: string
+    udeCurrency:
+     description: udeCurrency
+     type: string
+    minUdeValue:
+     description: minUdeValue
+     type: string
+    maxUdeValue:
+     description: maxUdeValue
+     type: string
+ ProductComponent:
+   description: "ProductComponent"
+   type: object
+   properties:
+    componentName:
+     description: componentName
+     type: string
+    componentDescription:
+     description: componentDescription
+     type: string
+    componentCurrency:
+     description: componentCurrency
+     type: string
+    componentType:
+     description: componentType
+     type: string
+    hostComponentType:
+     description: hostComponentType
+     type: string
+    mainComponent:
+     description: mainComponent
+     type: string
+    componentReportingType:
+     description: componentReportingType
+     type: string
+    includeinEMI:
+     description: includeinEMI
+     type: string
+    daysinMonth:
+     description: daysinMonth
+     type: string
+    daysinYear:
+     description: daysinYear
+     type: string
+    graceDays:
+     description: graceDays
+     type: string
+    verifyFunds:
+     description: verifyFunds
+     type: string
+    daysFromCurrency:
+     description: daysFromCurrency
+     type: string
+    irrApplicable:
+     description: irrApplicable
+     type: string
+    specialInterestComponent:
+     description: specialInterestComponent
+     type: string
+    periodicity:
+     description: periodicity
+     type: string
+    formulaType:
+     description: formulaType
+     type: string
+    balanceType:
+     description: balanceType
+     type: string
+    accrualRequired:
+     description: accrualRequired
+     type: string
+    accrualFrequency:
+     description: accrualFrequency
+     type: string
+    compoundingReq:
+     description: compoundingReq
+     type: string
+    trackReceivable:
+     description: trackReceivable
+     type: string
+    trackPayable:
+     description: trackPayable
+     type: string
+    deferredCharge:
+     description: deferredCharge
+     type: string
+    negativeInterest:
+     description: negativeInterest
+     type: string
+    interestPostingRequired:
+     description: interestPostingRequired
+     type: string
+    ratetoUse:
+     description: ratetoUse
+     type: string
+    baseElement:
+     description: baseElement
+     type: string
+    penalBasisElement:
+     description: penalBasisElement
+     type: string
+    dfltSchedules:
+     type: array
+     items:
+      $ref: '#/definitions/DfltSchedule'
+    componentFormulaBook:
+     type: array
+     items:
+      $ref: '#/definitions/ComponentFormulaBook'  
+    productUdes:
+     type: array
+     items:
+      $ref: '#/definitions/ProductUde'
+ DfltSchedule:
+   description: "DfltSchedule"
+   type: object
+   properties:
+    scheduleType:
+     description: scheduleType
+     type: string
+    scheduleStartReference:
+     description: scheduleStartReference
+     type: string
+    frequency:
+     description: frequency
+     type: string
+    frequencyUnit:
+     description: frequencyUnit
+     type: string
+    numberofSchedule:
+     description: numberofSchedule
+     type: string
+    formulaName:
+     description: formulaName
+     type: string
+    sequenceNumber:
+     description: sequenceNumber
+     type: string
+    scheduleFlag:
+     description: scheduleFlag
+     type: string
+    capitalized:
+     description: capitalized
+     type: string
+ ComponentFormulaBook:
+   description: "ComponentFormulaBook"
+   type: object
+   properties:
+    formulaName:
+     description: formulaName
+     type: string
+    amortized:
+     description: amortized
+     type: string
+    amortizeBaseElement:
+     description: amortizeBaseElement
+     type: string
+    roundUpDown:
+     description: roundUpDown
+     type: string
+    roundingFactor:
+     description: roundingFactor
+     type: string
+    bookExpression:
+     type: array
+     items:
+      $ref: '#/definitions/BookExpression'
+    bookElement:
+     type: array
+     items:
+      $ref: '#/definitions/BookElement'
+ BookExpression:
+   description: "BookExpression"
+   type: object
+   properties:
+    exprLine:
+     description: exprLine
+     type: string
+    result:
+     description: result
+     type: string
+    formulaType:
+     description: formulaType
+     type: string
+   
+ BookElement:
+   description: "BookElement"
+   type: object
+   properties:
+    udeId:
+     description: udeId
+     type: string
+    type:
+     description: type
+     type: string
+
+ CollateralDetailsMasterModel:
+   description: CollateralDetailsMaster model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+       processRefNo:
+         description: Process Ref No of the CollateralDetailsMasterModel
+         type: string
+         maxLength: 20
+       accountCurrency:
+         description: accountCurrency
+         type: string
+       channel:
+         description: Channel
+         type: string
+       accountBranch:
+         description: accountBranch
+         type: string
+       accountType:
+         description: accountType
+         type: string
+       accountSubType:
+         description: accountSubType
+         type: string
+       collateralApplicantDetailsList:
+         type: array
+         items:
+           $ref: '#/definitions/CollateralApplicantDetailsModel'
+
+ CollateralApplicantDetailsModel:
+   description: CollateralApplicantDetailsModel model
+   type: object
+   properties:
+     processRefNo:
+       description: Process Ref No of the CollateralApplicantDetailsModel
+       type: string
+       maxLength: 20
+     collateralDetailsMasterId:
+       description: collateralDetailsMasterId
+       type: string
+     id:
+       description: id
+       type: string
+     applicantId:
+       description: applicantId
+       type: string
+     partyId:
+       description: partyId
+       type: string
+     customerId:
+       description: customerId
+       type: string
+     customerName:
+       description: customerName
+       type: string
+     isLiabilityCreated:
+       description: isLiabilityCreated
+       type: boolean
+     custLiabilityId:
+       description: custLiabilityId
+       type: string
+     custLiabilityDesc:
+       description: custLiabilityDesc
+       type: string
+     primaryApplicant:
+       description: primaryApplicant
+       type: boolean
+     existingCustomer:
+       description: custLiabilityDesc
+       type: boolean
+     deleteCollateral:
+       description: custLiabilityDesc
+       type: boolean
+     dateOfBirth:
+       description: dateOfBirth
+       type: string
+     totalCollateralCCY:
+       description: totalCollateralCCY
+       type: string
+     coverAvailableCCY:
+       description: coverAvailableCCY
+       type: string
+     coverAvailable:
+       description: coverAvailable
+       type: number
+     totalCollateralValue:
+       description: totalCollateralValue
+       type: number
+     email:
+       description: email
+       type: string
+     collateralDetailsList:
+       type: array
+       items:
+         $ref: '#/definitions/CollateralDetailModel'
+
+ CollateralDetailModel:
+   description: CollateralDetailsModel model
+   type: object
+   properties:
+     id:
+       description: id
+       type: string
+     collateralApplicantDetailsId:
+       description: collateralApplicantDetailsId
+       type: string
+     applicationNumber:
+       description: applicationNumber
+       type: string
+     processRefNo:
+       description: Process Ref No of the CollateralDetailsModel
+       type: string
+       maxLength: 20
+     collateralCode:
+       description: collateralCode
+       type: string
+     collateralRefNo:
+       description: collateralRefNo
+       type: string
+     collateralOnboard:
+       description: collateralOnboard
+       type: boolean
+     collateralDesc:
+       description: collateralDesc
+       type: string
+     collateralType:
+       description: collateralType
+       type: string
+     collateralCategory:
+       description: collateralCategory
+       type: string
+     collateralBranch:
+       description: collateralBranch
+       type: string
+     primaryCollateral:
+       description: primaryCollateral
+       type: boolean
+     isCollateralCreated:
+       description: isCollateralCreated
+       type: boolean
+     liabilityId:
+       description: liabilityId
+       type: string
+     liabilityDesc:
+       description: liabilityDesc
+       type: string
+     totalCollateralCCY:
+       description: totalCollateralCCY
+       type: string
+     collateralAmountCCY:
+       description: collateralAmountCCY
+       type: string
+     collateralAmount:
+       description: collateralAmount
+       type: number
+     hairCut:
+       description: hairCut
+       type: number
+     amountConsideredCCY:
+       description: amountConsideredCCY
+       type: string
+     amountConsidered:
+       description: amountConsidered
+       type: number
+     collateralAvlFromDate:
+       description: collateralAvlFromDate
+       type: string
+     collateralAvlToDate:
+       description: collateralAvlToDate
+       type: string
+
+ AccountServicesMasterModel:
+  description: AccountServicesMaster model
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDatasegmentModel'
+  - type: object
+    properties:
+     id:
+      description: Id of the AccountServicesMasterModel
+      type: string
+      maxLength: 36
+     processRefNo:
+      description: Process Ref No of the AccountServicesMasterModel
+      type: string
+      maxLength: 20  
+     applicationNumber:
+      description: applicationNumber
+      type: string
+     channel:
+      description: Channel
+      type: string
+     remarks:
+      description: remarks
+      type: string 
+     statementCycle:
+      description: Statement Cycle
+      type: string  
+     startDate:
+      description: Start Date
+      type: string 
+     statementType:
+      description: Statement Type
+      type: string 
+     repaymentCycle:
+      description: Repayment Cycle
+      type: string
+     accountServicesModel:
+      type: array
+      items:
+       $ref: '#/definitions/AccountServicesModel'
+ AccountServicesModel:
+   description: "AccountServices Model"
+   type: object
+   properties:
+    id:
+     description: Id of the AccountServicesModel
+     type: string
+     maxLength: 36
+    processRefNo:
+     description: Process Ref No of the AccountServicesModel
+     type: string
+     maxLength: 20
+    applicationNumber:
+     description: applicationNumber
+     type: string
+    accountServicesMasterId:
+     description: Id of master table
+     type: string
+     maxLength: 36
+    holidayPreferenceType:
+     description: Holiday Preference Type
+     type: string
+     maxLength: 20
+    ignoreHolidays:
+     description: Ignore Holidays 
+     type: boolean  
+    holidayCheck:
+     description: Holiday check
+     type: string
+     maxLength: 30
+    cascadeSchedules:
+     description: Cascade Schedules 
+     type: boolean  
+    moveAcrossMonth:
+     description: Move Across Month 
+     type: boolean
+    scheduleMovement:
+     description: Schedule Movement 
+     type: string  
+     maxLength: 20
+    seqNo:
+     description: seq No
+     type: integer 
+
+ ValuationApplicantDetailsModel:
+   description: Valuation Applicant Details Model
+   type: object
+   properties:
+     id:
+       description: Id of the Valuation Applicant Details Model
+       type: string
+     valuationDetailsMasterId:
+       description: Id of Valuation Details Master Table
+       type: string
+     applicationNumber:
+       description: Application Number
+       type: string
+       maxLength: 20
+     processRefNo:
+       description: Process Ref Number
+       type: string
+       maxLength: 20
+     applicantId:
+       description: Applicant ID
+       type: string
+     partyId:
+       description: Party ID
+       type: string
+     customerId:
+       description: Customer ID
+       type: string
+     customerName:
+       description: Customer Name
+       type: string
+     dateOfIncorporation:
+       description: Customer Name
+       type: string
+     businessName:
+       description: businessName
+       type: string
+     customerType:
+       description: customerType
+       type: string
+     primaryApplicant:
+       description: Primary Applicant Y/N
+       type: boolean
+     existingCustomer:
+       description: Existing Customer Y/N
+       type: boolean
+     deleteValuation:
+       description: Delete Valuation
+       type: boolean
+     dateOfBirth:
+       description: Date of Birth
+       type: string
+     email:
+       description: Email
+       type: string
+     mobileNumber:
+       description: Mobile Number
+       type: integer
+       format: int64
+     mobileIsd:
+       description: Mobile ISD
+       type: string
+     phoneNo:
+       description: Phone Number
+       type: integer
+       format: int64
+     phoneIsd:
+       description: Phone ISD
+       type: string
+     applicantTotal:
+       description: applicant Total
+       type: number
+     valuationDetailsList:
+       type: array
+       items:
+         $ref: '#/definitions/ValuationDetailsModel'
+ ValuationDetailsModel:
+   description: Valuation Details Model
+   type: object
+   properties:
+     id:
+       description: Id of the Valuation Details Model
+       type: string
+     valuationApplicantDetailsId:
+       description: Id of Valuation Applicant Details table
+       type: string
+     applicationNumber:
+       description: applicationNumber
+       type: string
+       maxLength: 20
+     processRefNo:
+       description: Process Ref No
+       type: string
+       maxLength: 20
+     collateralCode:
+       description: Collateral Code
+       type: string
+     onboardApplicationNumber:
+       description: Onboard Application Number
+       type: string
+     collateralType:
+       description: Collateral Type
+       type: string
+     collateralCategory:
+       description: Collateral Category
+       type: string
+     collateralDesc:
+       description: Collateral Description
+       type: string
+     collateralRefNo:
+       description: Collateral Ref No
+       type: string
+     primaryCollateral:
+       description: Primary Collateral
+       type: boolean
+       default: false
+     liabilityId:
+       description: Liability Id
+       type: string
+     liabilityDesc:
+       description: Liability Description
+       type: string
+     collateralCCY:
+       description: Collateral CCY
+       type: string
+     collateralAmount:
+       description: Collateral Amount
+       type: number
+     haircut:
+       description: HairCut %
+       type: number
+     deleteCollateral:
+       description: Delete Collateral
+       type: boolean
+     leastValuationAmount:
+       description: Least Valuation Amount
+       type: number
+     valuationReviewList:
+       type: array
+       items:
+        $ref: '#/definitions/ValuationReviewModel'
+ ValuationReviewModel:
+   description: Valuation Review Model
+   type: object
+   properties:
+     id:
+       description: Id of the Valuation Review Model
+       type: string
+     valuationDetailsId:
+       description: Id of Valuation Details table
+       type: string
+     applicationNumber:
+       description: applicationNumber
+       type: string
+       maxLength: 20
+     processRefNo:
+       description: Process Ref No
+       type: string
+       maxLength: 20
+     valuationSeqNo:
+       description: Valuation Sequence Number
+       type: integer
+     valuationType:
+       description: Valuation Type
+       type: string
+     valuationCCY:
+       description: Valuation Currency
+       type: string
+     valuationAmount:
+       description: Valuation Amount
+       type: number
+     agencyCode:
+       description: Agency Code
+       type: string
+     agencyName:
+       description: Agency Name
+       type: string
+     valuationDate:
+       description: Valuation Date
+       type: string

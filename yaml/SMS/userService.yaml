@@ -1,0 +1,339 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#  This source is part of the Oracle Banking Software Product.
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise,
+#  translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East),
+#  Mumbai - 400 063, India.
+#
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+swagger: "2.0"
+info:
+  description: "This is SMS service.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "SMS Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+tags:
+  - name: "SMSAPI"
+    description: "API for SMS"
+
+schemes:
+  - "http"
+
+paths:
+
+  /service/user:
+    post:
+      tags:
+        - "user"
+      summary: "Adds a new user."
+      description: "Adds a new user. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "user"
+          in: "body"
+          description: "Request Body that contains data required for creating a new user"
+          required: true
+          schema:
+            $ref: "#/definitions/UserDto"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created user"
+              type: "string"
+          schema:
+            $ref: "#/definitions/UserServiceDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  # path to modify existing record
+  #
+  #  supprorted http methods PUT
+  #
+  # path examples----
+  #   PUT       .../service/user/xxx
+
+  /service/user/{userLoginId}:
+    put:
+      tags:
+        - "user"
+      summary: "Update an existing user."
+      description:  "Update an existing user."
+      operationId: "modifyRecord"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "userLoginId"
+          in: "path"
+          description: "User Login ID the user Maintenance"
+          required: true
+          type: "string"
+        - name: "user"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing user"
+          required: true
+          schema:
+            $ref: "#/definitions/UserDto"
+      responses:
+        200:
+          description: "Returns updated user"
+          schema:
+            $ref: "#/definitions/UserServiceDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  UserServiceDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/UserDto'
+  UserDto:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          startDate:
+            type: string
+          userStatus:
+            type: string
+            minLength: 0
+            maxLength: 1
+          endDate:
+            type: string
+          staffAccRestriction:
+            type: string
+          customerNo:
+            type: string
+          statusChangedOn:
+            type: string
+          userEmail:
+            type: string
+            minLength: 0
+            maxLength: 50
+          telephoneNumber:
+            type: string
+            minLength: 0
+            maxLength: 50
+          homePhone:
+            type: string
+            minLength: 0
+            maxLength: 50
+          userMobile:
+            type: string
+            minLength: 0
+            maxLength: 50
+            pattern: '^$|^\+[1-9]{1}[0-9]{3,14}$'
+          userFax:
+            type: string
+            minLength: 0
+            maxLength: 50
+            pattern: '^$|^\+?[0-9]{6,}$'
+          userLoginId:
+            type: string
+            minLength: 0
+            maxLength: 12
+          userName:
+            type: string
+            minLength: 0
+            maxLength: 100
+          isSupervisor:
+            type: string
+            minLength: 0
+            maxLength: 1
+          managerId:
+            type: string
+            minLength: 0
+            maxLength: 12
+          homeBranch:
+            type: string
+            minLength: 0
+            maxLength: 3
+          theme:
+            type: string
+            minLength: 0
+            maxLength: 100
+          locale:
+            type: string
+            minLength: 0
+            maxLength: 10
+          piiEnabled:
+            description: PII Enabled
+            type: boolean
+          languageCode:
+            type: string
+            minLength: 0
+            maxLength: 3
+          UserApplications:
+            type: array
+            items:
+              $ref: '#/definitions/UserApplications'
+          UserRoleBranches:
+            type: array
+            items:
+              $ref: '#/definitions/UserRoleBranches'
+        required:
+          - startDate
+          - userStatus
+          - userLoginId
+          - userName
+          - isSupervisor
+          - homeBranch
+          - languageCode
+  UserApplications:
+    type: object
+    properties:
+      id:
+        type: string
+        minLength: 0
+        maxLength: 36
+      userId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      applicationId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      applicationName:
+        description: Application name
+        type: string
+      applicationDescription:
+        description: Application description
+        type: string
+    required:
+      - applicationId
+  UserRoleBranches:
+    type: object
+    properties:
+      branchCode:
+        type: string
+        minLength: 0
+        maxLength: 3
+      id:
+        type: string
+        minLength: 0
+        maxLength: 36
+      userId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      roleId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      branchId:
+        type: string
+        minLength: 0
+        maxLength: 36
+      roleCode:
+        type: string
+      roleDescription:
+        type: string
+    required:
+      - branchCode
+      - roleId
+      - branchId
+  UserCollection:
+    description: Collection of user.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/UserDto'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  UserWrapperDto:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/UserDto'
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string

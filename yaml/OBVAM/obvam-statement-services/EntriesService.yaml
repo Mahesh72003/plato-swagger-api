@@ -1,0 +1,276 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : EntriesService.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  Update the API document with latest changes and incorporated the document review comments.
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a service used by the transaction services for inserting data required for statement generation." 
+ version: "1.0.0"
+ title: "obvam-statement-services Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "obvam-statement-services"
+   description: "This is a service used by the transaction services for inserting data required for statement generation. "
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../obvam-statement-services
+
+ /service/obvamStatementServices:
+  get:
+   tags:
+    - "EntriesService"
+   summary: "Get all valid obvam-statement-services."
+   description:  "Get all valid obvam-statement-services. This endpoints will be used to get all valid obvam-statement-services maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: processingRefNo
+     required: false
+     type: string
+   - in: query
+     name: transactionStatus
+     required: false
+     type: string
+   - in: query
+     name: trnCode
+     required: false
+     type: string
+   - in: query
+     name: drCr
+     required: false
+     type: string
+   - in: query
+     name: virtualAccount
+     required: true
+     type: string
+   - in: query
+     name: transactionCcy
+     required: false
+     type: string
+   - in: query
+     name: trnDate
+     required: false
+     type: string
+   - in: query
+     name: valueDate
+     required: false
+     type: string
+   - in: query
+     name: sourceCode
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: accountType
+     required: false
+     type: string
+   - in: query
+     name: transactionFrom
+     required: false
+     type: string
+   - in: query
+     name: fromDate
+     required: true
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+   - in: query
+     name: toDate
+     required: true
+     type: string
+     pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+   - in: query
+     name: includeHierarchy
+     required: false
+     type: string
+     pattern: "[Y,N]"
+     default: "N"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/EntriesServiceDTOCollection"
+    400:
+     description: "Bad request error, the server is unable to process the request."
+    401:
+     description: "Unauthorized request error, invalid credentials."
+    403:
+     description: "Request denied, no permission to access the request. "
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+
+  
+definitions:
+ EntriesServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     processingRefNo:
+      type: string
+      description: ""
+     serialNo:
+      type: number
+      description: ""
+     transactionStatus:
+      type: string
+      description: ""
+     trnCode:
+      type: string
+      description: ""
+     runningBalance:
+      type: number
+      description: ""
+     drCr:
+      type: string
+      description: ""
+     virtualAccount:
+      type: string
+      description: ""
+     accountCcy:
+      type: string
+      description: ""
+     accountCcyAmount:
+      type: number
+      description: ""
+     transactionCcy:
+      type: string
+      description: ""
+     transactionAmount:
+      type: number
+      description: ""
+     trnDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: ""
+     valueDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: ""
+     addlText:
+      type: string
+      description: ""
+     exchRate:
+      type: number
+      description: ""
+     reconciliationRefNo:
+      type: string
+      description: ""
+     sourceCode:
+      type: string
+      description: ""
+     sourceRefNo:
+      type: string
+      description: ""
+     showInStmt:
+      type: string
+      description: ""
+     stmtDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: ""
+     accountType:
+      type: string
+      description: ""
+     transactionFrom:
+      type: string
+      description: ""
+     realAccountNo:
+      type: string
+      description: "Real account number"
+     realAccountBrn:
+      type: string
+      description: "Branch code of Real account number"
+     realAccCcy:
+      type: string
+      description: "Currency of Real account number"
+     excRateTxccyRaccy:
+      type: number
+      description: "Exchange rate between Transaction currency and real account currency"
+     amtInRealAccCcy:
+      type: number
+      description: "Transaction amount in real account currency"
+     realAccClass:
+      type: string
+      description: "Account class of real account number"
+     authStat:
+      type: string
+      description: "Auth Stat"
+
+
+ EntriesServiceDTOCollection: 
+  description: "Collection of entries."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/EntriesServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer

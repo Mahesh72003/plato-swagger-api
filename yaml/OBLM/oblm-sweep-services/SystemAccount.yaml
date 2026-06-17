@@ -1,0 +1,643 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+swagger: '2.0'
+info:
+  description: This is a sample server sweepmonitor server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Sweep Monitor
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+  - application/json
+  - application/xml
+produces:
+  - application/json
+  - application/xml
+tags:
+  - name: SystemAccountAPI
+    description: API for System Account Operations
+schemes:
+  - https
+paths:
+  /systemAccount:
+    post:
+      tags:
+        - systemAccount
+      summary: Create new system account.
+      description: Create new system account.
+      operationId: save
+      parameters:
+        - name: systemAccountDTO
+          in: body
+          description: Request Body that contains data required for creating a new system account
+          required: true
+          schema:
+            $ref: '#/definitions/LmsTbSystemAccountDTO'
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: URL of newly created sweepmaster data
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+    get:
+      tags:
+        - systemAccount
+      summary: Get all valid system accounts.
+      description:  Get all system account records.
+      operationId: getAll
+      parameters:
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: id
+          in: query
+          description: Record id
+          required: false
+          type: string
+        - name: accountNumber
+          in: query
+          description: account number
+          required: false
+          type: string
+        - name: customerId
+          in: query
+          description: customer ID (child)
+          required: false
+          type: string
+        - name: creditDisbursementAccount
+          in: query
+          description: borrowing account
+          required: false
+          type: string
+        - name: debitDisbursementAccount
+          in: query
+          description: lending account
+          required: false
+          type: string
+        - name: sweepId
+          in: query
+          description: sweep ID
+          required: false
+          type: string
+        - name: sweepLogId
+          in: query
+          description: sweep log ID
+          required: false
+          type: string
+        - name: status
+          in: query
+          description: account status
+          required: false
+          type: string
+        - name: fromDate
+          in: query
+          description: from account creation date
+          required: false
+          type: string
+        - name: toDate
+          in: query
+          description: to account creation date
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/LmsTbSystemAccountCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  
+  /systemAccount/getForAccountPair:
+    get:
+      tags:
+        - systemAccountForAccountPair
+      summary: Get valid system accounts for passed account pair.
+      description:  Get valid system accounts for passed account pair.
+      operationId: getSystemAccountsForAccountPair
+      parameters:
+        - name: parentAccountNumber
+          in: query
+          description: parent account number
+          required: false
+          type: string
+        - name: childAccountNumber
+          in: query
+          description: child account number
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/LmsTbSystemAccountCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  
+  /systemAccount/{sweepId}/recordRepayment:
+    patch:
+      tags:
+        - systemAccount
+      summary: Record repayment in system account.
+      description: Record repayment in system account.
+      operationId: recordRepayment
+      parameters:
+        - name: sweepId
+          in: path
+          description: sweep ID for which system account was created
+          required: true
+          type: string
+        - name: lmsRepaymentDTO 
+          in: body
+          description: Request Body that contains data required for recording repayment in system account 
+          required: true
+          schema:
+            $ref: "#/definitions/LmsRepaymentDTO"
+      responses:
+        200:
+          description: "Returns updated system account"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        201: 
+          description: "Returns message of succes or failure " 
+          headers:
+            Location:
+              description: "URL of created system account" 
+              type: string
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /systemAccount/{sweepId}/updateStatus/{status}:
+    patch:
+      tags:
+        - systemAccount
+      summary: Update status of system account.
+      description: Update status of system account.
+      operationId: updateAccountStatus
+      parameters:
+        - name: sweepId
+          in: path
+          description: sweep ID for which system account was created
+          required: true
+          type: string
+        - name: status
+          in: path
+          description: status
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Returns updated account"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        201: 
+          description: "Returns message of succes or failure " 
+          headers:
+            Location:
+              description: "URL of created system account" 
+              type: string
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /systemAccount/{systemAccountNumber}/recordReallocation:
+    patch:
+      tags:
+        - systemAccount
+      summary: Record reallocation in system account.
+      description: Record reallocation in system account.
+      operationId: recordReallocation
+      parameters:
+        - name: systemAccountNumber
+          in: path
+          description: systemAccountNumber
+          required: true
+          type: string
+        - name: lmsRepaymentDTO 
+          in: body
+          description: Request Body that contains data required for recording repayment in system account 
+          required: true
+          schema:
+            $ref: "#/definitions/LmsRepaymentDTO"
+      responses:
+        200:
+          description: "Returns updated system account"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        201: 
+          description: "Returns message of succes or failure " 
+          headers:
+            Location:
+              description: "URL of created system account" 
+              type: string
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+definitions:
+  LmsTbSystemAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountGroupCode:
+          type: string
+          description: ""
+        accountNumber:
+          type: string
+          description: ""
+        accountDescription:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        creationDate:
+          type: string
+          description: ""
+        creditDisbursementAccount:
+          type: string
+          description: ""
+        currency:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        debitDisbursementAccount:
+          type: string
+          description: ""
+        id:
+          type: string
+          description: ""
+        interestOs:
+          type: number
+          description: ""
+        interestPaid:
+          type: number
+          description: ""
+        isTwoWay:
+          type: string
+          description: ""
+        principalOs:
+          type: number
+          description: ""
+        principalPaid:
+          type: number
+          description: ""
+        lastReallocationDate:
+          type: string
+          description: ""
+        lastReverseSweepDate:
+          type: string
+          description: ""
+        noOfDaysAccrued:
+          type: number
+          description: ""
+        status:
+          type: string
+          description: ""
+        sweepId:
+          type: string
+          description: ""
+        sweepLogId:
+          type: string
+          description: ""
+        trackAsIcl:
+          type: string
+          description: ""
+  
+  LmsRepaymentDTO:
+    type: object
+    properties:
+      currency:
+        type: string
+        description: ""
+      principalPaid:
+        type: number
+        description: ""
+      interestPaid:
+        type: number
+        description: ""
+      repaymentDate:
+        type: string
+        description: ""
+      transactionReference:
+        type: string
+        description: ""
+  
+  LmsTbSystemAccountCollection: 
+    description: Collection of system accounts.
+    type: object
+    properties:
+      data:
+        type: array
+        items: 
+          $ref: "#/definitions/LmsTbSystemAccountDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+
+  ResponseResourceSupport:
+    type: object
+
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+        
+  ICAccountCollection:
+    description: Collection of IC accounts.
+    type: object
+    properties:
+      accMasterList:
+        type: array
+        items:
+          $ref: '#/definitions/ICAccountRequestDTO'
+          
+  ICAccountRequestDTO:
+    description: IC Account request DTO object
+    allOf:
+    - type: object
+      properties:
+        acc:
+          type: string
+          description: 'Account Number'
+        accountClass:
+          type: string
+          description: 'Account Group'
+        accType:
+          type: string
+          description: 'Type of Account'
+        acOpenDate:
+          type: string
+          description: 'Account Open Date'
+        bookAcc:
+          type: string
+          description: 'Interest Booking account'
+        bookBrn:
+          type: string
+          description: 'Interest Booking branch'
+        bookCcy:
+          type: string
+          description: 'Interest Booking currency'
+        brn:
+          type: string
+          description: 'Branch'
+        calcAcc:
+          type: string
+          description: 'Interest Calculation Account'
+        ccy:
+          type: string
+          description: 'Interest Calculation Account currency'
+        custNo:
+          type: string
+          description: 'Customer/Entity'
+        intStartDate:
+          type: string
+          description: 'Interest Start Date'
+        chgbookacc:
+          type: string
+          description: 'Charge Booking Account'
+        chgbookbrn:
+          type: string
+          description: 'Charge Booking branch'
+        chgbookccy:
+          type: string
+          description: 'Charge Booking currency'
+        chgsrtdt:
+          type: string
+          description: 'Charge Start Date'
+        sourceSystem:
+          type: string
+          description: 'Source System'
+      required:
+      - acc
+      - accountClass
+      - acOpenDate
+      - brn
+      - ccy
+      - custNo
+      - sourceSystem
+  
+  ICResponseDTO:
+    description: IC Account response DTO object
+    allOf: 
+    - type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            $ref: '#/definitions/ICWarningDTO'
+        errors:
+          type: array
+          items:
+            $ref: '#/definitions/ICErrorDTO'
+  
+  ICWarningDTO:
+    description: IC response Warning DTO
+    allOf:
+    - type: object
+      properties:
+        warningCode:
+          type: string
+          description: 'Warning Code'
+        warningDesc:
+          type: string
+          description: 'Warning Description'
+  
+  ICErrorDTO:
+    description: IC response Error DTO
+    allOf:
+    - type: object
+      properties:
+        errorCode:
+          type: string
+          description: 'Error Code'
+        errorDesc:
+          type: string
+          description: 'Error Description'
+          
+  ICVDBalRequestDTOWrapper:
+    description: IC VD Balance request wrapper DTO object
+    allOf:
+    - type: object
+      properties:
+        type:
+          type: string
+          description: Balance type
+        extRefNo:
+          type: string
+          description: External Reference Number
+        sourceCode:
+          type: string
+          description: Source Code
+        vdBalList:
+          type: array
+          items:
+            $ref: '#/definitions/ICVDBalanceDTO'
+          description: VD Balance List
+      required:
+      - type
+      - extRefNo
+      - sourceCode
+      - vdBalList
+  
+  ICVDBalanceDTO:
+    description: IC VD Balance DTO object
+    allOf:
+    - type: object
+      properties:
+        acc:
+          type: string
+          description: Account Number
+        bal:
+          type: number
+          description: Balance
+        icBal:
+          type: number
+          description: Balance
+        brn:
+          type: string
+          description: Branch code
+        ccy:
+          type: string
+          description: Currency Code
+        valDt:
+          type: string
+          description: Value Date
+      required:
+      - acc
+      - bal
+      - brn
+      - valDt

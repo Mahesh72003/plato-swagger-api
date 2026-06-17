@@ -1,0 +1,664 @@
+swagger: '2.0'
+info:
+  description: IC Query Service.
+  version: 1.0.0
+  title: icquery Service
+host: 'api-plato.us.oracle.com:8080'
+basePath: /api/1.0
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: icquery
+    description: This Service is used to generate ic query operations
+schemes:
+  - https
+paths:
+  '/icQuery/ictbEntries/brn/{brn}/accNo/{accNo}':
+    get:
+      tags:
+        - ictbEntries
+      summary: Query IC Entries
+      description: Query IC Entries ..
+      operationId: queryIcEntries
+      parameters:
+        - name: brn
+          in: path
+          description: Branch Code
+          required: true
+          type: string
+        - name: accNo
+          in: path
+          description: Account Number
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns updated maintque
+          schema:
+            $ref: '#/definitions/IcEntriesDtoList'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /accGrp:
+    get:
+      tags:
+        - icGrp
+      summary: Get ic accGrp
+      description: Get ic accGrp
+      operationId: fetchAccGrp
+      parameters:
+        - name: accGrp
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: extAccGrpType
+          in: query
+          description: ''
+          required: false
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of success or failure '
+          schema:
+            $ref: '#/definitions/AccGrpDTOList'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /ictbEntriesHistory:
+    get:
+      tags:
+        - icGrp
+      summary: Get ictb entries history
+      description: Get ictb entries history
+      operationId: fetchEntriesHistory
+      parameters:
+        - name: brn
+          in: query
+          description: ''
+          required: true
+          type: string
+        - name: acc
+          in: query
+          description: ''
+          required: true
+          type: string
+        - name: dateFrom
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: dateTo
+          in: query
+          description: ''
+          required: false
+          type: string
+        - in: query
+          name: offset
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - in: query
+          name: limit
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: 'Returns message of success or failure '
+          schema:
+            $ref: '#/definitions/IctbEntriesHistoryCollection'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /icGrpExt:
+    post:
+      tags:
+        - icGrp
+      summary: create ic group–external group mapping
+      description: create ic group–external group mapping ..
+      operationId: saveIcGrpExt
+      parameters:
+        - name: icGrpExtBody
+          in: body
+          description: 'Request Body that contains data required for mapping '
+          required: true
+          schema:
+            $ref: '#/definitions/IcGrpExtDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/IcGrpExtResponseDTO'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /icGrpPrd:
+    post:
+      tags:
+        - icGrp
+      summary: create ic group–product mapping
+      description: create ic group–product mapping ..
+      operationId: saveIcGrpPrd
+      parameters:
+        - name: icGrpPrdBody
+          in: body
+          description: 'Request Body that contains data required for mapping '
+          required: true
+          schema:
+            $ref: '#/definitions/IcGrpPrdDTO'
+      responses:
+        '201':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/IcGrpPrdResponseDTO'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+    get:
+      tags:
+        - icGrp
+      summary: Get icGrpPrd
+      description: Get icGrpPrd
+      operationId: fetchIcGrpPrd
+      parameters:
+        - name: accGrp
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: productCode
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: ccy
+          in: query
+          description: ''
+          required: false
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of success or failure '
+          schema:
+            $ref: '#/definitions/IcGrpPrdFetchResponseDTO'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /prodUdeList:
+    get:
+      tags:
+        - prodUdeList
+      summary: Get for prodUdeList
+      description: Get prodUdeList
+      operationId: fetchProdUdeList
+      parameters:
+        - name: extAccGrp
+          in: query
+          description: ''
+          required: true
+          type: string
+        - name: extAccGrpType
+          in: query
+          description: ''
+          required: false
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of success or failure '
+          schema:
+            $ref: '#/definitions/ProdUdeDTOList'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /rate/icRate:
+    get:
+      tags:
+        - rate
+      summary: Get all rateCodes
+      description: Get all rateCodes
+      operationId: fetchIcGcScRate
+      parameters:
+        - name: branch
+          in: query
+          description: ''
+          type: string
+        - name: account
+          in: query
+          description: ''
+          type: string
+        - name: extAccGrp
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: accGrp
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: dateFrom
+          in: query
+          description: ''
+          type: string
+        - name: dateTo
+          in: query
+          description: ''
+          type: string
+        - name: ccy
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: dateType
+          in: query
+          description: ''
+          type: string
+      responses:
+        '200':
+          description: 'Returns message of succes or failure '
+          schema:
+            $ref: '#/definitions/GcScIcRate'
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+definitions:
+  IcGrpPrdDTO:
+    description: icGrpPrd DTO
+    type: object
+    properties:
+      accGrp:
+        type: string
+        description: ''
+      accGrpDesc:
+        type: string
+        description: ''
+      accProdList:
+        type: array
+        items:
+          $ref: '#/definitions/IcGrpPrdDetailDTO'
+  IcGrpPrdDetailDTO:
+    type: object
+    properties:
+      productCode:
+        type: string
+        description: ''
+      productDescription:
+        type: string
+        description: ''
+      ccy:
+        type: string
+        description: ''
+      open:
+        type: string
+        description: ''
+  IcGrpPrdResponseDTO:
+    description: IcGrpPrdResponseDTO.
+    type: object
+    properties:
+      warnings:
+        description: Warning Code List
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  IcGrpExtDTO:
+    description: icGrpExt DTO
+    type: object
+    properties:
+      accGrp:
+        type: string
+        description: ''
+      accGrpDesc:
+        type: string
+        description: ''
+      extAccGrp:
+        type: string
+        description: ''
+      extAccGrpDesc:
+        type: string
+        description: ''
+      extAccGrpType:
+        type: string
+        description: ''
+  IcGrpExtResponseDTO:
+    description: IcGrpExtResponseDTO.
+    type: object
+    properties:
+      warnings:
+        description: Warning Code List
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  AccGrpDTOList:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          AccGrpList:
+            type: array
+            items:
+              $ref: '#/definitions/AccGrpList'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  IctbEntriesHistoryCollection:
+    description: "Collection of IctbEntriesHistory."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/IctbEntriesHistoryDTO"
+     errors:
+      description: Error Code List
+      type: array
+      items:
+        $ref: '#/definitions/ErrorCodeDTO'
+     paging:
+      $ref: "#/definitions/PagingDto"
+  IctbEntriesHistoryDTO:
+    type: object
+    properties:
+     brn:
+      type: string
+     acc:
+      type: string
+     currency:
+      type: string
+      description: ""
+     product:
+      type: string
+      description: ""
+     productDesc:
+      type: string
+      description: ""
+     startDate:
+      type: string
+      description: ""
+     endDate:
+      type: string
+      description: ""
+     grossCrInterest:
+      type: string
+      description: ""
+     taxDeducted:
+      type: string
+      description: ""
+     netCrInterest:
+      type: string
+      description: ""
+     debitInterest:
+      type: string
+      description: ""
+     lastAccrDate:
+      type: string
+      description: ""
+     interestLiqdDate:
+      type: string
+      description: ""
+     trnRefNo:
+      type: string
+      description: ""
+  PagingDto:
+    type: object
+    properties:
+     totalResults:
+      type: integer
+  IcGrpPrdFetchResponseDTO:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          IcGrpPrdList:
+            type: array
+            items:
+              $ref: '#/definitions/IcGrpPrdDTO'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  AccGrpList:
+    type: object
+    properties:
+      accGrp:
+        type: string
+      accGrpDesc:
+        type: string
+      extAccGrpType:
+        type: string
+  ProdUdeDTOList:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          extAccGrp:
+            type: string
+            description: ''
+          extAccGrpType:
+            type: string
+            description: ''
+          aclass:
+            type: string
+            description: ''
+          prodList:
+            type: array
+            items:
+              $ref: '#/definitions/ProdList'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  ProdList:
+    type: object
+    properties:
+      productCode:
+        type: string
+        description: ''
+      productDescription:
+        type: string
+      rule:
+        type: string
+      prodUdeList:
+        type: array
+        items:
+          $ref: '#/definitions/UdeValList'
+  UdeValList:
+    type: object
+    properties:
+      udeId:
+        type: string
+      udeDesc:
+        type: string
+      udeType:
+        type: string
+  GcScIcRate:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            aclass:
+              type: string
+            productCode:
+              type: string
+            ccyCode:
+              type: string
+            udeEffDt:
+              type: string
+            branchCode:
+              type: string
+            RateCategory:
+              type: string
+            productdesc:
+              type: string
+            GenUdeValList:
+              type: array
+              items:
+                $ref: '#/definitions/GenUdeValList'
+      warnings:
+        description: Warning Code List
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  GenUdeValList:
+    type: object
+    properties:
+      udeId:
+        type: string
+      udeDesc:
+        type: string
+      udeType:
+        type: string
+      udeValue:
+        type: number
+      rateCode:
+        type: string
+      tdRateCode:
+        type: string
+  IcEntriesDtoList:
+    type: object
+    properties:
+      IcEntriesList:
+        type: array
+        items:
+          $ref: '#/definitions/IcEntriesDto'
+      warnings:
+        description: Warning Code List
+        type: array
+        items:
+          $ref: '#/definitions/WarningCodeDTO'
+      errors:
+        description: Error Code List
+        type: array
+        items:
+          $ref: '#/definitions/ErrorCodeDTO'
+  IcEntriesDto:
+    type: object
+    properties:
+      brn:
+        type: string
+        description: Branch Code
+      acc:
+        type: string
+        description: Account Nuimber
+      product:
+        type: string
+        description: Product Code
+      frmno:
+        type: integer
+        description: Frm No
+      calcamt:
+        type: number
+        description: Calc Amount
+      totalaccr:
+        type: number
+        description: Accrued Amount
+      pendingaccr:
+        type: number
+        description: Amount to Accrue
+      curraccr:
+        type: number
+        description: Current Accrual
+      enddate:
+        type: string
+        format: date
+        description: End Date
+      drcr:
+        type: string
+        description: Debit/Credit
+  WarningCodeDTO:
+    type: object
+    properties:
+      warningCode:
+        type: string
+      warningDesc:
+        type: string
+  ErrorCodeDTO:
+    type: object
+    properties:
+      errorCode:
+        type: string
+      errorDesc:
+        type: string

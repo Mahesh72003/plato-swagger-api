@@ -1,0 +1,370 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : Account.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server account maintenance server." 
+ version: "1.0.0"
+ title: "Account Maintenance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/v1"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "account"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../accountList
+
+ /account:
+  get:
+   tags:
+    - "account"
+   summary: "Get all valid account."
+   description:  "Get all valid account. This endpoints will be used to Get all valid account maintenance records."
+   operationId: "fetchAccountList"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: accountNumber
+     required: false
+     type: string
+   - in: query
+     name: branchCode
+     required: false
+     type: string
+   - in: query
+     name: currency
+     required: false
+     type: string
+   - in: query
+     name: customerId
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ LmmTmAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        sourceSystem:
+          type: string
+          description: ""
+        sourceSystemAccNo:
+          type: string
+          description: ""
+        iban:
+          type: string
+          description: ""
+        logCode:
+          type: string
+          description: ""
+        accountNumber:
+          type: string
+          description: ""
+        accountDescription:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        currency:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        accOpenDate:
+          type: string
+          format: date
+          description: ""
+        accClosedDate:
+          type: string
+          format: date
+          description: ""
+        acyAvailableBal:
+          type: number
+          description: ""
+        acyCurrentBal:
+          type: number
+          description: ""
+        lastBalUpdateTime:
+          type: string
+          format: date
+          description: ""
+        isActive:
+          type: string
+          description: ""
+        isExternal:
+          type: string
+          description: ""
+        isResident:
+          type: string
+          description: ""
+        isNotional:
+          type: string
+          description: ""
+        acyCasaBlockedAmt:
+          type: number
+          description: ""
+        accCategory:
+          type: string
+          description: ""
+        drLimit:
+          type: number
+          description: ""
+        crLimit:
+          type: number
+          description: ""
+        ilRouteCode:
+          type: string
+          description: ""
+        lineId:
+          type: string
+          description: ""
+        limitCcy:
+          type: string
+          description: ""
+        uncollFundsLimit:
+          type: number
+          description: ""
+        uncollAvailable:
+          type: number
+          description: ""
+        balCompParticipation:
+          type: string
+          description: ""
+        odLimit:
+          type: number
+          description: ""
+        isDebitUnlimited:
+          type: string
+          description: ""
+        isNoCredit:
+         type: string
+         description: ""
+        isNoDebit:
+         type: string
+         description: ""
+        isFrozen:
+         type: string
+         description: ""
+        isBlocked:
+         type: string
+         description: ""
+        isDormant:
+         type: string
+         description: ""
+      required:
+      - accountNumber
+      - branchCode
+      - currency
+      - customerId
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ LmmTmAccountCollection: 
+  description: "Collection of account."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmAccountDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ LmmTmAccountWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmAccountDTO"
+ LmmTmCustomerDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     customerId:
+      type: string
+      description: ""
+     customerName:
+      type: string
+      description: ""
+     parentCustomerId:
+      type: string
+      description: ""
+     address:
+      type: string
+      description: ""
+     bankCode:
+      type: string
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+     sourceSystem:
+      type: string
+      description: ""
+     sourceSystemCustNo:
+      type: string
+      description: ""
+     closedStat:
+      type: string
+      description: ""
+     closedDtStamp:
+      type: string
+      format: date
+      description: ""
+     isForgotten:
+      type: string
+      description: ""
+    required:
+     - customerId
+     - customerName
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmCustomerCollection: 
+  description: "Collection of customer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmCustomerDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmCustomerWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmCustomerDTO"

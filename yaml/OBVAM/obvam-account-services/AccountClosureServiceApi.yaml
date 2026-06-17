@@ -1,0 +1,720 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#  **
+#  ** File Name  : AccountClosure.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Sampada
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+swagger: "2.0"
+info:
+ description: "This is a Virtual accounts Closure service." 
+ version: "1.0.0"
+ title: "accounts Closure Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "accountClosure"
+   description: "Virtual Account Closure for Virtual Entity can be created using this service."
+
+schemes:
+- "https"
+
+paths:
+ /service/accountclosureapi:
+  post:
+   tags:
+    - "accountClosure"
+   summary: "Adds a new Closure Account."
+   description: "Adds a new Closure accounts. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "accountclosure" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new Virtual Account Closure" 
+      required: true
+      schema:
+       $ref: "#/definitions/AccountClosureSaveServiceApiMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created accounts" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/AccClosureServiceApiDTOWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+  get:
+   tags:
+    - "accountClosure"
+   summary: "Gets all valid Virtual Account Closure records."
+   description: "Fetches all valid records that have been maintained."
+   operationId: "getAllClosures"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth needs to be set to fetch record that are unauthorized and/or closed, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is the starting number of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is the maximum number of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: branchCode
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: requestRefNo
+     required: false
+     type: string
+   - in: query
+     name: sourceRefNo
+     required: false
+     type: string
+   - in: query
+     name: sourceCode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns Virtual Account Closure records"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/AccountClosureCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  
+ /service/web/accountclosureapi:
+  post:
+   tags:
+    - "accountClosure"
+   summary: "Adds a new Closure Account."
+   description: "Adds a new Closure accounts. Add additional information here for this endpoint."
+   operationId: "saveRecordWebApi"
+   parameters:
+    - name: "accountclosure" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new Virtual Account Closure" 
+      required: true
+      schema:
+       $ref: "#/definitions/VamTmAccountClosureDsModel"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created accounts" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/accountclosureapi/{reqRefNo}/approve:
+  patch:
+   tags:
+    - "accountClosure"
+   summary: "Authorize the Virtual Account Closure record by given Identification Number."
+   description: "Authorize the version of the record identified by the Identification Number and Modification Number provided."
+   operationId: "authorizeServiceApi"
+   parameters:
+    - name: "reqRefNo"
+      in: "path"
+      description: "Request refernce number of the closure request"
+      required: true
+      type: "string"
+    - name: "accountclosure"
+      in: "body"
+      description: "Request body must contain Identification Number and Modification Number of Virtual Account Closure record which needs to be authorized"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/AccClosureServiceApiDTOWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/accountclosureapi/{id}/approvewebapi:
+  patch:
+   tags:
+    - "accountClosure"
+   summary: "Authorize the Virtual Account Closure record by given Identification Number."
+   description: "Authorize the version of the record identified by the Identification Number and Modification Number provided."
+   operationId: "authorizeWebApi"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the Virtual Account Closure record that has been maintained."
+      required: true
+      type: "string"
+    - name: "accountclosure"
+      in: "body"
+      description: "Request body must contain Identification Number and Modification Number of Virtual Account Closure record which needs to be authorized"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/accountclosureapi/{reqRefNo}/delete:
+  patch:
+   tags:
+    - "accountClosure"
+   summary: "Deletes the Virtual Account Closure record identified by given Identification Number."
+   description: "Deletes the version of the record identified by the Identification Number and Modification Number provided."
+   operationId: "delete"
+   parameters:
+    - name: "reqRefNo"
+      in: "path"
+      description: "Key of the Virtual Account Closure record that has been maintained."
+      required: true
+      type: "string"
+    - name: "accountclosure"
+      in: "body"
+      description: "Request body must contain Identification Number and Modification Number of Virtual Account Closure record which needs to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ClosureReqDetailsResponseDto"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/accountclosureapi/getByNK/{requestRefNo}:
+  get:
+   tags:
+    - "accountClosure"
+   summary: "Get by Natural Key the Virtual Account Closure record"
+   description: "Authorize the version of the record identified by the Identification Number and Modification Number provided."
+   operationId: "getByNK"
+   parameters:
+    - name: "requestRefNo"
+      in: "path"
+      description: "Request refernce number of the closure request"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/VirtualAccountClosureServiceWrapperDto"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+
+      
+definitions:
+ VirtualAccountClosureServiceApiMasterDTO:
+  type: object  
+  allOf:
+  - type: object
+    properties:
+     requestRefNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request"
+     sourceRefNo:
+      type: string
+      description: "Reference Number for the Virtual Account Closure Request from Source"
+     sourceCode:
+      type: string
+      description: "Source Code for the VA closure Request"
+     VirtualAccountClosureDetailsDTO:
+      type: array
+      items:
+       $ref: "#/definitions/VirtualAccountClosureServiceApiDetailsDTO"
+       
+ VirtualAccountClosureServiceApiDetailsDTO:
+  type: object
+  properties:
+     requestRefNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request"
+     sourceRefNo:
+      type: string
+      description: "Source Reference number of Virtual Account Closure Request"
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which closure is requested"
+     vaClosureRefNum:
+      type: string
+      description: "Reference Number for Virtual Account Number"
+      
+ AccountClosureSaveServiceApiMasterDTO:
+  type: object  
+  properties:
+     sourceCode:
+      type: string
+      description: "Reference number of Virtual Account Closure Request"
+     sourceRefNo:
+      type: string
+      description: "Reference Number for the Virtual Account Closure Request from Source"
+     AccountClosureSaveDetailsDTO:
+       type: array
+       items:
+        $ref: "#/definitions/AccountClosureSaveDetailsDTO"
+       
+ AccountClosureSaveDetailsDTO:
+  type: object
+  properties:
+     virtualAccountNo:
+      type: string
+      description: "Virtual Account number for which closure is requested"
+
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ OrchestratorDTO:
+  type: object
+ AccClosureServiceApiDTOWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ClosureReqDetailsResponseDto"
+   data:
+    $ref: "#/definitions/VirtualAccountClosureServiceApiMasterDTO" 
+ AccountClosureCollection:
+  type: object  
+  allOf:
+  - type: object
+    properties:
+     data:
+      type: array
+      items:
+       $ref: "#/definitions/VirtualAccountClosureServiceApiMasterDTO"
+     paging:
+       $ref: "#/definitions/PagingDto" 
+ VirtualAccountClosureServiceWrapperDto:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VirtualAccountClosureServiceApiMasterDTO"
+ LmmTmAccountCollection:
+   description: Collection of account.
+   type: object
+   properties:
+     data:
+       type: array
+       items:
+         $ref: '#/definitions/LmmTmAccountDTO'
+# LM Account DTO to get LM Account Detail
+ LmmTmAccountDTO:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+       sourceSystem:
+         type: string
+         description: ''
+       sourceSystemAccNo:
+         type: string
+         description: ''
+       iban:
+         type: string
+         description: ''
+       updatedIban:
+         type: string
+         description: ''
+       logCode:
+         type: string
+         description: ''
+       accountNumber:
+         type: string
+         description: 'Account Number for which the details to be fetched'
+       accountDescription:
+         type: string
+         description: ''
+       branchCode:
+         type: string
+         description: 'Branch Code'
+       bankCode:
+         type: string
+         description: 'Bank Code'
+       cityId:
+         type: string
+         description: ''
+       countryId:
+         type: string
+         description: ''          
+       currency:
+         type: string
+         description: 'Currency'
+       customerId:
+         type: string
+         description: 'Customer ID'
+       customerName:
+         type: string
+         description: 'Customer Name'
+       accCreatedDate:
+         type: string
+         format: date
+         description: ''            
+       accOpenDate:
+         type: string
+         description: ''
+       accClosedDate:
+         type: string
+         format: date
+         description: ''
+       acyAvailableBal:
+         type: number
+         description: ''
+       acyCurrentBal:
+         type: number
+         description: ''
+       lastBalUpdateTime:
+         type: string
+         format: date
+         description: ''
+       isActive:
+         type: string
+         description: ''
+       isExternal:
+         type: string
+         description: ''
+       isResident:
+         type: string
+         description: ''
+       isNotional:
+         type: string
+         description: ''
+       acyCasaBlockedAmt:
+         type: number
+         description: ''
+       accCategory:
+         type: string
+         description: ''
+       drLimit:
+         type: number
+         description: ''
+       crLimit:
+         type: number
+         description: ''
+       ilRouteCode:
+         type: string
+         description: ''
+       lineId:
+         type: string
+         description: ''
+       limitCcy:
+         type: string
+         description: ''
+       region:
+         type: string
+         description: ''
+       uncollFundsLimit:
+         type: number
+         description: ''
+       uncollAvailable:
+         type: number
+         description: ''
+       balCompParticipation:
+         type: string
+         description: ''
+       odLimit:
+         type: number
+         description: ''
+       isDebitUnlimited:
+         type: string
+         description: ''
+       groupCode:
+         type: string
+         description: ""
+       groupDescription:
+         type: string
+         description: ""
+       isNoCredit:
+         type: string
+         description: ""
+       isNoDebit:
+         type: string
+         description: ""
+       isFrozen:
+         type: string
+         description: ""
+       isBlocked:
+         type: string
+         description: ""
+       countryCode:
+         type: string
+         description: Country Code
+         minLength: 0
+         maxLength: 4
+       address4:
+         type: string
+         description: Fourth line of the customer?s address
+         minLength: 0
+         maxLength: 105
+         pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+       address3:
+         type: string
+         description: Third line of the customer?s address
+         minLength: 0
+         maxLength: 105
+         pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+       address2:
+         type: string
+         description: Second line of the customer?s address
+         minLength: 0
+         maxLength: 105
+         pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+       address1:
+         type: string
+         description: First line of the customer?s address
+         minLength: 0
+         maxLength: 105
+         pattern: '[A-Za-z0-9 ()_+:"'',.?\/-]*'
+       isDormant:
+         type: string
+         description: ""
+       isProspect:
+         type: string
+         description: "" 
+       isVirtual:
+         type: string
+         description: ""
+       isICRequired:
+         type: string
+         description: ""
+       isMultiCurrencyAccount:
+         type: string
+         description: ""
+       multiCcyAccountNumber:
+         type: string
+         description: ""
+       noBalanceHandling:
+         type: string
+         description: ""
+       isBalanceOnline:
+         type: string
+         description: ""
+       branchDate:
+         type: string
+         description: ""
+       isRegulatedDebits:
+         type: string
+         description: 'Denotes whether the Accounts debit is Regulated'
+       entityID:
+         type: string
+         description: ""
+       entityName:
+         type: string
+         description: ""
+       bankName:
+         type: string
+         description: "Name of the Bank"
+       branchName:
+         type: string
+         description: "Name of the Branch"
+       countryName:
+         type: string
+         description: "Name of the Country"
+       simAccount:
+         type: string
+         description: "Simulation AccountNumber"
+       LmmTmMultiCcyAccountDTO:
+         type: array
+         items:
+           $ref: '#/definitions/LmmTmMultiCcyAccountDTO'         
+     required:
+     - accountNumber
+     - branchCode
+     - currency
+     - customerId
+ LmmTmMultiCcyAccountDTO:
+   type: object
+   properties:
+     linkedAccountNumber:
+       type: string
+       description: ''
+     linkedAccountBranch:
+       type: string
+       description: ''
+     linkedAccountCurrency:
+       type: string
+       description: ''
+     isPrimary:
+       type: string
+       description: ''
+     multiCcyAccountNumber:
+       type: string
+       description: ""

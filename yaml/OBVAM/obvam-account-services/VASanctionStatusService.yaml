@@ -1,0 +1,271 @@
+# ----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+# This source is part of the Oracle Banking Virtual Account Management Software Product.
+# Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+# 
+# No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+# 
+# Oracle Financial Services Software Limited.
+# Oracle Park, Off Western Express Highway,
+# Goregaon (East),
+# Mumbai - 400 063, India.
+# 
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Ajitesh Awasthi
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Service API for Virtual Account Sanction Status." 
+ version: "1.0.0"
+ title: "Virtual Account Sanction Status Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "vaSanctionStatusService"
+   description: "This Service API is used to handle sanction status for a virtual account"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supported http methods POST and GET
+#
+# path example ../vasanctionstatus
+
+ /service/vasanctionstatus:
+  post:
+   tags:
+    - "vaSanctionStatusService"
+   summary: "Adds a new record in virtual account sanction status."
+   description: "Adds a new record in virtual account sanction status."
+   operationId: "saveVASanctionStatus"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string   
+    - name: "vaSanctionStatus" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new virtual account sanction status request" 
+      required: true
+      schema:
+       $ref: "#/definitions/VASanctionStatusServiceDTO"    
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created Virtual Account Sanction Status" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/VASanctionStatusServiceResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"     
+    
+  get:
+   tags:
+    - "vaSanctionStatusService"
+   summary: "Get Virtual account Sanction status record by account number"
+   description:  "This endpoint will be used to Get virtual account details by account number"
+   operationId: "getVASanctionStatus"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string       
+    - in: query
+      name: virtualAccountNo
+      required: true
+      type: string        
+   responses:
+    201:
+     description: "Returns virtual account sanction status records"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VASanctionStatusServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+         
+definitions:
+ VASanctionStatusServiceDTO:
+  type: object
+  properties:
+     keyId:
+      type: string
+      description: "ID of Virtual Account Sanction Status"
+     referenceNo:
+      type: string
+      description: "Reference number of Virtual Account Closure Request submission"
+     sourceReferenceNo:
+      type: string
+      description: "Source reference number of Virtual Account Closure Request submission"
+     virtualAccountNo:
+      type: string
+      description: "Virtual account number for which sanction status needs to get updated"
+     accountDescription:
+      type: string
+      description: "Account description"
+     currSanctionStatus:
+      type: string
+      description: "Current Authorized Sanction status"
+     newSanctionStatus:
+      type: string
+      description: "Sanction status which needs to be updated"       
+     customerNo:
+      type: string
+      description: "customer number"
+     approverRemarks:
+      type: string
+      description: "Approver remarks"
+     authStatus:
+      type: string
+      description: "Auth status"
+     makerId:
+      type: string
+      description: "Maker ID" 
+     makerDateStamp:
+      type: string
+      format: date
+      description: "Maker Date time stamp"
+     checkerId:
+      type: string
+      description: "Checker ID" 
+     checkerDateStamp:
+      type: string
+      format: date
+      description: "Checker Date time stamp"
+  required:
+   - virtualAccountNo  
+   - newSanctionStatus
+ VASanctionStatusServiceWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VASanctionStatusServiceDTO"   
+ VASanctionStatusServiceResponseWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/VASanctionStatusServiceResponseDto"
+   data:
+    $ref: "#/definitions/VASanctionStatusServiceDTO"
+ VASanctionStatusServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/VASanctionStatusServiceResponseCode"
+ VASanctionStatusServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string                 
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VASanctionStatusServiceCollection: 
+  description: "Collection of Virtual Account Sanction Status records."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VASanctionStatusServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object

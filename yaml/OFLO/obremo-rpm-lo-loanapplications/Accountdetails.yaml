@@ -1,0 +1,237 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : accountdetails.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /obremo-rpm-lo-loanapplications
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /service/v1/accountdetails:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - AccountDetails
+      summary: Adds a new AccountDetails.
+      description: Adds a new AccountDetails. Add additional information here for this endpoint.
+      operationId: addAccountDetails
+      parameters:
+      - name: AccountDetails
+        in: body
+        description: Request Body that contains data required for creating a new AccountDetails
+        required: true
+        schema:
+          $ref: '#/definitions/AccountDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created AccountDetails
+          headers:
+            Location:
+              description: URL of newly created AccountDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - AccountDetails
+      summary: Retrieves the list of existing AccountDetails.
+      description: Retrieves the list of existing AccountDetails. Add additional information here for the this endpoint.
+      operationId: getAllAccountDetails
+      parameters:
+      - name: processRefNo
+        in: query
+        description: processRefNo of the user that needs to be fetched
+        required: true
+        type: string
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/v1/accountdetails/{id}:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - AccountDetails
+      summary: Update an existing AccountDetails.
+      description: Update an existing AccountDetails. Add additional information here for the this endpoint.
+      operationId: updateAccountDetails
+      parameters:
+      - name: id
+        in: path
+        description: id of the AccountDetails that need to be updated
+        required: true
+        type: string
+      - name: AccountDetails
+        in: body
+        description: Request Body that contains data required for updating an existing AccountDetails
+        required: true
+        schema:
+          $ref: '#/definitions/AccountDetailsModel'
+      responses:
+        200:
+          description: Returns updated AccountDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  AccountDetailsModel:
+    description: AccountDetails model
+    type: object
+    properties:
+      id:
+        description: Id of the AccountDetails
+        type: string
+        maxLength: 36
+      processRefNo:
+        description: Process Reference Number
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string
+      productCode:
+        description: Product Code
+        type: string
+      accountCurrency:
+        description: Account Currency
+        type: string
+      accountBranch:
+        description: Account Branch
+        type: string
+      isValidationComplete:
+        description: isValidationComplete
+        type: boolean  
+      isInterestChanged:
+        description: isInterestChanged
+        type: boolean   
+      amount:
+        description: Amount
+        type: number
+      latestAmount:
+        description: Latest Amount
+        type: number
+      applicationDate:
+        description: Application Date
+        type: string
+      tenureYears:
+        description: Tenure Years
+        type: integer
+        format: int64
+        minimum: 0
+      tenureMonths:
+        description: Tenure Months
+        type: integer
+        format: int64
+        minimum: 0
+      tenureDays:
+        description: Tenure Days
+        type: integer
+        format: int64
+        minimum: 0
+      interestRate: 
+        description: Interest Rate
+        type: number
+        format: double
+      effectiveRate:
+        description: Effective Rate
+        type: number
+        format: double
+      latestEffectiveRate:
+        description: Latest Effective Rate
+        type: number
+        format: double
+      customerMargin:
+        description: Margin
+        type: number
+        format: double
+  AccountDetailsCollection:
+    description: Collection of AccountDetails.
+    type: object
+    properties:
+      AccountDetailsList:
+        type: array
+        items:
+          $ref: '#/definitions/AccountDetailsModel'

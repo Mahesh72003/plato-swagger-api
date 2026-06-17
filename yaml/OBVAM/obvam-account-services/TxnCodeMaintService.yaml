@@ -1,0 +1,415 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : transactionCode.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Vaarunya 
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a server for hosting VD Balance services." 
+ version: "1.0.0"
+ title: "Transaction Code Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "TxnCodeMaintService"
+   description: "API for TxnCodeMaintService Operations."
+
+schemes:
+- "https"
+
+paths:
+
+ /service/txncodemaint:
+  post:
+   tags:
+    - "TxnCodeMaintService"
+   summary: "API to create TransactionCode Maintainance details"
+   description:  "Create the maintainance details for the specific transaction Code"
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "txnCodeMaintDetails" 
+      in: "body" 
+      description: "Request Body that contains data required for creating transaction Code Maintainance" 
+      required: true
+      schema:
+       $ref: "#/definitions/TxnCodeMaintServiceRequestDTO"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/TxnCodeMaintServiceResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "TxnCodeMaintService"
+   summary: "Get all maintainance for the specified transaction Code."
+   description:  "Get all maintainance for the specified transaction Code"
+   operationId: "getAll"
+   parameters:
+   - name: sourceCode
+     description: "Source from which request is initiated"
+     in: header
+     required: true
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - name: txnCode
+     in: query
+     description: TxnCode for which details has to be fetched
+     required: false
+     type: string
+   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/TxnCodeMaintServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /service/txncodemaint/{txnCode}:
+  put:
+   tags:
+    - "TxnCodeMaintService"
+   summary: "Update an existing TransactionCode."
+   description:  "Update an existing TransactionCode."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "txnCode"
+      in: "path"
+      description: "key of the TransactionCode Maintenance"
+      required: true
+      type: "string"
+    - name: "txnCodeDetails"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing transaction Code"
+      required: true
+      schema:
+       $ref: "#/definitions/TxnCodeMaintServiceRequestDTO"
+   responses:
+    200:
+     description: "Returns updated accountstructures"
+     schema:
+      $ref: "#/definitions/TxnCodeMaintServiceResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  
+ /service/txncodemaint/{txnCode}/close:
+  patch:
+   tags:
+    - "TxnCodeMaintService"
+   summary: "Close the transaction Code Maintainance by given transaction Code."
+   description:  "Close the transaction Code Maintainance identified by given transaction Code."
+   operationId: "closeRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "txnCode"
+      in: "path"
+      description: "Key of the txnCode maintenance"
+      required: true
+      type: "string"
+    - name: "accountstructures"
+      in: "body"
+      description: Request body contain transaction Code and Modification no of transaction Code maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/TxnCodeDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/TxnCodeMaintServiceResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ /service/txncodemaint/{txnCode}/reopen:
+  patch:
+   tags:
+    - "TxnCodeMaintService"
+   summary: "reopen the transaction Code Maintainance by given transaction Code."
+   description:  "reopen the transaction Code Maintainance identified by given transaction Code."
+   operationId: "reopenRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "txnCode"
+      in: "path"
+      description: "Key of the transaction Code maintenance"
+      required: true
+      type: "string"
+    - name: "txnCodeMaint"
+      in: "body"
+      description: "Request body contain transaction Code and Modification no of transaction Code maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/TxnCodeDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/TxnCodeMaintServiceResponseWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+definitions:
+ TxnCodeMaintServiceRequestDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     txnCode:
+      type: string
+      description: "Txn Code"
+     txnDesc:
+      type: string
+      description: "Txn Code Description"
+     days:
+      type: number
+      description: "Total No. of Days"
+     availablity:
+      type: string
+      description: "Uncollected Funds Availability Information"
+     autoRelease:
+      type: string
+      description: "Auto-Release of the uncollected Funds True/False"
+    required:
+     - txnCode
+     - availablity
+ TxnCodeMaintServiceDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     txnCode:
+      type: string
+      description: "Txn Code"
+     txnDesc:
+      type: string
+      description: "Txn Code Description"
+     days:
+      type: number
+      description: "Total No. of Days"
+     availablity:
+      type: string
+      description: "Uncollected Funds Availability Information"
+     autoRelease:
+      type: string
+      description: "Auto-Release of the uncollected Funds True/False"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ TxnCodeMaintServiceCollection:
+  description: "Collection of accmap."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/TxnCodeMaintServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ TxnCodeMaintServiceRequestWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/TxnCodeMaintServiceRequestDTO"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ TxnCodeMaintServiceResponseWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/TxnCodeMaintServiceResponseDto"
+   data:
+    $ref: "#/definitions/TxnCodeMaintServiceDTO"
+ TxnCodeMaintServiceResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+ TxnCodeMaintServiceResponseDto:
+  type: object
+  properties:
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/TxnCodeMaintServiceResponseCode"
+ TxnCodeDto:
+  type: object
+  properties:
+   remarks:
+     type: string
