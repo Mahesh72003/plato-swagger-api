@@ -1,6 +1,3 @@
-var basicIP = window.location.hostname;
-var basicPort = window.location.port;
-var protocol = window.location.protocol;
 $(document).ready(function () {
 
     prod_name = "Swagger API";
@@ -9,7 +6,7 @@ $(document).ready(function () {
     product_element.setAttribute("class", "product-item");
 
     product_link = document.createElement("a");
-    url=protocol+'//'+basicIP+':'+basicPort+'/plato-swagger-api/swaggerHomePage.html';
+    url='swaggerHomePage.html';
     product_link.setAttribute("href", url);
 
     product_name_div = document.createElement("div");
@@ -34,7 +31,7 @@ $(document).ready(function () {
     product_element.setAttribute("class", "product-item");
 
     product_link = document.createElement("a");
-    url=protocol+'//'+basicIP+':'+basicPort+'/plato-swagger-api/asyncHomePage.html';
+    url='asyncHomePage.html';
     product_link.setAttribute("href", url);
 
     product_name_div = document.createElement("div");

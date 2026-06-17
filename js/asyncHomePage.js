@@ -1,6 +1,3 @@
-var basicIP=window.location.hostname;
-var basicPort=window.location.port;
-var protocol = window.location.protocol;
 $(document).ready(function(){
     var prod_array = products.product_list;
     prod_array.sort(function(a, b) {
@@ -13,7 +10,7 @@ $(document).ready(function(){
     product_element.setAttribute("class","product-item");
 
     product_link= document.createElement("a");
-    url=protocol+'//'+basicIP+':'+basicPort+'/plato-swagger-api/async-welcome.html?product='+prod_name;
+    url='async-welcome.html?product=' + encodeURIComponent(prod_name);
     product_link.setAttribute("href",url);
 
     product_name_div = document.createElement("div");

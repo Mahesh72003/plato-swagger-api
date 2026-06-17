@@ -1,6 +1,3 @@
-var basicIP=window.location.hostname;
-var basicPort=window.location.port;
-var protocol = window.location.protocol;
 function displayList(moduleName) {
     var slist = document.getElementById("slist_"+moduleName);
     var sort_array=[];
@@ -27,7 +24,6 @@ function displayList(moduleName) {
 
 function createLink(url,displayText) {
     link = document.createElement("a");
-    url=protocol+'//'+basicIP+':'+basicPort+'/plato-swagger-api/'+url;
     link.setAttribute("href",url);
     text = document.createTextNode(displayText);
     link.appendChild(text);

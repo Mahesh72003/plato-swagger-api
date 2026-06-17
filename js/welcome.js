@@ -1,6 +1,25 @@
-var basicIP=window.location.hostname;
-var basicPort=window.location.port;
-var protocol = window.location.protocol;
+function resolveSwaggerUrl(path) {
+    var normalizedPath = path;
+
+    while (normalizedPath.indexOf('../') === 0) {
+        normalizedPath = normalizedPath.substring(3);
+    }
+
+    while (normalizedPath.indexOf('./') === 0) {
+        normalizedPath = normalizedPath.substring(2);
+    }
+
+    if (/^(https?:)?\/\//i.test(normalizedPath)) {
+        return normalizedPath;
+    }
+
+    if (/^[a-z]/.test(normalizedPath)) {
+        return 'yaml/api-extract/swagger-api/' + normalizedPath;
+    }
+
+    return 'yaml/' + normalizedPath;
+}
+
 function displayList(moduleName) {
     var slist = document.getElementById("slist_"+moduleName);
     var sort_array=[];
@@ -27,7 +46,7 @@ function displayList(moduleName) {
 
 function createLink(url,displayText) {
     link = document.createElement("a");
-    url=protocol+'//'+basicIP+':'+basicPort+'/plato-swagger-api/index-api.html?url='+protocol+'//'+basicIP+':'+basicPort+'/plato-swagger-api/yaml/api-extract/swagger-api/'+url;
+    url='index-api.html?url=' + encodeURIComponent(new URL(resolveSwaggerUrl(url), window.location.href).href);
     link.setAttribute("href",url);
     text = document.createTextNode(displayText);
     link.appendChild(text);
