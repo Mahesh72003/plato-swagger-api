@@ -1,0 +1,383 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "EventsAPI"
+    description: "API for Events Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /events:
+    post:
+      tags:
+        - "EventsAPI"
+      summary: "Adds a new event."
+      description: "Adds a new Event. Add additional information here for this endpoint."
+      operationId: "save"
+      parameters:
+        - name: "eventsDto"
+          in: "body"
+          description: "Request Body that contains data required for creating a new event"
+          required: true
+          schema:
+            $ref: "#/definitions/LmdTbEventsDTO"
+      responses:
+        201: 
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created event" 
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "EventsAPI"
+      summary: "Retrieves the list of existing events based on log Type."
+      description:  "Retrieves the list of existing events based on log type. Add additional information here for the this endpoint."
+      operationId: "getData"
+      parameters:
+      - name: "customerId"
+        in: "query"
+        description: "Customer Id(s) for which data needs to be fetched"
+        required: false
+        type: "string"
+      - name: "eventType"
+        in: "query"
+        description: "fetch record according to eventType"
+        required: false
+        type: "string"
+      - name: "offset"
+        in: "query"
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "limit is maximum no of records to be fetched"
+        required: false
+        type: "integer"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdTbEventsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /events/dismiss:
+    put:
+      tags:
+        - "EventsAPI"
+      summary: "Modify a event."
+      description: "Adds a new Event. Add additional information here for this endpoint."
+      operationId: "dismissEvent"
+      parameters:
+        - name: "eventsDto"
+          in: "body"
+          description: "Request Body that contains data required for creating a new event"
+          required: true
+          schema:
+            $ref: "#/definitions/LmdTbEventsDTO"
+      responses:
+        200: 
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created event" 
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /events/{id}:
+    get:
+      tags:
+        - "EventsAPI"
+      summary: "Retrieves the event by id"
+      description:  "Retrieves the event by id"
+      operationId: "getById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Event Id for which data needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdTbEventsWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /events/deleteEvent:
+    put:
+      tags:
+        - "EventsAPI"
+      summary: "Delete a event."
+      description: "Delete a Event. Add additional information here for this endpoint."
+      operationId: "deleteEvent"
+      parameters:
+        - name: "eventsDto"
+          in: "body"
+          description: "Request Body that contains data required for creating a new event"
+          required: true
+          schema:
+            $ref: "#/definitions/LmdTbEventsDTO"
+      responses:
+        200: 
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created event" 
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  LmdTbEventsDTO:
+    description: "Events DTO"
+    type: "object"
+    allOf:
+    - $ref: "#/definitions/GenericDto"
+    - type: object
+      properties:
+       eventDate:
+        description: "Date of Events"
+        type: string
+        #format: date
+       eventType:
+        description: "Type of Events"
+        type: string
+       eventCode:
+        description: "Code for Events"
+        type: string 
+       eventSource:
+        description: "Source for Events"
+        type: string
+       eventDescription:
+        description: "Description for Events"
+        type: string
+       customerId:
+        description: "Customer Id in Events"
+        type: string
+       isActive:
+        description: "Is Active in Events"
+        type: string 
+       createdBy:
+        description: "Created by for Events"
+        type: string
+       startDate:
+        description: "Start Date for Events"
+        type: string
+        format: date
+       closeDate:
+        description: "Close Date for Events"
+        type: string
+        format: date
+       transactionId:
+        description: "Transaction Id for Events"
+        type: string 
+       fromAccountNumber:
+        description: "From Account Number for Events"
+        type: string   
+       fromBranchCode:
+        description: From Branch Code for Exceptions
+        type: string
+       fromCurrencyCode:
+        description: From Currency Code for Exceptions
+        type: string    
+       toAccountNumber:
+        description: "To Account Number for Events"
+        type: string
+       toBranchCode:
+        description: To Branch Code for Exceptions
+        type: string
+       toCurrencyCode:
+        description: To Currency Code for Exceptions
+        type: string
+       structureType:
+        description: Structure Type for Exceptions
+        type: string  
+       userId:
+        description: User Id for Exceptions
+        type: string 
+       structureId:
+        description: "Structure Id for Events"
+        type: string        
+      required:
+       - id 
+       - eventCode
+  ExceptionReportbodyDTO:
+   type: object
+   properties: 
+        logDate:
+          type: string
+          format: date
+        logDescription:
+          type: string
+          description: Exception occured
+        structureId:
+          type: string
+          description: Exception occured 
+        startDate:
+          description: Start Date for Exceptions
+          type: string
+          format: date
+        transactionRef:
+          description: Transaction Ref for Exceptions
+          type: string
+        fromAccountNumber:
+          description: From Account Number for Exceptions
+          type: string
+        fromBranchCode:
+          description: From Branch Code for Exceptions
+          type: string
+        fromCurrencyCode:
+          description: From Currency Code for Exceptions
+          type: string          
+        toAccountNumber:
+          description: To Account Number for Exceptions
+          type: string
+        toBranchCode:
+          description: To Branch Code for Exceptions
+          type: string
+        toCurrencyCode:
+          description: To Currency Code for Exceptions
+          type: string
+        structureType:
+          description: Structure Type for Exceptions
+          type: string
+        customerId:
+          description: Customer Id for Exceptions
+          type: string    
+        userId:
+          description: User Id for Exceptions
+          type: string
+        eventSource:
+          description: Event Source
+          type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string     
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdTbEventsCollection:
+    description: Collection of Events
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/LmdTbEventsDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object   
+  LmdTbEventsWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmdTbEventsDTO"

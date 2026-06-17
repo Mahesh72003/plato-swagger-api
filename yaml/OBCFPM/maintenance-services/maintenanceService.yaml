@@ -1,0 +1,109 @@
+swagger: "2.0"
+info:
+  description: This is a sample server Maintenance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: "1.0.0"
+  title: "Maintenance Service"
+host: whf00bdn:7771
+basePath: "/maintenance-services"
+tags:
+  - name: "MaintenanceAPI"
+    description: "API for Maintenance Operations"
+    
+schemes:
+- "http"
+
+paths:
+  /service/v1/collateralType:
+    get:
+      tags:
+      - collateralTypeService
+      summary: Retrieves all the existing CollateralTypes.
+      description: Retrieves all the existing CollateralTypes.
+      operationId: getAllCollateralTypes
+      parameters:
+      - name: userId
+        in: header
+        type: string
+        required: true
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+      - name: authToken
+        in: header
+        type: string
+        required: true
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: tenantId
+        in: header
+        type: string
+        required: false
+      - name: contentType
+        in: header
+        type: string
+        required: false
+      - name: branchDate
+        in: header
+        type: string
+        format: date-time
+        required: false
+      - name: offset
+        in: query
+        description: The maximum number of items that may be returned for a single request
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: The starting point within the collection of resource results
+        required: false
+        type: integer
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:          
+  CollateralTypeModel:
+    allOf:
+    - $ref: '#/definitions/RepresentationModel'
+    - type: object
+      properties:
+        recordId:
+          type: string
+        collateralTypeCode:
+          type: string
+        collateralTypeDescription:
+          type: string
+        authStat:
+          type: string
+        recordStat:
+          type: string
+        makerId:
+          type: string
+        checkerId:
+          type: string
+        makerTimestamp:
+          type: string
+          format: date-time
+        checkerTimestamp:
+          type: string
+          format: date-time
+  CollateralTypeCollection:
+    description: Collection of CollateralTypes.
+    type: object
+    properties:
+      collateralTypeList:
+        type: array
+        items:
+          $ref: '#/definitions/CollateralTypeModel'

@@ -1,0 +1,535 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Instrument Collection Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "InstrumentManagement"
+    description: "API for Instrument related Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/instrumentmgmnt:
+    post:
+      tags:
+        - "InstrumentManagement"
+      summary: "Adds a new Instrument"
+      description: "Adds a new Instrument with all  additional information "
+      operationId: "addInstrument"
+      parameters:
+        - name: "instrument"
+          in: "body"
+          description: "Request Body that contains data required for creating a new DepositSlip"
+          required: true
+          schema:
+            $ref: "#/definitions/InstrumentReqModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "content of a file"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+          description: "Branch Date"
+      responses:
+        201:
+          description: "Successfully created the loan details"
+          schema:
+             $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "InstrumentManagement"
+      summary: "Retrieves the list of existing Instrument"
+      description:  "Retrieves the list of existing Instrument with additional information "
+      operationId: "getAllInstruments"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "content of a file"
+        - name: "corporateId"
+          in: "query"
+          required: false
+          description: "Corporate Id"
+          type: "string"
+        - name: "instrumentNumber"
+          in: "query"
+          description: "Instrument Number"
+          required: false
+          type: "integer"
+          format: "int64"
+        - name: "depositSlipNumber"
+          in: "query"
+          required: false
+          description: "Deposit Slip Number"
+          type: "integer"
+          format: "int64"
+        - name: "depositFromDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Deposit From-Date"
+        - name: "depositToDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Deposit To-Date"
+        - name: "instrumentAmountFrom"
+          in: "query"
+          type: "number"
+          required: false
+          description: "Instrument Amount From"
+        - name: "instrumentAmountTo"
+          in: "query"
+          type: "number"
+          required: false
+          description: "Instrument Amount To"
+        - name: "instrumentStatus"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Instrument Status"
+        - name: "pickupCode"
+          in: "query"
+          required: false
+          description: "Pickup Code"
+          type: "string"
+        - name: "locationCode"
+          in: "query"
+          required: false
+          description: "Location Code"
+          type: "string"
+        - name: "accountNumber"
+          in: "query"
+          required: false
+          description: "Account Number"
+          type: "string"
+        - name: "product"
+          in: "query"
+          required: false
+          description: "Product Value"
+          type: "string"
+        - name: "depositBranch"
+          in: "query"
+          required: false
+          description: "Deposit Branch"
+          type: "string"
+        - name: "depositLocation"
+          in: "query"
+          required: false
+          description: "Deposit Branch Location"
+          type: "string"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "Limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "Offset of the limit"
+          type: "integer"
+        - name: "scheduleOriginationBranch"
+          in: "query"
+          required: false
+          description: "Origin Branch"
+          type: "string"
+        - name: "scheduleDestinationBranch"
+          in: "query"
+          required: false
+          description: "Returning Branch"
+          type: "string"
+        - name: "scheduleDestinationBank"
+          in: "query"
+          required: false
+          description: "Returning Bank"
+          type: "string"
+        - name: "scheduleRefNo"
+          in: "query"
+          required: false
+          description: "Schedule Reference No"
+          type: "string"
+        - name: "courierCode"
+          in: "query"
+          required: false
+          description: "Unique Courier Code"
+          type: "string"
+        - name: "scheduleDispatchDateFrom"
+          in: "query"
+          required: false
+          description: "Scheduled Dispatch Date(From)"
+          type: "string"
+        - name: "scheduleDispatchDateTo"
+          in: "query"
+          required: false
+          description: "Scheduled Dispatch Date(To)"
+          type: "string"
+        - name: "txnRefNo"
+          in: "query"
+          required: false
+          description: "Instrument Reference No"
+          type: "string"
+        - name: "instFromDate"
+          in: "query"
+          required: false
+          description: "Instrument From Date"
+          type: "string"
+        - name: "instToDate"
+          in: "query"
+          required: false
+          description: "Instrument To Date"
+          type: "string"
+        - name: "referenceNum"
+          in: "query"
+          required: false
+          description: "Reference Number"
+          type: "string"
+        - name: "drawnOnBankCode"
+          in: "query"
+          required: false
+          description: "Drawn Bank Code"
+          type: "string"
+        - name: "drawerAcNo"
+          in: "query"
+          required: false
+          description: "Drawer Account No"
+          type: "string"
+        - name: "corrBankCode"
+          in: "query"
+          required: false
+          description: "Bank Code"
+          type: "string"
+        - name: "instrumentAmt"
+          in: "query"
+          required: false
+          description: "Instrument Amount"
+          type: "number"
+        - name: "divisionCode"
+          in: "query"
+          required: false
+          description: "Division Code"
+          type: "string"
+        - name: "routingNumber"
+          in: "query"
+          required: false
+          description: "Routing Number"
+          type: "number"
+        - name: "instTxnStatus"
+          in: "query"
+          required: false
+          description: "Instrument Transaction Status"
+          type: "string"
+        - name: "depositChannel"
+          in: "query"
+          required: false
+          description: "Deposit Channel"
+          type: "string"
+        - name: "clearingLocation"
+          in: "query"
+          required: false
+          description: "Clearing Location"
+          type: "string"
+        - name: "instAmtCcy"
+          in: "query"
+          required: false
+          description: "Instrument Amount Currency"
+          type: "string"
+        - name: "instMgmtCourierCode"
+          in: "query"
+          required: false
+          description: "Instrument Management Courier Code"
+          type: "string"
+        - name: "isPDCChecked"
+          in: "query"
+          required: false
+          description: "isPDCChecked Flag value"
+          type: "string"
+                    
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InstrumentEnquiryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/instrumentmgmnt/authorize:
+    post:
+      tags:
+        - "InstrumentManagement"
+      summary: "Update an existing Instrument."
+      description:  "Update an existing Instrument Add additional information here for the this endpoint."
+      operationId: "authorizeInstrument"
+      parameters:
+        - name: "conductorWorkFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for authorizing a instrument"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+          description: "Branch Date"    
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+          
+          
+  /web/v1/instrumentmgmnt/unauthorize/{instrumentManagementBatchRefNo}:
+    get:
+      tags:
+        - "InstrumentManagement"
+      summary: "Update an existing Instrument."
+      description:  "Update an existing Instrument Add additional information here for the this endpoint."
+      operationId: "getUnAuthorizedInstrument"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+          description: "Branch Date"
+        - name: "instrumentManagementBatchRefNo"
+          type: "string" 
+          in: "path"
+          required: true
+          description: "Instrument Management Batch Reference No"
+        - name: "scheduleRefNo"
+          type: "string" 
+          in: "query"
+          required: false
+          description: "Schedule Reference No"     
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/InstrumentEnquiryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/instrumentmgmnt/unauthroizeCreditAdvPost/{instrumentManagementBatchRefNo}:
+    get:
+      tags:
+        - "InstrumentManagement"
+      summary: "get an existing Instrument."
+      description:  "Get an existing Instrument based on instrumentManagementBatchRefNo."
+      operationId: "getUnAuthorizedCreditInstrument"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "content of a file"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+          description: "Branch Date"
+        - name: "instrumentManagementBatchRefNo"
+          type: "string" 
+          in: "path"
+          required: true
+          description: "Instrument Management Batch Reference No"
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/InstrumentEnquiryAuthorization"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+          

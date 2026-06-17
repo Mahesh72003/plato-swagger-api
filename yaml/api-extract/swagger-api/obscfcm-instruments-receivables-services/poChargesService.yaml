@@ -1,0 +1,145 @@
+swagger: "2.0"
+info:
+  description: "Provides APIs to perform Charges Operations on Purchase Orders"
+  version: "1.0.0"
+  title: "Purchase Order Charges Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-instruments-receivables-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PoChargesService"
+    description: "API for Purchase Order Charge Operations"
+
+paths:
+  /service/v1/poCharges:
+    get:
+      tags:
+        - "PoChargesService"
+      summary: "Calculate the online charges for Purchase Orders"
+      description:  "Calculate the online charges for Purchase Orders"
+      operationId: "getPoChargeDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          description: "User Id"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "applicationCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Code"
+        - name: "event"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Event"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/ObChargesTxnDTOCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not auhorized."
+        500:
+          description: "Internal error"
+          
+definitions:          
+   PoDTOCollection:
+    description: "Collection of PO DTO."
+    type: "object"
+    properties:
+      obChargesTxnDTOList:
+       type: "array"
+       items:
+        $ref: "#/definitions/PoTxnDTO"
+        
+
+        
+   PoTxnDTO:
+    type: object
+    allOf:
+    - $ref: './CommonDef.yaml#/definitions/GenericDto'
+    - type: object
+      properties:
+       obPoTxnId:
+        type: string
+        description: "Ob Po Transaction Id"
+       txnRefNo:
+        type: string
+        description: "Transaction Reference Number"
+       poStatus:
+        type: string
+        description: "Po status"
+       currency:
+        type: string
+        description: "Currency"
+       buyerId:
+        type: string
+        description: "Buyer Id"
+       supplierId:
+        type: string
+        description: "Supplier Id"
+       buyerName:
+        type: string
+        description: "Buyer Name"
+       supplierName:
+        type: string
+        description: "Supplier Name"
+       netPoAmount:
+        type: number
+        description: "Net Po Amount"
+       acceptanceAmount:
+        type: number
+        description: "Acceptance Amount"
+       poDate:
+        type: string
+        description: "Po Date"
+       promisedShipmentDate:
+        type: string
+        description: "Promised Shipment Date"
+       programId:
+        type: string
+        description: "Program Id"
+       programName:
+        type: string
+        description: "Program Name"
+       relationshipCode:
+        type: string
+        description: "Relationship Code"
+       poExternalNumber:
+        type: string
+        description: "PO External Number"
+       poInternalNumber:
+        type: string
+        description: "PO Internal Number"
+       processingDate:
+        type: string
+        description: "Processing Date"
+       event:
+        type: string       
+        description: "Event"

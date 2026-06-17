@@ -1,0 +1,274 @@
+swagger: "2.0"
+info:
+  description: "List of Service API's for Cash Denomination for Branch, Branch wise currency - denominations"
+  version: "1.0.0"
+  title: "Cash Denominations Master Maintenance Details Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "CashDenomMaintMasterDetailServiceApi"
+    description: "List of Service API's for Cash Denomination"
+
+
+paths:
+  /service/v1/distinctBranchCode:
+    get:
+      tags:
+        - "cashDenomMaintMasterDetailService"
+      summary: "Retrieves the list of Distinct Branch Codes"
+      description:  "Retrieves the list of Unique Branch Code Data"
+      operationId: "getDistinctBranchCodes"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Id"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant Id"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "UserId For SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content Type"         
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/DistinctBranchCodeModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+          
+  /service/v1/getCCYDenominationDetails:
+    get:
+      tags:
+        - "cashDenomMaintMasterDetailService"
+      summary: "Retrieves the list of CCY and Debomination Details"
+      description:  "Retrieves the list of CCY and Debomination Details"
+      operationId: "getCCYDenominationDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Id"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant Id"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "UserId For SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content Type"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "Limit To Be Fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "Offset Of Limit"
+          type: "integer"  
+        - name: "branch"
+          in: "query"
+          type: "string"
+          required: true
+          description: "Branch Value"
+        - name: "currency"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Currency Value"             
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/DenominationResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"        
+   
+definitions:       
+  DistinctBranchCodeModel:
+    description: "Collection of Branch Codes"
+    type: "object"
+    properties:
+      data:
+        type: "object"
+        description: "List Of Errors "
+        items:
+          $ref: "#/definitions/BranchCodeModel"    
+      errors:
+        type: "object"
+        description: "List Of Errors "
+        items:
+          $ref: "#/definitions/Error"
+      responseStatus:
+        type: "string"
+        description: "Response Status"    
+  BranchCodeModel:
+    type: "object"
+    description: "BranchCode Model"
+    properties:
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      branchName:
+        type: "string"
+        description: "Branch Name"
+              
+  Error:
+    type: "object"
+    description: "Error Model"
+    properties:
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDescription:
+        type: "string"
+        description: "Error Description"              
+      errorStatus:
+        type: "string"
+        description: "Error Status"
+        
+  DenominationResponseModel:
+    description: "Collection of Master and Denomination Details"
+    type: "object"
+    properties:
+      denominationData:
+        type: "array"
+        description: "List Of Master and Denomination data"
+        items:
+          $ref: "#/definitions/ObcmTmCashDenomMaintMasterDTO"
+      paging:
+          $ref: "#/definitions/PagingDto"    
+      errors:
+        type: "object"
+        description: "List Of Errors "
+        items:
+          $ref: "#/definitions/Error"
+      responseStatus:
+        type: "string"
+        description: "Response Status"    
+  ObcmTmCashDenomMaintMasterDTO:
+    type: object
+    description: "Cash Denomination Maint Master Model" 
+    properties:
+      id:
+        type: "string"
+        description: "Master Id"
+      branch:
+        type: "string"
+        description: "Branch Value"
+      currency:
+        type: "string"
+        description: "Currency"
+      mainUnit:
+        type: "string"
+        description: "Main Unit"
+      subUnit:
+        type: "string"
+        description: "Sub Unit"
+      modNo:
+        type: "integer"
+        description: "Mod No"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Date"
+      checkerId:
+        type: "string"
+        description: "Checker ID" 
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Date"
+      onceAuth:
+        type: "string"
+        description: "Once Authorization"
+      recordStat:
+        type: "string"
+        description: "Record Status"
+      authStat:
+        type: "string"
+        description: "Authorization Status"   
+      ObcmTmCashDenomMaintDetailsDTO:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmTmCashDenomMaintDetailsDTO"
+  ObcmTmCashDenomMaintDetailsDTO:
+    type: "object"
+    description: "Cash Denomination Detail Model"
+    properties:
+      denominationDesc:
+        type: "string"
+        description: "Denomination Description"
+      denominationType:
+        type: "string"
+        description: "Denomination Type"
+      denominationValue:
+        type: "string"
+        description: "Denomination Value"
+      id:
+        type: "string"
+        description: "Denomination Id"
+      cashDenomMaintMasterId:
+        type: "string"
+        description: "Denomination Maint Master Id"  
+  PagingDto:
+    type: "object"
+    properties:
+      totalResults:
+        type: "integer"

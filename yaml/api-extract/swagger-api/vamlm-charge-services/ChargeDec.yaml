@@ -1,0 +1,668 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server chargedecision server." 
+ version: "1.0.0"
+ title: "chargedecision Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargedecision"
+   description: "Charge Decisioning is to configure Charge Decisioning Rules. The Charge Code and Charge Pricing Rule created can be mapped to an Event and Pricing Scheme. The calculation and collection frequencies for the charge will also be defined."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../chargedecision
+
+ /chargedecision:
+  post:
+   tags:
+    - "chargedecision"
+   summary: "Adds a new chargedecision."
+   description: "Adds a new chargedecision. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "chargedecision" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new chargedecision" 
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargDecMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created chargedecision" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargedecision"
+   summary: "Get all valid chargedecision."
+   description:  "Get all valid chargedecision. This endpoints will be used to Get all valid chargedecision maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: applicationCode
+     in: query
+     description: Application for which the data is processed -VAMCHG/LMCHG
+     required: true
+     type: string   
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: chargeType
+     required: false
+     type: string
+   - in: query
+     name: event
+     required: false
+     type: string
+   - in: query
+     name: pricingScheme
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: loggedinBrn
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VlcTmChargDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../chargedecision/xxx
+#   DELETE    .../chargedecision/xxx
+#   GET       .../chargedecision/xxx
+#   GET       .../chargedecision/xxx?version=latestrecord
+#   GET       .../chargedecision/xxx?version=1
+
+ /chargedecision/{id}:
+  put:
+   tags:
+    - "chargedecision"
+   summary: "Update an existing chargedecision."
+   description:  "Update an existing chargedecision."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the chargedecision Maintenance"
+      required: true
+      type: "string"
+    - name: "chargedecision"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing chargedecision"
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargDecMasterDTO"
+   responses:
+    200:
+     description: "Returns updated chargedecision"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargedecision"
+   summary: "Retrieves the chargedecision by ID."
+   description:  "Retrieves the chargedecision by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargedecision based on given id."
+     schema:
+      $ref: "#/definitions/VlcTmChargDecMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "chargedecision"
+   summary: "Deletes the chargedecision identified by given ID."
+   description:  "Deletes the chargedecision identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargedecision maintenance"
+      required: true
+      type: "string"
+    - name: "chargedecision"
+      in: "body"
+      description: Request body contain chargedecision and Modification no of chargedecision maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargedecision/xxx/approve
+
+ /chargedecision/{id}/approve:
+  patch:
+   tags:
+    - "chargedecision"
+   summary: "Authorize the chargedecision by given ID."
+   description:  "Authorize the chargedecision identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargedecision maintenance"
+      required: true
+      type: "string"
+    - name: "chargedecision"
+      in: "body"
+      description: Request body contain chargedecision and Modification no of chargedecision maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargedecision/xxx/close
+ /chargedecision/{id}/close:
+  patch:
+   tags:
+    - "chargedecision"
+   summary: "Close the chargedecision by given ID."
+   description:  "Close the chargedecision identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargedecision maintenance"
+      required: true
+      type: "string"
+    - name: "chargedecision"
+      in: "body"
+      description: Request body contain chargedecision and Modification no of chargedecision maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../chargedecision/xxx/unauthorized
+
+ /chargedecision/{id}/unauthorized:
+  get:
+   tags:
+    - "chargedecision"
+   summary: "Retrives the chargedecision by given ID."
+   description:  "Retrives the chargedecision identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargedecision based on given id."
+     schema:
+       $ref: "#/definitions/VlcTmChargDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../chargedecision/xxx/history
+
+ /chargedecision/{id}/history:
+  get:
+   tags:
+    - "chargedecision"
+   summary: "Retrives the chargedecision by given ID."
+   description:  "Retrives the chargedecision by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargedecision based on given id."
+     schema:
+       $ref: "#/definitions/VlcTmChargDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  fetch charge codes
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../chargedecision/xxx/getChargecodes
+ /chargedecision/getChargecodes:
+  get:
+   tags:
+    - "chargedecision"
+   summary: "Retrives the charge codes by given pricing scheme, app code & charge type."
+   description:  "Retrives the charge codes by given pricing scheme, app code & charge type."
+   operationId: "getChargecodes"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: applicationCode
+     in: query
+     description: application code need to be set to fetch summary record
+     required: true
+     type: string
+   - name: pricingScheme
+     in: query
+     description: pricing scheme need to be set to fetch summary record
+     required: false
+     type: string
+   - name: chargeType
+     in: query
+     description: Charge Type need to be set to fetch summary record
+     required: false
+     type: string
+   - name: chgCode
+     in: query
+     description: Charge Code need to be set to fetch summary record
+     required: false
+     type: string
+   responses:
+    200:
+     description: "Returns the charge codes based on given pricing scheme, app code & charge type."
+     schema:
+       $ref: "#/definitions/VlcTmChargeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+
+
+definitions:
+ VlcTmChargDecMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     chargeType:
+      type: string
+      description: ""
+     event:
+      type: string
+      description: ""
+     pricingScheme:
+      type: string
+      description: ""
+     applicationCode:
+      type: string
+      description: "Appication for which this data is used. Possible values VAMCHG/LMCHG"   
+     loggedInBranch:
+      type: string
+      description: "Current logged in branch"       
+     VlcTmChargDecDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VlcTmChargDecDetailDTO'
+    required:
+     - chargeType
+     - event
+     - pricingScheme
+     - VlcTmChargDecDetailDTO
+     - applicationCode
+ VlcTmChargDecDetailDTO:
+  type: object
+  properties:
+     calcFreq:
+      type: string
+      description: ""
+     calcRefPeriod:
+      type: string
+      description: ""
+     calcUnits:
+      type: number
+      description: ""
+     chgCode:
+      type: string
+      description: ""
+      minLength: 3
+      maxLength: 20
+     chgCriteria:
+      type: string
+      description: ""
+     chgDecMasterId:
+      type: string
+      description: ""
+     chgPrcTemplateId:
+      type: string
+      description: ""
+     collFreq:
+      type: string
+      description: ""
+     collRefPeriod:
+      type: string
+      description: ""
+     collUnits:
+      type: number
+      description: ""
+     effectiveDate:
+      type: string
+      format: date
+      description: ""
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     expiryDate:
+      type: string
+      format: date
+      description: ""
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+     id:
+      type: string
+      description: ""
+     parentChgCode:
+      type: string
+      description: ""
+  required:
+   - calcFreq
+   - chgCode
+   - chgCriteria
+   - chgPrcTemplateId
+   - effectiveDate
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VlcTmChargDecMasterCollection: 
+  description: "Collection of chargdec."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargDecMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ VlcTmChargDecMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VlcTmChargDecMasterDTO"
+ VlcTmChargeCollection: 
+  description: "Collection of charge code detail."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargeCodeDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ VlcTmChargeCodeDTO:
+  type: object
+  properties:
+   chgCode:
+    type: string
+    description: ""
+   chgCodeDesc:
+    type: string
+    description: ""

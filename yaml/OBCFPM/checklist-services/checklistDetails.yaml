@@ -1,0 +1,262 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server checklist server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Checklist Service"
+host: "whf00anh:7711"
+basePath: "/checklist-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ChecklistAPI"
+    description: "API for checklist's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /v1/checklist:
+    post:
+      tags:
+        - "checklistDetails"
+      summary: "Create a new Checklist."
+      description: "Create a new Checklist."
+      operationId: "createChecklist"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "checklist"
+          in: "body"
+          description: "Request Body that contains data required for creating a new checklist"
+          required: true
+          schema:
+            $ref: "#/definitions/ChecklistCollection"
+      responses:
+        201:
+          description: "Returns the Id of the newly created checklist"
+          headers:
+            Location:
+              description: "URL of newly created checklist"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "checklistDetails"
+      summary: "Retrieves the list of existing checklists."
+      description:  "Retrieves the list of existing checklists."
+      operationId: "getAllChecklists"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "entityId"
+          in: "query"
+          required: false
+          description: "Checklist that need to be fetched"
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ChecklistCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /v1/checklist/{id}:
+    get:
+      tags:
+        - "checklistDetails"
+      summary: "Retrieves the Checklist by ID."
+      description:  "Retrieves the Checklist by ID."
+      operationId: "getChecklistById"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Checklist that need to be fetched by id."
+          required: true
+          type: "string" 
+      responses:
+        200:
+          description: "Returns the checklist based on given id."
+          schema:
+            $ref: "#/definitions/ChecklistModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "checklistDetails"
+      summary: "Update an existing checklist."
+      description:  "Update an existing checklist."
+      operationId: "updateChecklist"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "entityId"
+          in: "path"
+          description: "Checklist that need to be updated"
+          required: true
+          type: "string"
+        - name: "ChecklistCollection"
+          in: "body"
+          description: "Checklist that need to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/ChecklistCollection"
+      responses:
+        200:
+          description: "Returns updated checklist"
+          schema:
+            $ref: "#/definitions/ChecklistCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "checklistDetails"
+      summary: "Deletes the checklist identified by given ID."
+      description:  "Deletes the checklist identified by given ID."
+      operationId: "deleteChecklist"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"   
+definitions:
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"
+  ChecklistModel:
+    description: "Checklist model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the checklist"
+        type: "string"
+      entityType:
+        description: "Entity Type of the checklist"
+        type: "string"
+      entityId:
+        description: "Entity ID of the checklist"
+        type: "string"
+      branchCode:
+        description: "Branch Code of the checklist"
+        type: "string"
+      description:
+        description: "Description of the checklist"
+        type: "string"
+      remarks:
+        description: "Remarks of the checklist"
+        type: "string"
+      complied:
+        description: "Complied of the checklist"
+        type: "boolean"
+      stageId:
+        description: "Stage Id of the checklist"
+        type: "string"        
+      checkListId:
+        description: "CheckList Id of the checklist"
+        type: "string"
+      createdBy:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        type: "string"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+  ChecklistCollection:
+    description: "Collection of CheckList."
+    type: "object"
+    properties:
+      checklist:
+        type: "array"
+        items:
+          $ref: "#/definitions/ChecklistModel"

@@ -1,0 +1,712 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : Charges.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2018-2022 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server chargedefinition server." 
+ version: "1.0.0"
+ title: "chargedefinition Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargedefinition"
+   description: "We use charge definition to create, modify, authorize, close, delete, reopen charge codes. Other details that we capture are Charge Description, Charge Category, Charge Credit Account, Charge Credit TXN Code, Charge Debit TXN Code , Effective and Expiry Date"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../chargedefinition
+
+ /chargedefinition:
+  post:
+   tags:
+    - "chargedefinition"
+   summary: "Adds a new chargedefinition."
+   description: "Adds a new chargedefinition. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "chargedefinition" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new chargedefinition" 
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargesDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created chargedefinition" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargedefinition"
+   summary: "Get all valid chargedefinition."
+   description:  "Get all valid chargedefinition. This endpoints will be used to Get all valid chargedefinition maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: applicationCode
+     in: query
+     description: Application for which the data is processed -VAMCHG/LMCHG
+     required: true
+     type: string       
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: chargeCategory
+     required: false
+     type: string
+   - in: query
+     name: chargeCode
+     required: false
+     type: string
+   - in: query
+     name: chargeCodeDesc
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: loggedinBrn
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VlcTmChargesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../chargedefinition/xxx
+#   DELETE    .../chargedefinition/xxx
+#   GET       .../chargedefinition/xxx
+#   GET       .../chargedefinition/xxx?version=latestrecord
+#   GET       .../chargedefinition/xxx?version=1
+
+ /chargedefinition/{id}:
+  put:
+   tags:
+    - "chargedefinition"
+   summary: "Update an existing chargedefinition."
+   description:  "Update an existing chargedefinition."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the chargedefinition Maintenance"
+      required: true
+      type: "string"
+    - name: "chargedefinition"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing chargedefinition"
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargesDTO"
+   responses:
+    200:
+     description: "Returns updated chargedecision"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargedefinition"
+   summary: "Retrieves the chargedefinition by ID."
+   description:  "Retrieves the chargedefinition by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargedefinition based on given id."
+     schema:
+      $ref: "#/definitions/VlcTmChargesWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "chargedefinition"
+   summary: "Deletes the chargedefinition identified by given ID."
+   description:  "Deletes the chargedefinition identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargedefinition maintenance"
+      required: true
+      type: "string"
+    - name: "chargedefinition"
+      in: "body"
+      description: Request body contain chargedefinition and Modification no of chargedefinition maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargedefinition/xxx/approve
+
+ /chargedefinition/{id}/approve:
+  patch:
+   tags:
+    - "chargedefinition"
+   summary: "Authorize the chargedefinition by given ID."
+   description:  "Authorize the chargedefinition identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargedefinition maintenance"
+      required: true
+      type: "string"
+    - name: "chargedefinition"
+      in: "body"
+      description: Request body contain chargedefinition and Modification no of chargedefinition maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargedefinition/xxx/close
+ /chargedefinition/{id}/close:
+  patch:
+   tags:
+    - "chargedefinition"
+   summary: "Close the chargedefinition by given ID."
+   description:  "Close the chargedefinition identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargedefinition maintenance"
+      required: true
+      type: "string"
+    - name: "chargedefinition"
+      in: "body"
+      description: Request body contain chargedefinition and Modification no of chargedefinition maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../chargedefinition/xxx/unauthorized
+
+ /chargedefinition/{id}/unauthorized:
+  get:
+   tags:
+    - "chargedefinition"
+   summary: "Retrives the chargedefinition by given ID."
+   description:  "Retrives the chargedefinition identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargedefinition based on given id."
+     schema:
+       $ref: "#/definitions/VlcTmChargesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../chargedefinition/xxx/history
+
+ /chargedefinition/{id}/history:
+  get:
+   tags:
+    - "chargedefinition"
+   summary: "Retrives the chargedefinition by given ID."
+   description:  "Retrives the chargedefinition by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargedefinition based on given id."
+     schema:
+       $ref: "#/definitions/VlcTmChargesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ VlcTmChargesDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     chargeCategory:
+      type: string
+      description: "value can be TAX or STANDARD "
+     chargeCode:
+      type: string
+      description: ""
+      minLength: 3
+      maxLength: 20
+      pattern: '([a-zA-Z0-9]+)?'
+     chargeCodeDesc:
+      type: string
+      description: ""
+     chargeCreditAcc:
+      type: string
+      description: ""
+     creditTxnCode:
+      type: string
+      description: ""
+     debitTxnCode:
+      type: string
+      description: ""
+     applicationCode:
+      type: string
+      description: "Appication for which this data is used. Possible values VAMCHG/LMCHG"     
+     loggedInBranch:
+      type: string
+      description: "Current logged in branch"    
+    required:
+     - chargeCategory
+     - chargeCode
+     - chargeCodeDesc
+     - chargeCreditAcc
+     - applicationCode
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VlcTmChargesCollection: 
+  description: "Collection of charges."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargesDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ VlcTmChargesWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VlcTmChargesDTO"
+
+
+
+# CMC_API's
+
+ ChargesResponseDto:
+   type: object
+   properties:
+     applicationCode:
+       type: string
+     txnDetails:
+       type: "array"
+       items:
+         $ref: "#/definitions/TransactionDetailsResponseDto"
+         
+ TransactionDetailsResponseDto:
+   type: object
+   properties:
+     txnRefNo:
+       type: "string"
+     chargeDetails:
+       description: "Collection of calculated charges"
+       type: "array"
+       items:
+         $ref: "#/definitions/ChargesDetails"
+     txnAttributes:
+       type: "array"
+       items:
+         $ref: "#/definitions/TransactionAttribute"
+         
+ ChargesDetails:
+   type: object
+   properties:
+     partyId:
+       description: "Party Id which needs to be charged"
+       type: string
+     chargeCode:
+       description: "Charge Code"
+       type: string
+     partyToCharge:
+       description: "Party which needs to be charged"
+       type: string
+     priceMethod:
+       description: "Price method which will be used to calculate charge"
+       type: string
+     charge:
+       description: "Calculated charge amount"
+       type: number
+     chargeCcy:
+       description: "Currency in which charge is calculated"
+       type: string
+     chargeSharing:
+       type: string
+     exchangeRate:
+       description: "Exchange rate will be provided if charge is calculated in transaction currency"
+       type: number
+       
+ ChargeCalculationRequestDto:
+   type: object
+   properties:
+     applicationCode:
+       type: "string"
+     txnDetails:
+       type: "array"
+       items:
+         $ref: "#/definitions/TransactionDetailsRequestDto"
+          
+ TransactionDetailsRequestDto:
+   type: object
+   properties:
+     txnRefNo:
+       type: "string"
+     priceMethods:
+       description: "Details of each charge to be calculated"
+       type: "array"
+       items:
+         $ref: "#/definitions/ChargeCalculationDetails"
+     txnAttributes:
+       type: "array"
+       items:
+         $ref: "#/definitions/TransactionAttribute"
+         
+ TransactionAttribute:
+   type: object
+   properties:
+     attrName:
+       type: "string"
+     attrValue:
+       type: "string"
+       
+ ChargeCalculationDetails:
+   type: object
+   properties:
+     partyId:
+       description: "Party Id which needs to be charged"
+       type: string
+     chargeCode:
+       description: "Charge Code"
+       type: string
+     chargeCodeDesc:
+       description: "Charge Code Description"
+       type: string
+     parentChargeCode:
+       description: "Parent Charge Code"
+       type: string
+     chargeGroup:
+       description: "Charge Group"
+       type: string
+     chargeCategory:
+       description: "Charge Category"
+       type: string
+     chargeType:
+       description: "Charge Type"
+       type: string
+     chargeSharing:
+       description: "Flag to indicate if charge sharing is available"
+       type: string
+     partyToCharge:
+       description: "Party which needs to be charged"
+       type: string
+     chargeSharingPct:
+       description: "Percentage of charge which will be charged to the given party"
+       type: number
+     chargeCriteria:
+       description: "Amount/Count on which charge needs to be calculated. e.g. FINANCE_AMOUNT, INVOICE_COUNT"
+       type: string
+     chargeCriteriaValue:
+       description: "Amount/Count Value on which charge needs to be calculated"
+       type: number
+     tenor:
+       description: "Period for which charge will be calculated"
+       type: number
+     slidingScaleTenor:
+       description: "Period for sliding scale"
+       type: number
+     txnCcy:
+       description: "Transaction currency. It should be sent when chargeInTxnCcy is Y"
+       type: string
+     priceRuleId:
+       description: "Pricing Rule Id"
+       type: string
+     exchangeRate:
+       description: "Exchange Rate"
+       type: number
+     externalPricingApplicable:
+       type: string
+       description: "External Pricing Applicable"
+     externalPricingSystem:
+       type: string
+       description: "External Pricing System"
+     isChargeCalculated:
+       type: string
+       description: "Is Charge Calculated"
+     charge:
+       type: number
+       description: "Charge"
+     closedVAToInclude:
+       type: number
+       description: "Closed VA to Include"
+     chargeCriteriaDetailId:
+       type: string
+       description: "Charge Criteria Detail ID"
+          
+ SlabDetails:
+   type: object
+   properties:
+     fromSlab:
+       type: number
+     toSlab:
+       type: number
+     amount:
+       type: number
+     percentage:
+       type: number
+     unit:
+       type: number

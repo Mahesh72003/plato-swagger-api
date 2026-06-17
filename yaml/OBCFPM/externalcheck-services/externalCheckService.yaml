@@ -1,0 +1,177 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server External Check server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "External Check Service"
+host: "whf00anh:7721"
+basePath: "/ExternalCheck"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ExternalCheckService"
+    description: "API for ExternalCheck Operations"
+    
+schemes:
+- "http"
+
+paths:
+  /service/v1/externalCheck:
+    post:
+      tags:
+        - "ExternalCheckService"
+      summary: "Adds a new external check."
+      description: "Adds a new external check."
+      operationId: "createExternalCheck"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false  
+        - name: "externalCheckMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new external check"
+          required: true
+          schema:
+            $ref: "#/definitions/ExternalCheckMasterModel"
+      responses:
+        201:
+          description: "Successfully created a new external check"
+          headers:
+            Location:
+              description: "URL of newly created external check"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/externalCheck/{id}:
+    get:
+      tags:
+        - "ExternalCheckService"
+      summary: "Retrieves the external check by Id."
+      description:  "Retrieves the external check by Id."
+      operationId: "getExternalCheckById"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Returns the external check based on given id."
+          schema:
+            $ref: "#/definitions/ExternalCheckMasterModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "ExternalCheckService"
+      summary: "Update an existing external check."
+      description:  "Update an existing external check."
+      operationId: "updateExternalCheck"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "id"
+          in: "path"
+          description: "Id of the external check that need to be updated"
+          required: true
+          type: "string"      
+        - name: "externalCheckMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing external check"
+          required: true
+          schema:
+            $ref: "#/definitions/ExternalCheckMasterModel"
+      responses:
+        200:
+          description: "Returns updated external check"
+          schema:
+            $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+    delete:
+      tags:
+        - "ExternalCheckService"
+      summary: "Deletes the external check identified by given collateral Id."
+      description:  "Deletes the external check identified by given collateral Id"
+      operationId: "deleteExternalCheck"
+      parameters:
+        - name: "externalCheckMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new external check"
+          required: true
+          schema:
+            $ref: "#/definitions/ExternalCheckMasterModel" 
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"         

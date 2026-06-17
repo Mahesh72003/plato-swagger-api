@@ -1,0 +1,242 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : CustomerService.yaml
+#  **
+#  ** Module     : oblm
+#  **
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  johjen.mathew@oracle.com
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server customer server."
+  version: "1.0.0"
+  title: "customer Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "CustomerService"
+    description: "Service API for Customer Entity"
+
+schemes:
+  - "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supported http methods POST and GET
+  #
+  # path example ../customer
+
+  /service/customer:
+    post:
+      tags:
+        - "CustomerService"
+      summary: "Adds a new customer."
+      description: "Adds a new customer. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "customer"
+          in: "body"
+          description: "Request Body that contains data required for creating a new customer"
+          required: true
+          schema:
+            $ref: "#/definitions/LmmTmCustomerDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created customer"
+              type: "string"
+          schema:
+            $ref: "#/definitions/CustomerServiceDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  # path to modify existing record
+  #
+  #  supprorted http methods PUT
+  #
+  # path examples----
+  #   PUT       .../customer/xxx
+
+  /service/customer/{customerId}:
+    put:
+      tags:
+        - "CustomerService"
+      summary: "Update an existing customer."
+      description: "Update an existing customer."
+      operationId: "modifyRecord"
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: "customerId"
+          in: "path"
+          description: "Customer ID of the customer Maintenance"
+          required: true
+          type: "string"
+        - name: "customer"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing customer"
+          required: true
+          schema:
+            $ref: "#/definitions/LmmTmCustomerDTO"
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/CustomerServiceDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - CustomerService
+      summary: Retrieves the account by ID.
+      description: Retrieves the account by ID.
+      operationId: getById
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: customerId
+          in: path
+          description: customerId of the Customer Maintenance
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the account based on given id.
+          schema:
+            $ref: '#/definitions/CustomerServiceDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/customer/{customerId}/close:
+    patch:
+      tags:
+        - CustomerService
+      summary: Close the account by given ID.
+      description: Close the account identified by given ID.
+      operationId: closeRecord
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: customerId
+          in: path
+          description: customerId of the customer Maintenance
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/customer/{customerId}/reopen:
+    patch:
+      tags:
+        - CustomerService
+      summary: reopen the account by given ID.
+      description: reopen the account identified by given ID.
+      operationId: reopenRecord
+      parameters:
+        - name: sourceCode
+          description: "Source from which request is initiated"
+          in: header
+          required: true
+          type: string
+        - name: customerId
+          in: path
+          description: customerId of the customer Maintenance
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  CustomerServiceDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/LmmTmCustomerDTO'

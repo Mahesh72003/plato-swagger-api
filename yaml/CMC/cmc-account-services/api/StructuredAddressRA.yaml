@@ -1,0 +1,639 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2020 , 2020 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : StructuredAddressRA.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: This service is used to maintain structured address for Real Account .
+ version: "1.0.0"
+ title: "StructuredAddressRA Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "structuredaddress"
+   description: "This service is used to maintain structured address for Real Account ."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../structuredaddress
+
+ /structuredaddress:
+  post:
+   tags:
+    - "structuredaddress"
+   summary: "Adds a new structuredaddress."
+   description: "Adds a new structuredaddress. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "structuredaddress" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new structuredaddress" 
+      required: true
+      schema:
+       $ref: "#/definitions/StructuredAddressDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created structuredaddress" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "structuredaddress"
+   summary: "Get all valid structuredaddress."
+   description:  "Get all valid structuredaddress. This endpoints will be used to Get all valid structuredaddress maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: townName
+     required: false
+     type: string
+   - in: query
+     name: strrCountry
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: postcode
+     required: false
+     type: string
+   - in: query
+     name: custAccountNo
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/StructuredAddressCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../structuredaddress/xxx
+#   DELETE    .../structuredaddress/xxx
+#   GET       .../structuredaddress/xxx
+#   GET       .../structuredaddress/xxx?version=latestrecord
+#   GET       .../structuredaddress/xxx?version=1
+
+ /structuredaddress/{id}:
+  put:
+   tags:
+    - "structuredaddress"
+   summary: "Update an existing structuredaddress."
+   description:  "Update an existing structuredaddress."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the structuredaddress Maintenance"
+      required: true
+      type: "string"
+    - name: "structuredaddress"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing structuredaddress"
+      required: true
+      schema:
+       $ref: "#/definitions/StructuredAddressDTO"
+   responses:
+    200:
+     description: "Returns updated structuredaddress"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "structuredaddress"
+   summary: "Retrieves the structuredaddress by ID."
+   description:  "Retrieves the structuredaddress by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the structuredaddress based on given id."
+     schema:
+      $ref: "#/definitions/StructuredAddressWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "structuredaddress"
+   summary: "Deletes the structuredaddress identified by given ID."
+   description:  "Deletes the structuredaddress identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the structuredaddress maintenance"
+      required: true
+      type: "string"
+    - name: "structuredaddress"
+      in: "body"
+      description: Request body contain structuredaddress and Modification no of structuredaddress maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../structuredaddress/xxx/approve
+
+ /structuredaddress/{id}/approve:
+  patch:
+   tags:
+    - "structuredaddress"
+   summary: "Authorize the structuredaddress by given ID."
+   description:  "Authorize the structuredaddress identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the structuredaddress maintenance"
+      required: true
+      type: "string"
+    - name: "structuredaddress"
+      in: "body"
+      description: Request body contain structuredaddress and Modification no of structuredaddress maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../structuredaddress/xxx/close
+ /structuredaddress/{id}/close:
+  patch:
+   tags:
+    - "structuredaddress"
+   summary: "Close the structuredaddress by given ID."
+   description:  "Close the structuredaddress identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the structuredaddress maintenance"
+      required: true
+      type: "string"
+    - name: "structuredaddress"
+      in: "body"
+      description: Request body contain structuredaddress and Modification no of structuredaddress maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../structuredaddress/xxx/reopen
+
+ /structuredaddress/{id}/reopen:
+  patch:
+   tags:
+    - "structuredaddress"
+   summary: "reopen the structuredaddress by given ID."
+   description:  "reopen the structuredaddress identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the structuredaddress maintenance"
+      required: true
+      type: "string"
+    - name: "structuredaddress"
+      in: "body"
+      description: Request body contain structuredaddress and Modification no of structuredaddress maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../structuredaddress/xxx/unauthorized
+
+ /structuredaddress/{id}/unauthorized:
+  get:
+   tags:
+    - "structuredaddress"
+   summary: "Retrives the structuredaddress by given ID."
+   description:  "Retrives the structuredaddress identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the structuredaddress based on given id."
+     schema:
+       $ref: "#/definitions/StructuredAddressCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../structuredaddress/xxx/history
+
+ /structuredaddress/{id}/history:
+  get:
+   tags:
+    - "structuredaddress"
+   summary: "Retrives the structuredaddress by given ID."
+   description:  "Retrives the structuredaddress by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the structuredaddress based on given id."
+     schema:
+       $ref: "#/definitions/StructuredAddressCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /structuredaddress/unauthorizedcount:
+  get:
+   tags:
+    - "structuredaddress"
+   summary: "Retrives the unauthorized core account records."
+   description:  "Retrives the unauthorized core account records."
+   operationId: "getUnauthorizedCount"
+   responses:
+    200:
+     description: "Returns unauthorized core account records."
+     schema:
+       type: integer
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ StructuredAddressDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     department:
+      type: string
+      description: "Department"
+      maxLength: 70
+     subDepartment:
+      type: string
+      description: "Sub Department"
+      maxLength: 70      
+     streetName:
+      type: string
+      description: "Street Name"
+      maxLength: 70
+     buildingNumber:
+      type: string
+      description: "Building Number"
+      maxLength: 16
+     buildingName:
+      type: string
+      description: "building Name"
+      maxLength: 35
+     floor:
+      type: string
+      description: "Floor"
+      maxLength: 70
+     postbox:
+      type: string
+      description: "postbox"
+      maxLength: 16
+     room:
+      type: string
+      description: "Room"
+      maxLength: 70
+     postcode:
+      type: string
+      description: "postcode"
+      maxLength: 16
+     townName:
+      type: string
+      description: "Town Name"
+      maxLength: 35
+     townLocationName:
+      type: string
+      description: "Town Location Name"
+      maxLength: 35
+     districtName:
+      type: string
+      description: "District name"
+      maxLength: 35
+     countrySubDivision:
+      type: string
+      description: "Country Sub Division"
+      maxLength: 35
+     strrCountry:
+      type: string
+      description: "country"
+      maxLength: 2
+     custAccountNo:
+      type: string
+      description: "Account number of the External customer"
+      minLength: 1
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+    required:
+     - custAccountNo
+     - strrCountry
+     - postcode
+     - townName
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ StructuredAddressCollection: 
+  description: "Collection of StructuredAddress."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/StructuredAddressDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ StructuredAddressWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/StructuredAddressDTO"

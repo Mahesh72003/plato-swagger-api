@@ -1,0 +1,349 @@
+swagger: '2.0'
+info:
+   description: This is a sample server Manual Recon Service.  You can find out more about Swagger at [swagger.io](http://swagger.io)
+      and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+   version: 1.0.0
+   title: Allocation Service
+host: api-plato.us.oracle.com:8080
+basePath: /obscfcm-manual-recon-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+-  name: allocationService
+   description: APIs for allocation
+schemes:
+- https
+paths:
+   /web/v1/getAllocPmtReconDet:
+      get:
+         tags:
+         - "allocationService"
+         summary: "Get Allocation Payment Recon Details"
+         description: "Get Allocation Payment Recon Details"
+         operationId: "getAllocPmtReconDetails"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: tenantId
+            in: header
+            type: string
+            required: false
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: user id for SMS
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: authToken
+            in: header
+            type: string
+            required: false
+         -  name: contentType
+            in: header
+            type: string
+            required: false
+         -  name: branchDate
+            in: header
+            type: string
+            format: date-time
+            required: false
+         -  name: paymentRefNo
+            in: query
+            type: string
+            description: Request parameter
+            required: true
+         responses:
+            200:
+               description: Successfully received the allocation payment reconcilation details
+               schema:
+                  $ref: '#/definitions/AllocPayReconDtoCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/initiateAllocationPayRecon:
+      post:
+         tags:
+         - "allocationService"
+         summary: "create new recon data"
+         description: "create new recon data by passing all the required details."
+         operationId: "createAllocationPayRecon"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: reconTxnTwDto
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: '#/definitions/ReconTxnDto'
+         responses:
+            201:
+               description: Successfully created allocation payment reconcilation
+               schema:
+                  $ref: ./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/initiateDeAllocationPayRecon:
+      post:
+         tags:
+         - "allocationService"
+         summary: "create new de allocation reconcilation data"
+         description: "create new de allocation reconcilation data by passing all the required details."
+         operationId: "createDeAllocationPayRecon"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: reconTxnTwDto
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: '#/definitions/ReconTxnDto'
+         responses:
+            201:
+               description: Successfully created de allocation payment reconcilation
+               schema:
+                  $ref: ./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/getAllocationPayRecon:
+      post:
+         tags:
+         - "allocationService"
+         summary: "get allocation reconcilation data"
+         description: "get allocation reconcilation data by passing all the required details."
+         operationId: "getAllocationPayRecon"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: reconTxnTwDto
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: '#/definitions/AllocPaySearchModel'
+         responses:
+            201:
+               description: Successfully created allocation payment reconcilation
+               schema:
+                  $ref: '#/definitions/AllocPayReconDtoCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/getPaymentsToAlloc:
+      post:
+         tags:
+         - "allocationService"
+         summary: "get allocation reconcilation data"
+         description: "get allocation reconcilation data by passing all the required details."
+         operationId: "getPaymentsToAllocate"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: reconTxnTwDto
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: '#/definitions/AllocPaySearchModel'
+         responses:
+            201:
+               description: Successfully received payments to allocate
+               schema:
+                  $ref: '#/definitions/PaymentAllocCollectionDto'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/prepareAllocation:
+      post:
+         tags:
+         - "allocationService"
+         summary: "allocate the payments"
+         description: "get the allocation details by passing all the required details."
+         operationId: "prepareAllocation"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: reconTxnTwDto
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: '#/definitions/ReconTxnDto'
+         responses:
+            201:
+               description: Successfully allocated
+               schema:
+                  $ref: '#/definitions/ReconTxnDto'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/prepareAllocationData:
+      get:
+         tags:
+         - "allocationService"
+         summary: "Get Allocation Details."
+         description: "Allocation Data"
+         operationId: "prepareAllocationData"
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: user id for SMS
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: paymentRefNo
+            in: query
+            type: string
+            description: paymentRefNo
+            required: true
+         -  name: amountToBeAllocated
+            in: query
+            type: number
+            description: amountToBeAllocated
+            required: true
+         -  name: allocationBasis
+            in: query
+            type: string
+            description: allocationBasis
+            required: false
+         responses:
+            201:
+               description: 'Returns message of success or failure '
+               schema:
+                  $ref: '#/definitions/AllocPmtRconCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error

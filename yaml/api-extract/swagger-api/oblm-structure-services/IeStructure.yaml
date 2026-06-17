@@ -1,0 +1,712 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server interestenhancement server."
+  version: "1.0.0"
+  title: "interestenhancement Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+tags:
+- name: "interestenhancement"
+  description: "Interest Enhancement method works by applying preferential pricing across a group of accounts on the basis of pre-determined criteria that are typically based on a net aggregate balance threshold.
+
+For example, a company with multiple credit balances distributed across its various operating centers may find that individually these balances only qualify for the lowest interest-rate tier payable on credit balances. By contrast, under an interest-enhancement arrangement, the total of these balances is used to enhance the qualifying tier of the individual balances"
+
+schemes:
+- "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supprorted http methods POST and GET
+  #
+  # path example ../interestenhancement
+
+  /interestenhancement:
+    post:
+      tags:
+      - "interestenhancement"
+      summary: "Adds a new interestenhancement."
+      description: "Adds a new interestenhancement. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      parameters:
+      - name: "interestenhancement"
+        in: "body"
+        description: "Request Body that contains data required for creating a new interestenhancement"
+        required: true
+        schema:
+          $ref: "#/definitions/LmmTmIeStructureDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created interestenhancement"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "interestenhancement"
+      summary: "Get all valid interestenhancement."
+      description:  "Get all valid interestenhancement. This endpoints will be used to Get all valid interestenhancement maintenance records."
+      operationId: "getAll"
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/LmmTmIeStructureCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+  #
+  #  supprorted http methods PUT, DELETE and GET
+  #
+  # path examples----
+  #   PUT       .../interestenhancement/xxx
+  #   DELETE    .../interestenhancement/xxx
+  #   GET       .../interestenhancement/xxx
+  #   GET       .../interestenhancement/xxx?version=latestrecord
+  #   GET       .../interestenhancement/xxx?version=1
+
+  /interestenhancement/{id}:
+    put:
+      tags:
+      - "interestenhancement"
+      summary: "Update an existing interestenhancement."
+      description:  "Update an existing interestenhancement."
+      operationId: "modifyRecord"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "key of the interestenhancement Maintenance"
+        required: true
+        type: "string"
+      - name: "interestenhancement"
+        in: "body"
+        description: "Request Body that contains data required for updating an existing interestenhancement"
+        required: true
+        schema:
+          $ref: "#/definitions/LmmTmIeStructureDTO"
+      responses:
+        200:
+          description: "Returns updated interestenhancement"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "interestenhancement"
+      summary: "Retrieves the interestenhancement by ID."
+      description:  "Retrieves the interestenhancement by ID."
+      operationId: "getById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the user that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Id of the user that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Returns the interestenhancement based on given id."
+          schema:
+            $ref: "#/definitions/LmmTmIeStructureWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      tags:
+      - "interestenhancement"
+      summary: "Deletes the interestenhancement identified by given ID."
+      description:  "Deletes the interestenhancement identified by given ID. Add additional information here for the this endpoint."
+      operationId: "delete"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the interestenhancement maintenance"
+        required: true
+        type: "string"
+      - name: "interestenhancement"
+        in: "body"
+        description: Request body contain interestenhancement and Modification no of interestenhancement maintenance which need to be deleted"
+        required: true
+        schema:
+          $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to Authorize existing record.
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../interestenhancement/xxx/approve
+
+  /interestenhancement/{id}/approve:
+    patch:
+      tags:
+      - "interestenhancement"
+      summary: "Authorize the interestenhancement by given ID."
+      description:  "Authorize the interestenhancement identified by given ID."
+      operationId: "authorize"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the interestenhancement maintenance"
+        required: true
+        type: "string"
+      - name: "interestenhancement"
+        in: "body"
+        description: Request body contain interestenhancement and Modification no of interestenhancement maintenance which need to be deleted"
+        required: true
+        schema:
+          $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to close existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../interestenhancement/xxx/close
+  /interestenhancement/{id}/close:
+    patch:
+      tags:
+      - "interestenhancement"
+      summary: "Close the interestenhancement by given ID."
+      description:  "Close the interestenhancement identified by given ID."
+      operationId: "closeRecord"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the interestenhancement maintenance"
+        required: true
+        type: "string"
+      - name: "interestenhancement"
+        in: "body"
+        description: Request body contain interestenhancement and Modification no of interestenhancement maintenance which need to be closed"
+        required: true
+        schema:
+          $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to reopen existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../interestenhancement/xxx/reopen
+
+  /interestenhancement/{id}/reopen:
+    patch:
+      tags:
+      - "interestenhancement"
+      summary: "reopen the interestenhancement by given ID."
+      description:  "reopen the interestenhancement identified by given ID."
+      operationId: "reopenRecord"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the interestenhancement maintenance"
+        required: true
+        type: "string"
+      - name: "interestenhancement"
+        in: "body"
+        description: Request body contain interestenhancement and Modification no of interestenhancement maintenance which need to be reopen"
+        required: true
+        schema:
+          $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to get all unauthorized records
+  #
+  #  supprorted http methods GET
+  #
+  # path examples----
+  #   GET       .../interestenhancement/xxx/unauthorized
+
+  /interestenhancement/{id}/unauthorized:
+    get:
+      tags:
+      - "interestenhancement"
+      summary: "Retrives the interestenhancement by given ID."
+      description:  "Retrives the interestenhancement identified by given ID."
+      operationId: "authQuery"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the user that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Returns the interestenhancement based on given id."
+          schema:
+            $ref: "#/definitions/LmmTmIeStructureCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to  history record for remitterid
+  #
+  #  supprorted http methods GETS
+  #
+  # path examples----
+  #   GET       .../interestenhancement/xxx/history
+
+  /interestenhancement/{id}/history:
+    get:
+      tags:
+      - "interestenhancement"
+      summary: "Retrives the interestenhancement by given ID."
+      description:  "Retrives the interestenhancement by ID."
+      operationId: "getHistory"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the user that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Returns the interestenhancement based on given id."
+          schema:
+            $ref: "#/definitions/LmmTmIeStructureCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /interestenhancement/getIEStructureId:
+    get:
+      tags:
+      - interestenhancement
+      summary: Retrieves the IE structure ID.
+      description: Retrieves the IE structureID.
+      operationId: getIEStructureId
+      responses:
+        200:
+          description: Returns the IE structure id.
+          schema:
+            $ref: '#/definitions/LmmTmIeStructureWrapperDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error          
+definitions:
+  LmmTmIeStructureDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        branchCode:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        effectiveDate:
+          type: string
+          format: date
+          description: ""
+        endDate:
+          type: string
+          format: date
+          description: ""
+        enhancementType:
+          type: string
+          description: ""
+        interestMethod:
+          type: string
+          description: ""
+#       isCaEnhAllowed:
+#         type: string
+#         description: ""
+#       isCaPartAllowed:
+#         type: string
+#         description: ""
+#       isLnPartAllowed:
+#         type: string
+#         description: ""
+#       isSbEnhAllowed:
+#         type: string
+#         description: ""
+#       isSbPartAllowed:
+#         type: string
+#         description: ""
+#       isTdPartAllowed:
+#         type: string
+#         description: ""
+        isTemp:
+          type: string
+          description: ""
+        logCode:
+          type: string
+          description: ""
+#       nominatedAccBranch:
+#         type: string
+#         description: ""
+#       nominatedAccCcy:
+#         type: string
+#         description: ""
+        nominatedAccNo:
+          type: string
+          description: ""
+        sourceSystem:
+          type: string
+          description: ""
+        pauseStartDate:
+          type: string
+          format: date
+          description: ""
+        pauseEndDate:
+          type: string
+          format: date
+          description: ""
+        structureDescription:
+          type: string
+          description: ""
+        structureId:
+          type: string
+          description: ""
+        thresholdAmount:
+          type: number
+          description: ""
+        thresholdCurrency:
+          type: string
+          description: ""
+        versionNo:
+          type: number
+          description: ""
+        LmmTmIeAccountDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmIeAccountDTO'
+        LmmTmIeRateDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmIeRateDTO'
+        LmmTmIeThresholdDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmIeThresholdDTO'
+      required:
+        - LmmTmIeAccountDTO
+        - LmmTmIeRateDTO
+        - LmmTmIeThresholdDTO
+  LmmTmIeAccountDTO:
+    type: object
+    properties:
+      accountNumber:
+        type: string
+        description: ""
+      branchCode:
+        type: string
+        description: ""
+      currency:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      ieStructureId:
+        type: string
+        description: ""
+      availableBalance:
+        type: number
+        description: ""        
+  LmmTmIeRateDTO:
+    type: object
+    properties:
+      currency:
+        type: string
+        description: ""
+      enhancementRate:
+        type: number
+        description: ""
+      fromAmount:
+        type: number
+        description: ""
+      id:
+        type: string
+        description: ""
+      ieStructureId:
+        type: string
+        description: ""
+      rateType:
+        type: string
+        description: ""
+      toAmount:
+        type: number
+        description: ""
+  LmmTmIeThresholdDTO:
+    type: object
+    properties:
+      amount:
+        type: number
+        description: ""
+      currency:
+        type: string
+        description: ""
+      enhancementRate:
+        type: number
+        description: ""
+      id:
+        type: string
+        description: ""
+      ieStructureId:
+        type: string
+        description: ""
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmmTmIeStructureCollection:
+    description: "Collection of iestructure."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/LmmTmIeStructureDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  LmmTmIeStructureWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmmTmIeStructureDTO"
+  IcEntry:
+    type: object
+    allOf:
+    - type: object
+      properties:
+        account:
+          type: string
+          description: ''
+        branch:
+          type: string
+          description: ''
+        currency:
+          type: string
+          description: ''
+      required:
+      - account
+      - branch
+      - currency         

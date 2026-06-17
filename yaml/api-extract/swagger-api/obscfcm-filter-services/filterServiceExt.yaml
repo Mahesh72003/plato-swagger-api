@@ -1,0 +1,180 @@
+swagger: "2.0"
+info:
+  description: "This provides filter queries for respective categories for all applicable filter criteria and filters the best possible result for that category"
+  version: "1.0.0"
+  title: "Filter Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-filter-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Filter-Service"
+    description: "APIs for Filter Service"
+
+paths: 
+  /service/v1/filterQuery:
+    get:
+      tags:
+        - "Filter-Service"
+      summary: "Retrieves Filter Criteria Query"
+      description:  "Retrieves Filter Criteria Query"
+      operationId: "getFilterQuery"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "appCode"
+        in: "query"
+        description: "Application Code"
+        type: "string"
+        required: true
+      - name: "category"
+        in: "query"
+        description: "Category for which filter query need to be fetched"
+        required: true
+        type: "string"
+      - name: "eventCode"
+        in: "query"
+        description: "Event code for which filter query need to be fetched"
+        required: false
+        type: "string"  
+      responses:
+        200:
+          description: "List of filter queries for given category & event code"
+          schema:
+            $ref: "./filterServiceDef.yaml#/definitions/ScfTransOutputResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  
+  /service/v1/filterValues:
+   post:
+     tags:
+       - "Filter-Service"
+     summary: "Gives best possible result for the given category as per the applicable filter criteria"
+     description: "Gives best possible result for the given category as per the applicable filter criteria"
+     operationId: "filterRecords"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       description: "Application Id"
+       type: "string"
+       required: true  
+     - name: "scfFilterInput" 
+       in: "body" 
+       description: "Request of the API with attribute values for different filter criteria" 
+       required: true
+       schema:
+        $ref: "./filterServiceDef.yaml#/definitions/ScfFilterInput"     
+     responses:
+       200:
+         description: "Best possible record from the filtered records"
+         schema:
+           $ref: "./filterServiceDef.yaml#/definitions/ScfFilterOutput"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"
+         
+  /service/v1/filterNames:
+   post:
+     tags:
+       - "Filter-Service"
+     summary: "Gives the attribute name for given attribute value"
+     description: "Gives the attribute name for given attribute value"
+     operationId: "filterNames"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       description: "Application Id"
+       type: "string"
+       required: true
+     - name: "category"
+       in: "query"
+       description: "Category"
+       type: "string"
+       required: true
+     - name: "language"
+       in: "query"
+       description: "Language"
+       type: "string"
+       required: false
+     - name: "applicationCode"
+       in: "query"
+       description: "Application Code"
+       type: "string"
+       required: true
+     - name: "filterCriteria"
+       in: "query"
+       description: "Filter Criteria"
+       type: "string"
+       required: true
+     - name: "map" 
+       in: "body" 
+       description: "Request of the API with applicable filter parameters" 
+       required: true
+       schema:
+        $ref: "./filterServiceDef.yaml#/definitions/StringStringMap"
+     - name: "eventCode"
+       in: "query"
+       description: "Event code mapped to the category that needs to be fetched"
+       required: false
+       type: "string"     
+     responses:
+       200:
+         description: "Filter names set for given filter parameters"
+         schema:
+           $ref: "./filterServiceDef.yaml#/definitions/StringStringMap"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"

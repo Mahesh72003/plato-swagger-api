@@ -1,0 +1,729 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : covenants
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server covenantmaintenance server." 
+ version: "1.0.0"
+ title: "covenantmaintenance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "covenantmaintenance"
+   description: "Maintenance to capture covenants outside of the Loan application. User should be able to capture covenants outside of the loan application, which are not captured during the loan application life cycle."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../covenantmaintenance
+
+ /covenantmaintenance:
+  post:
+   tags:
+    - "covenantmaintenance"
+   summary: "Adds a new covenantmaintenance."
+   description: "Adds a new covenantmaintenance. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "covenantmaintenance" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new covenantmaintenance" 
+      required: true
+      schema:
+       $ref: "#/definitions/ClmoTmCovenantsDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created covenantmaintenance" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "covenantmaintenance"
+   summary: "Get all valid covenantmaintenance."
+   description:  "Get all valid covenantmaintenance. This endpoints will be used to Get all valid covenantmaintenance maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: partyNumber
+     in: query
+     description: partyNumber to filter
+     required: false
+     type: "string"
+   - name: projectName
+     in: query
+     description: projectName to filter
+     required: false
+     type: "string"
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ClmoTmCovenantsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../covenantmaintenance/xxx
+#   DELETE    .../covenantmaintenance/xxx
+#   GET       .../covenantmaintenance/xxx
+#   GET       .../covenantmaintenance/xxx?version=latestrecord
+#   GET       .../covenantmaintenance/xxx?version=1
+
+ /covenantmaintenance/{id}:
+  put:
+   tags:
+    - "covenantmaintenance"
+   summary: "Update an existing covenantmaintenance."
+   description:  "Update an existing covenantmaintenance."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the covenantmaintenance Maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing covenantmaintenance"
+      required: true
+      schema:
+       $ref: "#/definitions/ClmoTmCovenantsDTO"
+
+   responses:
+    200:
+     description: "Returns updated covenantmaintenance"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "covenantmaintenance"
+   summary: "Retrieves the covenantmaintenance by ID."
+   description:  "Retrieves the covenantmaintenance by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+      $ref: "#/definitions/ClmoTmCovenantsWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "covenantmaintenance"
+   summary: "Deletes the covenantmaintenance identified by given ID."
+   description:  "Deletes the covenantmaintenance identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../covenantmaintenance/xxx/approve
+
+ /covenantmaintenance/{id}/approve:
+  patch:
+   tags:
+    - "covenantmaintenance"
+   summary: "Authorize the covenantmaintenance by given ID."
+   description:  "Authorize the covenantmaintenance identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../covenantmaintenance/xxx/close
+ /covenantmaintenance/{id}/close:
+  patch:
+   tags:
+    - "covenantmaintenance"
+   summary: "Close the covenantmaintenance by given ID."
+   description:  "Close the covenantmaintenance identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../covenantmaintenance/xxx/reopen
+
+ /covenantmaintenance/{id}/reopen:
+  patch:
+   tags:
+    - "covenantmaintenance"
+   summary: "reopen the covenantmaintenance by given ID."
+   description:  "reopen the covenantmaintenance identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../covenantmaintenance/xxx/unauthorized
+
+ /covenantmaintenance/{id}/unauthorized:
+  get:
+   tags:
+    - "covenantmaintenance"
+   summary: "Retrives the covenantmaintenance by given ID."
+   description:  "Retrives the covenantmaintenance identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+       $ref: "#/definitions/ClmoTmCovenantsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../covenantmaintenance/xxx/history
+
+ /covenantmaintenance/{id}/history:
+  get:
+   tags:
+    - "covenantmaintenance"
+   summary: "Retrives the covenantmaintenance by given ID."
+   description:  "Retrives the covenantmaintenance by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+       $ref: "#/definitions/ClmoTmCovenantsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /dashboards/covenants:
+     get:
+      tags:
+       - "covenantmaintenance"
+      produces:
+      - application/json
+      - application/xml
+      summary: get the covenants details
+      description: get the covenants details
+      operationId: getCovenantsSummary
+      parameters:
+      - name: rangeStart
+        in: query
+        description: rangeEnd
+        required: false
+        type: string
+      - name: rangeEnd
+        in: query
+        description: rangeEnd
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns CovenantsWidgetModelCollection
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+ /dashboards/pastcovenants/{rangeStart}:
+     get:
+      tags:
+       - "covenantmaintenance"
+      produces:
+      - application/json
+      - application/xml
+      summary: get the covenants details
+      description: get the covenants details
+      operationId: getPastCovenants
+      parameters:
+      - name: rangeStart
+        in: path
+        description: start date of the period for which loans to be fetched
+        required: true
+        type: string
+      responses:
+        201:
+          description: Returns PastCovenantsWidgetModelCollection
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error   
+definitions:
+ ClmoTmCovenantsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     partyId:
+      type: string
+      description: "partyId"
+     partyName:
+      type: string
+      description: "partyName"
+     partyNumber:
+      type: string
+      description: "partyNumber"
+     projectName:
+      type: string
+      description: "projectName"
+      maxLength: 105      
+     covenantsDetails:
+      type: array
+      items:
+       $ref: '#/definitions/ClmoTmCovenantsDetailsDTO'
+ ClmoTmCovenantsDetailsDTO:
+  type: object
+  properties:
+     covenantsId:
+      type: string
+      description: "covenantsId"
+     description:
+      type: string
+      description: "description"
+     dueBy:
+      type: string
+      description: "dueBy"
+     endBy:
+      type: string
+      description: "endBy"
+     frequency:
+      type: string
+      description: "frequency"
+     id:
+      type: string
+      description: "id"
+     name:
+      type: string
+      description: "name"
+     reminderDays:
+      type: number
+      description: "reminderDays"
+     status:
+      type: string
+      description: "status"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ClmoTmCovenantsCollection: 
+  description: "Collection of covenants."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ClmoTmCovenantsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ClmoTmCovenantsWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/ClmoTmCovenantsDTO"
+ CovenantsWidgetModelCollection:
+     description: Collection of CovenantsWidgetModelCollection.
+     type: object
+     properties:
+      data:
+       type: array
+       items:
+        $ref: '#/definitions/CovenantsWidgetModel'
+ CovenantsWidgetModel:
+     type: object
+     properties:
+       month:
+        type: string
+       count:
+        type: number
+       parties:
+          type: array
+          items:
+            $ref: '#/definitions/CovenantsWidgetPartytModel'
+ PastCovenantsWidgetModelCollection:
+     description: Collection of PastCovenantsWidgetModelCollection.
+     type: object
+     properties:
+      data:
+       type: array
+       items:
+        $ref: '#/definitions/PastCovenantsWidgettModel'
+ PastCovenantsWidgettModel:
+     description: Collection of PastCovenantsWidgettModel.
+     type: object
+     properties:
+      parties:
+       type: array
+       items:
+        $ref: '#/definitions/CovenantsWidgetPartytModel'     
+ CovenantsWidgetPartytModel:
+    type: object
+    properties:
+      partyName:
+         type: string
+      partyNumber:
+         type: string
+      partyId:
+         type: string 
+      projects:
+          type: array
+          items:
+            $ref: '#/definitions/CovenantsProjectWidgetModel'
+ CovenantsProjectWidgetModel:
+    type: object
+    properties:
+      keyId:
+       type: string
+      projectName:
+          type: string
+      keyProjectId:
+          type: string
+      covenantsDetails:
+          type: array
+          items:
+            $ref: '#/definitions/CovenantsDetailsWidgetModel'  
+ CovenantsDetailsWidgetModel:
+    type: object
+    properties:
+     covenantsId:
+      type: string
+      description: "covenantsId"
+     description:
+      type: string
+      description: "description"
+     dueBy:
+      type: string
+      description: "dueBy"
+     endBy:
+      type: string
+      description: "endBy"
+     frequency:
+      type: string
+      description: "frequency"
+     id:
+      type: string
+      description: "id"
+     name:
+      type: string
+      description: "name"
+     reminderDays:
+      type: number
+      description: "reminderDays"
+     status:
+      type: string
+      description: "status"

@@ -1,0 +1,485 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: NLPProcessing Application Service
+host: 10.184.157.121:9000
+basePath: /nlpprocessing-services
+tags:
+- name: nlpprocessingapplication
+  description: API for NLPprocessingApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/nlpprocessingapplication/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPProcessingApplicationAggregate
+      summary: Get NLPProcess application aggregate details
+      description: Get NLPProcessing application aggregate details. Add additional information here for the this endpoint.
+      operationId: getNLPProcessingApplication
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which NLPProcessing application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns NLPProcessApplication data for the application number
+          schema:
+            $ref: '#/definitions/NLPProcessingApplicationAggregateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/nlpprocessingapplication/{applicationNumber}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPProcessingApplicationAggregate
+      summary: Get NLPProcess application details
+      description: Get NLPProcess application details. Add additional information here for the this endpoint.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which NLPProcess application data needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode of the datasegment that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Datasegment history for the application number
+          schema:
+            $ref: '#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/nlpprocessingapplication/customer/{customerNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPProcessingApplicationAggregate
+      summary: Get NLPProcessing application aggregate details
+      description: Get NLPProcess application aggregate details. Add additional information here for the this endpoint.
+      operationId: getNLPProcessingApplicationsByCustomerNumber
+      parameters:
+      - name: customerNumber
+        in: path
+        description: Customer number for which NLPProcessing application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns NLPProcessingApplication data for the customer number
+          schema:
+            $ref: '#/definitions/NLPProcessingApplicationAggregateCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/nlpprocessingapplication/submit:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPProcessingApplicationAggregate
+      summary: Submit for the NLPProcessing application domain.
+      description: Populates NLPProcessing application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveNLPProcessingApplication
+      parameters:
+      - name: NLPProcessingApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new NLPProcessingApplicationAggregate
+        required: true
+        schema:
+          $ref: '#/definitions/NLPProcessingApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/nlpprocessingapplication/{applicationNumber}/workdata:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPProcessingApplicationAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getWorkDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which NLPProcessing application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns NLPProcessingApplicationAggregateModel for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/crossdomaindatasegments:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CrossDomainDatasegments
+      summary: Performs cross domain datasegments operations.
+      description: Performs cross domain datasegments operations.
+      operationId: defaultDependentDatasegments
+      parameters:
+      - name: CrossDomainDatasegments
+        in: body
+        description: Request Body that contains data required for defaulting cross domain datasegments.
+        required: true
+        schema:
+          $ref: '#/definitions/CrossDomainDatasegmentsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created CrossDomainDatasegments
+          headers:
+            Location:
+              description: URL of newly created CrossDomainDatasegments
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    allOf:
+    - type: object
+      discriminator: resouce_type
+  ApplicationTransactionFlowStatus:
+    description: ApplicationTransactionFlowModel
+    type: string
+    enum:
+    - INCOMPLETE
+    - COMPLETE
+    - WIP
+  BasicApplicationDetailsModel:
+    description: BasicApplicationDetails model
+    type: object
+    required:
+    - businessProductCode
+    - applicationBranch
+    - customerType
+    - applicationDate
+    - priority
+    properties:
+      id:
+        description: Id of the BasicApplicationDetails
+        type: string
+        format: int64
+      applicationNumber:
+        description: Application Number of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 20
+      processRefNumber:
+        description: process refeernce Number of the BasicApplicationDetails
+        type: string
+      businessProductCode:
+        description: ApplicationCategory Name of the BasicApplicationDetails
+        type: string
+        maxLength: 36
+      lifeCycleCode:
+        description: LifeCycleCode
+        type: string
+        maxLength: 20
+      applicationChannel:
+        description: ApplicationChannel of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 22
+      applicationDate:
+        description: ApplicationDate code of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 11
+      subCategory:
+        description: SubCategory  of the BasicApplicationDetails
+        type: string
+      remarks:
+        description: Remarks of the BasicApplicationDetails
+        type: string
+      applicationInitiationDate:
+        description: applicationInitiationDate code of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 10
+      applicationBranch:
+        description: applicationBranch  of the BasicApplicationDetails
+        type: string
+      customerType:
+        description: CustomerType  of the BasicApplicationDetails
+        $ref: '#/definitions/CustomerType'
+      customerNumber:
+        description: customerNumber  of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 22
+      customerName:
+        description: customerName  of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      preMandateReference:
+        description: PreMandate application Number
+        type: string
+        maxLength: 20
+      postMandateReference:
+        description: PreMandate application Number
+        type: string
+        maxLength: 20
+      postMandateParticipantReference:
+        description: PreMandate application Number
+        type: string
+        maxLength: 20
+      dealOriginationReference:
+        description: deal Origination application Number
+        type: string
+        maxLength: 20
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string
+      priority:
+        description: priority  of the BasicApplicationDetails
+        $ref: '#/definitions/TaskPriority'
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeader'
+      facilities:
+        description: Facility Details
+        type: array
+        items:
+          $ref: '#/definitions/FacilitiesModel'
+  NLPProcessingApplicationAggregateModel:
+    description: NLPProcessingApplicationAggregateModel
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      processRefNumber:
+        description: Process Ref Number
+        type: string
+      id:
+        description: NLPProcessing Application Id
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      nlpDetailsModel:
+       $ref: '#/definitions/NLPDetailsModel'
+  NLPProcessingApplicationAggregateCollection:
+    description: Collection of NLPProcessingApplicationAggregate
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/NLPProcessingApplicationAggregateModel'
+  ApplicationTransactionFlowStatus:
+    description: ApplicationTransactionFlowModel
+    type: string
+    enum:
+    - INCOMPLETE
+    - COMPLETE
+    - WIP
+  FacilitiesModel:
+    description: Facilities Model
+    type: object
+    properties:
+      facilityRefNo:
+        description: Facility Reference No
+        type: string
+        maxLength: 16
+      facilityName:
+        description: Facility Name
+        type: string
+        maxLength: 35
+      facilityCurrency:
+        description: Facility Currency
+        type: string
+        maxLength: 4
+      facilityAmount:
+        description: Facility Amount
+        type: number
+        minimum: 0
+      availableAmount:
+        description: Available Amount
+        type: number
+        minimum: 0
+      tranches:
+        description: Facility Tranches Details
+        type: array
+        items:
+          $ref: '#/definitions/FacilityTranchesModel'
+  FacilityTranchesModel:
+    description: Facility Tranches Model
+    type: object
+    properties:
+      trancheRefNo:
+        description: Tranche Reference No
+        type: string
+        maxLength: 16
+      trancheName:
+        description: Tranche Name
+        type: string
+        maxLength: 35
+      trancheCurrency:
+        description: Tranche Currency
+        type: string
+        maxLength: 4
+      trancheAmount:
+        description: Tranche Amount
+        type: number
+        minimum: 0
+      availableAmount:
+        description: Available Amount
+        type: number
+        minimum: 0
+  ApplicationInitiationResponse:
+    description: ApplicationInitiation Response
+    type: object
+    allOf:
+    - $ref: '#/definitions/ResponseResourceSupport'
+    - type: object
+      properties:
+        applicationNumber:
+          description: Application number
+          type: string
+        processRefNumber:
+          description: Process Reference number
+          type: string
+        processCode:
+          description: Process Code
+          type: string
+        stageCode:
+          description: Stage Code
+          type: string
+        stageName:
+          description: Stage Name
+          type: string
+        workflowId:
+          description: Workflow Id
+          type: string
+        taskId:
+          description: Task Id
+          type: string 
+        taskOutcomes:
+         type: array
+         items:
+          type: string
+  CrossDomainDatasegmentsModel:
+    description: CrossDomainDatasegments Model
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      processRefNumber:
+        description: process Ref Number
+        type: string
+      trancheReferenceNumber:
+        description: Tranche Reference Number
+        type: string
+      customerNumber:
+        description: customer Number
+        type: string
+      applicationBranch:
+        description: application Branch
+        type: string
+      operation:
+        description: operation
+        type: string

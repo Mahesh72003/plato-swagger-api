@@ -1,0 +1,266 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server cmccoreaccounts server." 
+ version: "1.0.0"
+ title: "cmccoreaccounts Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "CoreAccountService"
+   description: "This service is used to create Virtual Account for Virtual Entity. Virtual Account Details such as IBAN and Debit/Credit restrictions. Interest, Overdraft, Real Account Linkage Preferences are captured"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../cmccoreaccounts
+
+ /service/coreaccounts:
+  post:
+   tags:
+    - "CoreAccountService"
+   summary: "Adds a new coreaccounts."
+   description: "Adds a new coreaccounts. Add additional information here for this endpoint."
+   operationId: "saveCustomerAccount"
+   parameters:
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      type: "string"
+      required: true   
+    - name: "coreaccounts" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new coreaccounts" 
+      required: true
+      schema:
+       $ref: "../api/CoreAccount.yaml#/definitions/CoreAccountDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created coreaccounts" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreAccountServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../accounts/xxx
+#   DELETE    .../accounts/xxx
+#   GET       .../accounts/xxx
+#   GET       .../accounts/xxx?version=latestrecord
+#   GET       .../accounts/xxx?version=1
+ /service/coreaccounts/{custAccountNo}:
+  put:
+   tags:
+    - "CoreAccountService"
+   summary: "Update an existing coreaccounts."
+   description:  "Update an existing coreaccounts."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "custAccountNo"
+      in: "path"
+      description: "custAccountNo of the coreaccounts Maintenance"
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      in: "header"
+      description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+      required: true
+      type: "string"      
+    - name: "coreaccounts"
+      in: "body"
+      description: "Request body contains data required to update an existing coreaccounts"
+      required: true
+      schema:
+       $ref: "../api/CoreAccount.yaml#/definitions/CoreAccountDTO"
+   responses:
+    200:
+     description: "Returns updated accounts"
+     schema:
+      $ref: "#/definitions/CoreAccountServiceResponseDtoWrapper"
+    400:
+     description: "Bad request error, the server is unable to process the request"
+    401:
+     description: "Unauthorized request error, invalid credentials"
+    403:
+     description: "Request denied, no permission to access the request."
+    405:
+     description: "Request denied, invalid input."
+    500:
+     description: "Internal server error."
+     
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coreaccounts/xxx/close
+ /service/coreaccounts/{custAccountNo}/close:
+  patch:
+   tags:
+    - "CoreAccountService"
+   summary: "Close the coreaccounts by given custAccountNo."
+   description:  "Close the coreaccounts identified by given custAccountNo."
+   operationId: "closeRecord"
+   parameters:
+    - name: "custAccountNo"
+      in: "path"
+      description: "Key of the coreaccounts maintenance"
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      in: "header"
+      description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+      required: true
+      type: "string"       
+    - name: "coreaccounts"
+      in: "body"
+      description: Request body contain coreaccounts and Modification no of coreaccounts maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/CloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CoreAccountServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coreaccounts/xxx/reopen
+
+ /service/coreaccounts/{custAccountNo}/reopen:
+  patch:
+   tags:
+    - "CoreAccountService"
+   summary: "reopen the coreaccounts by given custAccountNo."
+   description:  "reopen the coreaccounts identified by given custAccountNo."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "custAccountNo"
+      in: "path"
+      description: "Key of the coreaccounts maintenance"
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      in: "header"
+      description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+      required: true
+      type: "string"       
+    - name: "coreaccounts"
+      in: "body"
+      description: Request body contain coreaccounts and Modification no of coreaccounts maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/ReOpenDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CoreAccountServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+definitions:
+ CloseDto:
+  type: object
+  properties:
+   modNo:
+    type: integer  
+   remarks:
+    type: string
+ ReOpenDto:
+  type: object
+  properties:
+   modNo:
+    type: integer  
+   remarks:
+    type: string    
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+     $ref: "../api/CoreAccount.yaml#/definitions/ResponseDto"
+ CoreAccountServiceResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "../api/CoreAccount.yaml#/definitions/ResponseDto"
+   data:
+    $ref: "../api/CoreAccount.yaml#/definitions/CoreAccountDTO"

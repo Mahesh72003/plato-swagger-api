@@ -1,0 +1,304 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : paymentTerms
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on payment terms." 
+ version: "1.0.0"
+ title: "Payment Term Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: /obscfcm-core-services
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "paymentTermsService"
+   description: "API for payment terms that will allow the bank to maintain specific payment frequencies and dates for buyers making bulk payments on repetitive fixed dates. Thus, payment frequencies such as weekly, monthly etc. can be maintained against each buyer. The screen is extensible and allows for maintenance against specific suppliers of a buyer.
+Maintenance of multiple payment dates against the same invoice is out of scope."
+
+paths:
+ /service/v1/filter:
+  post:
+   tags:
+    - "paymentTermsService"
+   summary: "Filters the paymentTerms by given input params."
+   description:  "Filters the paymentTerms by given input params."
+   operationId: "getFilteredTerms"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "paymentTerms"
+      in: "body"
+      description: Request body of invoice type
+      required: true
+      schema:
+       $ref: "#/definitions/InvoiceFilterModel"
+   responses:
+    200:
+     description: "Returns the paymentTerms based on given id."
+     schema:
+       $ref: "#/definitions/ObPaymentTermsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+ ObPaymentTermsCollection: 
+  description: "Collection of termstm."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ObPaymentTermsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ InvoiceFilterModel:
+    description: "Invoice model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      invoiceId:
+        description: "Id of the Invoice "
+        type: "integer"
+        format: "int64"
+      buyerId:
+        type: string
+        description: "buyerId"
+      buyerName:
+        type: string
+        description: "buyerName"
+      invoiceDate:
+        type: string
+        description: "invoiceDate"
+      invoiceDueDate:
+        type: string
+        description: "invoiceDueDate"
+      invoiceNumber:
+        type: string
+        description: "invoiceNumber"
+      invoiceRefNo:
+        type: string
+        description: "invoiceRefNo"
+      programCode:
+        type: string
+        description: "programCode"
+      programName:
+        type: string
+      reasonCode:
+        type: string
+        description: "reasonCode"
+      supplierId:
+        type: string
+        description: "supplierId"
+      supplierName:
+        type: string
+        description: "supplierName"
+      supplierDivCode:
+        type: string
+        description: "supplierDivCode"
+      supplierDivName:
+        type: string
+        description: "supplierDivName"
+      paymentTerms:
+        type: string
+      shipmentDate:
+        type: string
+      divisionCode:
+        type: string
+      transactionRefNo:
+        type: string
+      relationCode:
+        type: string
+        description: "relationCode"
+      supplierCode:
+        type: string
+      buyerCode:
+        type: string
+      paymentDate:
+        type: string
+      buyerDivCode:
+        type: string
+        description: "buyerDivCode"
+      buyerDivName:
+        type: string
+ ObPaymentTermsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     id:
+      type: string
+      description: "id"
+     daysOfTheMonth:
+      type: string
+      description: "daysOfTheMonth"
+     daysOfTheWeek:
+      type: string
+      description: "daysOfTheWeek"
+     filterAttr1: 
+      description: "filterAttr1"
+      type: string
+     filterAttr1Name:
+      type: string
+      description: "filterAttr1Name" 
+     filterAttr2: 
+      description: "filterAttr2"
+      type: string
+     filterAttr2Name:
+      type: string
+      description: "filterAttr2Name" 
+     filterAttr3: 
+      description: "filterAttr3"
+      type: string
+     filterAttr3Name:
+      type: string
+      description: "filterAttr3Name" 
+     filterAttr4: 
+      description: "filterAttr4"
+      type: string
+     filterAttr4Name:
+      type: string
+      description: "filterAttr4Name" 
+     filterAttr5: 
+      description: "filterAttr5"
+      type: string
+     filterAttr5Name:
+      type: string
+      description: "filterAttr5Name" 
+     filterAttr6: 
+      description: "filterAttr6"
+      type: string
+     filterAttr6Name:
+      type: string
+      description: "filterAttr6Name" 
+     filterAttr7: 
+      description: "filterAttr7"
+      type: string
+     filterAttr7Name:
+      type: string
+      description: "filterAttr7Name" 
+     filterAttr8: 
+      description: "filterAttr8"
+      type: string
+     filterAttr8Name:
+      type: string
+      description: "filterAttr8Name" 
+     filterAttr9: 
+      description: "filterAttr9"
+      type: string
+     filterAttr9Name:
+      type: string
+      description: "filterAttr9Name" 
+     filterAttr10: 
+      description: "filterAttr10"
+      type: string
+     filterAttr10Name:
+      type: string
+      description: "filterAttr10Name"     
+     filterCriteria:
+      type: string
+      description: "filterCriteria"
+     frequencyOfPayments:
+      type: string
+      description: "frequencyOfPayments"
+     holidayTreatment:
+      type: string
+      description: "holidayTreatment"
+     minimumCreditPeriod:
+      type: number
+      description: "minimumCreditPeriod"
+     paymentDateCalculationBasis:
+      type: string
+      description: "paymentDateCalculationBasis"
+     txnControllerRefNo:
+      type: string
+      description: "txnControllerRefNo" 
+     applicationCode:
+      type: string
+      description: "applicationCode"   
+     ObPaymentCustomTermsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObPaymentCustomTermsDTO'
+ ObPaymentCustomTermsDTO:
+  type: object
+  properties:
+     fromDay:
+      type: string
+      description: "FromDay for Custom payment Terms"
+     id:
+      type: string
+      description: "Id for Custom payment Terms"
+     paymentDay:
+      type: string
+      description: "PaymentDay for Custom payment Terms"
+     paymentTermsId:
+      type: string
+      description: "PaymentTermsId for Custom payment Terms"
+     toDay:
+      type: string
+      description: "ToDay for Custom payment Terms"
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+    

@@ -1,0 +1,242 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : verification.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/verifications:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Verifications
+      summary: Adds a new verification.
+      description: Adds a new verification. Add additional information here for this endpoint.
+      operationId: addVerification
+      parameters:
+      - name: verification
+        in: body
+        description: Request Body that contains data required for creating a new verification
+        required: true
+        schema:
+          $ref: '#/definitions/VerificationModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created verification
+          headers:
+            Location:
+              description: URL of newly created verification
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Verifications
+      summary: Retrieves the list of existing verifications.
+      description: Retrieves the list of existing verifications. Add additional information here for the this endpoint.
+      operationId: getAllVerifications
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/verifications/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Verifications
+      summary: Retrieves the verification by id.
+      description: Retrieves the verification by id. Add additional information here for the this endpoint.
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the verification based on given id.
+          schema:
+            $ref: '#/definitions/VerificationModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Verifications
+      summary: Update an existing verification.
+      description: Update an existing verification. Add additional information here for the this endpoint.
+      operationId: updateVerification
+      parameters:
+      - name: id
+        in: path
+        description: id of the verification that need to be updated
+        required: true
+        type: string
+      - name: verification
+        in: body
+        description: Request Body that contains data required for updating an existing verification
+        required: true
+        schema:
+          $ref: '#/definitions/VerificationModel'
+      responses:
+        200:
+          description: Returns updated verification
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Verifications
+      summary: Deletes the verification identified by given ID.
+      description: eletes the verification identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteVerification
+      parameters:
+      - name: id
+        in: path
+        description: Id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  VerificationModel:
+   description: Verification model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     required:
+     - verificationStatus
+     properties:
+      verificationStatus:
+        description: Verification Status
+        type: string
+        maxLength: 20
+      agency:
+        description: agency
+        type: string
+        maxLength: 20
+      verificationRemarks:
+        description: verificationRemarks
+        type: string
+        maxLength: 300
+  VerificationCollection:
+    description: Collection of verifications.
+    type: object
+    properties:
+      VerificationList:
+        type: array
+        items:
+          $ref: '#/definitions/VerificationModel'
+  GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type

@@ -1,0 +1,3151 @@
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform Operations on Accounting" 
+ version: "1.0.0"
+ title: "Accounting APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-account-maintenance-services"
+consumes:
+ - "application/json"
+ - "application/xml"
+produces:
+ - "application/json"
+ - "application/xml"
+tags:
+ - name: "accountingservices"
+   description: "API for SCF Accounting's Operations"
+ - name: "accountingpost"
+   description: "API for SCF Accounting's Post Operations"
+
+paths:
+  /service/v1/accounting:     
+    post:
+      tags:
+      - "accountingservices"
+      summary: "Get all accounting entries with their details based on filter(query param) criterias."
+      description: "Get all accounting entries."
+      operationId: "getAllAccountingDetails"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: offset
+        in: query
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: "limit is maximum no of records to be fetched"
+        required: false
+        type: integer     
+      - name: "rquestDto" 
+        in: "body" 
+        description: "Request Body that contains data required for creating a new accentrycode" 
+        required: true
+        schema:
+            $ref: "./obscfcm-accounting-def.yaml#/definitions/GenericObscfCmAccountDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/AccountingCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/accountDetails:     
+    get:
+      tags:
+      - "accountingservices"
+      summary: "Get all account details based on filter(query param) criteria."
+      description: "Get all account details."
+      operationId: "getByPartyId"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "partyId"
+        in: "query"
+        description: "Party Id"
+        required: false
+        type: "string"
+      - name: "branchCode"
+        in: "query"
+        description: "Branch Code"
+        required: false
+        type: "string"
+      - name: "eventCode"
+        in: "query"
+        description: "Event Code"
+        required: false
+        type: "string"
+      - name: "productCode"
+        in: "query"
+        description: "Product Code"
+        required: false
+        type: "string"
+      - name: "recordStat"
+        in: "query"
+        description: "Record Status"
+        required: false
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/ScfTmExtAccMapMasterModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/partyId:     
+    get:
+      tags:
+      - "accountingservices"
+      summary: "Get Party Id  based on filter(query param) criteria."
+      description: "Get Party Id."
+      operationId: "getPartyId"      
+      parameters: 
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"     
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"  
+      - name: "bankCode"
+        in: "query"
+        description: "Bank Code"
+        required: true
+        type: "string"        
+      - name: "extAcNo"
+        in: "query"
+        description: "External Account Number"
+        required: true
+        type: "string"          
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            type: "string"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/internalAccount/party:     
+    get:
+      tags:
+      - "accountingservices"
+      summary: "Get Party based on the account number"
+      description: "Get Party based on account number."
+      operationId: "getPartyByIntAccNo"      
+      parameters: 
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"     
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"  
+      - name: "intAcNo"
+        in: "query"
+        description: "Internal Account Number"
+        required: false
+        type: "string"  
+      - name: "applicationCode"
+        in: "query"
+        description: "Application Code"
+        required: false
+        type: "string"           
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/InternalPartyDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/updateExternalSystemResponse:     
+    post:
+      tags:
+      - "accountingservices"
+      summary: "Update external system response status"
+      description: "Update external system response status"
+      operationId: "updateExternalSystemResponse"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "externalSystemResponse" 
+        in: "body" 
+        description: "Request Body that contains response status for external systems" 
+        required: true
+        schema:
+            $ref: "#/definitions/ExternalSystemResponseStatus"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/ExternalSystemStatusUpdateResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"        
+          
+  /service/v1/accountingpost:
+     post:
+       tags:
+        - "accountingpost"
+       summary: "Adds a new accentrycode."
+       description: "Adds a new accounting entry code."
+       operationId: "saveRecord"
+       parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Id"        
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "accontingTransactionModelcollection" 
+          in: "body" 
+          description: "Request Body that contains data required for creating a new accounting" 
+          required: true
+          schema:
+           $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTransactionCollection"
+       responses:
+        201: 
+         description: "Returns message of succes or failure " 
+         headers:
+          Location:
+           description: "URL of newly created accentrycode" 
+           type: "string"
+         schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+         description: "Malformed syntax."
+        401:
+         description: "Request does not have sufficient credentials."
+        403:
+         description: "Request is not authorized."
+        405:
+         description: "Invalid input"
+        500:
+         description: "Internal error"
+     get:
+       tags:
+        - "accountingpost"
+       summary: "Get all valid accentrycode."
+       description:  "Get all valid accounting entry code."
+       operationId: "getAll"
+       parameters:
+       - name: id
+         in: query
+         description: "Id"
+         required: false
+         type: string       
+       - name: includecloseandunauth
+         in: query
+         description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+         required: false
+         type: boolean
+       - name: "appId"
+         in: "header"
+         type: "string"
+         required: true
+         description: "Application Id"        
+       - name: "userId"
+         in: "header"
+         type: "string"
+         required: true
+         description: "User Id"
+       - name: "branchCode"
+         in: "header"
+         type: "string"
+         required: true
+         description: "Branch Code"   
+       - name: offset
+         in: query
+         description: "offset is starting no of records to be fetched"
+         required: false
+         type: integer
+         
+       - name: refNo
+         in: query
+         description: "Reference Number"
+         required: false
+         type: "string"
+         
+       - name: seqNo
+         in: query
+         description: "Sequence Number"
+         required: false
+         type: "integer"
+         format: "int64"
+         
+       - name: drCrIndicator
+         in: query
+         description: "Debit Credit Indicator"
+         required: false
+         type: "string"
+         
+       - name: amountCcy
+         in: query
+         description: "Amount Currency"
+         required: false
+         type: "string"
+         
+       - name: amountType
+         in: query
+         description: "Amount Type"
+         required: false
+         type: "string"
+         
+       - name: accountNo
+         in: query
+         description: "Account Number"
+         required: false
+         type: "string"
+         
+       - name: status
+         in: query
+         description: "Status"
+         required: false
+         type: "string"
+         
+       - name: accRoleCode
+         in: query
+         description: "Accounting Role Code"
+         required: false
+         type: "string"
+         
+       - name: accPartyType
+         in: query
+         description: "Party Type"
+         required: false
+         type: "string"
+         
+       - name: accPartyId
+         in: query
+         description: "PartyId"
+         required: false
+         type: "string"
+         
+       - name: accSettMethod
+         in: query
+         description: "Settlement Method"
+         required: false
+         type: "string"
+         
+         
+       - name: accRoleDesc
+         in: query
+         description: "Accounting Role Description"
+         required: false
+         type: "string"
+         
+       - name: accEntryDesc
+         in: query
+         description: "Accounting Entry Description"
+         required: false
+         type: "string"
+         
+       - name: accType
+         in: query
+         description: "Account Type"
+         required: false
+         type: "string"
+         
+       - name: eventSrNo
+         in: query
+         description: "Event Sr No."
+         required: false
+         type: "string"
+         
+       - name: ecaRefNo
+         in: query
+         description: "ECA Ref Number"
+         required: false
+         type: "string"
+         
+       - name: externalAccount
+         in: query
+         description: "External Account"
+         required: false
+         type: "string"
+         
+       - name: paymentMode
+         in: query
+         description: "Payment Mode"
+         required: false
+         type: "string"
+         
+       - name: externalAccountCcy
+         in: query
+         description: "External Account Currency"
+         required: false
+         type: "string"
+         
+       - name: externalBankId
+         in: query
+         description: "External Bank Id"
+         required: false
+         type: "string"
+         
+       - name: externalBankName
+         in: query
+         description: "External Bank Name"
+         required: false
+         type: "string"
+         
+       - name: externalBranchCode
+         in: query
+         description: "External Branch Code"
+         required: false
+         type: "string"
+         
+       - name: externalBranchName
+         in: query
+         description: "External Branch Name"
+         required: false
+         type: "string"
+         
+       - name: externalBranchRoutingCode
+         in: query
+         description: "External Branch Routing Code"
+         required: false
+         type: "integer"
+         format: "int64"
+     
+       - name: accEntryDescription
+         in: query
+         description: "AccEntryDescription is the description of AccEntryCode."
+         required: false
+         type: "string"
+         
+       - name: limit
+         in: query
+         description: "limit is maximum no of records to be fetched"
+         required: false
+         type: integer
+         
+       - name: dateRefBasis         
+         in: query
+         description: "Date Type"
+         required: false
+         type: string
+         
+       - name: dateFrom
+         in: query
+         description: "Date From"
+         required: false
+         type: string
+         pattern: '^\d{4}-\d{2}-\d{2}$'
+         
+       - name: dateTo
+         in: query
+         description: "Date to"
+         required: false
+         type: string
+         pattern: '^\d{4}-\d{2}-\d{2}$'
+         
+       - name: postingStatus
+         in: query
+         description: "Posting Status"
+         required: false
+         type: string
+         
+       - name: eventCode
+         in: query
+         description: "Event Code"
+         required: false
+         type: string
+         
+       - name: applicationCode
+         in: query
+         description: "Application Code"
+         required: false
+         type: string
+         
+       - name: productCode
+         in: query
+         description: "Product Code"
+         required: false
+         type: string
+         
+       - name: authorizationStatus
+         in: query
+         description: "Authorization Status"
+         required: false
+         type: string
+         
+       responses:
+        201:
+         description: "Returns message of succes or failure"
+         headers: 
+          Location:
+           description: "Location"
+           type: "string"
+         schema:
+           $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTransactionCollection"
+        400:
+         description: "Malformed syntax."
+        401:
+         description: "Request does not have sufficient credentials."
+        403:
+         description: "Request is not authorized."
+        405:
+         description: "Invalid input"
+        500:
+         description: "Internal error"
+    
+  /service/v1/accountingpost/{refNo}/purge:
+    delete:
+     tags:
+      - "accountingpost"
+     summary: "Delete the accentrycode by ID."
+     description:  "Delete the accounting entry code by ID."
+     operationId: "purgeRecord"
+     parameters:    
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Application Id"        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "User Id"
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Branch Code"
+      - name: "refNo"
+        in: "path"
+        description: "refNo of the record that needs to be purged"
+        required: true
+        type: "string"
+     responses:
+      200:
+       description: "Returns the accentrycode based on given id."
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+  
+  /service/v1/accountingpost/{refNo}/approve:
+    patch:
+     tags:
+      - "accountingpost"
+     summary: "Authorize the accentrycode by given ID."
+     description:  "Authorize the accounting entry code identified by given ID."
+     operationId: "authorize"
+     parameters:    
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Application Id"        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "User Id"
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Branch Code"
+      - name: "refNo"
+        in: "path"
+        description: "Key of the accentrycode maintenance"
+        required: true
+        type: "string"
+      - name: "accountingTransactionCollection"
+        in: "body"
+        description: Request body contain accentrycode and Modification no of accentrycode maintenance which need to be deleted"
+        required: true
+        schema:
+         $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTransactionCollection"
+     responses:
+      200:
+       description: "Successful operation."
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+       
+       
+  /service/v1/accountinggeneric:     
+    post:
+      tags:
+      - "accountingservices"
+      summary: "this method is same as getAllAccountingDetails only difference is the response"
+      description: "Get all accounting details"
+      operationId: "getAllGenericAccountingDetails"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: offset
+        in: query
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: "limit is maximum no of records to be fetched"
+        required: false
+        type: integer     
+      - name: "rquestDto" 
+        in: "body" 
+        description: "Request Body that contains data required for creating a new accentrycode" 
+        required: true
+        schema:
+            $ref: "./obscfcm-accounting-def.yaml#/definitions/GenericObscfCmAccountDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+             $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTransactionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+          
+  /service/v1/poolingAccountNumber:     
+    post:
+      tags:
+      - "accountingservices"
+      summary: "Get all accounting entries with their details based on filter(query param) criterias."
+      description: "Get all accounting numbers."
+      operationId: "getAllAccountingNumbers"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: offset
+        in: query
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: "limit is maximum no of records to be fetched"
+        required: false
+        type: integer
+      - name: includecloseandunauth
+        in: query
+        description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+        required: false
+        type: boolean    
+      - name: "rquestDto" 
+        in: "body" 
+        description: "Request Body that contains data required for creating a new accentrycode" 
+        required: true
+        schema:
+            $ref: "./obscfcm-accounting-def.yaml#/definitions/GenericObscfCmAccountDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "./obscfcm-accounting-def.yaml#/definitions/PoolingAccountCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/fetchAccountingTxnDetails:
+     post:
+       tags:
+        - "accountingpost"
+       summary: "Fetch Accounting Transaction Details"
+       description: "Fetches Accounting Details Corresponding to Transactions"
+       operationId: "fetchAccountingTxnDetails"
+       parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Id"        
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "accountingTxnDetailsFetchReqModel" 
+          in: "body" 
+          description: "Request Body that contains data required for fetching accounting Details" 
+          required: true
+          schema:
+           $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTxnDetailsFetchReqModel"
+       responses:
+        200: 
+         description: "Returns message of success or failure " 
+         schema:
+           $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTxnDetailsResponseCollection"
+        400:
+         description: "Malformed syntax."
+        401:
+         description: "Request does not have sufficient credentials."
+        403:
+         description: "Request is not authorized."
+        405:
+         description: "Invalid input"
+        500:
+         description: "Internal error"
+
+definitions:
+  AccountingModel:
+    type: object
+    properties:
+      refNo:
+        type: "string"    
+        description: "Reference Number"  
+      seqNo:
+        type: "integer"
+        format: "int64"
+      accEntryCode:
+       type: string
+       description: "Account Entry Code"
+      creditAmountType:
+       type: string
+       description: "Credit Amount Type"
+      debitAmountType:
+       type: string
+       description: "Debit Amount Type"
+      creditAccRoleCode:
+       type: string
+       description: "Credit Account Role Code"
+      debitAccRoleCode:
+       type: string
+       description: "Debit Account Role Code"
+      debitAccRoleDescription:
+       type: string
+       description: "Debit Account Role Description"
+      creditAccRoleDescription:
+       type: string
+       description: "Credit Account Role Description"
+      sequence:
+       type: number
+       description: "Sequence"
+      eventCode:
+       type: string
+       description: "Event Code"
+      accEntryDescription:
+       type: string
+       description: "Account Entry Description"
+      creditAmount:
+       type: number
+       description: "Credit Amount"
+      creditAmtCcy:
+       type: string
+       description: "Credit Amount Currency"
+      debitAmount:
+       type: number
+       description: "Debit Amount"
+      debitAmtCcy:
+       type: string
+       description: "Debit Amount Currency"
+      creditPartyId:
+       type: string
+       description: "Credit Party Id"
+      creditPartyName:
+       type: string
+       description: "Credit Party Name"
+      debitPartyId:
+       type: string
+       description: "Debit Party Id"
+      debitPartyName:
+       type: string
+       description: "Debit Party Name"
+      creditPartyType:
+       type: string
+       description: "Credit Party Type"
+      debitPartyType:
+       type: string
+       description: "Debit Party Type"
+      creditAccountNumber:
+       type: string
+       description: "Credit Account Number"
+      creditAccountCurrency:
+       type: string
+       description: "Credit Account Currency"
+      debitAccountNumber:
+       type: string
+       description: "Debit Account Number"
+      debitAccountCurrency:
+       type: string
+       description: "Debit Account Currency"
+      debitAmountInAccCcy:
+       type: number
+       description: "Debit Amount In Account Currency"
+      creditAmountInAccCcy:
+       type: number
+       description: "Credit Amount In Account Currency"
+      creditSettlementMethod:
+       type: string
+       description: "Credit Settlement Method"
+      debitSettlementMethod:
+       type: string
+       description: "Debit Settlement Method"
+      creditDivisionCode:
+       type: string
+       description: "Credit Division Code"
+      debitDivisionCode:
+       type: string
+       description: "Debit Division Code"
+      creditExchangeRate:
+       type: "number"
+       description: "Credit Exchange Rate"
+      debitExchangeRate:
+       type: "number"
+       description: "Debit Exchange Rate"
+      creditAccType:
+        type: "string"
+        description: "Credit Account Type"
+      debitAccType:
+        type: "string"
+        description: "Debit Account Type"
+      eventSrNo:
+        type: "number"
+        description: "Event Serial Number"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      processingDate:
+        type: "string"
+        description: "Processing Date"
+      txnBranchCode:
+        type: "string"
+        description: "Transaction Branch Code"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      additionalField1:
+        type: "string"
+        description: "Additional Field 1"
+      additionalField2:
+        type: "string"
+        description: "Additional Field 2"
+      additionalField3:
+        type: "string"
+        description: "Additional Field 3"
+      additionalField4:
+        type: "string"
+        description: "Additional Field 4"
+      additionalField5:
+        type: "string"
+        description: "Additional Field 5"
+      additionalField6:
+        type: "string"
+        description: "Additional Field 6"
+      additionalField7:
+        type: "string"
+        description: "Additional Field 7"
+      additionalField8:
+        type: "string"
+        description: "Additional Field 8"
+      additionalField9:
+        type: "string"
+        description: "Additional Field 9"
+      additionalField10:
+        type: "string"
+        description: "Additional Field 10"
+      creditVaFlagYN:
+        type: string
+        description: "Credit Virtual Account flag as Y or N"
+      debitVaFlagYN:
+        type: string
+        description: "Debit Virtual Account flag as Y or N"        
+      creditIntAcntList:
+        type: array
+        items:
+          type: "string"
+      debitIntAcntList:
+        type: array
+        items:
+          type: "string"
+      creditExtAcntList:
+        type: array
+        items:
+          type: "object"
+      debitExtAcntList:
+        type: array
+        items:
+          type: "object"
+      accEntryAttributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+      creditInternalAttributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+      debitInternalAttributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+      creditExternalAttributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+      debitExternalAttributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+      
+        
+  PagingDto:
+    type: object
+    properties:
+     totalResults:
+      type: integer
+      
+  AccountingCollection: 
+    description: "Collection of AccountingModel"
+    type: object
+    properties:
+      accountingModelList:
+        type: array
+        items:
+          $ref: "#/definitions/AccountingModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  AccountingFinanceModel:
+    type: object
+    properties:
+      accEntryCode:
+       type: string
+       description: "Account Entry Code"
+      creditAmountType:
+       type: string
+       description: "Credit Amount Type"
+      debitAmountType:
+       type: string
+       description: "Debit Amount Type"
+      creditAccRoleCode:
+       type: string
+       description: "Credit Account Role Code"
+      debitAccRoleCode:
+       type: string
+       description: "Debit Account Role Code"
+      debitAccRoleDescription:
+       type: string
+       description: "Debit Account Role Description"
+      creditAccRoleDescription:
+       type: string
+       description: "Credit Account Role Description"
+      sequence:
+       type: number
+       description: "Sequence"
+      accEntryDescription:
+       type: string
+       description: "Account Entry Description"
+      creditAmount:
+       type: number
+       description: "Credit Amount"
+      creditAmtCcy:
+       type: string
+       description: "Credit Amount Currency"
+      debitAmount:
+       type: number
+       description: "Debit Amount"
+      debitAmtCcy:
+       type: string
+       description: "Debit Amount Currency"
+      creditPartyId:
+       type: string
+       description: "Credit Party Id"
+      creditPartyName:
+       type: string
+       description: "Credit Party Name"
+      debitPartyId:
+       type: string
+       description: "Debit Party Id"
+      debitPartyName:
+       type: string
+       description: "Debit Party Name"
+      creditAccountNumber:
+       type: string
+       description: "Credit Account Number"
+      creditAccountCurrency:
+       type: string
+       description: "Credit Account Currency"
+      debitAccountNumber:
+       type: string
+       description: "Debit Account Number"
+      debitAccountCurrency:
+       type: string
+       description: "Debit Account Currency"
+      debitAmountInAccCcy:
+       type: number
+       description: "Debit Amount In Account Currency"
+      creditAmountInAccCcy:
+       type: number
+       description: "Credit Amount In Account Currency"
+      creditSettlementMethod:
+       type: string
+       description: "Credit Settlement Method"
+      debitSettlementMethod:
+       type: string
+       description: "Debit Settlement Method"
+      creditDivisionCode:
+       type: string
+       description: "Credit Division Code"
+      debitDivisionCode:
+       type: string
+       description: "Debit Division Code"
+      creditExchangeRate:
+       type: "number"
+       description: "Credit Exchange Rate"
+      debitExchangeRate:
+       type: "number"
+       description: "Debit Exchange Rate"
+  AccountingFinanceCollection: 
+    description: "Collection of AccountingFinanceModel"
+    type: object
+    properties:
+      accountingFinanceModelList:
+        type: array
+        items:
+          $ref: "#/definitions/AccountingFinanceModel"
+  ParamsDto:
+    type: object
+    properties:
+      key:
+       type: string
+      value:
+       type: array
+       items:
+         $ref: string
+         
+  ScfTmExtAccMapMasterModelDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: string
+          description: "Account Number"     
+        bankName:
+          type: string
+          description: "Bank Name"
+        branchCode:
+          type: string
+          description: "Branch Code"
+        branchName:
+          type: string
+          description: "Branch Name"
+        defaultAccount:
+          type: string
+          description: "Default account"
+        eventCode:
+          type: string
+          description: "Event Code"     
+        ifscCode:
+          type: string
+          description: "Ifsc Code"
+        partyId:
+          type: string
+          description: "Party Id"    
+        productCode:
+          type: string
+          description: "Product Code"
+        filterAttr1:
+          type: string
+          description: "Filter Attribute 1" 
+        filterAttr2:
+          type: string
+          description: "Filter Attribute 2"
+        filterAttr3:
+          type: string
+          description: "Filter Attribute 3"
+        filterAttr4:
+          type: string
+          description: "Filter Attribute 4"
+        filterAttr5:
+          type: string
+          description: "Filter Attribute 5"
+        accountCcy:
+          type: string
+          description: "Account Currency"
+        paymentMode:
+          type: string
+          description: "Payment Mode"
+        bankId:
+          type: string
+          description: "Bank Id"
+        filterCriteria:
+          type: string
+          description: "Filter Criteria"
+        routingCode:
+          type: string
+          description: "Routing Code"
+      
+  ScfTmExtAccMapMasterModelCollection: 
+    description: "Collection of extaccmap."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/ScfTmExtAccMapMasterModelDTO"
+                  
+  PartyTransactionModel:
+    description: "Party Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      financeRefNo:
+        type: "string"
+        description: "Finance Reference Number"
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      srNo:
+        type: "integer"
+        format: "int64"
+        description: "Serial Number"
+      partyCode:
+        type: "string"
+        description: "Party Code"
+      partyId:
+        type: "string"
+        description: "Party Id"
+      partyName:
+        type: "string"
+        description: "Party name"
+      partyAddress:
+        type: "string"  
+        description: "Party address"
+      divisionCode:
+        type: "string"
+        description: "Division Code"
+      divisionName:
+        type: "string"   
+        description: "Division Name"     
+
+  ScfTransOutputResponse:
+    description: "Output response from transaction API"
+    type: "object"
+    properties:
+      queryList:
+        type: "array"
+        items:
+          $ref: "#/definitions/FilterQueryModel"
+          
+  FilterQueryModel:
+    description: "Query and attribute list model"
+    type: "object"
+    properties:
+      query:
+        description: "Filter Query"
+        type: "string"
+      ScfTransCriteriaQueryAttributeModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/TransCriteriaQueryAttributeModel"
+          
+  FilterRecords:
+    description: "Represents the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+          
+  FilterInput:
+    description: "Represents the input request of the final filter service call from transaction services"
+    type: "object"
+    properties:
+      category:
+        description: "Represents the category of the filter"
+        type: "string"
+      eventCode:
+        description: "Event Code"
+        type: "string"
+      applicationCode:
+        description: "Represents the applicationcode"
+        type: "string"
+      filterRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/FilterRecords"
+          
+  FilterOutput:
+    description: "Represents the best possible combination for the given category"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        items:
+          $ref: "./obscfcm-accounting-def.yaml#/definitions/Attribute"
+  SystemParamModel:
+    description: "Scf System Param model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Parameter"
+        type: "integer"
+        format: "int64"
+      key:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+      value:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+        
+  TransCriteriaQueryAttributeModel:
+    description: "Query for each type of given category"
+    type: "object"
+    properties:
+      paramIndex:
+        description: "input parameter index in the query"
+        type: "integer"
+      paramName:
+        description: "input parameter name in the query"
+        type: "string"
+      columnName:
+        description: "corresponding column of the input parameter index in the query"
+        type: "string"
+      mappedParam:
+        description: "corresponding mapped param index in the query"
+        type: "string"        
+        
+  SystemParamCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      ScfSystemParamModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/SystemParamModel"
+          
+  ResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/FinanceTransactionModel" 
+      errors:
+        type: "object"
+      paging:
+        type: "object"
+        
+  InterestResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/InterestTransactionCollection" 
+      errors:
+        type: "object"
+      paging:
+        type: "object"                  
+       
+  PartyResponseModel:
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/PartyTransactionModel"   
+      errors:
+        type: "object"
+      paging:
+        type: "object" 
+        
+  ScfAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: "string"
+          description: "Account Number"
+        accountType:
+          type: "string"
+          description: "Account Type"
+        accountCcy:
+          type: "string"
+          description: "Account Currency"
+        amountInAccCcy:
+          type: "number"   
+          description: "Amount In Account Currency"
+        exchangeRate:
+          type: "number"
+          description: "Exchange Rate"
+        vaFlagYN:
+          type: "string"
+          description: "Virtual Account flag as Y or N"          
+        allAccountList:
+          type: "array"
+          items: 
+            type: "string"   
+        
+  CurrencyUtilityDto:
+    type: object
+    properties:
+     amount:
+      type: number
+      description: "Amount"
+     rate:
+      type: number
+      description: "Rate"
+        
+  CurrencyRateCalculatorDtoWrapper:
+    type: object
+    properties:
+     data:
+      $ref: "#/definitions/CurrencyUtilityDto"
+                
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+        
+  InterestTransactionModel:
+    description: "Interest Transaction Model"
+    allOf:
+    - $ref: "#/definitions/TransactionModel"
+    - type: "object"
+      properties:
+        id:
+          type: "string"
+          description: "Id"
+        financeRefNo:
+          type: "string"
+          description: "Finance Reference Number"
+        seqNo:
+          type: "integer"
+          format: "int64"
+          description: "Sequence Number"
+        interestType:
+          type: "string"
+          description: "Interest Type"
+        interestRateType:
+          type: "string"
+          description: "Interest Rate Type"
+        interestRate:
+          type: "number"
+          description: "Interest Rate"
+        spread:
+          type: "number"
+          description: "Spread"
+        interestRateTotal:
+          type: "number"
+          description: "Interest Rate Total"
+        interestCollFreq:
+          type: "string"
+          description: "Interest Collection Frequency"
+        interestAmtCcy:
+          type: "string"
+          description: "Interest Amount Currency"
+        interestAmount:
+          type: "number"
+          description: "Interest Amount"
+        componetName:
+           type: "string"
+           description: "Component Name"
+        interestComp:
+           type: "string"    
+           description: "Interest Component"    
+
+
+  TransactionModel:
+    type: "object"
+    discriminator: "model_Type"
+          
+  FinanceTransactionModel:
+    description: "Finance Transaction Model"
+    allOf:
+    - $ref: "#/definitions/TransactionModel"
+    - type: "object"
+      properties:
+        financeRefNo:
+          type: "string"
+          description: "Finance Reference Number"
+        requestId:
+          type: "string"
+          description: "Request Id"
+        productCode:
+          type: "string"
+          description: "Product Code"
+        operationCode:
+          type: "string"
+          description: "Operation Code"
+        programCode:
+          type: "string"
+          description: "Program Code"
+        programName:
+          type: "string"
+          description: "Program Name"
+        buyerId:
+          type: "string"
+          description: "Buyer Id"
+        buyerName:
+          type: "string"
+          description: "Buyer Name"
+        supplierId:
+          type: "string"
+          description: "Supplier Id"
+        supplierName:
+          type: "string"
+          description: "Supplier Name"
+        debtor:
+          type: "string"
+          description: "Debtor"
+        startDate:
+          type: "string"
+          description: "Start Date"
+        tenor:
+          type: "integer"
+          format: "int64"
+          description: "Tenor"
+        maturityDate:
+          type: "string"
+          description: "Maturity Date"
+        invoiceAmtCcy:
+          type: "string"
+          description: "Invoice Amount Currency"
+        invoiceAmount:
+          type: "number"
+          description: "Invoice Amount"
+        financePCT:
+          type: "number"
+          description: "Finance PCT"
+        financeAmtCcy:
+          type: "string"
+          description: "Finance Amount Currency"
+        financeAmt:
+          type: "number"
+          description: "Finance Amount"
+        exchangeRate:
+          type: "number"
+          description: "Exchange Rate"
+        processingDate:
+          type: "string"
+          description: "Processing Date"
+        settlementProcessingDate:
+          type: "string"
+          description: "Settlement Processing Date"
+        makerId:
+          type: "string"
+          description: "Maker Id"
+        makerDateStamp:
+          type: "string"
+          description: "Maker Date Stamp"
+        authId:
+          type: "string"
+          description: "Authorization id"
+        authDateStamp:
+          type: "string"
+          description: "Authorized Date Stamp"
+        financeStatus:
+          type: "string"
+          description: "Finance Status"
+        clRefNo:
+          type: "string"
+          description: "Cl Reference Number"
+        settlementRefNo:
+          type: "string"
+          description: "Settlement Reference Number"
+        settlementMethod:
+          type: "string"
+          description: "Settlement Method"
+        totalSettlementAmt:
+          type: "number"
+          description: "Total Settlement"
+        creditReceived:
+          type: "string"
+          description: "Credit Received"
+        creditAccount:
+          type: "string"
+          description: "Credit Account"
+        paymentParty:
+          type: "string"
+          description: "Payment Party"
+        accountType:
+          type: "string"
+          description: "Account Type"
+        settlementAmtAllocated:
+          type: "number"
+          description: "Settlement Amount Allocated"
+        balanceAmtToBeAllocated:
+          type: "number"
+          description: "Balance Amount To Be Allocated"
+        settlementAmtAllocation:
+          type: "string"
+          description: "Settlement Amount Allocation"
+        manualAllocation:
+          type: "string"
+          description: "Manual Allocation"
+        pastDueDate:
+          type: "string"
+          description: "Past Due Date"
+        valueDate:
+          type: "string"
+          description: "Value date"
+        principalOSAmount:
+          type: "number"
+          description: "Principal OS Amount"
+        interestOSAmount:
+          type: "number"
+          description: "Interest OS Amount"
+        totalOSAmount:
+          type: "number"
+          description: "Total OS Amount"
+        valueDtdIntOSAmt:
+          type: "number"
+          description: "Value Dated Interest OS Amount"
+        pmtToPenOnIntOS:
+          type: "number"
+          description: "Payment To Pen On Interest OS"
+        interestPaidUpfront:
+          type: "number"
+          description: "Interest Paid Upfront"
+        overdueIntOSAmt:
+          type: "number"
+          description: "Overdue Interest OS Amount"
+        valueDtdOverdueIntOSAmt:
+          type: "number"
+          description: "Value Dated Overdue Interest OS Amount"
+        paymentAmt:
+          type: "number"
+          description: "Payment Amount"
+        appropPaymentAmt:
+          type: "number"
+          description: "Appropriation Payment Amount"
+        appropriationSequence:
+          type: "string"
+          description: "Appropriation Sequence"
+        pmtToPrncplOS:
+          type: "number"
+          description: "Payment To Principal OS"
+        pmtToIntOS:
+          type: "number"
+          description: "Payment To Interest OS"
+        pmtToOverdueIntOS:
+          type: "number"
+          description: "Payment To Overdue Interest OS"
+        productDescription:
+          type: "string"
+          description: "Product Description"
+        productCategory:
+          type: "string"
+          description: "Product Category"
+        maxTenorAllowed:
+          type: "number"
+          description: "Maximum Tenor Allowed"
+        minTenorAllowed:
+          type: "number"
+          description: "Minimum Tenor Allowed"
+        minFinPCT:
+          type: "number"
+          description: "Minimum Finance PCT"
+        maxFinPCT:
+          type: "number"
+          description: "Maximum Finance PCT"
+        holidayTreatment:
+          type: "string"
+          description: "Holiday Treatment"
+        productType:
+          type: "string"
+          description: "Product Type"
+        preferredDisbursementMode:
+          type: "string"
+          description: "Preferred Disbursement Mode"
+        settlementCcy:
+          type: "string"
+          description: "Settlement Currency"
+        totalOSAmountSettlementCcy:
+          type: "number"
+          description: "Total OS Amount Settlement Currency"
+        refund:
+          type: "number"
+          description: "Refund"
+        interestRefundAmt:
+          type: "number"
+          description: "Interest Refund Amount"
+        interestRefundPmtMode:
+          type: "string"
+          description: "Interest Refund Payment Amount"
+        settlementExchangeRate:
+          type: "number"
+          description: "Settlement Exchange Rate"
+        totalOSPostAllocation:
+          type: "number"
+          description: "Total OS Post Allocation"
+        errorCode:
+          type: "string"
+          description: "Error Code"
+        errorDescription:
+          type: "string"
+          description: "Error Description"
+        graceDays:
+          type: "number"
+          description: "Grace Days"
+        partRepaymentAllowed:
+          type: "string"
+          description: "Part Repayment Allowed"
+        staleStatus:
+          type: "string"
+          description: "Stale Status"
+        minFinanciableAmt:
+          type: "number"
+          description: "Minimum Financiable Amount"
+        maxFinanciableAmt:
+          type: "number"
+          description: "Maximum Financiable Amount"
+        minReFinPCT:
+          type: "number"
+          description: "Minimum ReFinance PCT"
+        maxReFinPCT:
+          type: "number"
+          description: "Maximum ReFinance PCT"
+        penIntOSAmt:
+          type: "number"
+          description: "Pen Interest OS Amount"
+        valueDtdPenIntOSAmt:
+          type: "number"
+          description: "Value Dated Pen Interest OS Amount"
+        interestAmortized:
+          type: "number"
+          description: "Interest Amortized"
+        withRecourse:
+          type: "string"
+          description: "With Recourse"
+        transactionFlow:
+          type: "string"
+          description: "Transaction Flow"
+        totalMarginAmount:
+          type: "number"
+          description: "Total Margin Amount"
+        interestType:
+          type: "string"
+          description: "Interest Type"
+        interestRefundHandling:
+          type: "string"
+          description: "Interest Refund Handling"
+        interestBearingPartyRole:
+          type: "string"
+          description: "Interest Bearing Party Role"
+        isFromRecon:
+          type: "string"
+          description: "Is From Recon"
+        isNPA:
+          type: "string"
+          description: "Is NPA"          
+          
+          
+  DepositSlipModel:
+    description: "Deposit Slip Model"
+    allOf:
+    - $ref: "#/definitions/TransactionModel"
+    - type: "object"
+      properties:
+        referenceNum:
+          description: "Reference Num of the DepositSlip"
+          type: "string"
+        depositSlipRefNo:
+          description: "Deposit Slip Ref No of the slip"
+          type: "string"
+        depositSlipNo:
+          description: "no of the DepositSlipNo"
+          type: "integer"
+          format: "int64"
+        corporateId:
+          description: "Corporate Id of the DepositSlip"
+          type: "string"
+        corporateName:
+          description: "Corporate Name of the DepositSlip"
+          type: "string"        
+        creditAccountNo:
+          description: "Credit Account No of the DepositSlip"
+          type: "number"
+        depositSlipDate:
+          type: string
+          format: date
+          description: "Deposit Slip Date"
+        depositSlipAmt:
+          description: "Deposit Slip Amount"
+          type: number
+        depositSlipAmtCcy:
+          description: "Deposit Slip Amount Currency"
+          type: string
+        depositSlipCount:
+          description: "Deposit Slip Count"
+          type: "integer"
+          format: "int64"
+        depositSlipValue:
+          description: "Deposit Slip Value"
+          type: "number"
+        divisionCode:
+          description: "Division Code"
+          type: "string"
+        divisionDesc:
+          description: "Division Description"
+          type: "string"
+        pickupLocationCode:
+          description: "Pickup Location Code"
+          type: "string"
+        pickupLocationDesc:
+          description: "Pickup Location Description"
+          type: "string"
+        pickupPointCode:
+          description: "Pickup Point Code"
+          type: "string"
+        pickupPointDesc:
+          description: "Pickup Point Description"
+          type: "string"
+        pickupDate:
+          description: "Pickup Date"
+          type: string
+          format: date
+        noOfInstruments:
+          description: "Number Of Instruments"
+          type: "integer"
+          format: "int64"
+        noOfMiscFields:
+          description: "Number Of Miscellaneous Fields"
+          type: "integer"
+          format: "int64"
+        misc1:
+          description: "Miscellaneous 1"
+          type: "string" 
+        misc2:
+          description: "Miscellaneous 2"
+          type: "string" 
+        misc3:
+          description: "Miscellaneous 3"
+          type: "string" 
+        misc4:
+          description: "Miscellaneous 4"
+          type: "string" 
+        misc5:
+          description: "Miscellaneous 5"
+          type: "string" 
+        misc6:
+          description: "Miscellaneous 6"
+          type: "string" 
+        misc7:
+          description: "Miscellaneous 7"
+          type: "string" 
+        misc8:
+          description: "Miscellaneous 8"
+          type: "string" 
+        misc9:
+          description: "Miscellaneous 9"
+          type: "string" 
+        misc10:
+          description: "Miscellaneous 10"
+          type: "string" 
+        misc11:
+          description: "Miscellaneous 11"
+          type: "string" 
+        misc12:
+          description: "Miscellaneous 12"
+          type: "string" 
+        misc13:
+          description: "Miscellaneous 13"
+          type: "string" 
+        misc14:
+          description: "Miscellaneous 14"
+          type: "string" 
+        misc15:
+          description: "Miscellaneous 15"
+          type: "string" 
+        misc16:
+          description: "Miscellaneous 16"
+          type: "string" 
+        misc17:
+          description: "Miscellaneous 17"
+          type: "string" 
+        misc18:
+          description: "Miscellaneous 18"
+          type: "string" 
+        misc19:
+          description: "Miscellaneous 19"
+          type: "string" 
+        misc20:
+          description: "Miscellaneous 20"
+          type: "string" 
+        misc21:
+          description: "Miscellaneous 21"
+          type: "string" 
+        misc22:
+          description: "Miscellaneous 22"
+          type: "string" 
+        misc23:
+          description: "Miscellaneous 23"
+          type: "string" 
+        misc24:
+          description: "Miscellaneous 24"
+          type: "string" 
+        misc25:
+          description: "Miscellaneous 25"
+          type: "string" 
+        misc26:
+          description: "Miscellaneous 26"
+          type: "string" 
+        misc27:
+          description: "Miscellaneous 27"
+          type: "string" 
+        misc28:
+          description: "Miscellaneous 28"
+          type: "string" 
+        misc29:
+          description: "Miscellaneous 29"
+          type: "string" 
+        misc30:
+          description: "Miscellaneous 30"
+          type: "string"
+ 
+  InvoiceCollectionDto:
+    description: "List of Invoices"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/InvoiceModel'
+      paging:
+        type: "object"
+ 
+  InstrumentModel:
+    description: "Instruement Model"
+    allOf:
+    - $ref: "#/definitions/TransactionModel"
+    - type: "object"
+      properties:
+        referenceNum:
+          description: "Reference Num of the batch"
+          type: "string"
+        depositSlipRefNo:
+          description: "Deposit Slip Ref No of the Instrument"
+          type: "string"
+        depositSlipNo:
+          description: "no of the DepositSlipNo"
+          type: "integer"
+          format: "int64"
+        instrumentRefNo:
+          description: "Instrument Ref No of the Instrument"
+          type: "string"
+        instrumentNo:
+          description: "no of the Instrument"
+          type: "integer"
+          format: "int64"
+        instrumentDate:
+          type: string
+          format: date
+          description: "Instrument Date"
+        instrumentType:
+          description: "Instrument Type"
+          type: "string"
+        instrumentAmtCcy:
+          description: "Instrument Amount Currency"
+          type: "string"        
+        instrumentAmt:
+          description: "Instrument Amount"
+          type: "number"
+        routingNumber:
+          description: "Routing Number"
+          type: number
+        drawnOnBankCode:
+          description: "Drawn On Bank Code"
+          type: "string"
+        drawnOnBankName:
+          description: "Drawn On Bank Name"
+          type: "string"
+        drawnOnBranchCode:
+          description: "Drawn On Branch Code"
+          type: "string"
+        drawnOnBranchName:
+          description: "Drawn On Branch Name"
+          type: "string"
+        payableAtLocationCode:
+          description: "Payable At Location Code"
+          type: "string"
+        payableAtLocationDesc:
+          description: "Payable At Location Description"
+          type: "string"
+        payableAtLocClusterCode:
+          description: "Payable At Location Cluster Code"
+          type: "string"
+        payableAtLocClusterDesc:
+          description: "Payable At Location Cluster Description"
+          type: "string"
+        drawerId:
+          description: "Drawer Id"
+          type: string
+        drawerName:
+          description: "Drawer Name"
+          type: "string"
+        drawerAcNo:
+          description: "Drawer Account Number"
+          type: "number"
+        drawerAcName:
+          description: "Drawer Account Name"
+          type: "string"
+        clearingNetworkCode:
+          description: "Clearing Network Code"
+          type: "string"
+        clearingNetworkDesc:
+          description: "Clearing Network Description"
+          type: "string"
+        corporateRefNo:
+          description: "Corporate Reference Number"
+          type: "string"
+        creditAccountNo:
+          description: "Credit Account Number"
+          type: "number"
+        productCode:
+          description: "Product Code"
+          type: "string"
+        productDesc:
+          description: "Product Description"
+          type: "string"
+        divisionCode:
+          description: "Division Code"
+          type: "string"
+        divisionCodeDesc:
+          description: "Division Code Description"
+          type: "string"
+        instrumentStatus:
+          description: "Instrument Status"
+          type: "string"
+        instrumentCount:
+          description: "Instrument Count"
+          type: "number"
+        instrumentAmountValue:
+          description: "Instrument Amount Value"
+          type: "number"
+        noOfMiscFields:
+          description: "Number Of Miscellaneous Fields"
+          type: "number"
+        misc1:
+          description: "Miscellaneous 1"
+          type: "string" 
+        misc2:
+          description: "Miscellaneous 2"
+          type: "string" 
+        misc3:
+          description: "Miscellaneous 3"
+          type: "string" 
+        misc4:
+          description: "Miscellaneous 4"
+          type: "string" 
+        misc5:
+          description: "Miscellaneous 5"
+          type: "string" 
+        misc6:
+          description: "Miscellaneous 6"
+          type: "string" 
+        misc7:
+          description: "Miscellaneous 7"
+          type: "string" 
+        misc8:
+          description: "Miscellaneous 8"
+          type: "string" 
+        misc9:
+          description: "Miscellaneous 9"
+          type: "string" 
+        misc10:
+          description: "Miscellaneous 10"
+          type: "string" 
+        misc11:
+          description: "Miscellaneous 11"
+          type: "string" 
+        misc12:
+          description: "Miscellaneous 12"
+          type: "string" 
+        misc13:
+          description: "Miscellaneous 13"
+          type: "string" 
+        misc14:
+          description: "Miscellaneous 14"
+          type: "string" 
+        misc15:
+          description: "Miscellaneous 15"
+          type: "string" 
+        misc16:
+          description: "Miscellaneous 16"
+          type: "string" 
+        misc17:
+          description: "Miscellaneous 17"
+          type: "string" 
+        misc18:
+          description: "Miscellaneous 18"
+          type: "string" 
+        misc19:
+          description: "Miscellaneous 19"
+          type: "string" 
+        misc20:
+          description: "Miscellaneous 20"
+          type: "string" 
+        misc21:
+          description: "Miscellaneous 21"
+          type: "string" 
+        misc22:
+          description: "Miscellaneous 22"
+          type: "string" 
+        misc23:
+          description: "Miscellaneous 23"
+          type: "string" 
+        misc24:
+          description: "Miscellaneous 24"
+          type: "string" 
+        misc25:
+          description: "Miscellaneous 25"
+          type: "string" 
+        misc26:
+          description: "Miscellaneous 26"
+          type: "string" 
+        misc27:
+          description: "Miscellaneous 27"
+          type: "string" 
+        misc28:
+          description: "Miscellaneous 28"
+          type: "string" 
+        misc29:
+          description: "Miscellaneous 29"
+          type: "string" 
+        misc30:
+          description: "Miscellaneous 30"
+          type: "string"
+
+  Parameter:
+    type: "object"
+    discriminator: "parameter_Type"
+
+   
+
+  ScfFinanceParameter:
+    description: "Finance Transaction Model"
+    allOf:
+    - $ref: "#/definitions/Parameter"
+    - type: "object"
+      properties:
+        paymentMode:
+          description: "Payment Mode"
+          type: "string"
+        interestType:
+          description: "Interest Type"
+          type: "string"
+        programCode:
+          description: "Interest Type"
+          type: "string"
+        anchorId:
+          description: "Anchor Id"
+          type: "string"
+        spokeId:
+          description: "Spoke Id"
+          type: "string"
+        partyId:
+          description: "Party Id"
+          type: "string"
+        partyName:
+          description: "Party Name"
+          type: "string"
+        partyRole:
+          description: "Party Role"
+          type: "string"
+        chargeAmt:
+          description: "Charge Amount"
+          type: "number"
+        chgCcy:
+          description: "Charge Currency"
+          type: "string"
+        autoDebitIntOsAmt:
+          description: "Interest OS Amount"
+          type: "number"
+        autoDebitFinOsAmt:
+          description: "Finance OS Amount"
+          type: "number"
+        autoDebitTotalOsAmt:
+          description: "Total OS Amount"
+          type: "number"
+        autoDebitInvoiceOsAmt:
+          description: "Invoice OS Amount"
+          type: "number"
+        autoDebitCcy:
+          description: "Total OS Currency"
+          type: "string" 
+        marginAmt:
+          description: "Margin Amount"
+          type: "number"
+        marginCcy:
+          description: "Margin Currency"
+          type: "string"   
+        chargeCode:
+          description: "Charge Code"
+          type: "string"
+        chargeType:
+          description: "Charge Type"
+          type: "string"
+        interestRefundPmtMode:
+          description: "Payment Mode Type"
+          type: "string"
+        interestBearingPartyId:
+          description: "Interest bearing party Id"
+          type: "string"
+        interestBearingPartyName:
+          description: "Interest bearing party name"
+          type: "string"
+        isFinanced:
+          description: "Financed Check"
+          type: "string"
+        paymentParty:
+          description: "Payment Party Check"
+          type: "string"
+        partyDivCode:
+          description: "Party Name"
+          type: "string"
+        partyDivName:
+          description: "Party Name"
+          type: "string"
+        counterPartyId:
+          description: "Counter Party Id"
+          type: "string"
+        counterPartyName:
+          description: "Counter Party Name"
+          type: "string"
+        counterPartyDivCode:
+          description: "Counter Party Div Code"
+          type: "string"
+        counterPartyDivName:
+          description: "Counter Party Div Name"
+          type: "string"
+        counterPartyRole:
+          description: "Counter Party Role"
+          type: "string"
+        isNPA:
+          description: "Is NPA"
+          type: "string" 
+        interestRefundHandling:
+          type: "string"
+          description: "Interest Refund Handling"         
+          
+  CmInstrumentCollParameter:
+    description: "Instrument Collection Model"
+    allOf:
+    - $ref: "#/definitions/Parameter"
+    - type: "object"
+      properties:
+        paymentMode:
+          description: "PaymentMode"
+          type: "string"
+        depositSLipAmnt:
+          description: "Deposite Slip Amount"
+          type: number
+        depositSLipAmntCcy:
+          description: "Deposite Slip Amount Currency"
+          type: "string"
+        instrumentAmnt:
+          description: "Instrument Amount"
+          type: number
+        instrumentAmntCcy:
+          description: "Instrument Amount Currency"
+          type: "string"
+        corporateName:
+          description: "Corporate Name"
+          type: "string"
+        corporateId:
+          description: "Corporate Id"
+          type: "string"
+        drawerId:
+          description: "Drawer Id"
+          type: "string"
+        drawerName:
+          description: "Drawer Name"
+          type: "string"
+        corporateDivisionCode:
+          description: "Corporate Division Code"
+          type: "string"                 
+        poolingLevelType:
+          description: "Pooling Level Type"
+          type: "string"
+        counterPartyId:
+          description: "Counter Party Id"
+          type: "string"
+        partyId:
+          description: "Party Id"
+          type: "string"
+        partyName:
+          description: "Party Name"
+          type: "string"
+        partyRole:
+          description: "Party Role"
+          type: "string"
+        chargeAmt:
+          description: "Charge Amount"
+          type: "number"
+        chgCcy:
+          description: "Charge Currency"
+          type: "string"  
+        chargeCode:
+          description: "Charge Code"
+          type: "string"
+        chargeType:
+          description: "Charge Type"
+          type: "string"          
+        location:
+          description: "Location"
+          type: "string"
+        interestRefundPaymentMode:
+          description: "Interest Refund Payment Mode"
+          type: "string"
+        poolingAcntType:
+          description: "Pooling Account Type"
+          type: "string"
+        autoDebitIntOsAmt:
+          description: "Interest OS Amount"
+          type: "number"
+        autoDebitTotalOsAmt:
+          description: "Total OS Amount"
+          type: "number"
+        autoDebitInvoiceOsAmt:
+          description: "Invoice OS Amount"
+          type: "number"
+        autoDebitCcy:
+          description: "Total OS Currency"
+          type: "string"
+        isFinanced:
+          description: "Financed Check"
+          type: "string" 
+        valueDate:
+          type: "string"
+          description: "Value Date"
+        processingDate:
+          type: "string"
+          description: "Processing Date"
+        floatArrangement:
+          type: "string"
+          description: "Float Arrangement"
+        creditStatus:
+          type: "string"
+          description: "Credit Status"
+        instrumentStatus:
+          type: "string"
+          description: "Instrument Status"
+        returnRecoveryFrom:
+          type: "string"
+          description: "Return Recovery From"
+        creditReversalFrom:
+          type: "string"
+          description: "Credit Reversal From"
+        consActCrRevAmnt:
+          description: "Consolidated Actual Credit Reversed Amount"
+          type: number
+        consActCrRevAmntCcy:
+          description: "Consolidated Actual Credit Reversed Amount Currency"
+          type: "string"
+        consInstrumentAmnt:
+          description: "Consolidated Instrument Amount"
+          type: number
+        consInstrumentAmntCcy:
+          description: "Consolidated Instrument Amount Currency"
+          type: "string"
+        unrecoveredCrAmntCons:
+          description: "Unrecovered Credit Consolidated Amount"
+          type: number
+        unrecoveredCrAmntConsCcy:
+          description: "Unrecovered Credit Consolidated Amount Currency"
+          type: "string"  
+        consActRetRevAmnt:
+          description: "Consolidated Actual Return Recovery Amount"
+          type: number
+        consActRetRevAmntCcy:
+          description: "Consolidated Actual Return Recovery Amount Currency"
+          type: "string" 
+        actCrRevAmnt:
+          description: "Actual Credit Reversed Amount"
+          type: number
+        actCrRevAmntCcy:
+          description: "Actual Credit Reversed Amount Currency"
+          type: "string"
+        unrecoveredCrAmnt:
+          description: "Unrecovered Credit Amount"
+          type: number
+        unrecoveredCrAmntCcy:
+          description: "Unrecovered Credit Amount Currency"
+          type: "string"
+        pendingRecAmnt:
+          description: "Pending Recovery Amount"
+          type: number
+        pendingRecAmntCcy:
+          description: "Pending Recovery Amount Currency"
+          type: "string"    
+          
+  ReceivablesParameter:
+    description: "Receivables Transaction Model"
+    allOf:
+    - $ref: "#/definitions/Parameter"
+    - type: "object"
+      properties:
+        invoiceRefNo:
+          description: "Invoice Ref No"
+          type: "string"
+        paymentMode:
+          description: "Payment Mode"
+          type: "string"
+        interestType:
+          description: "Interest Type"
+          type: "string"
+        programCode:
+          description: "Program Code"
+          type: "string"
+        anchorId:
+          description: "Anchor Id"
+          type: "string"
+        spokeId:
+          description: "Spoke Id"
+          type: "string"
+        partyId:
+          description: "Party Id"
+          type: "string"
+        partyName:
+          description: "Party Name"
+          type: "string"
+        partyDivCode:
+          description: "Party Division Name"
+          type: "string"
+        partyDivName:
+          description: "Party Division Name"
+          type: "string" 
+        partyRole:
+          description: "Party Role"
+          type: "string"
+        chargeAmt:
+          description: "Charge Amount"
+          type: "number"
+        chgCcy:
+          description: "Charge Currency"
+          type: "string"
+        autoDebitIntOsAmt:
+          description: "Interest OS Amount"
+          type: "number"
+        autoDebitFinOsAmt:
+          description: "Finance OS Amount"
+          type: "number"
+        autoDebitTotalOsAmt:
+          description: "Total OS Amount"
+          type: "number"
+        autoDebitInvoiceOsAmt:
+          description: "Invoice OS Amount"
+          type: "number"
+        autoDebitCcy:
+          description: "Total OS Currency"
+          type: "string" 
+        marginAmt:
+          description: "Margin Amount"
+          type: "number"
+        marginCcy:
+          description: "Margin Currency"
+          type: "string"   
+        chargeCode:
+          description: "Charge Code"
+          type: "string"
+        chargeType:
+          description: "Charge Type"
+          type: "string"
+        interestRefundPmtMode:
+          description: "Interest Payment Mode Type"
+          type: "string"
+        interestBearingPartyId:
+          description: "Interest Bearing Party Id"
+          type: "string"
+        interestBearingPartyName:
+          description: "Interest Bearing Party Name"
+          type: "string"
+        isFinanced:
+          description: "Financed Check"
+          type: "string" 
+        isApproved:
+          description: "Approved Check"
+          type: "string" 
+        paymentParty:
+          description: "Payment Party"
+          type: "string" 
+        isPUA:
+          description: "PUA Check"
+          type: "string"
+        buyerId:
+          description: "Buyer Id"
+          type: "string"
+        buyerName:
+          description: "Buyer Name"
+          type: "string"  
+        buyerDivCode:
+          description: "Buyer Div code"
+          type: "string"  
+        buyerDivName:
+          description: "Buyer Div Name"
+          type: "string"
+        supplierId:
+          description: "Supplier Id"
+          type: "string"
+        supplierName:
+          description: "Supplier Name"
+          type: "string"  
+        supplierDivCode:
+          description: "Supplier Div Code"
+          type: "string"  
+        supplierDivName:
+          description: "Supplier Div Name"
+          type: "string"
+        importFactorId:
+          description: "importFactorId"
+          type: "string"
+        importFactorName:
+          description: "importFactorName"
+          type: "string"
+        insuranceCoId:
+          description: "insuranceCoId"
+          type: "string"
+        insuranceCoName:
+          description: "insuranceCoName"
+          type: "string"
+        reconPmtAmount:
+          description: "reconPmtAmount"
+          type: number 
+        reconPmtAmountCcy:
+          description: "reconPmtAmountCcy"
+          type: "string"              
+ 
+          
+  InvoiceModel:
+      description: "Invoice model"
+      allOf:
+      - $ref: "#/definitions/TransactionModel"
+      - type: "object"
+        properties:
+          srcAppCd:
+            type: "string"
+            description: "Source Application Code"
+          seqNo:
+            description: "Seq of the Invoice "
+            type: "integer"
+            format: "int64"
+          invoiceId:
+            description: "Id of the Invoice "
+            type: "string"
+          acceptanceAmount:
+            type: number
+            description: "Acceptance Amount"
+          amount:
+            type: number
+            description: "Amount"
+          buyerId:
+            type: string
+            description: "Buyer Id"
+          buyerName:
+            type: string
+            description: "Buyer Name"
+          buyerDivCode:
+            type: string
+            description: "Buyer Division Code"
+          buyerDivName:
+            type: string
+            description: "Buyer Division Name"
+          currency:
+            type: string
+            description: "Currency"
+          isDisputed:
+            type: string
+            description: "Is Disputed"
+          discrepancyCode:
+            type: string
+            description: "Discrepancy Code"
+          disputeResolveRemarks:
+            type: string
+            description: "Dispute Resolve Remarks"
+          fileName:
+            type: string
+            description: "File Name"
+          fileRef:
+            type: string
+            description: "File Reference"
+          filler1:
+            type: string
+            description: "Filler1"
+          filler2:
+            type: string
+            description: "Filler2"
+          filler3:
+            type: string
+            description: "Filler3"
+          filler4:
+            type: string
+            description: "Filler4"
+          financeAmount:
+            type: number
+            description: "Finance Amount"
+          financePercentage:
+            type: number
+            description: "Finance Percentage"
+          indicator:
+            type: string
+            description: "Indicator"
+          invoiceDate:
+            type: string
+            description: "Invoice Date"
+          invoiceDueDate:
+            type: string
+            description: "Invoice Due Date"
+          invoiceNumber:
+            type: string
+            description: "Invoice Number"
+          invoiceProcessStatus:
+            type: string
+            description: "Invoice Process Status"
+          invoiceRefNo:
+            type: string
+            description: "Invoice Reference Number"
+          invoiceStatus:
+            type: string
+            description: "Invoice Status"
+          invAcceptanceDate:
+            type: string
+            description: "Invoice Acceptance Date"
+          maxFinancePercentage:
+            type: number
+            description: "Maximum Finance Percentage"
+          paidAmount:
+            type: number
+            description: "Paid Amount"
+          paymentStatus:
+            type: string
+            description: "Payment Status"
+          preAccepted:
+            type: string
+            description: "Pre Accepted"
+          poNumber:
+            type: string
+            description: "PO Number"
+          programCode:
+            type: string
+            description: "Program Code"
+          programName:
+            type: string
+            description: "Program Name"
+          reasonCode:
+            type: string
+            description: "Reason Code"
+          remarks:
+            type: string
+            description: "Remarks"
+          supplierId:
+            type: string
+            description: "Supplier Id"
+          supplierName:
+            type: string
+            description: "Supplier Name"
+          supplierDivCode:
+            type: string
+            description: "Supplier Division Code"
+          supplierDivName:
+            type: string
+            description: "Supplier Division Name"
+          taxAmount:
+            type: number
+            description: "Tax Amount"
+          totalInvoiceAmount:
+            type: number
+            description: "Total Invoice Amount"
+          paymentTerms:
+            type: string
+            description: "Payment Terms"
+          shipmentDate:
+            type: string
+            description: "Shipment date"
+          outstandingAmount:
+            type: number
+            description: "Outstanding Amount"
+          discountAllowed:
+            type: string
+            description: "Discount Allowed"
+          discountPercentage:
+            type: number
+            description: "Discount Percentage"
+          discountAmount:
+            type: number
+            description: "Discount Amount"
+          taxPercentage:
+            type: number
+            description: "Tax Percentage"
+          purchaseOrderDate:
+            type: string
+            description: "Purchase Order Date"
+          staleStatus:
+            type: string
+            description: "Stale Status"
+          divisionCode:
+            type: string
+            description: "Division Code"
+          shipmentAddress:
+            type: string
+            description: "Shipment Address"
+          shipmentCountry:
+            type: string
+            description: "Shipment Country"
+          shipmentNo:
+            type: string
+            description: "Shipment Number"
+          reasonForExport:
+            type: string
+            description: "Reason For Export"
+          termsOfSale:
+            type: string
+            description: "Terms Of Sale"
+          countryOfOrigin:
+            type: string
+            description: "Country Of Origin"
+          miscCharge1:
+            type: number
+            description: "Miscellaneous Charge 1"
+          miscCharge1Amount:
+            type: number
+            description: "Miscellaneous Charge 1 Amount"
+          miscCharge1Desc:
+            type: string
+            description: "Miscellaneous Charge 1 Description"
+          miscCharge2:
+            type: number
+            description: "Miscellaneous Charge 2"
+          miscCharge2Amount:
+            type: number
+            description: "Miscellaneous Charge 2 Amount"
+          miscCharge2Desc:
+            type: string
+            description: "Miscellaneous Charge 2 Description"
+          netInvoiceAmount:
+            type: number
+            description: "Net Invoice Amount"
+          financeableAmount:
+            type: number
+            description: "Financeable Amount"
+          finTxnStatus:
+            type: string
+            description: "Finance Transaction Status"
+          transactionRefNo:
+            type: string
+            description: "Transaction Reference Number"
+          relationCode:
+            type: string
+            description: "Relation Code"
+          supplierCode:
+            type: string
+            description: "Supplier Code"
+          buyerCode:
+            type: string
+            description: "Buyer Code"
+          shipmentRefNo:
+            type: string
+            description: "Shipment Reference Number"
+          repayAccountNo:
+            type: string
+            description: "Repay Account Number"
+          bank:
+            type: string
+            description: "Bank"
+          branch:
+            type: string
+            description: "Branch"
+          routingCode:
+            type: number
+            description: "Routing Code"
+          isAutoAuth:
+           type: string
+           description: "Is Auto Authorized"
+          reasonErrorCode:
+            type: string
+            description: "Reason Error Code"
+          isApproved:
+            type: string 
+            description: "Is Approved"
+          invoiceCommodityGridList:
+            type: array
+            items:
+              $ref: '#/definitions/InvoiceCommodityGridModel'
+          finEligibilityAmt:
+            type: number
+            description: "Finance Eligibility Amount"
+          reconTxnStatus:
+            type: string
+            description: "Recon Transaction Status"
+          reasonForShipment:
+            type: string
+            description: "Reason For Shipment"
+          virtualAcFlag:
+            type: string
+            description: "Virtual Account Flag"
+          fundingReqAmt:
+            type: number
+            description: "Funding Required Amount"
+          raisedBy:
+            type: string
+            description: "Raised By"
+          processingBranchCode:
+            type: string
+            description: "Processing Branch Code"
+          action:
+            type: string
+            description: "Action"
+          processingDate:
+            type: string
+            description: "Processing Date"
+          paymentDate:
+            type: string
+            description: "Payment date"
+          disputedAmount:
+            type: number 
+            description: "Disputed Amount"  
+          linkedDocs:
+            type: string  
+            description: "Linked Documents"  
+          isFinanced:
+            type: string   
+            description: "Is Financed"                 
+          tcmId:
+            type: string
+            description: "Tcm Id"
+          makerId:
+            type: string
+            description: "Maker Id"
+          makerDtStamp:
+            type: string
+            description: "Maker Date Stamp"
+          stageId:
+            type: string
+            description: "Stage Id"
+          isAccepted:
+            type: string
+            description: "Is Accepted"
+          isDisputeResolvedWriteOff:
+            type: string
+            description: "Is Dispute Resolved Write Off"
+          isAssigned:
+            type: string
+            description: "Is Assigned"
+          assignmentParty:
+            type: string
+            description: "Assignment Party"
+          isOverdue :
+            type: string 
+            description: "Is Overdue"
+          oldAcceptanceAmount:
+            type: number
+            description: "Old Acceptance Amount"
+          oldFinanceAmount:
+            type: number
+            description: "Old Finance Amount"
+          amountToBeFinanced:
+            type: number
+            description: "Amount To Be Financed"
+          oldInvoiceDueDate:
+            type: string
+            description: "Old Invoice Due Date"
+          oldDisputeAmount:
+            type: number
+            description: "Old Dispute Amount"
+          sourceTxnId:
+            type: string   
+            description: "Source Transaction Id"
+          paymentDueDate:
+            type: string
+            description: "Payment Due Date"
+          debitNoteId:
+            type: string
+            description: "Debit Note Id"
+          isDebitNote:
+            type: string
+            description: "Is Debit Note"
+          adjustmentReason:
+            type: integer
+            description: "Adjustment Reason"
+          isPUA:
+            type: string
+            description: "Is PUA"
+          isIndirectPayment:
+            type: string
+            description: "Is Indirect Payment"
+          paymentParty:
+            type: string
+            description: "Payment party"
+          importFactorId:
+            type: string
+            description: "Import Factor Id"
+          importFactorName:
+            type: string
+            description: "Import Factor Name"
+          insuranceCoId:
+            type: string
+            description: "Insurance Co Id"
+          insuranceCoName:
+            type: string
+            description: "Insurance Co Name"
+          paymentMode:
+            type: string
+            description: "Payment Mode"
+          reconPmtAmount:
+            type: number
+            description: "Recon Payment Amount"
+          reconPmtAmountCcy:
+            type: string    
+            description: "Recon Payment Amount Currency"                 
+
+  InvoiceCommodityGridModel:
+    type: object
+    properties:
+      commodityCode:
+        type: string
+        description: "Commodity Code"
+      quantity:
+        type: number
+        description: "Quantity"
+      commodityName:
+        type: string
+        description: "Commodity Name"
+      commodityDesc:
+        type: string
+        description: "Commodity Description"
+      costPerUnit:
+        type: number
+        description: "Cost per Unit"
+      totalCost:
+        type: number
+        description: "Total Cost"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      netCost:
+        type: number
+        description: "Net Cost"
+      invoiceCommodityGridId:
+        description: "Id of the Invoice Commodity Grid"
+        type: "string"
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      descriptionOfGoods:
+        type: string
+        description: "Description Of Goods"
+      totalWeight:
+        type: number
+        description: "Total Weight"
+      unitWeight:
+        type: number
+        description: "Unit Weight"
+      ccy:
+        type: string
+        description: "Currency"
+      discountPercentage:
+        type: number
+        description: "Discount Percentage"
+      discountAmount:
+        type: number
+        description: "Discount Amount"
+      taxPercentage:
+        type: number
+        description: "Tax Percentage"
+      unit:
+        type: string
+        description: "Unit"
+                
+  InternalPartyDetails:
+    description: "Collection of Accounting Transaction Models."
+    type: "object"
+    properties:
+      accountType:
+       type: "string"
+       description: "Account Type"
+      partyId:
+       type: "string"
+       description: "Party Id"
+  InterestTransactionCollection:
+    description: "Collection of Interest Transaction Models."
+    type: "object"
+    properties:
+      InterestTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InterestTransactionModel"
+  ResponseDtoWrapper:
+    type: object
+    
+  ExternalSystemStatusUpdateResponse:
+    description: "External Syatem Status Update Response"
+    type: "object"
+    properties:
+      status:
+        description: "Status"
+        type: "string"
+      eventCode:
+        description: "Event Code"
+        type: "string"
+        
+  ExternalSystemResponseStatus:
+    description: "Request body to update external system response"
+    type: "object"
+    properties:
+      referenceNo:
+        description: "Transaction Reference Number"
+        type: "string"
+      seqNo:
+        description: "Sequence Number"
+        type: "integer"
+        format: "int64"
+      txnReferenceNo:
+        description: "Transaction Reference Number"
+        type: "string"
+      accountList:
+        description: "External System Response Model"
+        type: "array"
+        items:
+          $ref: "#/definitions/ExternalSystemResponseStatusModel"
+    
+  ExternalSystemResponseStatusModel:
+    description: "Request body to update external system response"
+    type: "object"
+    properties:
+      accountNumber:
+        description: "Account Number"
+        type: "string"
+      ecaStatus:
+        description: "ECA Status"
+        type: "string"
+      ecaRefNo:
+        description: "ECA Reference Number"
+        type: "string"
+      blkRefNo:
+        description: "Block Reference Number"
+        type: "string"
+      ecaErrorCode:
+        description: "ECA Error Codes"
+        type: "string"
+      postingStatus:
+        description: "Posting Status"
+        type: "string"
+      postingRefNo:
+        description: "Posting Reference Number"
+        type: "string"
+      postingErrorCode:
+        description: "Posting Error Codes"
+        type: "string"
+      vamPostingStatus:
+        description: "VAM Posting Status"
+        type: "string"
+      vamReferenceNumber:
+        description: "VAM Reference Number"
+        type: "string"
+      clearingRefNo:
+        description: "Clearing Reference Number"
+        type: "string"
+      paymentStatus:
+        description: "Payment Status"
+        type: "string"
+      paymentRefNo:
+        description: "Payment Reference Number"
+        type: "string"
+      extPaymentErrorCode:
+        description: "External Payment Error Codes"
+        type: "string"
+
+  ScftmCustomerDelinqStatusDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: "Customer Id"
+      delinquencyStatus:
+        type: string
+        description: "Delinquency Status"
+      activeStatus:
+        type: string
+        description: "Active Status"
+      statusDate:
+        type: string
+        format: date
+        description: "Status Date"
+      channel:
+        type: string
+        description: "Channel"
+      event:
+        type: string
+        description: "Event"
+      customerName:
+        type: string
+        description: "Customer Name"
+      deliquencyDescription:
+        type: string
+        description: "Deliquency Description"
+      priority:
+        description: "Delinquency Status priority."
+        type: "integer"        

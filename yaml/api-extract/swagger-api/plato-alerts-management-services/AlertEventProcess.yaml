@@ -1,0 +1,152 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : plato-alerts-applicability-rules-services
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server Event server." 
+ version: "1.0.0"
+ title: "Alerts Event Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "plato-alerts-management-services"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../plato-alerts-applicability-rules-services
+
+ /eventProcess:
+  post:
+   tags:
+    - "plato-alerts-management-services"
+   summary: "Publish alerts to dynamically configured topics."
+   description: "Publish alerts to dynamically configured topics."
+   operationId: "eventProcess"
+   parameters:
+    - name: "event" 
+      in: "body" 
+      description: "Request Body that contains data required to be sent." 
+      required: true
+      schema:
+        $ref: "#/definitions/PlatoAlertsEventDTO" 
+    - name: "branchCode" 
+      in: "header" 
+      description: "Request Body that contains data required to be sent." 
+      required: false
+      type: "string"
+    - name: "userId" 
+      in: "header" 
+      description: "Request Body that contains data required to be sent." 
+      required: false
+      type: "string"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "" 
+       type: "string"
+     schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+  PlatoAlertsEventDTO:
+    description: "Event model"
+    type: "object"
+    properties:
+     messageBody:
+      type: object
+      description: ""
+     eventId:
+      type: string
+      description: ""
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport" 
+  ResponseResourceSupport:
+    type: object
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+       type: string       

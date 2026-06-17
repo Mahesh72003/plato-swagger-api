@@ -1,0 +1,560 @@
+asyncapi: 2.0.0
+info:
+  title: Oracle Banking Liquidity Management(OBLM) API
+  version: '1.0.0'
+  description: Liquidity Management Service
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  production:
+    url: fsgbu-mum-639.snbomprshared1.gbucdsint02bom.oraclevcn.com:9092,fsgbu-mum-639.snbomprshared1.gbucdsint02bom.oraclevcn.com:9093
+    protocol: kafka
+    description: Broker - 1
+
+channels:
+  sweep-error:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends sweep error notification
+      message:
+        description: Sends sweep error notification
+        $ref: '#/components/messages/eventMessage'
+  sweep-success:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends sweep success notification
+      message:
+        description: Sends sweep success notification
+        $ref: '#/components/messages/eventMessage'
+  sweep-pending:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends sweep pending notification
+      message:
+        description: Sends sweep pending notification
+        $ref: '#/components/messages/eventMessage'
+  sweep-handOff:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends sweep handoff notification
+      message:
+        description: Sends sweep handoff notification
+        $ref: '#/components/messages/eventMessage'
+  structure-created:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends structure creation notification
+      message:
+        description: Sends structure creation notification
+        $ref: '#/components/messages/eventMessage'
+  structure-createdAndAuthorized:
+    description: Sends notification when newly created structure is authorized
+    publish:
+      summary: Sends notification when newly created structure is authorized
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  structure-modified:
+    description: Sends structure creation notification.
+    publish:
+      summary: Sends structure creation notification.
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  structure-modifiedAndAuthorized:
+    description: Sends notification when modified structure is authorized
+    publish:
+      summary: Sends notification when modified structure is authorized
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  structure-closed:
+    description: Sends structure close notification.
+    publish:
+      summary: Sends structure close notification.
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  structure-closedAndAuthorized:
+    description: Sends notification when closed structure is authorized
+    publish:
+      summary: Sends notification when closed structure is authorized
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  structure-reopen:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends structure re-open notification.
+      message:
+        description: Sends structure re-open notification.
+        $ref: '#/components/messages/eventMessage'
+  structure-reopenAndAuthorized:
+    description: Sends notification when re-opened structure is authorized
+    publish:
+      summary: Sends notification when re-opened structure is authorized
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  structure-expiry:
+    description: Sends structure expiry notification.
+    publish:
+      summary: Sends structure expiry notification.
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/eventMessage'
+  vamlm.bankchargeeventrequest:
+    description: Sends Bank Charge events.
+    publish:
+      summary: Sends Bank Charge events.
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/bankChargeEventRequest'
+  vamlm.branchchargeeventrequest:
+    description: The topic on which account balance notification updated.
+    publish:
+      summary: Sends Branch Charge events.
+      message:
+        description: Sends Branch Charge events.
+        $ref: '#/components/messages/branchChargeEventRequest'
+  vamlm.structurechargesnotification:
+    description: Sends structure charges notification.
+    publish:
+      summary: Sends structure charges notification.
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/structureCharges'
+  vamlm.pricingmapnotification:
+    description: Sends pricing map notification.
+    publish:
+      summary: Sends pricing map notification.
+      message:
+        description: Send account balance notification
+        $ref: '#/components/messages/pricingMap'
+components:
+  messages:
+    eventMessage:
+      name: OBLM Notificaton
+      title: OBLM Notificaton
+      summary: OBLM Notificaton
+      traits:
+        - $ref: "#/components/messageTraits/commonHeaders"
+      payload:
+        $ref: "#/components/schemas/EventMessage"
+    bankChargeEventRequest:
+      name: Bank Charge Notificaton
+      title: Bank Charge Notificaton
+      summary: Bank Charge Notificaton
+      traits:
+        - $ref: "#/components/messageTraits/commonHeaders"
+      payload:
+        $ref: "#/components/schemas/BankChargeEventRequest" 
+    branchChargeEventRequest:
+      name: Branch Charge Notificaton
+      title: Branch Charge Notificaton
+      summary: Branch Charge Notificaton
+      traits:
+        - $ref: "#/components/messageTraits/commonHeaders"
+      payload:
+        $ref: "#/components/schemas/BranchChargeEventRequest"  
+    pricingMap:
+      name: Pricing Map Notificaton
+      title: Pricing Map Notificaton
+      summary: Pricing Map Notificaton
+      traits:
+        - $ref: "#/components/messageTraits/commonHeaders"
+      payload:
+        $ref: "#/components/schemas/PricingMap"     
+    structureCharges:
+      name: Structure Charge Notificaton
+      title: Structure Charge Notificaton
+      summary: Structure Charge Notificaton
+      traits:
+        - $ref: "#/components/messageTraits/commonHeaders"
+      payload:
+        $ref: "#/components/schemas/StructureCharges"                           
+  schemas:
+    EventMessage:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - 'null'
+          default: null
+        evtCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        logTime:
+          type:
+            - string
+            - 'null'
+          default: null
+        logType:
+          type:
+            - string
+            - 'null'
+          default: null
+        logDescription:
+          type:
+            - string
+            - 'null'
+          default: null
+        serviceData:
+          type:
+            - string
+            - 'null'
+          default: null
+        publishedTime:
+          type:
+            - string
+            - 'null'
+          default: null
+    BankChargeEventRequest:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - 'null'
+          default: null
+        modNo:
+          type:
+            - string
+            - 'null'
+          default: null
+        RecordStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        AuthStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        CheckerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        checkerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        OnceAuth:
+          type:
+            - string
+            - 'null'
+          default: null
+        applicationCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        bankCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        chargeCalcPref:
+          type:
+            - string
+            - 'null'
+          default: null
+        chargeCollPref:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgIncludeClosedVa:
+          type:
+            - string
+            - 'null'
+          default: null
+    BranchChargeEventRequest:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - 'null'
+          default: null
+        modNo:
+          type:
+            - string
+            - 'null'
+          default: null
+        RecordStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        AuthStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        CheckerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        checkerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        OnceAuth:
+          type:
+            - string
+            - 'null'
+          default: null
+        applicationCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        branchCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        chargeRateCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        chargeRateType:
+          type:
+            - string
+            - 'null'
+          default: null
+    PricingMap:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - 'null'
+          default: null
+        modNo:
+          type:
+            - string
+            - 'null'
+          default: null
+        RecordStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        AuthStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        CheckerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        checkerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        OnceAuth:
+          type:
+            - string
+            - 'null'
+          default: null
+        applicationCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        pricingScheme:
+          type:
+            - string
+            - 'null'
+          default: null
+        realCustomerNo:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgFundingAccount:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgFundingAccountBranch:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgFundingAccountCCY:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgPostingBranch:
+          type:
+            - string
+            - 'null'
+          default: null
+        event:
+          type:
+            - string
+            - 'null'
+          default: null
+    StructureCharges:
+      type: object
+      properties:
+        id:
+          type:
+            - string
+            - 'null'
+          default: null
+        modNo:
+          type:
+            - string
+            - 'null'
+          default: null
+        RecordStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        AuthStat:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        MakerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        CheckerId:
+          type:
+            - string
+            - 'null'
+          default: null
+        CheckerDateStamp:
+          type:
+            - string
+            - 'null'
+          default: null
+        OnceAuth:
+          type:
+            - string
+            - 'null'
+          default: null
+        applicationCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        strCode:
+          type:
+            - string
+            - 'null'
+          default: null
+        realCustomerNo:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgFundingAccount:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgFundingAccountBranch:
+          type:
+            - string
+            - 'null'
+          default: null
+        chgFundingAccountCCY:
+          type:
+            - string
+            - 'null'
+          default: null
+        vaCount:
+          type:
+            - string
+            - 'null'
+          default: null
+        event:
+          type:
+            - string
+            - 'null'
+          default: null 
+        strChgType:
+          type:
+            - string
+            - 'null'
+          default: null           
+  messageTraits:
+    commonHeaders:
+      headers:
+        type: object
+        properties:
+          userId:
+            type: string
+          branchCode:
+            type: string
+          sourceSystem:
+            type: string
+          event:
+            type: string
+          ackRequired:
+            type: boolean
+            default: false
+          kafka_messageKey:
+            type: string
+          messageId:
+            type: string
+          entityId:
+            type: string            
+          

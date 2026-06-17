@@ -1,0 +1,386 @@
+swagger: "2.0"
+info:
+  description: "This service provides APIs for maintaining system, application and other parameters"
+  version: "1.0.0"
+  title: "Master Maintenance Services APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Maintenance-Service-API"
+    description: "API for master maintenance related operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/sysParams:
+    get:
+      tags:
+        - "Maintenance-Service-API"
+      summary: "Retrieves Scf System Parameters"
+      description:  "Retrieves the Scf System Parameters."
+      operationId: "getParam"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User ID"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App ID"
+        type: "string"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfSystemParamCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/sysParams/{key}:
+    patch:
+      tags:
+        - "Maintenance-Service-API"
+      summary: "Update an existing parameter."
+      description:  "Update an existing parameter."
+      operationId: "updateParam"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "User ID"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          description: "App ID"
+          type: "string"
+          required: true
+        - name: "key"
+          in: "path"
+          description: "key of the parameter that need to be updated"
+          required: true
+          type: "string"
+        - name: "ScfSystemParamModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing System Parameter"
+          required: true
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfSystemParamModel"
+      responses:
+        200:
+          description: "Returns updated parameter"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfSystemParamModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/parties:
+     get:
+      tags:
+        - "Maintenance-Service-API"
+      summary: "Retrieves Scf Master Party Parameters"
+      description:  "Retrieves the Scf Master Party Parameters."
+      operationId: "getParty"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "User ID"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "App ID"
+          required: true        
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfMasterPartyModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/appParams:
+    get:
+      tags:
+        - "Maintenance-Service-API"
+      summary: "Retrieves Scf Application Parameters"
+      description:  "Retrieves the Scf Application Parameters."
+      operationId: "getAppParam"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User ID"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App ID"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfApplicationParamModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/product/delinquencyStatus:
+   get:
+     tags:
+       - "Maintenance-Service-API"
+     summary: "Get the valid delinquency status"
+     description:  "Get the valid delinquency status"
+     operationId: "getDelinquencyStatus"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User ID"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App ID"
+       required: true     
+     - in: query
+       name: delinquencyStatus
+       required: false
+       description: "Delinquency Status"
+       type: "string"  
+     responses:
+      201:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: "Location"
+         type: "string"
+       schema:
+         $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfTmDelinquencyStatusCollection"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"          
+  /service/v1/product/externalProduct:
+   get:
+     tags:
+       - "Maintenance-Service-API"
+     summary: "Get all valid external system product code ."
+     description:  "Get all valid external system product code ."
+     operationId: "getExternalProduct"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User ID"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       description: "App ID"
+       type: "string"
+       required: true     
+     - in: query
+       name: scheduleType
+       description: "Schedule Type"
+       required: true
+       type: "string"
+     - in: query
+       name: referenceDate
+       description: "Reference Date"
+       required: true
+       type: "string"
+     - in: query
+       name: interestComponent
+       description: "Interest Component"
+       required: true
+       type: "string"   
+     responses:
+      201:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         type: "string"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"
+  /service/v1/cm/appParams:
+    get:
+      tags:
+        - "Maintenance-Service-API"
+      summary: "Retrieves Obcm Application Parameters"
+      description:  "Retrieves the Obcm Application Parameters."
+      operationId: "getCmAppParam"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User ID"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App ID"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ObcmApplicationParamModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/getRefNoGenParams:
+    get:
+      tags:
+        - "Maintenance-Service-API"
+      summary: "Retrieves Reference Number Generation Parameters"
+      description:  "Retrieves Reference Number Generation Parameters."
+      operationId: "getRefNoGenParams"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "User ID"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "App ID"
+          required: true
+        - name: "applicationCode"
+          in: "query"
+          required: true
+          description: "Application Code"
+          type: "string"
+        - name: "entity"
+          in: "query"
+          required: true
+          description: "Entity"
+          type: "string"
+        - name: "refNoType"
+          in: "query"
+          required: true
+          description: "Reference Number Type"
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfTmRefNoGenLogicCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"

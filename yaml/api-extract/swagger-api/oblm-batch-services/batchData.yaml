@@ -1,0 +1,1216 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : batchData.yaml
+#  **
+#  ** Module     : batch
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server batch server."
+  version: "1.0.0"
+  title: "batch Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+tags:
+- name: "batch"
+  description: ""
+
+schemes:
+- "https"
+
+paths:
+  /batch:
+    post:
+      tags:
+      - "batch"
+      summary: "Adds a new batch."
+      description: "Adds a new batch. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      parameters:
+      - name: "structureDTO"
+        in: "body"
+        description: "Request Body that contains data required for creating a new batch"
+        required: true
+        schema:
+          $ref: "#/definitions/LmmTmStructureDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created batch"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "batch"
+      summary: "Get all valid batch."
+      description:  "Get all valid batch. This endpoints will be used to Get all valid batch maintenance records."
+      operationId: "getAll"
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: structureMasterId
+        in: query
+        description: structureMasterId need to be set to fetch batch Data for particular structureMasterId
+        required: false
+        type: string         
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/LmbTbBatchDataCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /batch/{id}:
+    get:
+      tags:
+      - "batch"
+      summary: "Retrieves the batch by ID."
+      description:  "Retrieves the batch by ID."
+      operationId: "getById"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the user that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Id of the user that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Returns the batch based on given id."
+          schema:
+            $ref: "#/definitions/LmbTbBatchDataWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /batch/batchEod/{branchCode}:
+    get:
+      tags:
+      - batch
+      summary: Retrieves the Structure Master Id by header Branch Code.
+      description: Retrieves the Structure Master Id by header Branch Code.
+      operationId: getAccountForEOD
+      parameters:
+      - name: branchCode
+        in: path
+        description: Branch Code
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the Structure Master Id details by header Branch Code.
+          schema:
+            $ref: '#/definitions/LmbTbBatchDataCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  
+  /batch/batchBod/{branchCode}:
+    get:
+      tags:
+      - batch
+      summary: Retrieves the Structure Master Id by header Branch Code.
+      description: Retrieves the Structure Master Id by header Branch Code.
+      operationId: getAccountForBOD
+      parameters:
+      - name: branchCode
+        in: path
+        description: Branch Code
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the Structure Master Id details by header Branch Code.
+          schema:
+            $ref: '#/definitions/LmbTbBatchDataCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+
+  /batch/batchBodRev/{branchCode}:
+    get:
+      tags:
+      - batch
+      summary: Retrieves the Reverse sweep Structure Master Id by header Branch Code.
+      description: Retrieves the Reverse sweep Structure Master Id by header Branch Code.
+      operationId: getAccountForBODRev
+      parameters:
+      - name: branchCode
+        in: path
+        description: Branch Code
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the Reverse sweep Structure Master Id details by header Branch Code.
+          schema:
+            $ref: '#/definitions/LmbTbBatchDataCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+          
+  /batch/batchIntraDay:
+    get:
+      tags:
+      - batch
+      summary: Retrieves the Structure Details by Next Execution Date.
+      description: Retrieves the Structure Master Id by Next Execution Date.
+      operationId: getIntradayAccountPair
+      responses:
+        200:
+          description: Returns the Structure Master Id details by Next Execution Date.
+          schema:
+            $ref: '#/definitions/LmbTbBatchDataCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error 
+  /batch/batchReverseSweep:
+    get:
+      tags:
+      - batch
+      summary: Retrieves the reverse sweep details by Next Execution Date.
+      description: Retrieves the reverse sweep details by Next Execution Date.
+      operationId: getReverseSweepDetails
+      responses:
+        200:
+          description: Returns the Structure Master Id details by Next Execution Date.
+          schema:
+            $ref: '#/definitions/LmbTbBatchDataCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error                     
+  /batch/updateNextRunDate:          
+    post:
+      tags:
+      - batch
+      summary: Update next run date for given structure.
+      description: Update next run date for given structure.
+      operationId: updateNextRunDate
+      parameters:
+      - name: lmBatchDataList
+        in: body
+        description: Request Body that contains structure details for next run date update
+        required: true
+        schema:
+          $ref: '#/definitions/LmbTbBatchDataCollection'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created structure
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /batch/updateBatchData:
+    put:
+      tags:
+      - batch
+      summary: Update status for batch data.
+      description: Update status for batch data.
+      operationId: updateBatchData
+      parameters:
+      - name: batchDTO
+        in: body
+        description: Update status for batch data.
+        required: true
+        schema:
+          $ref: '#/definitions/LmbTbBatchDataDTO'
+      responses:
+        200:
+          description: Returns updated reallocation log
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /batch/{structureId}/{accountNumber}/{parentAccountNumber}/last-successful-sweep-date:
+    patch:
+      tags:
+        - batch
+      summary: Update last successful sweep date for given structure.
+      description: Update last successful sweep date for given structure.
+      operationId: updateLastSuccessfulSweepDate
+      parameters:
+        - name: structureId
+          in: path
+          description: path param that contains structure Id for last successful sweep date update
+          type: string
+          required: true
+        - name: accountNumber
+          in: path
+          description: path param that contains accountNumber for last successful sweep date update
+          type: string
+          required: true
+        - name: parentAccountNumber
+          in: path
+          description: path param that contains parentAccountNumber for last successful sweep date update
+          type: string
+          required: true
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created structure
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  LmbTbBatchDataDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        currencyCode:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        effectiveDate:
+          type: string
+          format: date
+          description: ""
+        frequencyCategory:
+          type: string
+          description: ""
+        instructionId:
+          type: string
+          description: ""
+        isEodExecution:
+          type: string
+          description: ""
+        lastExecutionTime:
+          type: string
+          description: ""
+        nextExecutionDate:
+          type: string
+          description: ""
+        lastSuccessfulSweepDate:
+          type: string
+          format: date
+          description: ""
+        parentAccountNumber:
+          type: string
+          description: ""
+        parentBranchCode:
+          type: string
+          description: ""
+        parentCurrencyCode:
+          type: string
+          description: ""
+        priority:
+          type: number
+          description: ""
+        status:
+          type: string
+          description: ""
+        statusMessage:
+          type: string
+          description: ""
+        structureId:
+          type: string
+          description: ""
+        structureMasterId:
+          type: string
+          description: "" 
+        structureDetailsId:
+          type: string
+          description: ""  
+        frequencyId:
+          type: string
+          description: "" 
+        isBodExecution:
+          type: string
+          description: ""
+        backwardTreatment:
+          type: string
+          description: ""
+        holidayTreatment:
+          type: string
+          description: ""
+        maxBackwardDays:
+          type: integer
+          description: ""
+        batchStatus:
+          type: string
+          description: ""
+        suspensionStartDate:
+          type: string
+          description: ''
+        suspensionEndDate:
+          type: string
+          description: ''
+        isReverseSweep:
+          type: string
+          description: ''
+  LmbTbReverseSweepBatchDataDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        currencyCode:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        effectiveDate:
+          type: string
+          format: date
+          description: ""
+        frequencyCategory:
+          type: string
+          description: ""
+        instructionId:
+          type: string
+          description: ""
+        isEodExecution:
+          type: string
+          description: ""
+        lastExecutionTime:
+          type: string
+          description: ""
+        nextExecutionDate:
+          type: string
+          description: ""
+        parentAccountNumber:
+          type: string
+          description: ""
+        parentBranchCode:
+          type: string
+          description: ""
+        parentCurrencyCode:
+          type: string
+          description: ""
+        priority:
+          type: number
+          description: ""
+        status:
+          type: string
+          description: ""
+        statusMessage:
+          type: string
+          description: ""
+        structureId:
+          type: string
+          description: ""
+        structureMasterId:
+          type: string
+          description: "" 
+        structureDetailsId:
+          type: string
+          description: ""  
+        frequencyId:
+          type: string
+          description: "" 
+        isBodExecution:
+          type: string
+          description: ""
+        backwardTreatment:
+          type: string
+          description: ""
+        holidayTreatment:
+          type: string
+          description: ""
+        maxBackwardDays:
+          type: integer
+          description: ""
+        batchStatus:
+          type: string
+          description: ""
+  LmmTmStructureDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        structureId:
+          type: string
+          description: ""
+        structureDescription:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        customerName:
+          type: string
+          description: ""
+        numberOfAccountsLinked:
+          type: integer
+          description: ""
+        structureType:
+          type: string
+          description: ""
+        struturePriority:
+          type: integer
+          description: ""
+          minimum: 1
+          maximum: 99
+        effectiveDate:
+          type: string
+          description: ""
+        endDate:
+          type: string
+          description: ""
+        headerAccountNumber:
+          type: string
+          description: ""
+        headerBranchCode:
+          type: string
+          description: ""
+        headerCurrency:
+          type: string
+          description: ""
+        multiBankFlag:
+          type: string
+          description: ""
+        crossBorderFlag:
+          type: string
+          description: ""
+        crossCurrencyFlag:
+          type: string
+          description: ""
+        balanceType:
+          type: string
+          description: ""
+        structureFrequency:
+          type: string
+          description: ""
+        currencyRateType:
+          type: string
+          description: ""
+        allowSweepOnCurrencyHol:
+          type: string
+          description: ""
+        interestMethod:
+          type: string
+          description: ""
+        ratePickUp:
+          type: string
+          description: ""
+        nextRunDate:
+          type: string
+          format: date
+          description: ""
+        eodExecution:
+          type: string
+          description: ""
+        reverseFrequency:
+          type: string
+          description: ""
+        instructionType:
+          type: string
+          description: ""
+        reallocationMethod:
+          type: string
+          description: ""
+        holidayTreatment:
+          type: string
+          description: ""
+        maxBackwardDays:
+          type: integer
+          description: ""
+        backwardTreatment:
+          type: string
+          description: ""
+        centralAccountNumber:
+          type: string
+          description: ""
+        centralAccountBranch:
+          type: string
+          description: ""
+        centralAccountCurrency:
+          type: string
+          description: ""
+        nextRunDateReverse:
+          type: string
+          format: date
+          description: ""
+        prevRunDateReverse:
+          type: string
+          format: date
+          description: ""
+        structureStatus:
+          type: string
+          description: ""
+        investmentSweep:
+          type: string
+          description: ""
+        considerPostSweepBalance:
+          type: string
+          description: ""
+        fxRatePickup:
+          type: string
+          description: ""
+        limitTrackingFlag:
+          type: string
+          description: ""
+        sourceSystem:
+          type: string
+          description: ""
+        systemAccountNumber:
+          type: string
+          description: ""
+        systemAccountBranch:
+          type: string
+          description: ""
+        systemAccountCurrency:
+          type: string
+          description: ""
+        batchStatus:
+          type: string
+          description: ""
+        LmmTmStructureDetailsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmStructureDetailsDTO'
+        LmmTmStructureAccountsDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmmTmStructureAccountsDTO'
+      required:
+      - id
+      - structureId
+  LmmTmStructureDetailsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      accountNumber:
+        type: string
+        description: ""
+      branchCode:
+        type: string
+        description: ""
+      accountCurrency:
+        type: string
+        description: ""
+      isExternal:
+        type: string
+        description: ""
+      acyAvailableBal:
+        type: number
+        description: ""
+      bankCode:
+        type: string
+        description: ""
+      countryId:
+        type: string
+        description: ""
+      cityId:
+        type: string
+        description: ""
+      isNotional:
+        type: string
+        description: ""    
+      accCategory:
+        type: string
+        description: ""             
+      parentAccountNumber:
+        type: string
+        description: ""
+      parentAccountBranch:
+        type: string
+        description: ""
+      parentAccountCurrency:
+        type: string
+        description: ""
+      bookingAccountNumber:
+        type: string
+        description: ""
+      bookingAccountBranch:
+        type: string
+        description: ""
+      bookingAccountCurrency:
+        type: string
+        description: ""
+      rateType:
+        type: string
+        description: ""
+      accountType:
+        type: string
+        description: ""
+      sweepPriority:
+        type: integer
+        description: ""
+      isTwoWay:
+        type: string
+        description: ""
+      reverseSweepFrequency:
+        type: string
+        description: ""
+      twowaySweepPriority:
+        type: integer
+        description: ""
+      onlineBalanceFetch:
+        type: string
+        description: ""
+      partialReverseSweep:
+        type: string
+        description: ""
+      isHold:
+        type: string
+        description: ""
+      eodExecution:
+        type: string
+        description: ""
+      ratePickUp:
+        type: string
+        description: ""
+      reallocationRequired:
+        type: string
+        description: ""
+      reallocationMethod:
+        type: string
+        description: ""
+      allowReverseSweep:
+        type: string
+        description: ""
+      isNominatedAccount:
+        type: string
+        description: ""
+      accountLevel:
+        type: integer
+        description: ""
+      centralAccountNumber:
+        type: string
+        description: ""
+      centralAccountBranch:
+        type: string
+        description: ""
+      centralAccountCurrency:
+        type: string
+        description: ""
+      percentageShare:
+        type: integer
+        description: ""
+      percentageChildShare:
+        type: integer
+        description: ""
+      partialTransferAllowed:
+        type: string
+        description: ""
+      LmmTmStructureInstructionDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureInstructionDTO'
+      LmmTmStructurePaymentDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructurePaymentDTO'
+      LmmTmStructureAccPriorityDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureAccPriorityDTO'
+    required:
+    - structureMasterId
+  LmmTmStructureAccountsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      accountNumber:
+        type: string
+        description: ""
+      accountBranch:
+        type: string
+        description: ""
+      accountCurrency:
+        type: string
+        description: ""
+      isExternal:
+        type: string
+        description: ""
+      isNotional:
+        type: string
+        description: ""
+      accCategory:
+        type: string
+        description: ""
+      accountType:
+        type: string
+        description: ""                                
+      isSelected:
+        type: string
+        description: ""
+  LmmTmStructureAccPriorityDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureId:
+        type: string
+        description: ""
+      accountNumber:
+        type: string
+        description: ""
+      structureDetailsId:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      structurePriority:
+        type: integer
+        description: ""
+      versionNo:
+        type: integer
+        description: ""
+  LmmTmStructureAccPrtyCollection:
+    description: Collection of externalsystem.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureAccPriorityDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  LmmTmStructureInstructionDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureDetailsId:
+        type: string
+        description: ""
+      instructionId:
+        type: string
+        description: ""
+      instrDesc:
+        type: string
+        description: ""
+      instructionPriority:
+        type: integer
+        description: ""
+      suspensionStartDate:
+        type: string
+        description: ""
+      suspensionEndDate:
+        type: string
+        description: ""
+      LmmTmStructureInstructionFrequencyDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureInstructionFrequencyDTO'
+      LmmTmStructureInstructionDetDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureInstructionDetDTO'
+    required:
+    - structureDetailsId
+  LmmTmStructureInstructionFrequencyDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureInstructionId:
+        type: string
+        description: ""
+      frequencyId:
+        type: string
+        description: ""
+      freqDesc:
+        type: string
+        description: ""
+    required:
+    - structureInstructionId
+  LmmTmStructureInstructionDetDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureInstructionId:
+        type: string
+        description: ""
+      paramName:
+        type: string
+        description: ""
+      paramValue:
+        type: string
+        description: ""
+    required:
+    - structureInstructionId
+  LmmTmStructurePaymentDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structureDetailsId:
+        type: string
+        description: ""
+      sweepDirection:
+        type: string
+        description: ""
+      interfaceMasterId:
+        type: string
+        description: ""
+      LmmTmStructurePaymentDetailDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructurePaymentDetailDTO'
+    required:
+    - structureDetailsId
+  LmmTmStructurePaymentDetailDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      structurePaymentId:
+        type: string
+        description: ""
+      paramName:
+        type: string
+        description: ""
+      paramValue:
+        type: string
+        description: ""
+    required:
+    - structurePaymentId  
+  IcEntry:
+    type: object
+    allOf:
+    - type: object
+      properties:
+        account:
+          type: string
+          description: ''
+        branch:
+          type: string
+          description: ''
+        currency:
+          type: string
+          description: ''
+        entDt:
+          type: string
+          format: date
+          description: ''
+        accruedAmt:
+          type: number
+          description: ''
+        drcr:
+          type: string
+          description: ''
+        cur_run_accr:
+          type: string
+          description: ''
+        liqn:
+          type: string
+          description: ''
+        accr:
+          type: string
+          description: ''  
+      required:
+      - account
+      - branch
+      - currency
+  LmbTmIcEntryCollection:
+    description: Collection of Ic Entries.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/IcEntry'
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmbTbBatchDataCollection:
+    description: "Collection of batchdata."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/LmbTbBatchDataDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  LmbTbBatchDataWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmbTbBatchDataDTO"
+  LmmTmPoolStructureDTO:
+    type: object
+    properties:
+      structureId:
+        type: string
+        description: ''
+      jobSchedulerId:
+        type: string
+        description: ''
+  LmmTmPoolStructureCollection:
+    description: Collection of pool position.
+    type: object
+    properties:
+      jobSchedulerId:
+        type: string
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmPoolStructureDTO'
+  StructureRevSweepBodDTO:
+    type: object
+    properties:
+      structureId:
+        type: string
+        description: ''
+      structureFrequency:
+        type: string
+        description: ''
+      reverseFrequency:
+        type: string
+        description: ''
+      instructionType:
+        type: string
+        description: ''
+      nextRunDateReverse:
+        type: string
+        description: ''
+      prevRunDateReverse:
+        type: string
+        description: ''
+      structureMasterId:
+        type: string
+        description: ''
+      accountNumber:
+        type: string
+        description: ''
+      structureDetailsId:
+        type: string
+        description: ''        
+      branchCode:
+        type: string
+        description: ''
+      accountCurrency:
+        type: string
+        description: ''
+  StructureRevSweepBodCollection:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/StructureRevSweepBodDTO'       

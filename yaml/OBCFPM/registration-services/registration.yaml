@@ -1,0 +1,2186 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Valuation server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Registration Service"
+host: "whf00anh:7771"
+basePath: "/registration-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "RegistrationAPI"
+    description: "API for Registration's Operations"
+    
+schemes:
+- "http"
+
+paths:
+  /web/v1/registration:
+    post:
+      tags:
+        - "RegistrationWeb"
+      summary: "Adds a new collateral registration."
+      description: "Adds a new collateral registration."
+      operationId: "createCollateralRegistrationW"
+      parameters:
+        - name: "collateralRegistration"
+          in: "body"
+          description: "Request Body that contains data required for creating a new collateral registration"
+          required: true
+          schema:
+            $ref: "#/definitions/CollateralRegistrationMasterModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully created a new collateral registration"
+          headers:
+            Location:
+              description: "URL of newly created collateral registration"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/registration/{collateralId}:
+    get:
+      tags:
+        - "RegistrationWeb"
+      summary: "Retrieves the list of existing collateral registration."
+      description:  "Retrieves the list of existing collateral registration."
+      operationId: "getAllCollateralRegistrationW"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Collateral Id for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/registration/latest/{collateralId}:
+    get:
+      tags:
+        - "RegistrationWeb"
+      summary: "Retrieves the collateral registration by Id."
+      description:  "Retrieves the collateral registration by Id."
+      operationId: "getCollateralRegistrationByIdW"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "statusId"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the collateral registration based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/replication/registration/{collateralId}:
+    get:
+      tags:
+        - "RegistrationRplcnWeb"
+      summary: "Retrieves the collateral registration by Id."
+      description:  "Retrieves the collateral registration by Id."
+      operationId: "getCollateralRegistrationRplcn"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the collateral registration based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /web/v1/registration/{id}:
+    put:
+      tags:
+        - "RegistrationWeb"
+      summary: "Update an existing collateral registration."
+      description:  "Update an existing collateral registration."
+      operationId: "updateCollateralRegistrationW"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the collateral registration that need to be updated"
+          required: true
+          type: "string"      
+        - name: "collateralRegistration"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing collateral registration"
+          required: true
+          schema:
+            $ref: "#/definitions/CollateralRegistrationMasterModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns updated collateral registration"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "RegistrationWeb"
+      summary: "Deletes the collateral registration identified by given Id."
+      description:  "Deletes the collateral registration identified by given Id"
+      operationId: "deleteCollateralRegistrationW"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the collateral registration that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/registration/delete/collateral/{collateralId}:
+    delete:
+      tags:
+        - "RegistrationWeb"
+      summary: "Deletes the Registration identified by given collateral Id."
+      description:  "Deletes the Registration identified by given collateral Id"
+      operationId: "deleteCollateralRegistration"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the registration that need to be updated"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "hardDeleteFlag"
+          in: "query"
+          type: "boolean"
+          required: false
+        - name: "collateralAssetId"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"            
+  /web/v1/registration/collateral/{collateralId}/collateralAsset/{collateralAssetId}:
+    get:
+      tags:
+        - "RegistrationWeb"
+      summary: "Retrieves the registration work record or replication record for the given asset of a collateral."
+      description:  "Retrieves the registration details work record or replication record for the given asset based on the collateralId and collateralAssetId"
+      operationId: "getRegistrationDetsByCollateralAsset"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Identifies a collateral"
+          required: true
+          type: "string"
+        - name: "collateralAssetId"
+          in: "path"
+          description: "Identifies a collateral asset"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "replicationFlag"
+          in: "query"
+          required: false
+          type: "boolean"
+          description: "Determines to fetch work record or replication record"
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "recordStatus"
+          in: "query"
+          required: false
+          type: "string"
+          description: "Determines the type of records to fetch: either MAIN or REPLICATED"
+      responses:
+        200:
+          description: "Returns the Response Model for the given Collateral asset"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/registration/finalSubmit:
+    post:
+      tags:
+        - "RegistrationWeb"
+      summary: "Creates a new Registration Main."
+      description: "Creates a new Registration Main."
+      operationId: "createCollateralRegistrationMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "submitInFacility"
+          in: "query"
+          type: "boolean"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Registration Main"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created Registration Main"
+          headers:
+            Location:
+              description: "URL of newly created Registration Main"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+  /web/v1/registration/main/{collateralId}:
+    get:
+      tags:
+        - "RegistrationWeb"
+      summary: "Retrieves the Registration Main by collateralID."
+      description:  "Retrieves the Registration Main by collateralID."
+      operationId: "getAllCollateralRegistrationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the Registration Main based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+    delete:
+      tags:
+        - "RegistrationWeb"
+      summary: "Deletes the collateral registration identified by given Id."
+      description:  "Deletes the collateral registration identified by given Id"
+      operationId: "deleteCollateralRegMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the collateral registration that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"      
+  /web/v1/deRegistration:
+    post:
+        tags:
+          - "DeRegistrationWeb"
+        summary: "Adds a new deRegistration."
+        description: "Adds a new deRegistration."
+        operationId: "createCollateralDeRegistrationW"
+        parameters:
+          - name: "collateralDeRegistration"
+            in: "body"
+            description: "Request Body that contains data required for creating a new deRegistration"
+            required: true
+            schema:
+              $ref: "#/definitions/CollateralDeRegistrationMasterModel"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          201:
+           description: "Successfully created a new deRegistration"
+           headers:
+             Location:
+              description: "URL of newly created deRegistration"
+              type: "string"
+           schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          405:
+            description: "Invalid input"
+          500:
+            description: "Internal error" 
+  /web/v1/deRegistration/{collateralId}: 
+    get:
+        tags:
+          - "DeRegistrationWeb"
+        summary: "Retrieves the list of existing deRegistration."
+        description:  "Retrieves the list of existing deRegistration."
+        operationId: "getAllCollateralDeRegistrationW"
+        parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Collateral Id for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false   
+        responses:
+          200:
+            description: "Successful performs the operation"
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error" 
+  /web/v1/deRegistration/latest/{collateralId}:
+    get:
+        tags:
+          - "DeRegistrationWeb"
+        summary: "Retrieves the deRegistration by  Id."
+        description:  "Retrieves the deRegistration by  Id."
+        operationId: "getCollateralDeRegistrationByIdW"
+        parameters:
+          - name: "collateralId"
+            in: "path"
+            description: "Id for which data needs to be fetched"
+            required: true
+            type: "string"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false  
+        responses:
+          200:
+            description: "Returns the deRegistration based on given collateral id."
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"
+  /web/v1/replication/deRegistration/{collateralId}:
+    get:
+        tags:
+          - "DeRegistrationRplcnWeb"
+        summary: "Retrieves the deRegistration replication record by  Id."
+        description:  "Retrieves the deRegistration replication record by  Id."
+        operationId: "getCollateralDeRegistrationRplcn"
+        parameters:
+          - name: "collateralId"
+            in: "path"
+            description: "Id for which data needs to be fetched"
+            required: true
+            type: "string"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: false
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false  
+        responses:
+          200:
+            description: "Returns the deRegistration based on given collateral id."
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error" 
+ 
+  /web/v1/deRegistration/{id}:
+    put:
+        tags:
+          - "DeRegistrationWeb"
+        summary: "Update an existing deRegistration."
+        description:  "Update an existing deRegistration."
+        operationId: "updateCollateralDeRegistrationW"
+        parameters:
+          - name: "id"
+            in: "path"
+            description: "Id of the deRegistration that need to be updated"
+            required: true
+            type: "string"      
+          - name: "collateralDeRegistration"
+            in: "body"
+            description: "Request Body that contains data required for updating an existing deRegistration"
+            required: true
+            schema:
+              $ref: "#/definitions/CollateralDeRegistrationMasterModel"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          200:
+            description: "Returns updated deRegistration"
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          405:
+            description: "Invalid input"
+          500:
+            description: "Internal error"
+    delete:
+        tags:
+          - "DeRegistrationWeb"
+        summary: "Deletes the deRegistration identified by given collateral Id."
+        description:  "Deletes the deRegistration identified by given collateral Id"
+        operationId: "deleteCollateralDeRegistrationW"
+        parameters:
+          - name: "id"
+            in: "path"
+            description: "Id of the deRegistration that needs to be deleted"
+            required: true
+            type: "string"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          200:
+            description: "Successful operation."
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"
+  /web/v1/deRegistration/finalSubmit:
+    post:
+      tags:
+        - "DeRegistrationWeb"
+      summary: "Creates a new DeRegistration Main."
+      description: "Creates a new DeRegistration Main."
+      operationId: "createCollateralDeRegistrationMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new DeRegistration Main"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created DeRegistration Main"
+          headers:
+            Location:
+              description: "URL of newly created DeRegistration Main"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+  /web/v1/deRegistration/main/{collateralId}:
+    get:
+      tags:
+        - "DeRegistrationWeb"
+      summary: "Retrieves the DeRegistration Main by collateralID."
+      description:  "Retrieves the DeRegistration Main by collateralID."
+      operationId: "getAllCollateralDeRegistrationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+      responses:
+        200:
+          description: "Returns the DeRegistration Main based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+    delete:
+      tags:
+        - "DeRegistrationWeb"
+      summary: "Deletes the collateral registration identified by given Id."
+      description:  "Deletes the collateral registration identified by given Id"
+      operationId: "deleteCollateralDeRegMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the collateral registration that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"      
+  /web/v1/documentRetrieval:
+    post:
+        tags:
+          - "DocRetrievalWeb"
+        summary: "Adds a new documentRetrieval."
+        description: "Adds a new documentRetrieval."
+        operationId: "createCollateralDocumentRetrievalW"
+        parameters:
+          - name: "collateralDocumentRetrieval"
+            in: "body"
+            description: "Request Body that contains data required for creating a new documentRetrieval"
+            required: true
+            schema:
+              $ref: "#/definitions/CollateralDocumentRetrievalMasterModel"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          201:
+           description: "Successfully created a new documentRetrieval"
+           headers:
+             Location:
+              description: "URL of newly created documentRetrieval"
+              type: "string"
+           schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          405:
+            description: "Invalid input"
+          500:
+            description: "Internal error"  
+  /web/v1/documentRetrieval/{collateralId}:
+    get:
+        tags:
+          - "DocRetrievalWeb"
+        summary: "Retrieves the list of existing documentRetrieval."
+        description:  "Retrieves the list of existing documentRetrieval."
+        operationId: "getAllCollateralDocumentRetrievalW"
+        parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Collateral Id for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        responses:
+          200:
+            description: "Successful performs the operation"
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error" 
+  /web/v1/documentRetrieval/latest/{collateralId}:
+    get:
+        tags:
+          - "DocRetrievalWeb"
+        summary: "Retrieves the documentRetrieval by  Id."
+        description:  "Retrieves the documentRetrieval by  Id."
+        operationId: "getCollateralDocumentRetrievalByIdW"
+        parameters:
+          - name: "collateralId"
+            in: "path"
+            description: "Id for which data needs to be fetched"
+            required: true
+            type: "string"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: false
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          200:
+            description: "Returns the documentRetrieval based on given collateral id."
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"
+  /web/v1/replication/documentRetrieval/{collateralId}:
+    get:
+        tags:
+          - "DocRetrievalRplcnWeb"
+        summary: "Retrieves the documentRetrieval by  Id."
+        description:  "Retrieves the documentRetrieval by  Id."
+        operationId: "getCollateralDocumentRetrievalRplcn"
+        parameters:
+          - name: "collateralId"
+            in: "path"
+            description: "Id for which data needs to be fetched"
+            required: true
+            type: "string"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: false
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          200:
+            description: "Returns the documentRetrieval based on given collateral id."
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"
+  /web/v1/documentRetrieval/{id}:
+    put:
+        tags:
+          - "DocRetrievalWeb"
+        summary: "Update an existing documentRetrieval."
+        description:  "Update an existing documentRetrieval."
+        operationId: "updateCollateralDocumentRetrievalW"
+        parameters:
+          - name: "id"
+            in: "path"
+            description: "id of the documentRetrieval that need to be updated"
+            required: true
+            type: "string"      
+          - name: "collateralDocumentRetrieval"
+            in: "body"
+            description: "Request Body that contains data required for updating an existing documentRetrieval"
+            required: true
+            schema:
+              $ref: "#/definitions/CollateralDocumentRetrievalMasterModel"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          200:
+            description: "Returns updated documentRetrieval"
+            schema:
+              $ref: "#/definitions/ResponseModel"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          405:
+            description: "Invalid input"
+          500:
+            description: "Internal error"
+    delete:
+        tags:
+          - "DocRetrievalWeb"
+        summary: "Deletes the documentRetrieval identified by given collateral Id."
+        description:  "Deletes the documentRetrieval identified by given collateral Id"
+        operationId: "deleteCollateralDocumentRetrievalW"
+        parameters:
+          - name: "id"
+            in: "path"
+            description: "Id of the documentRetrieval that needs to be deleted"
+            required: true
+            type: "string"
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: true
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+        responses:
+          200:
+            description: "Successful operation."
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"   
+  /web/v1/documentRetrieval/finalSubmit:
+    post:
+      tags:
+        - "DocRetrievalWeb"
+      summary: "Creates a new documentRetrieval Main."
+      description: "Creates a new documentRetrieval Main."
+      operationId: "createCollateralDocumentRetrievalMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new documentRetrieval Main"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created documentRetrieval Main"
+          headers:
+            Location:
+              description: "URL of newly created documentRetrieval Main"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+  /web/v1/documentRetrieval/main/{collateralId}:
+    get:
+      tags:
+        - "DocRetrievalWeb"
+      summary: "Retrieves the documentRetrieval Main by collateralID."
+      description:  "Retrieves the documentRetrieval Main by collateralID."
+      operationId: "getAllCollateralDocumentRetrievalMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+      responses:
+        200:
+          description: "Returns the documentRetrieval Main based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+    delete:
+      tags:
+        - "DocRetrievalWeb"
+      summary: "Deletes the collateral registration identified by given Id."
+      description:  "Deletes the collateral registration identified by given Id"
+      operationId: "deleteCollateralDocRetrievalMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the collateral registration that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/registration/moveMainToReplcn/collateral/{collateralId}:
+    head:
+      tags:
+        - "RegistrationWeb"
+      summary: "Moves Collateral Registration details from TB to TX."
+      description: "Moves Collateral Registration details from TB to TX."
+      operationId: "moveCollateralRegistrationInFacilityFromTBToTX"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "entityReferenceNumber of the details that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  RepresentationModel:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"
+  CollateralRegistrationMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+        properties:
+          recordId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          parentId:
+            type: "string"
+          replicationFlag:
+            type: "boolean"
+          applicationNumber:
+            type: "string"
+          collateralRegistrationList:
+            type: "array"
+            items: { $ref: '#/definitions/CollateralRegistrationModel' }
+  CollateralRegistrationModel:
+    description: "Collateral Registration model"
+    type: "object"
+    required:
+      - agencyId
+      - documentId
+      - registrationRequestDate
+      - registrationStatus
+    properties:
+      parentId:
+        type: "string"
+      id:
+        type: "string"
+      agencyId:
+        type: "string"
+      documentId:
+        type: "string"
+      registrationRequestDate:
+        type: "string"
+        format: "date-time"
+      confirmationDate:
+        type: "string"
+        format: "date-time"
+      documentDescription:
+        type: "string"
+      isConfirmationReceived:
+        type: "boolean"
+      registrationDate:
+        type: "string"
+        format: "date-time"
+      registrationReferenceNumber:
+        type: "string"
+      registrationStatus:
+        type: "string"
+      isDocumentAdded:
+        type: "boolean"
+      # PatchSet -Dec delete changes
+      softDeleteFlag:
+        type: "string"
+      deleteStat:
+        type: "string"
+  CollateralRegistrationCollection:
+    description: "Collection of Collateral Registration."
+    type: "object"
+    properties:
+      CollateralRegistrationMasterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CollateralRegistrationMasterModel"
+  CollateralDeRegistrationMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object" 
+        required:
+          - collateralId   
+        properties:
+          recordId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          collateralDeRegistrationList:
+            type: "array"
+            items:
+              $ref: "#/definitions/CollateralDeRegistrationModel"
+  CollateralDeRegistrationModel:
+    description: "Collateral DeRegistration model"
+    type: "object"
+    required:
+      - agencyId
+      - documentId
+      - deregistrationRequestDate
+    properties:
+      parentId:
+        type: "string"
+      id:
+        type: "string"
+      agencyId:
+        type: "string"
+      documentId:
+        type: "string"
+      deregistrationRequestDate:
+        type: "string"
+        format: "date-time"
+      confirmationDate:
+        type: "string"
+        format: "date-time"
+      documentDescription:
+        type: "string"
+      isConfirmationReceived:
+        type: "boolean"
+      deregistrationDate:
+        type: "string"
+        format: "date-time"
+      expectedDeregistrationDate:
+        type: "string"
+        format: "date-time"
+      deregistrationReferenceNo:
+        type: "number"
+      deregistrationStatus:
+        type: "string"
+  CollateralDeRegistrationCollection:
+    description: "Collection of Collateral DeRegistration."
+    type: "object"
+    properties:
+      CollateralDeRegistrationMasterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CollateralDeRegistrationMasterModel"
+  CollateralDocumentRetrievalModel:
+    description: "Collateral Document Retrieval Model"
+    type: "object"
+    required:
+      - agencyId
+      - documentId
+      - retreivalReferenceNumber
+      - retreivalStatus
+      - receivedDate
+    properties:
+      parentId:
+        type: "string"
+      id:
+        type: "string"
+      agencyId:
+        type: "string"
+      documentId:
+        type: "string"
+      documentDescription:
+        type: "string"
+      isDocumentReceived:
+        type: "boolean"
+      receivedDate:
+        type: "string"
+        format: "date-time"
+      retreivalReferenceNumber:
+        type: "number"
+      retreivalStatus:
+        type: "string"
+  CollateralDocumentRetrievalCollection:
+    description: "Collection of Collateral Document Retrieval."
+    type: "object"
+    properties:
+      CollateralDocumentRetrievalMasterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CollateralDocumentRetrievalMasterModel"
+  CollateralDocumentRetrievalMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+        properties:
+          recordId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          collateralDocumentRetreivalList:
+            type: "array"
+            items:
+              $ref: "#/definitions/CollateralDocumentRetrievalModel"
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      isFromCAM:
+        type: "boolean"
+      externalCheckReq:
+        type: "boolean"
+      fieldInvestigationReq:
+        type: "boolean"
+      externalValuationReq:
+        type: "boolean"
+      internalValuationReq:
+        type: "boolean"
+      legalOpinionReq:
+        type: "boolean"
+      riskEvaluationReq:
+        type: "boolean"
+      externalCheckAgencySelected:
+        type: "boolean"
+      externalValAgencySelected:
+        type: "boolean"
+      legalFirmSelected:
+        type: "boolean"
+      isCollatCreateSelected:
+        type: "boolean"
+      collateralValue:
+        type: "number"
+      oldCollateralValue:
+        type: "number"
+      isFromCollateralEvaluation:
+        type: "boolean"
+      isFromCollateralReview:
+        type: "boolean"
+      isSubmissionAndAwaitingReq:
+        type: "boolean"
+      serviceName:
+        type: "string"
+      ownerEstimatedValue:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      customerId:
+        type: "string"
+      collateralType:
+        type: "string"
+      collateralCode:
+        type: "string"
+      collateralCurrency:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      submitFlag:
+        type: "boolean"
+      source:
+        type: "string"
+      isKYCRequired:
+        type: "boolean"
+      isCreditRatingRequired:
+        type: "boolean"
+      stageUpdateFlag:
+        type: "boolean"
+      collateralSubmissionReq:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      documentSafeKeepingReq:
+        type: "boolean"
+      updateCategory:
+        type: "string"            

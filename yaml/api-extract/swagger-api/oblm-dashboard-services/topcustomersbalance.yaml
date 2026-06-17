@@ -1,0 +1,150 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+- "application/xml"
+produces:
+- "application/json"
+- "application/xml"
+tags:
+- name: "CustomerBalanceAPI"
+  description: "API for Customer Balance Operations"
+
+schemes:
+- "https"
+
+paths:
+  /topcustomersbalance:
+    get:
+      tags:
+      - "CustomerBalanceAPI"
+      summary: "Retrieves the list of existing CustomerBalance."
+      description:  "Retrieves the list of existing CustomerBalance. Add additional information here for the this endpoint."
+      operationId: "getData"
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdTbTopCustomerBalanceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  LmdTbTopCustomerBalanceDTO:
+    description: "CustomerBalance DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        availableBalance:
+          description: "Balance in Customer Balance"
+          type: integer
+        currency:
+          description: "Currency in Customer Balance"
+          type: string
+        customerId:
+          description: "Customer Id for Customer Balance"
+          type: string
+        userId:
+          description: "User Id  of the Customer Balance"
+          type: string
+      required:
+      - id
+      - userId
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdTbTopCustomerBalanceCollection:
+    description: Collection of CustomerBalance
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmdTbTopCustomerBalanceDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmdTbTopCustomerBalanceWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmdTbTopCustomerBalanceDTO'
+ 

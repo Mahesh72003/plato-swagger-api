@@ -1,0 +1,196 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Settlement server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Settlement Service"
+host: "whf00anh:7711"
+basePath: "/settlement-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "SettlementAPI"
+    description: "API for Settlement's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/settlement:
+    post:
+      tags:
+        - "settlementService"
+      summary: "Create a new Settlement."
+      description: "Create a new Settlement."
+      operationId: "createSettlement"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "settlement"
+          in: "body"
+          description: "Request Body that contains data required for creating a new settlement"
+          required: true
+          schema:
+            $ref: "./settlementWeb.yaml#/definitions/SettlementModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created settlement"
+          headers:
+            Location:
+              description: "URL of newly created settlement"
+              type: "string"
+          schema:
+              $ref: "./settlementWeb.yaml#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "settlementService"
+      summary: "Retrieves the list of existing settlements."
+      description:  "Retrieves the list of existing settlements."
+      operationId: "getAllSettlements"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./settlementWeb.yaml#/definitions/SettlementCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/settlement/{id}:
+    get:
+      tags:
+        - "settlementService"
+      summary: "Retrieves the Settlement by ID."
+      description:  "Retrieves the Settlement by ID."
+      operationId: "getSettlementById"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Settlement that need to be updated"
+          required: true
+          type: "string" 
+      responses:
+        200:
+          description: "Returns the customer based on given id."
+          schema:
+            $ref: "./settlementWeb.yaml#/definitions/SettlementModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "settlementService"
+      summary: "Update an existing settlement."
+      description:  "Update an existing settlement."
+      operationId: "updateSettlement"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Settlement that need to be updated"
+          required: true
+          type: "string"
+        - name: "settlementModel"
+          in: "body"
+          description: "Settlement that need to be updated"
+          required: true
+          schema:
+            $ref: "./settlementWeb.yaml#/definitions/SettlementModel"
+      responses:
+        200:
+          description: "Returns updated settlement"
+          schema:
+            $ref: "./settlementWeb.yaml#/definitions/SettlementModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "settlementService"
+      summary: "Deletes the settlement identified by given ID."
+      description:  "Deletes the settlement identified by given ID."
+      operationId: "deleteSettlement"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"    

@@ -1,0 +1,180 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server." 
+ version: "1.0.0"
+ title: "Get core account Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "getCoreAccounts"
+   description: "API for getting all the valid core accounts"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../accfcltys
+
+ /getCoreAccounts:
+  get:
+   tags:
+    - "getCoreAccounts"
+   summary: "Get all valid coreaccounts."
+   description:  "Get all valid coreaccounts based on the flag that is set to normal/multi-currency/nostro/virtual accounts"
+   operationId: "getCoreAccounts"
+   parameters:
+   - name: normalaccount
+     in: query
+     description: flag for normal account
+     required: false
+     type: boolean
+   - name: multiccyaccount
+     in: query
+     description: flag for multi-currency account
+     required: false
+     type: boolean
+   - name: nostroaccount
+     in: query
+     description: flag for nostro account
+     required: false
+     type: boolean
+   - name: virtualaccount
+     in: query
+     description: flag for virtual account
+     required: false
+     type: boolean
+   - name: customerNo
+     in: query
+     description: Customer number for which real accounts should be fetched
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns all the valid core accounts based on account class flag"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /coreAccountDetailList:
+  get:
+   tags:
+    - "getCoreAccounts"
+   summary: "Get all valid coreaccounts."
+   description:  "Gets the core account details for tilde seperated core Account and Branch combination seperated by comma for multiple records"
+   operationId: "coreAccountDetailList"
+   parameters:
+    - name: coreAccWithBrn
+      in: query
+      required: true
+      type: "string"
+   responses:
+    201:
+     description: "Returns all the core account details for the input Real Acc and Brn"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+# path to fetch all valid records for given account numbers
+#
+#  supported http methods GET
+#
+# path example ../service/coreaccounts     
+     
+ /service/coreaccounts:
+  get:
+   tags:
+    - "coreaccountdetails"
+   summary: "Get all valid coreaccounts."
+   description:  "Get all valid coreaccounts. This endpoints will be used to Get all valid coreaccounts maintenance records."
+   operationId: "getAll"
+   parameters:
+   - in: query
+     name: realaccountnos
+     description: string of realaccountnos seperated by comma
+     required: true
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreAccountCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"

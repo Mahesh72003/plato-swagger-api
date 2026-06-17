@@ -1,0 +1,622 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Using Auto recon service, back office user can configure recon rules for reconcilation purpose and auto-recon-rule-dec service" 
+ version: "1.0.0"
+ title: "Auto Reconciliation Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-manual-recon-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "autoRecon"
+   description: "APIs for auto reconcilation"
+                                                                                                     
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../RuleDef
+
+ /service/v1/autoRecon:
+  post:
+   tags:
+    - "autoRecon"
+   summary: "Adds a new autoRecon."
+   description: "Adds a new autoRecon record"
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "autoRecon" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new autoRecon" 
+      required: true
+      schema:
+       $ref: "#/definitions/ScfTmReconMasterWrapperDTO"
+   responses:
+    201: 
+     description: "Successfully saves a new reconcilation record" 
+     headers:
+      Location:
+       description: "URL of newly created autoReconRuleDef" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseModel"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/getReconRuleDetails:     
+  get:
+   tags:
+    - "autoRecon"
+   summary: "Get all Recon Rule details."
+   description:  "Get all Recon Rule details. This endpoints will be used to Get all Recon maintenance records details."
+   operationId: "getReconRuleDetails"    
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"  
+   - name: "appId"
+     in: "header"
+     description: "appId"
+     required: true
+     type: "string"
+   - name: "partyId"
+     in: query
+     description: "partyId"
+     required: true
+     type: "string"
+   - name: reconCategory
+     in: query
+     required: false
+     type: string
+   - name: reconType
+     in: query
+     required: false
+     type: string
+   - name: ruleDescription
+     in: query
+     required: false
+     type: string
+   - name: ruleId
+     in: query
+     required: false
+     type: string 
+   - name: "authStat"
+     in: query
+     description: "authStatus"
+     required: false
+     type: "string"
+   - name: "recordStat"
+     in: query
+     description: "recordStatus"
+     required: false
+     type: "string"     
+   responses:
+    201: 
+     description: "Successfully received all Recon Rule details"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ScfReconGetDetailsDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"     
+ /service/v1/reconExecRules:    
+  get:
+   tags:
+    - "autoRecon"
+   summary: "Get all Rule Set"
+   description:  "Get all Rule Set. This endpoints will be used to Get all Rule Set maintenance records."
+   operationId: "getObReconRuleExec"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"  
+   - name: "appId"
+     in: "header"
+     description: "appId"
+     required: true
+     type: "string"    
+   responses:
+    201: 
+     description: "Successfully received all Rule Set"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ReconRuleExecCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/reconExecRulesDetails:
+   post:
+     tags:
+       - "autoRecon"
+     summary: "Get all the valid Rule Set"
+     description: "Get all valid Rule Set. This endpoints will be used to Get all the valid as per the data elements Rule Set maintenance records."
+     operationId: "getObReconRuleExecDetails"
+     parameters:
+       - name: "userId"
+         in: "header"
+         description: "userId"
+         required: true
+         type: "string"
+       - name: "branchCode"
+         in: "header"
+         description: "branchCode"
+         required: true
+         type: "string"
+       - name: "appId"
+         in: "header"
+         description: "appId"
+         required: true
+         type: "string"
+       - name: "RuleExecDetails"
+         in: "body"
+         description: "Request Body that contains data for fetching required limit"
+         required: true
+         schema:
+           $ref: "#/definitions/ReconRuleExecDTO"
+     responses:
+       201:
+         description: "Successfully received all Rule Set"
+         headers:
+           Location:
+             description: "Location"
+             type: "string"
+         schema:
+           $ref: "#/definitions/ReconRuleExecCollection"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+definitions:
+ ScfTmReconMasterWrapperDTO:
+  type: object
+  properties:
+   partyId:
+    type: string
+    description: "Party Id" 
+   isAutoAuth:
+    type: string
+    description: "Is Auto Authorization"
+   action:
+    type: string
+    description: "Action" 
+   ReconRuleMasterList:
+    type: array
+    items:
+     $ref: "#/definitions/ReconRuleDefMasterDTO"
+ ReconRuleDefMasterDTO:
+  type: object
+  allOf:
+  - $ref: "./AutoReconWebDef.yaml#/definitions/GenericDto"
+  - type: object
+    properties:
+     ruleAction:
+      type: string
+      description: "Rule action"
+     id:
+      type: string
+      description: "Id"
+     priority:
+      type: number
+      description: "Priority"
+     baseEntity:
+      type: string
+      description: "Base Entity"
+     baseOnAttr:
+      type: string
+      description: "Base on attribute"
+     genericCriteria:
+      type: string
+      description: "Generic Criteria"
+     reconCategory:
+      type: string
+      description: "Recon Category"
+     reconType:
+      type: string
+      description: "Recon Type"
+     executeGeneric:
+      type: string
+      description: "Execute Generic"
+     ruleDescription:
+      type: string
+      description: "Rule description"      
+     ruleId:
+      type: string
+      description: "Rule Id"
+     allocationBasis:
+      type: string
+      description: "Allocation Basis"
+     GroupsAndConditions:
+      type: array
+      items:
+       $ref: "#/definitions/GroupsAndConditions"
+     AllocationList:
+      type: array
+      items:
+       $ref: "#/definitions/AllocationDTO"
+ GroupsAndConditions:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "Unique identifier for a group or condition"
+   isGroup:
+    type: boolean
+    description: "Boolean value to identify whether this child is a group or condition"
+   connectingOperator:
+    type: string
+    description: "Logical Operator applied between all groups, this is the connecting operator"
+   level:
+    type: number
+    description: "This helps to identify the nesting level."
+   matchingCriteria:
+    type: string
+    description: "Matching Criteria"
+   reconEntityLHS:
+    type: string
+    description: "Should be null or not present if isGroup is true"
+   reconEntityAttribLHS:
+    type: string
+    description: "Will be provided if Single entity is LHS entity or if single entity is N. Attribute which user wants to use for recon"
+   reconEntityRHS:
+    type: string
+    description: "Should be null or not present if isGroup is true"
+   reconEntityAttribRHS:
+    type: string
+    description: "Will be provided if Single entity is RHS entity or if single entity is N. Attribute which user wants to use for recon"
+   patternTypeLHS:
+    $ref: "./ReconciliationDef.yaml#/definitions/PatternTypeDTO"
+   patternTypeRHS:
+    $ref: "./ReconciliationDef.yaml#/definitions/PatternTypeDTO"
+   groupsAndConditions:
+    type: "array"
+    items:
+     $ref: "#/definitions/GroupsAndConditions"     
+     
+ ResponseModel:
+  type: object
+  properties:
+    messages:
+     $ref: "#/definitions/ReconResponseDto"
+    data:
+     $ref: "#/definitions/ReconDecResponseData"
+ ReconDecResponseData:
+  type: object
+  properties:
+    partyId:
+     type: string
+     description: "Party Id"
+    authStatus:
+     type: string
+     description: "Authorization Status"
+    existing:
+     type: string
+     description: "Existing"
+    reconRuleResponse:
+      type: array
+      items:
+       $ref: "#/definitions/ReconRuleResponse"
+ ReconRuleResponse:
+  type: object
+  properties:
+    ruleId:
+     type: string
+     description: "Rule Id"
+    ruleDescription:
+     type: string
+     description: "Rule Description"
+    ruleExisting:
+     type: string
+     description: "Rule Existing"
+    ruleAuthStat:
+     type: string
+     description: "Rule Authorization Status"
+    ruleMakerId:
+     type: string
+     description: "Rule Maker Id"
+    ruleCheckerId:
+     type: string
+     description: "Rule Checker Id"
+    ruleMakerDate:
+     type: object
+     description: "Rule Maker Date"
+    ruleCheckerDate:
+     type: object
+     description: "Rule Checker Date"
+ ReconResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "./AutoReconWebDef.yaml#/definitions/ResponseCode"
+   requestId:
+    type: string 
+ ReconRuleExecCollection:
+  type: "object"
+  properties:
+     reconRuleExecDTOList:
+      type: "array"
+      items:
+       $ref: "#/definitions/ReconRuleExecDTO"
+ ReconRuleExecDTO:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      pmtPartyFound:
+        type: "string"
+      beneFound:
+        type: "string"
+      cpInfoFound:
+        type: "string"
+      pmtPartyRole:
+        type: "string"
+      cpRole:
+        type: "string"
+      beneRole:
+        type: "string"
+      prgFound:
+        type: "string"
+      stlTwdsFlag:
+        type: "string"
+      pmtPartyCategory:
+        type: "string"
+      rconDecFltrAttr:
+        type: "string"
+      reconCategory:
+        type: "string" 
+ AllocationDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "Id"
+   allocationParameter:
+    type: string
+    description: "Allocation Parameter"
+   percentage:
+    type: number
+    description: "Percentage"
+ ScfReconGetDetailsDTO:
+  type: object
+  properties:
+   partyId:
+    type: string
+    description: "Party Id" 
+   action:
+    type: string
+    description: "Action" 
+   recordStat:
+    type: string
+    description: "Record Status" 
+   authStat:
+    type: string
+    description: "Authorization Status"
+   modNo:
+    type: integer
+    description: "Mod Number"    
+   ReconRuleMasterList:
+    type: array
+    items:
+     $ref: "#/definitions/ScfReconRuleDefinitionCollection"
+ ScfReconRuleDefinitionCollection: 
+  description: "Collection of reconruledefinition."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ReconRuleDefinitionDetailsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ReconRuleDefinitionDetailsDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "Id"
+   reconCategory:
+    type: string
+    description: "Recon Category"  
+   ruleId:
+    type: string
+    description: "Rule Id"
+   ruleDescription:
+    type: string
+    description: "Rule Description"
+   priority:
+    type: number
+    description: "Priority"
+   executeGeneric:
+    type: string
+    description: "Execute Generic"
+   reconType:
+    type: string
+    description: "Recon Type"
+   genericCriteria:
+    type: string
+    description: "Generic Criteria"
+   baseEntity:
+    type: string
+    description: "Base Entity"
+   baseOnAttr:
+    type: string
+    description: "Base on Atrribute"
+   allocationBasis:
+    type: string
+    description: "Allocation Basis"
+   rulePartyLinkageFlag:
+    type: string
+    description: "Rule party mapping"    
+   groupsAndConditions:
+    type: array
+    items:
+     $ref: "#/definitions/RuleElementDetailsDTO"
+   reconAllocationDTO:
+    type: array
+    items:
+     $ref: "#/definitions/ReconAllocationDetailsDTO"
+ ReconAllocationDetailsDTO:
+  type: object
+  properties:
+   action:
+    type: string
+    description: "Action"
+   allocationParameter:
+    type: string
+    description: "Allocation Parameter"
+   id:
+    type: string
+    description: "Id"
+   percentage:
+    type: number
+    description: "Percentage"
+   reconRuleDefinitionId:
+    type: string
+    description: "Recon Rule Definition Id"
+ RuleElementDetailsDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "Unique identifier for a group or condition"
+   isGroup:
+    type: boolean
+    description: "Boolean value to identify whether this child is a group or condition"
+   connectingOperator:
+    type: string
+    description: "Logical Operator applied between all groups, this is the connecting operator"
+   level:
+    type: number
+    description: "This helps to identify the nesting level."
+   matchingCriteria:
+    type: string
+    description: "Matching Criteria"
+   reconEntityLHS:
+    type: string
+    description: "Should be null or not present if isGroup is true"
+   reconEntityAttribLHS:
+    type: string
+    description: "Will be provided if Single entity is LHS entity or if single entity is N. Attribute which user wants to use for recon"
+   reconEntityRHS:
+    type: string
+    description: "Should be null or not present if isGroup is true"
+   reconEntityAttribRHS:
+    type: string
+    description: "Will be provided if Single entity is RHS entity or if single entity is N. Attribute which user wants to use for recon"
+   patternTypeLHS:
+    $ref: "./ReconciliationDef.yaml#/definitions/PatternTypeDTO"
+   patternTypeRHS:
+    $ref: "./ReconciliationDef.yaml#/definitions/PatternTypeDTO"
+   groupsAndConditions:
+    type: "array"
+    items:
+     $ref: "#/definitions/RuleElementDetailsDTO"   

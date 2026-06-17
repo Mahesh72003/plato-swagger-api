@@ -1,0 +1,202 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : orchestration.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+  description: "You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Orchestration Services"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "clmo-orchestration-services"
+    description: "API for orchestrate"
+    
+schemes:
+- "https"
+
+paths:
+  /orchestrate:
+    post:
+      tags:
+        - "orchestrate"
+      summary: "orchestration api"
+      description: "orchestrates the handoff process called from the business process"
+      operationId: "orchestrate"
+      parameters:
+        - name: "source"
+          in: "header"
+          description: "source header"
+          required: true
+          type: "string"
+          pattern: "^\\w{0,15}$"
+        - name: "appId"
+          in: "header"
+          description: "appId header"
+          required: true
+          type: "string"          
+        - name: "user"
+          in: "header"
+          description: "user header"
+          required: true
+          type: "string"
+        - name: "branch"
+          in: "header"
+          description: "branch header"
+          required: true
+          type: "string"
+        - name: "OrchestrateRequest"
+          in: "body"
+          description: "Request Body that contains data required for orchestration"
+          required: true
+          schema:
+            $ref: "#/definitions/OrchestrateRequestModel"                 
+      responses:
+        201:
+          description: "Returns response object for orchestration"
+          schema:
+            $ref: "#/definitions/OrchestrateResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"    
+  /simulate:
+    post:
+      tags:
+        - "simulate"
+      summary: "simulation api"
+      description: "simulates the handoff process"
+      operationId: "simulate"
+      parameters:
+        - name: "source"
+          in: "header"
+          description: "source header"
+          required: true
+          type: "string"
+          pattern: "^\\w{0,15}$"
+        - name: "appId"
+          in: "header"
+          description: "appId header"
+          required: true
+          type: "string"          
+        - name: "user"
+          in: "header"
+          description: "user header"
+          required: true
+          type: "string"
+        - name: "branch"
+          in: "header"
+          description: "branch header"
+          required: true
+          type: "string"
+        - name: "OrchestrateRequest"
+          in: "body"
+          description: "Request Body that contains data required for orchestration"
+          required: true
+          schema:
+            $ref: "#/definitions/OrchestrateRequestModel"                 
+      responses:
+        201:
+          description: "Returns response object for simulation"
+          schema:
+            $ref: "#/definitions/String"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  OrchestrateRequestModel:
+    description: "OrchestrationRequest model"
+    type: "object"
+    required:
+    - field1
+    - orchestrator    
+    properties:
+      field1:
+        description: "field1"
+        type: "string"
+        pattern: "^\\w{0,35}$"
+      field2:
+        description: "field2"
+        type: "string"
+        pattern: "^\\w*$"
+      orchestrator:
+        description: "name of the orchestrator"
+        type: "string"
+        pattern: "^\\w*$"
+      applicationNumber:
+        description: "applicationNumber"
+        type: "string"
+        pattern: "^\\w*$"
+      processRefNumber:
+        description: "processRefNumber"
+        type: "string"            
+        pattern: "^\\w*$"
+  OrchestrateResponseModel:
+    description: "OrchestrationResponse model"
+    type: "object"
+    required:
+    - field1
+    - field3    
+    properties:
+      field1:
+        description: "field1"
+        type: "string"
+        pattern: "^\\w{0,35}$"
+      field2:
+        description: "field2"
+        type: "string"
+        pattern: "^\\w{0,35}$"
+      field3:
+        description: "field3"
+        type: "string"        
+        pattern: "^\\w{0,35}$"

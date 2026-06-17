@@ -1,0 +1,1296 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cam
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server covenantmaintenance server." 
+ version: "1.0.0"
+ title: "covenant Master Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "covenantmaintenance"
+   description: "This is a covenant maintenance service meant for handling maintenance details for Covenants. This is an enhancement in terms of covenant tracking as more details are added up based on the initial scenario which is existing. The enhancement involves addition of new tables and combining the results of data from different children and giving back the response"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../covenantmaintenance
+
+ /covenantmaster:
+  post:
+   tags:
+    - "covenantmaster"
+   summary: "Adds a new covenantmaintenance."
+   description: "Adds a new covenantmaintenance. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "covenantmaintenance" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new covenantmaintenance" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmCovenantMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created covenantmaintenance" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Get all valid covenantmaintenance."
+   description:  "Get all valid covenantmaintenance. This endpoints will be used to Get all valid covenantmaintenance maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: covenantLinkageType
+     in: query
+     description: get records based on the Covenant Linkage Type
+     required: false
+     type: "string"
+   - name: covenantCode
+     in: query
+     description: get records based on the Covenant Code
+     required: false
+     type: "string"
+   - name: covenantName
+     in: query
+     description: get records based on the Covenant Code
+     required: false
+     type: "string"
+   - name: recordStatus
+     in: query
+     description: get records based on the Record status
+     required: false
+     type: "string"
+   - name: authStatus
+     in: query
+     description: get records based on the Auth status
+     required: false
+     type: "string"
+
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../covenantmaintenance/xxx
+#   DELETE    .../covenantmaintenance/xxx
+#   GET       .../covenantmaintenance/xxx
+#   GET       .../covenantmaintenance/xxx?version=latestrecord
+#   GET       .../covenantmaintenance/xxx?version=1
+
+ /covenantmaster/saveandautoauth:
+   post:
+     tags:
+     - "covenantmaster"
+     summary: "Adds a new covenantmaintenance."
+     description: "Adds a new covenantmaintenance. Add additional information here for this endpoint."
+     operationId: "saveAndAutoAuth"
+     parameters:
+     - name: "covenantmaintenance"
+       in: "body"
+       description: "Request Body that contains data required for creating a new covenantmaintenance"
+       required: true
+       schema:
+         $ref: "#/definitions/CfpmTmCovenantMasterDTO"
+     responses:
+       201:
+         description: "Returns message of success or failure "
+         headers:
+           Location:
+             description: "URL of newly created covenantmaintenance"
+             type: "string"
+         schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+
+
+ /covenantmaster/{id}:
+  put:
+   tags:
+    - "covenantmaster"
+   summary: "Update an existing covenantmaintenance."
+   description:  "Update an existing covenantmaintenance."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the covenantmaintenance Maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing covenantmaintenance"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmCovenantMasterDTO"
+   responses:
+    200:
+     description: "Returns updated covenantmaintenance"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by ID."
+   description:  "Retrieves the covenantmaintenance by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "covenantmaster"
+   summary: "Deletes the covenantmaintenance identified by given ID."
+   description:  "Deletes the covenantmaintenance identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/covenantCode/{covenantCode}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by covenantId."
+   description:  "Retrieves the covenantmaintenance by covenantId."
+   operationId: "getByCovenantCode"
+   parameters:
+    - name: "covenantCode"
+      in: "path"
+      description: "covenantId of the covenant details to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ /covenantmaster/available/{covenantCode}:
+   get:
+     tags:
+     - "covenantmaster"
+     summary: "Retrieves covenant maintenance data from main table. if record not available in main table, the record is retrieved from work table"
+     description:  "Retrieves covenant maintenance data from main table. if record not available in main table, the record is retrieved from work table"
+     operationId: "getAvailableByCovenantCode"
+     parameters:
+     - name: "covenantCode"
+       in: "path"
+       description: "covenantId of the covenant details to be fetched"
+       required: true
+       type: "string"
+     responses:
+       200:
+         description: "Returns the covenantmaintenance based on given id."
+         schema:
+           $ref: "#/definitions/CfpmTmCovenantMasterWrapperDTO"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"
+
+
+ /covenantmaster/sector/{sectorCode}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by SectorID."
+   description:  "Retrieves the covenantmaintenance by SectorID."
+   operationId: "getBySectorId"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "sectorCode"
+      in: "path"
+      description: "Covenant details based on sector ID"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on sector ID"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given sectorid."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/currency/{currencyCode}:
+  get:
+   tags:
+    - "covenant"
+   summary: "Retrieves the covenantmaintenance by currency."
+   description:  "Retrieves the covenantmaintenance by currency."
+   operationId: "getBycurrencyCode"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "currencyCode"
+      in: "path"
+      description: "Covenant details based on currency"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on currency"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given currency."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error" 
+     
+ /covenantmaster/country/{countryCode}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by currency."
+   description:  "Retrieves the covenantmaintenance by currency."
+   operationId: "getBycountryCode"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "countryCode"
+      in: "path"
+      description: "Covenant details based on currency"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on currency"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given currency."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/industry/{industryCode}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by industry code."
+   description:  "Retrieves the covenantmaintenance by industry code."
+   operationId: "getByindustryCode"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "industryCode"
+      in: "path"
+      description: "Covenant details based on industry code"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on industry code"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given currency."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/monitoringinfo/{monitoringInfoId}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by monitoring info Code."
+   description:  "Retrieves the covenantmaintenance by monitoring info Code."
+   operationId: "getBymonitoringInfoCode"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "monitoringInfoId"
+      in: "path"
+      description: "Covenant details based on monitoring info Code"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on monitoring info Code"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given monitoring info Code."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/subindustry/{subIndustryCode}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by sub Industry Code."
+   description:  "Retrieves the covenantmaintenance by sub Industry Code."
+   operationId: "getBysubIndustryCode"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "subIndustryCode"
+      in: "path"
+      description: "Covenant details based on sub Industry Code"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on sub Industry Code"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given monitoring info Code."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/linkagesubtype/{covenantLinkageSubType}:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by covenant Linkage SubType."
+   description:  "Retrieves the covenantmaintenance by covenant Linkage SubType."
+   operationId: "getByLinkageSubType"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: "covenantLinkageSubType"
+      in: "path"
+      description: "Covenant details based on covenant Linkage SubType"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Covenant details based on covenant Linkage SubType"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given monitoring info Code."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /covenantmaster/combined:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrieves the covenantmaintenance by covenant Linkage SubType."
+   description:  "Retrieves the covenantmaintenance by covenant Linkage SubType."
+   operationId: "getCombinedData"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - name: currencyCode
+      in: query
+      description: combined data
+      required: false
+      type: string
+    - name: countryCode
+      in: query
+      description: combined data
+      required: false
+      type: string
+    - name: industryCode
+      in: query
+      description: combined data
+      required: false
+      type: string
+    - name: sectorCode
+      in: query
+      description: combined data
+      required: false
+      type: string
+    - name: subIndustryCode
+      in: query
+      description: combined data
+      required: false
+      type: string
+    - name: covenantLinkageSubType
+      in: query
+      description: combined data
+      required: false
+      type: string
+    - name: monitoringInfoId
+      in: query
+      description: combined data
+      required: false
+      type: string
+      
+      
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given monitoring info Code."
+     schema:
+      $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error" 
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../covenantmaintenance/xxx/approve
+
+ /covenantmaster/{id}/approve:
+  patch:
+   tags:
+    - "covenantmaster"
+   summary: "Authorize the covenantmaintenance by given ID."
+   description:  "Authorize the covenantmaintenance identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../covenantmaintenance/xxx/close
+ /covenantmaster/{id}/close:
+  patch:
+   tags:
+    - "covenantmaster"
+   summary: "Close the covenantmaintenance by given ID."
+   description:  "Close the covenantmaintenance identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../covenantmaintenance/xxx/reopen
+
+ /covenantmaster/{id}/reopen:
+  patch:
+   tags:
+    - "covenantmaster"
+   summary: "reopen the covenantmaintenance by given ID."
+   description:  "reopen the covenantmaintenance identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the covenantmaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "covenantmaintenance"
+      in: "body"
+      description: Request body contain covenantmaintenance and Modification no of covenantmaintenance maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../covenantmaintenance/xxx/unauthorized
+
+ /covenantmaster/{id}/unauthorized:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrives the covenantmaintenance by given ID."
+   description:  "Retrives the covenantmaintenance identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../covenantmaintenance/xxx/history
+
+ /covenantmaster/{id}/history:
+  get:
+   tags:
+    - "covenantmaster"
+   summary: "Retrives the covenantmaintenance by given ID."
+   description:  "Retrives the covenantmaintenance by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the covenantmaintenance based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmCovenantMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+ CfpmTmCovenantMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    required:
+      - covenantClassificationType
+      - covenantDescription
+      - covenantLinkageType
+      - covenantName
+      - covenantType
+      - covenantCode
+      - noticeDays
+      - trackingFrequency
+      - deferredDays
+    properties:
+     covenantClassificationType:
+      type: string
+      description: ""
+     covenantCode:
+      type: string
+      description: ""
+     covenantDescription:
+      type: string
+      description: ""
+     covenantFormula:
+      type: string
+      description: ""
+     covenantLinkageType:
+      type: string
+      description: ""
+     covenantName:
+      type: string
+      description: ""
+     covenantTargetCondition:
+      type: string
+      description: ""
+     covenantTargetFromValue:
+      type: string
+      description: ""
+     covenantTargetToValue:
+      type: string
+      description: ""
+     covenantTargetType:
+      $ref: '#/definitions/CovenantTargetTypeStatus'
+     covenantType:
+      type: string
+      description: ""
+     noticeDays:
+      type: number
+      description: ""
+     trackingCustomDays:
+      type: number
+      description: ""
+     trackingFrequency:
+      type: string
+      description: ""
+     deferredDays:
+       type: integer
+       description: ""
+     covenantSubType:
+       type: string
+       description: ""
+     CfpmTmCovenantCcyMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantCcyMapDTO'
+     CfpmTmCovenantCountryMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantCountryMapDTO'
+     CfpmTmCovenantGradeMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantGradeMapDTO'
+     CfpmTmCovenantIndustryMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantIndustryMapDTO'
+     CfpmTmCovenantMntringInfoDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantMntringInfoDTO'
+     CfpmTmCovenantSectorMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantSectorMapDTO'
+     CfpmTmCovenantSubIndMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantSubIndMapDTO'
+     CfpmTmCvntLnkgsubtypeMapDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCvntLnkgsubtypeMapDTO'
+ CfpmTmCovenantCcyMapDTO:
+  type: object
+  properties:
+     covenantMasterId:
+      type: string
+      description: ""
+     currencyCode:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+ CfpmTmCovenantCountryMapDTO:
+  type: object
+  properties:
+     countryCode:
+      type: string
+      description: ""
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     targetValueFrom:
+      type: string
+      description: ""
+     targetValueTo:
+      type: string
+      description: ""
+ CfpmTmCovenantGradeMapDTO:
+  type: object
+  properties:
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     internalGradeFrom:
+      type: number
+      description: ""
+     internalGradeTo:
+      type: number
+      description: ""
+ CfpmTmCovenantIndustryMapDTO:
+  type: object
+  properties:
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     industryCode:
+      type: string
+      description: ""
+ CfpmTmCovenantMntringInfoDTO:
+  type: object
+  properties:
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     monitoringInfoId:
+      type: string
+      description: ""
+ CfpmTmCovenantSectorMapDTO:
+  type: object
+  properties:
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     sectorCode:
+      type: string
+      description: ""
+ CfpmTmCovenantSubIndMapDTO:
+  type: object
+  properties:
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     subIndustryCode:
+      type: string
+      description: ""
+ CfpmTmCvntLnkgsubtypeMapDTO:
+  type: object
+  properties:
+     covenantLinkageSubType:
+      type: string
+      description: ""
+     covenantMasterId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmCovenantMasterCollection: 
+  description: "Collection of covenant."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmCovenantMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CfpmTmCovenantCountryCollection: 
+  description: "Collection of covenant on country."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmCovenantCountryMapDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmCovenantMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmCovenantMasterDTO"
+ CovenantTargetTypeStatus:
+    description: CovenantTargetTypeStatusModel
+    type: string
+    enum:
+    - RATIO
+    - PERCENTAGE
+    - VALUE
+
+ TypesMasterModelCollection:
+   description: "Collection of covenant on country."
+   type: "object"
+   properties:
+     typesMasterModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/TypesMasterModel"
+
+ TypesMasterModel:
+   type: object
+   properties:
+     recordId:
+       type: string
+       description: ""
+     keyId:
+       type: string
+       description: ""
+     versionNo:
+       type: "integer"
+       format: "int64"
+     recordStat:
+       type: "string"
+     createdBy:
+       type: "string"
+     createdDate:
+       type: "string"
+       format: "date-time"
+     updatedBy:
+       type: "string"
+     updatedDate:
+       type: "string"
+       format: "date-time"
+     keyValuePairList:
+       type: "array"
+       items: { $ref: '#/definitions/TypesModel' }
+
+ TypesModel:
+   type: object
+   properties:
+     id:
+       type: "string"
+       description: ""
+     key:
+       type: "string"
+       description: ""
+     value:
+       type: "string"
+     parentId:
+       type: "string"
+

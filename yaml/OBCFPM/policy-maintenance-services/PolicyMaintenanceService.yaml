@@ -1,0 +1,129 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cam.policylibrary
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server policy maintenance details server." 
+ version: "1.0.0"
+ title: "policy maintenance details service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "policyMaintenanceDetails"
+   description: "A micro service that will maintain policy maintenance details in a separate table. This service will also provide APIs for GET, PUT, DELETE, GET by id, Authorize the given record, Reopen and Close APIs for the maintenance records."
+
+schemes:
+- "https"
+
+paths:
+ /web/v1/policyLibraryMaintenanceDetails:
+  get:
+   tags:
+    - "policyMaintenanceDetails"
+   summary: "Get all policy maintenance details."
+   description:  "Get all policy maintenance detail. This endpoints will be used to Get all policy maintenance records."
+   operationId: "getPolicyLibMaintenanceDetails"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: industryCode
+     required: false
+     type: string
+   - in: query
+     name: industryGrpCode
+     required: false
+     type: string
+   - in: query
+     name: sectorCode
+     required: false
+     type: string
+   - in: query
+     name: subIndustryCode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseModel"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ policyLibMaintenanceDetails:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     sectorReportsDetails:
+      type: object
+      description: "Detailed description of the caution."
+     environmentalGuidelineDetails:
+      type: object
+      description: "Name of the caution."
+     sectorExpertsDetails:
+      type: object
+      description: "Code of the Industry."
+     cautionListDetails:
+      type: object
+      description: "Code of the industry group."

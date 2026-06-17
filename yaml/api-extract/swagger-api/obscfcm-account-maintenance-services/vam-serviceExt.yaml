@@ -1,0 +1,157 @@
+swagger: "2.0"
+info:
+ description: "Provides APIs for Virtual Account Management" 
+ version: "1.0.0"
+ title: "VAM Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-account-maintenance-services"
+consumes:
+ - "application/json"
+ - "application/xml"
+produces:
+ - "application/json"
+ - "application/xml"
+tags:
+ - name: "vamaccountingservices"
+   description: "API for VAM Operations"
+
+paths:
+  /service/v1/postVirtualAcc:     
+    get:
+      tags:
+      - "vamaccountingservices"
+      summary: "Post virtual accounts"
+      description: "Post virtual accounts"
+      operationId: "postVirtualAcc"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "refNo" 
+        in: "query" 
+        description: "Finance Reference Number" 
+        required: true
+        type: "string"
+      - name: "action" 
+        in: "query" 
+        description: "Operation/Event Code" 
+        required: false
+        type: "string" 
+      - name: "applicationCode" 
+        in: "query" 
+        description: "Application Code" 
+        required: false
+        type: "string"
+      - name: "txnType" 
+        in: "query" 
+        description: "Transaction Type" 
+        required: false
+        type: "string"         
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/VamPostingDetailsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+definitions:
+
+  VamPostingDetailsCollection:
+    description: "VAM Account posting response details"
+    type: "object"
+    properties:
+      status:
+        description: "VAM posting status"
+        type: "string"
+      vamErrorDetails:
+        description: "Eca error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/VamErrorDetails"
+          
+  VatRequestDetServiceDTO:
+    type: object
+    properties:
+      drCrInd:
+        type: string
+        description: "Debit Credit Indicator"
+      txnAccount:
+        type: string
+        description: "Transaction Account"
+      txnAccountBrn:
+        type: string
+        description: "Transaction Account Brn"
+      txnCcy:
+        type: string
+        description: "Transaction Currency"
+      txnAccountCcy:
+        type: string
+        description: "Transaction Account Currency"
+      txnAmount:
+        type: number
+        description: "Transaction Amount"
+      txnCode:
+        type: string
+        description: "Transaction Code"
+      valueDate:
+        type: string
+        description: "Value Date"
+      exchRate:
+        type: number
+        description: "Exchange Rate"
+      reconRefNo:
+        type: string
+        description: "Recon Reference Number"
+      addlText:
+        type: string
+        description: "Add1 text"
+      ecaOrBlockRefNo:
+        type: string
+        description: "Eca Or Block Reference Number"
+      ddaOffset:
+        type: string
+        description: "Dda Offset"
+      skipDDAEntries:
+        type: string
+        description: "Skip DDA Entries"
+      forceDebit:
+        type: string
+        description: "Force Debit"
+      blkReleaseStatus:
+        type: string
+        description: "Blk Release Status"
+        
+  VamErrorDetails:
+    description: "VAM error code collection"
+    type: "object"
+    properties:
+      errorCode:
+        description: "Error code"
+        type: "string"
+      errorDesc:
+        description: "Error description"
+        type: "string"

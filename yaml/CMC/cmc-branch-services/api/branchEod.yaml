@@ -1,0 +1,584 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2020 , 2020 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : BranchEod.yaml
+#  **
+#  ** Module     : branchEod
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "API to run Branch EOD"
+  version: "1.0.0"
+  title: "BranchEod Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+tags:
+  - name: "brancheod"
+    description: "API for branchEod Operations"
+schemes:
+  - "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supprorted http methods POST and GET
+  #
+  # path example ../eodBranches
+
+  /brancheod/start:
+    post:
+      tags:
+        - "brancheod"
+      summary: "Invoke EOD for a branch"
+      description: "Starts EOD process for a branch"
+      operationId: "startEod"
+      parameters:
+        - name: "startBrnEodDTO"
+          in: "body"
+          description: "Request Body that contains data required to start EOD process"
+          required: true
+          schema:
+            $ref: "#/definitions/StartBranchEodDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created Branch Eod instance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /brancheod/{branchCode}/{eodDate}:
+    get:
+      tags:
+        - "brancheod"
+      summary: "Get EOD process status of a given branch"
+      description:  "Get the detailed status report of EOD process for a branch"
+      operationId: "getWorkflowStatusByBranch"
+      parameters:
+        - name: "branchCode"
+          in: "path"
+          description: "Branch code for which EOD status should be retrieved"
+          required: true
+          type: "string"
+        - name: "eodDate"
+          in: "path"
+          description: "EOD date for which process status should be retrieved"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Branch EOD details"
+          schema:
+            $ref: "#/definitions/WorkFlowTaskStatus"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /brancheod/workflow/{branchId}:
+    get:
+      tags:
+        - "brancheod"
+      summary: "Get workflow definition"
+      description:  "Get the detailed status report of EOD process for a branch"
+      operationId: "getWorkflowDefinition"
+      parameters:
+        - name: "branchId"
+          in: "path"
+          description: "To fetch DSL definition mapped to the input branch"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Branch EOD details"
+          schema:
+            $ref: "#/definitions/TaskDependencyMetaData"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /brancheod/{workflowId}/retry:
+    post:
+      tags:
+        - "brancheod"
+      summary: "Retry EOD"
+      description:  "Retry EOD with the given Workflow ID"
+      operationId: "retryEOD"
+      parameters:
+        - name: "workflowId"
+          in: "path"
+          description: "Workflow ID that should be retried"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns success or failure message"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /brancheod/milestone:
+    post:
+      tags:
+        - "brancheod"
+      summary: "Marks a milestone"
+      description:  "Marks a milestone"
+      operationId: "markMilestone"
+      responses:
+        200:
+          description: "Returns success messsage"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /brancheod/task/update/{branchId}/{workflowId}/{taskId}:
+    put:
+      tags:
+        - "brancheod"
+      summary: "Update the task status of a workflow to completed"
+      description:  "Updates the task id of a workflow as completed"
+      operationId: "updateTaskStatus"
+      parameters:
+        - name: "branchId"
+          in: "path"
+          description: "Branch ID"
+          required: true
+          type: "string"
+        - name: "workflowId"
+          in: "path"
+          description: "Workflow ID"
+          required: true
+          type: "string"
+        - name: "taskId"
+          in: "path"
+          description: "Task ID of the above workflow that should be updated as completed"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Updates the task status and returns the http status"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /brancheod/task/updateTask:
+    put:
+      tags:
+        - "brancheod"
+      summary: "Update the task status of a workflow to completed"
+      description:  "Updates the task id of a workflow as completed"
+      operationId: "updateTaskStatus"
+      parameters:
+        - name: "updateTaskDTO"
+          in: "body"
+          description: "Request body that contains taskName, branchCode,status, errCode, errDesc to update the task status"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTaskDTO"
+      responses:
+        200:
+          description: "Updates the task status and returns the http status"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+definitions:
+  StartBranchEodDTO:
+    type: object
+    properties:
+      branchCode:
+        type: string
+        minLength: 3
+        maxLength: 3
+
+  BranchEodInstanceDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      branchCode:
+        type: string
+      eodDate:
+        type: string
+        format: date
+      eodFlowName:
+        type: string
+      workFlowInstanceID:
+        type: string
+      initiatedBy:
+        type: string
+      initiatedDateTime:
+        type: string
+        format: date
+      BranchEodStatusDTO:
+        type: array
+        items:
+          $ref: '#/definitions/BranchEodStatusDTO'
+
+  BranchEodStatusDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      stage:
+        type: string
+      jobName:
+        type: string
+      executionDate:
+        type: string
+      startTime:
+        type: string
+        format: date
+      endTime:
+        type: string
+        format: date
+      status:
+        type: string
+      errorCode:
+        type: string
+      errorMsg:
+        type: string
+
+  EodWorkFlowDTO:
+    type: object
+    properties:
+      createTime:
+        type: string
+        format: date
+      updateTime:
+        type: string
+        format: date
+      status:
+        type: string
+      endTime:
+        type: string
+        format: date
+      workflowId:
+        type: string
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/EodTaskDTO'
+      workflowDefinition:
+        type: object
+        properties:
+          tasks:
+            type: array
+            items:
+              $ref: '#/definitions/TaskMetaDataDTO'
+
+  WorkFlowTaskStatusDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: string
+      rowId:
+        type: string
+      start:
+        type: string
+      end:
+        type: string
+      sysStart:
+        type: string
+      sysEnd:
+        type: string
+      taskId:
+        type: string
+      workflowInstanceId:
+        type: string
+      taskDefName:
+        type: string
+      referenceTaskName:
+        type: string
+      workflowStatus:
+        type: string
+      type:
+        type: string
+      errorCode:
+        type: string
+      errorMessage:
+        type: string
+
+  WorkFlowTaskStatus:
+    description: Status of task in workflow for a branch.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/WorkFlowTaskStatusDTO'
+
+  WorkFlowMetaDataDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      type:
+        type: string
+      version:
+        type: string
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/TaskMetaDataDTO'
+
+  TaskDependencyMetaDataDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      predecessorTaskId:
+        type: string
+      successorTaskId:
+        type: string
+      type:
+        type: string
+
+  TaskDependencyMetaData:
+    description: Metadata of task dependency in workflow definition.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/TaskDependencyMetaDataDTO'
+
+  TaskMetaDataDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      taskReferenceName:
+        type: string
+      type:
+        type: string
+      forkTasks:
+        type: array
+        items:
+          $ref: '#/definitions/TaskMetaDataDTOCollection'
+      joinOn:
+        type: array
+        items:
+          type: string
+
+  TaskMetaDataDTOCollection:
+    type: array
+    items:
+      $ref: '#/definitions/TaskMetaDataDTO'
+
+  EodTaskDTO:
+    type: object
+    properties:
+      taskType:
+        type: string
+      status:
+        type: string
+      referenceTaskName:
+        type: string
+      retryCount:
+        type: string
+      seq:
+        type: string
+      correlationId:
+        type: string
+      pollCount:
+        type: number
+      taskDefName:
+        type: string
+      scheduledTime:
+        type: string
+        format: date
+      startTime:
+        type: string
+        format: date
+      endTime:
+        type: string
+        format: date
+      updateTime:
+        type: string
+        format: date
+      workflowInstanceId:
+        type: string
+      workflowType:
+        type: string
+      taskId:
+        type: string
+      reasonForIncompletion:
+        type: string
+      taskStatus:
+        type: string
+      outputData:
+        $ref: '#/definitions/TaskOutputDataDTO'
+
+  TaskOutputDataDTO:
+    type: object
+    properties:
+      subWorkflowId:
+        type: string
+
+  StartWorkFlowRequestDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      version:
+        type: string
+      correlationId:
+        type: string
+      input:
+        $ref: '#/definitions/StartWFInputDTO'
+
+  StartWFInputDTO:
+    type: object
+    properties:
+      appID:
+        type: string
+      userID:
+        type: string
+      branchCode:
+        type: string
+      eodDate:
+        type: string
+
+
+  WorkFlowUpdateDTO:
+    type: object
+    properties:
+      taskId:
+        type: string
+      workflowInstanceId:
+        type: string
+      status:
+        type: string
+      reasonForIncompletion:
+        type: string
+
+  UpdateTaskDTO:
+    type: object
+    properties:
+      taskName:
+        type: string
+      branchCode:
+        type: string
+      status:
+        type: string
+      errCode:
+        type: string
+      errDesc:
+        type: string
+    required:
+      - taskName
+      - branchCode
+      - status
+
+  PendingDto:
+    type: object
+    properties:
+      serviceActivity:
+        type: string
+        description: ""
+      count:
+        type: number
+        description: ""
+      summaryComponent:
+        type: string
+        description: ""
+      group:
+        type: string
+        description: ""
+
+  PendingCollection:
+    description: "Collection of PendingDto."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/PendingDto"

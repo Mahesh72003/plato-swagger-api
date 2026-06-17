@@ -1,0 +1,607 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server ccycutoff server." 
+ version: "1.0.0"
+ title: "ccycutoff Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ccycutoff"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../ccycutoff
+
+ /ccycutoff:
+  post:
+   tags:
+    - "ccycutoff"
+   summary: "Adds a new ccycutoff."
+   description: "Adds a new ccycutoff. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "ccycutoff" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new ccycutoff" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmCurrencyCutoffDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created ccycutoff" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "ccycutoff"
+   summary: "Get all valid ccycutoff."
+   description:  "Get all valid ccycutoff. This endpoints will be used to Get all valid ccycutoff maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query   
+     name: bicCode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmCurrencyCutoffCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../ccycutoff/xxx
+#   DELETE    .../ccycutoff/xxx
+#   GET       .../ccycutoff/xxx
+#   GET       .../ccycutoff/xxx?version=latestrecord
+#   GET       .../ccycutoff/xxx?version=1
+
+ /ccycutoff/{id}:
+  put:
+   tags:
+    - "ccycutoff"
+   summary: "Update an existing ccycutoff."
+   description:  "Update an existing ccycutoff."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the ccycutoff Maintenance"
+      required: true
+      type: "string"
+    - name: "ccycutoff"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing ccycutoff"
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmCurrencyCutoffDTO"
+   responses:
+    200:
+     description: "Returns updated ccycutoff"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "ccycutoff"
+   summary: "Retrieves the ccycutoff by ID."
+   description:  "Retrieves the ccycutoff by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ccycutoff based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmCurrencyCutoffWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "ccycutoff"
+   summary: "Deletes the ccycutoff identified by given ID."
+   description:  "Deletes the ccycutoff identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ccycutoff maintenance"
+      required: true
+      type: "string"
+    - name: "ccycutoff"
+      in: "body"
+      description: Request body contain ccycutoff and Modification no of ccycutoff maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ccycutoff/xxx/approve
+
+ /ccycutoff/{id}/approve:
+  patch:
+   tags:
+    - "ccycutoff"
+   summary: "Authorize the ccycutoff by given ID."
+   description:  "Authorize the ccycutoff identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ccycutoff maintenance"
+      required: true
+      type: "string"
+    - name: "ccycutoff"
+      in: "body"
+      description: Request body contain ccycutoff and Modification no of ccycutoff maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ccycutoff/xxx/close
+ /ccycutoff/{id}/close:
+  patch:
+   tags:
+    - "ccycutoff"
+   summary: "Close the ccycutoff by given ID."
+   description:  "Close the ccycutoff identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ccycutoff maintenance"
+      required: true
+      type: "string"
+    - name: "ccycutoff"
+      in: "body"
+      description: Request body contain ccycutoff and Modification no of ccycutoff maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ccycutoff/xxx/reopen
+
+ /ccycutoff/{id}/reopen:
+  patch:
+   tags:
+    - "ccycutoff"
+   summary: "reopen the ccycutoff by given ID."
+   description:  "reopen the ccycutoff identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ccycutoff maintenance"
+      required: true
+      type: "string"
+    - name: "ccycutoff"
+      in: "body"
+      description: Request body contain ccycutoff and Modification no of ccycutoff maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../ccycutoff/xxx/unauthorized
+
+ /ccycutoff/{id}/unauthorized:
+  get:
+   tags:
+    - "ccycutoff"
+   summary: "Retrives the ccycutoff by given ID."
+   description:  "Retrives the ccycutoff identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ccycutoff based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmCurrencyCutoffCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../ccycutoff/xxx/history
+
+ /ccycutoff/{id}/history:
+  get:
+   tags:
+    - "ccycutoff"
+   summary: "Retrives the ccycutoff by given ID."
+   description:  "Retrives the ccycutoff by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ccycutoff based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmCurrencyCutoffCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /ccycutoff/getCutoffDetails:
+  post:
+   tags:
+    - "ccycutoff"
+   summary: "Update an existing ccycutoff."
+   description:  "Update an existing ccycutoff."
+   operationId: "getCutoffDetails"
+   parameters:
+    - name: "mbccdto"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing ccycutoff"
+      required: true
+      schema:
+        $ref: "#/definitions/MbccDTO"
+   responses:
+    200:
+     description: "Returns updated ccycutoff"
+     schema:
+      $ref: "#/definitions/LmmTmCurrencyCutoffWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"     
+     
+definitions:
+ MbccDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     childCCY:
+      type: string
+      description: ""
+     parentCCy:
+      type: string
+      description: ""
+     pBranchCode:
+      type: string
+      description: ""
+     cBranchCode:
+      type: string
+      description: ""             
+ LmmTmCurrencyCutoffDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     bicCode:
+      type: string
+      description: ""
+     LmmTmCurrencyCutoffDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmCurrencyCutoffDetailsDTO'
+    required:
+     - bicCode
+ LmmTmCurrencyCutoffDetailsDTO:
+  type: object
+  properties:
+     currencyCode:
+      type: string
+      description: ""
+     currencyCutoffId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     incomingCutoffHr:
+      type: number
+      description: ""
+     incomingCutoffMin:
+      type: number
+      description: ""
+     messageType:
+      type: string
+      description: ""
+     outgoingCutoffHr:
+      type: number
+      description: ""
+     outgoingCutoffMin:
+      type: number
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmCurrencyCutoffCollection: 
+  description: "Collection of currencycutoff."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmCurrencyCutoffDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmCurrencyCutoffWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmCurrencyCutoffDTO"

@@ -1,0 +1,202 @@
+swagger: '2.0'
+info:
+   description: Maintenance service for oracle banking integration hub.
+   version: 1.0.0
+   title: OBIH Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: Config
+   description: This service will be used for registering the routing hub configuration
+schemes:
+- https
+paths:
+   /config:
+      post:
+         tags:
+         - Config
+         summary: Adds a new configuration.
+         description: Adds a new configuration. Add additional information here for this endpoint.
+         operationId: createRecord
+         parameters:
+         -  name: config
+            in: body
+            description: Request Body that contains data required for creating a new configuration
+            required: true
+            schema:
+               $ref: '#/definitions/ConfigDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created configuration
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - Config
+         summary: Get all valid configuration.
+         description: Get all valid configuration. This endpoints will be used to Get all valid configuration maintenance
+            records.
+         operationId: getByEntityType
+         parameters:
+         -  name: entityType
+            in: query
+            description: key of the config Maintenance
+            required: true
+            type: string
+         -  name: entityValue
+            in: query
+            description: key of the config Maintenance
+            required: false
+            type: string
+         responses:
+            201:
+               description: Returns message of succes or failure
+               headers:
+                  Location:
+                     description: ''
+                     type: string
+               schema:
+                  $ref: '#/definitions/ConfigWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      put:
+         tags:
+         - Config
+         summary: Update an existing configuration.
+         description: Update an existing configuration.
+         operationId: modifyRecord
+         parameters:
+         -  name: config
+            in: body
+            description: Request Body that contains data required for creating a new configuration
+            required: true
+            schema:
+               $ref: '#/definitions/ConfigDTO'
+         responses:
+            200:
+               description: Returns updated configuration
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      delete:
+         tags:
+         - Config
+         summary: Deletes the configuration.
+         description: Deletes the configuration. Add additional information here for the this endpoint.
+         operationId: deleteRecord
+         parameters:
+         -  name: entityType
+            in: query
+            description: key of the config Maintenance
+            required: true
+            type: string
+         -  name: entityValue
+            in: query
+            description: key of the config Maintenance
+            required: false
+            type: string
+         responses:
+            200:
+               description: Successful operation.
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+definitions:
+   ConfigPropertyDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            propertyName:
+               type: string
+               description: ''
+               maxLength: 255
+            propertyValue:
+               type: string
+               description: ''
+         required:
+         - propertyName
+   ConfigCategoryDTO:
+      type: object
+      properties:
+         name:
+            type: string
+            description: ''
+            maxLength: 255
+         value:
+            type: array
+            items:
+               $ref: '#/definitions/ConfigPropertyDTO'
+      required:
+      - name
+   ConfigDTO:
+      type: object
+      properties:
+         entityType:
+            type: string
+            description: ''
+            maxLength: 255
+         entityValue:
+            type: string
+            description: ''
+            maxLength: 36
+         CategoryCollection:
+            type: array
+            items:
+               $ref: '#/definitions/ConfigCategoryDTO'
+      required:
+      - entityType         
+   ConfigWrapperDTO:
+      type: object
+      properties:
+         data:
+            $ref: '#/definitions/ConfigDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   GenericDto:
+      allOf:
+      -  type: object
+         discriminator: resource_type

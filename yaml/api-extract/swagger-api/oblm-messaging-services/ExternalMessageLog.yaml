@@ -1,0 +1,373 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+swagger: '2.0'
+info:
+  description: This is a sample external message log server.
+  version: 1.0.0
+  title: External Message Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: externalMessage
+  description: API for external message Operations
+schemes:
+- https
+paths:
+  /externalMessage/getExternalMessageLog:
+    get:
+      tags:
+      - externalMessage
+      summary: Get all MT message log.
+      description: Get external message log based on input criteria.
+      operationId: getExternalMsgLog
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: accountNumber
+        in: query
+        description: accountNumber
+        required: false
+        type: string
+      - name: messageDate
+        in: query
+        description: messageDate
+        required: false
+        type: string
+      - name: bicCode
+        in: query
+        description: bicCode
+        required: false
+        type: string
+      - name: transRefNum
+        in: query
+        description: transRefNum
+        required: false
+        type: string
+      - name: swiftMsgType
+        in: query
+        description: swiftMsgType
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: status
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/ExternalMsgLogCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /externalMessage/processPendingMessage:
+    get:
+      tags:
+      - externalMessage
+      summary: process pending message.
+      description: process pending message.
+      operationId: processPendingMessage
+      parameters:
+      - name: messageId
+        in: query
+        description: Id of the message to be processed
+        required: true
+        type: string
+      - name: remark
+        in: query
+        description: Remark of the message to be processed
+        required: false
+        type: string
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of processPendingMessage
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /externalMessage/supressMessage:
+    get:
+      tags:
+      - externalMessage
+      summary: supressMessage.
+      description: supressMessage.
+      operationId: supressMessage
+      parameters:
+      - name: messageId
+        in: query
+        description: Id of the message to be processed
+        required: true
+        type: string
+      - name: remark
+        in: query
+        description: Remark of the message to be processed
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns the balance based on given id.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error  
+  /externalMessage/processHoldMessagesInBatch:
+    get:
+      tags:
+      - externalMessage
+      summary: processHoldMessagesInBatch.
+      description: processHoldMessagesInBatch.
+      operationId: processHoldMessagesInBatch
+      responses:
+        200:
+          description: Returns the balance based on given id.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error          
+definitions:
+  ExternalMsgDetailsDTO:
+    type: object
+    properties:
+      messageId:
+        type: string
+        description: ''
+      logTimeInUserBranchTimeZone:
+        type: string
+        description: ''
+      logTimeInUTCTimeZone:
+        type: string
+        description: ''
+      processedTimeInUserBranchTimeZone:
+        type: string
+        description: ''
+      processedTimeInUTCTimeZone:
+        type: string
+        description: ''        
+      valueDate:
+        type: string
+        description: ''
+      bicCode:
+        type: string
+        description: ''
+      transRefNum:
+        type: string
+        description: ''
+      accountNumber:
+        type: string
+        description: ''
+      currencyCode:
+        type: string
+        description: ''
+      statementNo:
+        type: integer
+        description: ''
+      sequenceNo:
+        type: integer
+        description: ''
+      openingBalance:
+        type: number
+        description: ''
+      availableBalance:
+        type: number
+        description: ''
+      bookDatedBalance:
+        type: number
+        description: ''
+      dateTimeIndicator:
+        type: string
+        description: ''
+      messageStatus:
+        type: string
+        description: ''
+      errorCode:
+        type: string
+        description: ''
+      errorDesc:
+        type: string
+        description: ''
+      messageType:
+        type: string
+        description: ''
+      message:
+        type: string
+        description: ''
+      messageAuditList:
+        type: array
+        items:
+          $ref: '#/definitions/ExternalMsgLogAuditDTO'
+  ExternalMsgLogAuditDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      messageId:
+        type: string
+        description: ''
+      messageAction:
+        type: string
+        description: ''
+      actionSource:
+        type: string
+        description: From date for which value dated balance is being fetched
+      makerId:
+        type: string
+        description: ''
+      makerDtStamp:
+        type: string
+        description: ""
+      checkerId:
+        type: string
+        description: ""
+      checkerDtStamp:
+        type: string
+        description: ""
+      authStat:
+        type: string
+        description: ""
+      errorDesc:
+        type: string
+        description: ""
+      makerRemarks:
+        type: string
+        description: ""
+      checkerRemarks:
+        type: string
+        description: ""
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  BindingResult:
+    type: object
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  ExternalMsgLogCollection:
+    description: Collection of MT messages.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ExternalMsgDetailsDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  

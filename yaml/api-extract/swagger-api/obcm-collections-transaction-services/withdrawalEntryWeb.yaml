@@ -1,0 +1,1109 @@
+swagger: "2.0"
+info:
+ description: "This is a sample server withdrawalentry server." 
+ version: "1.0.0"
+ title: "withdrawalentry Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "WithdrawalEntryWeb"
+   description: "this service is for making withdrawal entry in obcm. web api for creating withdrawal entry in obcm. api will have create unlock delete modify copy functionalities. captures withdrawal entry from corporate and through courier."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../withdrawalentry
+
+ /web/v1/withdrawalentry:
+  post:
+   tags:
+    - "WithdrawalEntryWeb"
+   summary: "Adds a new withdrawalentry."
+   description: "Adds a new withdrawalentry. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "withdrawalentry" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new withdrawalentry" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmWithdrawalEntryDTO"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "tenantId"
+      in: "header"
+      type: "string"
+      required: false
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "user id for SMS"
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "authToken"
+      in: "header"
+      type: "string"
+      required: false
+      description: "branch code for SMS"
+    - name: "contentType"
+      in: "header"
+      type: "string"
+      required: false
+    - name: "branchDate"
+      in: "header"
+      type: "string"
+      format: "date-time"
+      required: false   
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created withdrawalentry" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+                     
+ /web/v1/withdrawalentry/stageUpdate:
+      post:
+         tags:
+          - "WithdrawalEntryWeb"
+         summary: Updates human task in conductor server
+         description: Updates human task in conductor server
+         operationId: updateStage
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: user id for SMS
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: CashWithdrawalTransactionModel
+            in: body
+            description: Request Body that contains data required for creating a new Finance Transaction
+            required: true
+            schema:
+               $ref: '#/definitions/CashWithdrawalTransactionModel'
+         responses:
+            201:
+               description: Returns the Id of the newly created FinanceTransaction details
+               headers:
+                  Location:
+                     description: URL of newly created FinanceTransaction details
+                     type: string
+               schema:
+                  $ref: "#/definitions/ResponseDtoWrapper"
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+               
+ /web/v1/withdrawalentry/unauthorize/refNo/{transactionRefNo}:
+    get:
+      tags:
+        - "WithdrawalEntryWeb"
+      summary: "Retrieves the unauthorized withdrawalentry by transaction ref no."
+      description:  "Retrieves the unauthorized withdrawalentry by transaction ref no."
+      operationId: "getUnauthorizedEntryByTranRefNo"
+      parameters:
+        -  name: appId
+           in: header
+           type: string
+           required: true
+        -  name: userId
+           in: header
+           type: string
+           required: true
+           description: user id for SMS
+        -  name: branchCode
+           in: header
+           type: string
+           required: true
+        -  name: "transactionRefNo"
+           type: "string" 
+           in: "path"
+           required: true
+           description: "transactionRefNo"      
+      responses:
+        200:
+          description: "Returns the withdrawalentry based on given transaction ref no."
+          schema:
+             $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+ 
+ /web/v1/cashWithdrawalInquiry:
+   get:
+      tags:
+        - "WithdrawalEntryWeb"
+      summary: "Retrieves the list of existing cash withdrawal"
+      description:  "Retrieves the list of existing cash withdrawal with additional information "
+      operationId: "getCashWithdrwalInquiry"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "withdrawalBranch"
+          in: "query"
+          required: false
+          description: "withdrawalBranch"
+          type: "string"
+        - name: "corporateId"
+          in: "query"
+          required: false
+          description: "corporateId"
+          type: "string"
+        - name: "accountNumber"
+          in: "query"
+          description: "accountNumber"
+          required: false
+          type: "string"
+        - name: "slipNumber"
+          in: "query"
+          required: false
+          description: "slipNumber"
+          type: "string"
+        - name: "chequeNumber"
+          in: "query"
+          type: "string"
+          required: false
+          description: "chequeNumber"
+        - name: "referenceNumber"
+          in: "query"
+          type: "string"
+          required: false
+          description: "referenceNumber"
+        - name: "extRefNumber"
+          in: "query"
+          type: "string"
+          required: false
+          description: "extRefNumber"
+        - name: "courier"
+          in: "query"
+          type: "string"
+          required: false
+          description: "courier"
+        - name: "amountReferenceBasis"
+          in: "query"
+          type: "string"
+          required: false
+          description: "amountReferenceBasis"
+        - name: "currency"
+          in: "query"
+          required: false
+          description: "currency"
+          type: "string"
+        - name: "amountFrom"
+          in: "query"
+          required: false
+          description: "amountFrom"
+          type: "string"
+        - name: "amountTo"
+          in: "query"
+          required: false
+          description: "amountTo"
+          type: "string"
+        - name: "dateRefBasis"
+          in: "query"
+          required: false
+          description: "dateRefBasis"
+          type: "string"
+        - name: "dateFrom"
+          in: "query"
+          required: false
+          description: "dateFrom"
+          type: "string"
+        - name: "dateTo"
+          in: "query"
+          required: false
+          description: "dateTo"
+          type: "string"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "processingStatus"
+          in: "query"
+          required: false
+          description: "processingStatus"
+          type: "string"
+        - name: "debitStatus"
+          in: "query"
+          required: false
+          description: "debitStatus"
+          type: "string"
+                           
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashWithdrawalEnquiryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+ /web/v1/withdrawalentry/checkduplicate:
+  get:
+   tags:
+    - "WithdrawalEntryWeb"
+   summary: "Validates a new withdrawalentry."
+   description: "Validates a new withdrawalentry."
+   operationId: "checkDuplicate"
+   parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "tenantId"
+      in: "header"
+      type: "string"
+      required: false
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "user id for SMS"
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "authToken"
+      in: "header"
+      type: "string"
+      required: false
+      description: "branch code for SMS"
+    - name: "contentType"
+      in: "header"
+      type: "string"
+      required: false
+    - name: "branchDate"
+      in: "header"
+      type: "string"
+      format: "date-time"
+      required: false
+    - name: "corporateId"
+      in: "query"
+      required: false
+      description: "corporateId"
+      type: "string"
+    - name: "slipNumber"
+      in: "query"
+      required: false
+      description: "slipNumber"
+      type: "string"
+    - name: "accountNumber"
+      in: "query"
+      description: "accountNumber"
+      required: false
+      type: "string"
+    - name: "chequeNumber"
+      in: "query"
+      type: "string"
+      required: false
+      description: "chequeNumber"          
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created withdrawalentry" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseModel"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /web/v1/withdrawalentry/externalrefno:
+  get:
+      tags:
+        - "WithdrawalEntryWeb"
+      summary: "Retrieves the list of withdrawal entries."
+      description:  "Retrieves the list of existing withdrawal entries."
+      operationId: "getAllExternalRefNo"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "extReferenceNo"
+          in: "query"
+          type: "string"
+          required: false
+          description: "external reference number"
+        - name: "channel"
+          in: "query"
+          description: "external channel"
+          required: false
+          type: "string"
+        - name: "corporateName"
+          in: "query"
+          description: "corporate name to filter"
+          required: false
+          type: "string"
+        - name: "includeAll"
+          in: "query"
+          description: "include all the records without validation"
+          required: false
+          type: "boolean"
+        - name: "includeCompleted"
+          in: "query"
+          description: "includeCompleted - to send only records for which stage is completed"
+          required: false
+          type: "boolean"        
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"  
+ 
+definitions:
+  ObcmWithdrawalEntryDTO:
+    type: object
+    properties:
+     amount:
+      type: number
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+     checkerRemarks:
+      type: string
+      description: ""
+     chequeDate:
+      type: string
+      description: ""
+     chequeNo:
+      type: number
+      description: ""
+     consignmentDate:
+      type: string
+      description: ""
+     consignmentNo:
+      type: string
+      description: ""
+     contactNo:
+      type: string
+      description: ""
+     corporateId:
+      type: string
+      description: ""
+     corporateName:
+      type: string
+      description: ""
+     corporateRefNo:
+      type: string
+      description: ""
+     courierCode:
+      type: string
+      description: ""
+     debitAccountNo:
+      type: string
+      description: ""
+     denominationCount:
+      type: number
+      description: ""
+     extReferenceNo:
+      type: string
+      description: ""
+     idProofDetail:
+      type: string
+      description: ""
+     idProofType:
+      type: string
+      description: ""
+     makerRemarks:
+      type: string
+      description: ""
+     misc1:
+      type: string
+      description: ""     
+     misc2:
+      type: string
+      description: ""     
+     misc3:
+      type: string
+      description: ""     
+     misc4:
+      type: string
+      description: ""
+     misc5:
+      type: string
+      description: ""
+     misc6:
+      type: string
+      description: ""
+     misc7:
+      type: string
+      description: ""
+     misc8:
+      type: string
+      description: ""
+     misc9:
+      type: string
+      description: ""
+     misc10:
+      type: string
+      description: "" 
+     misc11:
+      type: string
+      description: ""
+     misc12:
+      type: string
+      description: ""
+     misc13:
+      type: string
+      description: ""
+     misc14:
+      type: string
+      description: ""
+     misc15:
+      type: string
+      description: ""
+     misc16:
+      type: string
+      description: ""
+     misc17:
+      type: string
+      description: ""
+     misc18:
+      type: string
+      description: ""
+     misc19:
+      type: string
+      description: ""
+     misc20:
+      type: string
+      description: ""
+     misc21:
+      type: string
+      description: ""
+     misc22:
+      type: string
+      description: ""
+     misc23:
+      type: string
+      description: ""
+     misc24:
+      type: string
+      description: ""
+     misc25:
+      type: string
+      description: ""
+     misc26:
+      type: string
+      description: ""
+     misc27:
+      type: string
+      description: ""
+     misc28:
+      type: string
+      description: ""
+     misc29:
+      type: string
+      description: ""
+     misc30:
+      type: string
+      description: ""
+     noOfMiscFields:
+      type: number
+      description: ""
+     recipientName:
+      type: string
+      description: ""
+     slipNo:
+      type: number
+      description: ""
+     currency:
+      type: string
+      description: ""
+     action:
+      type: string
+      description: ""  
+     transactionRefNo:
+      type: string
+      description: ""
+     denominationDetails:
+      type: array
+      description: "" 
+      items:
+          $ref: "#/definitions/DenominationDetailsModel"
+     exchangeRate:
+      type: number
+      description: ""
+     amtAccCcy: 
+      type: number
+      description: ""
+     deliveryPointCode:
+      type: string 
+      description: ""
+     deliveryPointDesc:
+      type: string
+      description: ""
+     recipientType: 
+      type: string
+      description: ""
+     stage:
+      description: "stage"
+      type: "string"
+     debitStatus:
+      description: "debitStatus"
+      type: "string"
+     externalChannel:
+      description: "externalChannel"
+      type: "string"
+     lienNumber:
+      description: "lienNumber"
+      type: "string"
+     lienAmount:
+      description: "lienAmount"
+      type: "number"
+     processingDate:
+      description: "processingDate"
+      format: date
+      type: "string"
+     requestedDate:
+      description: "requestedDate"
+      format: date
+      type: "string"
+     lienDate:
+      description: "lienDate"
+      format: date
+      type: "string"
+     debitDate:
+      description: "debitDate"
+      format: date
+      type: "string"
+     withdrawalSlipDate:
+      description: "withdrawalSlipDate"
+      format: date
+      type: "string"
+     debitACCY:
+      description: "Debit account number currency"
+      type: string
+     vaFlagYN:
+      type: string
+      description: "Virtual Account flag as Y or N"      
+     cwAccRefNo:  
+      description: "Cash withdrawal acc ref number"
+      type: string
+     lienStatus:
+      description: "Cash withdrawal lien status"
+      type: string
+     withdrawalDate:
+      description: "Channel Withdrawal Date"
+      type: "string"
+     channel:
+      description: "Channel"
+      type: "string"     
+  CashWithdrawalTransactionModel:
+    description: "CashWithdrawalTransactionModel for updating conductor stage"
+    type: "object"
+    properties:
+     workflowInstanceId:
+       type: string
+     taskInstanceId:
+       type: string
+     action:
+       type: string
+     obcmWithdrawalEntryDetail:
+       $ref: "#/definitions/ObcmWithdrawalEntryDTO" 
+       
+  DenominationDetailsModel:
+    description: "Denomination details model for inserting denomination details"
+    type : "object"     
+    properties:
+      id:
+        type: string
+      denominationType:
+        type: string
+      denominationValue:
+        type: number
+      denominationCount:
+        type: number
+      denominationAmount:
+        type: number
+      denominationRefNo:
+        type: string
+      depositSlipNo:
+        type: string
+      depositSlipRefNo:
+        type: string
+      referenceNum:
+        type: string
+      seqNo:
+        type: string  
+      makerId:
+        type: string
+      makerDtStamp:
+        type: string
+        format: date
+      checkerId:
+        type: string
+      checkerDtStamp:
+        type: string
+        format: date
+        
+  CashWithdrawalEnquiryCollection:
+    description: "Collection of CashWithdrawal"
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      errorCode:
+        type: "string"
+      cashWithdrawalList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashWithdrawalEnquiryModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: "object"
+    properties:
+      totalResults:
+        type: "integer"
+  CashWithdrawalEnquiryModel:
+    description: "DataSlips additional Field"
+    type: "object"
+    properties:
+       id:
+        description: "Id of the cashwithdrawal"
+        type: "string"
+       modNo:
+        description: "mod No of the cashwithdrawal"
+        type: "integer"
+       action:
+        description: "action"
+        type: "string"
+       amount:
+        description: "amount"
+        type: "number"
+       authStat:
+        description: "authStat"
+        type: "string"
+       branchCode:
+        description: "branchCode"
+        type: "string"
+       checkerDtStamp:
+        description: "checkerDtStamp"
+        type: "string"
+       checkerId:
+        description: "checkerId"
+        type: "string"
+       checkerRemarks:
+        description: "checkerRemarks"
+        type: "string"
+       chequeDate:
+        description: "chequeDate"
+        type: "string"
+       chequeNo:
+        description: "chequeNo"
+        type: "number"
+       consignmentDate:
+        description: "consignmentDate"
+        type: string
+       consignmentNo:
+        description: "consignmentNo"
+        type: "string"
+       contactNo:
+        description: "contactNo"
+        type: "number"
+       corporateId:
+        description: "corporateId"
+        type: "string"
+       corporateName:
+        description: "corporateName"
+        type: "string"
+       corporateRefNo:
+        description: "corporateRefNo"
+        type: "string"
+       courierCode:
+        description: "courierCode"
+        type: "string"
+       debitAccountNo:
+        description: "debitAccountNo"
+        type: "string"
+       denominationCount:
+        description: "denominationCount"
+        type: "number"
+       extReferenceNo:
+        description: "extReferenceNo"
+        type: "string"
+       idProofDetail:
+        description: "idProofDetail"
+        type: "string"
+       idProofType:
+        description: "idProofType"
+        type: "string"
+       makerDtStamp:
+        description: "makerDtStamp"
+        type: "string"        
+       makerId:
+        description: "makerId"
+        type: "string"
+       makerRemarks:
+        description: "makerRemarks"
+        type: "string"
+       onceAuth:
+        description: "onceAuth"
+        type: "string" 
+       recipientName:
+        description: "recipientName"
+        type: "string"
+       recordStat:
+        description: "recordStat"
+        type: "string" 
+       slipNo:
+        description: "slipNo"
+        type: "number"
+       transactionRefNo:
+        description: "transactionRefNo"
+        type: "string" 
+       currency:
+        description: "currency"
+        type: "string"
+       exchangeRate:
+        description: "exchangeRate"
+        type: "number"
+       amtAccCcy:
+        description: "amtAccCcy"
+        type: "number"
+       deliveryPointCode:
+        description: "deliveryPointCode"
+        type: "string"
+       deliveryPointDesc:
+        description: "deliveryPointDesc"
+        type: "string"
+       recipientType:
+        description: "recipientType"
+        type: "string"
+       processingStatus:
+        description: "stage"
+        type: "string"
+       debitStatus:
+        description: "debitStatus"
+        type: "string"
+       externalChannel:
+        description: "externalChannel"
+        type: "string"
+       lienNumber:
+        description: "lienNumber"
+        type: "string"
+       lienAmount:
+        description: "lienAmount"
+        type: "number"
+       processingDate:
+        description: "processingDate"
+        type: "string"
+       requestedDate:
+        description: "requestedDate"
+        type: "string"
+       lienDate:
+        description: "lienDate"
+        type: "string"
+       debitDate:
+        description: "debitDate"
+        type: "string"
+       withdrawalSlipDate:
+        description: "withdrawalSlipDate"
+        type: "string"
+       stage:
+        description: "Stage"
+        type: "string"
+       debitACCY:
+        description: "Debit Account CCY"
+        type: "string"
+       vaFlagYN:
+        description: "Virtual Account Falg(Y/N)"
+        type: "string"
+       channel:
+        description: "Channel"
+        type: "string"
+       channelWithdrawalBranch:
+        description: "Channel Withdrawal Branch"
+        type: "string"
+       withdrawalDate:
+        description: "Channel Withdrawal Date"
+        type: "string" 
+       cashWithdrawalMiscFields:
+        $ref: "#/definitions/CashWithdrawalMiscFieldsModel"
+       cashWithdrawalDenominationfFields:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashWithdrawalDenominationFieldsModel"  
+                            
+       
+  CashWithdrawalMiscFieldsModel:
+    description: "Collection of Cashwithdrawal"
+    type: "object"
+    properties:
+      noOfMiscFields:
+       description: "noOfMiscFields"
+       type: "number"
+      misc1:
+       description: "misc1"
+       type: "string"
+      misc2:
+       description: "misc2"
+       type: "string"
+      misc3:
+       description: "misc3"
+       type: "string"
+      misc4:
+       description: "misc4"
+       type: "string"
+      misc5:
+       description: "misc5"
+       type: "string"
+      misc6:
+       description: "misc6"
+       type: "string"
+      misc7:
+       description: "misc7"
+       type: "string"
+      misc8:
+       description: "misc8"
+       type: "string"
+      misc9:
+       description: "misc9"
+       type: "string"
+      misc10:
+       description: "misc10"
+       type: "string"
+      misc11:
+       description: "misc11"
+       type: "string"
+      misc12:
+       description: "misc12"
+       type: "string"
+      misc13:
+       description: "misc13"
+       type: "string"
+      misc14:
+       description: "misc14"
+       type: "string"
+      misc15:
+       description: "misc15"
+       type: "string"
+      misc16:
+       description: "misc16"
+       type: "string"
+      misc17:
+       description: "misc17"
+       type: "string"
+      misc18:
+       description: "misc18"
+       type: "string"
+      misc19:
+       description: "misc19"
+       type: "string"
+      misc20:
+       description: "misc20"
+       type: "string"
+      misc21:
+       description: "misc21"
+       type: "string"
+      misc22:
+       description: "misc22"
+       type: "string"
+      misc23:
+       description: "misc23"
+       type: "string"
+      misc24:
+       description: "misc24"
+       type: "string"
+      misc25:
+       description: "misc25"
+       type: "string"
+      misc26:
+       description: "misc26"
+       type: "string"
+      misc27:
+       description: "misc27"
+       type: "string"
+      misc28:
+       description: "misc28"
+       type: "string"
+      misc29:
+       description: "misc29"
+       type: "string"
+      misc30:
+       description: "misc30"
+       type: "string"     
+  CashWithdrawalDenominationFieldsModel:
+    description: "Collection of CashWithdrawal"
+    type: "object"
+    properties:
+      id:
+       description: "id"
+       type: "string"
+      denominationAmount:
+       description: "denominationAmount"
+       type: "number"
+      denominationCount:
+       description: "denominationCount"
+       type: "number"
+      denominationRefNo:
+       description: "denominationRefNo"
+       type: "string"
+      denominationType:
+       description: "denominationType"
+       type: "string"
+      denominationValue:
+       description: "denominationValue"
+       type: "number"
+      depositSlipNo:
+       description: "depositSlipNo"
+       type: "number"
+      depositSlipRefNo:
+       description: "depositSlipRefNo"
+       type: "string"
+      referenceNum:
+       description: "referenceNum"
+       type: "string"
+      seqNo:
+       description: "seqNo"
+       type: "number"
+      makerId:
+       description: "makerId"
+       type: "string"
+      makerDtStamp:
+       description: "makerDtStamp"
+       type: "string"
+      checkerId:
+       description: "checkerId"
+       type: "string"
+      checkerDtStamp:
+       description: "checkerDtStamp"
+       type: "string"                

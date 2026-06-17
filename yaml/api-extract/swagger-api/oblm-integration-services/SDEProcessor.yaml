@@ -1,0 +1,115 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : SDEProcessor.yaml
+#  **
+#  ** Module     : oblm
+#  **
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Johjen Mathew
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is the server to process SDEs."
+  version: "1.0.0"
+  title: "SDE Processor Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "sde-processor"
+    description: "This server will process the SDEs that are to be populated to IC SDE Val table"
+
+schemes:
+  - "http"
+  - "https"
+
+paths:
+  /process-sde:
+    post:
+      tags:
+        - "sde-processor"
+      summary: "Process SDEs for different interest methods"
+      description: "Process SDEs for different interest methods"
+      operationId: "processSDE"
+      parameters:
+        - name: "branchCode"
+          in: "query"
+          description: "Branch Code"
+          required: true
+          type: "string"
+        - name: "interestType"
+          in: "query"
+          description: "Interest Type"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created transactionLog"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  RatioDetailCollection:
+    description: Collection of Interest Enhancement Details.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/RatioDetailDTO'
+  RatioDetailDTO:
+    type: object
+    properties:
+      accountNumber:
+        type: string
+        description: 'Account Number'
+      branchCode:
+        type: string
+        description: 'Branch Code'
+      netPoolPosition:
+        type: number
+        description: 'Net Pool Position'
+      coverageRatio:
+        type: number
+        description: 'Coverage Ratio'

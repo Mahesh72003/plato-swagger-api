@@ -1,0 +1,334 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : disbursementdetails.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/rsdisbursements:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RSDisbursement
+      summary: Adds a new RSDisbursement.
+      description: Adds a new RSDisbursement. Add additional information here for this endpoint.
+      operationId: createDisbursement
+      parameters:
+      - name: RSDisbursement
+        in: body
+        description: Request Body that contains data required for creating a new RSDisbursement
+        required: true
+        schema:
+          $ref: '#/definitions/RSDisbursementModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created RSDisbursement
+          headers:
+            Location:
+              description: URL of newly created RSDisbursement
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RSDisbursement
+      summary: Retrieves the list of existing RSDisbursement.
+      description: Retrieves the list of existing RSDisbursement. Add additional information here for the this endpoint.
+      operationId: getAllDisbursements
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/rsdisbursements/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RSDisbursement
+      summary: Retrieves the RSDisbursement by id.
+      description: Retrieves the RSDisbursement by id. Add additional information here for the this endpoint.
+      operationId: getDisbursementById
+      parameters:
+      - name: id
+        in: path
+        description: Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the RSDisbursement based on given applicationNumber.
+          schema:
+            $ref: '#/definitions/RSDisbursementModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RSDisbursement
+      summary: Update an existing RSDisbursement.
+      description: Update an existing RSDisbursement. Add additional information here for the this endpoint.
+      operationId: updateDisbursements
+      parameters:
+      - name: id
+        in: path
+        description: id of the RSDisbursement that need to be updated
+        required: true
+        type: string
+      - name: RSDisbursement
+        in: body
+        description: Request Body that contains data required for updating an existing RSDisbursement
+        required: true
+        schema:
+          $ref: '#/definitions/RSDisbursementModel'
+      responses:
+        200:
+          description: Returns updated RSDisbursement
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RSDisbursement
+      summary: Deletes the RSDisbursement identified by given ID.
+      description: Deletes the RSDisbursement identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteDisbursements
+      parameters:
+      - name: id
+        in: path
+        description: Id of the RSDisbursement that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  RSDisbursementModel:
+   description: Disbursement model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+      disbursementDetails:
+        type: array
+        items:
+          $ref: '#/definitions/RSDisbursementDetailsModel'
+  RSDisbursementDetailsModel:
+    description: DisbursementDetails model
+    type: object
+    required:
+    - scheduleDate
+    - disbursementCurrencyCode
+    - alrdyDisbursedAmt
+    properties:
+      id:
+        description: Id of the disbursementdetail
+        type: string
+      disburseSettleId:
+        description: Id of the disbursement
+        type: string
+      extAccNo:
+        description: extAccNo
+        type: string
+        maxLength: 20
+      totDisburseAmt:
+        description: totDisburseAmt
+        type: number
+        minimum: 0
+      scheduleDate:
+        description: scheduledate
+        type: string
+        minLength: 0
+        maxLength: 12
+      alrdyDisbursedAmt:
+        description: alrdyDisbursedAmt
+        type: number
+        minimum: 0
+      amt:
+        description: amt
+        type: number
+        minimum: 0
+      paymentMode:
+        description: paymentMode
+        type: string
+      clrBankCode:
+        description: clrBankCode
+        type: string
+        maxLength: 20
+      disbursementCurrencyCode:
+        description: Disbursement Currency code
+        type: string
+        maxLength: 3
+      autoDisbursement:
+        description: AutoDisbursement
+        type: boolean
+        default: false
+      percentageOfDisbursement:
+        description: percentageOfDisbursement
+        type: number
+        minimum: 0
+        maximum: 100
+      splitSettlementDetails:
+        type: array
+        items:
+          $ref: '#/definitions/RSSplitSettlementDetailsModel'
+  RSSplitSettlementDetailsModel:
+    description: SplitSettlementDetails model
+    type: object
+    required:
+    - splitSequenceNumber
+    - paymentMode
+    properties:
+      id:
+        description: Id of the SplitSettlementDetails
+        type: string
+        maxLength: 36
+      disbursementDetailsId:
+        description: Id of the disbursement details
+        type: string
+        maxLength: 36
+      splitSequenceNumber:
+        description: splitSequenceNumber
+        type: number
+      splitPercentage:
+        description: splitPercentage
+        type: number
+        minimum: 0
+        maximum: 100
+      splitAmount:
+        description: splitAmount
+        type: number
+        minimum: 0
+      paymentMode:
+        description: paymentMode
+        type: string
+        maxLength: 20
+      settlementAccountNumber:
+        description: settlementAccountNumber
+        type: string
+        maxLength: 20
+      settlementAccountBranch:
+        description: settlementAccountBranch
+        type: string
+        maxLength: 3
+      settlementAccountCurrency:
+        description: settlementAccountCurrency
+        type: string
+        maxLength: 3
+  RSDisbursementsCollection:
+    description: Collection of Disbursements.
+    type: object
+    properties:
+      DisbursementList:
+        type: array
+        items:
+          $ref: '#/definitions/RSDisbursementModel'
+  GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type

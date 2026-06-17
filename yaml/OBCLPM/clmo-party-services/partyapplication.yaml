@@ -1,0 +1,328 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Party Application Service
+host: 10.184.157.121:9000
+basePath: /party-services
+tags:
+- name: partyapplication
+  description: API for SyndicationApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/partyapplication/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PartyApplicationAggregate
+      summary: Get party application aggregate details
+      description: Get party application aggregate details. Add additional information here for the this endpoint.
+      operationId: getPartyApplication
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Party application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns PartyApplication data for the application number
+          schema:
+            $ref: '#/definitions/PartyApplicationAggregateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/partyapplication/{applicationNumber}/datasegment-history/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PartyApplicationAggregate
+      summary: Get Party application details
+      description: Get Party application details. Add additional information here for the this endpoint.
+      operationId: getHistory
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Party application data needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode of the datasegment that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Datasegment history for the application number
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/partyapplication/customer/{customerNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PartyApplicationAggregate
+      summary: Get Party application aggregate details
+      description: Get Party application aggregate details. Add additional information here for the this endpoint.
+      operationId: getPartyApplicationsByCustomerNumber
+      parameters:
+      - name: customerNumber
+        in: path
+        description: Customer number for which Party application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns PartyApplication data for the customer number
+          schema:
+            $ref: '#/definitions/PartyApplicationAggregateCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/partyapplication/submit:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PartyApplicationAggregate
+      summary: Submit for the Party application domain.
+      description: Populates Party application aggregate and moves the latest data from all worktables to main tables.
+      operationId: savePartyApplication
+      parameters:
+      - name: PartyApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new PartyApplicationAggregate
+        required: true
+        schema:
+          $ref: '#/definitions/PartyApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/partyapplication/{applicationNumber}/workdata:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PartyApplicationAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getWorkDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which Party application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns PartyApplicationAggregateModel for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/crossdomaindatasegments:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CrossDomainDatasegments
+      summary: Performs cross domain datasegments operations.
+      description: Performs cross domain datasegments operations.
+      operationId: defaultDependentDatasegments
+      parameters:
+      - name: CrossDomainDatasegments
+        in: body
+        description: Request Body that contains data required for defaulting cross domain datasegments.
+        required: true
+        schema:
+          $ref: '#/definitions/CrossDomainDatasegmentsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created CrossDomainDatasegments
+          headers:
+            Location:
+              description: URL of newly created CrossDomainDatasegments
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '../commondefinitions.yaml#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    allOf:
+    - type: object
+      discriminator: resouce_type
+  PartyApplicationAggregateModel:
+    description: PartyApplicationAggregateModel
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      processRefNumber:
+        description: Process Ref Number
+        type: string
+      id:
+        description: Party Application Id
+        type: string
+      stageCode:
+        description: Stage Code
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      party:
+        $ref: 'clmo-utility/party.yaml#/definitions/PartyModel'
+      drawdownParty:
+        $ref: '#/definitions/DrawdownPartyModel'
+  PartyApplicationAggregateCollection:
+    description: Collection of PartyApplicationAggregate
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PartyApplicationAggregateModel'
+  ApplicationTransactionFlowStatus:
+    description: ApplicationTransactionFlowModel
+    type: string
+    enum:
+    - INCOMPLETE
+    - COMPLETE
+    - WIP
+  ApplicationInitiationResponse:
+    description: ApplicationInitiation Response
+    type: object
+    allOf:
+    - $ref: '#/definitions/ResponseResourceSupport'
+    - type: object
+      properties:
+        applicationNumber:
+          description: Application number
+          type: string
+        processRefNumber:
+          description: Process Reference number
+          type: string
+        processCode:
+          description: Process Code
+          type: string
+        stageCode:
+          description: Stage Code
+          type: string
+        stageName:
+          description: Stage Name
+          type: string
+        workflowId:
+          description: Workflow Id
+          type: string
+        taskId:
+          description: Task Id
+          type: string 
+        taskOutcomes:
+         type: array
+         items:
+          type: string
+  CrossDomainDatasegmentsModel:
+    description: CrossDomainDatasegments Model
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      processRefNumber:
+        description: process Ref Number
+        type: string
+      trancheReferenceNumber:
+        description: Tranche Reference Number
+        type: string
+      customerNumber:
+        description: customer Number
+        type: string
+      applicationBranch:
+        description: application Branch
+        type: string
+      operation:
+        description: operation
+        type: string

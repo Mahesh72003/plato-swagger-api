@@ -1,0 +1,767 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : cashflowTxnTWList.yaml
+#  **
+#  ** Module     : obcm
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This provides APIs for channel request for cashflow transaction, Delete unauthorised transaction, KAFKA call back and fetching distinct cashflow transaction codes" 
+ version: "1.0.0"
+ title: "Cashflow Transaction APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "cashflowTxnListUpload"
+   description: "This provides APIs for channel request for cashflow transaction, Delete unauthorised transaction, KAFKA call back and fetching distinct cashflow transaction codes"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../decisioningmaster
+
+ /service/v1/cashflowInflowTxns:
+  post:
+   tags:
+    - "cashflowTxnTWtoTM"
+   summary: "Adds a new cashflow Tm transaction."
+   description: "Adds a new cashflow TM transaction. Additional information here for this endpoint."
+   operationId: "saveCashflowTxns"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "Application Id"
+    - name: "cashflowTWTxn" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new cashflow TM Txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmsCashflowTransactionCollection"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created fsgbu" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmsCashflowTransactionResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/authorizeCashflowTxn:
+  post:
+   tags:
+    - "cashflowTxnAuthorize"
+   summary: "Authorizes cashflow transaction."
+   description: "Authorizes cashflow transaction. Additional information here for this endpoint."
+   operationId: "authorizeCashflowTxn"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "Application Id"
+    - name: "cashflowTxn" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new cashflow TM Txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmsAuthorizeCashflowTxnCollection"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created fsgbu" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmsAuthorizeCashflowTxnResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/updateCashflowTxnStatus:
+  post:
+   tags:
+    - "cashflowTxnTWtoTM"
+   summary: "Update Process status cashflow transaction."
+   description: "Update Process status. Additional information here for this endpoint."
+   operationId: "updateCashflowTxnStatus"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "Application Id"
+    - name: "cashflowTxn" 
+      in: "body" 
+      description: "Request Body that contains data required for updating a  cashflow  Txn status " 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmsCashflowTxnUpdateDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created fsgbu" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmsCashflowTxnUpdateDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/deleteUnAuthCashflowTxn:
+  post:
+   tags:
+    - "cashflowTxnTWtoTM"
+   summary: "Deleting unAuthorize cashflow transactions."
+   description: "Deleting unAuthorize cashflow transactions."
+   operationId: "deleteUnAuthCashflowTxn"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "Application Id"
+    - name: "cashflowTxn" 
+      in: "body" 
+      description: "Request Body that contains data required for deleting unauthorized cashflow  Txn status " 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmsUnAuthorizeCashflowTxnCollection"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created fsgbu" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmsUnAuthorizeCashflowTxnResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/cashflowCodes:
+    get:
+      tags:
+        - "cashflowTxnTWtoTM"
+      summary: "Retrieves cashflowCodes"
+      description:  "Retrieves the Cashflow codes for given set of parameters."
+      operationId: "searchCashflowCode"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Application Id"
+      - name: "corporateId"
+        in: "query"
+        description: "Id of the Corporate / Party for which Cashflow Codes are required"
+        type: "string"
+        required: true
+      - name: "fromDate"
+        in: "query"
+        type: string
+        required: true
+        description: "Start Date for Cashflow Details in yyyy-MM-dd format"
+      - name: "toDate"
+        in: "query"
+        type: string
+        required: true
+        description: "End Date for Cashflow Details in yyyy-MM-dd format"
+      - name: "virtualAccount"
+        in: "query"
+        description: "Virtual Account"
+        type: "string"
+      - name: "realAccount"
+        in: "query"
+        description: "Real Account"
+        type: "string"
+      - name: "ccy"
+        in: "query"
+        description: "Currency"
+        type: "string"    
+                                                                                                                                                 
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashflowCodeResponseWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"                    
+definitions:
+  ObcmsCashflowTransactionCollection: 
+   description: "Collection of Cashflow Transaction Model"
+   type: "object"
+   properties:
+    data:
+     description: "List Of ObcmsCashflowTransactionDTO"
+     type: "array"
+     items: 
+       $ref: "#/definitions/ObcmsCashflowTransactionDTO"
+  ObcmsCashflowTransactionDTO:
+    description: "Cashflow Transaction Request Parameters model"
+    type: "object"
+    properties:  
+     externalReferenceNo:
+      type: "string"
+      description: "External Reference No"   
+     cashflowIndicator:
+      type: "string"
+      description: "Cashflow Indicator Flag"
+     corporateId:
+      type: "string"
+      description: "Corporate Id"
+     code:
+      type: "string"
+      description: "Code"
+     description:
+      type: "string"
+      description: "Description"
+     bankAccountNumber:
+      type: "string"
+      description: "Bank Account Number"
+     amount:
+      type: "string"
+      description: "Amount"
+     ccy:
+      type: "string"
+      description: "Currency"
+     expectedDate:
+      type: "string"
+      description: "Expected Date"
+     actualDate:
+      type: "string"
+      description: "Actual Date"
+     revisedExpectedDate:
+      type: "string"
+      description: "Revised Expected Date"
+     channel:
+      type: "string"
+      description: "Channel"
+     applicationName:
+      type: "string"
+      description: "Application Name"
+     partyName:
+      type: string
+      description: "Party Name"
+     partyId:
+      type: string
+      description: "Party Id"
+     virtualAcctNo:
+      type: string
+      description: "Virtual Account No"
+     actualCashflowAmt:
+      type: string
+      description: "Actual Cashflow Amount"
+     narration:
+      type: string
+      description: "Narration"
+     status:
+      type: string
+      description: "Status"             
+     udfTxt1:
+      type: string
+      description: "User Defined Text 1"
+     udfTxt2:
+      type: string
+      description: "User Defined Text 2"
+     udfTxt3:
+      type: string
+      description: "User Defined Text 3"
+     udfTxt4:
+      type: string
+      description: "User Defined Text 4"
+     udfTxt5:
+      type: string
+      description: "User Defined Text 5"
+     udfTxt6:
+      type: string
+      description: "User Defined Text 6"
+     udfTxt7:
+      type: string
+      description: "User Defined Text 7"
+     udfTxt8:
+      type: string
+      description: "User Defined Text 8"
+     udfTxt9:
+      type: string
+      description: "User Defined Text 9"
+     udfTxt10:
+      type: string
+      description: "User Defined Text 10"
+     reconStatus:
+      type: string
+      description: "Recon Status"
+     autoAuth:
+      type: string
+      description: "Auto Authentication Flag"
+     customerRefNo:
+      type: string
+      description: "Customer Reference No"
+     varianceAmount:
+      type: string
+      description: "Variance Amount"
+     excludeRecon:
+      type: string
+      description: "Exclude Recon"
+     transactionStatus:
+      type: string
+      description: "Transaction Status"
+     lastActionPerformed:
+      type: string
+      description: "Last Action Performed"                                                                                 
+  ObcmsCashflowTransactionResponse:
+    description: "Cashflow Transaction Response model"
+    type: "object"
+    properties:
+      cashflowResponse:
+        description: "Collection of Cashflow Transaction Response"
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmsCashflowTransactionRespDTO" 
+  Error:
+    description: "Error Details"
+    type: "object"
+    properties:
+      ecode:
+        type: "string"
+        description: "Error Code"
+      etype:
+        type: "string"
+        description: "Error Type"
+      edesc:
+        type: "string"
+        description: "Error Description"
+  ObcmsCashflowTransactionRespDTO:
+    description: "Cashflow Transaction Response Model"
+    type: "object"
+    properties:  
+      externalReferenceNo:
+        type: "string"
+        description: "External Reference No"   
+      cashflowIndicator:
+        type: "string"
+        description: "Cashflow Indicator Flag"
+      corporateId:
+        type: "string"
+        description: "Corporate Id"
+      code:
+        type: "string"
+        description: "Code"
+      description:
+        type: "string"
+        description: "Description"
+      bankAccountNumber:
+        type: "string"
+        description: "Bank Account Number"
+      amount:
+        type: "string"
+        description: "Amount"
+      ccy:
+        type: "string"
+        description: "Currency"
+      expectedDate:
+        type: "string"
+        description: "Expected Date"
+      actualDate:
+        type: "string"
+        description: "Actual Date"
+      revisedExpectedDate:
+        type: "string"
+        description: "Revised Expected Date"
+      channel:
+        type: "string"
+        description: "Channel"
+      applicationName:
+        type: "string"
+        description: "Application Name"
+      partyName:
+        type: string
+        description: "Party Name"
+      partyId:
+        type: string
+        description: "Party Id"
+      virtualAcctNo:
+        type: string
+        description: "Virtual Account No"
+      actualCashflowAmt:
+        type: string
+        description: "Actual Cashflow Amount"
+      narration:
+        type: string
+        description: "Narration"
+      status:
+        type: string
+        description: "Status"             
+      udfTxt1:
+        type: string
+        description: "User Defined Text 1"
+      udfTxt2:
+        type: string
+        description: "User Defined Text 2"
+      udfTxt3:
+        type: string
+        description: "User Defined Text 3"
+      udfTxt4:
+        type: string
+        description: "User Defined Text 4"
+      udfTxt5:
+        type: string
+        description: "User Defined Text 5"
+      udfTxt6:
+        type: string
+        description: "User Defined Text 6"
+      udfTxt7:
+        type: string
+        description: "User Defined Text 7"
+      udfTxt8:
+        type: string
+        description: "User Defined Text 8"
+      udfTxt9:
+        type: string
+        description: "User Defined Text 9"
+      udfTxt10:
+        type: string
+        description: "User Defined Text 10"                                                                
+      errorDesc:
+        type: string
+        description: "Error Description"
+      errorStatus:
+        type: string
+        description: "Error Status"
+      transactionId:
+        description: "Transaction Id"
+        type: "string"
+      authStatus:
+        type: string
+        description: "Authentication Status"
+      customerRefNo:
+        type: string
+        description: "Customer reference No"        
+      responseCode:
+        type: string
+        description: "Response Code"
+      modNo:
+        type: integer
+        description: "Modification No"
+      reconStatus:
+        type: string
+        description: "Recon status"
+      varianceAmount:
+        type: string
+        description: "Variance Amount"
+      excludeRecon:
+        type: string
+        description: "Exclude Recon"
+      transactionStatus:
+        type: string
+        description: "Transaction Status"
+      lastActionPerformed:
+        type: string
+        description: "Last Action Performed"
+      errors:
+        description: "List Of Error Details"
+        type: "array"
+        items:
+          $ref: "#/definitions/Error"
+    
+  ObcmsAuthorizeCashflowTxnCollection: 
+    description: "Collection of Cashflow Transaction to be authorized."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      description: "Collection of Authorized Cashflow Transaction Request Data Model"
+      items: 
+        $ref: "#/definitions/ObcmsAuthorizeCashflowTxnDTO"
+  ObcmsUnAuthorizeCashflowTxnCollection:
+    description: "Collection of Cashflow Transaction to be UnAuthorized."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      description: "Collection of UnAuthorized Cashflow Transaction Request Data Model"
+      items:
+        $ref: "#/definitions/ObcmsUnAuthorizeCashflowTxnDTO"
+  ObcmsAuthorizeCashflowTxnDTO:
+    description: "Authorized Cashfow Transaction Request Parameters model"
+    type: "object"
+    properties:  
+     externalReferenceNo:
+      type: "string"
+      description: "External Reference No"   
+     cashflowIndicator:
+      type: "string"
+      description: "Cashflow Indicator Flag"
+     corporateId:
+      type: "string"
+      description: "Corporate Id"
+     code:
+      type: "string"
+      description: "Cashflow Code"     
+     applicationName:
+      type: "string"
+      description: "Application Name"     
+     udfTxt4:
+      type: string
+      description: "User Defined Text 4"
+     transactionStatus:
+      type: string
+      description: "Transaction Status"
+     lastActionPerformed:
+      type: string
+      description: "Last Action Performed"                                                                               
+  ObcmsAuthorizeCashflowTxnResponse:
+    description: "Authorized Cashflow Transaction Response Data Model"
+    type: "object"
+    properties:
+      cashflowResponse:
+        description: "Collection of Cashflow Transaction Response"
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmsCashflowTransactionRespDTO"
+  ObcmsCashflowTxnUpdateDTO:
+    description: "Cashflow Transaction Update DTO"
+    type: "object"
+    properties:  
+     transactionId:
+      type: "string"
+      description: "Transaction Id"
+     modNo:
+      type: "string"
+      description: "Modification No"
+     reverseFlag:
+      type: "string"
+      description: "Reverse Flag"
+     errorCode:
+      type: "string"
+      description: "Error Code"
+     errorDesc:
+      type: "string"
+      description: "Error Description"
+     summaryProcessed:
+      type: "string"
+      description: "Summary Processed Value"
+     summaryEventFlag:
+      type: "string"
+      description: "Summary Event Flag"
+
+  ObcmsUnAuthorizeCashflowTxnDTO:
+    description: "UnAuthorized Cashfow Transaction Request Parameters model"
+    type: "object"
+    properties:
+      externalReferenceNo:
+        type: "string"
+        description: "External Reference No"
+      cashflowIndicator:
+        type: "string"
+        description: "Cashflow Indicator Flag"
+      corporateId:
+        type: "string"
+        description: "Corporate Id"
+      code:
+        type: "string"
+        description: "Cashflow Code"
+      applicationName:
+        type: "string"
+        description: "Application Name"
+      udfTxt4:
+        type: "string"
+        description: "User Defined Text 4"
+  ObcmsUnAuthorizeCashflowTxnResponse:
+    description: "UnAuthorized Cashflow Transaction Response Model"
+    type: "object"
+    properties:
+      unAuthorizedCashflowResponse:
+        description: "Collection of UnAuthorized Cashflow Transaction Response"
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmsUnAuthorizedCashflowTransactionRespDTO"
+          
+  ObcmsUnAuthorizedCashflowTransactionRespDTO:
+    description: "UnAuthorized Cashfow Transaction Response DTO model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      modNo:
+        type: "integer"
+        description: "Modification No"
+      externalReferenceNo:
+        type: "string"
+        description: "External Reference No"
+      cashflowIndicator:
+        type: "string"
+        description: "Cashflow Indicator Flag"
+      corporateId:
+        type: "string"
+        description: "Corporate Id"
+      code:
+        type: "string"
+        description: "Cashflow Code"
+      applicationName:
+        type: "string"
+        description: "Application Name"  
+      udfTxt4:
+        type: "string"
+        description: "User Defined Text 4"
+      authStat:
+        type: "string"
+        description: "Auth status"
+      responseCode:
+        type: "string"
+        description: "Response Code"
+      errors:
+        type: "object"
+        description: "Error Details"
+        items:
+          $ref: "#/definitions/Error"
+  CashflowCodeResponseWrapper:
+    description: "Cashflow Code Response Data Model"
+    type: "object"
+    properties:
+      inflow:
+        description: "Collection of Inflow Code Response"
+        type: "array"
+        items:
+          $ref: "#/definitions/CashflowCodeRespDTO"
+      outflow:
+        description: "Collection of Outflow Code Response"
+        type: "array"
+        items:
+          $ref: "#/definitions/CashflowCodeRespDTO"
+  CashflowCodeRespDTO:
+    description: "Cashfow Code Response DTO model"
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Code"
+      description:
+        type: "string"
+        description: "Description"

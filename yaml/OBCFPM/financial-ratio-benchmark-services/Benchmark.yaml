@@ -1,0 +1,586 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cam
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server financial-ratio-benchmark-services server." 
+ version: "1.0.0"
+ title: "financial-ratio-benchmark-services Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "financial-ratio-benchmark-services"
+   description: "A micro service that will maintain financial ratio benchmark details in a separate table. This service will also provide APIs for GET, PUT, DELETE, GET by id, Authorize the given record, Reopen and Close APIs for the maintenance records."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../financial-ratio-benchmark-services
+
+ /benchmarkdetails:
+  post:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Adds a new financial-ratio-benchmark-services."
+   description: "Adds a new financial-ratio-benchmark-services. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "financialRatioBenchmarkDetails" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new financial-ratio-benchmark-services" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmBenchmarkMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created financial-ratio-benchmark-services" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Get all valid financial-ratio-benchmark-services."
+   description:  "Get all valid financial-ratio-benchmark-services. This endpoints will be used to Get all valid financial-ratio-benchmark-services maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: applicablePeriod
+     in: query
+     description: applicablePeriod
+     required: false
+     type: string
+   - name: customerSegment
+     in: query
+     description: customerSegment
+     required: false
+     type: string  
+   - name: industryType
+     in: query
+     description: industryType
+     required: false
+     type: string     
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmBenchmarkMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../financial-ratio-benchmark-services/xxx
+#   DELETE    .../financial-ratio-benchmark-services/xxx
+#   GET       .../financial-ratio-benchmark-services/xxx
+#   GET       .../financial-ratio-benchmark-services/xxx?version=latestrecord
+#   GET       .../financial-ratio-benchmark-services/xxx?version=1
+
+ /benchmarkdetails/{id}:
+  put:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Update an existing financial-ratio-benchmark-services."
+   description:  "Update an existing financial-ratio-benchmark-services."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the financial-ratio-benchmark-services Maintenance"
+      required: true
+      type: "string"
+    - name: "financial-ratio-benchmark-services"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing financial-ratio-benchmark-services"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmBenchmarkMasterDTO"
+   responses:
+    200:
+     description: "Returns updated financial-ratio-benchmark-services"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Retrieves the financial-ratio-benchmark-services by ID."
+   description:  "Retrieves the financial-ratio-benchmark-services by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financial-ratio-benchmark-services based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmBenchmarkMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Deletes the financial-ratio-benchmark-services identified by given ID."
+   description:  "Deletes the financial-ratio-benchmark-services identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financial-ratio-benchmark-services maintenance"
+      required: true
+      type: "string"
+    - name: "financial-ratio-benchmark-services"
+      in: "body"
+      description: Request body contain financial-ratio-benchmark-services and Modification no of financial-ratio-benchmark-services maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financial-ratio-benchmark-services/xxx/approve
+
+ /benchmarkdetails/{id}/approve:
+  patch:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Authorize the financial-ratio-benchmark-services by given ID."
+   description:  "Authorize the financial-ratio-benchmark-services identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financial-ratio-benchmark-services maintenance"
+      required: true
+      type: "string"
+    - name: "financialRatioBenchmarkDetails"
+      in: "body"
+      description: Request body contain financial-ratio-benchmark-services and Modification no of financial-ratio-benchmark-services maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financial-ratio-benchmark-services/xxx/close
+ /benchmarkdetails/{id}/close:
+  patch:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Close the financial-ratio-benchmark-services by given ID."
+   description:  "Close the financial-ratio-benchmark-services identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financial-ratio-benchmark-services maintenance"
+      required: true
+      type: "string"
+    - name: "financialRatioBenchmarkDetails"
+      in: "body"
+      description: Request body contain financial-ratio-benchmark-services and Modification no of financial-ratio-benchmark-services maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financial-ratio-benchmark-services/xxx/reopen
+
+ /benchmarkdetails/{id}/reopen:
+  patch:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "reopen the financial-ratio-benchmark-services by given ID."
+   description:  "reopen the financial-ratio-benchmark-services identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financial-ratio-benchmark-services maintenance"
+      required: true
+      type: "string"
+    - name: "financialRatioBenchmarkDetails"
+      in: "body"
+      description: Request body contain financial-ratio-benchmark-services and Modification no of financial-ratio-benchmark-services maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../financial-ratio-benchmark-services/xxx/unauthorized
+
+ /benchmarkdetails/{id}/unauthorized:
+  get:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Retrives the financial-ratio-benchmark-services by given ID."
+   description:  "Retrives the financial-ratio-benchmark-services identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financial-ratio-benchmark-services based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmBenchmarkMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../financial-ratio-benchmark-services/xxx/history
+
+ /benchmarkdetails/{id}/history:
+  get:
+   tags:
+    - "financial-ratio-benchmark-services"
+   summary: "Retrives the financial-ratio-benchmark-services by given ID."
+   description:  "Retrives the financial-ratio-benchmark-services by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financial-ratio-benchmark-services based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmBenchmarkMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CfpmTmBenchmarkMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     applicablePeriod:
+      type: string
+      description: ""
+     balanceSheetCcy:
+      type: string
+      description: ""
+     benchmarkCode:
+      type: string
+      description: ""
+     customerSegment:
+      type: string
+      description: ""
+     effectiveDate:
+      type: string
+      format: date
+      description: ""
+     fromBalanceSheetSize:
+      type: number
+      description: ""
+     industryType:
+      type: string
+      description: ""
+     toBalanceSheetSize:
+      type: number
+      description: ""
+     CfpmTmBenchmarkDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBenchmarkDetailsDTO'
+ CfpmTmBenchmarkDetailsDTO:
+  type: object
+  properties:
+     absoluteRangeMax:
+      type: number
+      description: ""
+     absoluteRangeMin:
+      type: number
+      description: ""
+     bankBenchmarkValue:
+      type: number
+      description: ""
+     benchmarkCode:
+      type: string
+      description: ""
+     cfpmTmBenchmarkMasterId:
+      type: string
+      description: ""
+     financialCode:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     industryBnchmrkVl:
+      type: number
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmBenchmarkMasterCollection: 
+  description: "Collection of benchmark."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmBenchmarkMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmBenchmarkMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmBenchmarkMasterDTO"

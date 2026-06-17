@@ -1,0 +1,127 @@
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+swagger: '2.0'
+info:
+  description: This is a sample external message api.
+  version: 1.0.0
+  title: External Message Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: externalMessage
+  description: API for external message Operations
+schemes:
+- https
+paths:
+  /postMessage:
+    post:
+      tags:
+      - postMessage
+      summary: Post MT message.
+      description: Get external message log based on input criteria.
+      operationId: postMessage
+      parameters:
+      - name: message
+        in: body
+        description: Request Body that contains MT message
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  BindingResult:
+    type: object
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  

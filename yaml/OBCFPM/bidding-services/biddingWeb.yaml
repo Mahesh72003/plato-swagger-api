@@ -1,0 +1,684 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Bidding server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Bidding Service"
+host: "ofss222812:7701"
+basePath: "/bidding-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "BiddingAPI"
+    description: "API for Bidding's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/bidding:
+    post:
+      tags:
+        - "biddingWeb"
+      summary: "API for creating a new Bidding."
+      description: "API for creating a new Bidding."
+      operationId: "createBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "bidding"
+          in: "body"
+          description: "Request Body that contains data required for creating a new bidding"
+          required: true
+          schema:
+            $ref: "#/definitions/BiddingModel"
+      responses:
+        201:
+          description: "Returns the model of the newly created bidding"
+          headers:
+            Location:
+              description: "URL of newly created bidding"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/bidding/{entityId}:
+    get:
+      tags:
+        - "biddingWeb"
+      summary: "Retrieves the list of existing bidding."
+      description:  "Retrieves the list of existing bidding."
+      operationId: "getAllBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "entityId"
+          in: "path"
+          description: "Entity Id for which the bid details has to be fetched."
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/bidding/latest/{entityId}:
+    get:
+      tags:
+        - "biddingWeb"
+      summary: "Retrieves the Bidding by ID."
+      description:  "Retrieves the Bidding by ID."
+      operationId: "getBiddingById"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "entityId"
+          in: "path"
+          description: "Entity Id for which the bid details has to be fetched."
+          required: true
+          type: "string" 
+      responses:
+        200:
+          description: "Returns the Bidding based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/bidding/{recordId}:
+    put:
+      tags:
+        - "biddingWeb"
+      summary: "Update an existing bid details for the given Id."
+      description:  "Update an existing bid details for the given Id."
+      operationId: "updateBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "recordId"
+          in: "path"
+          description: "Id for which the bid details that need to be updated"
+          required: true
+          type: "string"
+        - name: "biddingModel"
+          in: "body"
+          description: "Bidding that need to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/BiddingModel"
+      responses:
+        200:
+          description: "Returns updated Bidding"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "biddingWeb"
+      summary: "Deletes the bidding identified by given ID."
+      description:  "Deletes the bidding identified by given ID."
+      operationId: "deleteBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "recordId"
+          in: "path"
+          description: "Id of the bidding that needs to be deleted"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/bidding/final:
+    post:
+      tags:
+        - "biddingWeb"
+      summary: "Submit Bidding."
+      description: "Submit Bidding."
+      operationId: "submitBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for submitting the bidding details."
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created bidding"
+          headers:
+            Location:
+              description: "URL of newly created bidding"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/collateral/main/{entityId}:
+    get:
+      tags:
+        - "biddingWeb"
+      summary: "Retrieves the list of existing main bidding."
+      description:  "Retrieves the list of existing main bidding."
+      operationId: "getFinalBiddingByRefNo"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "entityId"
+          in: "path"
+          description: "Entity Id for which the bid details has to be fetched."
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Bidding based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"    
+definitions:
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"
+  RepresentationModel:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      isFromCAM:
+        type: "boolean"
+      externalCheckReq:
+        type: "boolean"
+      fieldInvestigationReq:
+        type: "boolean"
+      externalValuationReq:
+        type: "boolean"
+      internalValuationReq:
+        type: "boolean"
+      legalOpinionReq:
+        type: "boolean"
+      riskEvaluationReq:
+        type: "boolean"
+      externalCheckAgencySelected:
+        type: "boolean"
+      externalValAgencySelected:
+        type: "boolean"
+      legalFirmSelected:
+        type: "boolean"
+      isCollatCreateSelected:
+        type: "boolean"
+      collateralValue:
+        type: "number"
+      oldCollateralValue:
+        type: "number"
+      isFromCollateralEvaluation:
+        type: "boolean"
+      isFromCollateralReview:
+        type: "boolean"
+      isSubmissionAndAwaitingReq:
+        type: "boolean"
+      serviceName:
+        type: "string"
+      ownerEstimatedValue:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      customerId:
+        type: "string"
+      collateralType:
+        type: "string"
+      collateralCode:
+        type: "string"
+      collateralCurrency:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      submitFlag:
+        type: "boolean"
+      source:
+        type: "string"
+      isKYCRequired:
+        type: "boolean"
+      isCreditRatingRequired:
+        type: "boolean"
+      stageUpdateFlag:
+        type: "boolean"
+      collateralSubmissionReq:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      documentSafeKeepingReq:
+        type: "boolean"
+      updateCategory:
+        type: "string"
+  BiddingModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - entityType
+          - entityId
+          - bidReferenceNumber
+          - bidDoneBy
+          - bidDate
+          - bidValidTill
+        properties:
+          recordId:
+            description: "Record Id of the bidding"
+            type: "string"
+          entityType:
+            description: "Entity Type of the bidding"
+            type: "string"
+          entityId:
+            description: "Entity ID of the bidding"
+            type: "string"
+          bidReferenceNumber:
+            description: "Bid Ref Number of the bidding"
+            type: "string"
+          bidDoneBy:
+            description: "Bid Done By of the bidding"
+            type: "string"
+          bidDate:
+            description: "Bid Date of the bidding"
+            type: "string"
+            format: "date-time"
+          bidValidTill:
+            description: "Bid Valid Till of the bidding"
+            type: "string"
+            format: "date-time"  
+          approverComments:
+            description: "Approver Comments of the bidding"
+            type: "string"     
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          bidDetails:
+            type: "array"
+            items: { $ref: '#/definitions/BiddingDetailsModel' }
+  BiddingDetailsModel:
+    description: "Bidding Details model"
+    type: "object"
+    required:
+      - bidderName
+      - bidValidTill
+      - bidAmount
+      - settlementType
+    properties:
+      id:
+        description: "Id of the bidding details"
+        type: "string"
+      bidReferenceNumber:
+        description: "Bid Ref Number of the bidding details"
+        type: "string"
+      bidderName:
+        description: "Bidder Name of the bidding details"
+        type: "string"
+      bidderOrgType:
+        description: "Bid Org Type of the bidding details"
+        type: "string"
+      workPhone:
+        description: "Work phone of the bidding details"
+        type: "string"
+      personalPhone:
+        description: "Personal Phone of the bidding details"
+        type: "string"
+      eMail:
+        description: "Email of the bidding details"
+        type: "string"
+      pointOfContact:
+        description: "Point Of Contact of the bidding details"
+        type: "string"
+      bidValidTill:
+        description: "Bid Valid Till of the bidding details"
+        type: "string"
+        format: "date-time"
+      bidSubmissionDate:
+        description: "Bid Submission Date of the bidding details"
+        type: "string"
+        format: "date-time"
+      bidAmount:
+        description: "Bid Amount of the bidding details"
+        type: "integer"
+        format: "int64"
+      settlementType:
+        description: "Settlement Type of the bidding details"
+        type: "string"
+      isSelectedBidder:
+        description: "Is Selected Bidder of the bidding details"
+        type: "boolean"
+      addressLine1:
+        description: "Address Line 1 of the bidding details"
+        type: "string"
+      addressLine2:
+        description: "Address Line 2 of the bidding details"
+        type: "string"
+      addressLine3:
+        description: "Address Line 3 of the bidding details"
+        type: "string"
+      addressLine4:
+        description: "Address Line 4 of the bidding details"
+        type: "string"
+      addressLine5:
+        description: "Address Line 5 of the bidding details"
+        type: "string"
+      city:
+        description: "City of the bidding details"
+        type: "string"
+      state:
+        description: "state of the bidding details"
+        type: "string"
+      country:
+        description: "Country of the bidding details"
+        type: "string"
+      zipCode:
+        description: "Zip Code of the bidding details"
+        type: "string"
+      parentId:
+        type: "string"
+  BiddingCollection:
+    description: "Collection of Bidding."
+    type: "object"
+    properties:
+      BiddingList:
+        type: "array"
+        items:
+          $ref: "#/definitions/BiddingModel"

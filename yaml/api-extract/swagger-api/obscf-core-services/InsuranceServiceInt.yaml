@@ -1,0 +1,130 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBSCF
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on insurance"
+ version: "1.0.0"
+ title: "Insurance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-core-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "insurancePolicyService"
+   description: "APIs for insurance related operations"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../insurance
+
+ /service/v1/allocateAmount:
+  put:
+   tags:
+    - "insurancePolicyService"
+   summary: "Updates an existing policy allocated amount"
+   description: "Updates an existing policy allocated amount"
+   operationId: "allocatePolicyAmount"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "policyDetails" 
+      in: "body" 
+      description: "Request Body that contains data required for updating an existing Policy Details" 
+      required: true
+      schema:
+       $ref: "#/definitions/LimitsPolicyAllocateDTO"
+   responses:
+    201: 
+     description: "Successfully performs the action"
+     schema:
+      type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+  LimitsPolicyAllocateDTO:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: "Request Id"
+      seqNO:
+        type: integer
+        description: "Sequence Number"
+      businessDate:
+        type: string
+        format: date
+        description: "Business Date"
+      status:
+        type: string
+        description: "Status"
+      listOfPolicyDTO:
+        type: array
+        items:
+          $ref: '#/definitions/ScfTmLimitsPolicyDetailsDTO'
+  ScfTmLimitsPolicyDetailsDTO:
+    type: object
+    properties:
+      insurancePolicyNumber:
+        type: string
+        description: "Insurance Policy Number"
+      policyAllocatedAmt:
+        type: number
+        description: "Policy Allocated Amount"

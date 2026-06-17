@@ -1,0 +1,115 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright 2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+swagger: "2.0"
+info:
+  description: "This service provides the SINGLE POINT OF ENTRY to the external systems for consuming Trade Finance API's.
+
+This Microservice contains API's to, 
+
+1) Create a Import LC Issuance transaction 
+2) Create a Guarantee Issuance Transaction"
+  version: "1.0.0"
+  title: "OBTFPM Gateway Service"
+host: "localhost:7001"
+tags:
+  - name: "OBTFPM Gateway Service"
+    description: "This is the gateway service of OBTFPM."
+schemes:
+- "http"
+
+paths:
+  /:
+    post:
+      tags:
+      - "gateway"
+      summary: "API to gateway interface of OBTFPM mid-office"
+      description: ""
+      operationId: "post"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "source"
+        in: "header"
+        description: "Source"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "tenantId"
+        in: "header"
+        type: "string"
+        required: false
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+            $ref: "#/definitions/gatewayInput"
+      responses:
+        201:
+          description: "successful operation"
+          headers:
+            Location:
+              type: "string"
+          schema:
+            $ref: "#/definitions/gatewayOutput"
+        405:
+          description: "Invalid input"
+definitions:
+  gatewayInput:
+    type: "object"
+    required:
+    - feedName
+    properties:     
+      feedName:
+        type: "string"
+      feedData:
+        $ref: "#/definitions/TradeFinanceMasterModel"
+        type: object
+    xml:
+      name: "gatewayInput"
+  gatewayOutput:
+    type: "object"
+    properties:     
+      feedResponse:
+        $ref: "#/definitions/fields"
+    xml:
+      name: "gatewayOutput"
+  fields:
+    type: "object"
+    properties:
+      field1:
+        type: "string"
+      field2:
+        type: "string"
+      data:
+        type: "object"
+  TradeFinanceMasterModel: 
+    description: "Collection of Trade Finance DTO's."
+    properties: 
+      applicationCategoryCode: 
+        type: string        
+    type: object        

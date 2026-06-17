@@ -1,0 +1,655 @@
+swagger: "2.0"
+info:
+  description: "EOD Service maintains & triggers all the required end of day events for the application"
+  version: "1.0.0"
+  title: "Eod-Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-eod-batch"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "EodService"
+    description: "API to start EOD job"
+
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+                    
+definitions:
+
+  EODResponseDetails:
+    type: "object"
+    description: "EOD Response Details"
+    properties:
+      status:
+        type: "string" 
+        description: "EOD Event Status"
+      errors:
+        type: "array"
+        description: "Error Codes"
+        items: 
+          $ref: "#/definitions/Error"
+        
+  Error:
+    type: "object"
+    properties:
+      ecode:
+        type: "string"
+        description: "Error code"
+      etype:
+        type: "string"
+        description: "Error Type"
+      edesc:
+        type: "string"
+        description: "Error Description"
+  
+  EodRequestDTO:
+    description: "Eod Parameters model"
+    type: "object"
+    properties:
+      jobName:
+        description: "Name of the job"
+        type: "string"
+
+  AccountingTransactionCollection:
+    description: "Collection of Accounting Transaction Models."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountingTransactionModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+        
+  PagingDto:
+    type: object
+    properties:
+     totalResults:
+      type: integer
+          
+  AccountingTransactionModel:
+    description: "Accounting Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      refNo:
+        type: "string"   
+        description: "Reference Number"   
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      accountingEntryCode:
+        type: "string"
+        description: "Accounting Entry Code"
+      drCrIndicator:
+        type: "string"
+        description: "Debit Credit Indicator"
+      amountCcy:
+        type: "string"
+        description: "Amount Currency"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+      amount:
+        type: "number"
+        description: "Amount"
+      amountType:
+        type: "string"
+        description: "Amount Type"
+      accountCcy:
+        type: "string"
+        description: "Amount Currency"
+      amountAccCcy:
+        type: "number"
+        description: "Amount Account Currency"
+      accountNo:
+        type: "string"
+        description: "Account Number"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      status:
+        type: "string"
+        description: "Status"
+      accRoleCode:
+        type: "string"
+        description: "Account Role Code"
+      accPartyType:
+        type: "string"
+        description: "Account Party Type"
+      accPartyId:
+        type: "string"
+        description: "Account Party Id"
+      accSettMethod:
+        type: "string"
+        description: "Account Settlement Method"
+      accEntrySeq:
+        type: "integer"
+        format: "int64"
+        description: "Account Entry Sequence"
+      accRoleDesc:
+        type: "string"
+        description: "Account Role Description"
+      accEntryDesc:
+        type: "string"
+        description: "Account Entry Description"
+      accType:
+        type: "string"
+        description: "Account Type"
+      eventSrNo:
+        type: "number"
+        description: "Event Serial Number"
+      ecaRefNo:
+        type: "string"
+        description: "Eca Reference Number"
+      externalAccount:
+        type: "string"
+        description: "External Account"
+      paymentMode:
+        type: "string"
+        description: "Payment Mode"
+      externalAccountCcy:
+        type: "string"
+        description: "External Account Currency"
+      externalBankId:
+        type: "string"
+        description: "External Bank Id"
+      externalBankName:
+        type: "string"
+        description: "External Bank Name"
+      externalBranchCode:
+        type: "string"
+        description: "External Branch Code"
+      externalBranchName:
+        type: "string"
+        description: "External Branch Name"
+      externalBranchRoutingCode:
+        type: "integer"
+        format: "int64"
+        description: "External Branch Routing Code"
+      stage:
+        type: "string"
+        description: "Stage"
+      additionalField1:
+        type: "string"
+        description: "Additional Field 1"
+      additionalField2:
+        type: "string"
+        description: "Additional Field 2"
+      additionalField3:
+        type: "string"
+        description: "Additional Field 3"
+      additionalField4:
+        type: "string"
+        description: "Additional Field 4"
+      additionalField5:
+        type: "string"
+        description: "Additional Field 5"
+      additionalField6:
+        type: "string"
+        description: "Additional Field 6"
+      additionalField7:
+        type: "string"
+        description: "Additional Field 7"
+      additionalField8:
+        type: "string"
+        description: "Additional Field 8"
+      additionalField9:
+        type: "string"
+        description: "Additional Field 9"
+      additionalField10:
+        type: "string"
+        description: "Additional Field 10"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      processingDate:
+        type: "string"
+        description: "Processing Date"
+      txnBranchCode:
+        type: "string"
+        description: "Transaction Branch Code"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      creditIntAcntList:
+        type: array
+        items:
+          type: "string"
+      debitIntAcntList:
+        type: array
+        items:
+          type: "string"
+        
+  AccountingModelCollection: 
+    description: "Collection of AccountingFinanceModel"
+    type: object
+    properties:
+      accountingModelList:
+        type: array
+        items:
+          $ref: "#/definitions/AccountingModel"
+          
+  AccountingModel:
+    type: object
+    properties:
+      accEntryCode:
+       type: string
+       description: "Account Entry Code"
+      creditAmountType:
+       type: string
+       description: "Credit Amount Type"
+      debitAmountType:
+       type: string
+       description: "Debit Amount Type"
+      creditAccRoleCode:
+       type: string
+       description: "Credit Account Role Code"
+      debitAccRoleCode:
+       type: string
+       description: "Debit Account Role Code"
+      debitAccRoleDescription:
+       type: string
+       description: "Debit Account Role Description"
+      creditAccRoleDescription:
+       type: string
+       description: "Credit Account Role Description"
+      sequence:
+       type: number
+       description: "Sequence"
+      accEntryDescription:
+       type: string
+       description: "Account Entry Description"
+      creditAmount:
+       type: number
+       description: "Credit Amount"
+      creditAmtCcy:
+       type: string
+       description: "Credit Amount Currency"
+      debitAmount:
+       type: number
+       description: "Debit Amount"
+      debitAmtCcy:
+       type: string
+       description: "Debit Amount Currency"
+      creditExchangeRate:
+       type: number
+       description: "Credit Exchange Rate"
+      debitExchangeRate:
+       type: number
+       description: "Debit Exchange Rate"
+      creditPartyId:
+       type: string
+       description: "Credit Party Id"
+      creditPartyName:
+       type: string
+       description: "Credit Party Name"
+      debitPartyId:
+       type: string
+       description: "Debit Party Id"
+      debitPartyName:
+       type: string
+       description: "Debit Party Name"
+      creditAccountNumber:
+       type: string
+       description: "Credit Account Number"
+      creditAccountCurrency:
+       type: string
+       description: "Credit Account Currency"
+      debitAccountNumber:
+       type: string
+       description: "Debit Account Number"
+      debitAccountCurrency:
+       type: string
+       description: "Debit Account Currency"
+      debitAmountInAccCcy:
+       type: number
+       description: "Debit Amount In Account Currency"
+      creditAmountInAccCcy:
+       type: number
+       description: "Credit Amount In Account Currency"
+      creditSettlementMethod:
+       type: string
+       description: "Credit Settlement Method"
+      debitSettlementMethod:
+       type: string
+       description: "Debit Settlement Method"
+       
+  ResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        type: "object"
+        description: "Data"
+      errors:
+        type: "object"
+        description: "Errors"
+      paging:
+        type: "object"
+        description: "Paging"
+        
+  ObChargesTxnDTO:
+     type: object
+     properties:
+       allowOverride:
+         type: string
+         description: "Allow Override"
+       allowPrcModify:
+         type: string
+         description: "Allow Prc Modify"
+       allowWaive:
+         type: string
+         description: "Allow Waive"
+       applicationCode:
+         type: string
+         description: "Application Code"
+       autoWaive:
+         type: string
+         description: "Auto Waive"
+       branchCode:
+         type: string
+         description: "Branch Code"
+       calcErrorCode:
+         type: string
+         description: "Calculate Error Code"
+       calcFreq:
+         type: string
+         description: "Calculate Frequency"
+       calcRefPeriod:
+         type: string
+         description: "Calculate Reference Period"
+       calcType:
+         type: string
+         description: "Calculate Type"
+       calcUnits:
+         type: number
+         description: "Calculate Units"
+       chargeAmount:
+         type: number
+         description: "Charge Amount"
+       chargeCategory:
+         type: string
+         description: "Charge Category"
+       chargeCode:
+         type: string
+         description: "Charge Code"
+       chargeCodeDesc:
+         type: string
+         description: "Charge Code Description"
+       chargeGroup:
+         type: string
+         description: "Charge Group"
+       chargeType:
+         type: string
+         description: "Charge Type"
+       chgCalcDate:
+         type: string
+         format: date
+         description: "Charge Calculate Date"
+       txnCcy:
+         type: string
+         description: "Transaction Currency"
+       chargeCriteria:
+         type: string
+         description: "Charge Criteria"
+       chargeCriteriaValue:
+         type: number
+         description: "Charge Criteria Value"
+       chgCriteriaCcy:
+         type: string
+         description: "Charge Criteria Currency"
+       chgCriteriaCount:
+         type: string
+         description: "Charge Criteria Count"
+       priceMethodDesc:
+         type: string
+         description: "Price Method Description"
+       priceTemplateId:
+         type: string
+         description: "Price Template Id"
+       chgSharing:
+         type: string
+         description: "Charge Sharing"
+       collectionType:
+         type: string
+         description: "Collection Type"
+       collectionFreq:
+         type: string
+         description: "Collection Frequency"
+       collectionRefPeriod:
+         type: string
+         description: "Collection Reference Period"
+       collectionUnits:
+         type: number
+         description: "Collection Units"
+       parentChargeCode:
+         type: string
+         description: "Parent Charge Code"
+       partyId:
+         type: string
+         description: "Party Id"
+       partyToCharge:
+         type: string
+         description: "Party To Charge"
+       postingErrorCode:
+         type: string
+         description: "Posting Error Code"
+       referenceEndDate:
+         type: string
+         description: "Reference End Date"
+       referenceStartDate:
+         type: string
+         description: "Reference Start Date"
+       referenceEndDateValue:
+         type: string
+         format: date
+         description: "Reference End Date Value"
+       referenceStartDateValue:
+         type: string
+         format: date
+         description: "Reference Start Date Value"
+       txnRefNo:
+         type: string
+         description: "Transaction Reference Number"
+       partyName:
+         type: string
+         description: "Party Name"
+       eventCode:
+         type: string
+         description: "Event Code"
+       exchangeRate:
+         type: number
+         description: "Exchange Rate"
+       firstChgCalcDate:
+         type: string
+         format: date
+         description: "First Charge Calculate Date"
+       nextChgCalcDate:
+         type: string
+         format: date
+         description: "Next Charge Caculate Date"
+       chgCollDate:
+         type: string
+         format: date
+         description: "Charge Collection Date"
+       firstChgCollDate:
+         type: string
+         format: date
+         description: "First Charge Collection Date"
+       nextChgCollDate:
+         type: string
+         format: date
+         description: "Next Charge Collection Date"
+       debitAccNumber:
+         type: string
+         description: "Debit Account Number"
+       creditAccNumber:
+         type: string
+         description: "Credit Account Number"
+       chgSharingPct:
+         type: number
+         description: "Charge Sharing Pct"
+       postingDate:
+         type: string
+         format: date
+         description: "Posting Date"
+       calcStartDate:
+         type: string
+         format: date
+         description: "Calculate Start Date"
+       calcEndDate:
+         type: string
+         format: date
+         description: "Calculate End Date"
+        
+  ObChargesTxnDTOCollection:
+    description: "Collection of ObChargesTxnDTO."
+    type: "object"
+    properties:
+      obChargesTxnDTOList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObChargesTxnDTO"
+  ScfSystemParamModel:
+    description: "Scf System Param model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Parameter"
+        type: "integer"
+        format: "int64"
+      key:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+      value:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+  ScfSystemParamCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      ScfSystemParamModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfSystemParamModel"
+  ObChargesTxnCollection:
+    description: "Collection of ObChargesTxnDTO."
+    type: "object"
+    properties:
+      obChargesTxnDTOList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObChargeTxnDTO"
+      
+  ObChargeTxnDTO:
+    type: object
+    properties:
+      txnRefNo:
+        type: "string"
+        description: "Transaction Reference Number"
+      chargeAmt:
+        type: "number"
+        description: "Charge Amount"
+      chargeCcy:
+        type: "string"
+        description: "Charge Currency"
+      partyId:
+        type: "string"
+        description: "Party Id"
+      partyName:
+        type: "string"
+        description: "Party Name"
+      chargeCode:
+        type: "string"
+        description: "Charge code"
+      chargeType:
+        type: "string"
+        description: "Charge Type"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+        
+  AccountEntryPostingResponse:
+    description: "Accounting entry posting response collection"
+    type: "object"
+    properties:
+      status:
+        description: "Account posting block status"
+        type: "string"
+      postingErrorDetails:
+        description: "Account posting error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/PostingErrorDetails"
+          
+  PostingErrorDetails:
+    description: "Posting error code collection"
+    type: "object"
+    properties:
+      errorCode:
+        description: "Error code"
+        type: "string"
+      errorDesc:
+        description: "Error description"
+        type: "string"
+        
+  EcaBlockAmountDetailsCollection:
+    description: "Eca blocked amount response collection"
+    type: "object"
+    properties:
+      status:
+        description: "Eca block status"
+        type: "string"
+      ecaAccAmtDetails:
+        description: "Eca account amount details"
+        type: "array"
+        items:
+          $ref: "#/definitions/EcaBlockAmountDetails"
+      ecaErrorDetails:
+        description: "Eca error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/EcaErrorDetails"
+          
+  EcaErrorDetails:
+    description: "Eca error code collection"
+    type: "object"
+    properties:
+      errorCode:
+        description: "Error code"
+        type: "string"
+      errorDesc:
+        description: "Error description"
+        type: "string"
+    
+  EcaBlockAmountDetails:
+    description: "Eca blocked amount response collection"
+    type: "object"
+    properties:
+      refNo:
+        description: "Transaction reference number"
+        type: "string"
+      accountNo:
+        description: "Account number"
+        type: "string"
+      requestedBlkAmount:
+        description: "Requested blocked amount"
+        type: "number"
+      approvedBlkAmount:
+        description: "Approved blocked amount"
+        type: "number"

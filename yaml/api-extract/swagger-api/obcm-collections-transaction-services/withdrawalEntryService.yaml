@@ -1,0 +1,1057 @@
+swagger: "2.0"
+info:
+ description: "APIs required for Cash Witdrawal Inquiry, PUT request from external channel,  Reject and Authorise" 
+ version: "1.0.0"
+ title: "Cashwithdrawal APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "WithdrawalEntryService"
+   description: "APIs required for Cash Witdrawal Inquiry, PUT request from external channel,  Reject and Authorise"
+
+paths:
+  /service/v1/authorizeWithdrawal:
+    post:
+      tags:
+        - "WithdrawalEntryService"
+      summary: "authorizes new withdrawalentry from conductor"
+      description: "authorizes new withdrawalentry from conductor"
+      operationId: "authorizeWithdrawal"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: conductorWorkflowModel
+          in: body
+          description: Request Body that contains data required to authorize withdrawal entry.
+          required: true
+          schema:
+            $ref: './batch.yaml#/definitions/ConductorWorkFlowModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created bidding
+          schema:
+            $ref: './batch.yaml#/definitions/ConductorWorkFlowModel'
+        400:
+          description: Bad Request
+          schema:
+            $ref: './batch.yaml#/definitions/ResponseDtoWrapper'
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+                    
+  /service/v1/rejectWithdrawal:
+    post:
+      tags:
+        - "WithdrawalEntryService"
+      summary: "rejects new withdrawalentry from conductor"
+      description: "rejects new withdrawalentry from conductor"
+      operationId: "rejectWithdrawal"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: conductorWorkflowModel
+          in: body
+          description: Request Body that contains data required to reject withdrawal entry.
+          required: true
+          schema:
+            $ref: './batch.yaml#/definitions/ConductorWorkFlowModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created bidding
+          schema:
+            $ref: './batch.yaml#/definitions/ConductorWorkFlowModel'
+        400:
+          description: Bad Request
+          schema:
+            $ref: './batch.yaml#/definitions/ResponseDtoWrapper'
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+   
+  /service/v1/cashWithdrawalInquiry:
+   get:
+      tags:
+        - "WithdrawalEntryService"
+      summary: "Retrieves the list of existing cash withdrawal"
+      description:  "Retrieves the list of existing cash withdrawal with additional information "
+      operationId: "getCashWithdrwalInquiry"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID for SMS" 
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file"
+        - name: "withdrawalBranchCode"
+          in: "query"
+          required: false
+          description: "Withdrawal Branch"
+          type: "string"
+        - name: "corporateId"
+          in: "query"
+          required: true
+          description: "Corporate Id"
+          type: "string"
+        - name: "slipNumber"
+          in: "query"
+          required: false
+          description: "Slip Number"
+          type: "string"
+        - name: "chequeNumber"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Cheque Number"
+        - name: "referenceNumber"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Reference Number"
+        - name: "extRefNumber"
+          in: "query"
+          type: "string"
+          required: false
+          description: "External Reference Number"
+        - name: "withdrawalAmtCCY"
+          in: "query"
+          required: false
+          description: "Withdrawal Amount CCY"
+          type: "string"
+        - name: "amountFrom"
+          in: "query"
+          required: false
+          description: "From Amount"
+          type: "string"
+        - name: "amountTo"
+          in: "query"
+          required: false
+          description: "To Amount"
+          type: "string"
+        - name: "processingFromDate"
+          in: "query"
+          required: false
+          description: "Processing From Date"
+          type: "string"
+        - name: "processingToDate"
+          in: "query"
+          required: false
+          description: "Processing To Date"
+          type: "string"
+        - name: "requestFromDate"
+          in: "query"
+          required: false
+          description: "Request From Date"
+          type: "string"
+        - name: "requestToDate"
+          in: "query"
+          required: false
+          description: "Request To Date"
+          type: "string"  
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "Limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "Offset of the limit"
+          type: "integer"
+        - name: "debitStatus"
+          in: "query"
+          required: false
+          description: "Debit Status Code"
+          type: "string"
+        - name: "deliveryPointCode"
+          in: "query"
+          required: false
+          description: "Delivery Point Code"
+          type: "string"
+        - name: "debitAccountNo"
+          in: "query"
+          required: false
+          description: "Debit Account Number"
+          type: "string"
+        - name: "withdrawalFromDate"
+          in: "query"
+          required: false
+          description: "Withdrawal From Date"
+          type: "string"
+        - name: "withdrawalToDate"
+          in: "query"
+          required: false
+          description: "Withdrawal To Date"
+          type: "string"                          
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashWithdrawalEnquiryResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+    
+   put:
+      tags:
+        - "WithdrawalEntryService"
+      summary: "To Create the Cash Withdrawal from an external application like OBDX and sent the request to OBCM"
+      description:  "The purpose of this API is get exposed to the external application normally portal to create Cash Withdrawal and send it to CMS back office for further processing."
+      operationId: "createCashWithdrwalEntry"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID for SMS" 
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file"
+        - name: "cashWithdrawalEntry"
+          in: "body"
+          description: "Request Body that contains data required for creating a new CashWithdrawal Entry"
+          required: true
+          schema:
+            $ref: "#/definitions/CashWithdrawalEntryRequestModel"                          
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashWithdrawalEntryResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"       
+definitions:
+  CashWithdrawalEnquiryResponseModel:
+    description: "Collection of CashWithdrawal Model"
+    type: "object"
+    properties:
+      responseStatus:
+        type: "string"
+        description: "Response Status"
+      cashWithdrawalData:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashWithDrawalEnquiryModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+      errors:
+        type: "object"
+        description: "List Of Errors "
+        items:
+          $ref: "#/definitions/Error"
+  PagingDto:
+    type: "object"
+    properties:
+      totalResults:
+        type: "integer"
+  Error:
+    type: "object"
+    description: "Error Model"
+    properties:
+      ecode:
+        type: "string"
+        description: "Error Code"
+      etype:
+        type: "string"
+        description: "Error Type"
+      edesc:
+        type: "string"
+        description: "Error Description"       
+  CashWithDrawalEnquiryModel:
+    description: "Cash Withdrawal Enquiry Model"
+    type: "object"
+    properties:
+       id:
+        description: "Id of the cashwithdrawal"
+        type: "string"
+       modNo:
+        description: "Mod No of the cashwithdrawal"
+        type: "integer"
+       action:
+        description: "Action"
+        type: "string"
+       amount:
+        description: "Amount"
+        type: "number"
+       authStat:
+        description: "Authorization Status"
+        type: "string"
+       branchCode:
+        description: "branchCode"
+        type: "string"
+       checkerDtStamp:
+        description: "CheckerDateStamp"
+        type: "string"
+       checkerId:
+        description: "Checker Id"
+        type: "string"
+       checkerRemarks:
+        description: "Checker Remarks"
+        type: "string"
+       chequeDate:
+        description: "Cheque Date"
+        type: "string"
+       chequeNo:
+        description: "Cheque Number"
+        type: "number"
+       consignmentDate:
+        description: "Consignment Date"
+        type: string
+       consignmentNo:
+        description: "Consignment Number"
+        type: "string"
+       contactNo:
+        description: "Contact Number"
+        type: "string"
+       corporateId:
+        description: "Corporate Id"
+        type: "string"
+       corporateName:
+        description: "Corporate Name"
+        type: "string"
+       corporateRefNo:
+        description: "Corporate Reference Number"
+        type: "string"
+       courierCode:
+        description: "Courier Code"
+        type: "string"
+       debitAccountNo:
+        description: "Debit Account Number"
+        type: "string"
+       denominationCount:
+        description: "Denomination Count"
+        type: "number"
+       extReferenceNo:
+        description: "External Reference Number"
+        type: "string"
+       idProofDetail:
+        description: "Id Proof Detail"
+        type: "string"
+       idProofType:
+        description: "Id Proof Type"
+        type: "string"
+       makerDtStamp:
+        description: "MakerDateStamp"
+        type: "string"        
+       makerId:
+        description: "Maker Id"
+        type: "string"
+       makerRemarks:
+        description: "Maker Remarks"
+        type: "string"
+       onceAuth:
+        description: "Once Authorization"
+        type: "string" 
+       recipientName:
+        description: "recipient Name"
+        type: "string"
+       recordStat:
+        description: "Record Status"
+        type: "string" 
+       slipNo:
+        description: "Slip Number"
+        type: "number"
+       transactionRefNo:
+        description: "Transaction Reference Number"
+        type: "string" 
+       currency:
+        description: "Currency"
+        type: "string"
+       exchangeRate:
+        description: "Exchange Rate"
+        type: "number"
+       amtAccCcy:
+        description: "Amount Account Ccy"
+        type: "number"
+       deliveryPointCode:
+        description: "Delivery Point Code"
+        type: "string"
+       deliveryPointDesc:
+        description: "Delivery Point Description"
+        type: "string"
+       recipientType:
+        description: "Recipient Type"
+        type: "string"
+       processingStatus:
+        description: "Stage"
+        type: "string"
+       debitStatus:
+        description: "Debit Status"
+        type: "string"
+       externalChannel:
+        description: "External Channel"
+        type: "string"
+       lienNumber:
+        description: "Lien Number"
+        type: "string"
+       lienAmount:
+        description: "Lien Amount"
+        type: "number"
+       processingDate:
+        description: "Processing Date"
+        type: "string"
+       requestedDate:
+        description: "Requested Date"
+        type: "string"
+       lienDate:
+        description: "Lien Date"
+        type: "string"
+       debitDate:
+        description: "Debit Date"
+        type: "string"
+       withdrawalSlipDate:
+        description: "WithdrawalSlipDate"
+        type: "string"
+       stage:
+        description: "Stage"
+        type: "string"
+       debitACCY:
+        description: "Debit Account CCY"
+        type: "string"
+       vaFlagYN:
+        description: "Virtual Account Falg(Y/N)"
+        type: "string"
+       channel:
+        description: "Channel"
+        type: "string"
+       channelWithdrawalBranch:
+        description: "Channel Withdrawal Branch"
+        type: "string"
+       withdrawalDate:
+        description: "Channel Withdrawal Date"
+        type: "string"      
+       cashWithdrawalEnquiryMiscFieldsData:
+        $ref: "#/definitions/CashWithdrawalEnquiryMiscFieldsModel"
+       cashWithdrawalEnquiryDenominationfFieldsData:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashWithdrawalEnquiryDenominationFieldsModel"
+  CashWithdrawalEnquiryMiscFieldsModel:
+    description: "Collection of Cashwithdrawal Enquiry Misc Fields Model"
+    type: "object"
+    properties:
+      noOfMiscFields:
+       description: "noOfMiscFields"
+       type: "number"
+      misc1:
+        description: "1st Miscellaneous Field"
+        type: "string" 
+      misc2:
+        description: "2nd Miscellaneous Field"
+        type: "string" 
+      misc3:
+        description: "3rd Miscellaneous Field"
+        type: "string" 
+      misc4:
+        description: "4th Miscellaneous Field"
+        type: "string" 
+      misc5:
+        description: "5th Miscellaneous Field"
+        type: "string" 
+      misc6:
+        description: "6th Miscellaneous Field"
+        type: "string" 
+      misc7:
+        description: "7th Miscellaneous Field"
+        type: "string" 
+      misc8:
+        description: "8th Miscellaneous Field"
+        type: "string" 
+      misc9:
+        description: "9th Miscellaneous Field"
+        type: "string" 
+      misc10:
+        description: "10th Miscellaneous Field"
+        type: "string" 
+      misc11:
+        description: "11th Miscellaneous Field"
+        type: "string" 
+      misc12:
+        description: "12th Miscellaneous Field"
+        type: "string" 
+      misc13:
+        description: "13th Miscellaneous Field"
+        type: "string" 
+      misc14:
+        description: "14th Miscellaneous Field"
+        type: "string" 
+      misc15:
+        description: "15th Miscellaneous Field"
+        type: "string" 
+      misc16:
+        description: "16th Miscellaneous Field"
+        type: "string" 
+      misc17:
+        description: "17th Miscellaneous Field"
+        type: "string" 
+      misc18:
+        description: "18th Miscellaneous Field"
+        type: "string" 
+      misc19:
+        description: "19th Miscellaneous Field"
+        type: "string" 
+      misc20:
+        description: "20th Miscellaneous Field"
+        type: "string" 
+      misc21:
+        description: "21st Miscellaneous Field"
+        type: "string" 
+      misc22:
+        description: "22nd Miscellaneous Field"
+        type: "string" 
+      misc23:
+        description: "23rd Miscellaneous Field"
+        type: "string" 
+      misc24:
+        description: "24th Miscellaneous Field"
+        type: "string" 
+      misc25:
+        description: "25th Miscellaneous Field"
+        type: "string" 
+      misc26:
+        description: "26th Miscellaneous Field"
+        type: "string" 
+      misc27:
+        description: "27th Miscellaneous Field"
+        type: "string" 
+      misc28:
+        description: "28th Miscellaneous Field"
+        type: "string" 
+      misc29:
+        description: "29th Miscellaneous Field"
+        type: "string" 
+      misc30:
+        description: "30th Miscellaneous Field"
+        type: "string"     
+  CashWithdrawalEnquiryDenominationFieldsModel:
+    description: "Collection of CashWithdrawal Enquiry Denomination Fields Model"
+    type: "object"
+    properties:
+      id:
+       description: "Id for Denomination"
+       type: "string"
+      denominationAmount:
+       description: "Denomination Amount"
+       type: "number"
+      denominationCount:
+       description: "Denomination Count"
+       type: "number"
+      denominationRefNo:
+       description: "Denomination Reference Number"
+       type: "string"
+      denominationType:
+       description: "Denomination Type"
+       type: "string"
+      denominationValue:
+       description: "Denomination Value"
+       type: "number"
+      depositSlipNo:
+       description: "DepositSlip Number"
+       type: "number"
+      depositSlipRefNo:
+       description: "DepositSlip Reference Number"
+       type: "string"
+      referenceNum:
+       description: "Reference Number"
+       type: "string"
+      seqNo:
+       description: "Seq No"
+       type: "number"
+      makerId:
+       description: "Maker Id"
+       type: "string"
+      makerDtStamp:
+       description: "MakerDateStamp"
+       type: "string"
+      checkerId:
+       description: "Checker Id"
+       type: "string"
+      checkerDtStamp:
+       description: "CheckerDateStamp"
+       type: "string"
+        
+  CashWithdrawalEntryRequestModel:
+    description: "Collection of CashWithdrawal Request Model"
+    type: "object"
+    properties:
+      cashWithdrawalEntryData:
+        description: "Cash Withdrawal Enuiry Data" 
+        $ref: "#/definitions/CashWithDrawalEntryModel"
+  CashWithDrawalEntryModel:
+    description: "Cash Withdrawal Enquiry Model"
+    type: "object"
+    properties:
+       id:
+        description: "Id of the cashwithdrawal"
+        type: "string"
+       modNo:
+        description: "Mod No of the cashwithdrawal"
+        type: "integer"
+       action:
+        description: "Action"
+        type: "string"
+       amount:
+        description: "Amount"
+        type: "number"
+       authStat:
+        description: "Authorization Status"
+        type: "string"
+       branchCode:
+        description: "branchCode"
+        type: "string"
+       checkerDtStamp:
+        description: "CheckerDateStamp"
+        type: "string"
+       checkerId:
+        description: "Checker Id"
+        type: "string"
+       checkerRemarks:
+        description: "Checker Remarks"
+        type: "string"
+       chequeDate:
+        description: "Cheque Date"
+        type: "string"
+       chequeNo:
+        description: "Cheque Number"
+        type: "string"
+       consignmentDate:
+        description: "Consignment Date"
+        type: "string"
+       consignmentNo:
+        description: "Consignment Number"
+        type: "string"
+       contactNo:
+        description: "Contact Number"
+        type: "string"
+       corporateId:
+        description: "Corporate Id"
+        type: "string"
+       corporateName:
+        description: "Corporate Name"
+        type: "string"
+       corporateRefNo:
+        description: "Corporate Reference Number"
+        type: "string"
+       courierCode:
+        description: "Courier Code"
+        type: "string"
+       debitAccountNo:
+        description: "Debit Account Number"
+        type: "string"
+       denominationCount:
+        description: "Denomination Count"
+        type: "number"
+       extReferenceNo:
+        description: "External Reference Number"
+        type: "string"
+       idProofDetail:
+        description: "Id Proof Detail"
+        type: "string"
+       idProofType:
+        description: "Id Proof Type"
+        type: "string"
+       makerDtStamp:
+        description: "MakerDateStamp"
+        type: "string"        
+       makerId:
+        description: "Maker Id"
+        type: "string"
+       makerRemarks:
+        description: "Maker Remarks"
+        type: "string"
+       onceAuth:
+        description: "Once Authorization"
+        type: "string" 
+       recipientName:
+        description: "recipient Name"
+        type: "string"
+       recordStat:
+        description: "Record Status"
+        type: "string" 
+       slipNo:
+        description: "Slip Number"
+        type: "string"
+       transactionRefNo:
+        description: "Transaction Reference Number"
+        type: "string" 
+       currency:
+        description: "Currency"
+        type: "string"
+       exchangeRate:
+        description: "Exchange Rate"
+        type: "number"
+       amtAccCcy:
+        description: "Amount Account Ccy"
+        type: "number"
+       deliveryPointCode:
+        description: "Delivery Point Code"
+        type: "string"
+       deliveryPointDesc:
+        description: "Delivery Point Description"
+        type: "string"
+       recipientType:
+        description: "Recipient Type"
+        type: "string"
+       processingStatus:
+        description: "Stage"
+        type: "string"
+       debitStatus:
+        description: "Debit Status"
+        type: "string"
+       externalChannel:
+        description: "External Channel"
+        type: "string"
+       lienNumber:
+        description: "Lien Number"
+        type: "string"
+       lienAmount:
+        description: "Lien Amount"
+        type: "number"
+       processingDate:
+        description: "Processing Date"
+        type: "string"
+       requestedDate:
+        description: "Requested Date"
+        type: "string"
+       lienDate:
+        description: "Lien Date"
+        type: "string"
+       debitDate:
+        description: "Debit Date"
+        type: "string"
+       withdrawalSlipDate:
+        description: "WithdrawalSlipDate"
+        type: "string"
+       stage:
+        description: "Stage"
+        type: "string"
+       debitACCY:
+        description: "Debit Account CCY"
+        type: "string"
+       vaFlagYN:
+        description: "Virtual Account Falg(Y/N)"
+        type: "string"
+       channel:
+        description: "Channel"
+        type: "string"
+       channelWithdrawalBranch:
+        description: "Channel Withdrawal Branch"
+        type: "string"
+       withdrawalDate:
+        description: "Channel Withdrawal Date"
+        type: "string"
+       cwAccRefNo:
+        description: "CashWithdrawal Account Reference Number"
+        type: "string"
+       lienStatus:
+        description: "Lien Status"
+        type: "string"        
+       noOfMiscFields:
+        description: "noOfMiscFields"
+        type: "number"
+       misc1:
+        description: "1st Miscellaneous Field"
+        type: "string" 
+       misc2:
+        description: "2nd Miscellaneous Field"
+        type: "string" 
+       misc3:
+        description: "3rd Miscellaneous Field"
+        type: "string" 
+       misc4:
+        description: "4th Miscellaneous Field"
+        type: "string" 
+       misc5:
+        description: "5th Miscellaneous Field"
+        type: "string" 
+       misc6:
+        description: "6th Miscellaneous Field"
+        type: "string" 
+       misc7:
+        description: "7th Miscellaneous Field"
+        type: "string" 
+       misc8:
+        description: "8th Miscellaneous Field"
+        type: "string" 
+       misc9:
+        description: "9th Miscellaneous Field"
+        type: "string" 
+       misc10:
+        description: "10th Miscellaneous Field"
+        type: "string" 
+       misc11:
+        description: "11th Miscellaneous Field"
+        type: "string" 
+       misc12:
+        description: "12th Miscellaneous Field"
+        type: "string" 
+       misc13:
+        description: "13th Miscellaneous Field"
+        type: "string" 
+       misc14:
+        description: "14th Miscellaneous Field"
+        type: "string" 
+       misc15:
+        description: "15th Miscellaneous Field"
+        type: "string" 
+       misc16:
+        description: "16th Miscellaneous Field"
+        type: "string" 
+       misc17:
+        description: "17th Miscellaneous Field"
+        type: "string" 
+       misc18:
+        description: "18th Miscellaneous Field"
+        type: "string" 
+       misc19:
+        description: "19th Miscellaneous Field"
+        type: "string" 
+       misc20:
+        description: "20th Miscellaneous Field"
+        type: "string" 
+       misc21:
+        description: "21st Miscellaneous Field"
+        type: "string" 
+       misc22:
+        description: "22nd Miscellaneous Field"
+        type: "string" 
+       misc23:
+        description: "23rd Miscellaneous Field"
+        type: "string" 
+       misc24:
+        description: "24th Miscellaneous Field"
+        type: "string" 
+       misc25:
+        description: "25th Miscellaneous Field"
+        type: "string" 
+       misc26:
+        description: "26th Miscellaneous Field"
+        type: "string" 
+       misc27:
+        description: "27th Miscellaneous Field"
+        type: "string" 
+       misc28:
+        description: "28th Miscellaneous Field"
+        type: "string" 
+       misc29:
+        description: "29th Miscellaneous Field"
+        type: "string" 
+       misc30:
+        description: "30th Miscellaneous Field"
+        type: "string" 
+       cashWithdrawalEnquiryDenominationfFieldsData:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashWithdrawalEnquiryDenominationFieldsModel"
+  CashWithdrawalEntryResponseModel:
+    description: "Collection of CashWithdrawal Response Model"
+    type: "object"
+    properties:
+      responseStatus:
+        type: "string"
+        description: "Response Status"
+      cashWithdrawalEntryData:
+        $ref: "#/definitions/CashWithDrawalEntryModel"
+      errors:
+        type: "object"
+        description: "List Of Errors "
+        items:
+          $ref: "#/definitions/Error"
+  ObcmTmCorpEnrchDlvryDTOCollection: 
+    description: "Collection of corpenrchdlvrydetails."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/ObcmTmCorpEnrchDlvryDTO"
+  ObcmTmCorpEnrchDlvryDTO:
+    type: object
+    properties:
+      corporateId:
+        type: string
+        description: "Corporate Id"
+      locationCode:
+        type: string
+        description: "Available location code"
+      dlvryCode:
+        type: string
+        description: "Dlvry code mapped to corporate or location code will be returned"
+      dlvryDesc:
+        type: string
+        description: "Name of the pick up point"
+      cntctPerson:
+        type: string
+        description: "Name of the contact person"
+      dlvryType:
+        type: string
+        description: "Constant value Adhoc / on call"
+      courierCode:
+        type: string
+        description: "List of existing courier codes can be fetched from back office"
+      addln1:
+        type: string
+        description: "Address line 1"
+      addln2:
+        type: string
+        description: "Address line 2"
+      addln3:
+        type: string
+        description: "Address line 3"
+      addln4:
+        type: string
+        description: "Address line 4"
+      cntryCode:
+        type: string
+        description: "Country Code of Dlvry point"
+      cntryName:
+        type: string
+        description: "Country Name of Dlvry point"
+      postalCode:
+        type: number
+        description: "Postal code of Dlvry point"
+      prPhoneNo:
+        type: number
+        description: "Primary number of contact"
+      prEmailId:
+        type: string
+        description: "Email of contact"
+      authStatus:
+        type: string
+        description: "A or U"
+      modNo:
+        type: integer
+        description: "Modification number of record"
+      agrmntDate:
+        type: string
+        format: date
+        description: "Argreement Date"
+      courierCodeDesc:
+        type: string
+        description: "Courier Code Description"
+      dayOfWeek:
+        type: string
+        description: "Day Of Week"
+      fax:
+        type: number
+        description: "Fax"
+      freq:
+        type: string
+        description: "Frequency"
+      id:
+        type: string
+        description: "Id"
+      locationDesc:
+        type: string
+        description: "Location Description"
+      dlvryMstrId:
+        type: string
+        description: "Delivery Master Id"
+      dlvryOnHldys:
+        type: string
+        description: "Delivery On Holydays"
+      dlvrySlot:
+        type: string
+        description: "DeliverySlot"
+      scEmailId:
+        type: string
+        description: "Secondary Email Id"
+      scPhoneNo:
+        type: number
+        description: "Secondary PhoneNo"                                                                                        

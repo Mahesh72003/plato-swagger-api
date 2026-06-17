@@ -1,0 +1,153 @@
+swagger: '2.0'
+info:
+   title: OBRH Service
+   version: 1.0.0
+   description: OBRH Service for Oracle Banking Routing Hub
+basePath: /api/1.0/
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: DispatchAudit
+   description: API for operations related to audit data of route dispatch
+schemes:
+- https
+paths:
+   /route/dispatch/audit:
+      get:
+         tags:
+         - DispatchAudit
+         summary: Get AuditDetails for Dispatch based on filter criteria.
+         operationId: getAll
+         parameters:
+         -  name: offset
+            in: query
+            description: offset is starting no of records to be fetched
+            type: integer
+            minimum: 0
+         -  name: limit
+            in: query
+            description: limit is maximum no of records to be fetched
+            type: integer
+            minimum: 0
+         -  name: serviceConsumerName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: serviceConsumerServiceName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: serviceProviderName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: serviceProviderImplName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: providedServiceName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: serviceTransformationName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: serviceRoutingName
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: requestId
+            in: query
+            description: key of the auditDetails
+            type: string
+         -  name: userId
+            in: query
+            description: key of the auditDetails
+            type: string
+         responses:
+            200:
+               description: Returns message of success or failure
+               schema:
+                  $ref: '#/definitions/DispatchAuditCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+definitions:
+   DispatchAuditDTO:
+      type: object
+      properties:
+            requestId:
+               type: string
+            userId:
+               type: string
+            serviceConsumerName:
+               type: string
+            serviceConsumerServiceName:
+               type: string
+            serviceTransformationName:
+               type: string
+            serviceRoutingName:
+               type: string
+            serviceProviderName:
+               type: string
+            serviceProviderVersion:
+               type: string
+            serviceProviderImplName:
+               type: string
+            providedServiceName:
+               type: string
+            dispatchRequest:
+               type: string
+            dispatchResponse:
+               type: string
+            dispatchExecStartTime:
+               type: string
+               format: date-time
+            dispatchExecEndTime:
+               type: string
+               format: date-time
+            providedServiceRequest:
+               type: string
+            providedServiceResponse:
+               type: string
+            providedServiceExecStartTime:
+               type: string
+               format: date-time
+            providedServiceExecEndTime:
+               type: string
+               format: date-time
+            failureRemarks:
+               type: string
+   DispatchAuditCollection:
+        description: Collection of DispatchAudit.
+        type: object
+        properties:
+            data:
+               type: array
+               items:
+                  $ref: '#/definitions/DispatchAuditDTO'
+            paging:
+               $ref: '#/definitions/PagingDto'
+            messages:
+               $ref: '#/definitions/ResponseDto'     
+   DispatchAuditWrapperDTO:
+      type: object
+      properties:
+         data:
+            $ref: '#/definitions/DispatchAuditDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   ResponseDto:
+      type: object
+   PagingDto:
+      type: object

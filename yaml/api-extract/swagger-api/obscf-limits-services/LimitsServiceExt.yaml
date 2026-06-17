@@ -1,0 +1,811 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBSCF
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This provides API to perform various operation such as block, utilize, release, unblock the limits and fetch the limits details" 
+ version: "1.0.0"
+ title: "Limits Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-limits-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "limitsService"
+   description: "API for Limits operations"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../limits
+
+ /service/v1/limitsDetails:  
+  post:
+   tags:
+    - "limitsService"
+   summary: "Get all valid limits."
+   description:  "Get all valid limits."
+   operationId: "getLimitsDetails"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - name: "limitTxnDetails"
+     in: "body"
+     description: "Request Body that contains data for fetching required limit"
+     required: true
+     schema:
+      $ref: "#/definitions/LimitsTxnBlockDTO"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "#/definitions/LimitsNodeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+ /service/v1/blockLimits:
+  put:
+   tags:
+    - "limitsService"
+   summary: "Block an existing limit."
+   description:  "Block an existing limit."
+   operationId: "blockLimitAmount"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "limitsLineDetails"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing limit"
+      required: true
+      schema:
+       $ref: "#/definitions/LimitsLineIdBlockDTO"
+   responses:
+    200:
+     description: "Returns updated limit"
+     schema:
+      $ref: "#/definitions/LimitsLineIdBlockDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /service/v1/unblockLimits:
+  put:
+   tags:
+    - "limitsService"
+   summary: "Unblock an existing limit."
+   description:  "Unblock an existing limit."
+   operationId: "unblockLimitAmount"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "limitsLineDetails"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing limit"
+      required: true
+      schema:
+       $ref: "#/definitions/LimitsLineIdBlockDTO"
+   responses:
+    200:
+     description: "Returns updated limit"
+     schema:
+      $ref: "#/definitions/LimitsLineIdBlockDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /service/v1/utilizeLimits:
+  put:
+   tags:
+    - "limitsService"
+   summary: "Utilize an existing limit."
+   description:  "Utilize an existing limit."
+   operationId: "utilizeLimitAmount"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "limitsLineDetails"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing limit"
+      required: true
+      schema:
+       $ref: "#/definitions/LimitsLineIdBlockDTO"
+   responses:
+    200:
+     description: "Returns updated limit"
+     schema:
+      $ref: "#/definitions/LimitsLineIdBlockDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+   
+ /service/v1/releaseLimits:
+  put:
+   tags:
+    - "limitsService"
+   summary: "Release an existing limit."
+   description:  "Release an existing limit."
+   operationId: "releaseLimitAmount"
+   parameters:
+    - name: "User Id"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "limitsLineDetails"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing limit"
+      required: true
+      schema:
+       $ref: "#/definitions/LimitsLineIdBlockDTO"
+   responses:
+    200:
+     description: "Returns updated limit"
+     schema:
+      $ref: "#/definitions/LimitsLineIdBlockDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/limitsEnquiry:
+  get:
+   tags:
+    - "limitsService"
+   summary: "Retrives the limits details for the given input request"
+   description:  "Retrives the limits details for the given input request"
+   operationId: "getLimitEnquiry"
+   parameters:
+    - name: "userId"
+      description: "User Id"
+      in: "header"
+      required: true
+      type: "string"
+    - name: "appId"
+      description: "Application Id"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      description: "Branch Code"
+      in: "header"
+      required: true
+      type: "string"
+    - name: "externalLineId"
+      description: "External LineId fetched from external Limit system"
+      in: "query"
+      type: "string"
+    - name: "limitType"
+      description: "Limit Type"
+      in: "query"
+      type: "string"
+    - name: "limitEntityType"
+      description: "Limit Entity Type"
+      in: "query"
+      type: "string"
+    - name: "limitEntity"
+      description: "Limit Entity"
+      in: "query"
+      type: "string"
+    - name: "partyId"
+      description: "Party Id"
+      in: "query"
+      type: "string"
+    - name: "limitExpirySwitch"
+      description: "Limit Expiry Switch"
+      in: "query"
+      type: "string"
+    - name: "limitFreeze"
+      description: "Limit freeze"
+      in: "query"
+      type: "string"
+    - name: "offset"
+      in: "query"
+      description: offset is starting no of records to be fetched
+      type: "integer"
+      required: false
+    - name: "limit"
+      in: "query"
+      description: limit is maximum no of records to be fetched
+      type: "integer"
+      required: false
+   responses:
+    200:
+     description: "Returns the anchorlimits based on given id."
+     schema:
+       $ref: "#/definitions/LimitsNodeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ /service/v1/limitsELCMSync:
+  get:
+   tags:
+    - "limitsService"
+   summary: "Sync the amounts and dates in Limits and ELCM System"
+   description:  "Sync the amounts and dates in Limits and ELCM System"
+   operationId: "limitsELCMSync"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+   responses:
+    200:
+     description: "Returns true in case of success"
+     schema:
+      type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /service/v1/checkExpiry:
+  get:
+    tags:
+    - "limitsService"
+    summary: Checks the Expiry of the Limits Structure
+    description: Checks the Expiry of the Limits Structure
+    operationId: checkExpiry
+    parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: Application Id        
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+      description: User Id
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+      description: Branch Code 
+    - name: "branchDate" 
+      in: "query" 
+      type: "string" 
+      description: "Branch Date"
+    - name: "nextWorkingDate" 
+      in: "query" 
+      type: "string"
+      description: "Next Working Date"
+    - name: "holidayCheckRequired" 
+      in: "query" 
+      type: "string"
+      description: "Holiday Check Required"
+    responses:
+      201:   
+        description: "Successfully performs the action"
+        schema:
+          type: boolean
+      400:
+        description: "Malformed syntax."
+      401:
+        description: "Request does not have sufficient credentials."
+      403:
+        description: "Request is not authorized."
+      405:
+        description: "Invalid input"
+      500:
+        description: "Internal error"
+ /service/v1/limitsNodeDetails:
+  get:
+   tags:
+    - "limitsService"
+   summary: "Retrives the limits details for the given input request"
+   description:  "Retrives the limits details for the given input request"
+   operationId: "getLimitNodeDetails"
+   parameters:
+    - name: "userId"
+      description: "User Id"
+      in: "header"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      description: "Branch Code"
+      in: "header"
+      required: true
+      type: "string"
+    - name: "lineId"
+      description: "Line Id"
+      in: "query"
+      type: "string"
+   responses:
+    200:
+     description: "Returns the anchorlimits based on given id."
+     schema:
+       $ref: "#/definitions/LimitsNodeDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+ LimitsNodeCollection: 
+  description: "Collection of Nodes."
+  type: "object"
+  properties:
+   errorCode:
+    type: string
+    description: "Error Code"
+   errorDescription:
+    type: string
+    description: "Error Description"
+   status:
+    type: string
+    description: "Status"
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LimitsNodeDTO"
+   paging:
+    type: "object"
+ LimitsNodeDTO:
+  type: object
+  properties:
+     adhocBlockedLimitAmt:
+      type: number
+      description: "Adhoc Blocked Limit Amount"
+     adhocLimitEffectDate:
+      type: string
+      format: date
+      description: "Adhoc Limit Effect Date"
+     adhocLimitExpiryDate:
+      type: string
+      format: date
+      description: "Adhoc Limit Expiry Date"
+     adhocSanctionedLimitAmt:
+      type: number
+      description: "Adhoc Sanctioned Limit Amount"
+     availableAdhocLimitAmt:
+      type: number
+      description: "Available Adhoc Limit Amount"
+     availableLimitAmt:
+      type: number
+      description: "Available Limit Amount"
+     blockedLimitAmt:
+      type: number
+      description: "Blocked Limit Amount"
+     effectiveFrom:
+      type: string
+      format: date
+      description: "Effective From"
+     entityDesc:
+      type: string
+      description: "Entity Desc"
+     entityId:
+      type: string
+      description: "Entity Id"
+     entityType:
+      type: string
+      description: "Entity Type"
+     exchangeRate:
+      type: number
+      description: "Exchange Rate"
+     expiresOn:
+      type: string
+      format: date
+      description: "Expires On"
+     externalLineId:
+      type: string
+      description: "External Line Id"
+     id:
+      type: string
+      description: "Id"
+     interchangeabilityAllowed:
+      type: string
+      description: "Interchangeability Allowed"
+     isPolicyAdded:
+      type: string
+      description: "Is Policy Added"
+     isRootEntity:
+      type: string
+      description: "Is Root Entity"
+     isStructureLinked:
+      type: string
+      description: "Is Structure Linked"
+     limitsId:
+      type: string
+      description: "Limits Id"
+     limitCurrency:
+      type: string
+      description: "Limit Currency"
+     limitType:
+      type: string
+      description: "Limit Type"
+     limitFreeze:
+      type: string
+      description: "Limit Freeze"
+     lineId:
+      type: string
+      description: "Line Id"
+     nodeIdentifier:
+      type: string
+      description: "Node Identifier"
+     parentCcy:
+      type: string
+      description: "Parent Currency"
+     parentNodeIdentifier:
+      type: string
+      description: "Parent Node Identifier"
+     parentSanctionedAdhocLimit:
+      type: number
+      description: "Parent Sanctioned Adhoc Limit"
+     parentSanctionedAmt:
+      type: number
+      description: "Parent Sanctioned Amount"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     sanctionedLimitAmt:
+      type: number
+      description: "Sanctioned Limit Amount"
+     structureDescription:
+      type: string
+      description: "Structure Description"
+     structureHierarchy:
+      type: string
+      description: "Structure Hierarchy"
+     structureId:
+      type: string
+      description: "Structure Id"
+     totalAvailableLimitAmt:
+      type: number
+      description: "Total Available Limit Amount"
+     totalBlockedLimitAmt:
+      type: number
+      description: "Total Blocked Limit Amount"
+     totalSanctionedLimitAmt:
+      type: number
+      description: "Total Sanctioned Limit Amount"
+     totalUtilizedLimitAmt:
+      type: number
+      description: "Total Utilized Limit Amount"
+     utilizedAdhocLimitAmt:
+      type: number
+      description: "Utilized Adhoc Limit Amount"
+     utilizedLimitAmt:
+      type: number
+      description: "Utilized Limit Amount"
+     limitsUtilizationMandatory:
+      type: string
+      description: "Limits Utilization Mandatory"
+     depth:
+      type: number
+      description: "Depth"
+     rootEntity:
+      type: string
+      description: "Root Entity"
+     rootEntityId:
+      type: string
+      description: "Root Entity Id"
+     rootEntityName:
+      type: string
+      description: "Root Entity Name"
+ LimitsTxnBlockDTO:
+  type: object
+  properties:     
+     rootEntity:
+      type: string
+      description: "Root Entity"
+     limitType:
+      type: string
+      description: "Limit Type"
+     levels:
+      type: string
+      description: "Levels"
+     buyerId:
+      type: string
+      description: "Buyer Id"
+     supplierId:
+      type: string
+      description: "Supplier Id"
+     productId:
+      type: string
+      description: "Product Id"
+     programId:
+      type: string
+      description: "Program Id"
+     poolId:
+      type: string
+      description: "Pool Id"
+     insuraneCompanyId:
+      type: string
+      description: "Insurane Company Id"
+     importFactorId:
+      type: string
+      description: "Import Factor Id"
+ LimitsLineIdBlockDTO:
+  type: object
+  properties:     
+     requestId:
+      type: string
+      description: "Request Id"
+     seqNO:
+      type: integer
+      description: "Sequence NO"
+     businessDate:
+      type: string
+      format: date
+      description: "Business Date"
+     status:
+      type: string
+      description: "Status"
+     LimitsAmountDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LimitsAmountDTO'
+ LimitsAmountDTO:
+  type: object
+  properties:
+     lineId:
+      type: string
+      description: "LineId"
+     isRootNode:
+      type: string
+      description: "Root Node Flag"
+     partyCode:
+      type: string
+      description: "Party Code"
+     currency:
+      type: string
+      description: "Currency"   
+     blockAmount:
+      type: number
+      description: "Block Amount"
+     txnMainLimitAmount:
+      type: number
+      description: "Txn Main Limit Amount" 
+     txnAdhocLimitAmount:
+      type: number
+      description: "Txn Adhoc Limit Amount"
+     totalBlockAmount:
+      type: number
+      description: "Total Block Amount"
+     totalUtilizeAmount:
+      type: number
+      description: "Total Utilize Amount"
+     totalAvailableAmount:
+      type: number
+      description: "Total Available Amount"
+     totalAdhocBlockAmount:
+      type: number
+      description: "Total Adhoc Block Amount"
+     totalAdhocUtilizeAmount:
+      type: number
+      description: "Total Adhoc Utilize Amount"
+     totalAdhocAvailableAmount:
+      type: number
+      description: "Total Adhoc Available Amount"     
+     limitsAction:
+      type: string
+      description: "Limits Action"
+     limitsType:
+      type: string
+      description: "Limits Type"
+     externalLineId:
+      type: string
+      description: "External Line Id"
+     expiresOn:
+      type: string
+      format: date    
+      description: "Expires On"
+     effectiveFrom:
+      type: string
+      description: "Effective From"
+      format: date
+     overrideLimitException:
+      type: string
+      description: "Override Limit Exception"
+     subLevelApplicable:
+      type: string
+      description: "Sub Level Applicable"
+     expiredLimitExceptionHandling:
+      type: string
+      description: "Expired Limit Exception Handling"
+     breachLimitExceptionHandling:
+      type: string
+      description: "Breach Limit Exception Handling"
+     expiredAndBreachLimitExceptionHandling:
+      type: string
+      description: "Expired And Breach Limit Exception Handling"
+     errorCode:
+      type: string
+      description: "Error Code"
+     errorDesc:
+      type: string
+      description: "Error Description"
+     breachType:
+      type: string
+     processingOutcome:
+      type: string
+ ScfSystemParamModel:
+  description: "Scf System Param model"
+  type: "object"
+  properties:
+     id:
+      description: "Id of the Parameter"
+      type: "integer"
+      format: "int64"
+     key:
+      description: "Key for the parameter.This is a unique constraint"
+      type: "string"
+     value:
+      description: "Configured value which will be used in rest of application."
+      type: "string"
+ ScfSystemParamCollection:
+  description: "Collection of list of Parameters."
+  type: "object"
+  properties:
+     ScfSystemParamModel:
+      type: "array"
+      items:
+       $ref: "#/definitions/ScfSystemParamModel"

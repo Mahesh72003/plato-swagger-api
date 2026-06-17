@@ -1,0 +1,364 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : localholiday
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server localholidays server." 
+ version: "1.0.0"
+ title: "localholidays Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+tags:
+ - name: "localholidaysService"
+   description: "API for localholidays Operations"
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../localholidays
+
+ /service/localholidays:
+  post:
+   tags:
+    - "localholidaysService"
+   summary: "Adds a new localholidays."
+   description: "Adds a new localholidays. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header     
+      required: true
+      type: string
+    - name: "localholidays" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new localholidays" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmLocalHolidayMasterDto"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created localholidays" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmLocalHolidayMasterResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  
+ /service/localholidays/{branchCode}/{year}:
+  put:
+   tags:
+    - "localholidaysService"
+   summary: "Update an existing rule."
+   description:  "Update an existing localholidays."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "branchCode"
+      in: "path"
+      description: "branchCode of the localholidaycalendars Maintenance"
+      required: true
+      type: "string"
+    - name: "year"
+      in: "path"
+      description: "year of the localholidaycalendars Maintenance"
+      required: true
+      type: "number"  
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string"
+    - name: "localholidays"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing localholidays"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmLocalHolidayMasterDto"
+   responses:
+    200:
+     description: "Returns updated localholidays"
+     schema:
+      $ref: "#/definitions/CmcTmLocalHolidayMasterResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+ /service/localholidays/{branchCode}/{year}/close:
+  patch:
+   tags:
+    - "localholidaysService"
+   summary: "Close the localholidays by given ID."
+   description:  "Close the localholidays identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "branchCode"
+      in: "path"
+      description: "branchCode of the localholidaycalendars Maintenance"
+      required: true
+      type: "string"
+    - name: "year"
+      in: "path"
+      description: "year of the localholidaycalendars Maintenance"
+      required: true
+      type: "number"  
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string"
+    - name: "localholidays"
+      in: "body"
+      description: Request body contain localholidays and Modification no of localholidays maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/CloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CmcTmLocalHolidayMasterResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/localholidays/{branchCode}/{year}/reopen:
+  patch:
+   tags:
+    - "localholidaysService"
+   summary: "reopen the localholidays by given ID."
+   description:  "reopen the localholidays identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "branchCode"
+      in: "path"
+      description: "branchCode of the localholidaycalendars Maintenance"
+      required: true
+      type: "string"
+    - name: "year"
+      in: "path"
+      description: "year of the localholidaycalendars Maintenance"
+      required: true
+      type: "number"  
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string"
+    - name: "localholidays"
+      in: "body"
+      description: Request body contain localholidays and Modification no of localholidays maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/ReOpenDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CmcTmLocalHolidayMasterResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"                                                 
+definitions:
+ CmcTmLocalHolidayMasterDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     year:
+      type: number
+      minLength: 0
+      maxLength: 4
+     weeklyHolidays:
+      type: string
+      minLength: 0
+      maxLength: 7
+     unexpHol:
+      type: string
+      minLength: 0
+      maxLength: 1
+     CmcTmLocalHolidayDto:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmLocalHolidayDto'
+    required:
+     - branchCode
+     - year
+ CmcTmLocalHolidayDto:
+  type: object
+  properties:
+     id:
+      type: string
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     year:
+      type: number
+      minLength: 0
+      maxLength: 4
+     month:
+      type: number
+      minLength: 0
+      maxLength: 2
+     holidayList:
+      type: string
+      minLength: 0
+      maxLength: 31
+     localHolidayMasterId:
+      type: string
+  required:
+   - month
+ CloseDto:
+  type: object
+  properties:
+   modNo:
+    type: integer  
+   remarks:
+    type: string
+ ReOpenDto:
+  type: object
+  properties:
+   modNo:
+    type: integer  
+   remarks:
+    type: string
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+     $ref: "#/definitions/ResponseDto"
+ CmcTmLocalHolidayMasterResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/CmcTmLocalHolidayMasterDto"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string   
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type       

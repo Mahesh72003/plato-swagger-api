@@ -1,0 +1,98 @@
+swagger: "2.0"
+info:
+  description: "  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "ApplicationLedger Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ApplicationLedgerAPI"
+    description: ""
+    
+schemes:
+- "https"
+
+paths:
+  /createAppIdEntityIdAssociation:
+    post:
+      tags:
+        - "ApplicationLedgerAPI"
+      summary: "Create AppId Entity Id Association"
+      description: ""
+      operationId: "createAppEntityIdAssociatn"
+      parameters:
+        - name: "applicationLedger"
+          in: "body"
+          description: "Request Body that contains data required for creating a new record"
+          required: true
+          schema:
+            $ref: "#/definitions/ApplicationLedgerCollection"
+      responses:
+        201:
+          description: ""
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /appIdList:          
+    get:
+      tags:
+        - "ApplicationLedgerAPI"
+      summary: "Retrieves the list of appIds."
+      description:  "Retrieves the list of appIds. "
+      operationId: "getAppIdList"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/AppIdModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  ApplicationLedgerModel:
+    description: "ApplicationLedger model"
+    type: "object"
+    properties:
+      appId:
+        description: "App Id"
+        type: "string"
+      entities:
+        description: "Entities"
+        type: "array"
+        items:
+          type: "object"
+          properties:
+              entityId:
+                type: string
+              jndi:
+                type: string
+  ApplicationLedgerCollection:
+    description: "Collection of ApplicationLedger model."
+    type: "object"
+    properties:
+      appList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ApplicationLedgerModel"
+  AppIdModel:
+    type: "array"
+    items:
+      type: "string"

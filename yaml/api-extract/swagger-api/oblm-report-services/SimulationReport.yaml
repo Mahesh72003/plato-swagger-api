@@ -1,0 +1,427 @@
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Bibilu
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server Simulation server." 
+ version: "1.0.0"
+ title: "Simulation report Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "Simulation report"
+   description: "Simulation report for Sweep and Pool"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../interestpaidreport
+
+ /simulation/generateSweepReport:     
+  post:
+   tags:
+    - "sweepreport"
+   summary: "Generate sweep report."
+   description:  "To generate sweep benefit report along with log summary"
+   operationId: "generateSweepReport"
+   parameters:
+     - name: SweepReportInputDTO
+       in: "body"
+       description: "Request Body that contains data required for creating sweep simulation report" 
+       required: true
+       schema:
+         $ref: "#/definitions/LmrSimulationSweepReportDTO"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/SweepSimulateReportDTOCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /simulation/generatePoolReport:
+   post:
+     tags:
+       - "poolreport"
+     summary: "Generate pool report."
+     description:  "To generate pool benefit report along with log summary"
+     operationId: "generatePoolReport"
+     parameters:
+       - name: PoolReportInputDTO
+         in: "body"
+         description: "Request Body that contains data required for creating pool simulation report"
+         required: true
+         schema:
+           $ref: "#/definitions/LmrSimulationPoolReportDTO"
+     responses:
+       201:
+         description: "Returns message of success or failure"
+         headers:
+           Location:
+             description: ""
+             type: "string"
+         schema:
+           $ref: "#/definitions/PoolSimulateReportDTOCollection"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+definitions:
+
+ SweepSimulateReportInputDTO:
+  type: object
+  properties: 
+     fromAccountNo:
+      type: string
+      description: ""
+     toAccountNo:
+      type: string
+      description: ""
+     sweepAmount:
+      type: string
+      description: ""
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ SweepSimulateReportDTOCollection: 
+  description: "Collection of report output."
+  type: "object"
+  properties:
+   data:
+    $ref: "#/definitions/ReportResponse"
+   messages:
+    $ref: "#/definitions/ResponseDto"
+ PoolSimulateReportDTOCollection:
+   description: "Collection of report output."
+   type: "object"
+   properties:
+     data:
+       $ref: "#/definitions/ReportResponse"
+     messages:
+       $ref: "#/definitions/ResponseDto"
+ LmrSimulationSweepReportDTO:
+    type: object
+    properties:
+      benefitReportHeader:
+        type: object
+        $ref: '#/definitions/BenefitReportHeaderDTO'
+      benefitReportBody:
+        type: array
+        items:
+          $ref: '#/definitions/BenefitReportBodyDTO'
+      sweepLogReportHeader:
+        type: object
+        $ref: '#/definitions/SweepLogReportHeaderDTO'
+      sweepLogReportBody:
+        type: array
+        items:
+          $ref: '#/definitions/SweepLogReportBodyDTO'
+      benefitSummary:
+        type: object
+        $ref: '#/definitions/BenefitSummaryDTO'
+ BenefitReportHeaderDTO:
+    type: object
+    properties:
+      structureId:
+        type: string
+        description: ""
+      structureDesc:
+        type: string
+        description: ""
+      structureType:
+        type: string
+        description: ""
+      simulationId:
+        type: string
+        description: ""
+      fromDt:
+        type: string
+        description: ""
+      toDt:
+        type: string
+        description: ""
+      headerAccount:
+        type: string
+        description: ""
+      headerCcy:
+        type: string
+        description: ""
+      generatedOn:
+        type: string
+        description: ""
+      generatedBy:
+        type: string
+        description: ""
+ BenefitReportBodyDTO:
+    type: object
+    properties:
+      accountNo:
+        type: string
+        description: ""
+      accountDesc:
+        type: string
+        description: ""
+      ccy:
+        type: string
+        description: ""
+      headerCcy:
+        type: string
+        description: ""
+      branch:
+        type: string
+        description: ""
+      branchDesc:
+        type: string
+        description: ""
+      preSweepIntAccCcy:
+        type: number
+        description: ""
+      preSweepIntHeaderCcy:
+        type: number
+        description: ""
+      postSweepIntAccCcy:
+        type: number
+        description: ""
+      postSweepIntHeaderCcy:
+        type: number
+        description: ""
+ SweepLogReportHeaderDTO:
+    properties:
+      simulationId:
+        type: string
+        description: ""
+      simulationDesc:
+        type: string
+        description: ""
+      customerId:
+        type: string
+        description: ""
+      customerName:
+        type: string
+        description: ""
+      fromDate:
+        type: string
+        description: ""
+      toDate:
+        type: string
+        description: ""
+ SweepLogReportBodyDTO:
+    type: object
+    properties:
+      logId:
+        type: string
+        description: ""
+      prodDesc:
+        type: string
+        description: ""
+      valueDt:
+        type: string
+        description: ""
+      fromAccountNo:
+        type: string
+        description: ""
+      fromBranch:
+        type: string
+        description: ""
+      fromCcy:
+        type: string
+        description: ""
+      fromAccountBal:
+        type: number
+        description: ""
+      fromAcPostSweepAcBal:
+        type: number
+        description: ""
+      toAccountNo:
+        type: string
+        description: ""
+      toBranch:
+        type: string
+        description: ""
+      toCcy:
+        type: string
+        description: ""
+      toAccountBal:
+        type: number
+        description: ""
+      toAcPostSweepAcBal:
+        type: number
+        description: ""
+      sweepDirection:
+        type: string
+        description: ""
+ BenefitSummaryDTO:
+    type: object
+    properties:
+      totalPostSweepIntHdrCcy:
+        type: number
+        description: ""
+      totalPreSweepIntHdrCcy:
+        type: number
+        description: ""
+      simulationBenefit:
+        type: number
+        description: ""
+ LmrSimulationPoolReportDTO:
+   type: object
+   properties:
+     benefitReportHeader:
+       type: object
+       $ref: '#/definitions/PoolBenefitReportHeaderDTO'
+     benefitReportBody:
+       type: array
+       items:
+         $ref: '#/definitions/PoolBenefitReportBodyDTO'
+     benefitSummary:
+       type: object
+       $ref: '#/definitions/PoolBenefitSummaryDTO'
+ PoolBenefitReportHeaderDTO:
+   type: object
+   properties:
+     customerId:
+       type: string
+       description: ""
+     customerName:
+       type: string
+       description: ""
+     structureId:
+       type: string
+       description: ""
+     structureDesc:
+       type: string
+       description: ""
+     structureType:
+       type: string
+       description: ""
+     simulationId:
+       type: string
+       description: ""
+     fromDt:
+       type: string
+       description: ""
+     toDt:
+       type: string
+       description: ""
+     headerAccount:
+       type: string
+       description: ""
+     headerCcy:
+       type: string
+       description: ""
+     interestMethod:
+       type: string
+       description: ""
+     reallocationMethod:
+       type: string
+       description: ""
+     generatedOn:
+       type: string
+       description: ""
+     generatedBy:
+       type: string
+       description: ""
+ PoolBenefitReportBodyDTO:
+   type: object
+   properties:
+     accountNo:
+       type: string
+       description: ""
+     accountDesc:
+       type: string
+       description: ""
+     ccy:
+       type: string
+       description: ""
+     headerCcy:
+       type: string
+       description: ""
+     branch:
+       type: string
+       description: ""
+     branchDesc:
+       type: string
+       description: ""
+     prePoolIntAccCcy:
+       type: number
+       description: ""
+     prePoolIntHeaderCcy:
+       type: number
+       description: ""
+     postPoolIntAccCcy:
+       type: number
+       description: ""
+     postPoolIntHeaderCcy:
+       type: number
+       description: ""
+ PoolBenefitSummaryDTO:
+   type: object
+   properties:
+     totalPostPoolIntHdrCcy:
+       type: number
+       description: ""
+     totalPrePoolIntHdrCcy:
+       type: number
+       description: ""
+     simulationBenefit:
+       type: number
+       description: ""

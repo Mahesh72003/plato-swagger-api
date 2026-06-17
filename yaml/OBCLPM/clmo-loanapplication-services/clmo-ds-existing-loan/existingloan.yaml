@@ -1,0 +1,281 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : existingloan.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/existingloans:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExistingLoans
+      summary: Adds a new ExistingLoan.
+      description: Adds a new ExistingLoan. Add additional information here for this endpoint.
+      operationId: addExistingLoan
+      parameters:
+      - name: ExistingLoanDetails
+        in: body
+        description: Request Body that contains data required for creating a new ExistingLoan
+        required: true
+        schema:
+          $ref: '#/definitions/ExistingLoanModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created ExistingLoan
+          headers:
+            Location:
+              description: URL of newly created ExistingLoan
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExistingLoans
+      summary: Retrieves the list of existing ExistingLoan.
+      description: Retrieves the list of existing ExistingLoan. Add additional information here for the this endpoint.
+      operationId: getAllExistingLoans
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/existingloans/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExistingLoans
+      summary: Retrieves the ExistingLoan by id.
+      description: Retrieves the ExistingLoan by id. Add additional information here for the this endpoint.
+      operationId: getExistingLoanById
+      parameters:
+      - name: id
+        in: path
+        description: id of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the ExistingLoan based on given Id.
+          schema:
+            $ref: '#/definitions/ExistingLoanModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExistingLoans
+      summary: Update an existing ExistingLoan.
+      description: Update an existing ExistingLoan. Add additional information here for the this endpoint.
+      operationId: updateExistingLoan
+      parameters:
+      - name: id
+        in: path
+        description: id of the ExistingLoan that need to be updated
+        required: true
+        type: string
+      - name: ExistingLoanDetails
+        in: body
+        description: Request Body that contains data required for updating an existing ExistingLoan
+        required: true
+        schema:
+          $ref: '#/definitions/ExistingLoanModel'
+      responses:
+        200:
+          description: Returns updated ExistingLoan
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExistingLoans
+      summary: Deletes the ExistingLoan identified by given ID.
+      description: Deletes the ExistingLoan identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteExistingLoan
+      parameters:
+      - name: id
+        in: path
+        description: Id of the ExistingLoan that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  ExistingLoanModel:
+   description: ExistingLoan model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+      existingLoanDetails:
+        type: array
+        items:
+          $ref: '#/definitions/ExistingLoanDetailsModel'
+  ExistingLoanCollection:
+    description: Collection of existingLoan.
+    type: object
+    properties:
+      ExistingLoanList:
+        type: array
+        items:
+          $ref: '#/definitions/ExistingLoanModel'
+  ExistingLoanDetailsModel:
+    description: ExistingLoanDetails model
+    type: object
+    required:
+    - lenderName
+    - loanAmount
+    - tenorRemaining
+    - currentOutstanding
+    properties:
+      id:
+        description: Id of the ExistingLoanDetails
+        type: string
+        maxLength: 36
+      existingLoanId:
+        description: Id of the ExistingLoan
+        type: string
+        maxLength: 36
+      lenderName:
+        description: Lender name of the ExistingLoanDetails
+        type: string
+        maxLength: 35
+      loanPurpose:
+        description: Loan Purpose of the ExistingLoanDetails
+        type: string
+      loanAmount:
+        description: Loan Amount of the ExistingLoanDetails
+        type: integer
+        format: int64
+        minimum: 0
+      tenorRemaining:
+        description: Tenor Remaining of the ExistingLoanDetails
+        type: integer
+        format: int64
+        minimum: 0
+      currentOutstanding:
+        description: Current Outstanding of the ExistingLoanDetails
+        type: string
+        maxLength: 20
+      status:
+        description: Status of the ExistingLoanDetails
+        type: string
+      loanCurrencyCode:
+        description: Loan currency code
+        type: string
+        maxLength: 3
+      loanAccountNumber:
+        description: Loan Account Number
+        type: string
+        maxLength: 20
+  GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type

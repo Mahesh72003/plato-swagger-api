@@ -1,0 +1,752 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : transactionorchestrator.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Transaction Orchestrator Service
+host: 10.184.157.121:9000
+basePath: /transactionorchestrator-services
+tags:
+- name: TransactionOrchestrator
+  description: API for Loan application Stage submit and application submit
+schemes:
+- http
+paths:
+  /web/v1/transactionorchestrator/stage/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Based on the application Number, posts the aggregates available for the application number and performs a stage movement
+      description: Based on the application Number, posts the aggregates available for the application number and performs a stage movement. Add additional information here for this endpoint.
+      operationId: updateStage
+      parameters:
+      - name: remarksModel
+        in: body
+        description: Request Body that contains data required for creating a the remarks for stage movement
+        required: true
+        schema:
+          $ref: '#/definitions/RemarksModel'
+      - name: applicationNumber
+        in: path
+        description: Application Number
+        required: true
+        type: string
+      responses:
+        201:
+          description: Returns the Id of the stage movement
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/{applicationNumber}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the application data for the given appication number and process reference number.
+      description: Get the application data for the given appication number. Add additional information here for the this endpoint.
+      operationId: getApplicationData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNumber
+        in: path
+        description: processRefNumber for which application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns LoanApplication data for the application number
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/workdata/{applicationNumber}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the application work data for the given appication number and process reference number.
+      description: Get the application work data for the given appication number. Add additional information here for the this endpoint.
+      operationId: getApplicationWorkData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNumber
+        in: path
+        description: processRefNumber for which application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns LoanApplication work data for the application number
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/processdata/{applicationNumber}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the application data for the given appication number and process reference number.
+      description: Get the application data for the given appication number. Add additional information here for the this endpoint.
+      operationId: getApplicationDataProcessData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNumber
+        in: path
+        description: processRefNumber  for which application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns LoanApplication data for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error      
+  /web/v1/transactionorchestrator/businessproductsummary/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the BusinessProductSummary for the given processRefNumber 
+      description: Get the BusinessProductSummary for the given processRefNumber .
+      operationId: getBusinessProductCode
+      parameters:
+      - name: processRefNumber
+        in: path
+        description: processRefNumber  for which application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns BusinessProductSummary data for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/{applicationNumber}/stagesummary/{stageCode}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the Stage Summery Details
+      description: Get the Stage Summery Details
+      operationId: getStageSummary
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which the Stage Summary Details
+        required: true
+        type: string
+      - name: stageCode
+        in: path
+        description: Stage Code
+        required: true
+        type: string
+      - name: status
+        in: query
+        description: status
+        required: false
+        type: string
+      - name: processRefNumber
+        in: path
+        description: processRefNumber  for which the Stage Summary Details
+        required: true
+        type: string                   
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/processsummary/{applicationNumber}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the Process Summary Details
+      description: Get the Process Summary Details
+      operationId: getProcessSummary
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which the Process Summery Details
+        required: true
+        type: string
+      - name: processRefNumber
+        in: path
+        description: processRefNumber for which the Process Summery Details
+        required: true
+        type: string
+      - name: status
+        in: query
+        description: status
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/previewadvice/{applicationNumber}/{stageCode}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the Preview Advice Details
+      description: Get the Preview Advice Details
+      operationId: getPreviewAdvice
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Preview advice details for the application number for which the Advice Summary Details
+        required: true
+        type: string
+      - name: processRefNumber
+        in: path
+        description: Preview advice details for the processRefNumber  for which the Advice Summary Details
+        required: true
+        type: string   
+      - name: stageCode
+        in: path
+        description: stage Code
+        required: true
+        type: string
+      - name: adviceName
+        in: query
+        description: Advice Name
+        required: false
+        type: string
+      - name: previewAdvice
+        in: query
+        description: Preview Advice
+        required: false
+        type: string                  
+      responses:
+        200:
+          description: Returns Preview Advice details for the application number and advice name
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/cashflowsimulation:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the Cashflow Details for the given application number
+      description: Get the Cashflow Details for the given application number.
+      operationId: getCashflowDetails
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: Application number for which application data needs to be fetched
+        required: true
+        type: string
+      - name: processRefNumber
+        in: query
+        description: processRefNumber  for which application data needs to be fetched
+        required: false
+        type: string  
+      responses:
+        200:
+          description: Returns Cashflow Details for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/facilitydetails/{facilityContractRefNo}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the facilty Details
+      description: Get the facilty Details
+      operationId: getFacilityDetails
+      parameters:
+      - name: facilityContractRefNo
+        in: path
+        description: Facility Contract Ref number for which the facility Details
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/tranchedetails/{trancheContractRefNo}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the tranche Details
+      description: Get the tranche Details
+      operationId: getTrancheDetails
+      parameters:
+      - name: trancheContractRefNo
+        in: path
+        description: Tranche Contract Ref number for which the tranche Details
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/drawdowndetails/{drawdownreferencenumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the drawdown Details
+      description: Get the drawdown Details
+      operationId: getDrawdownDetails
+      parameters:
+      - name: drawdownreferencenumber
+        in: path
+        description: Drawdown Contract Ref number for which the drawdown Details
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/approvallevels/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the loan approval levels
+      description: Get the loan approval levels
+      operationId: getloanApprovalLimits
+      parameters:
+      - name: processRefNumber
+        in: path
+        description: Get the loan approval levels
+        required: true
+        type: string
+      - name: taskId
+        in: query
+        description: Get the loan approval levels
+        required: false
+        type: string      
+      responses:
+        200:
+          description: Returns Applicationtransaction flows data for the given query parameters
+          schema:
+            $ref: '#/definitions/ApprovalMatrixModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/transactionorchestrator/dynamicstage/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TransactionOrchestrator
+      summary: Get the dynamicstage
+      description: Get dynamicstage
+      operationId: getDynamicStageCode
+      parameters:
+      - name: processRefNumber
+        in: path
+        description: Get dynamicstage
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns dynamicstage flows data for the given query parameters
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+definitions:
+  RemarksModel:
+    description: Remarks model
+    type: object
+    properties:
+      id:
+        description: Id of the Remarks
+        type: string
+      processRefNumber:
+        description: Process Ref Number
+        type: string
+      applicationNumber:
+        description: Application Number
+        type: string 
+      dataSegmentCode:
+        description: Data segment code
+        type: string
+      remarks:
+        description: Remarks
+        type: string
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeader'
+  TransactionHeader:
+    description: Transaction Headers
+    type: object
+    properties:
+      processRefNo:
+        description: Process Ref No
+        type: string
+      currentUser:
+        description: Current User
+        type: string
+      taskPriority:
+        description: Task Priority
+        type: string
+      branchCode:
+        description: Branch Code
+        type: string
+      taskOutcome:
+        description: Branch
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      businessProcessCode:
+        description: businessProcessCode
+        type: string
+      stage:
+        description: Stage Code
+        type: string
+      key1:
+        type: string 
+      workflowId:
+        type: string 
+      taskId:
+        type: string  
+  CashflowDetailsModel:
+    description: Cashflow Details model
+    type: object
+    properties:
+      id:
+        description: Id of the Cashflow
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: Application Number of the Cashflow
+        type: string
+        maxLength: 20
+      processRefNumber:
+        description: processRefNumber of the Cashflow
+        type: string
+        maxLength: 20  
+      dataSegmentCode:
+        description: Data segment code
+        type: string
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string 
+      stageCode:
+        description: stageCode
+        type: string
+        maxLength: 36
+      createdBy:
+        description: createdBy
+        type: string
+        maxLength: 36
+      status:
+        description: status
+        type: string
+        maxLength: 36
+      cashflowSummary:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowSummaryModel'
+  CashflowDetailsCollection:
+    description: Collection of Cashflow.
+    type: object
+    properties:
+      CashflowList:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowDetailsModel'
+  CashflowSummaryModel:
+    description: Cashflow Summary model
+    type: object
+    properties:
+      id:
+        description: Id of the Cashflow
+        type: string
+        maxLength: 36
+      cashflowId:
+        description: Id of the Cashflow
+        type: string
+        maxLength: 36
+      totalAmountDue:
+        description: Total Amount Due  
+        type: number  
+      totalAmountPaid:
+        description: Total Amount Paid
+        type: number
+      totalAmountAdjusted:
+        description: Total Amount Adjusted
+        type: number      
+      currency:
+        description: Currency
+        type: string
+      dueDate:
+        description: Due Date
+        type: string
+      cashflowComponent:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowComponentModel'
+  CashflowSummaryCollection:
+    description: Collection of Cashflow Summary.
+    type: object
+    properties:
+      CashflowList:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowSummaryModel'
+  CashflowComponentModel:
+    description: Cashflow Details model
+    type: object
+    required:
+    - component
+    - currency
+    - amountPaid
+    properties:
+      id:
+        description: Id of the Cashflow Component
+        type: string
+        maxLength: 36
+      cashflowSummaryId:
+        description: cashflow Id of the Cashflow Component
+        type: string
+        maxLength: 36
+      component:
+        description: Cashflow Component Id of the Cashflow Component
+        type: string
+        maxLength: 36
+      currency:
+        description: Cashflow Currency Code of the Cashflow Component
+        type: string
+        maxLength: 3
+      amountPaid:
+        description: Amount paid of the Cashflow Component
+        type: number
+      amountDue:
+        description: Amount Due of the Cashflow Component
+        type: number
+      adjustedAmount:
+        description: Adjusted Amount of the Cashflow Component
+        type: number
+  ApprovalMatrixModel:
+    description: "ApprovalMatrixModel"
+    type: "object"  
+    properties:
+      isMultiLevelApproval:
+        description: "isMultiLevelApproval"
+        type: "string"
+      totalApprovals:
+        description: "totalApprovals"
+        type: "integer"
+      isAutoDecision:
+        description: "isAutoDecision"
+        type: "string"
+  CashflowComponentCollection:
+    description: Collection of CashflowSummary.
+    type: object
+    properties:
+      CashflowDetailsList:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowComponentModel'

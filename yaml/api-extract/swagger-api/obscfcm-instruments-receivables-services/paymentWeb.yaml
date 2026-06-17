@@ -1,0 +1,609 @@
+swagger: "2.0"
+info:
+  description: "This is a sample Payment server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Payment Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PaymentWeb"
+    description: "API for Payment Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/payment:
+    post:
+      tags:
+        - "PaymentWeb"
+      summary: "Create new Payment "
+      description: "Create new Payment "
+      operationId: "createPayment"
+      parameters:
+        - name: "payment"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Payment."
+          required: true
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/ScfPaymentDTO"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the the newly created payment."
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/ScfPaymentDTO"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/authorizePayment:
+    post:
+      tags:
+        - "PaymentWeb"
+      summary: "Authorize a Payment "
+      description: "Authorize a Payment by PaymentRefNo "
+      operationId: "authorizePayment"
+      parameters:
+        - name: "conductorWorkflowModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkflowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the authorized payment status."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/paymentAction:
+    post:
+      tags:
+        - "PaymentWeb"
+      summary: "Authorize a Payment "
+      description: "Authorize a Payment by PaymentRefNo "
+      operationId: "updatePaymentStatus"
+      parameters:
+        - name: "paymentModel"
+          in: "body"
+          description: "Request Body that contains paymentRefNo to authorize"
+          required: true
+          schema:
+            $ref: "#/definitions/PaymentCollectionDto"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the authorized payment status."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/paymentTwSearch:
+    get:
+      tags:
+        - "PaymentWeb"
+      summary: "Gets Payments."
+      description: "Get Payments. "
+      operationId: "getPaymentsTw"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true                                                
+      - name: "transactionRefNo"
+        in: "query"
+        required: true
+        type: "string"        
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/PaymentCollectionDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"         
+definitions:
+  PaymentCollectionDto:
+    description: "ScfPaymentDTO Collection"
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfPaymentDTO"
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  ScfPaymentDTO:
+    description: "Payment details for Payments Model"
+    type: object
+    properties:
+     autoReconcile:
+      type: string
+      description: "Auto Reconcile"
+     bankCode:
+      type: string
+      description: "Bank Code"
+     beneficiaryCode:
+      type: string
+      description: "Beneficiary Code"
+     beneficiaryId:
+      type: string
+      description: "Beneficiary Id"
+     counterpartyId:
+      type: string
+      description: "Counterparty Id"
+     counterpartyCode:
+      type: string
+      description: "Counterparty Code"
+     creditAccNo:
+      type: string
+      description: "Credit Account Number"
+     creditNoteRefNo:
+      type: string
+      description: "Credit Note Reference Number"
+     dcIndicator:
+      type: string
+      description: "Dc Indicator"
+     eftRefNo:
+      type: string
+      description: "Eft Reference Number"
+     entityRefNo:
+      type: string
+      description: "Entity Reference Number"
+     filler1:
+      type: string
+      description: "Filler 1"
+     filler2:
+      type: string
+      description: "Filler 2"
+     filler3:
+      type: string
+      description: "Filler 3"
+     filler4:
+      type: string
+      description: "Filler 4"
+     filler5:
+      type: string
+      description: "Filler 5"
+     filler6:
+      type: string
+      description: "Filler 6"
+     filler7:
+      type: string
+      description: "Filler 7"
+     filler8:
+      type: string
+      description: "Filler 8"
+     filler9:
+      type: string
+      description: "Filler 9"
+     filler10:
+      type: string
+      description: "Filler 10"
+     flag:
+      type: string
+      description: "Flag"
+     genericAppropriation:
+      type: string
+      description: "Generic Appropriation"
+     specificAppropriation:
+      type: string
+      description: "Specific Appropriation"
+     indicator:
+      type: string
+      description: "Indicator"
+     instrumentBank:
+      type: string
+      description: "Instrument Bank"
+     instrumentBranch:
+      type: string
+      description: "Instrument Branch"
+     instrumentDate:
+      type: string
+      description: "Instrument Date"
+     mandateRefNo:
+      type: string
+      description: "Mandate Reference Number"
+     paymentAmount:
+      type: number
+      description: "Payment Amount"
+     paymentCurrency:
+      type: string
+      description: "Payment Currency"
+     paymentDate:
+      type: string
+      description: "Payment Date"
+     paymentMode:
+      type: string
+      description: "Payment Mode"
+     paymentNumber:
+      type: string
+      description: "Payment Number"
+     partyPaymentCode:
+      type: string
+      description: "Party Payment Code"
+     paymentPartyId:
+      type: string
+      description: "Payment Party Id"
+     paymentProcessStatus:
+      type: string
+      description: "Payment Process status"
+     paymentRefNo:
+      type: string
+      description: "Payment Reference Number"
+     paymentStatus:
+      type: string
+      description: "Payment Status"
+     programCode:
+      type: string
+      description: "Program Code"
+     remarks:
+      type: string
+      description: "Remarks"
+     remitterAccNo:
+      type: string
+      description: "Remitter account number"     
+     fileName:
+      type: string
+      description: "File Name"      
+     reasonCode:
+      type: string
+      description: "Reason Code"   
+     matchedAmount:
+      type: number
+     unmatchedAmount:
+      type: number   
+     reconTxnStatus:
+      type: string
+     isAutoAuth:
+      type: string
+     virtualAcFlag:
+      type: string
+     paymentBusinessDate:
+      type: string
+     allocStatus:
+      type: string
+     allocatedAmt:
+      type: number            
+     unallocatedAmt:
+      type: number
+     accOwner:
+      type: string
+     paymentPartyName:
+      type: string 
+     seqNo:
+      type: integer
+      format: int64
+     isPUA:
+      type: string
+     isIndirectPayment:
+      type: string
+     sourceTxnId:
+      type: string
+      description: "Recon Txn Number"
+     financeReferenceNo:
+      type: string      
+  PagingDto:
+   type: object
+   properties:
+    totalResults:
+     type: integer
+  FinanceTransactionModel:
+    description: "Finance Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      financeRefNo:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      requestId:
+        type: "string"
+      branchCode:
+        type: "string"
+      productCode:
+        type: "string"
+      operationCode:
+        type: "string"
+      programCode:
+        type: "string"
+      programName:
+        type: "string"
+      buyerId:
+        type: "string"
+      buyerName:
+        type: "string"
+      buyerDivCode:
+        type: string
+      buyerDivName:
+        type: string
+      supplierId:
+        type: "string"
+      supplierName:
+        type: "string"
+      supplierDivCode:
+        type: string
+      supplierDivName:
+        type: string
+      debtor:
+        type: "string"
+      debtorName:
+        type: "string"
+      startDate:
+        type: "string"
+      tenor:
+        type: "integer"
+        format: "int64"
+      maturityDate:
+        type: "string"
+      totalInstrumentAmtCcy:
+        type: "string"
+      totalInstrumentAmt:
+        type: "number"
+      financePCT:
+        type: "number"
+      financeAmtCcy:
+        type: "string"
+      financeAmt:
+        type: "number"
+      exchangeRate:
+        type: "number"
+      processingDate:
+        type: "string"
+      settlementProcessingDate:
+        type: "string"
+      makerId:
+        type: "string"
+      makerDateStamp:
+        type: "string"
+      authId:
+        type: "string"
+      authDateStamp:
+        type: "string"
+      financeStatus:
+        type: "string"
+      clRefNo:
+        type: "string"
+      settlementRefNo:
+        type: "string"
+      settlementMethod:
+        type: "string"
+      totalSettlementAmt:
+        type: "number"
+      creditReceived:
+        type: "string"
+      creditAccount:
+        type: "string"
+      paymentParty:
+        type: "string"
+      accountType:
+        type: "string"
+      settlementAmtAllocated:
+        type: "number"
+      balanceAmtToBeAllocated:
+        type: "number"
+      settlementAmtAllocation:
+        type: "string"
+      manualAllocation:
+        type: "string"
+      pastDueDate:
+        type: "string"
+      valueDate:
+        type: "string"
+      principalOSAmount:
+        type: "number"
+      interestOSAmount:
+        type: "number"
+      totalOSAmount:
+        type: "number"
+      valueDtdIntOSAmt:
+        type: "number"
+      overdueIntOSAmt:
+        type: "number"
+      valueDtdOverdueIntOSAmt:
+        type: "number"
+      paymentAmt:
+        type: "number"
+      appropPaymentAmt:
+        type: "number"
+      appropriationSequence:
+        type: "string"
+      pmtToPrncplOS:
+        type: "number"
+      pmtToIntOS:
+        type: "number"
+      pmtToOverdueIntOS:
+        type: "number"
+      productDescription:
+        type: "string"
+      productCategory:
+        type: "string"
+      maxTenorAllowed:
+        type: "number"
+      minTenorAllowed:
+        type: "number"
+      minFinPCT:
+        type: "number"
+      maxFinPCT:
+        type: "number"
+      holidayTreatment:
+        type: "string"
+      productType:
+        type: "string"
+      preferredDisbursementMode:
+        type: "string"
+      settlementCcy:
+        type: "string"
+      totalOSAmountSettlementCcy:
+        type: "number"
+      refund:
+        type: "number"
+      settlementExchangeRate:
+        type: "number"
+      totalOSPostAllocation:
+        type: "number"
+      settleFinExcRate:
+        type: "number"
+      stageId:
+        type: "string"
+      errorCode:
+       type: "string"
+      errorDescription:
+       type: "string"
+      graceDays:
+        type: "number"
+      partRepaymentAllowed:
+        type: "string"
+      staleStatus:
+        type: "string"
+      minFinanciableAmt:
+        type: "number"
+      maxFinanciableAmt:
+        type: "number"
+      minReFinPCT:
+        type: "number"
+      maxReFinPCT:
+        type: "number"
+      withRecourse:
+        type: "string"
+      penaltyInterestOSAmt:
+        type: "number"
+      interestPaid:
+        type: "number"
+      principalPaid:
+        type: "number"
+      overdueIntPaid:
+        type: "number"
+      penaltyIntPaid:
+        type: "number"
+      marginRefNo:
+        type: "string"  
+      docRefNo:
+        type: "string"  
+  FinanceTransactionCollection:
+    description: "Collection of Finance Transaction Models."
+    type: "object"
+    properties:
+      FinanceTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/FinanceTransactionModel"  
+  ScfTmNonCustomerCodeCollection: 
+    description: "Collection of unique non-customer codes."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       type: "string"
+  ResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/FinanceTransactionModel"
+      errors:
+        type: "object"
+      paging:
+        type: "object"
+  ScfCoreCustomerCodeCollection: 
+    description: "Collection of Valid Core customer codes."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       type: "string"

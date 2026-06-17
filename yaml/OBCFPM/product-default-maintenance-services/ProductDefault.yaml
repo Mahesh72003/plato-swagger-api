@@ -1,0 +1,692 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : FacilityMaintenance
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server productdefault server." 
+ version: "1.0.0"
+ title: "productdefault Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "productdefault"
+   description: "This service for facility category maintenance."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../productdefault
+   
+ /productdefault/getByEntityTypeAndCategory:
+  get:
+   tags:
+    - "productdefault"
+   summary: "Retrieves all the primary productdefault."
+   description:  "Retrieves all the primary productdefault."
+   operationId: "getByEntityTypeAndCategory"
+   parameters:
+    - name: "entity"
+      in: "query"
+      description: "Category Code that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "entityType"
+      in: "query"
+      description: "Category Code that needs to be fetched"
+      required: false
+      type: "string"
+    - name: "entityCategory"
+      in: "query"
+      description: "Category Code that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the primary productdefault list."
+     schema:
+      $ref: "#/definitions/CfpmTmProductDefaultDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error" 
+
+ /productdefault:
+  post:
+   tags:
+    - "productdefault"
+   summary: "Adds a new productdefault."
+   description: "Adds a new productdefault. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "productdefault" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new productdefault" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmProductDefaultDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created productdefault" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "productdefault"
+   summary: "Get all valid productdefault."
+   description:  "Get all valid productdefault. This endpoints will be used to Get all valid productdefault maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: entity
+     in: query
+     description: entity is single record to be fetched
+     required: false
+     type: string
+   - name: entityType
+     in: query
+     description: entityType is single record to be fetched
+     required: false
+     type: string
+   - name: entityCategory
+     in: query
+     description: entityCategory is single record to be fetched
+     required: false
+     type: string
+ 
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmProductDefaultCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../productdefault/xxx
+#   DELETE    .../productdefault/xxx
+#   GET       .../productdefault/xxx
+#   GET       .../productdefault/xxx?version=latestrecord
+#   GET       .../productdefault/xxx?version=1
+
+ /productdefault/{id}:
+  put:
+   tags:
+    - "productdefault"
+   summary: "Update an existing productdefault."
+   description:  "Update an existing productdefault."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the productdefault Maintenance"
+      required: true
+      type: "string"
+    - name: "productdefault"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing productdefault"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmProductDefaultDTO"
+   responses:
+    200:
+     description: "Returns updated productdefault"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "productdefault"
+   summary: "Retrieves the productdefault by ID."
+   description:  "Retrieves the productdefault by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the productdefault based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmProductDefaultWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "productdefault"
+   summary: "Deletes the productdefault identified by given ID."
+   description:  "Deletes the productdefault identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the productdefault maintenance"
+      required: true
+      type: "string"
+    - name: "productdefault"
+      in: "body"
+      description: Request body contain productdefault and Modification no of productdefault maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../productdefault/xxx/approve
+
+ /productdefault/{id}/approve:
+  patch:
+   tags:
+    - "productdefault"
+   summary: "Authorize the productdefault by given ID."
+   description:  "Authorize the productdefault identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the productdefault maintenance"
+      required: true
+      type: "string"
+    - name: "productdefault"
+      in: "body"
+      description: Request body contain productdefault and Modification no of productdefault maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../productdefault/xxx/close
+ /productdefault/{id}/close:
+  patch:
+   tags:
+    - "productdefault"
+   summary: "Close the productdefault by given ID."
+   description:  "Close the productdefault identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the productdefault maintenance"
+      required: true
+      type: "string"
+    - name: "productdefault"
+      in: "body"
+      description: Request body contain productdefault and Modification no of productdefault maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../productdefault/xxx/reopen
+
+ /productdefault/{id}/reopen:
+  patch:
+   tags:
+    - "productdefault"
+   summary: "reopen the productdefault by given ID."
+   description:  "reopen the productdefault identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the productdefault maintenance"
+      required: true
+      type: "string"
+    - name: "productdefault"
+      in: "body"
+      description: Request body contain productdefault and Modification no of productdefault maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../productdefault/xxx/unauthorized
+
+ /productdefault/{id}/unauthorized:
+  get:
+   tags:
+    - "productdefault"
+   summary: "Retrives the productdefault by given ID."
+   description:  "Retrives the productdefault identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the productdefault based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmProductDefaultCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../productdefault/xxx/history
+
+ /productdefault/{id}/history:
+  get:
+   tags:
+    - "productdefault"
+   summary: "Retrives the productdefault by given ID."
+   description:  "Retrives the productdefault by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the productdefault based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmProductDefaultCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CfpmTmProductDefaultDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     entity:
+      type: string
+      description: ""
+     entityCategory:
+      type: string
+      description: ""
+     entityType:
+      type: string
+     checkerTimestamp:
+      type: string
+      format: date
+      description: ""
+     makerTimestamp:
+      type: string
+      format: date
+      description: ""
+     cfpmTmTermsCndDefault:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmTermsCndDefaultDto'
+     cfpmTmDocumentDefault:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmDocumentDefaultDto'
+     cfpmTmCovenantDefault:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmCovenantDefaultDto'
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmProductDefaultCollection: 
+  description: "Collection of productdefault."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmProductDefaultDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmProductDefaultWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmProductDefaultDTO"
+ CfpmTmCovenantDefaultDto:
+  type: object
+  properties:
+     parentId:
+      type: string
+      description: ""
+     covenantDescription:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     covenantCode:
+      type: string
+      description: ""
+     covenantClassificationType:
+      type: string
+      description: ""
+     covenantLinkageType:
+      type: string
+      description: ""
+     covenantFormula:
+      type: string
+      description: ""
+     covenantName:
+      type: string
+      description: ""
+     covenantTargetCondition:
+      type: string
+      description: ""
+     covenantTargetFromValue:
+      type: string
+      description: ""
+     covenantTargetToValue:
+      type: string
+      description: ""
+     covenantType:
+      type: string
+      description: ""
+     covenantTargetType:
+      type: string
+      description: ""
+     noticeDays:
+      type: number
+      description: "" 
+     trackingFrequency:
+      type: string
+      description: ""
+     trackingCustomDays:
+      type: number
+      description: "" 
+     deferredDays:
+      type: integer
+      description: ""
+     covenantSubType:
+      type: string
+      description: ""
+ CfpmTmTermsCndDefaultDto:
+  type: object
+  properties:
+     parentId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     conditionCode:
+      type: string
+      description: ""
+     conditionType:
+      type: string
+      description: ""
+     conditionClause:
+      type: string
+      description: ""
+     termsDescription:
+      type: string
+      description: ""
+ CfpmTmDocumentDefaultDto:
+  type: object
+  properties:
+     parentId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     documentCode:
+      type: string
+      description: ""
+     documentType:
+      type: string
+      description: ""
+     isMandatory:
+      type: boolean
+      description: ""

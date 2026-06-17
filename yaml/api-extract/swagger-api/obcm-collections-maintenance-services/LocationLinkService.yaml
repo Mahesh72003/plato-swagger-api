@@ -1,0 +1,629 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBCM
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This service is list of Inquiry APIs for Location master, Correspondent Bank and Outside Network Bank"
+ version: "1.0.0"
+ title: "Location Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "locationService"
+   description: "This service is list of Inquiry APIs for Location master, Correspondent Bank and Outside Network Bank"
+
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../location
+
+ /service/v1/location:
+  get:
+   tags:
+    - "locationService"
+   summary: "Get all valid location."
+   description:  "Get all valid location. This endpoints will be used to Get all valid location maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     description: "App ID"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: locationCode
+     required: false
+     type: string
+   - in: query
+     name: locationDescription
+     required: false
+     type: string
+   - in: query
+     name: locationClusterCode
+     required: false
+     type: string
+   - name: authStat
+     in: query
+     description: authStatus need to be set to fetch summary record
+     required: false
+     type: string
+   - name: recordStat
+     in: query
+     description: recordStatus need to be set to fetch summary record
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Response 201"
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmTmLocationLinkCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../location/xxx
+#   DELETE    .../location/xxx
+#   GET       .../location/xxx
+#   GET       .../location/xxx?version=latestrecord
+#   GET       .../location/xxx?version=1
+
+ /service/v1/location/{locationCode}:
+  get:
+   tags:
+    - "locationService"
+   summary: "Retrieves the location by locationCode."
+   description:  "Retrieves the location by locationCode."
+   operationId: "getByLocationCode"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: "locationCode"
+      in: "path"
+      description: "locationCode of the location that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "recordStat"
+      in: "query"
+      description: "recordStat of the location that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the location based on given id."
+     schema:
+      $ref: "#/definitions/CmTmLocationLinkWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/v1/location/corrbanks/{locationCode}:
+  get:
+   tags:
+    - "locationService"
+   summary: "Retrieves the location by locationCode."
+   description:  "Retrieves the location by locationCode."
+   operationId: "getCorrBanksByLocationCode"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: "locationCode"
+      in: "path"
+      description: "locationCode of the location that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the location based on given id."
+     schema:
+      $ref: "#/definitions/CmTmLocCorrBankCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/v1/location/osnwbanks/{locationCode}:
+  get:
+   tags:
+    - "locationService"
+   summary: "Retrieves the location by locationCode."
+   description:  "Retrieves the location by locationCode."
+   operationId: "getOsNwBanksByLocationCode"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: "locationCode"
+      in: "path"
+      description: "locationCode of the location that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the location based on given id."
+     schema:
+      $ref: "#/definitions/CmTmLocOsNwCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/v1/locationmaster/{locationCode}:
+  get:
+   tags:
+    - "locationService"
+   summary: "Retrieves the location by locationCode."
+   description:  "Retrieves the location by locationCode."
+   operationId: "getLoactionMasterByLocationCode"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: "locationCode"
+      in: "path"
+      description: "locationCode of the location that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the location based on given id."
+     schema:
+      $ref: "#/definitions/CmTmLocationMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+definitions:
+ CmTmLocationLinkDTO:
+  description : "CmTmLocationLink DTO"
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference Number"
+     calendarCode:
+      type: string
+      description: "Calendar Code"
+     clearingNetwork:
+      type: string
+      description: "Clearing Network"
+     highValueCutoffAmt:
+      type: number
+      description: "High Value Cutoff Amount"
+     highValueCutoffAmtCcy:
+      type: string
+      description: "High Value Cutoff Amount Currency"
+     locationClusterCode:
+      type: string
+      description: "Location Cluster Code"
+     locationClusterDescription:
+      type: string
+      description: "Location Cluster Description"
+     locationCode:
+      type: string
+      description: "Location Code"
+     locationDescription:
+      type: string
+      description: "Location Description"
+     CmTmLocCorrBankDTO:
+      type: array
+      description: "CmTmLocCorrBank DTO"
+      items:
+       $ref: '#/definitions/CmTmLocCorrBankDTO'
+     CmTmLocOsNwBankDTO:
+      type: array
+      description: "CmTmLocOsNwBank DTO"
+      items:
+       $ref: '#/definitions/CmTmLocOsNwBankDTO'
+     CmTmLocOwnBranchDTO:
+      type: array
+      description: "CmTmLocOwnBranch DTO"
+      items:
+       $ref: '#/definitions/CmTmLocOwnBranchDTO'             
+ CmTmLocCorrBankDTO:
+  description: "CmTmLocCorrBank DTO"
+  type: object
+  properties:
+     bankCode:
+      type: string
+      description: "Bank Code"
+     bankDescription:
+      type: string
+      description: "Bank Description"
+     branchCode:
+      type: string
+      description: "Branch Code"
+     branchDescription:
+      type: string
+      description: "Branch Description"
+     id:
+      type: string
+      description: "ID"
+     locationCode:
+      type: string
+      description: "Location Code"
+     locationMasterId:
+      type: string
+      description: "Location Master ID"
+     priority:
+      type: number
+      description: "Priority"
+ CmTmLocOsNwBankDTO:
+  description: "CmTmLocOsNwBank DTO"
+  type: object
+  properties:
+     bankCode:
+      type: string
+      description: "Bank Code"
+     bankDescription:
+      type: string
+      description: "Bank Description"
+     branchCode:
+      type: string
+      description: "Branch Code"
+     branchDescription:
+      type: string
+      description: "Branch Description"
+     id:
+      type: string
+      description: "ID"
+     locationCode:
+      type: string
+      description: "Location Code"
+     locationMasterId:
+      type: string
+      description: "Location Master ID"
+     priority:
+      type: number
+      description: "Priority"
+ CmTmLocOwnBranchDTO:
+  description: "CmTmLocOwnBranch DTO"
+  type: object
+  properties:
+     branchCode:
+      type: string
+      description: "Branch Code"
+     branchDescription:
+      type: string
+      description: "Branch Description"
+     priority:
+      type: number
+      description: "Priority"
+     id:
+      type: string
+      description: "ID"
+     locationCode:
+      type: string
+      description: "Location Code"
+     locationMasterId:
+      type: string
+      description: "Location Master ID"
+     
+            
+ CmTmLocOsNwCollection: 
+  description: "Collection of CmTmLocOsNwBank DTO."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmTmLocOsNwBankDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ ModListKeyDto:
+  description: "Module List Key DTO"
+  type: object
+  properties:
+   modNos:
+    type: array
+    description: "Mod Nos"
+    items:
+     type: integer
+     description: "Items"
+   remarks:
+    type: string
+    description: "Remarks"
+ KeyDto:
+  description: "Key Dto"
+  type: object
+  properties:
+   modNo:
+    type: integer
+    description: "Mod Number"
+   remarks:
+    type: string
+    description: "Remarks"
+ ResponseDto:
+  description: "Response DTO"
+  type: object
+  properties:
+   id:
+    type: string
+    description: "ID"
+   status:
+    type: string
+    description: "Status"
+   codes:
+    type: array
+    description: "Codes"
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+    description: "Request ID"
+ ResponseCode:
+  description: "Response Code"
+  type: object
+  properties:
+   Code:
+    type: string
+    description: "Code"
+   Desc:
+    type: string
+    description: "Description"
+   Type:
+    type: string
+    description: "Type"
+   Language:
+    type: string
+    description: "Language"
+   args:
+    type: array
+    description: "Args"
+    items:
+     type: object
+     description: "Items"
+   arg:
+    type: string
+    description: "Arg"
+ GenericDto:
+  description: "Generic DTO"
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmTmLocationLinkCollection: 
+  description: "Collection of Location Link."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmTmLocationLinkDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  description: "Paging DTO"
+  type: object
+  properties:
+   totalResults:
+    type: integer
+    description: "Total Results"
+ ResponseDtoWrapper:
+  description: "Response DTO Wrapper"
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+  description: "Response Resource Support"
+ CmTmLocationLinkWrapperDTO:
+  type: object
+  description: "CmTmLocation Link Wrapper DTO"
+  properties:
+   data:
+    $ref: "#/definitions/CmTmLocationLinkDTO"
+ CmTmLocationMasterCollection: 
+  description: "Collection of Location Master."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmTmLocationMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmTmLocationMasterDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     locationCode:
+      type: string
+      description: "Location Code"
+     locationDescription:
+      type: string
+      description: "Location Description"
+     countryCode:
+      type: string
+      description: "Country Code"
+     stateCode:
+      type: string
+      description: "State Code"
+     locationType:
+      type: string
+      description: "Location Type"
+ CmTmNetworkMasterCollection: 
+  description: "Collection of Network Master DTO"
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmTmNetworkMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmTmLocCorrBankCollection: 
+  description: "Collection of CmTmLocCorrBank DTO."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmTmLocCorrBankDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmTmNetworkMasterDTO:
+  description: "CmTmNetworkMaster DTO"
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     networkCode:
+      type: string
+      description: "Network Code"
+     networkDescription:
+      type: string
+      description: "Network Description"
+     

@@ -1,0 +1,644 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : party
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server partymaintenance server." 
+ version: "1.0.0"
+ title: "partymaintenance Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "partymaintenance"
+   description: "Party Maintenance Service.This  service would be used for maintaining party details for a loan application.This service would persist both internal as well as external customers                                                                "
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../partymaintenance
+
+ /partymaintenance:
+  post:
+   tags:
+    - "partymaintenance"
+   summary: "Adds a new partymaintenance."
+   description: "Adds a new partymaintenance. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "partymaintenance" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new partymaintenance" 
+      required: true
+      schema:
+       $ref: "#/definitions/Party"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created partymaintenance" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "partymaintenance"
+   summary: "Get all valid partymaintenance."
+   description:  "Get all valid partymaintenance. This endpoints will be used to Get all valid partymaintenance maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: partyNumber
+     in: query
+     description: partyNumber to filter
+     required: false
+     type: "string"
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ClmoTmPartyCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../partymaintenance/xxx
+#   DELETE    .../partymaintenance/xxx
+#   GET       .../partymaintenance/xxx
+#   GET       .../partymaintenance/xxx?version=latestrecord
+#   GET       .../partymaintenance/xxx?version=1
+
+ /partymaintenance/{id}:
+  put:
+   tags:
+    - "partymaintenance"
+   summary: "Update an existing partymaintenance."
+   description:  "Update an existing partymaintenance."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the partymaintenance Maintenance"
+      required: true
+      type: "string"
+    - name: "partymaintenance"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing partymaintenance"
+      required: true
+      schema:
+       $ref: "#/definitions/Party"
+   responses:
+    200:
+     description: "Returns updated partymaintenance"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "partymaintenance"
+   summary: "Retrieves the partymaintenance by ID."
+   description:  "Retrieves the partymaintenance by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the partymaintenance based on given id."
+     schema:
+      $ref: "#/definitions/ClmoTmPartyWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "partymaintenance"
+   summary: "Deletes the partymaintenance identified by given ID."
+   description:  "Deletes the partymaintenance identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the partymaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "partymaintenance"
+      in: "body"
+      description: Request body contain partymaintenance and Modification no of partymaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../partymaintenance/xxx/approve
+
+ /partymaintenance/{id}/approve:
+  patch:
+   tags:
+    - "partymaintenance"
+   summary: "Authorize the partymaintenance by given ID."
+   description:  "Authorize the partymaintenance identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the partymaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "partymaintenance"
+      in: "body"
+      description: Request body contain partymaintenance and Modification no of partymaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../partymaintenance/xxx/close
+ /partymaintenance/{id}/close:
+  patch:
+   tags:
+    - "partymaintenance"
+   summary: "Close the partymaintenance by given ID."
+   description:  "Close the partymaintenance identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the partymaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "partymaintenance"
+      in: "body"
+      description: Request body contain partymaintenance and Modification no of partymaintenance maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../partymaintenance/xxx/reopen
+
+ /partymaintenance/{id}/reopen:
+  patch:
+   tags:
+    - "partymaintenance"
+   summary: "reopen the partymaintenance by given ID."
+   description:  "reopen the partymaintenance identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the partymaintenance maintenance"
+      required: true
+      type: "string"
+    - name: "partymaintenance"
+      in: "body"
+      description: Request body contain partymaintenance and Modification no of partymaintenance maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../partymaintenance/xxx/unauthorized
+
+ /partymaintenance/{id}/unauthorized:
+  get:
+   tags:
+    - "partymaintenance"
+   summary: "Retrives the partymaintenance by given ID."
+   description:  "Retrives the partymaintenance identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the partymaintenance based on given id."
+     schema:
+       $ref: "#/definitions/ClmoTmPartyCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../partymaintenance/xxx/history
+
+ /partymaintenance/{id}/history:
+  get:
+   tags:
+    - "partymaintenance"
+   summary: "Retrives the partymaintenance by given ID."
+   description:  "Retrives the partymaintenance by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the partymaintenance based on given id."
+     schema:
+       $ref: "#/definitions/ClmoTmPartyCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ Party:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     countryOfIncorporation:
+      type: string
+      description: "Country Of Incorporation"
+     dateOfIncorporation:
+      type: string
+      description: "Date Of Incorporation"
+     demographicType:
+      type: string
+      description: "Demographic Type"
+     organizationType:
+      type: string
+      description: "Organization Type"
+     kycStatus:
+      type: string
+      description: "KYC Status"
+     holdingPattern:
+      type: string
+      description: "Holding Pattern"
+     partyName:
+      type: string
+      description: "Party Name"
+     partyNumber:
+      type: string
+      description: "Party Number"
+     partyType:
+      type: string
+      description: "Party Type"
+     placeOfIncorporation:
+      type: string
+      description: "Place Of Incorporation"
+     languageCode:
+      type: string
+      description: "Language Code"
+     reportLocale:
+      type: string
+      description: "Report Locale"
+     address:
+      $ref: '#/definitions/AddressDto'
+     partyContact:
+      type: array
+      items:
+       $ref: '#/definitions/ClmoTmPartyContactDTO'
+ ClmoTmPartyContactDTO:
+  type: object
+  properties:
+     salutation:
+      type: string
+      description: "Salutation"
+     firstName:
+      type: string
+      description: "First Name"
+     lastName:
+      type: string
+      description: "Last Name"
+     designation:
+      type: string
+      description: "Designation"
+     id:
+      type: string
+      description: "ID"
+     partyId:
+      type: string
+      description: "Party Id"
+     partyContactMedia:
+      type: array
+      items:
+       $ref: '#/definitions/ClmoTmPartyContactMediaDTO'
+ ClmoTmPartyContactMediaDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     mediaAddress:
+      type: string
+      description: "Media Address"
+     mediaType:
+      type: string
+      description: "Media Type"
+     partyContactId:
+      type: string
+      description: "Party Contact ID"
+     preferredFlag:
+      type: string
+      description: "Preferred Flag"
+     address:
+      $ref: '#/definitions/AddressDto'
+ AddressDto:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     parentId:
+      type: string
+      description: "Area"
+     addressType:
+      type: string
+      description: "Address Type"
+     area:
+      type: string
+      description: "Area"
+     building:
+      type: string
+      description: "Building"
+     street:
+      type: string
+      description: "Street"
+     landmark:
+      type: string
+      description: "Landmark"
+     locality:
+      type: string
+      description: "Locality"
+     city:
+      type: string
+      description: "City"
+     state:
+      type: string
+      description: "State"
+     country:
+      type: string
+      description: "Country"
+     zipcode:
+      type: string
+      description: "ZIP Code"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ClmoTmPartyCollection: 
+  description: "Collection of party."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/Party"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ClmoTmPartyWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/Party"

@@ -1,0 +1,1187 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server autoRecon server." 
+ version: "1.0.0"
+ title: "Auto Reconciliation Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "autoReconRuleDef"
+   description: "Using auto-recon-rule-def service, back office user will be able to configure reconcilation rules for reconcilation purpose and auto-recon-rule-def service, Back office user should be able to configure reconcilation rules on the basis program/party/default. Multiple rules can be assigned to the particular program or party with priority of their implementation."
+ - name: "AutoReconRuleDec"
+   description: "Using auto-recon-rule-dec service, back office user will be able to configure reconcilation rules for reconcilation purpose and auto-recon-rule-dec service, Back office user should be able to configure reconcilation rules on the basis program/party/default. Multiple rules can be assigned to the particular program or party with priority of their implementation."
+                                                                                                      
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../RuleDef
+
+ /web/v1/ruleDef:
+  post:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Adds a new autoReconRuleDef."
+   description: "Adds a new autoReconRuleDef. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "autoReconRuleDef" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new autoReconRuleDef" 
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmReconRuleDefMasterDTO"
+   responses:
+    201: 
+     description: "Successfully saves a new record" 
+     headers:
+      Location:
+       description: "URL of newly created autoReconRuleDef" 
+       type: "string"
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Get all valid autoReconRuleDef."
+   description:  "Get all valid autoReconRuleDef. This endpoints will be used to Get all valid autoReconRuleDef maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: reconCategory
+     required: false
+     type: string
+   - in: query
+     name: reconType
+     required: false
+     type: string
+   - in: query
+     name: ruleDescription
+     required: false
+     type: string
+   - in: query
+     name: ruleId
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Successfully received all valid auto reconcilation rule definitions"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmReconRuleDefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../ruleDef/xxx
+#   DELETE    .../ruleDef/xxx
+#   GET       .../ruleDef/xxx
+#   GET       .../ruleDef/xxx?version=latestrecord
+#   GET       .../ruleDef/xxx?version=1
+
+ /web/v1/ruleDef/{id}:
+  put:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Update an existing autoReconRuleDef."
+   description:  "Update an existing autoReconRuleDef."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "key of the autoReconRuleDef Maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDef"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing autoReconRuleDef"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmReconRuleDefMasterDTO"
+   responses:
+    200:
+     description: "Returns updated autoReconRuleDef"
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Retrieves the autoReconRuleDef by ID."
+   description:  "Retrieves the autoReconRuleDef by ID."
+   operationId: "getById"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the autoReconRuleDef based on given id."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmReconRuleDefMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /web/v1/ruleDef/{id}/delete:   
+  patch:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Deletes the autoReconRuleDef identified by given ID."
+   description:  "Deletes the autoReconRuleDef identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDef maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDef"
+      in: "body"
+      description: Request body contain autoReconRuleDef and Modification no of autoReconRuleDef maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ruleDef/xxx/approve
+
+ /web/v1/ruleDef/{id}/approve:
+  patch:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Authorize the autoReconRuleDef by given ID."
+   description:  "Authorize the autoReconRuleDef identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDef maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDef"
+      in: "body"
+      description: Request body contain autoReconRuleDef and Modification no of autoReconRuleDef maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ruleDef/xxx/close
+ /web/v1/ruleDef/{id}/close:
+  patch:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Close the autoReconRuleDef by given ID."
+   description:  "Close the autoReconRuleDef identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDef maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDef"
+      in: "body"
+      description: Request body contain autoReconRuleDef and Modification no of autoReconRuleDef maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /web/v1/ruleDef/{id}/actions:
+  get:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Retrieves the autoReconRuleDef actions by ID."
+   description:  "Retrieves the autoReconRuleDef actions by ID."
+   operationId: "getAvailableUserActions"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the autoReconRuleDef actions based on given id."
+     schema:
+      type: string
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"      
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ruleDef/xxx/reopen
+
+ /web/v1/ruleDef/{id}/reopen:
+  patch:
+   tags:
+    - "autoReconRuleDef"
+   summary: "reopen the autoReconRuleDef by given ID."
+   description:  "reopen the autoReconRuleDef identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDef maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDef"
+      in: "body"
+      description: Request body contain autoReconRuleDef and Modification no of autoReconRuleDef maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../ruleDef/xxx/unauthorized
+
+ /web/v1/ruleDef/{id}/unauthorized:
+  get:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Retrives the autoReconRuleDef by given ID."
+   description:  "Retrives the autoReconRuleDef identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the auto reconcilation rule definition based on given id."
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmReconRuleDefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../ruleDef/xxx/history
+
+ /web/v1/ruleDef/{id}/history:
+  get:
+   tags:
+    - "autoReconRuleDef"
+   summary: "Retrives the autoReconRuleDef by given ID."
+   description:  "Retrives the autoReconRuleDef by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the auto reconcilation rule definition based on given id."
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmReconRuleDefMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../ruleDec
+     
+ /web/v1/ruleDec:
+  post:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Adds a new AutoReconRuleDec."
+   description: "Adds a new AutoReconRuleDec. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "autoReconRuleDec" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new autoReconRuleDec" 
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmRecRuleDecMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created autoReconRuleDec" 
+       type: "string"
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Get all valid AutoReconRuleDec."
+   description:  "Get all valid autoReconRuleDec. This endpoints will be used to Get all valid autoReconRuleDec maintenance records."
+   operationId: "getAll"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - in: query
+      name: authStat
+      required: false
+      type: string
+    - in: query
+      name: filterAttr1
+      required: false
+      type: string
+    - in: query
+      name: filterAttr2
+      required: false
+      type: string
+    - in: query
+      name: filterAttr3
+      required: false
+      type: string
+    - in: query
+      name: filterAttr4
+      required: false
+      type: string
+    - in: query
+      name: recordStat
+      required: false
+      type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmRecRuleDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../ruleDec/xxx
+#   DELETE    .../ruleDec/xxx
+#   GET       .../ruleDec/xxx
+#   GET       .../ruleDec/xxx?version=latestrecord
+#   GET       .../ruleDec/xxx?version=1
+
+ /web/v1/ruleDec/{id}:
+  put:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Update an existing AutoReconRuleDec."
+   description:  "Update an existing autoReconRuleDec."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "key of the autoReconRuleDec Maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDec"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing autoReconRuleDec"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmRecRuleDecMasterDTO"
+   responses:
+    200:
+     description: "Returns updated autoReconRuleDec"
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Retrieves the autoReconRuleDec by ID."
+   description:  "Retrieves the autoReconRuleDec by ID."
+   operationId: "getById"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the autoReconRuleDec based on given id."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmRecRuleDecMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /web/v1/ruleDec/{id}/delete:   
+  patch:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Deletes the autoReconRuleDec identified by given ID."
+   description:  "Deletes the autoReconRuleDec identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDec maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDec"
+      in: "body"
+      description: Request body contain autoReconRuleDec and Modification no of autoReconRuleDec maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successfully deleted the auto reconcilation rule Decision identified by given ID."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ruleDec/xxx/approve
+ /web/v1/ruleDec/{id}/approve:
+  patch:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Authorize the autoReconRuleDec by given ID."
+   description:  "Authorize the autoReconRuleDec identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDec maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDec"
+      in: "body"
+      description: Request body contain autoReconRuleDec and Modification no of autoReconRuleDec maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ruleDec/xxx/close
+ /web/v1/ruleDec/{id}/close:
+  patch:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Close the autoReconRuleDec by given ID."
+   description:  "Close the autoReconRuleDec identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDec maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDec"
+      in: "body"
+      description: Request body contain autoReconRuleDec and Modification no of autoReconRuleDec maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /web/v1/ruleDec/{id}/actions:
+  get:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Retrieves the autoReconRuleDec actions by ID."
+   description:  "Retrieves the autoReconRuleDec actions by ID."
+   operationId: "getAvailableUserActions"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successfuly receives the available user actions"
+     schema:
+      type: string
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"      
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ruleDec/xxx/reopen
+
+ /web/v1/ruleDec/{id}/reopen:
+  patch:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "reopen the autoReconRuleDec by given ID."
+   description:  "reopen the autoReconRuleDec identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the autoReconRuleDec maintenance"
+      required: true
+      type: "string"
+    - name: "autoReconRuleDec"
+      in: "body"
+      description: Request body contain autoReconRuleDec and Modification no of autoReconRuleDec maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successfully reopened the auto reopen the auto reconcilation rule decision identified by given ID."
+     schema:
+      $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../ruleDec/xxx/unauthorized
+
+ /web/v1/ruleDec/{id}/unauthorized:
+  get:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Retrives the autoReconRuleDec by given ID."
+   description:  "Retrives the autoReconRuleDec identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful authorization"
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmRecRuleDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../ruleDec/xxx/history
+
+ /web/v1/ruleDec/{id}/history:
+  get:
+   tags:
+    - "AutoReconRuleDec"
+   summary: "Retrives the autoReconRuleDec by given ID."
+   description:  "Retrives the autoReconRuleDec by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the auto reconcilation rule decision based on given id."
+     schema:
+       $ref: "./AutoReconWebDef.yaml#/definitions/ScfTmRecRuleDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"

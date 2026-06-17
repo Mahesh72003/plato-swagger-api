@@ -1,0 +1,792 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Liability server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "credit writeup Service"
+host: "whf00anh:7712"
+basePath: "/cam/Liability-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CreditWriteupAPI"
+    description: "API for Liability's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/writeup/comment:
+    post:
+      tags:
+        - "WriteupComment"
+      summary: "Adds a new comment."
+      description: "Adds a new comment."
+      operationId: "createWriteupComment"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "partyId"
+          in: "query"
+          description: "partyId"
+          required: false
+          type: "string"
+        - name: "writeupMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new comment"
+          required: true
+          schema:
+            $ref: "#/definitions/WriteupCollection"
+      responses:
+        201:
+          description: "Successfully created a new comment"
+          headers:
+            Location:
+              description: "URL of newly created comment"
+              type: "string"
+          schema:
+              $ref: "#/definitions/WriteupResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/writeup/comment/{entityType}/{entityId}/{applicationNumber}:
+    get:
+      tags:
+        - "WriteupComment"
+      summary: "Adds a new comment."
+      description: "Adds a new comment."
+      operationId: "getLatestWriteUpCategoryForAppNumAndEntity"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "entityType"
+          in: "path"
+          type: "string"
+          required: true                    
+        - name: "entityId"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "applicationNumber"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "writeupCategory"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "string"          
+      responses:
+        201:
+          description: "Successfully created a new comment"
+          schema:
+            $ref: "#/definitions/WriteupResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/writeup/comment/getcombined/{entityRefType}/{entityRefNo}:
+    get:
+      tags:
+        - "WriteupComment"
+      summary: "Fetches the combined write ups."
+      description: "Adds a new comment."
+      operationId: "getCombinedWriteUp"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          required: false
+          description: "application number"
+          type: "string" 
+        - name: "entityRefType"
+          in: "path"
+          type: "string"
+          required: true                    
+        - name: "entityRefNo"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+      responses:
+        201:
+          description: "Successfully retrieved writeup for the given entities"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"           
+  /web/v1/writeup/comment/history/{entityType}/{entityId}/{applicationNumber}/{writeupCategory}:
+    get:
+      tags:
+        - "WriteupComment"
+      summary: "Adds a new comment."
+      description: "Adds a new comment."
+      operationId: "getHistoryForaWriteupCategory"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "entityType"
+          in: "path"
+          type: "string"
+          required: true                    
+        - name: "entityId"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "applicationNumber"
+          in: "path"
+          type: "string"
+          required: true 
+        - name: "writeupCategory"
+          in: "path"
+          type: "string"
+          required: true                      
+      responses:
+        201:
+          description: "Successfully created a new comment"
+          schema:
+            $ref: "#/definitions/WriteupCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+  /web/v1/writeup/comment/submit/{applicationNumber}:
+    post:
+      tags:
+        - "WriteupComment"
+      summary: "Adds a new comment."
+      description: "Adds a new comment."
+      operationId: "submitWriteupComments"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "path"
+          type: "string"
+          required: true          
+      responses:
+        201:
+          description: "Successfully created a new comment"
+          schema:
+            $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+  /web/v1/writeup/comment/{id}:
+    put:
+      tags:
+        - "WriteupComment"
+      summary: "Adds a new comment."
+      description: "Adds a new comment."
+      operationId: "updateWriteupComment"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "id"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "partyId"
+          in: "query"
+          description: "partyId"
+          required: false
+          type: "string"          
+        - name: "writeupModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new comment"
+          required: true
+          schema:
+            $ref: "#/definitions/WriteupModel"
+      responses:
+        201:
+          description: "Successfully created a new comment"
+          headers:
+            Location:
+              description: "URL of newly created comment"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /web/v1/writeup/delete/byId/{id}:
+    delete:
+      tags:
+        - "WriteupComment"
+      summary: "Deletes the Write up identified by given Id."
+      description:  "Deletes the Write up identified by given Id"
+      operationId: "deleteWriteupById"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the write up that need to be updated"
+          required: true
+          type: "string"
+        - name: "partyId"
+          in: "query"
+          description: "partyId"
+          required: false
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the Response Model with status."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"    
+  /web/v1/migrateToReportsAndHistory/{applicationNumber}/{entityRefType}:
+    post:
+      tags:
+        - "WriteupComment"
+      summary: "Moves the writeups belongs to the given application number to the report and history tables"
+      description: "Moves the writeups belongs to the given application number to the report and history tables"
+      operationId: "migrateToReportsAndHistory"
+      parameters:
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "entityRefId"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "entityRefType"
+          in: "path"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Response Model with the list of migrated write p details for the given application number"
+          headers:
+            Location:
+              description: "URL of newly created Facility Details"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  WriteupModel:
+    description: "Comment model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Comment"
+        type: "string"
+      applicationNO:
+        description: "Application Number of the Comment"
+        type: "string"
+      entityRefType:
+        description: "Entity Ref Type of the Comment"
+        type: "string" 
+      entityRefNo:
+        description: "Entity Ref No of the Comment"
+        type: "string" 
+      type:
+        description: "Describes the record as a Comment or Writeup"
+        type: "string"
+      writeupCategory:
+        description: "Category of the Writeup"
+        type: "string"    
+      parentId:
+        description: "Parent Id of the Comment"
+        type: "string"
+      recordStat:
+        description: "Record Status of the Comment"
+        type: "string"  
+      stage:
+        description: "Satge of the Comment"
+        type: "string"
+      sourceType:
+        description: "Source Type of the Comment"
+        type: "string"
+      subject:
+        description: "Subject of the Comment"
+        type: "string"
+      isInternalToBank:
+        description: "Is Internal To Bank of the Comment"
+        type: "boolean"
+      email:
+        description: "Email of the Comment"
+        type: "string"        
+      initiatorEmail:
+        description: "Email Initiator of the Comment"
+        type: "string"
+      textObject:
+        description: "Body of the Comment"
+        type: "string"
+      versionNo:
+        description: "Version Number of the Comment"
+        type: "integer"
+        format: "int64"    
+      initiatorName:
+        description: "Initiator Name of the Comment"
+        type: "string"
+      createdDate:
+        description: "Date of Creation"
+        type: "string"
+        format: "date-time"
+      requestType:
+        description: "Request type"
+        type: "string"
+      filter1:
+        description: "filter 1"
+        type: "string"
+      filter2:
+        description: "filter 2"
+        type: "string"
+      filter3:
+        description: "filter 3"
+        type: "string"
+      filter4:
+        description: "filter 4"
+        type: "string"
+      filter5:
+        description: "filter 5"
+        type: "string"
+ 
+  WriteupCollection:
+    description: "Collection of Comments."
+    type: "object"
+    properties:
+      commentList:
+        type: "array"
+        items:
+          $ref: "#/definitions/WriteupModel"
+  PagingModel:
+    type: "object"
+    properties:
+      totalResults:
+        type: "integer"
+        format: "int64"
+  ErrorHandlerModel:
+    type: "object"
+    properties:
+      errorCode:
+        type: "string"
+      language:
+        type: "string"
+      message:
+        type: "string"
+      type:
+        type: "string"
+  WriteupResponseModel:
+    description: "Response model"
+    type: "object"
+    properties:
+      data:
+        type: "object"
+      paging:
+        $ref: "#/definitions/PagingModel"
+      errors:
+        type: "object"
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      isFromCAM:
+        type: "boolean"
+      externalCheckReq:
+        type: "boolean"
+      fieldInvestigationReq:
+        type: "boolean"
+      externalValuationReq:
+        type: "boolean"
+      internalValuationReq:
+        type: "boolean"
+      legalOpinionReq:
+        type: "boolean"
+      riskEvaluationReq:
+        type: "boolean"
+      externalCheckAgencySelected:
+        type: "boolean"
+      externalValAgencySelected:
+        type: "boolean"
+      legalFirmSelected:
+        type: "boolean"
+      isCollatCreateSelected:
+        type: "boolean"
+      collateralValue:
+        type: "number"
+      oldCollateralValue:
+        type: "number"
+      isFromCollateralEvaluation:
+        type: "boolean"
+      isFromCollateralReview:
+        type: "boolean"
+      isSubmissionAndAwaitingReq:
+        type: "boolean"
+      serviceName:
+        type: "string"
+      ownerEstimatedValue:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      customerId:
+        type: "string"
+      collateralType:
+        type: "string"
+      collateralCode:
+        type: "string"
+      collateralCurrency:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      submitFlag:
+        type: "boolean"
+      source:
+        type: "string"
+      isKYCRequired:
+        type: "boolean"
+      isCreditRatingRequired:
+        type: "boolean"
+      stageUpdateFlag:
+        type: "boolean"
+      collateralSubmissionReq:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      documentSafeKeepingReq:
+        type: "boolean"
+      updateCategory:
+        type: "string"
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"                    

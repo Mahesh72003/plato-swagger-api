@@ -1,0 +1,741 @@
+swagger: "2.0"
+info:
+ description: "Provides object definitions for charge rule service" 
+ version: "1.0.0"
+ title: "Charge Pricing Rule Service Definitions"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/cmc-charges-calculation-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargeService"
+   description: "Charge Service Definitions"
+
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+
+definitions: 
+  SlabDetails:
+    type: object
+    properties:
+      fromSlab:
+        type: number
+        description: "From Slab"
+      toSlab:
+        type: number
+        description: "To Slab"
+      amount:
+        description: "Amount needs to be provided when price category is Tier Based Amount or Tier Based Mixed"
+        type: number
+      percentage:
+        description: "Amount needs to be provided when price category is Tier Based Percent or Tier Based Mixed"
+        type: number
+      unit:
+        description: "unit specifies the charge amount to be levied per unit"
+        type: number
+      isSlidingScale:
+        description: "Sliding scale flag"
+        type: string
+      upperDiscThreshold:
+        description: "Upper threshold for discount"
+        type: number
+      lowerDiscThreshold:
+        description: "Lower threshold for discount"
+        type: number
+        
+  ChargeCalculationDto:
+    type: object
+    properties:
+      priceMethod:
+        type: string
+        description: "Price Method"
+      chargeInTxnCcy:
+        type: string
+        description: "Charge In Transaction Currency"
+      priceCcy:
+        type: string
+        description: "Price Currency"
+      txnCcy:
+        type: string
+        description: "Transaction Currency"
+      chargeCcy:
+        type: string
+        description: "Charge Currency"
+      flatCharge:
+        type: string
+        description: "Flat Charge"
+      tenor:
+        type: number
+        description: "Tenor"
+      slidingScaleTenor:
+        type: number
+        description: "Sliding Scale Tenor"
+      annumBasis:
+        type: number
+        description: "Annum Basis"
+      chargeCriteriaValue:
+        type: number
+        description: "Charge Criteria Value"
+      fixedAmt:
+        type: number
+        description: "Fixed Amount"
+      fixedPct:
+        type: number
+        description: "Fixed Percent"
+      isSlidingScale:
+        type: string
+        description: "Is Sliding Scale Applicable"
+      minMaxCriteria:
+        type: string
+        description: "Minimum Maximum Criteria"
+      minChgAmt:
+        type: number
+        description: "Minimum Charge Amount"
+      minChgPct:
+        type: number
+        description: "Minimum Charge Pct"
+      maxChgAmt:
+        type: number
+        description: "Maximum Charge Amount"
+      maxChgPct:
+        type: number
+        description: "Maximum Charge Pct"
+      exchangeRate:
+        type: number
+        description: "Exchange Rate"
+      parentChargeCode:
+        type: string
+        description: "Parent Charge Code"
+      rateCode:
+        type: string
+        description: "Rate Code"
+      rateType:
+        type: string
+        description: "Rate Type"
+      partyId:
+        type: string
+        description: "Party Id"
+      slabDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/SlabDetails"
+  
+  ChargeCalculationDetails:
+    type: object
+    properties:
+      partyId:
+        description: "Party Id which needs to be charged"
+        type: string
+      chargeCode:
+        description: "Charge Code"
+        type: string
+      chargeCodeDesc:
+        description: "Charge Code Description"
+        type: string
+      parentChargeCode:
+        description: "Parent Charge Code"
+        type: string
+      chargeGroup:
+        description: "Charge Group"
+        type: string
+      chargeCategory:
+        description: "Charge Category"
+        type: string
+      chargeType:
+        description: "Charge Type"
+        type: string
+      chargeSharing:
+        description: "Flag to indicate if charge sharing is available"
+        type: string
+      partyToCharge:
+        description: "Party which needs to be charged"
+        type: string
+      chargeSharingPct:
+        description: "Percentage of charge which will be charged to the given party"
+        type: number
+      chargeCriteria:
+        description: "Amount/Count on which charge needs to be calculated. e.g. FINANCE_AMOUNT, INVOICE_COUNT"
+        type: string
+      chargeCriteriaValue:
+        description: "Amount/Count Value on which charge needs to be calculated"
+        type: number
+      tenor:
+        description: "Period for which charge will be calculated"
+        type: number
+      slidingScaleTenor:
+        description: "Period for sliding scale"
+        type: number
+      txnCcy:
+        description: "Transaction currency. It should be sent when chargeInTxnCcy is Y"
+        type: string
+      priceRuleId:
+        description: "Pricing Rule Id"
+        type: string
+      exchangeRate:
+        description: "Exchange Rate"
+        type: number
+      externalPricingApplicable:
+        type: string
+        description: "External Pricing Applicable"
+      externalPricingSystem:
+        type: string
+        description: "External Pricing System"
+      isChargeCalculated:
+        type: string
+        description: "Is Charge Calculated"
+      charge:
+        type: number
+        description: "Charge"
+          
+  TransactionDetailsResponseDto:
+    type: object
+    properties:
+      txnRefNo:
+        type: "string"
+        description: "Transaction Reference Number"
+      chargeDetails:
+        description: "Collection of calculated charges"
+        type: "array"
+        items:
+          $ref: "#/definitions/ChargesDetails"
+      txnAttributes:
+        type: "array"
+        description: "Transaction Attributes"
+        items:
+          $ref: "#/definitions/TransactionAttribute"
+          
+  TransactionDetailsRequestDto:
+    type: object
+    properties:
+      txnRefNo:
+        type: "string"
+      priceMethods:
+        description: "Details of each charge to be calculated"
+        type: "array"
+        items:
+          $ref: "#/definitions/ChargeCalculationDetails"
+      txnAttributes:
+        type: "array"
+        description: "Transaction Attributes"
+        items:
+          $ref: "#/definitions/TransactionAttribute"
+          
+  TransactionAttribute:
+    type: object
+    properties:
+      attrName:
+        type: "string"
+        description: "Attribute Name"
+      attrValue:
+        type: "string"
+        description: "Attribute Value"
+        
+  ChargeCalculationRequestDto:
+    type: object
+    properties:
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      txnDetails:
+        type: "array"
+        description: "Transaction Details"
+        items:
+          $ref: "#/definitions/TransactionDetailsRequestDto"
+      
+          
+  ScfTransOutputResponse:
+    description: "Output response from transaction API"
+    type: "object"
+    properties:
+      queryList:
+        type: "array"
+        description: "List Of Queries"
+        items:
+          $ref: "#/definitions/ScfFilterQueryModel"
+          
+  ScfFilterQueryModel:
+    description: "Query and attribute list model"
+    type: "object"
+    properties:
+      query:
+        description: "Filter Query"
+        type: "string"
+      ScfTransCriteriaQueryAttributeModel:
+        type: "array"
+        description: "Query Attributes Collection"
+        items:
+          $ref: "#/definitions/ScfTransCriteriaQueryAttributeModel"
+          
+  ScfAttribute:
+    description: "Represents each attribute of the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeName:
+        description: "Name of the attribute representing DB column name"
+        type: "string"
+      attributeValue:
+        description: "Value of the corresponding column in DB"
+        type: "string"
+        
+  ScfFilterRecords:
+    description: "Represents the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        description: "Attribute List"
+        items:
+          $ref: "#/definitions/ScfAttribute"
+          
+  ScfFilterInput:
+    description: "Represents the input request of the final filter service call from transaction services"
+    type: "object"
+    properties:
+      category:
+        description: "Represents the category of the filter"
+        type: "string"
+      applicationCode:
+        description: "Represents the applicationCode of the filter"
+        type: "string"
+      filterRecords:
+        type: "array"
+        description: "Records To Be Filtered"
+        items:
+          $ref: "#/definitions/ScfFilterRecords"
+          
+  ScfFilterOutput:
+    description: "Represents the best possible combination for the given category"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        description: "Filtered Record Attribute List"
+        items:
+          $ref: "#/definitions/ScfAttribute"
+          
+  ScfTransCriteriaQueryAttributeModel:
+    description: "Query for each type of given category"
+    type: "object"
+    properties:
+      paramIndex:
+        description: "input parameter index in the query"
+        type: "integer"
+      paramName:
+        description: "input parameter name in the query"
+        type: "string"
+      columnName:
+        description: "corresponding column of the input parameter index in the query"
+        type: "string"
+      mappedParam:
+        type: "string"
+        description: "Mapped Param"
+              
+  ChargesResponseDto:
+    type: object
+    properties:
+      applicationCode:
+        type: string
+        description: "Application Code"
+      txnDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/TransactionDetailsResponseDto"
+          
+  ChargesDetails:
+    type: object
+    properties:
+      externalCharge:
+        description: "Party Id which needs to be charged"
+        type: string
+      partyId:
+        description: "Party Id which needs to be charged"
+        type: string
+      chargeCode:
+        description: "Charge Code"
+        type: string
+      partyToCharge:
+        description: "Party which needs to be charged"
+        type: string
+      priceMethod:
+        description: "Price method which will be used to calculate charge"
+        type: string
+      priceRuleId:
+        description: "Pricing Rule Id"
+        type: string
+      charge:
+        description: "Calculated charge amount"
+        type: number
+      chargeCcy:
+        description: "Currency in which charge is calculated"
+        type: string
+      chargeSharing:
+        type: string
+        description: "Charge Sharing"
+      exchangeRate:
+        description: "Exchange rate will be provided if charge is calculated in transaction currency"
+        type: number
+      minMaxValidationCriteria:
+        type: string
+        description: "Min-Max Charge Criteria"
+      maxChgAmount:
+        type: number
+        description: "Maximum Charge Amount"
+      maxChgPct:
+        type: number
+        description: "Maximum Charge Percentage"
+      minChgAmount:
+        type: number
+        description: "Minimum Charge Amount"
+      minChgPct:
+        type: number
+        description: "Minimum Charge Percentage"
+        
+  CmcPrcMethodsCollection:
+    description: "List of price methods for given price category"
+    type: "object"
+    properties:
+      CmcPrcMethodsModel:
+        type: "array"
+        description: "Price Methods Collection"
+        items:
+          $ref: "#/definitions/CmcPrcMethodsModel"
+          
+  CmcPrcMethodsModel:
+    description: "Pricing Methods Model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Parameter"
+        type: "integer"
+        format: "int64"
+      applicationCode:
+        description: "Application Code"
+        type: "string"
+      prcCategory:
+        description: "Price Category"
+        type: "string"
+      prcCategoryDesc:
+        description: "Price Category Description"
+        type: "string"
+      prcMethod:
+        description: "Price Method Name"
+        type: "string"
+      prcMethodDesc:
+        description: "Price Method Description"
+        type: "string"
+      slabType:
+        description: "Slab Type"
+        type: "string"
+        
+  CmcPrcCategoryCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      CmcPrcCategoryModel:
+        type: "array"
+        description: "Price Category Collection"
+        items:
+          $ref: "#/definitions/CmcPrcCategoryModel"
+          
+  CmcPrcCategoryModel:
+    description: "Pricing Category Model"
+    type: "object"
+    properties:
+      prcCategory:
+        description: "Pricing Category"
+        type: "string"
+      prcCategoryDesc:
+        description: "Pricing Category Description"
+        type: "string"
+
+  ExternalChargesOBRHModel:
+    description: "Pricing Category Model"
+    type: "object"
+    properties:
+      hostHeaders:
+            $ref: "#/definitions/ExternalPriceHostModel"
+      hostBody:
+            $ref: "#/definitions/ExternalPriceRequestModel"  
+                  
+  ExternalPriceHostModel:
+    description: "RelationshipPriceRequestModel"
+    type: "object"
+    properties:
+      source:
+        description: "Source"
+        type: "string"
+      userId:
+        description: "User Id"
+        type: "string"
+      branch:
+        description: "Branch"
+        type: "string"
+      entity:
+        description: "Entity"
+        type: "string"        
+        
+  ExternalPriceRequestModel:
+    description: "RelationshipPriceRequestModel"
+    type: "object"
+    properties:
+      currency:
+        description: "Currency"
+        type: "string"
+      currency2:
+        description: "Currency2"
+        type: "string"
+      customerNo:
+        description: "Customer Number"
+        type: "string"         
+      custAcNo:
+        description: "Customer Account Number"
+        type: "string"
+      edes:
+        type: "object"
+        $ref: "#/definitions/EdeModelArray"
+      moduleId:
+        description: "Module Id"
+        type: "string"  
+      priceCompCodes:
+        description: "Price Comp Codes"
+        type: "string"
+      productCode:
+        description: "Product Code"
+        type: "string"
+      rprefNo:
+        description: "Rpref Number"
+        type: "string"
+      sourcesystem:
+        description: "Source System"
+        type: "string"
+      trnrefNo:
+        description: "Transaction Reference Number"
+        type: "string"
+
+  EdeModel:
+    type: "object"
+    properties:
+      edeCode:
+        type: "string"
+        description: "Ede Code"
+      edeValue:
+        type: "string"
+        description: "Ede Value"
+        
+  EdeModelArray:
+    type: object
+    properties:
+      edeList:
+        type: "array"
+        description: "Ede Collection"
+        items:
+          $ref: "#/definitions/EdeModel"
+          
+  CmcTmCurrencyDefinitionCollection: 
+   description: "Collection of currencydefinition."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     description: "Currency Data Collection"
+     items: 
+      $ref: "#/definitions/CmcTmCurrencyDefinitionDto"
+    paging:
+     $ref: "#/definitions/PagingDto"
+     
+  PagingDto:
+    type: "object"
+    description: "Pagenation Details"
+    properties:
+      totalResults:
+        type: integer
+        
+  CmcTmCurrencyDefinitionDto:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       currencyCode:
+        type: string
+        description: "Currency Code"
+        minLength: 0
+        maxLength: 3
+        pattern: ^[A-Z]*$
+       currencyName:
+        type: string
+        description: "Currency Name"
+        minLength: 0
+        maxLength: 105
+        pattern: ^[A-Za-z ]*$
+       country:
+        type: string
+        description: "Country"
+        minLength: 0
+        maxLength: 3
+        pattern: ^[A-Z]*$
+       currencyDecimals:
+        type: number
+        description: "Currency Decimals"
+        minLength: 0
+        maxLength: 1
+       currencyRoundRule:
+        type: string
+        description: "Currency Round Rule"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:T|U|D|R)$"
+       currencyRoundUnit:
+        type: number
+        description: "Currency Round Unit"
+       currencyFormatMask:
+        type: string
+        description: "Currency Format Mask"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:I|N)$"
+       currencySpotDays:
+        type: number
+        description: "Currency Spot Days"
+        minLength: 0
+        maxLength: 3
+       currencyIntMethod:
+        type: number
+        description: "Currency Interest Method"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:0|1|2|3|4|5|6|7|8|9)$"
+       positionGl:
+        type: string
+        description: "positionGl"
+        minLength: 0
+        maxLength: 9
+       positionEqvgl:
+        type: string
+        description: "Position Equivalent GL"
+        minLength: 0
+        maxLength: 9
+       currencyEurType:
+        type: string
+        description: "Currency Euro type"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:E|I|O|C)$"
+       currencyTolLimit:
+        type: number
+        description: "Currency Total Limits"
+       settlementMsgDays:
+        type: number
+        description: "Settlement Days"
+        minLength: 0
+        maxLength: 3
+       indexFlag:
+        type: string
+        description: "Index Flag"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       indexBaseCurrency:
+        type: string
+        description: "Index Base Currency"
+        minLength: 0
+        maxLength: 3
+       cutOffHr:
+        type: number
+        description: "Cut off Hours"
+        minLength: 0
+        maxLength: 2
+       cutOffMin:
+        type: number
+        description: "Cut off Minutes"
+        minLength: 0
+        maxLength: 2
+       altCurrencyCode:
+        type: string
+        description: "Alternate Currency Code"
+        minLength: 0
+        maxLength: 10
+        pattern: ^[A-Z0-9]*$
+       eurConversionReqd:
+        type: string
+        description: "Euro Conversion Required"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       cutOffDays:
+        type: number
+        description: "Cutoff Days"
+        minLength: 0
+        maxLength: 2
+       crAutoExRateLmt:
+        type: number
+        description: "Credit Auto Exchange Rate Limit"
+        minLength: 0
+        maxLength: 3
+       drAutoExRateLmt:
+        type: number
+        description: "Debit Auto Exchange Rate Limit"
+       currencyType:
+        type: string
+        description: "Currency Type"
+        minLength: 0
+        maxLength: 3
+       gen103p:
+        type: string
+        description: "Generate 103+"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       clsCurrency:
+        type: string
+        description: "CLS Currency"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       fxNettingDays:
+        type: number
+        description: "Foreign Exchange Netting Days"
+        minLength: 0
+        maxLength: 3
+       isoNumCurrencyCode:
+        type: string
+        description: "Iso Currency Code"
+        minLength: 0
+        maxLength: 3
+        pattern: ^[0-9]*$
+       genCustCov:
+        type: string
+        description: "GenCustCov"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       validate50f:
+        type: string
+        description: "Validate50f"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+       maintenanceCountry:
+        type: string
+        description: "Maintenance Country"
+        minLength: 0
+        maxLength: 3
+       commodityCode:
+        type: string
+        description: "Commodity Code"
+        minLength: 0
+        maxLength: 1
+        pattern: "^(?:Y|N)$"
+      required:
+      - currencyCode
+      - maintenanceCountry
+  GenericDto:
+   allOf:
+    - type: object
+      discriminator: resource_type 

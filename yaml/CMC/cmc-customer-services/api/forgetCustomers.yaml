@@ -1,0 +1,305 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server forgetcustomers server." 
+ version: "1.0.0"
+ title: "forgetcustomers Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "corecustomers"
+   description: "This is the service to  maintain the right to forget customers.It has the option to create delete and authorize."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../forgetcustomers
+
+ /forgetcustomers:
+  post:
+   tags:
+    - "forgetcustomers"
+   summary: "Adds a new forgetcustomers request."
+   description: "Adds a new forgetcustomers request. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "forgetcustomersRequest" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new forgetcustomers request" 
+      required: true
+      schema:
+       $ref: "#/definitions/ForgetCustomersDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created forgetcustomers request" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "forgetcustomers"
+   summary: "Get all valid forgetcustomers requests."
+   description:  "Get all forgetcustomers. This endpoints will be used to Get all valid forgetcustomers maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includeunauth flag
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: authStatus
+     in: query
+     description: authorization status of records
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ForgetCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   DELETE    .../forgetcustomers/xxx
+#   GET       .../forgetcustomers/xxx
+
+ /forgetcustomers/{id}:
+  get:
+   tags:
+    - "forgetcustomers"
+   summary: "Retrieves the forgetcustomers request by ID."
+   description:  "Retrieves the forgetcustomers request by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the corecustomers based on given id."
+     schema:
+      $ref: "#/definitions/ForgetCustomerWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "forgetcustomers"
+   summary: "Deletes the forgetcustomers request identified by given ID."
+   description:  "Deletes the forgetcustomers request identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the forgetcustomers maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../forgetcustomers/xxx/approve
+
+ /forgetcustomers/{id}/approve:
+  patch:
+   tags:
+    - "forgetcustomers"
+   summary: "Authorize the forgetcustomers request by given ID."
+   description:  "Authorize the forgetcustomers identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the forgetcustomers request"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+
+definitions:
+ ForgetCustomersDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "id of forgetcustomers request"
+   authStatus:
+    type: string
+    description: "authorization status of request"
+   recordStatus:
+    type: string
+    description: "record status of the request"
+   makerId:
+    type: string
+    description: "Maker of the request"
+   checkerId:
+    type: string
+    description: "Authorizer of the request" 
+   processType:
+    type: string
+    description: "Identifies that if request is initiated by customer or bank"
+    pattern: 'BANK_INITIATED|CUSTOMER_INITIATED'
+   checkerDateStamp:
+    type: string
+    format: date
+    description: "Authorization timestamp of the request"
+   makerDateStamp:
+    type: string
+    format: date
+    description: "Timestamp of the request"
+   ForgetCustomerDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ForgetCustomerDetailDTO'
+  required:
+   - processType
+   
+ ForgetCustomerDetailDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "detail id of forgetcustomers request"
+   forgetCustomerMasterId:
+    type: string
+    description: "id of master of request"
+   customerNumber:
+    type: string
+    description: "Customer number for which customer has to be forgotten"
+   processStatus:
+    type: string
+    description: "Processing status of the request for customer"
+  required:
+   - customerNumber
+     
+ ForgetCustomerCollection: 
+  description: "Collection of forgetcustomer requests."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ForgetCustomersDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+    
+ ForgetCustomerWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/ForgetCustomersDTO"

@@ -1,0 +1,659 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides v3 APIs to perform operations on program" 
+ version: "1.0.0"
+ title: "Core Service v3 APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-core-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "programServiceV3"
+   description: "v3 APIs for program related operations"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../product
+
+ /service/v3/program/{id}:
+  put:
+   tags:
+    - "programServiceV3"
+   summary: "Update an existing program."
+   description:  "Update an existing program."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Key of the program Maintenance"
+      required: true
+      type: "string"
+    - name: "program"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing program"
+      required: true
+      schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProgramRequestDTO"
+   responses:
+    200:
+     description: "Returns updated program"
+     schema:
+      $ref: "./coreDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"   
+ /service/v3/program:
+  get:
+   tags:
+    - "programServiceV3"
+   summary: "Get all valid program."
+   description:  "Get all valid program."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: "Include close and unauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - in: query
+     name: recordStat
+     description: "Record Status"
+     required: false
+     type: string
+   - in: query
+     name: programCode
+     description: "Program Code"
+     required: true
+     type: string
+   - in: query
+     name: spokeId
+     description: "Spoke Id"
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ScfTmProgramSpokeResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+  post:
+   tags:
+    - "programServiceV3"
+   summary: "Adds a new program."
+   description: "Create a new program."
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "program" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new program" 
+      required: true
+      schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProgramRequestDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created program" 
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"                  
+definitions:
+ ScfSystemParamModel:
+    description: "Scf System Param model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Parameter"
+        type: "integer"
+        format: "int64"
+      key:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+      value:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+ ScfSystemParamCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      ScfSystemParamModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfSystemParamModel"
+ ScfTmProgramSpokeResponse:
+    description: "Scf Program Spoke Response"
+    type: "object"
+    properties:
+      programCode:
+        description: "Id of the Parameter"
+        type: "string"
+      programName:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+      anchorId:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+      spokeId:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+      programParams:
+          $ref: '#/definitions/ProgramParamModel'
+      spokeParams:
+          $ref: '#/definitions/SpokeParamsModel'
+ SpokeModel:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      spokeId:
+        description: "Id of the Parameter"
+        type: "string"
+      spokeName:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+ ProgramParamModel:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+     anchorId:
+      type: string
+      description: "Anchor Id"
+     anchorName:
+      type: string
+      description: "Anchor Name"
+     authorizationRequired:
+      type: string
+      description: "Authorization Required"
+     autoAcceptanceApplicable:
+      type: string
+      description: "Auto Acceptance Applicable"
+     autoAcceptanceDays:
+      type: number
+      description: "Auto Acceptance Days"
+     autoFinanceApplicable:
+      type: string
+      description: "Auto Finance Applicable"
+     autoSettlementApplicable:
+      type: string
+      description: "Auto Settlement Applicable"
+     autoDebitApplicable:
+      type: string
+      description: "Auto Debit Applicable"      
+     disbursementCcy:
+      type: string
+      description: "Disbursement Currency"
+     effectiveFrom:
+      type: string
+      format: date
+      description: "Effective From"
+     expiresOn:
+      type: string
+      format: date
+      description: "Expires On"
+     maxFinancePercentage:
+      type: number
+      description: "Maximum Finance Percentage"
+     maxTenorAllowed:
+      type: number
+      description: "Maximum Tenor Allowed"
+     minFinancePercentage:
+      type: number
+      description: "Minimum Finance Percentage"
+     minTenorAllowed:
+      type: number
+      description: "Minimum Tenor Allowed"
+     preferredDisbursementMode:
+      type: string
+      description: "Preferred Disbursement Mode"
+     preferredSettlementMode:
+      type: string
+      description: "Preferred Settlement Mode"
+     productCode:
+      type: string
+      description: "Product Code"
+     productDescription:
+      type: string
+      description: "Product Description"
+     programCode:
+      type: string
+      description: "Program Code"
+     programName:
+      type: string
+      description: "Program Name"
+     reconciliationTowards:
+      type: string
+      description: "Reconciliation Towards"  
+     withRecourse:
+      type: string
+      description: "With Recourse"
+     graceDays: 
+      type: number
+     interestBearingParty:
+      type: string
+      description: "Interest Bearing Party"
+     relationshipCode:
+      type: string
+      description: "Relationship Code" 
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference Number" 
+     twoFactorApp:
+      type: string
+      default: N
+      description: "Two Factor App"
+     insuranceApp:
+      type: string
+      default: N
+      description: "Insurance App" 
+     interestRefundHandling:
+      type: string
+      description: "Interest Refund Handling"
+     interestRefundPaymentMode:
+      type: string
+      description: "Interest Refund Payment Mode"
+     marginHandling:
+      type: string
+      description: "Margin Handling"
+     marginPaymentMode:
+      type: string
+      description: "Margin Payment Mode"
+     productParams:
+        $ref: '#/definitions/ProductParamsModel'
+     spokeList:
+      type: array
+      items:
+        $ref: '#/definitions/SpokeModel'
+ SpokeParamsModel:
+    type: object
+    properties:
+      productCode:
+       type: string
+       description: "Product Code"
+      authorizationRequired:
+       type: string
+       description: "Authorization Required"
+      autoFinanceApplicable:
+       type: string
+       description: "Auto Finance Applicable"
+      autoSettlementApplicable:
+       type: string
+       description: "Auto Settlement Applicable"
+      autoDebitApplicable:
+       type: string
+       description: "Auto Debit Applicable"      
+      disbursementCcy:
+       type: string
+       description: "Disbursement Currency"
+      id:
+       type: string
+       description: "Id"
+      maxFinancePercentage:
+       type: number
+       description: "Maximum Finance Percentage"
+      maxTenorAllowed:
+       type: number
+       description: "Maximum Tenor Allowed"
+      minFinancePercentage:
+       type: number
+       description: "Minimum Finance Percentage"
+      minTenorAllowed:
+       type: number
+       description: "Minimum Tenor Allowed"
+      preferredDisbursementMode:
+       type: string
+       description: "Preferred Disbursement Mode"
+      preferredSettlementMode:
+       type: string
+       description: "Preferred Settlement Mode"
+      programCode:
+       type: string
+       description: "Program Code"
+      programMasterId:
+       type: string
+       description: "Program Master Id"
+      spokeId:
+       type: string
+       description: "Spoke Id"
+      spokeName:
+       type: string
+       description: "Spoke Name"
+      withRecourse:
+       type: string
+       description: "With Recourse"
+      graceDays:
+       type: number
+       description: "Grace Days"
+      interestBearingParty:
+       type: string
+       description: "Interest Bearing Party"
+      importFactorId:
+       type: string
+       description: "Import Factor Id"
+      importFactorName:
+       type: string
+       description: "Import Factor Name"
+      insuranceCoId:
+       type: string
+       description: "Insurance Co Id"
+      insuranceCoName:
+       type: string
+       description: "Insurance Co Name"
+      interestRefundHandling:
+       type: string
+       description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+       type: string
+       description: "Interest Refund Payment Mode"
+      marginHandling:
+       type: string
+       description: "Margin Handling"
+      marginPaymentMode:
+       type: string
+       description: "Margin Payment Mode"
+      productParams:
+        $ref: '#/definitions/ProductParamsModel'
+      programSpokeCodeList:
+       type: array
+       items:
+        $ref: '#/definitions/ProgramSpokeCodeModel'   
+ ProgramSpokeCodeModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     spokeMasterId:
+      type: string
+      description: "Spoke Master Id"
+     programCode:
+      type: string
+      description: "Program Code"
+     spokeId:
+      type: string
+      description: "Spoke Id"
+     spokeName:
+      type: string
+      description: "Spoke Name"
+     spokeExternalCode:
+      type: string
+      description: "Spoke External Code"
+     spokeDivisionCode:
+      type: string
+      description: "Spoke Division Code"
+     spokeDivisionName:
+      type: string
+      description: "Spoke Division Name"
+     anchorDivisionCode:
+      type: string
+      description: "Anchor Division Code"
+     anchorDivisionName:
+      type: string
+      description: "Anchor Division Name" 
+ ProductParamsModel:
+    type: object
+    properties:
+     appropriationSeqAftDueDate:
+      type: string
+      description: "Appropriation Sequence After Due Date"
+     appropriationSeqBefDueDate:
+      type: string
+      description: "Appropriation Sequence Before Due Date"
+     appropriationSeqOnDueDate:
+      type: string
+      description: "Appropriation Sequence On Due Date"
+     autoDebitApplicable:
+      type: string
+      description: "Auto Debit Applicable"
+     creditLimitUtilization:
+      type: string
+      description: "Credit Limit Utilization"
+     debitAcctTypeAfterDueDate:
+      type: string
+      description: "Debit Account Type After Due Date"
+     debitAcctTypeOnDueDate:
+      type: string
+      description: "Debit Account Type On Due Date"
+     debitPartyAfterDueDate:
+      type: string
+      description: "Debit Party After Due Date"
+     debitPartyOnDueDate:
+      type: string
+      description: "Debit Party On Due Date"
+     debtor:
+      type: string
+      description: "Debtor"
+     effectiveFrom:
+      type: string
+      description: "Effective From"
+     expiresOn:
+      type: string
+      description: "Expires On"
+     holidayTreatment:
+      type: string
+      description: "HOliday Treatment"
+     maturityDateCalculation:
+      type: string
+      description: "Maturity Date Calculation"
+     minWaitingPeriod:
+      type: number
+      description: "Minimum Waiting Period"
+     multipleDisbursementAllowed:
+      type: string
+      description: "Multiple Disbursement Allowed"
+     npaAppropriationSeq:
+      type: string
+      description: "Npa Appropriation Sequence"
+     partRepaymentAllowed:
+      type: string
+      description: "Part Repayment Allowed"
+     prePaymentAllowed:
+      type: string
+      description: "Pre Payment Allowed"
+     productCategory:
+      type: string
+      description: "Product Category"
+     productType:
+      type: string
+      description: "Product Type"
+     reconciliationTowards:
+      type: string
+      description: "Reconciliation Towards"        
+     stalePeriod:
+      type: number
+      description: "Stale Period"
+     isCreditLimitApplicable:
+      type: string
+      description: "Is Credit Limit Applicable" 
+     isAccountingApplicable:
+      type: string
+      description: "Is Acconting Applicable" 
+     isAssignmentApplicable:
+      type: string
+      description: "Is Assignment Applicable" 
+     isAutoAssignment:
+      type: string
+      description: "Is Auto Assignment"   
+     isAcceptanceApplicable:
+      type: string
+      description: "Is Acceptance Applicable" 
+     isAutoAcceptance:
+      type: string
+      description: "Is Auto Acceptance"     
+     isDisbursementAuthRequired:
+      type: string
+      description: "Is Disbursement Authorization Required"
+     isDisbursementAutoProcessing:
+      type: string
+      description: "Is Disbursement Auto Processing"
+     isSettlementAuthRequired:
+      type: string
+      description: "Is Settlement Authorization Required" 
+     isSettlementAutoProcessing:
+      type: string
+      description: "Is Settlement Auto Processing" 
+     ProdLimitDecnParams:
+      type: array
+      items:
+       $ref: '#/definitions/ProdLimitDecnParams'
+ ProdLimitDecnParamsColl: 
+  description: "Collection of product."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ProdLimitDecnParams"         
+ ProdLimitDecnParams:
+  type: object
+  properties:
+     eventCode:
+      type: string
+      description: "Event Code"
+     limitType:
+      type: string
+      description: "Limit Type"
+     recourse:
+      type: string
+      description: "Recourse"
+     rootLimitEntityType:
+      type: string
+      description: "Root Limit Entity Type"
+     subLevelsApplicable:
+      type: string
+      description: "Sub Levels Applicable"
+     limitEvent:
+      type: string
+      description: "Limit Event"      
+     ProdLimitExpHandlParams:
+      type: array
+      items:
+       $ref: '#/definitions/ProdLimitExpHandlParams' 
+       
+ ProdLimitExpHandlParams:   
+  type: object
+  properties:
+     subLevelApplicable:
+      type: string
+      description: "Sub Levels Applicable"
+     expiredLimitExceptionHandling:
+      type: string
+      description: "Expired Limit Exception Handling"
+     breachLimitExceptionHandling:
+      type: string
+      description: "Breach Limit Exception Handling"
+     expiredAndBreachLimitExceptionHandling:
+      type: string
+      description: "Expired and Breach Limit Exception Handling"     

@@ -1,0 +1,559 @@
+swagger: '2.0'
+info:
+   description: Maintenance service for oracle banking integration hub.
+   version: 1.0.0
+   title: OBIH Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: ServiceProvider
+   description: This service will be used for registering the serviceprovider with service and route information in order
+      to integrate the 3rd party serviceproviders with OBDX. Collectively all services will be called as Integration Hub
+-  name: ProvidedServiceImport
+   description: Operations to import provided services from WSDL or Swagger Spec.
+schemes:
+- https
+paths:
+   /serviceconsumer/{id}/serviceprovider:
+      post:
+         tags:
+         - ServiceProvider
+         summary: Adds a new serviceprovider.
+         description: Adds a new serviceprovider. Add additional information here for this endpoint.
+         operationId: createRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceprovider Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceprovider
+            in: body
+            description: Request Body that contains data required for creating a new serviceprovider
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceProviderDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceprovider
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceProvider
+         summary: Get all valid serviceprovider.
+         description: Get all valid serviceprovider. This endpoints will be used to Get all valid serviceprovider maintenance
+            records.
+         operationId: getAll
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: offset
+            in: query
+            description: offset is starting no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: limit
+            in: query
+            description: limit is maximum no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: filterBy
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterValue
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterExactMatch
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: boolean
+         responses:
+            201:
+               description: Returns message of succes or failure
+               headers:
+                  Location:
+                     description: ''
+                     type: string
+               schema:
+                  $ref: '#/definitions/ServiceProviderCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/serviceprovider/{serviceProviderId}:
+      put:
+         tags:
+         - ServiceProvider
+         summary: Update an existing serviceprovider.
+         description: Update an existing serviceprovider.
+         operationId: modifyRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceprovider Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceProviderId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceprovider
+            in: body
+            description: Request Body that contains data required for updating an existing serviceprovider
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceProviderDTO'
+         responses:
+            200:
+               description: Returns updated serviceprovider
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceProvider
+         summary: Retrieves the serviceprovider by ID.
+         description: Retrieves the serviceprovider by ID.
+         operationId: getById
+         parameters:
+         -  name: id
+            in: path
+            description: Id of the user that needs to be fetched
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceProviderId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns the serviceprovider based on given id.
+               schema:
+                  $ref: '#/definitions/ServiceProviderWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+      delete:
+         tags:
+         - ServiceProvider
+         summary: Deletes the serviceprovider identified by given ID.
+         description: Deletes the serviceprovider identified by given ID. Add additional information here for the this endpoint.
+         operationId: deleteRecord
+         parameters:
+         -  name: id
+            in: path
+            description: Key of the serviceprovider maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceProviderId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Successful operation.
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+   /importprovidedservice:
+      get:
+         tags:
+         - ProvidedServiceImport
+         summary: Retrieves the list of available provided services by parsing a wsdl or swagger spec.
+         description: Retrieves the list of available provided services by parsing a wsdl or swagger spec.
+         operationId: importProvidedServices
+         parameters:
+         -  name: import_url
+            description: URL where the wsdl or swagger spec is located.
+            in: query
+            type: string
+            required: true
+         -  name: import_type
+            in: query
+            type: string
+            enum:
+            - WSDL
+            - SWAGGER
+            required: true
+         responses:
+            200:
+               description: Successful operation.
+               schema:
+                  $ref: '#/definitions/ProvidedServiceCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/serviceprovider/{serviceProviderId}/providedservice/{providedServiceId}/generaterequesttransformation:
+      get:
+         tags:
+         - ServiceProvider
+         summary: Retrieves the serviceprovider by ID.
+         description: Retrieves the serviceprovider by ID.
+         operationId: generateRequestTransformation
+         parameters:
+         -  name: id
+            in: path
+            description: Id of the user that needs to be fetched
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceProviderId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: providedServiceId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns the serviceprovider based on given id.
+               schema:
+                  $ref: '#/definitions/ProvidedServiceRequestTransformationWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/serviceprovider/{serviceProviderId}/export:
+      get:
+         tags:
+         - ServiceProvider
+         summary: Update an existing serviceprovider.
+         description: Update an existing serviceprovider.
+         operationId: exportProvider
+         produces:
+         - application/json
+         - application/octet-stream
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceprovider Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceProviderId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns updated serviceprovider
+               schema:
+                  type: object
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/serviceprovider/import:
+      post:
+         tags:
+         - ServiceProvider
+         summary: Update an existing serviceprovider.
+         description: Update an existing serviceprovider.
+         operationId: importProvider
+         consumes:
+         - multipart/form-data
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceprovider Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: file
+            in: formData
+            description: Request Body that contains data required for creating a new serviceConsumer
+            required: true
+            type: file
+         responses:
+            200:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceprovider
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error                              
+definitions:
+   ServiceProviderDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            serviceConsumerId:
+               type: string
+               description: ''
+               maxLength: 36
+            description:
+               type: string
+               description: ''
+               maxLength: 1000
+            name:
+               type: string
+               description: ''
+               maxLength: 255
+            status:
+               type: string
+               description: ''
+               maxLength: 15
+            type:
+               type: string
+               description: ''
+               maxLength: 31
+            version:
+               type: string
+               description: ''
+               maxLength: 255
+            headers:
+               type: string
+            ProvidedServiceCollection:
+               type: array
+               items:
+                  $ref: '#/definitions/ProvidedServiceDTO'
+            ServiceProviderImplCollection:
+               type: array
+               items:
+                  $ref: '#/definitions/ServiceProviderImplDTO'
+            isFactoryShipped:
+               type: string
+               description: ''
+               maxLength: 1
+         required:
+         - serviceConsumerId
+         - name
+         - status
+         - version
+         - type
+   ProvidedServiceDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            name:
+               type: string
+               description: ''
+               maxLength: 255
+            description:
+               type: string
+               description: ''
+            serviceUrl:
+               type: string
+               description: ''
+               maxLength: 2047
+            headers:
+               type: string
+            request_definition:
+               type: string
+               description: ''
+            response_definition:
+               type: string
+               description: ''
+            gateway_prefix:
+               type: string
+               description: ''
+               maxLength: 255
+            ProvidedRestService:
+               $ref: '#/definitions/ProvidedRestServiceDTO'
+            ProvidedWebService:
+               $ref: '#/definitions/ProvidedWebServiceDTO'
+         required:
+         - serviceUrl
+   ProvidedRestServiceDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            http_method:
+               type: string
+               description: ''
+               maxLength: 16
+            queryParams:
+               type: string
+   ProvidedWebServiceDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            service_namespace_uri:
+               type: string
+               description: ''
+               maxLength: 2047
+            service_local_part:
+               type: string
+               description: ''
+               maxLength: 255
+            port_namespace_uri:
+               type: string
+               description: ''
+               maxLength: 2047
+            port_local_part:
+               type: string
+               description: ''
+               maxLength: 255
+            operation_namespace_uri:
+               type: string
+               description: ''
+               maxLength: 2047
+            operation_local_part:
+               type: string
+               description: ''
+               maxLength: 255
+            header_xml:
+               type: string
+               description: ''
+   ServiceProviderCollection:
+      description: Collection of serviceprovider.
+      type: object
+      properties:
+         data:
+            type: array
+            items:
+               $ref: '#/definitions/ServiceProviderDTO'
+         paging:
+            $ref: '#/definitions/PagingDto'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   ServiceProviderWrapperDTO:
+      type: object
+      properties:
+         data:
+            $ref: '#/definitions/ServiceProviderDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   ProvidedServiceRequestTransformationWrapperDTO:
+      type: object
+      properties:
+         data:
+            type: string
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   ProvidedServiceResponseTransformationWrapperDTO:
+      type: object
+      properties:
+         data:
+            type: string
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   ProvidedServiceCollection:
+      description: Collection of serviceprovider.
+      type: object
+      properties:
+         data:
+            type: array
+            items:
+               $ref: '#/definitions/ProvidedServiceDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   RequestAttributeDTO:
+      type: object
+      properties:
+         name:
+            type: string
+         value:
+            type: string
+   GenericDto:
+      allOf:
+      -  type: object
+         discriminator: resource_type

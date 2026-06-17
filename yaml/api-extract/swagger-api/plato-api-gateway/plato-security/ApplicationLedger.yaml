@@ -1,0 +1,140 @@
+swagger: "2.0"
+info:
+  description: "  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "ApplicationLedger Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ApplicationLedgerAPI"
+    description: ""
+    
+schemes:
+- "https"
+
+paths:
+  /createEntityLedger:
+    post:
+      tags:
+        - "createEntityLedgerAPI"
+      summary: "Create Entity "
+      description: ""
+      operationId: "createEntityLedger"
+      parameters:
+        - name: "entity"
+          in: "body"
+          description: "Request Body that contains data required for creating a new record"
+          required: true
+          schema:
+            $ref: "#/definitions/EntityModel"
+      responses:
+        201:
+          description: ""
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /appIdList:          
+    get:
+      tags:
+        - "ApplicationLedgerAPI"
+      summary: "Retrieves the list of appIds."
+      description:  "Retrieves the list of appIds. "
+      operationId: "getAppIdList"
+      parameters:
+        - name: "appId"
+          in: "query"
+          description: "Id"
+          required: false
+          type: "string"           
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/AppIdModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /entityList/{appId}:
+    get:
+      tags:
+        - "GetEntityListForAppId"
+      summary: "Retrieves the entity List for an appId."
+      description:  "Retrieves the entity List for an appId. "
+      operationId: "getEntityDetailsForAppId"
+      parameters:
+        - name: "appId"
+          in: "path"
+          description: "Id"
+          required: true
+          type: "string"     
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/EntityJndiModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"        
+definitions:
+  EntityModel:
+    description: "Entity model"
+    type: "object"
+    properties:
+      entityId:
+        description: "Entity Id"
+        type: "string"
+      entityName:
+        description: "Entity Name"
+        type: "string"
+      appledger:
+        description: ""
+        type: "array"
+        items:
+          type: "object"
+          properties:
+              appId:
+                type: string
+              jndi:
+                type: string
+  AppIdModel:
+    type: object
+    properties: 
+      data:
+        type: "array"
+        items:
+          type: object
+          properties:
+            appId:
+              type: string
+  EntityJndiModel:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+         entityId: 
+           type: string
+         jndi:
+           type: string

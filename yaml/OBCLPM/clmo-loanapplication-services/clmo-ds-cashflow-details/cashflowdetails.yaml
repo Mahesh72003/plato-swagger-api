@@ -1,0 +1,314 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : cashflow.yaml
+#  **
+#  ** Module     : 
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/cashflow:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Cashflow
+      summary: Adds a new Cashflow.
+      description: Adds a new Cashflow. Add additional information here for this endpoint.
+      operationId: addCashflow
+      parameters:
+      - name: Cashflow
+        in: body
+        description: Request Body that contains data required for creating a new Cashflow
+        required: true
+        schema:
+          $ref: '#/definitions/CashflowDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Cashflow
+          headers:
+            Location:
+              description: URL of newly created Cashflow
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Cashflow
+      summary: Retrieves the list of existing Cashflow.
+      description: Retrieves the list of existing Cashflow. Add additional information here for the this endpoint.
+      operationId: getAllCashflow
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/cashflow/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Cashflow
+      summary: Get a  Cashflow.
+      description: Get a  Cashflow by given id. Add additional information here for the this endpoint.
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        description: id of the Cashflow that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Cashflow
+          schema:
+            $ref: '#/definitions/CashflowDetailsModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Cashflow
+      summary: Update an existing Cashflow.
+      description: Update an existing Cashflow. Add additional information here for the this endpoint.
+      operationId: updateCashflow
+      parameters:
+      - name: id
+        in: path
+        description: id of the Cashflow that need to be updated
+        required: true
+        type: string
+      - name: Cashflow
+        in: body
+        description: Request Body that contains data required for updating an existing Cashflow
+        required: true
+        schema:
+          $ref: '#/definitions/CashflowDetailsModel'
+      responses:
+        200:
+          description: Returns updated Cashflow
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Cashflow
+      summary: Deletes the Cashflow identified by given ID.
+      description: Deletes the Cashflow identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteCashflow
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Cashflow that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  CashflowDetailsModel:
+   description: Cashflow Details model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+      cashflowSummary:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowSummaryModel'
+  CashflowDetailsCollection:
+    description: Collection of Cashflow.
+    type: object
+    properties:
+      CashflowList:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowDetailsModel'
+  CashflowSummaryModel:
+    description: Cashflow Summary model
+    type: object
+    properties:
+      id:
+        description: Id of the Cashflow
+        type: string
+        maxLength: 36
+      cashflowId:
+        description: Id of the Cashflow
+        type: string
+        maxLength: 36
+      totalAmountDue:
+        description: Total Amount Due  
+        type: number  
+      totalAmountPaid:
+        description: Total Amount Paid
+        type: number
+      totalAmountAdjusted:
+        description: Total Amount Adjusted
+        type: number      
+      currency:
+        description: Currency
+        type: string
+      dueDate:
+        description: Due Date
+        type: string
+      cashflowComponent:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowComponentModel'
+  CashflowSummaryCollection:
+    description: Collection of Cashflow Summary.
+    type: object
+    properties:
+      CashflowList:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowSummaryModel'
+  CashflowComponentModel:
+    description: Cashflow Details model
+    type: object
+    required:
+    - component
+    - currency
+    - amountPaid
+    properties:
+      id:
+        description: Id of the Cashflow Component
+        type: string
+        maxLength: 36
+      cashflowSummaryId:
+        description: cashflow Id of the Cashflow Component
+        type: string
+        maxLength: 36
+      component:
+        description: Cashflow Component Id of the Cashflow Component
+        type: string
+        maxLength: 36
+      currency:
+        description: Cashflow Currency Code of the Cashflow Component
+        type: string
+        maxLength: 3
+      amountPaid:
+        description: Amount paid of the Cashflow Component
+        type: number
+      amountDue:
+        description: Amount Due of the Cashflow Component
+        type: number
+      adjustedAmount:
+        description: Adjusted Amount of the Cashflow Component
+        type: number
+  CashflowComponentCollection:
+    description: Collection of CashflowSummary.
+    type: object
+    properties:
+      CashflowDetailsList:
+        type: array
+        items:
+          $ref: '#/definitions/CashflowComponentModel'
+  GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type

@@ -1,0 +1,495 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: '2.0'
+info:
+  description: This is a sample server account maintenance server.
+  version: 1.0.0
+  title: Event Maintenance Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: event
+  description: ''
+schemes:
+- https
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supported http methods POST and GET
+#
+# path example ../event
+
+  /event:
+    post:
+     tags:
+      - "event"
+     summary: "Adds a new event."
+     description: "Adds a new event. Add additional information here for this endpoint."
+     operationId: "saveRecord"
+     parameters:
+      - name: "event" 
+        in: "body" 
+        description: "Request Body that contains data required for creating a new event" 
+        required: true
+        schema:
+         $ref: "#/definitions/LmmTmEventsDTO"
+     responses:
+      201: 
+       description: "Returns message of succes or failure " 
+       headers:
+        Location:
+         description: "URL of newly created event" 
+         type: "string"
+       schema:
+         $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"
+    get:
+     tags:
+      - "event"
+     summary: "Get all valid event."
+     description:  "Get all valid event. This endpoints will be used to Get all valid event maintenance records."
+     operationId: "getAll"
+     parameters:
+     - name: includecloseandunauth
+       in: query
+       description: includecloseandunauth need to be set to fetch summary record, defult value is false
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: offset is starting no of records to be fetched
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: limit is maximum no of records to be fetched
+       required: false
+       type: integer
+     - in: query
+       name: evtCode
+       required: false
+       type: string
+     - in: query
+       name: evtCategory
+       required: false
+       type: string
+     - in: query
+       name: evtDesc
+       required: false
+       type: string
+     - in: query
+       name: evtTopic
+       required: false
+       type: string
+     - in: query
+       name: evtIsEnabled
+       required: false
+       type: string
+     - in: query
+       name: recordStat
+       required: false
+       type: string
+     - in: query
+       name: authStat
+       required: false
+       type: string
+     responses:
+      201:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         $ref: "#/definitions/LmmTmEventsCollection"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../event/xxx
+#   GET       .../event/xxx
+#   GET       .../event/xxx?version=latestrecord
+#   GET       .../event/xxx?version=1
+
+  /event/{id}:
+    put:
+     tags:
+      - "event"
+     summary: "Update an existing event."
+     description:  "Update an existing event."
+     operationId: "modifyRecord"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "key of the event Maintenance"
+        required: true
+        type: "string"
+      - name: "event"
+        in: "body"
+        description: "Request Body that contains data required for updating an existing event"
+        required: true
+        schema:
+         $ref: "#/definitions/LmmTmEventsDTO"
+     responses:
+      200:
+       description: "Returns updated event"
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"
+    get:
+     tags:
+      - "event"
+     summary: "Retrieves the event by ID."
+     description:  "Retrieves the event by ID."
+     operationId: "getById"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the event that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "Version of the event that needs to be fetched"
+        required: true
+        type: "string"
+     responses:
+      200:
+       description: "Returns the event based on given id."
+       schema:
+        $ref: "#/definitions/LmmTmEventsWrapperDTO"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+    delete:
+     tags:
+      - "event"
+     summary: "Deletes the event identified by given ID."
+     description:  "Deletes the event identified by given ID. Add additional information here for the this endpoint."
+     operationId: "delete"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the event maintenance"
+        required: true
+        type: "string"
+      - name: "event"
+        in: "body"
+        description: Request body contain event and Modification no of event maintenance which need to be deleted"
+        required: true
+        schema:
+         $ref: "#/definitions/ModListKeyDto"
+     responses:
+      200:
+       description: "Successful operation."
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../event/xxx/approve
+
+  /event/{id}/approve:
+    patch:
+     tags:
+      - "event"
+     summary: "Authorize the event by given ID."
+     description:  "Authorize the event identified by given ID."
+     operationId: "authorize"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the event maintenance"
+        required: true
+        type: "string"
+      - name: "event"
+        in: "body"
+        description: Request body contain event and Modification no of event maintenance which need to be authorized"
+        required: true
+        schema:
+         $ref: "#/definitions/ModListKeyDto"
+     responses:
+      200:
+       description: "Successful operation."
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+
+# path to  get the event by given event code
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../event/getByEvtCode
+
+  /event/getByEvtCode/{evtCode}:
+    get:
+     tags:
+      - "event"
+     summary: "Retrives the event by given event code"
+     description:  "Retrives the customer by parent customerID."
+     operationId: "getEventByCode"
+     parameters:
+      - name: "evtCode"
+        in: "path"
+        description: "Event code of the event that needs to be fetched"
+        required: true
+        type: "string"
+     responses:
+      200:
+       description: "Returns the event based on given event code."
+       schema:
+         $ref: "#/definitions/LmmTmEventsDTO"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../event/xxx/close
+  /event/{id}/close:
+    patch:
+     tags:
+      - "event"
+     summary: "Close the event by given ID."
+     description:  "Close the event identified by given ID."
+     operationId: "closeRecord"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the event maintenance"
+        required: true
+        type: "string"
+      - name: "event"
+        in: "body"
+        description: Request body contain event and Modification no of event maintenance which need to be closed"
+        required: true
+        schema:
+         $ref: "#/definitions/KeyDto"
+     responses:
+      200:
+       description: "Successful operation."
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../event/xxx/reopen
+
+  /event/{id}/reopen:
+    patch:
+     tags:
+      - "event"
+     summary: "reopen the event by given ID."
+     description:  "reopen the event identified by given ID."
+     operationId: "reopenRecord"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "Key of the event maintenance"
+        required: true
+        type: "string"
+      - name: "event"
+        in: "body"
+        description: Request body contain event and Modification no of event maintenance which need to be reopen"
+        required: true
+        schema:
+         $ref: "#/definitions/KeyDto"
+     responses:
+      200:
+       description: "Successful operation."
+       schema:
+        $ref: "#/definitions/ResponseDtoWrapper"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"
+
+definitions:
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  LmmTmEventsDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       evtCode:
+        type: string
+        description: ""
+       evtCategory:
+        type: string
+        description: ""
+       evtDesc:
+        type: string
+        description: ""
+       evtTopic:
+        type: string
+        description: ""
+       evtIsEnabled:
+        type: string
+        description: ""
+      required:
+       - id
+       - evtCode
+  GenericDto:
+    allOf:
+     - type: object
+       discriminator: resource_type
+  LmmTmEventsCollection: 
+    description: "Collection of events."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LmmTmEventsDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+     totalResults:
+      type: integer
+  LmmTmEventsWrapperDTO:
+    type: object
+    properties:
+     data:
+      $ref: "#/definitions/LmmTmEventsDTO"
+  ModListKeyDto:
+    type: object
+    properties:
+     modNos:
+      type: array
+      items:
+       type: integer
+     remarks:
+      type: string

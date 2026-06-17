@@ -1,0 +1,239 @@
+swagger: "2.0"
+info:
+  description: "This is a GET API for Routing information with information such as Drawan Bank, Routing number etc."
+  version: "1.0.0"
+  title: "Routing Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "RoutingServiceAPI"
+    description: "This is an GET API for Routing information"
+
+schemes:
+- "https"
+
+paths:
+  /service/v1/routing:
+    get:
+      tags:
+        - "routingService"
+      summary: "Retrieves the list of Routing data"
+      description:  "Retrieves the list of Bank Details with Routing Code"
+      operationId: "getRoutingData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Id"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant Id"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "UserId For SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content Type"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "Limit To Be Fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "Offset Of Limit"
+          type: "integer"
+        - name: "routingCode"
+          in: "query"
+          description: "Routing Code"
+          type: "number"
+          required: false
+        - name: "drawnOnBankCode"
+          in: "query"
+          description: "Drawn On Bank Code"
+          required: false
+          type: "string"
+        - name: "drawnOnBranchCode"
+          in: "query"
+          description: "Brawn On Branch Code"
+          required: false
+          type: "string"
+        - name: "drawnOnBankName"
+          in: "query"
+          description: "Drawn On Bank Name"
+          required: false
+          type: "string"
+        - name: "drawnOnBranchName"
+          in: "query"
+          description: "Drawn On Branch Name"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/RoutingResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+   
+definitions:          
+  RoutingModelDto:
+    description: "To get the routing data"
+    type: object
+    properties:
+      id:
+        type: string
+        description: "Routing Id"
+      recordStat:
+        type: string
+        description: "Record Status"
+      authStat:
+        type: string
+        description: "Authorization Status"
+      modNo:
+        type: integer
+        description: "ModNo"
+      makerId:
+        type: string
+        description: "Maker Id"
+      makerDtStamp:
+        type: string
+        description: "Maker Date"
+      checkerId:
+        type: string
+        description: "Checker ID" 
+      checkerDtStamp:
+        type: string
+        description: "Checker Date"
+      onceAuth:
+        type: string
+        description: "Once Authorization"                 
+      routingCode:
+        type: number
+        description: "Routing Code"
+      bankCode:
+        type: string
+        description: "Bank Code"
+      bankName:
+        type: string
+        description: "Bank Name"
+      branchName:
+        type: string
+        description: "Branch Name"
+      branchCode:
+        type: string
+        description: "Branch Code"
+      locationCode:
+        type: string
+        description: "Location Code"
+      locationDescription:
+        type: string
+        description: "Location Description"
+      locationClusterCode:
+        type: string
+        description: "Location Cluster Code"
+      locationClusterDesc:
+        type: string
+        description: "Location Cluster Description"
+      addressLine1:
+        type: string
+        description: "Address Line 1" 
+      addressLine2:
+        type: string
+        description: "Address Line 2"   
+      addressLine3:
+        type: string
+        description: "Address Line 3"  
+      addressLine4:
+        type: string
+        description: "Address Line 4"
+      contactPerson:
+        type: string
+        description: "Contact Person"
+      countryCode:
+        type: string
+        description: "Country Code"
+      designation:
+        type: string
+        description: "Designation"
+      emailId:
+        type: string
+        description: "Email Id"
+      fax:
+        type: string
+        description: "Fax"
+      mobileNo:
+        type: number
+        description: "Mobile Number"
+      pincode:
+        type: string
+        description: "Pin Code"
+      stateCode:
+        type: string
+        description: "State Code"
+      telephone:
+        type: number
+        description: "TelePhone Number"                  
+          
+
+  RoutingResponseModel:
+    description: "Collection of RoutingModel"
+    type: "object"
+    properties:
+      routingData:
+        type: "array"
+        items:
+          $ref: "#/definitions/RoutingModelDto"
+      paging:
+          $ref: "#/definitions/PagingDto"
+      errors:
+        type: "object"
+        description: "List Of Errors "
+        items:
+          $ref: "#/definitions/Error"
+  Error:
+    type: "object"
+    description: "Error Model"
+    properties:
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDescription:
+        type: "string"
+        description: "Error Description"              
+      errorStatus:
+        type: "string"
+        description: "Error Status"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer

@@ -1,0 +1,199 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server autoRecon server." 
+ version: "1.0.0"
+ title: "Reconciliation Rule Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "reconCategory"
+   description: "Using reconcilation rule Service api, user gets attributes on which reconcilation and allocation happens"
+                                                                                                     
+schemes:
+- "https"
+
+paths:
+
+  /web/v1/reconCategories:
+    get:
+      tags:
+        - "reconCategory"
+      summary: "Provides all reconcilation categories for given language"
+      description: "Provides all reconcilation categories for given language"
+      operationId: "getReconCategories"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: "language" 
+        in: "query" 
+        description: "Language"
+        type: "string"
+        required: false
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/ReconCategoriesResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /web/v1/reconAttributes:
+    get:
+      tags:
+        - "reconCategory"
+      summary: "Provides all reconcilation categories for given language"
+      description: "Provides all reconcilation categories for given language"
+      operationId: "getReconAttributes"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: "language" 
+        in: "query" 
+        description: "Language"
+        type: "string"
+        required: false
+      - name: "reconCategory" 
+        in: "query" 
+        description: "Recon Category"
+        type: "string"
+        required: true
+      - name: "ruleType" 
+        in: "query" 
+        description: "Rule Type"
+        type: "string"
+        required: true
+      - name: "allocationApplicable" 
+        in: "query" 
+        description: "Allocation Applicable"
+        type: "string"
+        required: false        
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/ReconEntityAttributesResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/reconRules:
+    post:
+      tags:
+        - "reconCategory"
+      summary: "Provides all reconcilation rules for given category"
+      description: "Provides all reconcilation rules for given category"
+      operationId: "getReconRules"
+      parameters:
+      - name: "userId" 
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: paymentRefNoList
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './ReconRuleWebDef.yaml#/definitions/PaymentRefNoList'
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/ScfReconRuleCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"

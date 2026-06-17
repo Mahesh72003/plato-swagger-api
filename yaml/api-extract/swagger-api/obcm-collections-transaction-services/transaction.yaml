@@ -1,0 +1,63 @@
+swagger: "2.0"
+info:
+  description: "This API provides arrangement related details and pooling date"
+  version: "1.0.0"
+  title: "Arrangement Details and Pooling Date"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "Transaction"
+    description: "This API provides arrangement related details and pooling date"
+
+paths:
+  /service/v1/identifyArrDet:
+    post:
+      tags:
+        - "Transaction"
+      summary: "Identify Arrangement and Pooling Date"
+      description:  "Identify Arrangement and Pooling Date"
+      operationId: "getArrangementAndPoolingDate"
+      parameters:
+        - name: "workFlowModel" 
+          in: "body"  
+          description: "Request Body that contains data required for initiating a new txn"  
+          required: true  
+          schema: 
+            $ref: "./batch.yaml#/definitions/ConductorWorkFlowModel"  
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file" 
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./batch.yaml#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"

@@ -1,0 +1,4259 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : currencydefinition
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server Currency server." 
+ version: "1.0.0"
+ title: "currencydefinitions Service"
+host: "ofss220245:7001"
+basePath: "/cmc-currency-services"
+
+tags:
+ - name: "currency Services"
+   description: "API for Currency Operations"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../currencydefinitions
+
+ /currencydefinitions:
+  post:
+   tags:
+    - "currencydefinitions"
+   summary: "Adds a new currencydefinitions."
+   description: "Adds a new currencydefinitions. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "currencydefinitions" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new currencydefinitions" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyDefinitionDto"
+    
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created currencydefinitions" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencydefinitions"
+   summary: "Get all valid currencydefinitions."
+   description:  "Get all valid currencydefinitions. This endpoints will be used to Get all valid currencydefinitionsmaintanence records."
+   operationId: "getAll"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: currencyCode
+     required: false
+     type: string     
+   - in: query
+     name: currencyName
+     required: false
+     type: string
+   - in: query
+     name: recordStatus
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     name: maintenanceCountry
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyDefinitionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../currencydefinitions/xxx
+#   DELETE    .../currencydefinitions/xxx
+#   GET       .../currencydefinitions/xxx
+#   GET       .../currencydefinitions/xxx?version=latestrecord
+#   GET       .../currencydefinitions/xxx?version=1
+
+ /currencydefinitions/{id}:
+  put:
+   tags:
+    - "currencydefinitions"
+   summary: "Update an existing rule."
+   description:  "Update an existing currencydefinitions."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the currencydefinitions Maintenance"
+      required: true
+      type: "string"
+    - name: "currencydefinitions"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing currencydefinitions"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyDefinitionDto"
+   
+   responses:
+    200:
+     description: "Returns updated currencydefinitions"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencydefinitions"
+   summary: "Retrieves the currencydefinitions by ID."
+   description:  "Retrieves the currencydefinitions by ID."
+   operationId: "getById"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencydefinitions based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmCurrencyDefinitionWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "currencydefinitions"
+   summary: "Deletes the currencydefinitions identified by given ID."
+   description:  "Deletes the currencydefinitions identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencydefinitions Maintenece"
+      required: true
+      type: "string"
+    - name: "currencydefinitions"
+      in: "body"
+      description: Request body contain currencydefinitions and Modification no of currencydefinitions Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencydefinitions/xxx/approve
+
+ /currencydefinitions/{id}/approve:
+  patch:
+   tags:
+    - "currencydefinitions"
+   summary: "Authorize the currencydefinitions by given ID."
+   description:  "Authorize the currencydefinitions identified by given ID."
+   operationId: "authorize"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencydefinitions Maintenece"
+      required: true
+      type: "string"
+    - name: "currencydefinitions"
+      in: "body"
+      description: Request body contain currencydefinitions and Modification no of currencydefinitions Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencydefinitions/xxx/close
+ /currencydefinitions/{id}/close:
+  patch:
+   tags:
+    - "currencydefinitions"
+   summary: "Close the currencydefinitions by given ID."
+   description:  "Close the currencydefinitions identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencydefinitions maintenance"
+      required: true
+      type: "string"
+    - name: "currencydefinitions"
+      in: "body"
+      description: Request body contain currencydefinitions and Modification no of currencydefinitions maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencydefinitions/xxx/reopen
+
+ /currencydefinitions/{id}/reopen:
+  patch:
+   tags:
+    - "currencydefinitions"
+   summary: "reopen the currencydefinitions by given ID."
+   description:  "reopen the currencydefinitions identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencydefinitions maintenance"
+      required: true
+      type: "string"
+    - name: "currencydefinitions"
+      in: "body"
+      description: Request body contain currencydefinitions and Modification no of currencydefinitions maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../currencydefinitions/xxx/unauthorized
+
+ /currencydefinitions/{id}/unauthorized:
+  get:
+   tags:
+    - "currencydefinitions"
+   summary: "Retrives the currencydefinitions by given ID."
+   description:  "Retrives the currencydefinitions identified by given ID."
+   operationId: "authQuery"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencydefinitions based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyDefinitionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencydefinitions/xxx/history
+
+ /currencydefinitions/{id}/history:
+  get:
+   tags:
+    - "currencydefinitions"
+   summary: "Retrives the currencydefinitions by given ID."
+   description:  "Retrives the currencydefinitions by ID."
+   operationId: "getHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencydefinitions based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyDefinitionCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  view changes of  record
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencydefinitions/xxx/history
+
+ /currencydefinitions/{id}/viewchanges:
+  get:
+   tags:
+    - "currencydefinitions"
+   summary: "Retrives the currencydefinitions by given ID."
+   description:  "Retrives the currencydefinitions by ID."
+   operationId: "viewChanges"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencydefinitions based on given id."      
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /amountwords:
+  post:
+   tags:
+    - "amountwords"
+   summary: "Adds a new amountwords."
+   description: "Adds a new amountwords. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "amountwords" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new amountwords" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmAmountTextLanguageDto"
+   
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created amountwords" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "amountwords"
+   summary: "Get all valid amountwords."
+   description:  "Get all valid amountwords. This endpoints will be used to Get all valid amountwordsmaintanence records."
+   operationId: "getAll"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: langCode
+     required: false
+     type: string
+   - in: query
+     name: recordStatus
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmAmountTextLanguageCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../amountwords/xxx
+#   DELETE    .../amountwords/xxx
+#   GET       .../amountwords/xxx
+#   GET       .../amountwords/xxx?version=latestrecord
+#   GET       .../amountwords/xxx?version=1
+
+ /amountwords/{id}:
+  put:
+   tags:
+    - "amountwords"
+   summary: "Update an existing rule."
+   description:  "Update an existing amountwords."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the amountwords Maintenance"
+      required: true
+      type: "string"
+    - name: "amountwords"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing amountwords"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmAmountTextLanguageDto"
+   
+   responses:
+    200:
+     description: "Returns updated amountwords"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "amountwords"
+   summary: "Retrieves the amountwords by ID."
+   description:  "Retrieves the amountwords by ID."
+   operationId: "getById"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the amountwords based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmAmountTextLanguageWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "amountwords"
+   summary: "Deletes the amountwords identified by given ID."
+   description:  "Deletes the amountwords identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the amountwords Maintenece"
+      required: true
+      type: "string"
+    - name: "amountwords"
+      in: "body"
+      description: Request body contain amountwords and Modification no of amountwords Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../amountwords/xxx/approve
+
+ /amountwords/{id}/approve:
+  patch:
+   tags:
+    - "amountwords"
+   summary: "Authorize the amountwords by given ID."
+   description:  "Authorize the amountwords identified by given ID."
+   operationId: "authorize"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the amountwords Maintenece"
+      required: true
+      type: "string"
+    - name: "amountwords"
+      in: "body"
+      description: Request body contain amountwords and Modification no of amountwords Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../amountwords/xxx/close
+ /amountwords/{id}/close:
+  patch:
+   tags:
+    - "amountwords"
+   summary: "Close the amountwords by given ID."
+   description:  "Close the amountwords identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the amountwords maintenance"
+      required: true
+      type: "string"
+    - name: "amountwords"
+      in: "body"
+      description: Request body contain amountwords and Modification no of amountwords maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../amountwords/xxx/reopen
+
+ /amountwords/{id}/reopen:
+  patch:
+   tags:
+    - "amountwords"
+   summary: "reopen the amountwords by given ID."
+   description:  "reopen the amountwords identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the amountwords maintenance"
+      required: true
+      type: "string"
+    - name: "amountwords"
+      in: "body"
+      description: Request body contain amountwords and Modification no of amountwords maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../amountwords/xxx/unauthorized
+
+ /amountwords/{id}/unauthorized:
+  get:
+   tags:
+    - "amountwords"
+   summary: "Retrives the amountwords by given ID."
+   description:  "Retrives the amountwords identified by given ID."
+   operationId: "authQuery"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the amountwords based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmAmountTextLanguageCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../amountwords/xxx/history
+
+ /amountwords/{id}/history:
+  get:
+   tags:
+    - "amountwords"
+   summary: "Retrives the amountwords by given ID."
+   description:  "Retrives the amountwords by ID."
+   operationId: "getHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the amountwords based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmAmountTextLanguageCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  view changes of  record
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../amountwords/xxx/history
+
+ /amountwords/{id}/viewchanges:
+  get:
+   tags:
+    - "amountwords"
+   summary: "Retrives the amountwords by given ID."
+   description:  "Retrives the amountwords by ID."
+   operationId: "viewChanges"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the amountwords based on given id."      
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /currencyholidaycalendars:
+  post:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Adds a new currencyholidaycalendars."
+   description: "Adds a new currencyholidaycalendars. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "currencyholidaycalendars" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new currencyholidaycalendars" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyHolidayMasterDto"
+    
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created currencyholidaycalendars" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Get all valid currencyholidaycalendars."
+   description:  "Get all valid currencyholidaycalendars. This endpoints will be used to Get all valid currencyholidaycalendarsmaintanence records."
+   operationId: "getAll"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: currency
+     required: false
+     type: string
+   - in: query
+     name: year
+     required: false
+     type: integer
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     name: recordStatus
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyHolidayMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../currencyholidaycalendars/xxx
+#   DELETE    .../currencyholidaycalendars/xxx
+#   GET       .../currencyholidaycalendars/xxx
+#   GET       .../currencyholidaycalendars/xxx?version=latestrecord
+#   GET       .../currencyholidaycalendars/xxx?version=1
+
+ /currencyholidaycalendars/{id}:
+  put:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Update an existing rule."
+   description:  "Update an existing currencyholidaycalendars."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the currencyholidaycalendars Maintenance"
+      required: true
+      type: "string"
+    - name: "currencyholidaycalendars"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing currencyholidaycalendars"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyHolidayMasterDto"
+   
+   responses:
+    200:
+     description: "Returns updated currencyholidaycalendars"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Retrieves the currencyholidaycalendars by ID."
+   description:  "Retrieves the currencyholidaycalendars by ID."
+   operationId: "getById"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyholidaycalendars based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmCurrencyHolidayMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Deletes the currencyholidaycalendars identified by given ID."
+   description:  "Deletes the currencyholidaycalendars identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyholidaycalendars Maintenece"
+      required: true
+      type: "string"
+    - name: "currencyholidaycalendars"
+      in: "body"
+      description: Request body contain currencyholidaycalendars and Modification no of currencyholidaycalendars Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencyholidaycalendars/xxx/approve
+
+ /currencyholidaycalendars/{id}/approve:
+  patch:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Authorize the currencyholidaycalendars by given ID."
+   description:  "Authorize the currencyholidaycalendars identified by given ID."
+   operationId: "authorize"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyholidaycalendars Maintenece"
+      required: true
+      type: "string"
+    - name: "currencyholidaycalendars"
+      in: "body"
+      description: Request body contain currencyholidaycalendars and Modification no of currencyholidaycalendars Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencyholidaycalendars/xxx/close
+ /currencyholidaycalendars/{id}/close:
+  patch:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Close the currencyholidaycalendars by given ID."
+   description:  "Close the currencyholidaycalendars identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyholidaycalendars maintenance"
+      required: true
+      type: "string"
+    - name: "currencyholidaycalendars"
+      in: "body"
+      description: Request body contain currencyholidaycalendars and Modification no of currencyholidaycalendars maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencyholidaycalendars/xxx/reopen
+
+ /currencyholidaycalendars/{id}/reopen:
+  patch:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "reopen the currencyholidaycalendars by given ID."
+   description:  "reopen the currencyholidaycalendars identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyholidaycalendars maintenance"
+      required: true
+      type: "string"
+    - name: "currencyholidaycalendars"
+      in: "body"
+      description: Request body contain currencyholidaycalendars and Modification no of currencyholidaycalendars maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../currencyholidaycalendars/xxx/unauthorized
+
+ /currencyholidaycalendars/{id}/unauthorized:
+  get:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Retrives the currencyholidaycalendars by given ID."
+   description:  "Retrives the currencyholidaycalendars identified by given ID."
+   operationId: "authQuery"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyholidaycalendars based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyHolidayMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencyholidaycalendars/xxx/history
+
+ /currencyholidaycalendars/{id}/history:
+  get:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Retrives the currencyholidaycalendars by given ID."
+   description:  "Retrives the currencyholidaycalendars by ID."
+   operationId: "getHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyholidaycalendars based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyHolidayMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  view changes of  record
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencyholidaycalendars/xxx/history
+
+ /currencyholidaycalendars/{id}/viewchanges:
+  get:
+   tags:
+    - "currencyholidaycalendars"
+   summary: "Retrives the currencyholidaycalendars by given ID."
+   description:  "Retrives the currencyholidaycalendars by ID."
+   operationId: "viewChanges"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyholidaycalendars based on given id."      
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+     
+     
+ /currencyholidaycalendars/currencyholidays/{currency}/{inputDate}: 
+  get:
+   tags:
+    - "currencyholidays"
+   summary: "is Currency Holiday based on currency and year."
+   description:  "is Currency Holiday based on currency and year."
+   operationId: "isCurrencyHoliday"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "currency"
+      in: "path"
+      description: "currency"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "inputDate"
+      in: "path"
+      description: "inputDate"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+   responses:
+    200:
+     description: "Returns the currencyholiday based on given id."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /currencyholidaycalendars/currencyWorkingDay/{currency}/{inputDate}/{nextPrev}/{offset}/{lowerlimitdate}/{upperlimitdate}: 
+  get:
+   tags:
+    - "currencyholidays"
+   summary: "Branch Working Day Records based on currency and year."
+   description: "Branch Working Day Records based on currency and year."
+   operationId: "getBranchWorkingDay"
+   produces:
+   - "application/json"
+   - "text/html"
+   - "application/xml"
+   parameters:
+    - name: "currency"
+      in: "path"
+      description: "currency"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "inputDate"
+      in: "path"
+      description: "inputDate"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "nextPrev"
+      in: "path"
+      description: "nextPrev"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "offset"
+      in: "path"
+      description: "offset"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "lowerlimitdate"
+      in: "path"
+      description: "lowerlimitdate"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "upperlimitdate"
+      in: "path"
+      description: "upperlimitdate"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+   responses:
+    200:
+     description: "Returns the currencyholiday based on given id."
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+
+ /currencypairs:
+  post:
+   tags:
+    - "currencypairs"
+   summary: "Adds a new currencypairs."
+   description: "Adds a new currencypairs. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "currencypairs" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new currencypairs" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyPairDefnDto"
+   
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created currencypairs" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencypairs"
+   summary: "Get all valid currencypairs."
+   description:  "Get all valid currencypairs. This endpoints will be used to Get all valid currencypairsmaintanence records."
+   operationId: "getAll"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: currency1
+     required: false
+     type: string
+   - in: query
+     name: currency2
+     required: false
+     type: string
+   - in: query
+     name: throughCurrency
+     required: false
+     type: string
+   - in: query
+     name: recordStatus
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     name: maintenanceCountry
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyPairDefnCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../currencypairs/xxx
+#   DELETE    .../currencypairs/xxx
+#   GET       .../currencypairs/xxx
+#   GET       .../currencypairs/xxx?version=latestrecord
+#   GET       .../currencypairs/xxx?version=1
+
+ /currencypairs/{id}:
+  put:
+   tags:
+    - "currencypairs"
+   summary: "Update an existing rule."
+   description:  "Update an existing currencypairs."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the currencypairs Maintenance"
+      required: true
+      type: "string"
+    - name: "currencypairs"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing currencypairs"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyPairDefnDto"
+   
+   responses:
+    200:
+     description: "Returns updated currencypairs"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencypairs"
+   summary: "Retrieves the currencypairs by ID."
+   description:  "Retrieves the currencypairs by ID."
+   operationId: "getById"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencypairs based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmCurrencyPairDefnWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "currencypairs"
+   summary: "Deletes the currencypairs identified by given ID."
+   description:  "Deletes the currencypairs identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencypairs Maintenece"
+      required: true
+      type: "string"
+    - name: "currencypairs"
+      in: "body"
+      description: Request body contain currencypairs and Modification no of currencypairs Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencypairs/xxx/approve
+
+ /currencypairs/{id}/approve:
+  patch:
+   tags:
+    - "currencypairs"
+   summary: "Authorize the currencypairs by given ID."
+   description:  "Authorize the currencypairs identified by given ID."
+   operationId: "authorize"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencypairs Maintenece"
+      required: true
+      type: "string"
+    - name: "currencypairs"
+      in: "body"
+      description: Request body contain currencypairs and Modification no of currencypairs Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencypairs/xxx/close
+ /currencypairs/{id}/close:
+  patch:
+   tags:
+    - "currencypairs"
+   summary: "Close the currencypairs by given ID."
+   description:  "Close the currencypairs identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencypairs maintenance"
+      required: true
+      type: "string"
+    - name: "currencypairs"
+      in: "body"
+      description: Request body contain currencypairs and Modification no of currencypairs maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencypairs/xxx/reopen
+
+ /currencypairs/{id}/reopen:
+  patch:
+   tags:
+    - "currencypairs"
+   summary: "reopen the currencypairs by given ID."
+   description:  "reopen the currencypairs identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencypairs maintenance"
+      required: true
+      type: "string"
+    - name: "currencypairs"
+      in: "body"
+      description: Request body contain currencypairs and Modification no of currencypairs maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../currencypairs/xxx/unauthorized
+
+ /currencypairs/{id}/unauthorized:
+  get:
+   tags:
+    - "currencypairs"
+   summary: "Retrives the currencypairs by given ID."
+   description:  "Retrives the currencypairs identified by given ID."
+   operationId: "authQuery"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencypairs based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyPairDefnCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencypairs/xxx/history
+
+ /currencypairs/{id}/history:
+  get:
+   tags:
+    - "currencypairs"
+   summary: "Retrives the currencypairs by given ID."
+   description:  "Retrives the currencypairs by ID."
+   operationId: "getHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencypairs based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyPairDefnCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  view changes of  record
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencypairs/xxx/history
+
+ /currencypairs/{id}/viewchanges:
+  get:
+   tags:
+    - "currencypairs"
+   summary: "Retrives the currencypairs by given ID."
+   description:  "Retrives the currencypairs by ID."
+   operationId: "viewChanges"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencypairs based on given id."      
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /currencyratetypes:
+  post:
+   tags:
+    - "currencyratetypes"
+   summary: "Adds a new currencyratetypes."
+   description: "Adds a new currencyratetypes. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "currencyratetypes" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new currencyratetypes" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyRateTypeDto"
+  
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created currencyratetypes" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencyratetypes"
+   summary: "Get all valid currencyratetypes."
+   description:  "Get all valid currencyratetypes. This endpoints will be used to Get all valid currencyratetypesmaintanence records."
+   operationId: "getAll"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: currencyRateType
+     required: false
+     type: string
+   - in: query
+     name: recordStatus
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyRateTypeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../currencyratetypes/xxx
+#   DELETE    .../currencyratetypes/xxx
+#   GET       .../currencyratetypes/xxx
+#   GET       .../currencyratetypes/xxx?version=latestrecord
+#   GET       .../currencyratetypes/xxx?version=1
+
+ /currencyratetypes/{id}:
+  put:
+   tags:
+    - "currencyratetypes"
+   summary: "Update an existing rule."
+   description:  "Update an existing currencyratetypes."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the currencyratetypes Maintenance"
+      required: true
+      type: "string"
+    - name: "currencyratetypes"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing currencyratetypes"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyRateTypeDto"
+  
+   responses:
+    200:
+     description: "Returns updated currencyratetypes"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "currencyratetypes"
+   summary: "Retrieves the currencyratetypes by ID."
+   description:  "Retrieves the currencyratetypes by ID."
+   operationId: "getById"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyratetypes based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmCurrencyRateTypeWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "currencyratetypes"
+   summary: "Deletes the currencyratetypes identified by given ID."
+   description:  "Deletes the currencyratetypes identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyratetypes Maintenece"
+      required: true
+      type: "string"
+    - name: "currencyratetypes"
+      in: "body"
+      description: Request body contain currencyratetypes and Modification no of currencyratetypes Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencyratetypes/xxx/approve
+
+ /currencyratetypes/{id}/approve:
+  patch:
+   tags:
+    - "currencyratetypes"
+   summary: "Authorize the currencyratetypes by given ID."
+   description:  "Authorize the currencyratetypes identified by given ID."
+   operationId: "authorize"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyratetypes Maintenece"
+      required: true
+      type: "string"
+    - name: "currencyratetypes"
+      in: "body"
+      description: Request body contain currencyratetypes and Modification no of currencyratetypes Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencyratetypes/xxx/close
+ /currencyratetypes/{id}/close:
+  patch:
+   tags:
+    - "currencyratetypes"
+   summary: "Close the currencyratetypes by given ID."
+   description:  "Close the currencyratetypes identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyratetypes maintenance"
+      required: true
+      type: "string"
+    - name: "currencyratetypes"
+      in: "body"
+      description: Request body contain currencyratetypes and Modification no of currencyratetypes maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../currencyratetypes/xxx/reopen
+
+ /currencyratetypes/{id}/reopen:
+  patch:
+   tags:
+    - "currencyratetypes"
+   summary: "reopen the currencyratetypes by given ID."
+   description:  "reopen the currencyratetypes identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the currencyratetypes maintenance"
+      required: true
+      type: "string"
+    - name: "currencyratetypes"
+      in: "body"
+      description: Request body contain currencyratetypes and Modification no of currencyratetypes maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../currencyratetypes/xxx/unauthorized
+
+ /currencyratetypes/{id}/unauthorized:
+  get:
+   tags:
+    - "currencyratetypes"
+   summary: "Retrives the currencyratetypes by given ID."
+   description:  "Retrives the currencyratetypes identified by given ID."
+   operationId: "authQuery"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyratetypes based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyRateTypeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencyratetypes/xxx/history
+
+ /currencyratetypes/{id}/history:
+  get:
+   tags:
+    - "currencyratetypes"
+   summary: "Retrives the currencyratetypes by given ID."
+   description:  "Retrives the currencyratetypes by ID."
+   operationId: "getHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyratetypes based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyRateTypeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  view changes of  record
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../currencyratetypes/xxx/history
+
+ /currencyratetypes/{id}/viewchanges:
+  get:
+   tags:
+    - "currencyratetypes"
+   summary: "Retrives the currencyratetypes by given ID."
+   description:  "Retrives the currencyratetypes by ID."
+   operationId: "viewChanges"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the currencyratetypes based on given id."      
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../rates
+
+ /rates:
+  post:
+   tags:
+    - "rates"
+   summary: "Adds a new rates."
+   description: "Adds a new rates. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "rates" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new rates" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyRateMasterDto"
+   
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created rates" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "rates"
+   summary: "Get all valid rates."
+   description:  "Get all valid rates. This endpoints will be used to Get all valid ratesmaintanence records."
+   operationId: "getAll"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: branchCode
+     required: false
+     type: string
+   - in: query
+     name: currency1
+     required: false
+     type: string
+   - in: query
+     name: currency2
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     name: recordStatus
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyRateMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /rates/purgeRatesintoHistory/{rateDate}/{branchCode}:
+  get:
+   tags:
+    - "purgeRatesintoHistory"
+   summary: "purge Rates into History"
+   description:  "purge Rates into History at each EOD"
+   operationId: "purgeRatesintoHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+   - name: rateDate
+     in: "path"
+     description: rate Date for which purge needs to be happened
+     required: true
+     type: string
+   - name: branchCode
+     in: "path"
+     description: branch code
+     required: true
+     type: string
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../rates/xxx
+#   DELETE    .../rates/xxx
+#   GET       .../rates/xxx
+#   GET       .../rates/xxx?version=latestrecord
+#   GET       .../rates/xxx?version=1
+
+ /rates/{id}:
+  put:
+   tags:
+    - "rates"
+   summary: "Update an existing rule."
+   description:  "Update an existing rates."
+   operationId: "modifyRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the rates Maintenance"
+      required: true
+      type: "string"
+    - name: "rates"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing rates"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmCurrencyRateMasterDto"
+  
+   responses:
+    200:
+     description: "Returns updated rates"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "rates"
+   summary: "Retrieves the rates by ID."
+   description:  "Retrieves the rates by ID."
+   operationId: "getById"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the rates based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmCurrencyRateMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "rates"
+   summary: "Deletes the rates identified by given ID."
+   description:  "Deletes the rates identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the rates Maintenece"
+      required: true
+      type: "string"
+    - name: "rates"
+      in: "body"
+      description: Request body contain rates and Modification no of rates Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../rates/xxx/approve
+
+ /rates/{id}/approve:
+  patch:
+   tags:
+    - "rates"
+   summary: "Authorize the rates by given ID."
+   description:  "Authorize the rates identified by given ID."
+   operationId: "authorize"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the rates Maintenece"
+      required: true
+      type: "string"
+    - name: "rates"
+      in: "body"
+      description: Request body contain rates and Modification no of rates Maintenece which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../rates/xxx/close
+ /rates/{id}/close:
+  patch:
+   tags:
+    - "rates"
+   summary: "Close the rates by given ID."
+   description:  "Close the rates identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the rates maintenance"
+      required: true
+      type: "string"
+    - name: "rates"
+      in: "body"
+      description: Request body contain rates and Modification no of rates maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../rates/xxx/reopen
+
+ /rates/{id}/reopen:
+  patch:
+   tags:
+    - "rates"
+   summary: "reopen the rates by given ID."
+   description:  "reopen the rates identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+   - "application/json"
+   - "application/xml"
+   produces: 
+   - "application/json"
+   - "application/xml"   
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the rates maintenance"
+      required: true
+      type: "string"
+    - name: "rates"
+      in: "body"
+      description: Request body contain rates and Modification no of rates maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../rates/xxx/unauthorized
+
+ /rates/{id}/unauthorized:
+  get:
+   tags:
+    - "rates"
+   summary: "Retrives the rates by given ID."
+   description:  "Retrives the rates identified by given ID."
+   operationId: "authQuery"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the rates based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyRateMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../rates/xxx/history
+
+ /rates/{id}/history:
+  get:
+   tags:
+    - "rates"
+   summary: "Retrives the rates by given ID."
+   description:  "Retrives the rates by ID."
+   operationId: "getHistory"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the rates based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmCurrencyRateMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  view changes of  record
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../languagecodes/xxx/history
+
+ /rates/{id}/viewchanges:
+  get:
+   tags:
+    - "rates"
+   summary: "Retrives the rates by given ID."
+   description:  "Retrives the rates by ID."
+   operationId: "viewChanges"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the rates based on given id."      
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /currencyutility/roundAmount/{currencyCode}/{amount}/{option}/{method}/{decimal}/{units}/{maintenanceCountry}: 
+  get:
+   tags:
+    - "currencyutility"
+   summary: "Round Amount"
+   description:  "Round Amount"
+   operationId: "roundAmount"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "currencyCode" 
+      in: "path"
+      description: "currencyCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "amount" 
+      in: "path"
+      description: "amount"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "option" 
+      in: "path"
+      description: "option"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "method" 
+      in: "path"
+      description: "method"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "decimal" 
+      in: "path"
+      description: "decimal"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "units" 
+      in: "path"
+      description: "units"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "maintenanceCountry" 
+      in: "path"
+      description: "maintenanceCountry"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+    
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /currencyutility/getRate/{branchCode}/{currency1}/{currency2}/{rateType}/{indicator}/{rateDate}:  
+  get:
+   tags:
+    - "currencyutility"
+   summary: "Get Rate"
+   description:  "Get Rate"
+   operationId: "getRate"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "branchCode" 
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "branchCode" 
+      in: "path"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency1" 
+      in: "path"
+      description: "currency1"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency2" 
+      in: "path"
+      description: "currency2"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateType" 
+      in: "path"
+      description: "rateType"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "indicator" 
+      in: "path"
+      description: "indicator"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateDate" 
+      in: "path"
+      description: "rateDate"
+      required: true
+      type: "string"
+      pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+    - name: "rateSerialNo" 
+      in: "query"
+      description: "rateSerialNo"
+      type: number
+     
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     schema:
+      $ref: "#/definitions/CmcCurrencyUtilityDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /currencyutility/convertAmt1ToAmt2/{branchCode}/{currency1}/{currency2}/{rateType}/{rateIndicator}/{ccy1Amount}/{requireRounding}/{inrateDate}:  
+  get:
+   tags:
+    - "currencyutility"
+   summary: "Convert Amt1 to Amt2"
+   description:  "Convert Amt1 to Amt2"
+   operationId: "convertAmt1ToAmt2"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "branchCode" 
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+      
+    - name: "branchCode" 
+      in: "path"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency1" 
+      in: "path"
+      description: "currency1"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency2" 
+      in: "path"
+      description: "currency2"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateType" 
+      in: "path"
+      description: "rateType"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateIndicator" 
+      in: "path"
+      description: "rateIndicator"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "ccy1Amount" 
+      in: "path"
+      description: "ccy1Amount"
+      required: true
+      type: number
+    - name: "requireRounding" 
+      in: "path"
+      description: "requireRounding"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "inrateDate" 
+      in: "path"
+      description: "inrateDate"
+      required: true
+      type: "string"
+      pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+    - name: "rate" 
+      in: "query"
+      description: "rate"
+      type: "number"
+    - name: "rateSerialNo" 
+      in: "query"
+      description: "rateSerialNo"
+      type: number
+
+     
+   responses:
+    200:
+     description: "Successful performs the operation"
+     schema:
+      $ref: "#/definitions/CmcCurrencyUtilityDtoWrapper"
+    
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"         
+#amt1toamt2overloaded function introduced  
+ /currencyutility/convertAmt1ToAmt2/{branchCode}/{currency1}/{currency2}/{rateType}/{rateIndicator}/{ccy1Amount}/{requireRounding}/{inrateDate}/{inbranchDate}:  
+  get:
+   tags:
+    - "currencyutility"
+   summary: "Convert Amt1 to Amt2"
+   description:  "Convert Amt1 to Amt2"
+   operationId: "convertAmt1ToAmt2"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "branchCode" 
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+      
+    - name: "branchCode" 
+      in: "path"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency1" 
+      in: "path"
+      description: "currency1"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency2" 
+      in: "path"
+      description: "currency2"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateType" 
+      in: "path"
+      description: "rateType"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateIndicator" 
+      in: "path"
+      description: "rateIndicator"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"      
+    - name: "ccy1Amount" 
+      in: "path"
+      description: "ccy1Amount"
+      required: true
+      type: number
+    - name: "requireRounding" 
+      in: "path"
+      description: "requireRounding"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "inrateDate" 
+      in: "path"
+      description: "inrateDate"
+      required: true
+      type: "string"
+      pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+    - name: "inbranchDate" 
+      in: "path"
+      description: "inbranchDate"
+      required: true
+      type: "string"
+      pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"   
+
+     
+   responses:
+    200:
+     description: "Successful performs the operation"
+     schema:
+      $ref: "#/definitions/CmcCurrencyUtilityDtoWrapper"
+    
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+
+ /currencyutility/convertAmt1ToAmt2/{branchCode}/{currency1}/{currency2}/{rateType}/{rateIndicator}/{ccy1Amount}/{requireRounding}:  
+  get:
+   tags:
+    - "currencyutility"
+   summary: "Convert Amt1 to Amt2"
+   description:  "Convert Amt1 to Amt2"
+   operationId: "convertAmt1ToAmt2"
+   produces:
+   - "application/json"
+   - "application/xml"
+   parameters:
+    - name: "branchCode" 
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+      
+    - name: "branchCode" 
+      in: "path"
+      description: "branchCode"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency1" 
+      in: "path"
+      description: "currency1"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "currency2" 
+      in: "path"
+      description: "currency2"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateType" 
+      in: "path"
+      description: "rateType"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"
+    - name: "rateIndicator" 
+      in: "path"
+      description: "rateIndicator"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"      
+    - name: "ccy1Amount" 
+      in: "path"
+      description: "ccy1Amount"
+      required: true
+      type: number
+    - name: "requireRounding" 
+      in: "path"
+      description: "requireRounding"
+      required: true
+      type: "string"
+      pattern: ".*\\S.*"   
+
+     
+   responses:
+    200:
+     description: "Successful performs the operation"
+     schema:
+      $ref: "#/definitions/CmcCurrencyUtilityDtoWrapper"
+    
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"              
+
+definitions:
+ CmcTmCurrencyDefinitionDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     currencyCode:
+      type: string
+      description: "currencyCode"
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z]*$
+     currencyName:
+      type: string
+      description: "currencyName"
+      minLength: 0
+      maxLength: 105
+      pattern: ^[A-Za-z ]*$
+     country:
+      type: string
+      description: "country"
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z]*$
+     currencyDecimals:
+      type: number
+      description: "currencyDecimals"
+      minLength: 0
+      maxLength: 1
+     currencyRoundRule:
+      type: string
+      description: "Currency Round Rule"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:T|U|D|R)$"
+     currencyRoundUnit:
+      type: number
+      description: "Currency Round Unit"
+     currencyFormatMask:
+      type: string
+      description: "currencyFormatMask"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:I|N)$"
+     currencySpotDays:
+      type: number
+      description: "currencySpotDays"
+      minLength: 0
+      maxLength: 3
+     currencyIntMethod:
+      type: number
+      description: "Currency Interest Method"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:0|1|2|3|4|5|6|7|8|9)$"
+     positionGl:
+      type: string
+      description: "positionGl"
+      minLength: 0
+      maxLength: 9
+     positionEqvgl:
+      type: string
+      description: "Position Equivalent GL"
+      minLength: 0
+      maxLength: 9
+     currencyEurType:
+      type: string
+      description: "Currency Euro type"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:E|I|O|C)$"
+     currencyTolLimit:
+      type: number
+      description: "Currency Total Limits"
+     settlementMsgDays:
+      type: number
+      description: "Settlement Days"
+      minLength: 0
+      maxLength: 3
+     indexFlag:
+      type: string
+      description: "Index Flag"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     indexBaseCurrency:
+      type: string
+      description: "Index Base Currency"
+      minLength: 0
+      maxLength: 3
+     cutOffHr:
+      type: number
+      description: "Cut off Hours"
+      minLength: 0
+      maxLength: 2
+     cutOffMin:
+      type: number
+      description: "Cut off Minutes"
+      minLength: 0
+      maxLength: 2
+     altCurrencyCode:
+      type: string
+      description: "altCurrencyCode"
+      minLength: 0
+      maxLength: 10
+      pattern: ^[A-Z0-9]*$
+     eurConversionReqd:
+      type: string
+      description: "Euro Conversion Required"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     cutOffDays:
+      type: number
+      description: "cutOffDays"
+      minLength: 0
+      maxLength: 2
+     crAutoExRateLmt:
+      type: number
+      description: "Credit Auto Exchange Rate Limit"
+      minLength: 0
+      maxLength: 3
+     drAutoExRateLmt:
+      type: number
+      description: "Debit Auto Exchange Rate Limit"
+     currencyType:
+      type: string
+      description: "currencyType"
+      minLength: 0
+      maxLength: 3
+     gen103p:
+      type: string
+      description: "Generate 103+"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     clsCurrency:
+      type: string
+      description: "CLS Currency"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     fxNettingDays:
+      type: number
+      description: "Foreign Exchange Netting Days"
+      minLength: 0
+      maxLength: 3
+     isoNumCurrencyCode:
+      type: string
+      description: "isoNumCurrencyCode"
+      minLength: 0
+      maxLength: 3
+      pattern: ^[0-9]*$
+     genCustCov:
+      type: string
+      description: "genCustCov"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     validate50f:
+      type: string
+      description: "validate50f"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     maintenanceCountry:
+      type: string
+      description: "maintenanceCountry"
+      minLength: 0
+      maxLength: 3
+     commodityCode:
+      type: string
+      description: "commodityCode"
+      minLength: 0
+      maxLength: 1
+      pattern: "^(?:Y|N)$"
+     CmcTmCurrencyCountryMapDto:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmCurrencyCountryMapDto'
+    required:
+    - currencyCode
+    - maintenanceCountry
+ CmcTmCurrencyCountryMapDto:
+  type: object
+  properties:
+     maintenanceCountry:
+      type: string
+      description: "maintenanceCountry"
+      minLength: 0
+      maxLength: 3
+     id:
+      type: string
+      description: "id"
+     countryCode:
+      type: string
+      description: "countryCode"
+      minLength: 0
+      maxLength: 3
+     countryDesc:
+      type: string
+      description: "countryDesc"
+      minLength: 0
+      maxLength: 105
+     currencyCode:
+      type: string
+      description: "currencyCode"
+      minLength: 0
+      maxLength: 3
+     currencyDefinitionId:
+      type: string
+      description: "currencyDefinitionId"
+  required:
+   - countryCode
+ CmcTmAmountTextLanguageDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     langCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     CmcTmAmountTextCurrencyDto:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmAmountTextCurrencyDto'
+     CmcTmAmountTextDto:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmAmountTextDto'
+    required:
+     - langCode
+ CmcTmAmountTextCurrencyDto:
+  type: object
+  properties:
+     id:
+      type: string
+     lang:
+      type: string
+      minLength: 0
+      maxLength: 3
+     ccy:
+      type: string
+      minLength: 0
+      maxLength: 3
+     preDecimal:
+      type: string
+      minLength: 0
+      maxLength: 50
+     postDecimal:
+      type: string
+      minLength: 0
+      maxLength: 50
+     textBefore:
+      type: string
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     ccySymbol:
+      type: string
+      minLength: 0
+      maxLength: 3
+     textBetween:
+      type: string
+      minLength: 0
+      maxLength: 50
+     finalText:
+      type: string
+      minLength: 0
+      maxLength: 50
+     decimalsAsFraction:
+      type: string
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     amountTextLanguageId:
+      type: string
+  required:
+   - ccy
+ CmcTmAmountTextDto:
+  type: object
+  properties:
+     id:
+      type: string
+     lang:
+      type: string
+      minLength: 0
+      maxLength: 3
+     amt:
+      type: number
+     text:
+      type: string
+      minLength: 0
+      maxLength: 50
+     oneFlag:
+      type: string
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     amountTextLanguageId:
+      type: string
+  required:
+   - amt
+   
+ CurrencyUtilityDto:
+  type: object
+  properties:
+     amount:
+      type: number
+      minLength: 0
+      maxLength: 50
+     rate:
+      type: number
+      minLength: 0
+      maxLength: 3
+      
+   
+ CmcTmCurrencyHolidayMasterDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     currency:
+      type: string
+      minLength: 0
+      maxLength: 3
+     year:
+      type: number
+      minLength: 0
+      maxLength: 4
+     weeklyHolidays:
+      type: string
+      minLength: 0
+      maxLength: 7
+     CmcTmCurrencyHolidayDto:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmCurrencyHolidayDto'
+    required:
+     - currency
+     - year
+ CmcTmCurrencyHolidayDto:
+  type: object
+  properties:
+     currency:
+      type: string
+      minLength: 0
+      maxLength: 3
+     year:
+      type: number
+      minLength: 0
+      maxLength: 4
+     month:
+      type: number
+      minLength: 0
+      maxLength: 2
+     holidayList:
+      type: string
+      minLength: 0
+      maxLength: 31
+     id:
+      type: string
+     currencyHolidayMasterId:
+      type: string
+  required:
+   - month
+ CmcTmCurrencyPairDefnDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     currency1: 
+      type: string
+      minLength: 0
+      maxLength: 3
+     currency2:
+      type: string
+      minLength: 0
+      maxLength: 3
+     throughCurrency:
+      type: string
+      minLength: 0
+      maxLength: 3
+     quotation:
+      type: string
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:D|I)$
+     noOfUnits:
+      type: number
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:0|2|3)$
+     spreadDefn:
+      type: string
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:%|,|.)$
+     pointsMultiplier:
+      type: number
+     maintenanceCountry:
+      type: string
+      minLength: 0
+      maxLength: 3
+     checkThroughCurrency: 
+      type: string
+    required:
+     - currency1
+     - currency2
+     - maintenanceCountry
+ CmcTmCurrencyRateTypeDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     currencyRateType:
+      type: string
+      minLength: 0
+      maxLength: 8
+      pattern: ^[A-Z0-9*_]*$
+     currencyRateTypeDesc:
+      type: string
+      minLength: 0
+      maxLength: 105
+    required:
+     - currencyRateType
+ CmcTmCurrencyRateMasterDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z0-9]*$
+     currency1:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currency2:
+      type: string
+      minLength: 0
+      maxLength: 3
+     CmcTmCurrencyRateDto:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmCurrencyRateDto'
+    required:
+     - branchCode
+     - currency1
+     - currency2
+ CmcTmCurrencyRateDto:
+  type: object
+  properties:
+     id:
+      type: string
+     currencyRateMasterId:
+      type: string
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z0-9]*$
+     currency1:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currency2:
+      type: string
+      minLength: 0
+      maxLength: 3
+     rateType:
+      type: string
+      minLength: 0
+      maxLength: 8
+     midRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     buySpread:
+      type: number
+     saleSpread:
+      type: number
+     buyRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     saleRate:
+      type: number
+     unauthMidRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     unauthBuySpread:
+      type: number
+     unauthSaleSpread:
+      type: number
+     unauthBuyRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     unauthSaleRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     intAuthStat:
+      type: string
+      minLength: 0
+      maxLength: 1
+     rateDate:
+      type: string
+     rateSerial:
+      type: number
+      minLength: 0
+      maxLength: 4
+     unauthRateDate:
+      type: string
+     unauthRateSerial:
+      type: number
+      minLength: 0
+      maxLength: 4
+  required:
+   - rateType
+ CmcTmFwdrateDetailsDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branch:
+      type: string
+     currency1:
+      type: string
+     currency2:
+      type: string
+     periodCode:
+      type: number
+     premiumDiscountPoints:
+      type: number
+    required:
+    - branch
+    - currency1
+    - currency2
+    - periodCode
+ CmcTmRatesHistoryDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branchCode:
+      type: string
+     ccy1:
+      type: string
+     ccy2:
+      type: string
+     rateType:
+      type: string
+     rateDtStamp:
+      type: string
+      format: date
+     midRate:
+      type: number
+     buyRate:
+      type: number
+     saleRate:
+      type: number
+     rateSerial:
+      type: number
+     rateDate:
+      type: string
+      format: date
+    required:
+    - branch
+    - ccy1
+    - ccy2
+    - rateType
+    - rateDtStamp
+ CmcTmFwdrateMasterDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branch:
+      type: string
+     currency1:
+      type: string
+     currency2:
+      type: string
+     maxPeriod:
+      type: number
+    required:
+    - branch
+    - currency1
+    - currency2
+
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmcTmCurrencyDefinitionCollection: 
+  description: "Collection of currencydefinition."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCurrencyDefinitionDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CmcTmAmountTextLanguageCollection: 
+  description: "Collection of amounttextlanguage."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmAmountTextLanguageDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CmcTmCurrencyHolidayMasterCollection: 
+  description: "Collection of currencyholiday."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCurrencyHolidayMasterDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CmcTmCurrencyPairDefnCollection: 
+  description: "Collection of currencypairdefn."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCurrencyPairDefnDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CmcTmCurrencyRateTypeCollection: 
+  description: "Collection of currencyratetype."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCurrencyRateTypeDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CmcTmCurrencyRateMasterCollection: 
+  description: "Collection of currencyrate."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCurrencyRateMasterDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CmcTmCurrencyRateMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmCurrencyRateMasterDto"
+ CmcTmAmountTextLanguageWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmAmountTextLanguageDto"
+ CmcTmCurrencyDefinitionWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmCurrencyDefinitionDto"
+ CmcTmCurrencyHolidayMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmCurrencyHolidayMasterDto"
+ CmcTmCurrencyPairDefnWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmCurrencyPairDefnDto"
+ CmcTmCurrencyRateTypeWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmCurrencyRateTypeDto"
+ CmcCurrencyUtilityDtoWrapper:
+    description: "CmcCurrency Utility Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/CurrencyUtilityDto"
+#Dto Introduced for getting the branch Date
+ CmcTmSystemDatesCollection: 
+  description: "Collection of systemdates."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmSystemDatesDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmcTmSystemDatesDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+     today:
+      type: string
+     prevWorkingDay:
+      type: string
+     nextWorkingDay:
+      type: string
+    required:
+     - branchCode

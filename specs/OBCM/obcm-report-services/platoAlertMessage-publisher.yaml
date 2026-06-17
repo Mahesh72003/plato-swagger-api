@@ -1,0 +1,98 @@
+asyncapi: '2.0.0'
+id: 'urn:com:oracle:fsgbu:obcm:report:asyncapi:platoAlertMessage'
+info:
+  title: Plato Alert Message Publisher Event
+  version: '1.0.0'
+  description: Publish to Plato Alert Message Event
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  development:
+    url: whf00mip.in.oracle.com:9092
+    description: Development server
+    protocol: kafka
+channels:
+  platoAlertMessage:
+    description: Plato Alert Message Topic
+    subscribe:
+      summary: Published to platoAlertMessage event
+      message:
+        description: On trigger of an Collection transaction alert will be published on this channel in Plato Alerts Management Service
+        $ref: '#/components/messages/alertMessage'
+components:
+  messages:
+    alertMessage:
+      name: Plato Alert Message Generated Message Format
+      title: Plato Alert Message
+      summary: Plato Alert Message Generation Message
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/alertMessagePayload"
+  schemas:
+    alertMessagePayload:
+      type: object
+      description: Alert Messsage Model
+      properties :
+        users :
+          type : array
+          description: Users Data
+          $ref: "#/components/schemas/user"
+        alertName :
+          type : string
+          description: Alert Name
+        functionalIdentifier :
+          type : string
+          description: Functional Identifier
+    user:
+      type: object
+      description: User Model
+      properties :
+        userId :
+          type : string
+          description: User Id
+        channels :
+          type : array
+          description: Channels
+          $ref: "#/components/schemas/channel"
+    channel:
+      type: object
+      description: Channel Model
+      properties :
+        key :
+          type : string
+          description: Key
+        mode :
+          type : string
+          description: Mode
+        shortMessage :
+          type : string
+          description: Short Message
+        message :
+          type : string
+          description: Message
+        parameters :
+          type : array
+          description: Parameters
+          $ref: "#/components/schemas/parameter"
+    parameter:
+      type: object
+      description: Parameter Model
+      properties :
+        key :
+          type : string
+          description: Key
+        value :
+          type : string
+          description: Value
+        documents :
+          type : array
+          description: Documents
+          $ref: "#/components/schemas/document"
+    document:
+      type: object
+      description: Document Model
+      properties :
+        documentId :
+          type : string
+          description: Document Id

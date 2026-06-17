@@ -1,0 +1,390 @@
+swagger: "2.0"
+info:
+  description: "This API helps to perform Cashflow Search function"
+  version: "1.0.0"
+  title: "Cashflow Search API"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Cashflow-Search-API"
+    description: "This API helps to perform Cashflow Search function"
+
+paths:
+  /service/v1/cashflow-maint/search:
+    get:
+      tags:
+        - "Cashflow-Search-Service"
+      summary: "Retrieves Cashflows"
+      description:  "Retrieves the Cashflows for given set of parameters."
+      operationId: "searchCashflows"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Application Id"
+      - name: "partyId"
+        in: "query"
+        description: "Id of the Corporate / Party for which Cashflow Details are required"
+        type: "string"
+        required: true
+      - name: "fromDate"
+        in: "query"
+        type: string
+        description: "Start Date for Cashflow Details in yyyy-MM-dd format"
+      - name: "toDate"
+        in: "query"
+        type: string
+        description: "End Date for Cashflow Details in yyyy-MM-dd format"
+      - name: "cashFlowType"
+        in: "query"
+        type: string
+        description: "Inflow or Outflow"
+      - name: "cashFlowCode"
+        in: "query"
+        type: string
+        description: "CashFlow Code Required"
+      - name: "ccy"
+        in: "query"
+        type: string
+        description: "Settlement Curency"
+      - name: "bankAccountNumber"
+        in: "query"
+        type: string
+        description: "Bank Account No"
+      - name: "virtualAcctNo"
+        in: "query"
+        type: string
+        description: "Virtual Account No"
+      - name: "fromAmount"
+        in: "query"
+        type: number
+        description: "From Amount"
+      - name: "toAmount"
+        in: "query"
+        type: number
+        description: "To Amount"
+      - name: "fromActualAmount"
+        in: "query"
+        type: number
+        description: "From Actual Amount"
+      - name: "toActualAmount"
+        in: "query"
+        type: number
+        description: "To Actual Amount"
+      - name: "reconStatus"
+        in: "query"
+        type: string
+        description: "Recon Status"
+      - name: "externalTransactionRefNo"
+        in: "query"
+        type: string
+        description: "External Reference No"
+      - name: "transactionId"
+        in: "query"
+        type: string
+        description: "Transaction Id"
+      - name: "udfTxt4"
+        in: "query"
+        type: string
+        description: "User Defined Text 4 .OBDX sends RefNo in this field"
+      - name: "channel"
+        in: "query"
+        type: string
+        description: "Channel"
+      - name: "counterPartyId"
+        in: "query"
+        type: string
+        description: "Counter Party Id"
+      - name: "customerRefNo"
+        in: "query"
+        type: string
+        description: "Customer Reference No"
+      - name: "authStatus"
+        in: "query"
+        type: string
+        description: "Authentication Status"
+      - name: "forInquiry"
+        in: "query"
+        type: string        
+        description: "For Inquiry Flag- Y/N "                                                                                                
+      - name: "mlBase"
+        in: "query"
+        type: string
+        description: "Base on which search needs to be performed, P-Predicted, A-Actual(Default)"
+      - name: offset
+        in: query
+        description: "Offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: "Limit is maximum no of records to be fetched"
+        required: false
+        type: integer                                        
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashflowResponseWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"
+definitions:          
+  CashflowResponseWrapper:
+    description: "Cashflow response model"
+    type: "object"
+    properties:
+      status:
+        description: "Status"
+        type: string
+      cashflows:
+        type: array
+        description: "List of Cashflow Reponse"
+        items:
+          $ref: "#/definitions/CashflowResponse"
+      errorCodes:
+        type: array
+        description: "List of Error Model"
+        items:
+          $ref: "#/definitions/ErrorModel"
+      paging:
+          description: "Paging DTO Model"
+          $ref: "#/definitions/PagingDto"
+  PagingDto:
+    description: "Paging DTO object"
+    type: object
+    properties:
+     totalResults:
+      description: "Total Results"
+      type: integer              
+  CashflowResponse:
+    description: "Cashflow Response Model"
+    type: "object"
+    properties:
+      partyId:
+        description: "Party Id / Corporate Id"
+        type: string
+      corporateName:
+        description: "Corporate Name"
+        type: string
+      actualDate:
+        description: "Actual Cashflow Date in yyyy-MM-dd format"
+        type: string
+      cashFlowType:
+        description: "Cashflow Type - Inflow / Outflow"
+        type: string
+      cashFlowCode:
+        description: "Cashflow Code"
+        type: string
+      ccy:
+        description: "Settlement Curency"
+        type: string
+      amount:
+        description: "Cashflow Amount"
+        type: number
+      expecDate:
+        description: "Expected Cashflow Date in yyyy-MM-dd format"
+        type: string
+      revisedExpectedDate:
+        description: "Revised Expected Cashflow Date in yyyy-MM-dd format"
+        type: string         
+      counterpartyId:
+        description: "Counterparty Id"
+        type: string
+      cashflowDescription:
+        description: "Cashflow Description"
+        type: string
+      counterpartyName:
+        description: "Counterparty Name"
+        type: string
+      externalTransactionRefNo:
+        description: "External Transaction Ref No"
+        type: string
+      bankAccountNumber:
+        type: string
+        description: "Bank Accont No"        
+      virtualAcctNo:
+        type: string
+        description: "Virtual Account No"
+      actualCashflowAmt:
+        type: number
+        description: "Actual Cashflow Amount"
+      narration:
+        type: string
+        description: "Narration"
+      reconStatus:
+        type: string
+        description: "Recon Status"
+      applicationName:
+        type: string
+        description: "Application Name"
+      channel:
+        type: string
+        description: "Channel"
+      transactionId:
+        type: string
+        description: "Transaction Id"                        
+      udfTxt1:
+        type: string
+        description: "User Defined Text 1"
+      udfTxt2:
+        type: string
+        description: "User Defined Text 2"
+      udfTxt3:
+        type: string
+        description: "User Defined Text 3"
+      udfTxt4:
+        type: string
+        description: "User Defined Text 4"
+      udfTxt5:
+        type: string
+        description: "User Defined Text 5"
+      udfTxt6:
+        type: string
+        description: "User Defined Text 6"
+      udfTxt7:
+        type: string
+        description: "User Defined Text 7"
+      udfTxt8:
+        type: string
+        description: "User Defined Text 8"
+      udfTxt9:
+        type: string
+        description: "User Defined Text 9"
+      udfTxt10:
+        type: string
+        description: "User Defined Text 10"
+      summaryProcessed:
+        type: string
+        description: "Summary Processed"
+      parentId:
+        type: string
+        description: "Parent Id"
+      fileReferenceNo:
+        type: string
+        description: "File Reference No"
+      makerId:
+        type: string
+        description: "Maker Id"
+      makerDateTime:
+        type: string
+        description: "Maker dateTime"
+      checkerId:
+        type: string
+        description: "Checker Id"
+      checkerDateTime:
+        type: string
+        description: "Checker dateTime"
+      modNo:
+        type: string
+        description: "Modification No"
+      authStatus:
+        type: string
+        description: "Authentication Status"
+      recordStatus:
+        type: string
+        description: "Record Status"
+      onceAuth:
+        type: string
+        description: "Once Authentication Flag"
+      customerRefNo:
+        type: string
+        description: "Customer Reference No"
+      varianceAmount:
+        type: number
+        description: "Variance Amount"
+      unpaidAmount:
+        description: "Unpaid Amount"
+        type: number
+      excludeRecon:
+        type: string
+        description: "Exclude Recon"
+      transactionStatus:
+        type: string
+        description: "Transaction Status"
+      lastActionPerformed:
+        type: string
+        description: "Last Action Performed"
+      startOfWeek:
+        type: "string"
+        description: "Start Of Week"
+      endOfWeek:
+        type: "string"
+        description: "End Of Week"
+      predictedCashflows:
+        type: array
+        description: "List of Predicted Cashflows"
+        items:
+          $ref: "#/definitions/PredictedCashflow"
+  ErrorModel:
+    description: "Error model"
+    type: "object"
+    properties:
+      ErrorCode:
+        description: "Error Code"
+        type: string
+      ErrorDescrtiption:
+        description: "Error Description"
+        type: string
+  PredictedCashflow:
+    description: "Predicted Cashflow"
+    type: "object"
+    properties:
+      partyId:
+        description: "Party Id / Corporate Id"
+        type: string
+      corporateName:
+        description: "Corporate Name"
+        type: string
+      actAmount:
+        description: "Actual Amount"
+        type: number
+      actDate:
+        description: "Actual Cashflow Date in yyyy-MM-dd format"
+        type: string
+      cashFlowType:
+        description: "Cashflow Type - Inflow / Outflow"
+        type: string
+      cashFlowCode:
+        description: "Cashflow Code"
+        type: string
+      ccy:
+        description: "Settlement Curency"
+        type: string
+      amount:
+        description: "Predicted Cashflow Amount"
+        type: number
+      date:
+        description: "Predicted Cashflow Date in yyyy-MM-dd format"
+        type: string
+      customerRefNo:
+        type: string
+        description: "Customer Reference No"
+      externalTransactionRefNo:
+        description: "External Transaction Ref No"
+        type: string
+        

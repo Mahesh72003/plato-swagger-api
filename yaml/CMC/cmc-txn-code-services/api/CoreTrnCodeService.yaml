@@ -1,0 +1,268 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : CoreTrnCodeService.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server coretrncodes server." 
+ version: "1.0.0"
+ title: "cmccoretrncodes Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "coretrncodesService"
+   description: "Source Transaction Codes can be created using this service. Transaction codes represents various types of transactions, for example, transfer charges, incoming mail transfer, incoming telex transfer, reserve, incoming clearing transfer etc."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../coretrncodes
+
+ /service/coretrncodes:
+  post:
+   tags:
+    - "coretrncodesService"
+   summary: "Adds a new coretrncodes."
+   description: "Adds a new coretrncodes. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string" 
+    - name: "coretrncodes" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new coretrncodes" 
+      required: true
+      schema:
+       $ref: "../api/CoreTrnCode.yaml#/definitions/TransactionCodeDTO"   
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created coretrncodes" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/TransactionCodeResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../coretrncodes/xxx
+#   DELETE    .../coretrncodes/xxx
+#   GET       .../coretrncodes/xxx
+#   GET       .../coretrncodes/xxx?version=latestrecord
+#   GET       .../coretrncodes/xxx?version=1
+
+ /service/coretrncodes/{trnCode}:
+  put:
+   tags:
+    - "coretrncodesService"
+   summary: "Update an existing coretrncodes."
+   description:  "Update an existing coretrncodes."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "trnCode"
+      in: "path"
+      description: "trnCode of the coretrncodes Maintenance"
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string"  
+    - name: "coretrncodes"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing coretrncodes"
+      required: true
+      schema:
+       $ref: "../api/CoreTrnCode.yaml#/definitions/TransactionCodeDTO"
+   
+   responses:
+    200:
+     description: "Returns updated coretrncodes"
+     schema:
+      $ref: "#/definitions/TransactionCodeResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coretrncodes/xxx/close
+ /service/coretrncodes/{trnCode}/close:
+  patch:
+   tags:
+    - "coretrncodesService"
+   summary: "Close the coretrncodes by given ID."
+   description:  "Close the coretrncodes identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "trnCode"
+      in: "path"
+      description: "trnCode of the coretrncodes maintenance"
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string"   
+    - name: "coretrncodes"
+      in: "body"
+      description: Request body contain coretrncodes and Modification no of coretrncodes maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/CloseDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/TransactionCodeResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../coretrncodes/xxx/reopen
+
+ /service/coretrncodes/{trnCode}/reopen:
+  patch:
+   tags:
+    - "coretrncodesService"
+   summary: "reopen the coretrncodes by given ID."
+   description:  "reopen the coretrncodes identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "trnCode"
+      in: "path"
+      description: "trnCode of the coretrncodes maintenance"
+      required: true
+      type: "string"
+    - name: "sourceCode"
+      in: "header"
+      description: "Source from which request is initiated"
+      required: true
+      type: "string"     
+    - name: "coretrncodes"
+      in: "body"
+      description: Request body contain coretrncodes and Modification no of coretrncodes maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/ReOpenDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/TransactionCodeResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CloseDto:
+  type: object
+  properties:
+   modNo:
+    type: integer  
+   remarks:
+    type: string
+ ReOpenDto:
+  type: object
+  properties:
+   modNo:
+    type: integer  
+   remarks:
+    type: string    
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+     $ref: "../api/CoreTrnCode.yaml#/definitions/ResponseDto"
+ TransactionCodeResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "../api/CoreTrnCode.yaml#/definitions/ResponseDto"
+   data:
+    $ref: "../api/CoreTrnCode.yaml#/definitions/TransactionCodeDTO" 

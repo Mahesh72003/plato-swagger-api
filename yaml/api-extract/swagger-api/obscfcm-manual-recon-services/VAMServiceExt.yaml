@@ -1,0 +1,117 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This provides APIs which would call VAM service for fetching Virtual Account Number and making Allocation transaction against them." 
+ version: "1.0.0"
+ title: "VAM Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-manual-recon-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "vamservice"
+   description: "Using this service caller will be able to call in VAM services"
+                                                                                                     
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../RuleDef
+
+ /service/v1/fetchVirtualAccounts:
+  post:
+   tags:
+   - "vamservice"
+   summary: "Fetches virtual accounts as per the attributes"
+   description: "Fetches virtual accounts as per the attributes"
+   operationId: "fetchVirtualAccounts"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "App Id"
+      type: "string"
+      required: true
+    - name: "attributes" 
+      in: "body" 
+      description: "atributes"
+      required: true
+      schema:
+       $ref: "#/definitions/Map"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     schema:
+      $ref: "#/definitions/VirtualAccountsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+
+ Map:
+  type: object
+  additionalProperties:
+   type: string
+
+ VirtualAccountsCollection:
+  type: object
+  properties:
+   virtualAccounts:
+    type: array
+    items:
+     type: string
+    description: "Virtual Account Number"
+  

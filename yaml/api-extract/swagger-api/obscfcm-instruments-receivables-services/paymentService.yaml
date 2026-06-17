@@ -1,0 +1,1173 @@
+swagger: "2.0"
+info:
+  description: "Provides APIs to perform operations on Payments"
+  version: "1.0.0"
+  title: "Payment Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-instruments-receivables-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PaymentService"
+    description: "APIs for Payment Operations"
+
+paths:
+  /service/v1/stagePayment:
+    post:
+      tags:
+        - "PaymentService"
+      summary: "Create new Payment in stage table."
+      description: "Create new Payment in stage table. "
+      operationId: "createStagePayment"
+      parameters:
+        - name: "payment"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Payment."
+          required: true
+          schema:
+            $ref: "#/definitions/ScfPaymentDTO"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the the newly created payment."
+          schema:
+              $ref: "#/definitions/ScfPaymentDTO"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /service/v1/mainPayment:
+    post:
+      tags:
+        - "PaymentService"
+      summary: "Adds all the main payments from the stage to the main table after validation."
+      description: "Adds all the main payments from the stage to the main table after validation."
+      operationId: "createMainPayments"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "fileNames"
+          in: "body"
+          description: "Request Body that contains data required for creating new Payments."
+          required: true
+          schema:
+            type: array
+            items: 
+              type: string
+      responses:
+        201:
+          description: "Returns the Id of the newly created payment"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"   
+  /service/v1/invPayRecon:
+    patch:
+      tags:
+        - "PaymentService"
+      summary: "Update API for Invoice Payment Recon"
+      description: "Updates Invoices and Payment after Auto Recon "
+      operationId: "invoicePaymentAutoRecon"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "reconType"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "ScfInvPayReconCollection"
+          in: "body"
+          description: "Request Body that contains data required for updating Invoices and Payment."
+          required: true
+          schema:
+            $ref: "#/definitions/ScfInvPayReconCollection"
+      responses:
+        201:
+          description: "Returns collection of invoices,payments and credit notes"
+          schema:
+              $ref: "#/definitions/ScfInvPayReconCollection"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ScfInvPayReconCollection"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"     
+  /service/v1/paymentSearch:
+    get:
+      tags:
+        - "PaymentService"
+      summary: "Gets Payments."
+      description: "Get Payments. "
+      operationId: "getPayments"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: "paymentStatus"
+        in: "query"
+        required: false
+        type: array
+        items:
+          type: string   
+        collectionFormat: multi
+      - name: "paymentMode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentRefNo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentDateFrom"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentDateTo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentParty"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "beneficiaryCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentCcy"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "forRecon"
+        in: "query"
+        required: false
+        type: boolean
+      - name: "accountNumber"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "virtualAcFlag"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "counterpartyId"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "creditAccNo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "remitterAccNo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "instrumentBank"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "entityRefNo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "programCode"
+        in: "query"
+        required: false
+        type: "string"                                                
+      - name: "paymentAmountFrom"
+        in: "query"
+        required: false
+        type: "number"                                                
+      - name: "paymentAmountTo"
+        in: "query"
+        required: false
+        type: "number"                                                
+      - name: "remarks"
+        in: "query"
+        required: false
+        type: "string"                                                
+      - name: "matchedAmount"
+        in: "query"
+        required: false
+        type: "number"                                                
+      - name: "dateReferenceBasis"
+        in: "query"
+        required: false
+        type: "string"                                                
+      - name: "dateFrom"
+        in: "query"
+        required: false
+        type: "string"                                                
+      - name: "dateTo"
+        in: "query"
+        required: false
+        type: "string"                                                
+      - name: "dcIndicator"
+        in: "query"
+        required: false
+        type: "string"                                                
+      - name: "paymentNumber"
+        in: "query"
+        required: false
+        type: "string"        
+      - name: "relationshipCode"
+        in: "query"
+        required: false
+        type: "string"        
+      - name: "allocStatus"
+        in: "query"
+        required: false
+        type: "string"        
+      - name: "amountReferenceBasis"
+        in: "query"
+        required: false
+        type: "string"        
+      - name: "amountFrom"
+        in: "query"
+        required: false
+        type: "number"        
+      - name: "amountTo"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "reconStatus"
+        in: "query"
+        required: false
+        type: "string"        
+      - name: "flag"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "accOwner"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentPartyName"
+        in: "query"
+        required: false
+        type: "string" 
+      - name: "counterpartyName"
+        in: "query"
+        required: false
+        type: "string"  
+      - name: "beneficiaryName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "forInquiry"
+        in: "query"
+        required: false
+        type: "boolean"
+      - name: "fileName"
+        in: "query"
+        required: false
+        type: "string" 
+      - name: "beneficiaryId"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "specificAppropriation"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "partyPaymentCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "counterpartyCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "autoReconcile"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "bankCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "S"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "instrumentDate"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "instrumentBranch"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "mandateRefNo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "creditNoteRefNo"
+        in: "query"
+        required: false
+        type: "string" 
+      - name: "allocationRequired"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler1"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler2"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler3"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler4"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler5"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler6"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler7"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler8"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler9"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "filler10"
+        in: "query"
+        required: false
+        type: "string"             
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/PaymentCollectionDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"   
+  
+  /service/v1/allocationStatus:
+    post:
+      tags:
+        - "PaymentService"
+      summary: "Update allocation status"
+      description: "Update allocation status"
+      operationId: "updateAllocationStatus"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "allocationStatus"
+          in: "body"
+          description: "Request Body to update allocation amount & status"
+          required: true
+          schema:
+            $ref: "#/definitions/AllocationRequestDto"
+      responses:
+        200:
+          description: "Returns Ok response"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/payments:
+    post:
+      tags:
+        - "PaymentService"
+      summary: "Create new bulk Payment "
+      description: "Create new bulk Payment "
+      operationId: "createBatchPayment"
+      parameters:
+        - name: "payment"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Payment."
+          required: true
+          schema:
+            type: array
+            items: 
+              $ref: "#/definitions/ScfPaymentDTO"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the the newly created payment."
+          schema:
+            $ref: "#/definitions/CreatePaymentsResponseCollection"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/getCurrentTwPayment:
+    get:
+      tags:
+        - "PaymentService"
+      summary: "Retrieves the list of existing Invoices."
+      description:  "Retrieves the list of existing Invoices."
+      operationId: "getCurrentTwPayment"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "paymentRefNo"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/PaymentCollectionDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"         
+  /service/v1/purgePmtTransaction:
+      post:
+         tags:
+         - PaymentService
+         summary: Purge payment transactions
+         description: Purge payment transactions
+         operationId: purgePmtTransaction
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: userId
+            in: header
+            type: string
+            required: true
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: conductorWorkflowModel
+            in: body
+            description: Request Body with attributes picked from model.
+            required: true
+            schema:
+               $ref: '#/definitions/ConductorWorkflowModel'
+         responses:
+            200:
+               description: Invoices rejected successfully
+               schema:
+                $ref: "#/definitions/ConductorWorkflowModel"
+            400:
+               description: Bad Request
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+  /service/v1/authorizePayment:
+    post:
+      tags:
+        - "PaymentService"
+      summary: "Authorize a Payment "
+      description: "Authorize a Payment by PaymentRefNo "
+      operationId: "authorizePayment"
+      parameters:
+        - name: "conductorWorkflowModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkflowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the authorized payment status."
+          schema:
+            $ref: "#/definitions/ConductorWorkflowModel"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /service/v1/purgeInstrumentsRecon:
+      post:
+         tags:
+         - PaymentService
+         summary: Purge instruments recon
+         description: Purge instruments recon
+         operationId: purgeInstrumentsRecon
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: userId
+            in: header
+            type: string
+            required: true
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: scfInvPayReconDTO
+            in: body
+            description: Request Body with attributes picked from model.
+            required: true
+            schema:
+               $ref: '#/definitions/ScfInvPayReconDTO'
+         responses:
+            200:
+               description: Invoices rejected successfully
+               schema:
+                type: boolean
+            400:
+               description: Bad Request
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error          
+definitions:
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "./CommonDef.yaml#/definitions/ResponseCode"
+    requestId:
+     type: string
+  ResponseResourceSupport:
+    type: object
+  ScfPaymentDTO:
+    description: "Payment details for Payments Model"
+    type: object
+    properties:
+     autoReconcile:
+      type: string
+      description: "Auto Reconcile"
+     bankCode:
+      type: string
+      description: "Bank Code"
+     beneficiaryCode:
+      type: string
+      description: "Beneficiary Code"
+     beneficiaryId:
+      type: string
+      description: "Beneficiary Id"
+     beneficiaryName:
+      type: string 
+     counterpartyId:
+      type: string
+      description: "Counterparty Id"
+     counterpartyName:
+      type: string
+     counterpartyCode:
+      type: string
+      description: "Counterparty Code"
+     creditAccNo:
+      type: string
+      description: "Credit Account Number"
+     creditNoteRefNo:
+      type: string
+      description: "Credit Note Reference Number"
+     dcIndicator:
+      type: string
+      description: "Dc Indicator"
+     eftRefNo:
+      type: string
+      description: "Eft Reference Number"
+     entityRefNo:
+      type: string
+      description: "Entity Reference Number"
+     filler1:
+      type: string
+      description: "Filler 1"
+     filler2:
+      type: string
+      description: "Filler 2"
+     filler3:
+      type: string
+      description: "Filler 3"
+     filler4:
+      type: string
+      description: "Filler 4"
+     filler5:
+      type: string
+      description: "Filler 5"
+     filler6:
+      type: string
+      description: "Filler 6"
+     filler7:
+      type: string
+      description: "Filler 7"
+     filler8:
+      type: string
+      description: "Filler 8"
+     filler9:
+      type: string
+      description: "Filler 9"
+     filler10:
+      type: string
+      description: "Filler 10"
+     flag:
+      type: string
+      description: "Flag"
+     genericAppropriation:
+      type: string
+      description: "Generic Appropriation"
+     specificAppropriation:
+      type: string
+      description: "Specific Appropriation"
+     indicator:
+      type: string
+      description: "Indicator"
+     instrumentBank:
+      type: string
+      description: "Instrument Bank"
+     instrumentBranch:
+      type: string
+      description: "Instrument Branch"
+     instrumentDate:
+      type: string
+      description: "Instrument Date"
+     mandateRefNo:
+      type: string
+      description: "Mandate Reference Number"
+     paymentAmount:
+      type: number
+      description: "Payment Amount"
+     paymentCurrency:
+      type: string
+      description: "Payment Currency"
+     paymentDate:
+      type: string
+      description: "Payment Date"
+     paymentMode:
+      type: string
+      description: "Payment Mode"
+     paymentNumber:
+      type: string
+      description: "Payment Number"
+     partyPaymentCode:
+      type: string
+      description: "Party Payment Code"
+     paymentPartyId:
+      type: string
+      description: "Payment Party id"
+     paymentPartyName:
+      type: string
+     paymentProcessStatus:
+      type: string
+      description: "Payment Process Status"
+     paymentRefNo:
+      type: string
+      description: "Payment Reference Number"
+     paymentStatus:
+      type: string
+      description: "Payment Status"
+     programCode:
+      type: string
+      description: "Program Code"
+     remarks:
+      type: string
+      description: "Remarks"
+     remitterAccNo:
+      type: string
+      description: "Remitter Account Number"     
+     fileName:
+      type: string
+      description: "File Name"      
+     reasonCode:
+      type: string
+      description: "Reason Code"   
+     matchedAmount:
+      type: number
+     unmatchedAmount:
+      type: number   
+     reconTxnStatus:
+      type: string
+     isAutoAuth:
+      type: string
+     virtualAcFlag:
+      type: string
+     paymentBusinessDate:
+      type: string
+     counterpartyRole:
+      type: string
+     beneficiaryRole:
+      type: string
+     paymentPartyRole:
+      type: string
+     relationshipCode:
+      type: string
+     errorDesc:
+      type: string
+     paymentPartyCategory:
+      type: string
+     derivedFlag:
+      type: string
+     allocationRequired:
+      type: string
+     allocStatus:
+      type: string
+     allocatedAmt:
+      type: number            
+     unallocatedAmt:
+      type: number
+     accOwner:
+      type: string
+     procBranchCode:
+      type: string
+     procBranchDate:
+      type: string
+     transactionRefNo:
+      type: string
+     transactionStatus:
+      type: string
+     seqNo:
+      type: integer
+      format: int64
+     isPUA:
+      type: string
+     isIndirectPayment:
+      type: string
+     sourceTxnId:
+      type: string
+      description: "Recon Txn Number" 
+     reconciledPmtAmt:
+      type: number
+     totalAllocatedAmt:
+      type: number
+     isRecon:
+      type: string
+     financeReferenceNo:
+      type: string       
+  PagingDto:
+   type: object
+   properties:
+    totalResults:
+     type: integer
+  ScfInvPayReconCollection:
+    description: "ScfInvPayReconDTO Collection"
+    type: "object"
+    properties:
+      scfInvPayReconList:
+        type: array
+        items:
+          $ref: '#/definitions/ScfInvPayReconDTO'
+      responseDtoWrapper:
+          $ref: "#/definitions/ResponseDtoWrapper"
+
+  FinanceTransactionCollection:
+    description: "Collection of Finance Transaction Models."
+    type: "object"
+    properties:
+      FinanceTransactionList:
+        type: "array"
+        items:
+          $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/FinanceTransactionModel"  
+  ScfTmNonCustomerCodeCollection: 
+    description: "Collection of unique non-customer codes."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       type: "string"
+  ResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/FinanceTransactionModel"
+      errors:
+        type: "object"
+      paging:
+        type: "object"
+  ScfInvPayReconDTO:
+    description: "Response Model"
+    type: "object"
+    properties:
+      invoices:
+        type: "array"
+        items: 
+          $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/InvoiceModel"
+      payments:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfPaymentDTO"
+      creditNotes:
+        type: "array"
+        items:
+          $ref: "./CreditNoteDef.yaml#/definitions/CreditNoteModel"
+      reconTxnRefNo:
+        type: string
+      financeRefNo:
+        type: string  
+      isAccountingApplicable:
+        type: string
+      isLimitsApplicable:
+        type: string
+  ScfCoreCustomerCodeCollection: 
+    description: "Collection of Valid Core customer codes."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       type: "string"
+  PaymentCollectionDto:
+    description: "ScfPaymentDTO Collection"
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfPaymentDTO"
+      paging:
+        type: "object"    
+  CreatePaymentsResponse:
+    properties:
+      paymentNumber:
+        type: "string"
+      paymentRefNo:
+        type: "string"
+      errorDesc:
+        type: "string"
+  CreatePaymentsResponseCollection:
+    description: List of Create Payment Service Response
+    type: object
+    properties:
+      paymentList:
+        type: array
+        items:
+          $ref: '#/definitions/CreatePaymentsResponse'
+  AllocationRequestDto:
+    description: "Allocation request Dto"
+    type: "object"
+    properties:
+      paymentRefNo:
+        type: string
+        description: "Payment reference number"
+      allocationStatus:
+        type: string
+        description: "Allocation Status"
+      reconAction:
+        type: string
+        description: "Recon Action"
+      allocationAmt:
+        type: number
+        description: "Allocation Amount"
+      reconTxnRefNo:
+        type: string
+        description: "Recon Txn Reference No"
+  AutoReconRequestDTO:
+    description: "Auto Recon Parameters model"
+    type: "object"
+    properties:
+      jobName:
+        description: "Name of the job"
+        type: "string"
+      jobParameters:
+        description: "parameters of the job"
+        type: "array"
+        items:
+          $ref: '#/definitions/JobParameter'
+  JobParameter:
+    description: "JobParameter"
+    type: "object"
+    properties:
+      key:
+        type: "string"
+        description: "key"
+      value:
+        type: "string"
+        description: "value"
+  ConductorWorkflowModel:
+    description: "ConductorWorkflowModel"
+    type: "object"
+    properties:
+      processCode:
+        type: "string"
+        description: "Process Code to identify workflow"
+      processName:
+        type: "string"
+        description: "Process Name to identify workflow"
+      userId:
+        type: "string"
+        description: "User Id"
+      stageId:
+        type: "string"
+        description: "Stage Id"
+      stageDescription:
+        type: "string"
+        description: "Stage desc"
+      branchCode:     
+        type: "string"
+        description: "Branch Code"
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDesc:
+        type: "string"
+        description: "Error Desc"
+      transactionReferenceNo:
+        type: "string"
+        description: "Transaction Referenec No"
+      processingDate:
+        description: "Processing Date"
+        type: "string"
+      businessDate:
+        description: "Business Date"
+        type: "string"
+      workflowInstanceId:
+        description: "Workflow Instance Id"
+        type: "string"
+      taskInstanceId:
+        description: "Task Instance Id"
+        type: "string"
+      appId:
+        description: "AppId of Workflow Service"
+        type: "string"
+      uri:
+        description: "EndPoint of Workflow Service"
+        type: "string"
+      product:
+        description: "Product type to identify service for instrument"
+        type: "string"
+      applicationCode:
+        description: "Application code"
+        type: "string"
+      instrumentModel:
+        $ref: "#/definitions/InstrumentModel"
+      workflowType:
+        description:
+        type: "string"    
+      productCode:
+        description:
+        type: "string"    
+      event:
+        description:
+        type: "string"
+      priority:
+        type: "string"
+      amount:
+        type: "number"
+      customerNumber:
+        type: "string"
+      currencyCode:
+        type: "string"
+      productCategory:
+        type: "string"
+      applicationNumber:
+        description: "Reference number without seqno"
+        type: "string" 
+  InstrumentModel:
+    description: "InstrumentModel"
+    properties: 
+      action:
+        type: "string"
+        description: "Action"
+      isAutoAuth:
+        type: "string"
+        description: "IsAutoAuth"
+      isFileUpload:
+        type: "string"
+        description: "isFileUpload"
+      isFileAuthorized:
+        type: "string"
+        description: "isFileUpload"
+      isPortalTxn:
+        type: "string"
+        description: "isPortalTxn"
+      instrumentType:
+        type: "string"
+        description: "Instrument Type"
+      partyId:
+        type: "string"
+        description: "Party id"
+      invoiceRefNo:
+        type: "string"
+        description: "Invoice Ref No"
+      isFromML:
+        type: "string"
+        description: "Check if txn is from ML"
+      isMLHumanTaskReqd:
+        type: "string"
+        description: "Check if ml txn requires human task"
+      additionalDetails:
+        type: object
+      additionalProperties:
+        type: object

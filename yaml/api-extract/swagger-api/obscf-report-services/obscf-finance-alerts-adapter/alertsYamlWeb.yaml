@@ -1,0 +1,2037 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBCM
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a alertdefinitionmaster server." 
+ version: "1.0.0"
+ title: "Alert Definition master Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "alertdefinitionmaster"
+   description: "This server is for maintaining alerts between corporate and its buyers and sellers. All parameter related to alerts will be configured through this service.
+Service will have all operations for ADD/MODIFY/DELETE/AUTHORIZE"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../alertdefinitionmaster
+
+ /web/v1/alertdecisioning:
+  post:
+   tags:
+    - "alertdecisioning"
+   summary: "Adds a new alertdecisioning."
+   description: "Adds a new alertdecisioning. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "alertdecisioning" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new alertdecisioning" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObTmAlertsDecisioningMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created alertdecisioning" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+
+definitions:
+ ObTmAlertsDecisioningMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     filterAttr1:
+      type: string
+      description: "Filter Attribute 1"
+     filterAttr2:
+      type: string
+      description: "Filter Attribute 2"
+     filterAttr3:
+      type: string
+      description: "Filter Attribute 3"
+     filterAttr4:
+      type: string
+      description: "Filter Attribute 4"
+     filterAttr5:
+      type: string
+      description: "Filter Attribute 5"
+     filterCriteria:
+      type: string
+      description: "Filter Criteria"
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference Number"
+     ObTmAlertsDecisioningDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObTmAlertsDecisioningDetailsDTO'
+ ObTmAlertsDecisioningDetailsDTO:
+  type: object
+  properties:
+     additionalDetails:
+      type: string
+      description: "Additional Details"
+     alertCategory:
+      type: string
+      description: "Alert Category"
+     alertCode:
+      type: string
+      description: "Alert Code"
+     alertDescription:
+      type: string
+      description: "Alert Description"
+     alertFrequency:
+      type: string
+      description: "Alert Frequency"
+     beforeDays:
+      type: string
+      description: "Before Days"
+     decisioningMasterId:
+      type: string
+      description: "Decisioning Master Id"
+     deliveryMode:
+      type: string
+      description: "Delivery Mode"
+     event:
+      type: string
+      description: "Event"
+     id:
+      type: string
+      description: "Id"
+     intervalDays:
+      type: string
+      description: "Interval Days"
+     noOfAlerts:
+      type: string
+      description: "Number of Alerts"
+     recipient:
+      type: string
+      description: "Recipient"
+     ObTmAlertsDecisioningDeliveryDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObTmAlertsDecisioningDeliveryDetailsDTO'
+ ObTmAlertsDecisioningDeliveryDetailsDTO:
+  type: object
+  properties:
+     alertText:
+      type: string
+      description: "Alert text"
+     decisioningDetailsId:
+      type: string
+      description: "Decisioning Details Id"
+     documentId:
+      type: string
+      description: "Document Id"
+     id:
+      type: string
+      description: "Id"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+  
+ InvoiceRaised:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - INVOICE_DATE
+    - OUTSTANDING_AMOUNT
+    
+ InvoiceAccepted:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - INVOICE_DATE
+    - ACCEPTANCE_AMOUNT
+    
+ InvoiceAssigned:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - PROC_DATE
+    
+ InvoiceDisputed:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - PROC_DATE
+    
+ InvoiceModified:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - PROC_DATE
+    
+ InvoiceCancelled:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - PROC_DATE
+    
+ InvoiceProcessed:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - INVOICE_NUMBER
+    - PROC_DATE
+
+ InvoiceOverdue:
+  type: string
+  enum:
+    - BUYER_ID
+    - INVOICE_NUMBER
+    - INVOICE_DUE_DATE
+    
+ FinanceMaturity:
+  type: string
+  enum:
+    - DEBTOR
+    - FINANCE_REFERENCE_NUMBER
+    - MATURITY_DATE
+
+ FinanceOverdue:
+  type: string
+  enum:
+    - DEBTOR
+    - FINANCE_REFERENCE_NUMBER
+    - MATURITY_DATE
+    
+ LoanDisbursed:
+  type: string
+  enum:
+    - DEBTOR
+    - FINANCE_REFERENCE_NUMBER
+    - FINANCE_AMOUNT
+    - FINANCE_STATUS
+    - PROCESSING_DATE
+    
+ LoanSettled:
+  type: string
+  enum:
+    - DEBTOR
+    - FINANCE_REFERENCE_NUMBER
+    - PAYMENT_STATUS
+    - VALUE_DATE
+    
+ LoanPartialSettled:
+  type: string
+  enum:
+    - DEBTOR
+    - FINANCE_REFERENCE_NUMBER
+    - PAYMENT_STATUS
+    - TOTAL_OS_AMOUNT
+    - PRINCIPAL_OS_AMOUNT
+    - INTEREST_OS_AMOUNT
+    
+ LoanPaymentReminder:
+  type: string
+  enum:
+    - DEBTOR
+    - FINANCE_REFERENCE_NUMBER
+    - MATURITY_DATE
+    - TOTAL_OS_AMOUNT
+    - PRINCIPAL_OS_AMOUNT
+    - INTEREST_OS_AMOUNT
+    
+ PoRaised:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - PO_EXTERNAL_NUMBER
+    - PO_DATE
+    
+ PoAccepted:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - PO_EXTERNAL_NUMBER
+    - ACCEPTANCE_DATE
+    
+ PoCancelled:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - PO_EXTERNAL_NUMBER
+    - CHECKER_DT_STAMP
+    
+ PoModified:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - PO_EXTERNAL_NUMBER
+    - CHECKER_DT_STAMP
+    
+ PoProcessedForFinance:
+  type: string
+  enum:
+    - BUYER_ID
+    - SUPPLIER_ID
+    - PO_EXTERNAL_NUMBER
+    - CHECKER_DT_STAMP
+    
+ InstrumentLodged:
+  type: string
+  enum:
+    - CORPORATE_ID
+    - INSTRUMENT_NO
+    - CHECKER_DT_STAMP
+    
+ InstrumentCleared:
+  type: string
+  enum:
+    - CORPORATE_ID
+    - INSTRUMENT_NO
+    - REALISATION_DATE
+    
+ InstrumentOnHold:
+  type: string
+  enum:
+    - CORPORATE_ID
+    - INSTRUMENT_NO
+    
+ InstrumentReturned:
+  type: string
+  enum:
+    - CORPORATE_ID
+    - INSTRUMENT_NO
+    - RETURNING_DATE
+    
+ CounterpartyOnboarded:
+  type: string
+  enum:
+    - CORPORATE_ID
+    - COUNTERPARTYNAME
+    
+ CounterpartyDisassociated:
+  type: string
+  enum:
+    - CORPORATE_ID
+    - COUNTERPARTYNAME
+    - RELATIONSHIP_CODE
+    
+ LimitsExpiring:
+  type: string
+  enum:
+    - ENTITY_ID
+    - STRUCTURE_DESCRIPTION
+    - EXPIRES_ON
+    
+ LimitsSanctioned:
+  type: string
+  enum:
+    - ENTITY_ID
+    - STRUCTURE_DESCRIPTION
+    - SANCTIONED_LIMIT_AMT
+ AdviceResponse:
+    description: Advice Response
+    type: object
+    properties:
+      status:
+        description: Status
+        type: string
+      documentReferenceId:
+        description: Document Reference Id
+        type: string
+      documentInbase64:
+        description: Document Inbase64
+        type: string
+      documentNature:
+        description: Document Nature
+        type: string
+ EmailRequest:
+    description: Data required for sending a mail to the user
+    type: object
+    required:
+    - emailFrom
+    - emailTo
+    - documentInBase64
+    - reportContentType
+    properties:
+      serviceName:
+        description: Service Name
+        type: string
+      emailBCC:
+        description: Email-BCC
+        type: string
+      emailBody:
+        description: Email-Body
+        type: string
+      emailCC:
+        description: Email-CC
+        type: string
+      emailFrom:
+        description: Email-From
+        type: string
+      emailReplyTo:
+        description: Email-Reply-To
+        type: string
+      emailSubject:
+        description: Email-Subject
+        type: string
+      emailTo:
+        description: Email-To
+        type: string
+      contentType:
+        description: Content-Type
+        type: string
+      documentInBase64:
+        description: Document in Base64
+        type: string
+      documentName:
+        description: documentName
+        type: string
+      reportContentType:
+        description: reportContentType
+        type: string
+  
+ AlertDtoCollection:
+   description: "Collection of Alert Dto."
+   type: "object"
+   properties:
+     financeMaintDto:
+       $ref: "#/definitions/FinanceMaintDto"
+     partyTransactionModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/PartyTransactionModel"
+     limitsFactorTransactionList:
+       type: "array"
+       items:
+         $ref: "#/definitions/LimitsFactorTransactionModel"
+     interestTransactionModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/InterestTransactionModel"
+     chargeEnquiryDetailsModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/ChargeEnquiryDetailsModel"
+     accountingTransactionModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/AccountingTransactionModel"
+     invoiceFinanceModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/InvoiceFinanceModel"
+     financeTransactionIntgModelList:
+       type: "array"
+       items:
+         $ref: "#/definitions/FinanceTransactionIntgModel"
+
+ FinanceMaintDto:
+   description: "DTO for ScfFinTxnTm"
+   type: object
+   properties:
+     branchCode:
+       type: "string"
+       description: "Branch Code"
+     branchName:
+       type: "string"
+       description: "Branch Name"
+     productCode:
+       type: "string"
+       description: "Product Code"
+     productDescription:
+       type: "string"
+       description: "Product Description"
+     programCode:
+       type: "string"
+       description: "Program Code"
+     programName:
+       type: "string"
+       description: "Program Name"
+     buyerId:
+       type: "string"
+       description: "Buyer Id"
+     buyerName:
+       type: "string"
+       description: "Buyer Name"
+     supplierId:
+       type: "string"
+       description: "Supplier Id"
+     supplierName:
+       type: "string"
+       description: "Supplier Name"
+     anchorId:
+       type: "string"
+       description: "Anchor Id"
+     anchorName:
+       type: "string"
+       description: "Anchor Name"
+     debtorId:
+       type: "string"
+       description: "Debtor Id"
+     debtorName:
+       type: "string"
+       description: "Debtor Name"
+     spokeId:
+       type: "string"
+       description: "Spoke Id"
+     spokeName:
+       type: "string"
+       description: "Spoke Name"
+     startDate:
+       type: "string"
+       description: "Start Date"
+     maturityDate:
+       type: "string"
+       description: "Maturity Date"
+     tenor:
+       type: "number"
+       description: "Tenor"
+     graceDays:
+       type: "number"
+       description: "Grace Days"
+     pastDueDate:
+       type: "string"
+       description: "Past Due Date"
+     totalInstrumentAmtCcy:
+       type: "string"
+       description: "Total Instrument Amount Currency"
+     totalInstrumentAmt:
+       type: "number"
+       description: "Total Instrument Amount"
+     financeAmtCcy:
+       type: "string"
+       description: "Finance Amount Currency"
+     financePct:
+       type: "number"
+       description: "Finance Pct"
+     financeAmt:
+       type: "number"
+       description: "Finance Amount"
+     exchangeRate:
+       type: "number"
+       description: "Exchange Rate"
+     lastProcessingDate:
+       type: "string"
+       description: "Last Processing Date"
+     financeStatus:
+       type: "string"
+       description: "Finance Status"
+     clRefNo:
+       type: "string"
+       description: "Cl Reference Number"
+     makerId:
+       type: "string"
+       description: "Maker Id"
+     makerDateStamp:
+       type: "string"
+       description: "Maker Date Stamp"
+     authId:
+       type: "string"
+       description: "Authorization Id"
+     authDtStamp:
+       type: "string"
+       description: "Authorization Date Stamp"
+     lastOperationCode:
+       type: "string"
+       description: "Last Operation Code"
+     financeReferenceNo:
+       type: "string"
+       description: "Finance Reference Number"
+     disbRequestId:
+       type: "string"
+       description: "Disbursement Request Id"
+     lastValueDate:
+       type: "string"
+       description: "Last Value Date"
+     principalOsAmount:
+       type: "number"
+       description: "Principal Os Amount"
+     interestOsAmount:
+       type: "number"
+       description: "Interest Os Amount"
+     totalOsAmount:
+       type: "number"
+       description: "Total Os Amount"
+     overdueIntOsAmount:
+       type: "number"
+       description: "Overdue Int Os Amount"
+     penIntOsAmount:
+       type: "number"
+       description: "Pen Int Os Amount"
+     totalRepaidAmount:
+       type: "number"
+       description: "Total Repaid Amount"
+     totPmtTowardsPrncplOs:
+       type: "number"
+       description: "Total Payment Towards Principle Os"
+     totPmtTowardsIntOs:
+       type: "number"
+       description: "Total Payment Towards Int Os"
+     totPmtTowardsOverdueIntOs:
+       type: "number"
+       description: "Total Payment Towards Overdue Int Os"
+     totPmtTowardsPenIntOs:
+       type: "number"
+       description: "Total Payment Towards Pen Int Os"
+     lastSeqNo:
+       type: "number"
+       description: "Last Sequence Number"
+     buyerDivCode:
+       type: "string"
+       description: "Buyer Division Code"
+     supplierDivCode:
+       type: "string"
+       description: "Supplier Division Code"
+     buyerDivName:
+       type: "string"
+       description: "Buyer Division Name"
+     supplierDivName:
+       type: "string"
+       description: "Supplier Division Name"
+     buyerAddress:
+       type: "string"
+       description: "Buyer Address"
+     supplierAddress:
+       type: "string"
+       description: "SupplierAddress"
+     branchLocalCcy:
+       type: "string"
+       description: "Branch Local Currency"
+     eventDate:
+       type: "string"
+       description: "Event Date"
+     eventType:
+       type: "string"
+       description: "Event Type"
+     userId:
+       type: "string"
+       description: "User Id"
+     applicationCode:
+       type: "string"
+       description: "Application Code"
+     intCalcBasisAmt:
+       type: number
+       description: "Interest calculation Basis Amount"
+     odIntCalcBasisAmt:
+       type: number
+       description: "Overdue int calculation Basis Amount"
+     penIntCalcBasisAmt:
+       type: number
+       description: "Penalty int calculation Basis Amount"
+
+ PartyTransactionModel:
+   description: "Party Transaction Model"
+   type: "object"
+   properties:
+     id:
+       type: "string"
+       description: "Id"
+     financeRefNo:
+       type: "string"
+       description: "Finance Reference Number"
+     seqNo:
+       type: "integer"
+       format: "int64"
+       description: "Sequence Number"
+     srNo:
+       type: "integer"
+       format: "int64"
+       description: "Serial Number"
+     partyCode:
+       type: "string"
+       description: "Party Code"
+     partyId:
+       type: "string"
+       description: "Party Id"
+     partyName:
+       type: "string"
+       description: "Party Name"
+     partyAddress:
+       type: "string"
+       description: "Party Address"
+     divisionCode:
+       type: "string"
+       description: "Division Code"
+     divisionName:
+       type: "string"
+       description: "Division Name"
+     isMandatory:
+       type: "string"
+       description: "Is Mandatory"
+        
+ LimitsFactorTransactionModel:
+   description: "Limits Transaction Model"
+   type: "object"
+   properties:
+     id:
+       type: "string"
+       description: "Id"
+     financeRefNo:
+       type: "string"
+       description: "Finance Reference Number"
+     limitEvent:
+       type: string
+       description: "Limit Event"
+     txnEvent:
+       type: string
+       description: "Transaction event"
+     seqNo:
+       type: "integer"
+       format: "int64"
+       description: "Sequence Number"
+     limitsAction:
+       type: "string"
+       description: "Limits Action"
+     limitType:
+       type: "string"
+       description: "Limit Type"
+     limitTypeDesc:
+       type: "string"
+       description: "Limit Type Description"
+     entityType:
+       type: "string"
+       description: "Entity Type"
+     entityId:
+       type: "string"
+       description: "Entity Id"
+     entityDesc:
+       type: "string"
+       description: "Entity Description"
+     structureId:
+       type: "string"
+       description: "Structure Id"
+     structureDesc:
+       type: "string"
+       description: "Structure Description"
+     lineId:
+       type: "string"
+       description: "Line ID"
+     nodeIdentifier:
+       type: "string"
+       description: "Node Identifier"
+     limitCcy:
+       type: "string"
+       description: "Limit Currency"
+     sanctionedLimitAmt:
+       type: "number"
+       description: "Sanctioned Limit Amount"
+     availableLimitAmt:
+       type: "number"
+       description: "Available Limit Amount"
+     totalBlockedAmt:
+       type: "number"
+       description: "Total Blocked Amount"
+     totalUtilizedAmount:
+       type: "number"
+       description: "Total Utilized Amount"
+     adhocSanctionedLmtAmt:
+       type: "number"
+       description: "Adhoc Sanctioned Limit Amount"
+     adhocAvailableLmtAmt:
+       type: "number"
+       description: "Adhoc Available Limit Amount"
+     adhocTotalBlockedAmt:
+       type: "number"
+       description: "Adhoc Total Blocked Amount"
+     adhocTotalUtilizedAmt:
+       type: "number"
+       description: "Adhoc Total Utilized Amount"
+     txnCcy:
+       type: "string"
+       description: "Transaction Currency"
+     txnAmt:
+       type: "number"
+       description: "Transaction Amount"
+     txnAmtLimitCcy:
+       type: "number"
+       description: "Transaction Amount Limit Currency"
+     exchangeRate:
+       type: "number"
+       description: "Exchange Rate"
+     txnAmtLimitCcyMain:
+       type: "number"
+       description: "Transaction Amount Limit Currency Main"
+     txnAmtLimitCcyAdhoc:
+       type: "number"
+       description: "Transaction Amount Limit Currency Adhoc"
+     netTxnAmt:
+       type: "number"
+       description: "Net Transaction Amount"
+     netUtilLmtMainLmtCcy:
+       type: "number"
+       description: "Net Util Limit Main Limit Currency"
+     netUtilLmtAdhocLmtCcy:
+       type: "number"
+       description: "Net Util Limit Adhoc Limit Currency"
+     parentStructureId:
+       type: "string"
+       description: "Parent Structure Id"
+     parentNodeLineId:
+       type: "string"
+       description: "Parent Node Line Id"
+     externalLineId:
+       type: "string"
+       description: "External Line Id"
+     status:
+       type: "string"
+       description: "Status"
+     errorCode:
+       type: "string"
+       description: "Error Code"
+     errorDesc:
+       type: "string"
+       description: "Error Description"
+     limitsUtilizationMandatory:
+       type: "string"
+       description: "Limits Utilization Mandatory"
+     rootEntity:
+       type: "string"
+       description: "Root Entity"
+     rootEntityName:
+       type: "string"
+       description: "Root Entity Name"
+     depth:
+       type: "number"
+       description: "Depth"
+     rootEntityFlag:
+       type: "string"
+       description: "Root Entity Flag"
+     expiresOn:
+       type: "string"
+       description: "Expires On"
+       format: date
+     effectiveFrom:
+       type: "string"
+       format: date
+       description: "Effective From"
+     txnDate:
+       type: string
+       description: "Transaction Date"
+     expiredLimitExceptionHandling:
+       type: string
+       description: "Expired Limit Exception Handling"
+     breachLimitExceptionHandling:
+       type: string
+       description: "Breach Limit Exception Handling"
+     expiredAndBreachLimitExceptionHandling:
+       type: string
+       description: "Expired And Breach Limit Exception Handling"
+     breachType:
+       type: string
+       description: "Breach Type"
+     processingOutcome:
+       type: string
+       description: "Processing Outcome"
+        
+ InterestTransactionModel:
+   description: "Interest Transaction Model"
+   type: "object"
+   properties:
+     id:
+       type: "string"
+       description: "Id"
+     financeRefNo:
+       type: "string"
+       description: "Finance Reference Number"
+     seqNo:
+       type: "integer"
+       format: "int64"
+       description: "Sequence Number"
+     interestType:
+       type: "string"
+       description: "Interest Type"
+     interestRateType:
+       type: "string"
+       description: "Interest Rate Type"
+     interestRate:
+       type: "number"
+       description: "Interest Rate"
+     spread:
+       type: "number"
+       description: "Spread"
+     interestRateTotal:
+       type: "number"
+       description: "Interest Rate Total"
+     interestCollFreq:
+       type: "string"
+       description: "Interest Collection Frequency"
+     interestAmtCcy:
+       type: "string"
+       description: "Interest Amount Currency"
+     interestAmount:
+       type: "number"
+       description: "Interest Amount"
+     componetName:
+       type: "string"
+       description: "Component Name"
+     interestComp:
+       type: "string"
+       description: "InterestComponent"
+     fixedRateType:
+       type: "string"
+       description: "Fixed Rate Type"
+     rateCode:
+       type: "string"
+       description: "Rate Code"
+     resetTenor:
+       type: "number"
+       description: "Reset Tenor"
+     rateFixingDays:
+       type: "number"
+       description: "Rate Fixing Days"
+     rateCodeUsage:
+       type: "string"
+       description: "Rate Code Usage"
+     rateRevisionFreq:
+       type: "string"
+       description: "Rate Revision Frequency"
+     rateBasis:
+       type: "string"
+       description: "Rate Basis"
+     rateCalcType:
+       type: "string"
+       description: "Rate Calculate Type"
+     tierBasedSpread:
+       type: "string"
+       description: "Tier Based Spread"
+     tierType:
+       type: "string"
+       description: "Tier Type"
+     frequency:
+       type: "string"
+       description: "Frequency"
+     noOfUnits:
+       type: "number"
+       description: "Number Of Units"
+     scheduleType:
+       type: "string"
+       description: "Schedule Type"
+     referenceDate:
+       type: "string"
+       description: "Reference Date"
+     monthEnd:
+       type: "string"
+       description: "Month End"
+     interestAmtTier:
+       type: "array"
+       items:
+         $ref: "#/definitions/PrefIntAmtTiersModel"
+     interestTenorTier:
+       type: "array"
+       items:
+         $ref: "#/definitions/PrefIntTenorTiersModel"
+     interestMixedTier:
+       type: "array"
+       items:
+         $ref: "#/definitions/PrefIntMixedTiersModel"
+          
+ ChargeEnquiryDetailsModel:
+    type: object
+    properties:
+      id:
+        type: string
+        description: "Id"
+      applicationCode:
+        type: string
+        description: "Application Code"
+      branchCode:
+        type: string
+        description: "Branch Code"
+      calcErrorCode:
+        type: string
+        description: "Calculate Error Code"
+      event:
+        type: string
+        description: "Event"
+      party:
+        type: string
+        description: "Party"
+      partyId:
+        type: string
+        description: "Party Id"
+      partyRole:
+        type: string
+        description: "Party Role"
+      product:
+        type: string
+        description: "Product"
+      chargeCode:
+        type: string
+        description: "Charge Code"
+      chargeCodeDesc:
+        type: string
+        description: "Charge Code Description"
+      chargeGroup:
+        type: string
+        description: "Charge Group"
+      chargeType:
+        type: string
+        description: "Charge Type"
+      instrumentType:
+        type: string
+        description: "Instrument Type"
+      chargeAccount:
+        type: string
+        description: "Charge Account"
+      collectionType:
+        type: string
+        description: "Collection Type"
+      txnRefNo:
+        type: string
+        description: "Transaction Reference Number"
+      postingDate:
+        type: string
+        description: "Posting Date"
+      currency:
+        type: string
+        description: "Currency"
+      chargeAmt:
+        type: number
+        description: "Charge Amount"
+      chgCalcDate:
+        type: string
+        description: "Charge Calculate Date"
+      calcStartDate:
+        type: string
+        description: "Calculate Start Date"
+      calcEndDate:
+        type: string
+        description: "Calculate End Date"
+      calcType:
+        type: string
+        description: "Calculate Type"
+      calcFreq:
+        type: string
+        description: "Calculate Frequency"
+      parentChgCode:
+        type: string
+        description: "Parent Charge Code"
+      parentChgCodeDesc:
+        type: string
+        description: "Parent Charge Code Description"
+      baseAmount:
+        type: number
+        description: "Base Amount"
+      baseAmountCcy:
+        type: string
+        description: "Base Amount Currency"
+      baseCount:
+        type: number
+        description: "Base Count"
+      priceTemplateId:
+        type: string
+        description: "Price Template Id"
+      modNo:
+        type: number
+        description: "Mod Number"
+      calcRefPeriod:
+        type: string
+        description: "Calculate Reference Period"
+      calcUnits:
+        type: number
+        description: "Calculate Units"
+      chargeCategory:
+        type: string
+        description: "Charge Category"
+      chargeCriteria:
+        type: string
+        description: "Charge Criteria"
+      chargeCriteriaValue:
+        type: number
+        description: "Charge Criteria Value"
+      chgCriteriaCcy:
+        type: string
+        description: "Charge Criteria Currency"
+      chgCriteriaCount:
+        type: string
+        description: "Charge Criteria Count"
+      chgInTxnCcy:
+        type: string
+        description: "Charge In Transaction Currency"
+      chgSharing:
+        type: string
+        description: "Charge Sharing"
+      chgSharingPct:
+        type: number
+        description: "Charge Sharing Pct"
+      collectionFreq:
+        type: string
+        description: "Collection Frequency"
+      collectionRefPeriod:
+        type: string
+        description: "Collection Reference Period"
+      collectionUnits:
+        type: number
+        description: "Collection Units"
+      exchangeRate:
+        type: number
+        description: "Exchange Rate"
+      fixedAmt:
+        type: number
+        description: "Fixed Amount"
+      fixedPct:
+        type: number
+        description: "Fixed Pct"
+      flatCharge:
+        type: string
+        description: "Flat Charge"
+      maxAmt:
+        type: number
+        description: "Maximum Amount"
+      maxPct:
+        type: number
+        description: "Maximum Pct"
+      minAmt:
+        type: number
+        description: "Minimum Amount"
+      minPct:
+        type: number
+        description: "Minimum Pct"
+      minmaxCriteria:
+        type: string
+        description: "Minimum Maximum Criteria"
+      prcCategory:
+        type: string
+        description: "Price Category"
+      prcCcy:
+        type: string
+        description: "Price Currency"
+      priceMethodDesc:
+        type: string
+        description: "Price Method Description"
+      referenceEndDate:
+        type: string
+        description: "Reference End Date"
+      referenceStartDate:
+        type: string
+        description: "Reference Start Date"
+      txnCcy:
+        type: string
+        description: "Transaction Currency"
+      allowOverride:
+        type: string
+        description: "Allow Override"
+      allowPrcModify:
+        type: string
+        description: "Allow Price Modify"
+      allowWaive:
+        type: string
+        description: "Allow Waive"
+      autoWaive:
+        type: string
+        description: "Auto Waive"
+      postingErrorCode:
+        type: string
+        description: "Posting Error Code"
+      referenceStartDateValue:
+        type: string
+        description: "Reference Start Date Value"
+      referenceEndDateValue:
+        type: string
+        description: "Reference End Date Value"
+      partyName:
+        type: string
+        description: "Party Name"
+      debitAccountNo:
+        type: string
+        description: "Debit Account Number"
+      creditAccountNo:
+        type: string
+        description: "Credit Account Number"
+      firstChgCalcDate:
+        type: string
+        description: "First Charge Calculate Date"
+      nextChgCalcDate:
+        type: string
+        description: "Next Charge Calculate Date"
+      firstChgCollDate:
+        type: string
+        description: "First Charge Collection Date"
+      nextChgCollDate:
+        type: string
+        description: "Next Charge Collection Date"                                             
+
+ AccountingTransactionModel:
+    description: "Accounting Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      refNo:
+        type: "string"    
+        description: "Reference Number"  
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      accountingEntryCode:
+        type: "string"
+        description: "Accounting Entry Code"
+      drCrIndicator:
+        type: "string"
+        description: "Debit Credit Indicator"
+      amountCcy:
+        type: "string"
+        description: "Amount Currency"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+      amount:
+        type: "number"
+        description: "Amount"
+      amountType:
+        type: "string"
+        description: "Amount Type"
+      accountCcy:
+        type: "string"
+        description: "Account Currency"
+      amountAccCcy:
+        type: "number"
+        description: "Amount Account Currency"
+      accountNo:
+        type: "string"
+        description: "Account Number"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      status:
+        type: "string"
+        description: "Status"
+      accRoleCode:
+        type: "string"
+        description: "Account Role Code"
+      accPartyType:
+        type: "string"
+        description: "Account Party Type"
+      accPartyId:
+        type: "string"
+        description: "Account Party Id"
+      accSettMethod:
+        type: "string"
+        description: "Account Settlement Method"
+      accEntrySeq:
+        type: "integer"
+        format: "int64"
+        description: "Account Entry Sequence"
+      accRoleDesc:
+        type: "string"
+        description: "Account Role Description"
+      accEntryDesc:
+        type: "string"
+        description: "Account Entry Description"
+      accType:
+        type: "string"
+        description: "Account Type"
+      eventSrNo:
+        type: "number"
+        description: "Event Serial Number"
+      ecaRefNo:
+        type: "string"
+        description: "Eca Reference Number"
+      externalAccount:
+        type: "string"
+        description: "External Account"
+      paymentMode:
+        type: "string"
+        description: "Payment Mode"
+      externalAccountCcy:
+        type: "string"
+        description: "External Account Currency"
+      externalBankId:
+        type: "string"
+        description: "External Bank Id"
+      externalBankName:
+        type: "string"
+        description: "External Bank Name"
+      externalBranchCode:
+        type: "string"
+        description: "External Branch Code"
+      externalBranchName:
+        type: "string"
+        description: "External Branch Name"
+      externalBranchRoutingCode:
+        type: "integer"
+        format: "int64"
+        description: "External Branch Routing Code"
+      stage:
+        type: "string"
+        description: "Stage"
+      additionalField1:
+        type: "string"
+        description: "Additional Field1"
+      additionalField2:
+        type: "string"
+        description: "Additional Field2"
+      additionalField3:
+        type: "string"
+        description: "Additional Field3"
+      additionalField4:
+        type: "string"
+        description: "Additional Field4"
+      additionalField5:
+        type: "string"
+        description: "Additional Field5"
+      additionalField6:
+        type: "string"
+        description: "Additional Field6"
+      additionalField7:
+        type: "string"
+        description: "Additional Field7"
+      additionalField8:
+        type: "string"
+        description: "Additional Field8"
+      additionalField9:
+        type: "string"
+        description: "Additional Field9"
+      additionalField10:
+        type: "string"
+        description: "Additional Field10"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      processingDate:
+        type: "string"
+        description: "Processing date"
+      txnBranchCode:
+        type: "string"
+        description: "Transaction Branch Code"
+      productCode:
+        type: "string"
+        description: "Product code"
+      accClass:
+        type: "string"
+        description: "Account Class"
+      vaContraAccNo:
+        type: "string"
+        description: "VA Contra Account Number"
+      creditIntAcntList:
+        type: array
+        items:
+          type: "string"
+      debitIntAcntList:
+        type: array
+        items:
+          type: "string"
+      actualPostingAmt:
+        type: number
+        description: "Actual Posting Amount"
+      postingRefNo:
+        type: string
+        description: "Posting Reference No"
+      postingStatus:
+        type: string
+        description: "Posting Status"
+      ecaStatus:
+        type: string
+        description: "ECA Status"
+      postingErrorCode:
+        type: string
+        description: "Posting Error Code"
+      ecaErrorCode:
+        type: string
+        description: "ECA Error Code"
+      blkRefNo:
+        type: string
+        description: "Block Reference No"
+      makerId:
+        type: string
+        description: "Maker Id"
+      makerDateStamp:
+        type: string
+        description: "Maker Date Stamp"
+      checkerId:
+        type: string
+        description: "Checker Id"
+      checkerDateStamp:
+        type: string
+        description: "Checker Date Stamp"        
+        
+ InvoiceFinanceModel:
+     description: "Invoice Finance Transaction Model"
+     type: "object"
+     properties:
+       scfInvoiceFinanceId:
+         type: "integer"
+         format: "int64"
+       requestId:
+         type: "string"
+       financeReferenceNo:
+         type: "string"
+       invoiceNumber:
+         type: "string"
+       status:
+         type: "string"
+       invoiceRefNo:
+         type: "string"
+       finTxnStatus:
+         type: "string"
+       principalOSAmt: 
+         type: "number"
+       interestOSAmt: 
+         type: "number" 
+       overdueInterestOSAmt: 
+         type: "number"
+       penaltyInterestOSAmt: 
+         type: "number"
+       pctContriTwdsFin: 
+         type: "number"
+       amtContriTwdsFin: 
+         type: "number"
+       interestAmortized: 
+         type: "number"
+       interestPaidInvCcy:  
+         type: "number"
+       marginAmt:     
+         type: "number"
+       principalPaidInvCcy: 
+         type: "number"
+       overdueInterestPaidInvCcy: 
+         type: "number"  
+       penaltyInterestPaidInvCcy: 
+         type: "number"
+       marginRefNo: 
+         type: "string"
+       interestPaidFinCcy: 
+         type: "number"
+       principalPaidFinCcy:  
+         type: "number"
+       overdueInterestPaidFinCcy: 
+         type: "number"   
+       penaltyInterestPaidFinCcy: 
+         type: "number"
+       invCcy: 
+         type: "string"
+       finCcy:
+         type: "string"
+       appropriationSeq:
+         type: "string"
+       disbursementMarginCalc: 
+         type: "number"
+       interestType: 
+         type: "string"
+       finMaturityDate:
+         type: string
+       financePct:
+         type: "number"
+       txnRefNo:
+         type: string
+       amountToBeFinanced:
+         type: "number"
+       indicator:
+         type: string        
+         
+ FinanceTransactionIntgModel:
+    description: "Finance Transaction Intg model"
+    type: "object"
+    properties:
+      id:
+        type: string
+        description: "Id"
+      refNo:
+        type: string
+        description: "refNo"
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      requestId:
+        description: "Request Id"
+        type: string
+      branchCode:
+        type: string
+        description: "Branch Code"
+      amount:
+        type: number
+        description: "Amount"
+      productCode:
+        type: string
+        description: "Product Code"
+      programCode:
+        type: string
+        description: "Program Code"
+      operationCode:
+        type: string
+        description: "Operation Code"
+      programName:
+        type: string
+        description: "Program Name"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      disputeResolveRemarks:
+        type: string
+        description: "Dispute Resolve Remarks"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      debtor:
+        type: string
+        description: "Debtor"
+      startDate:
+        type: string
+        description: "Start Date"
+      tenor:
+        type: number
+        description: "Filler 2"
+      maturityDate:
+        type: string
+        description: "Filler 3"
+      invoiceAmtCcy:
+        type: string
+        description: "Filler 4"
+      invoiceAmount:
+        type: number
+        description: "Filler 5"
+      financePCT:
+        type: number
+        description: "Filler 6"
+      financeAmtCcy:
+        type: string
+        description: "Filler 7"
+      financeAmt:
+        type: number
+        description: "Filler 8"
+      exchangeRate:
+        type: number
+        description: "Filler 9"
+      processingDate:
+        type: string
+        description: "Filler 10"
+      settlementProcessingDate:
+        type: string
+        description: "Indicator"
+      makerId:
+        type: string
+        description: "Invoice Date"
+      makerDateStamp:
+        type: string
+        description: "Invoice Due Date"
+      authId:
+        type: string
+        description: "Invoice Number"
+      authDateStamp:
+        type: string
+        description: "Invoice Process Status"
+      financeStatus:
+        type: string
+        description: "Invoice Reference Number"
+      clRefNo:
+        type: string
+        description: "Invoice Status"
+      settlementRefNo:
+        type: string
+        description: "Invoice Acceptance Date"
+      settlementMethod:
+         type: string
+         description: "Maximum Finance Percentage"
+      totalSettlementAmt:
+        type: number
+        description: "Paid Amount"
+      creditReceived:
+        type: string
+        description: "Payment Status"
+      creditAccount:
+        type: string
+        description: "Po Number"
+      paymentParty:
+        type: string
+        description: "Program Code"
+      accountType:
+        type: string
+        description: "Reason Code"
+      settlementAmtAllocated:
+        type: number
+        description: "Remarks"
+      balanceAmtToBeAllocated:
+        type: number
+        description: "Supplier Id"
+      settlementAmtAllocation:
+        type: string
+        description: "Supplier Name"
+      manualAllocation:
+        type: string
+        description: "Supplier Division Code"
+      pastDueDate:
+        type: string
+        description: "Supplier Division Name"
+      valueDate:
+        type: string
+        description: "Tax Amount"
+      principalOSAmount:
+        type: number
+        description: "Total Invoice Amount"
+      interestOSAmount:
+        type: number
+        description: "Financeable Amount"
+      totalIntOSAmount:
+        type: number
+        description: "Relation Code"
+      totalOSAmount:
+        type: number
+        description: "Transaction Reference Number"
+      valueDtdIntOSAmt:
+        type: number
+        description: "Supplier Code"
+      overdueIntOSAmt:
+        type: number
+        description: "Buyer Code"
+      valueDtdOverdueIntOSAmt:
+        type: number
+        description: "Shipment Reference Number"
+      paymentAmt:
+        type: number
+        description: "Repay Account Number"
+      appropPaymentAmt:
+        type: number
+        description: "Bank"
+      appropriationSequence:
+        type: string
+        description: "Branch"
+      pmtToPrncplOS:
+        type: number
+        description: "Routing Code"
+      pmtToIntOS:
+       type: number
+       description: "Is Auto Authorized"
+      pmtToOverdueIntOS: 
+        type: number
+        description: "Funding Required Amount"
+      updateTimestamp:
+        type: string
+        description: "Tcm Id"
+      businessDate:
+        type: string
+        description: "Maker Id"
+      eventCode:
+        type: string 
+        description: "Maker Date Stamp"
+      penIntOSAmt:
+        type: number
+        description: "Processing Branch Code"
+      pmtToPenOnIntOS:
+        type: number
+        description: "Action"
+      valueDtdPenIntOSAmt:
+        type: number
+        description: "Value Dtd Pen Int OS Amount"
+      interestAmortized:
+        type: number
+        description: "Payment Date"
+      totalMarginAmount:
+        type: number  
+        description: "Disputed Amount" 
+      delinquencyStatus:
+        type: string
+        description: "Linked Docs"         
+        
+ PrefIntAmtTiersModel:
+    description: "Amount Tier Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      intTxnId:
+        type: "string"
+        description: "Int Transaction Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "number"
+        description: "Spread"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      tierSeq:
+        type: "number"
+        description: "Tier Sequence"
+      toAmt:
+        type: "number"
+        description: "To Amount"
+      fromAmt:
+        type: "number"
+        description: "From Amount"
+        
+ PrefIntMixedTiersModel:
+    description: "Tenor Tier Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      intTxnId:
+        type: "string"
+        description: "Int Transaction Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "number"
+        description: "Spread"
+      tenorTierSeq:
+        type: "number"
+        description: "Tenor Tier Sequence"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      toAmt:
+        type: "number"
+        description: "To Amount"
+      toTenor:
+        type: "number"
+        description: "To Tenor"
+      amtTierSeq:
+        type: "number"
+        description: "Amount Tier Sequence"
+      fromAmt:
+        type: "number"
+        description: "From Amount"
+      fromTenor:
+        type: "number"
+        description: "From Tenor"
+        
+ PrefIntTenorTiersModel:
+    description: "Tenor Tier Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      intTxnId:
+        type: "string"
+        description: "Int Transaction Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "number"
+        description: "Spread"
+      tierSeq:
+        type: "number"
+        description: "Tier Sequence"
+      toTenor:
+        type: "number"
+        description: "To Tenor"
+      fromTenor:
+        type: "number"
+        description: "From Tenor"         
+        
+ UpdatedPlaceholdersDto:
+    description: "DTO for FlatAlertObj"
+    type: object
+    properties:
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      branchName:
+        type: "string"
+        description: "Branch Name"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      buyerId:
+        type: "string"
+        description: "Buyer Id"
+      buyerName:
+        type: "string"
+        description: "Buyer Name"
+      supplierId:
+        type: "string"
+        description: "Supplier Id"
+      supplierName:
+        type: "string"
+        description: "Supplier Name"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      debtorId:
+        type: "string"
+        description: "Debtor Id"
+      debtorName:
+        type: "string"
+        description: "Debtor Name"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      maturityDate:
+        type: "string"
+        description: "Maturity Date"
+      tenor:
+        type: "number"
+        description: "Tenor"
+      graceDays:
+        type: "number"
+        description: "Grace Days"
+      pastDueDate:
+        type: "string"
+        description: "Past Due Date"
+      totalInstrumentAmtCcy:
+        type: "string"
+        description: "Total Instrument Amount Currency"
+      totalInstrumentAmt:
+        type: "number"
+        description: "Total Instrument Amount"
+      financeAmtCcy:
+        type: "string"
+        description: "Finance Amount Currency"
+      financePct:
+        type: "number"
+        description: "Finance Pct"
+      financeAmt:
+        type: "number"
+        description: "Finance Amount"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      lastProcessingDate:
+        type: "string"
+        description: "Last Processing Date"
+      financeStatus:
+        type: "string"
+        description: "Finance Status"
+      clRefNo:
+        type: "string"
+        description: "Cl Reference Number"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      authId:
+        type: "string"
+        description: "Authorization Id"
+      authDtStamp:
+        type: "string"
+        description: "Authorization Date Stamp"
+      lastOperationCode:
+        type: "string"
+        description: "Last Operation Code"
+      financeReferenceNo:
+        type: "string"
+        description: "Finance Reference Number"
+      disbRequestId:
+        type: "string"
+        description: "Disbursement Request Id"
+      lastValueDate:
+        type: "string"
+        description: "Last Value Date"
+      principalOsAmount:
+        type: "number"
+        description: "Principal Os Amount"
+      interestOsAmount:
+        type: "number"
+        description: "Interest Os Amount"
+      totalOsAmount:
+        type: "number"
+        description: "Total Os Amount"
+      overdueIntOsAmount:
+        type: "number"
+        description: "Overdue Int Os Amount"
+      penIntOsAmount:
+        type: "number"
+        description: "Pen Int Os Amount"
+      totalRepaidAmount:
+        type: "number"
+        description: "Total Repaid Amount"
+      totPmtTowardsPrncplOs:
+        type: "number"
+        description: "Total Payment Towards Principle Os"
+      totPmtTowardsIntOs:
+        type: "number"
+        description: "Total Payment Towards Int Os"
+      totPmtTowardsOverdueIntOs:
+        type: "number"
+        description: "Total Payment Towards Overdue Int Os"
+      totPmtTowardsPenIntOs:
+        type: "number"
+        description: "Total Payment Towards Pen Int Os"
+      lastSeqNo:
+        type: "number"
+        description: "Last Sequence Number"
+      buyerDivCode:
+        type: "string"
+        description: "Buyer Division Code"
+      supplierDivCode:
+        type: "string"
+        description: "Supplier Division Code"
+      buyerDivName:
+        type: "string"
+        description: "Buyer Division Name"
+      supplierDivName:
+        type: "string"
+        description: "Supplier Division Name"
+      buyerAddress:
+        type: "string"
+        description: "Buyer Address"
+      supplierAddress:
+        type: "string"
+        description: "SupplierAddress"
+      branchLocalCcy:
+        type: "string"
+        description: "Branch Local Currency"
+      eventDate:
+        type: "string"
+        description: "Event Date"
+      eventType:
+        type: "string"
+        description: "Event Type"
+      userId:
+        type: "string"
+        description: "User Id"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      intCalcBasisAmt:
+        type: number
+        description: "Interest calculation Basis Amount"
+      odIntCalcBasisAmt:
+        type: number
+        description: "Overdue int calculation Basis Amount"
+      penIntCalcBasisAmt:
+        type: number   
+        description: "Penalty int calculation Basis Amount"  
+      loanAccountNo:
+        type: "string"
+        description: "Account Number"                  

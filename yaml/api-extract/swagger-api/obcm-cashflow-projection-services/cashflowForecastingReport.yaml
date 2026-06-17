@@ -1,0 +1,542 @@
+swagger: "2.0"
+info:
+  description: "This service provides aggregate levels of cashflow forecasting for daily, monthly , quarterly, Weekly and Retrieves the actual and predicted Cashflows based on given set of parameters."
+  version: "1.0.0"
+  title: "Cashflow Aggregate APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Cashflow-Forecasting-Report-API"
+    description: "This service provides aggregate levels of cashflow forecasting for daily, monthly , quarterly, Weekly and retrieves the actual and predicted Cashflows based on given set of parameters."
+
+paths:
+  /service/v1/cashflowForecasting:
+    get:
+      tags:
+        - "CashflowForecasting"
+      summary: "Retrieves Cashflow Forecasting report "
+      description:  "Retrieves the Cashflows for based on given set of parameters."
+      operationId: "fetchCashflowSummaryData"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "corporateId"
+        in: "query"
+        description: "Corporate Id"
+        type: "string"
+      - name: "aggregationLevel"
+        in: "query"
+        description: "Aggregation Level"
+        type: "string"  
+      - name: "frequency"
+        in: "query"
+        type: string
+        description: "Frequency"
+      - name: "fromDate"
+        in: "query"
+        description: "From Date for Cashflow Details in dd-MM-yyyy format"
+        type: "string"
+      - name: "toDate"
+        in: "query"
+        description: "To Date for Cashflow Details in dd-MM-yyyy format"
+        type: "string"                        
+      - name: "offset"
+        in: query
+        description: Offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: "limit"
+        in: query
+        description: Limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: "bankAccount"
+        in: "query"
+        description: "Bank Account"
+        type: "string"
+      - name: "virtualAccount"
+        in: "query"
+        description: "Virtual Account"
+        type: "string"
+      - name: "ccy"
+        in: "query"
+        description: "Currency"
+        type: "string"
+      - name: "cashflowType"
+        in: "query"
+        description: "CashFlow Type Either I or O"
+        type: "string"
+      - name: "cashflowCode"
+        in: "query"
+        description: "CashFlow Code"
+        type: "string"
+      - name: "summaryRequired"
+        in: "query"
+        description: "Summary Required"
+        type: "string"
+      - name: "counterParty"
+        in: "query"
+        description: "Counter Party"
+        type: "string"
+      - name: "parentAggStatus"
+        in: "query"
+        description: "Parent Aggregate Status"
+        type: "string"                                              
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashflowForecastingResponseWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"
+  /service/v1/nested/cashflowForecasting:
+    get:
+      tags:
+        - "CashflowForecasting"
+      summary: "Retrieves Nested Cashflow Forecasting report "
+      description:  "Retrieves Nested Cashflow Data for based on given set of parameters."
+      operationId: "fetchCashflowSummaryNestedData"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "corporateId"
+        in: "query"
+        description: "CorporateId"
+        type: "string"
+      - name: "aggregationLevel"
+        in: "query"
+        description: "Aggregation Level"
+        type: "string"  
+      - name: "frequency"
+        in: "query"
+        type: string
+        description: "Frequency"
+      - name: "code"
+        in: "query"
+        type: string
+        description: "Code"
+        required: true
+      - name: "bankAccount"
+        in: "query"
+        type: string
+        description: "Bank Account"
+      - name: "virtualAccount"
+        in: "query"
+        type: string
+        description: "Virtual Account"
+      - name: "counterParty"
+        in: "query"
+        type: string
+        description: "Counter Party"
+      - name: "fromDate"
+        in: "query"
+        description: "From Date for Cashflow Details in dd-MM-yyyy format"
+        type: "string"
+      - name: "toDate"
+        in: "query"
+        description: "To Date for Cashflow Details in dd-MM-yyyy format"
+        type: "string"                        
+      - name: "offset"
+        in: query
+        description: Offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: "limit"
+        in: query
+        description: Limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: "ccy"
+        in: "query"
+        description: "Currency"
+        type: "string"                               
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashflowForecastingResponseWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"
+          
+  /service/v1/receivePredictedResults:
+    post:
+      tags:
+        - "CashflowForecasting"
+      summary: "Retrieves Predicted Cashflows Result"
+      description: "Retrieves Predicted Cashflows Result"
+      operationId: "receivePredictedResults"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: authToken
+        in: header
+        type: string
+        required: false
+        description: "Authorization Token"
+      - name: contentType
+        in: header
+        type: string
+        required: false
+        description: "Content Type"
+      - name: "predictedResultList" 
+        in: "body" 
+        description: "Request Body that contain data required for creating a new counter party" 
+        required: true
+        schema:
+         $ref: "#/definitions/ObcmCashflowMLResultList"                             
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            type: boolean
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"          
+  /service/v1/cashflowSummary:
+    get:
+      tags:
+        - "CashflowForecasting"
+      summary: "Retrieves Cashflow ML Txns "
+      description:  "Retrieves the actual and predicted Cashflows for based on given set of parameters."
+      operationId: "fetchCashflowMLPredictedSummary"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "corporateId"
+        in: "query"
+        description: "Corporate Id"
+        type: "string"
+      - name: "aggregationLevel"
+        in: "query"
+        description: "Aggregation Level"
+        type: "string"  
+      - name: "frequency"
+        in: "query"
+        type: string
+        description: "Frequency"
+      - name: "fromDate"
+        in: "query"
+        description: "From Date for Cashflow Details in dd-MM-yyyy format"
+        type: "string"
+      - name: "toDate"
+        in: "query"
+        description: "To Date for Cashflow Details in dd-MM-yyyy format"
+        type: "string"                        
+      - name: "offset"
+        in: query
+        description: Offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: "limit"
+        in: query
+        description: Limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: "bankAccount"
+        in: "query"
+        description: "Bank Account"
+        type: "string"
+      - name: "virtualAccount"
+        in: "query"
+        description: "Virtual Account"
+        type: "string"
+      - name: "ccy"
+        in: "query"
+        description: "Currency"
+        type: "string"
+      - name: "cashflowType"
+        in: "query"
+        description: "CashFlow Type Either I or O"
+        type: "string"
+      - name: "cashflowCode"
+        in: "query"
+        description: "CashFlow Code"
+        type: "string"
+      - name: "summaryRequired"
+        in: "query"
+        description: "Summary Required"
+        type: "string"
+      - name: "counterParty"
+        in: "query"
+        description: "Counter Party"
+        type: "string"
+      - name: "parentAggStatus"
+        in: "query"
+        description: "Parent Aggregate Status"
+        type: "string"
+      - name: "mlCashflowPredictedBase"
+        in: "query"
+        type: string
+        description: "Base on which search needs to be performed, P-Predicted, A-Actual(Default), B-Both"                                              
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CashflowForecastingResponseWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"            
+definitions:
+  CashflowForecastingResponseWrapper:
+    description: "Cashflow Forecasting response wrapper"
+    type: "object"
+    properties:
+      responseStatus:
+        description: "Response Status"
+        type: string  
+      partyId:
+        description: "Party Id"
+        type: string
+      branchCcy:
+        description: "Branch ccy"
+        type: string
+      agrregationCategory:
+        description: "Agrregation Category"
+        type: string
+      frequency:
+        description: "frequency"
+        type: string
+      code:
+        description: "Code"
+        type: string
+      errorCode:
+        description: "Error Code"
+        type: string
+      errorDesc:
+        description: "Error Desc"
+        type: string
+      summaryRequired:
+        description: "Summary Required"
+        type: string    
+      cashflows:
+        type: array
+        items:
+          $ref: "#/definitions/CashflowForecastingResponse"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  CashflowForecastingResponse:
+    description: "Cashflow Forecasting Response model"
+    type: object
+    properties:
+      cashflowDate:
+        description: "CashflowDate"
+        type: string
+      month:
+        description: "Month"
+        type: string
+      quarter:
+        description: "Quarter"
+        type: string        
+      year:
+        description: "Year"
+        type: string
+      weekNo:
+        description: "Week"
+        type: string        
+      inflowAmount:
+        description: "Inflow Amount"
+        type: string
+      outflowAmount:
+        description: "Outflow Amount"
+        type: string                
+      cashflowAmount:
+        description: "Cashflow Amount"
+        type: string
+      actualCashflowAmt:
+        description: "Actual cashflow Amount"
+        type: string
+      category:
+        description: "Category"
+        type: string                              
+      aggCategory:
+        description: "Agg Category"
+        type: string
+      cashflowDescription:
+        description: "Cashflow Code Description"
+        type: string
+      countOfInflows:
+        description: "Count of Inflows"
+        type: number
+      countOfOutflows:
+        description: "Count of Outflows"
+        type: number
+      netUnpaidAmount:
+        description: "Net Unpaid Amount"
+        type: string
+      unpaidCount:
+        description: "Unpaid Count"
+        type: number
+      totalActualInflow:
+        description: "Total Actual Inflow Amount"
+        type: string
+      totalActualOutflow:
+        description: "Total Actual Outflow Amount"
+        type: string
+      unPaidInflowAmount:
+        description: "Unpaid Inflow Amount"
+        type: string
+      unPaidOutflowAmount:
+        description: "Unpaid Outflow Amount"
+        type: string
+      unPaidInflowCount:
+        description: "Unpaid Inflow Count"
+        type: string
+      unPaidOutflowCount:
+        description: "Unpaid Outflow Count"
+        type: string
+      reconciledInflowAmount:
+        description: "Reconciled Inflow Amount"
+        type: string
+      reconciledOutflowAmount:
+        description: "Reconciled Outflow Amount"
+        type: string   
+      qtrMonth:
+        description: "Quarter Month"
+        type: string
+      predInflowAmount:
+        description: "Predicted Inflow Amount"
+        type: string
+      predOutflowAmount:
+        description: "Predicted Outflow Amount"
+        type: string
+      predNetCashflowAmount:
+        description: "Net Predicted Cashflow Amount"
+        type: string
+      predCountOfInflows:
+        description: "Predicted Count of Inflows"
+        type: number
+      predCountOfOutflows:
+        description: "Predicted Count of Outflows"
+        type: number
+      predNetCountOfCashflows:
+        description: "Predicted Net Count of Cashflows"
+        type: number
+      remark:
+        description: "Remark"
+        type: string
+      startOfWeek:
+        type: "string"
+        description: "Start Of Week"
+      endOfWeek:
+        type: "string"
+        description: "End Of Week"        
+  ObcmCashflowMLResultList:
+    type: object
+    properties :
+      data:
+       type: array
+       items:
+        $ref: '#/definitions/ObcmCashflowMLPredictionResultsDTO'
+  ObcmCashflowMLPredictionResultsDTO:
+    description: "ObcmCashflow MLPrediction Results"
+    type: object
+    properties:
+      refNum:
+        description: "Reference Number"
+        type: string
+      dueDatePaymentFlag:
+        description: "Due Date Payment Flag"
+        type: integer
+      firstTRDelayDays:
+        description: "First TR Delay Days"
+        type: integer        
+      totalSettleTrancheCount:
+        description: "Total Settle Tranche Count"
+        type: integer
+      trancheAvgPayGap:
+        description: "Tranche Avg Pay Gap"
+        type: integer        
+      version:
+        description: "Version"
+        type: integer
+      predictedDate:
+        description: "Predicted Date"
+        type: string

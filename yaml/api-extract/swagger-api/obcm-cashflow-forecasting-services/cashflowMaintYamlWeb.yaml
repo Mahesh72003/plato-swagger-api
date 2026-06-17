@@ -1,0 +1,663 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cff
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a Cashflow-maint Web Api service." 
+ version: "1.0.0"
+ title: "cashflow-maint Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "cashflowMaint"
+   description: "Cashflow Maint web Api Service"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../web/v1/cashflow-maint
+
+ /web/v1/cashflow-maint:
+  post:
+   tags:
+    - "cashflow-maint"
+   summary: "Adds a new cashflow-maint."
+   description: "Adds a new cashflow-maint. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "cashflow-maint" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new cashflow-maint" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmsTmCashflowMaintMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created cashflow-maint" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "cashflow-maint"
+   summary: "Get all valid cashflow-maint."
+   description:  "Get all valid cashflow-maint. This endpoints will be used to Get all valid cashflow-maint maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: Includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: Offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: Limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: corporateName
+     in: query
+     description: Corporate Name need to be set to fetch summary record
+     required: false
+     type: string
+   - name: sourceApplication
+     in: query
+     description: Source Application need to be set to fetch summary record
+     required: false
+     type: string
+   - name: channel
+     in: query
+     description: Channel need to be set to fetch summary record
+     required: false
+     type: string
+   - name: cashflowCode
+     in: query
+     description: Code need to be set to fetch summary record
+     required: false
+     type: string
+   - name: cashflowDescription
+     in: query
+     description: Description need to be set to fetch summary record
+     required: false
+     type: string
+   - name: authStatus
+     in: query
+     description: Authorization Status need to be set to fetch summary record
+     required: false
+     type: string
+   - name: recordStatus
+     in: query
+     description: Record Status need to be set to fetch summary record
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmsTmCashflowMaintMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../web/v1/cashflow-maint/xxx
+#   DELETE    .../web/v1/cashflow-maint/xxx
+#   GET       .../web/v1/cashflow-maint/xxx
+#  /web/v1/cashflow-maint/xxx?version=latestrecord
+#   GET       .../web/v1/cashflow-maint/xxx?version=1
+
+ /web/v1/cashflow-maint/{id}:
+  put:
+   tags:
+    - "cashflow-maint"
+   summary: "Update an existing cashflow-maint."
+   description:  "Update an existing cashflow-maint based on Id Value."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the cashflow-maint Maintenance"
+      required: true
+      type: "string"
+    - name: "cashflow-maint"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing cashflow-maint"
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmsTmCashflowMaintMasterDTO"
+   responses:
+    200:
+     description: "Returns updated cashflow-maint"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "cashflow-maint"
+   summary: "Retrieves the cashflow-maint by ID."
+   description:  "Retrieves the cashflow-maint by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the cashflow-maint based on given id."
+     schema:
+      $ref: "#/definitions/ObcmsTmCashflowMaintMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ /web/v1/cashflow-maint/{id}/actions:
+  get:
+   tags:
+    - "cashflow-maint"
+   summary: "Retrieves the cashflow-maint actions by ID."
+   description:  "Retrieves the cashflow-maint actions by ID."
+   operationId: "getAvailableUserActions"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the cashflow-maint actions based on given id."
+     schema:
+      type: string
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../web/v1/cashflow-maint/xxx/approve
+
+ /web/v1/cashflow-maint/{id}/approve:
+  patch:
+   tags:
+    - "cashflow-maint"
+   summary: "Authorize the cashflow-maint by given ID."
+   description:  "Authorize the cashflow-maint identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the cashflow-maint maintenance"
+      required: true
+      type: "string"
+    - name: "cashflow-maint"
+      in: "body"
+      description: Request body contain cashflow-maint and Modification no of cashflow-maint maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../web/v1/cashflow-maint/xxx/close
+ /web/v1/cashflow-maint/{id}/close:
+  patch:
+   tags:
+    - "cashflow-maint"
+   summary: "Close the cashflow-maint by given ID."
+   description:  "Close the cashflow-maint identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the cashflow-maint maintenance"
+      required: true
+      type: "string"
+    - name: "cashflow-maint"
+      in: "body"
+      description: Request body contain cashflow-maint and Modification no of cashflow-maint maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../web/v1/cashflow-maint/xxx/reopen
+
+ /web/v1/cashflow-maint/{id}/reopen:
+  patch:
+   tags:
+    - "cashflow-maint"
+   summary: "reopen the cashflow-maint by given ID."
+   description:  "reopen the cashflow-maint identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the cashflow-maint maintenance"
+      required: true
+      type: "string"
+    - name: "cashflow-maint"
+      in: "body"
+      description: Request body contain cashflow-maint and Modification no of cashflow-maint maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to delete existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../web/v1/CashflowMaint/xxx/reopen
+
+ /web/v1/cashflow-maint/{id}/delete:
+  patch:
+   tags:
+    - "CashflowMaint"
+   summary: "delete the CashflowMaint by given ID."
+   description:  "delete the CashflowMaint identified by given ID."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the CashflowMaint maintenance"
+      required: true
+      type: "string"
+    - name: "CashflowMaint"
+      in: "body"
+      description: Request body contain CashflowMaint and Modification no of CashflowMaint maintenance which need to be delete"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../web/v1/cashflow-maint/xxx/unauthorized
+
+ /web/v1/cashflow-maint/{id}/unauthorized:
+  get:
+   tags:
+    - "cashflow-maint"
+   summary: "Retrives the cashflow-maint by given ID."
+   description:  "Retrives the cashflow-maint identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the cashflow-maint based on given id."
+     schema:
+       $ref: "#/definitions/ObcmsTmCashflowMaintMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../web/v1/cashflow-maint/xxx/history
+
+ /web/v1/cashflow-maint/{id}/history:
+  get:
+   tags:
+    - "cashflow-maint"
+   summary: "Retrives the cashflow-maint by given ID."
+   description:  "Retrives the cashflow-maint by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the cashflow-maint based on given id."
+     schema:
+       $ref: "#/definitions/ObcmsTmCashflowMaintMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ ObcmsTmCashflowMaintMasterDTO:
+  description: "ObcmsTmCashflowMaintMasterDTO Model"
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     corporateId:
+      type: string
+      description: "Corporate Id"
+     corporateName:
+      type: string
+      description: "Corporate Name"
+     sourceApplication:
+      type: string
+      description: "Source Application"
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference No"
+     channel:
+      type: string
+      description: "Channel"
+     ObcmsTmCashflowMaintDetailsDTO:
+      description: "List Of ObcmsTmCashflowMaintDetailsDTO Model"
+      type: array
+      items:
+       $ref: '#/definitions/ObcmsTmCashflowMaintDetailsDTO'
+ ObcmsTmCashflowMaintDetailsDTO:
+  type: object
+  description: "ObcmsTmCashflowMaintDetailsDTO Model"
+  properties:
+     cashflowCode:
+      type: string
+      description: "CashFlow Code"
+     cashflowDescription:
+      type: string
+      description: "CashFLow Description"
+     cashflowMasterId:
+      type: string
+      description: "CashFlow Master Id"
+     cashflowType:
+      type: string
+      description: "CashFlow Type"
+     id:
+      type: string
+      description: "Id for CashFLow"
+     parentId:
+      type: string
+      description: "Parent Id"
+     rootParentId:
+      type: string
+      description: "Root Parent Id"
+     ObcmsTmCashflowMaintDetailsDTO:
+      description: "List Of ObcmsTmCashflowMaintDetailsDTO"
+      type: array
+      items:
+       $ref: '#/definitions/ObcmsTmCashflowMaintDetailsDTO'
+ ModListKeyDto:
+  type: object
+  description: "List Of ModListKeyDto"
+  properties:
+   modNos:
+    type: array
+    description: "List Of Mod Nos"
+    items:
+     type: integer
+   remarks:
+    description: "Remarks"
+    type: string
+ KeyDto:
+  description: "KeyDto Model"
+  type: object
+  properties:
+   modNo:
+    description: "Mod No"
+    type: integer
+   remarks:
+    description: "Remarks"
+    type: string
+ ResponseDto:
+  type: object
+  description: "ResponseDto Model"
+  properties:
+   id:
+    description: "Id"
+    type: string
+   status:
+    description: "Status"
+    type: string
+   codes:
+    description: "List Of Codes"
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    description: "Request Id"
+    type: string
+ ResponseCode:
+  type: object
+  description: "Response Code Model"
+  properties:
+   Code:
+    description: "Code"
+    type: string
+   Desc:
+    description: "Description"
+    type: string
+   Type:
+    description: "Type"
+    type: string
+   Language:
+    description: "Language"
+    type: string
+   args:
+    description: "List Of Arguments"
+    type: array
+    items:
+     type: object
+   arg:
+   description: "Argument"
+   type: string
+ GenericDto:
+  description: "GenericDto Model"
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ObcmsTmCashflowMaintMasterCollection: 
+  description: "Collection of cashflowmaint."
+  type: "object"
+  properties:
+   data:
+   description: "List Of Data"
+   type: "array"
+   items: 
+     $ref: "#/definitions/ObcmsTmCashflowMaintMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  description: "PagingDto Model"
+  properties:
+   totalResults:
+    description: "Totala Results"
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  description: "ResponseDtoWrapper Model"
+  properties:
+   messages:
+    description: "Messages"
+    $ref: "#/definitions/ResponseDto"
+   data:
+    description: "Data"
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+  description: "ResponseResourceSupport Model"
+ ObcmsTmCashflowMaintMasterWrapperDTO:
+  type: object
+  description: "ObcmsTmCashflowMaintMasterWrapperDTO Model"
+  properties:
+   data:
+    description: "Data"
+    $ref: "#/definitions/ObcmsTmCashflowMaintMasterDTO"

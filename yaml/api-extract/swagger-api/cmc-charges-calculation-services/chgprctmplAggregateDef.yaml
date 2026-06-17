@@ -1,0 +1,328 @@
+swagger: '2.0'
+info:
+  description: "Provides object definitions for charge rule service"
+  version: 1.0.0
+  title: "Charge Pricing Rule Service Definitions"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/cmc-charges-calculation-services"
+tags:
+- name: "ChgPrcTmplAggregateWeb"
+  description: "Provides web APIs object definition for price rule maintenance"
+- name: "ChgPrcTmplAggregateService"
+  description: "Provides service APIs object definition for price rule maintenance"
+
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+                      
+definitions:
+ ChgPrcTmplAggregateModel:
+    description: ChgPrcTmplAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: "Key Id"
+        type: string
+       cmcTmChgPrcTmplt:
+        $ref: '#/definitions/CmcTmChgPrcTmpltDTO'
+       extendedDatasegments:
+        description: "Data for the extended datasegment operation"
+        type: array
+        items:
+          type: object
+          
+ BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type
+                               
+ ChgPrcTmplAggregateModelCollection:
+    description: "Collection of  Charge Price Template Aggregate Model"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChgPrcTmplAggregateModel'
+          
+ ChgPrcTmplWebModel:
+    description: ChgPrcTmplWebModel
+    type: object
+    properties:
+      resourceId:
+        description: "Resource Id"
+        type: string
+      resourceName:
+        description: "Resource Name"
+        type: string
+      operationType:
+        description: "Operation Type"
+        type: string
+      makerId:
+        description: "Maker Id"
+        type: string
+      makerDateStamp:
+        description: "Maker Datestamp"
+        type: string
+        format: date-time
+      checkerId:
+        description: "Checker Id"
+        type: string
+      checkerDateStamp:
+        description: "Checker Datestamp"
+        type: string
+        format: date-time
+      modNo:
+        description: "Mod No"
+        type: integer
+      recordStatus:
+        description: "Record Status Flag"
+        type: string
+      authStatus:
+        description: "Auth Status Flag"
+        type: string
+      onceAuth:
+        description: "Once Auth Flag"
+        type: string
+      doerRemarks:
+        description: "Doer Remarks"
+        type: string
+      approverRemarks:
+        description: "Approver Remarks"
+        type: string        
+      cmcTmChgPrcTmplt:
+        $ref: '#/definitions/CmcTmChgPrcTmpltDTO'
+      extendedDatasegments:
+        description: "Data for the extended datasegment operation"
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType 
+                
+ ChgPrcTmplWebModelCollection:
+    description: "Collection of Price Rule"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChgPrcTmplWebModel'
+          
+ CmcTmChgPrcTmpltDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     id:
+      type: string
+      description: "ID"
+     action:
+      type: string
+      description: "Action"
+     autoAuth:
+      type: string
+      description: "Auto Authorization"
+     modificationStatus:
+      type: string
+      description: "Modification Status"
+     datasegmentCode:
+      type: string
+      description: "Datasegment Code"
+     checkerRemarks:
+      type: string
+      description: "Checker Remarks"
+     makerRemarks:
+      type: string
+      description: "Maker Remarks"
+     applicationCode:
+      type: string
+      description: "Application Code"
+     chgInTxnCcy:
+      type: string
+      description: "Charge in Transaction Currency Flag"
+     chgPrcDesc:
+      type: string
+      description: "Price Method Description"
+     chgPrcTemplateId:
+      type: string
+      description: "Price Rule Id"
+     fixedAmt:
+      type: number
+      description: "Fixed Amount"
+     fixedPct:
+      type: number
+      description: "Fixed Percentage"
+     flatChg:
+      type: string
+      description: "Flat Charge Flag"
+     maxChgAmount:
+      type: number
+      description: "Maximum Charge Amount"
+     maxChgPct:
+      type: number
+      description: "Maximum Charge Percentage"
+     minChgAmount:
+      type: number
+      description: "Minimum Charge Amount"
+     minChgPct:
+      type: number
+      description: "Minimum Charge Percentage"
+     minMaxValidationCriteria:
+      type: string
+      description: "Min-Max CHarge Criteria"
+     prcCategory:
+      type: string
+      description: "Price Category"
+     prcCategoryDesc:
+      type: string
+      description: "Price Category Description"
+     prcCcy:
+      type: string
+      description: "Price Rule Currency"
+     prcMethod:
+      type: string
+      description: "Price Method"
+     prcMethodDesc:
+      type: string
+      description: "Price Method Description"
+     annumBasis:
+      type: string
+      description: "Annum Basis"
+     rateCode:
+      type: string
+      description: "Rate Code"
+     rateType:
+      type: string
+      description: "Rate Type"
+     isSlidingScale:
+      type: string
+      description: "Sliding Scale Flag"
+     category:
+      type: string
+      description: "Category"
+     CmcTmChgPrcTiersDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmChgPrcTiersDTO'
+       
+ CmcTmChgPrcTiersDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     amount:
+      type: number
+      description: "Amount"
+     chgPrcTemplateId:
+      type: string
+      description: "Charge Price Template ID"
+     fromSlab:
+      type: number
+      description: "Slab start limit"
+     pct:
+      type: number
+      description: "Slab Percentage"
+     prcMasterId:
+      type: string
+      description: "Price rule master id"
+     toSlab:
+      type: number
+      description: "Slab end limit"
+     unit:
+      type: number
+      description: "Slab units"
+     isSlidingScale:
+      type: string
+      description: "Sliding Scale Flag"
+     upperThreshold:
+      type: number
+      description: "Upper threshold"
+     lowerThreshold:
+      type: number
+      description: "Lower threshold"  
+      
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+           
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+    description: "Id"
+   status:
+    type: string
+    description: "Status"
+   codes:
+    type: array
+    description: "Message Code"
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    description: "Request Id"
+    type: string
+    
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+    description: "Code"
+   Desc:
+    type: string
+    description: "Description"
+   Type:
+    type: string
+    description: "Type"
+   Language:
+    type: string
+    description: "Language"
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+    
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+    
+ ResponseResourceSupport:
+  type: object
+  
+ CmcTmChgPrcTmpltCollection: 
+  description: "Collection of cmctmchgprctmplt."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmChgPrcTmpltDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+    
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+    
+ OrchestratorDTO:
+   type: object

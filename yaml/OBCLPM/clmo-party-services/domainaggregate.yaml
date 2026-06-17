@@ -1,0 +1,328 @@
+  #----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : domainaggregate.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Domain Aggregate Service
+host: 10.184.157.121:9000
+basePath: /party-services
+tags:
+- name: DomainAggregate
+  description: API for Domain Aggregate Operations
+schemes:
+- http
+paths:
+  /web/domaindata/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DomainAggregate
+      summary: Get party application aggregate details
+      description: Get party application aggregate details. Add additional information here for the this endpoint.
+      operationId: getDomainData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which loan application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns LoanApplication data for the application number
+          schema:
+            $ref: '#/definitions/PartyApplicationAggregateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/workdata/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DomainAggregate
+      summary: Get the Work Table Details.
+      description: Get the Work Table Details.
+      operationId: getWorkData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which party application data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns PartyApplicationAggregateModel for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+  /web/summarydata/{applicationNumber}:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DomainAggregate
+      summary: Get the Summary Details.
+      description: Get the Summary Details.
+      operationId: getSummaryData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which loan application data needs to be fetched
+        required: true
+        type: string
+      - name: DataSegmentDetails
+        in: body
+        description: Request Body that contains data required for creating summary data
+        required: true
+        schema:
+          $ref: '#/definitions/DataSegmentModelCollection' 
+      responses:
+        200:
+          description: Returns Data Segment Summary for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/summarydatawork/{applicationNumber}:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DomainAggregate
+      summary: Get the Summary Details.
+      description: Get the Summary Details.
+      operationId: getSummaryDataWork
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which loan application data needs to be fetched
+        required: true
+        type: string
+      - name: DataSegmentDetails
+        in: body
+        description: Request Body that contains data required for creating summary data
+        required: true
+        schema:
+          $ref: '#/definitions/DataSegmentModelCollection' 
+      responses:
+        200:
+          description: Returns Data Segment Summary for the application number
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/savedomaindata:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DomainAggregate
+      summary: Save domain data .
+      description: Populates party application aggregate and moves the latest data from all worktables to main tables.
+      operationId: saveDomainData
+      parameters:
+      - name: partyApplicationAggregateModel
+        in: body
+        description: Request Body that contains data required for creating a new PartyApplicationAggregate
+        required: true
+        schema:
+          $ref: '#/definitions/PartyApplicationAggregateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BankingInfo
+          headers:
+            Location:
+              description: URL of newly created BankingInfo
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/moduledata/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DomainAggregate
+      summary: Get loan application module data
+      description: Get loan application module data details.
+      operationId: getModuleData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application number for which loan application module data needs to be fetched
+        required: true
+        type: string
+      - name: processCode
+        in: query
+        description: Process code for which loan application module data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns LoanApplication module data for the process code
+          schema:
+           $ref: '#/definitions/HashMap'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  DataSegmentModel:
+    description: "data segment model"
+    type: "object"
+    required:
+    - dataSegmentCode
+    - sequence
+    - editFlag
+    properties:
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      dataSegmentCode:
+        description: "data segment code name"
+        type: "string"
+      dataSegmentName:
+        description: "dataSegmentName"
+        type: "string"
+      sequence:
+        description: "sequence"
+        type: "integer"
+        format: "int64"
+      editFlag:
+        description: "mandatory"
+        type: boolean
+        default: false
+      domain:
+        description: "Domain Name"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      classCode:
+        description: "classCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      groupCode:
+        description: "groupCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+  TransactionControllerStatus:
+    description: TransactionControllerModel
+    type: string
+    enum:
+    - INCOMPLETE
+    - COMPLETE
+    - WIP
+  DataSegmentModelCollection:
+    description: Collection of StatusModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DataSegmentModel'
+  HashMap:
+    type: object
+    additionalProperties: true

@@ -1,0 +1,149 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : businessproduct_serviceapi.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Business product Service
+host: 10.184.157.121:9000
+basePath: /business-product-service
+tags:
+- name: BusinessProduct service
+  description: API for Business Product maintainance
+schemes:
+- http
+paths:
+  /service/api/v1/businessproducts/summary:
+    get:
+      tags:
+        - "BusinessProductServiceSummary"
+      summary: "Get all valid applications categories with only id and name values."
+      description:  " Get all valid applications categories with only id and name values..This endpoints will be used to Get all valid business product maintanence records."
+      operationId: "getBusinessProducts"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - in: query
+        name: authStatus
+        required: false
+        type: string
+      - in: query
+        name: recordStatus
+        required: false
+        type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          schema:
+           type: object
+           $ref: "#/definitions/BusinessProductServiceSummaryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/api/v1/businessproducts/{businessProductCode}/backofficeproducts:
+    get:
+      tags:
+        - "BusinessProductServiceSummary"
+      summary: "Get all products mapped to given  business product code "
+      description:   "Get all products mapped to given  business product code "
+      operationId: "getProductsByBusinessProductCode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessProductCode"
+          in: "path"
+          description: "Code of the Business product for which the mapped back-office products should be fetched"
+          required: true
+          type: "string"       
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          type: string
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"          
+definitions:          
+ BusinessProductServiceSummaryCollection:
+  description: "Collection of business product summary."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/BusinessProductServiceSummaryModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ BusinessProductServiceSummaryModel:
+    description: "BusinessProductSummaryModel model"
+    type: "object"
+    required:
+    - businessProductCode
+    - businessProductDescription
+    properties:
+      businessProductCode:
+       description: "business product Name"
+       type: "string"
+       minLength: 0
+       maxLength: 16
+      businessProductDescription:
+       description: "business product Description"
+       type: "string"
+       minLength: 0
+       maxLength: 60
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer      

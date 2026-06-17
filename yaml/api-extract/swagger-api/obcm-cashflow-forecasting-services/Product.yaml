@@ -1,0 +1,675 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obcm
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a product server Service.This is peforming getting all cashflow Product Informations" 
+ version: "1.0.0"
+ title: "product Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "product"
+   description: "With the Program Parameter Services, user will be able to create new program with its attributes for financing. These attributes includes the basic program parameters as well as program finance attributes. Along with this, this application/MS also provides the functionality to linkage of buyer to one or more suppliers or linkage of supplier to one or more buyers"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../product
+
+ /web/v1/product:
+  post:
+   tags:
+    - "product"
+   summary: "Adds a new product."
+   description: "Adds a new product. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "product" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new product" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmTmProductMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created product" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "product"
+   summary: "Get all valid product."
+   description:  "Get all valid product. This endpoints will be used to Get all valid product maintenance records."
+   operationId: "getAll"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: Includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: Offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: Limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - in: query
+      name: authStat
+      required: false
+      type: string
+      description: Authorization Status
+    - in: query
+      name: recordStat
+      required: false
+      type: string
+      description: Record Status
+    - in: query
+      name: productCategory
+      required: false
+      type: string
+      description: Product Category
+    - in: query
+      name: branchCode
+      required: false
+      type: string
+      description: Branch Code
+    - in: query
+      name: productCode
+      required: false
+      type: string
+      description: Product Code
+    - in: query
+      name: productDescription
+      required: false
+      type: string
+      description: Product Description
+    - in: query
+      name: productType
+      required: false
+      type: string
+      description: Product Type
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmTmProductMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../product/xxx
+#   DELETE    .../product/xxx
+#   GET       .../product/xxx
+#   GET       .../product/xxx?version=latestrecord
+#   GET       .../product/xxx?version=1
+
+ /web/v1/product/{id}:
+  put:
+   tags:
+    - "product"
+   summary: "Update an existing product."
+   description:  "Update an existing product."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the product Maintenance"
+      required: true
+      type: "string"
+    - name: "product"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing product"
+      required: true
+      schema:
+       $ref: "#/definitions/CmTmProductMasterDTO"
+   responses:
+    200:
+     description: "Returns updated product"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "product"
+   summary: "Retrieves the product by ID."
+   description:  "Retrieves the product by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the product based on given id."
+     schema:
+      $ref: "#/definitions/CmTmProductMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+     
+ /web/v1/product/{id}/actions:
+  get:
+   tags:
+    - "product"
+   summary: "Retrieves the product actions by ID."
+   description:  "Retrieves the products actions by ID."
+   operationId: "getAvailableUserActions"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the product actions based on given id."
+     schema:
+      type: string
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../product/xxx/approve
+
+ /web/v1/product/{id}/approve:
+  patch:
+   tags:
+    - "product"
+   summary: "Authorize the product by given ID."
+   description:  "Authorize the product identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the product maintenance"
+      required: true
+      type: "string"
+    - name: "product"
+      in: "body"
+      description: Request body contain product and Modification no of product maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../product/xxx/close
+ /web/v1/product/{id}/close:
+  patch:
+   tags:
+    - "product"
+   summary: "Close the product by given ID."
+   description:  "Close the product identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the product maintenance"
+      required: true
+      type: "string"
+    - name: "product"
+      in: "body"
+      description: Request body contain product and Modification no of product maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../product/xxx/reopen
+
+ /web/v1/product/{id}/reopen:
+  patch:
+   tags:
+    - "product"
+   summary: "reopen the product by given ID."
+   description:  "reopen the product identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the product maintenance"
+      required: true
+      type: "string"
+    - name: "product"
+      in: "body"
+      description: Request body contain product and Modification no of product maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../product/xxx/unauthorized    
+     
+ /web/v1/product/{id}/delete:
+  patch:
+   tags:
+    - "product"
+   summary: "delete the product by given ID."
+   description:  "delete the product identified by given ID."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the product maintenance"
+      required: true
+      type: "string"
+    - name: "productId"
+      in: "body"
+      description: Request body contain product and Modification no of product maintenance which need to be delete"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../product/xxx/unauthorized
+
+ /web/v1/product/{id}/unauthorized:
+  get:
+   tags:
+    - "product"
+   summary: "Retrives the product by given ID."
+   description:  "Retrives the product identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the product based on given id."
+     schema:
+       $ref: "#/definitions/CmTmProductMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../product/xxx/history
+
+ /web/v1/product/{id}/history:
+  get:
+   tags:
+    - "product"
+   summary: "Retrives the product by given ID."
+   description:  "Retrives the product by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the product based on given id."
+     schema:
+       $ref: "#/definitions/CmTmProductMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CmTmProductMasterDTO:
+  description: "CmTmProductMasterDTO Model"
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     branchCode:
+      type: string
+      description: "Branch Code"
+     clearingDays:
+      type: number
+      description: "Clearing days"
+     currency:
+      type: string
+      description: "Currency"
+     cutOffTime:
+      type: string
+      description: "Cut Off Time"
+     effectiveDate:
+      type: string
+      format: date
+      description: "Effective Date"
+     expiryDate:
+      type: string
+      format: date
+      description: "ExpiryDate"
+     maxTxnAmt:
+      type: number
+      description: "Maximum Transaction Amount"
+     minTxnAmt:
+      type: number
+      description: "Minimum Transaction Amount"
+     networkType:
+      type: string
+      description: "NetWork Type"
+     productCategory:
+      type: string
+      description: "Product Category"
+     productCode:
+      type: string
+      description: "Product Code"
+     productDescription:
+      type: string
+      description: "Product Description"
+     productExposureLimit:
+      type: number
+      description: "Product Exposure Limit"
+     productType:
+      type: string
+      description: "Product Type"
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference No"
+ ModListKeyDto:
+  type: object
+  description: "ModListKeyDto Model"
+  properties:
+   modNos:
+    description: "List Of ModNos"
+    type: array
+    items:
+     type: integer
+   remarks:
+    description: "Remarks"
+    type: string
+ KeyDto:
+  type: object
+  description: "KeyDto Model"
+  properties:
+   modNo:
+    description: "Mod No"
+    type: integer
+   remarks:
+    description: "Remarks"
+    type: string
+ ResponseDto:
+  description: "ResponseDto Model"
+  type: object
+  properties:
+   id:
+    type: string
+    description: "Id"
+   status:
+    type: string
+    description: "Status"
+   codes:
+    description: "List Of Codes"
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  description: "ResponseCode Model"
+  properties:
+   Code:
+    description: "Code"
+    type: string
+   Desc:
+    type: string
+    description: "Description"
+   Type:
+    type: string
+    description: "Type"
+   Language:
+    type: string
+    description: "Language"
+   args:
+    type: array
+    description: "List Of Arguments Items"
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmTmProductMasterCollection: 
+  description: "Collection of product."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    description: "List Of CmTmProductMasterDTO"
+    items: 
+     $ref: "#/definitions/CmTmProductMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  description: "PagingDto"
+  properties:
+   totalResults:
+    type: integer
+    description: "Total Results"
+ ResponseDtoWrapper:
+  type: object
+  description: "ResponseDtoWrapper Model"
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CmTmProductMasterWrapperDTO:
+  type: object
+  description: "CmTmProductMasterWrapperDTO Model"
+  properties:
+   data:
+    $ref: "#/definitions/CmTmProductMasterDTO"
+ ProductDescDTO:
+  type: object
+  description: "ProductDescDTO Model"
+  properties:
+    productCode:
+     type: string
+     description: "Product Code"
+    productDescription:
+     type: string
+     description: "Product Description"
+ ProductDescCollection: 
+  description: "Collection of products with Description."
+  type: "object"
+  properties:
+   data:
+    description: "List Of ProductDescDTO"
+    type: "array"
+    items: 
+     $ref: "#/definitions/ProductDescDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"

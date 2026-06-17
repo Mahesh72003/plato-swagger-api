@@ -1,0 +1,1427 @@
+swagger: "2.0"
+info:
+  description: "Provides APIs to perform operations on finances"
+  version: "1.0.0"
+  title: "Finance Loan Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-finance-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "eodFinanceService"
+    description: "APIs for Eod Finance Operations"
+  - name: "limitsTransactionService"  
+    description: "API to retrive the limits details for the given input request"   
+  - name: "financeTransactionService"
+    description: "API for Finance Operations"      
+
+paths:        
+  /service/v1/unauthorizedTxns:   
+    get:
+      tags:
+       - "eodFinanceService"
+      summary: Check for the unauthorized transactions
+      description: Check for the unauthorized transactions
+      operationId: isUnauthorizedTxns
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: User id
+            
+      responses:
+        201:   
+          description: "Successfully performs the action"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/processOutstandingTxns:   
+    get:
+      tags:
+       - "eodFinanceService"
+      summary: Get the Outstanding Txn for given branch
+      description: Get the Outstanding Txn for given branch
+      operationId: processOutstandingTxn
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: User id
+      - name: "branchCode"
+        in: "query"
+        type: "string"
+        required: true
+        description: Branch Code
+      - name: "branchDate" 
+        in: "query" 
+        type: "string" 
+        description: Branch Date
+      - name: "nextWorkingDate" 
+        in: "query" 
+        type: "string"
+        description: Next Working Date
+      responses:
+        201:   
+          description: "Processing of Outstanding Transactions completed"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/processNonPerformAssetTxns:   
+    get:
+      tags:
+       - "eodFinanceService"
+      summary: Get the NPA Txn for given branch
+      description: Get the NPA Txn for given branch
+      operationId: processNonPerformAssetTxn
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: User id
+      - name: "branchCode"
+        in: "query"
+        type: "string"
+        required: true
+        description: Branch Code
+      - name: "branchDate" 
+        in: "query" 
+        type: "string" 
+        description: Branch Date
+      - name: "nextWorkingDate" 
+        in: "query" 
+        type: "string"
+        description: Next Working Date
+      responses:
+        201:   
+          description: "EOD Activity for Outstanding Transactions completed"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+  /service/v1/processModifyContractTxns:   
+    get:
+      tags:
+       - "eodFinanceService"
+      summary: Get the ModifyContract Txn for given branch
+      description: Get the ModifyContract Txn for given branch
+      operationId: processModifyContractTxn
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: User id
+      - name: "branchCode"
+        in: "query"
+        type: "string"
+        required: true
+        description: Branch Code
+      - name: "branchDate" 
+        in: "query" 
+        type: "string" 
+        description: Branch Date
+      - name: "nextWorkingDate" 
+        in: "query" 
+        type: "string"
+        description: Next Working Date
+      responses:
+        201:   
+          description: "EOD Activity for Outstanding Transactions completed"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"        
+  /service/v1/overdueTxns:   
+    get:
+      tags:
+       - "eodFinanceService"
+      summary: Find the overdue txns in the given branch
+      description: Find the overdue txns in the given branch
+      operationId: findOverdueTxns
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: User id
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: Branch Code
+      responses:
+        201:   
+          description: "EOD Activity for Overdue Txns Completed"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/limitsEnquiry:
+    get:
+     tags:
+      - "limitsTransactionService"
+     summary: "Retrives the limits details for the given input request"
+     description:  "Retrives the limits details for the given input request"
+     operationId: "getLimits"
+     parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "Application Id"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "debtorId" 
+        in: "query" 
+        description: "Debtor Id"
+        type: "string"
+      - name: "debtorName"
+        in: "query"
+        description: "Debtor Name"
+        type: "string"
+      - name: "lineId"
+        in: "query"
+        description: "Line Id"
+        type: "string"
+      - name: "financeRefNo"
+        in: "query"
+        description: "Finance Reference Number"
+        type: "string"
+      - name: "processingDate" 
+        in: "query" 
+        description: "Processing Date"
+        type: "string"
+      - name: "productCode"
+        in: "query"
+        description: "Product Code"
+        type: "string"
+      - name: "programCode"
+        in: "query"
+        description: "Program Code"
+        type: "string"
+      - name: offset
+        in: query
+        description: Offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: Limit is maximum no of records to be fetched
+        required: false
+        type: integer
+     responses:
+        200:
+         description: "Returns the anchorlimits based on given id."
+         schema:
+           $ref: "./financeTxnWebDef.yaml#/definitions/LimitsDetailsResponse"
+        400:
+         description: "Malformed syntax."
+        401:
+         description: "Request does not have sufficient credentials."
+        403:
+         description: "Request is not authorized."
+        500:
+         description: "Internal error"
+         
+  /service/v1/getInprogressTxns:
+    get:
+     tags:
+      - "financeTransactionService"
+     summary: "Retrives the in progress txns for given productCode/programCode/nonCustomerId/limitLineId"
+     description:  "Retrives the in progress txns for given productCode/programCode/nonCustomerId/limitLineId"
+     operationId: "getInprogressTxns"
+     parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "productCode" 
+        in: "query" 
+        description: "Product Code"
+        type: "string"
+      - name: "programCode"
+        in: "query"
+        description: "Program Code"
+        type: "string"
+      - name: "nonCustId"
+        in: "query"
+        description: "Non Customer Id"
+        type: "string"
+      - name: "limitLineId"
+        in: "query"
+        description: "Limit Line Id"
+        type: "string"
+      - name: "accEntryCode"
+        in: "query"
+        description: "Account Entry Code"
+        type: "string"
+      - name: "divisionCode"
+        in: "query"
+        description: "Division Code"
+        type: "array"
+        items:
+         type: string
+     responses:
+        200:
+         description: "Returns true if there are in progress txns"
+         schema:
+           type: boolean
+        400:
+         description: "Malformed syntax."
+        401:
+         description: "Request does not have sufficient credentials."
+        403:
+         description: "Request is not authorized."
+        500:
+         description: "Internal error"
+         
+  /service/v1/getLinkedFinancesToInvoice/{invoiceRefNo}:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Retrieves the Finances for particular Invoice."
+      description:  "Retrieves the Finances for particular Invoice."
+      operationId: "getLinkedFinancesToInvoice"
+      parameters:
+        - name: "invoiceRefNo"
+          in: "path"
+          description: "ReferenceNumber for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "requestId"
+          in: "query"
+          description: "Request Id"
+          type: "string"
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/getLinkedInvoicesToFinance/{financeRefNo}:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Retrieves the Invoices for a particular Finance Transaction."
+      description:  "Retrieves the Invoices for a particular Finance Transaction."
+      operationId: "getInvByFinanceRefNo"
+      parameters:
+        - name: "financeRefNo"
+          in: "path"
+          description: "ReferenceNumber for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/InvoiceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/financeSettlement:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Retrieves the list of existing Finances and initiates settlements."
+      description: "Retrieves the list of existing Finances and initiates settlements"
+      operationId: "initiateSettlement"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch code for SMS"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: financeRefNo
+          in: query
+          description: "Finance Reference Number"
+          required: true
+          type: string
+        - name: totalSettlementAmt
+          in: query
+          description: "Total Settlement Amount"
+          required: true
+          type: number
+        - name: debtor
+          in: query
+          description: "Debtor"
+          required: true
+          type: string
+        - name: settlementCcy
+          in: query
+          description: "Settlement Curency"
+          required: true
+          type: string
+        - name: settlementRefNo
+          in: query
+          description: "Settlement Reference Number"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            type: "object"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /service/v1/accountingEntries:
+    post:
+      tags:
+        - "financeTransactionService"
+      summary: "Creates new accounting entries for charges"
+      description: "Creates new accounting entries for charges"
+      operationId: "createChargesAccountingTransactionData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "refNo"
+          in: "query"
+          description: "Reference Number"
+          type: "string"
+          required: true
+        - name: "action"
+          in: "query"
+          description: "Action"
+          type: "string"
+          required: true
+        - name: "chargeCode"
+          in: "query"
+          description: "Charge Code"
+          type: "string"
+          required: false
+      responses:
+        201:
+          description: "Successfully created new accounting entries"
+          schema:
+              $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/financeTransaction:
+    post:
+      tags:
+        - "financeTransactionService"
+      summary: "Adds a new Finance Transaction."
+      description: "Adds a new Finance Transaction."
+      operationId: "createFinTransaction"
+      parameters:
+        - name: "financeTransaction"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Finance Transaction"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/FinanceTransactionModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "Application Id"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch code for SMS"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully created a new Finance Transaction"
+          headers:
+            Location:
+              description: "URL of newly created Finance Transaction"
+              type: "string"
+          schema:
+              $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/financeEnquiry:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Settlement Enquiry"
+      description: "Settlement Enquiry"
+      operationId: "getFinanceEnquiry"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "Application Id"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          description: "Branch code for SMS"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: offset 
+          in: query
+          description: "Offset"
+          required: false
+          type: integer
+        - name: limit 
+          in: query
+          description: "Limit"
+          required: false
+          type: integer
+        - name: financeRefNo 
+          in: query
+          description: "Finance Reference Number"
+          required: true
+          type: string
+        - name: seqNo 
+          in: query
+          description: "Sequence Number"
+          required: false
+          type: string
+        - name: requestId
+          in: query
+          description: "Request Id"
+          type: string
+      responses:
+        201:
+          description: "Successfully performed Finance Transaction Enquiry"
+          schema:
+              $ref: "./financeTxnWebDef.yaml#/definitions/FinanceEnquiryDetailCollectionV1"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/deliquencyStatusEnquiry:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Get the customer status"
+      description: "Get the customer status"
+      operationId: "getCustomerDeliquencyStatus"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true 
+        - name: customerId 
+          in: query
+          description: "Customer Id"
+          required: true
+          type: string 
+      responses:
+        201:
+          description: "Successfully performed the operation"
+          schema:
+           type: string 
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403: 
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/financeEnquiryMain:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Retrieves the list of existing Finances"
+      description:  "Retrieves the list of existing Finances."
+      operationId: "getFinanceEnquiryDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "Application Id"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          description: "Tenant Id"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          description: "Branch code for SMS"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          description: "Content Type"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: branchCode
+          in: query
+          description: "Branch Code"
+          type: string
+          required: false
+        - name: financeRefNo 
+          in: query
+          description: "Finance Reference Number"
+          required: false
+          type: string
+        - name: requestId 
+          in: query
+          description: "Request Id"
+          required: false
+          type: string
+        - name: financeStatus 
+          in: query
+          description: "Finance Status"
+          required: false
+          type: string
+        - name: productCode 
+          in: query
+          description: "Product Code"
+          required: false
+          type: string
+        - name: supplierId 
+          in: query
+          description: "Supplier Id"
+          required: false
+          type: string
+        - name: supplierName 
+          in: query
+          description: "Supplier Name"
+          required: false
+          type: string
+        - name: buyerId 
+          in: query
+          description: "Buyer Id"
+          required: false
+          type: string
+        - name: buyerName 
+          in: query
+          description: "Buyer Name"
+          required: false
+          type: string
+        - name: debtor 
+          in: query
+          description: "Debtor"
+          required: false
+          type: string
+        - name: debtorName
+          in: query
+          description: "Debtor Name"
+          required: false
+          type: string
+        - name: processingDateFrom 
+          in: query
+          description: "Processing Date From"
+          required: false
+          type: string
+        - name: processingDateTo
+          in: query
+          description: "Processing Date To"
+          required: false
+          type: string
+        - name: programCode 
+          in: query
+          description: "Program Code"
+          required: false
+          type: string
+        - name: programName 
+          in: query
+          description: "Program Name"
+          required: false
+          type: string
+        - name: financeDateFrom 
+          in: query
+          description: "Finance Date From"
+          required: false
+          type: string
+        - name: financeDateTo
+          in: query
+          description: "Finance Date To"
+          required: false
+          type: string
+        - name: maturityDateFrom 
+          in: query
+          description: "Maturity Date From"
+          required: false
+          type: string
+        - name: maturityDateTo
+          in: query
+          description: "Maturity Date To"
+          required: false
+          type: string
+        - name: txnStatus
+          in: query
+          description: "Transaction Status"
+          required: false
+          type: string
+        - name: outstandingAmountRangeFrom 
+          in: query
+          description: "Outstanding Amount Range From"
+          required: false
+          type: number
+        - name: outstandingAmountRangeTo
+          in: query
+          description: "Outstanding Amount Range To"
+          required: false
+          type: number 
+        - name: amountRangeCcy
+          in: query
+          description: "Amount Range Currency"
+          required: false
+          type: string
+        - name: financeAmountRangeFrom 
+          in: query
+          description: "Finance Amount Range From"
+          required: false
+          type: number
+        - name: financeAmountRangeTo
+          in: query
+          description: "Finance Amount Range To"
+          required: false
+          type: number 
+        - name: pastDueDateFrom 
+          in: query
+          description: "Past Due Date From"
+          required: false
+          type: string
+        - name: pastDueDateTo
+          in: query
+          description: "Past Due Date To"
+          required: false
+          type: string
+        - name: anchorId
+          in: query
+          description: "Anchor Id"
+          required: false
+          type: string
+        - name: spokeId
+          in: query
+          description: "Spoke Id"
+          required: false
+          type: string
+        - name: operationCode
+          in: query
+          description: "Operation Code"
+          required: false
+          type: string
+        - name: limit
+          in: query
+          required: false
+          description: "Limit to be fetched"
+          type: integer
+        - name: offset
+          in: query
+          required: false
+          description: "Offset of the limit"
+          type: integer
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+          
+  /service/v1/paymentIncomingFinanceValidation:           
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Payment Incoming 2nd stage Finance Validation"
+      description:  "Payment Incoming 2nd stage Finance Validation"
+      operationId: "paymentIncomingFinanceValidation"
+      parameters:
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        type: "string"
+        required: true
+      - name: "refNo"
+        in: "query"
+        description: "Reference Number"
+        type: "string"
+        required: false
+      - name: "virtualAccNo"
+        in: "query"
+        description: "Virtual Account Number"
+        type: "string"
+        required: false
+      - name: "borrowerAccNo"
+        in: "query"
+        description: "Borrower Account Number"
+        type: "string"
+        required: false
+      - name: "debtor"
+        in: "query"
+        description: "Debtor"
+        type: "string"
+        required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/PaymentIncomingFinanceValidationModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/processExternalNonPerformAssetTxns:   
+    get:
+      tags:
+       - "eodFinanceService"
+      summary: Get the NPA Txn for given branch
+      description: Get the NPA Txn for given branch
+      operationId: processExternalNonPerformAssetTxn
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: User Id
+      - name: "branchCode"
+        in: "query"
+        type: "string"
+        required: true
+        description: Branch Code
+      - name: "branchDate" 
+        in: "query" 
+        type: "string" 
+        description: Branch Date
+      - name: "nextWorkingDate" 
+        in: "query" 
+        type: "string"
+        description: Next Working Date
+      responses:
+        201:   
+          description: "EOD Activity for Outstanding Transactions completed"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"   
+          
+          
+          
+  /service/v1/processAdhocFinances:
+    post:
+      tags:
+        - "financeTransactionService"
+      summary: "Adds a new Finance Record"
+      description: "Adds a Finace record from limits schema"
+      operationId: "processAdhocFinances"
+      parameters:
+        - name: "conductorWorkflowModel"
+          in: "body"
+          description: "Request Body that contains data required for finance Process"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ConductorWorkflowModel"
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully completed Auto Finance"
+          schema:
+              $ref: "./financeTxnWebDef.yaml#/definitions/ConductorWorkflowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+          
+          
+          
+  /service/v1/initiateNewFinanceTxn:
+    post:
+      tags:
+        - "financeTransactionService"
+      summary: "Initiates a new Finace Transaction"
+      description: "Initiates a new Finance Transaction from the request body"
+      operationId: "createNewFinanceTxn"
+      parameters:
+        - name: "conductorWorkflowModel"
+          in: "body"
+          description: "Request Body that contains data required for finance Process"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ConductorWorkflowModel"
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully completed Auto Finance"
+          schema:
+              $ref: "./financeTxnWebDef.yaml#/definitions/ConductorWorkflowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/updateAccountingResponse:
+    post:
+      tags:
+        - "financeTransactionService"
+      summary: "Capturing success response of accounting"
+      description:  "Capturing success response of accounting."
+      operationId: "updateAccountingResponse"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "extSystemResponseModel"
+          in: "body"
+          description: "Request Body that contains data required for updateExternalSystemResponse"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ExtSystemAcctModelCollection"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ExtSystemResponseModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/updatePaymentResponse:
+    post:
+      tags:
+        - "financeTransactionService"
+      summary: "Capturing success response of payment"
+      description:  "Capturing success response of payment."
+      operationId: "updatePaymentResponse"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authorization Token"
+        - name: "contentType"
+          in: "header"
+          description: "Content Type"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          description: "Branch Date"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "extSystemResponseModel"
+          in: "body"
+          description: "Request Body that contains data required for updateExternalSystemResponse"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ExtSystemPaymentModelCollection"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ExtSystemResponseModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /sevice/v1/purgedFinanceTxns:
+    get:
+      tags:
+        - "financeTransactionService"
+      summary: "Retrives the purge finance transactions"
+      description:  "Retrives the purge finance transactions"
+      operationId: "findPurgedFinanceTxns"
+      parameters:
+        
+        - name: "appId"
+          in: "header"
+          description: "appId"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          type: "string"
+          required: true
+          
+        - name: "debtor"
+          in: "query"
+          description: "debtor"
+          type: "string"
+          required: true
+        - name: "requestDate"
+          in: "query"
+          description: "Request Date"
+          type: "string"
+          required: false
+          
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/PurgedFinanceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"

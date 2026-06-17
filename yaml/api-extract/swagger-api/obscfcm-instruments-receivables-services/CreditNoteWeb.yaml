@@ -1,0 +1,300 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Credit Note server."
+  version: "1.0.0"
+  title: "Credit Note Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CreditNoteWeb"
+    description: "API for CreditNote Web layer Operations"
+
+schemes:
+- "https"
+- "http"
+
+paths:
+  /web/v1/createCreditNote:
+    post:
+      tags:
+        - "CreditNoteWeb"
+      summary: "Create new CreditNote from UI."
+      description: "Create new CreditNote from UI. "
+      operationId: "createCreditNote"
+      parameters:
+        - name: "creditNote"
+          in: "body"
+          description: "Request Body that contains data required for creating a new CreditNote."
+          required: true
+          schema:
+            $ref: "./CreditNoteDef.yaml#/definitions/CreateCreditNoteModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the details of the newly created credit note"
+          schema:
+              $ref: "./CreditNoteDef.yaml#/definitions/CreditNoteModel"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/createCreditNote/{creditNoteRefNo}/{seqNo}:
+    put:
+      tags:
+        - "CreditNoteWeb"
+      summary: "Create inprogress CreditNote from UI."
+      description: "Create inprogress CreditNote from UI. "
+      operationId: "createCreditNoteInProgress"
+      parameters:
+        - name: "creditNote"
+          in: "body"
+          description: "Request Body that contains data required for creating a inprogress CreditNote."
+          required: true
+          schema:
+            $ref: "./CreditNoteDef.yaml#/definitions/CreditNoteModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "creditNoteRefNo"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "seqNo"
+          in: "path"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the details of the newly created credit note"
+          schema:
+              $ref: "./CreditNoteDef.yaml#/definitions/CreditNoteModel"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/getCreditNoteByUser:
+    get:
+      tags:
+        - "CreditNoteWeb"
+      summary: "Get User Specific Credit Note from UI."
+      description: "Get User Specific Credit Note from UI. "
+      operationId: "getCreditNoteByUser"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "cnNumber"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "transactionRefNo"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "offset"
+          in: "query"
+          required: false
+          type: "integer"
+        - name: "limit"
+          in: "query"
+          required: false
+          type: "integer"
+      responses:
+        200:
+          description: "Returns the details of the credit note"
+          schema:
+            $ref: "./CreditNoteDef.yaml#/definitions/CreditNoteCollectionDto"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/creditNoteSearch:
+    get:
+      tags:
+        - "CreditNoteWeb"
+      summary: "Retrieves the list of existing Credit Notes."
+      description: "Retrieves the list of existing Credit Notes."
+      operationId: "getCreditNotes"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: "cnNumber"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "creditNoteRefNo"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "cnStatus"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "fileName"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "transactionRefNo"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "programCode"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "relationCode"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "buyerId"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "supplierId"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "remarks"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "cnDateFrom"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "cnDateTo"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "cnExpiryDateFrom"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "cnExpiryDateTo"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "currency"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "cnAmountFrom"
+          in: "query"
+          required: false
+          type: "number"
+        - name: "cnAmountTo"
+          in: "query"
+          required: false
+          type: "number"
+        - name: "adjustmentReason"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "cnReconcilationStatus"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "dateReferenceBasis"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "dateFrom"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "dateTo"
+          in: "query"
+          required: false
+          type: "string"  
+      responses:
+        200:
+          description: "Returns the details of the credit note"
+          schema:
+            $ref: "./CreditNoteDef.yaml#/definitions/CreditNoteCollectionDto"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"

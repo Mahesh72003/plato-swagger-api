@@ -1,0 +1,237 @@
+swagger: '2.0'
+info:
+  description: "These APIs can be used to make Reconciliation, Dereconciliation, Allocation and Deallocation transactions."
+  version: 1.0.0
+  title: Manual Recon Service APIs
+host: api-plato.us.oracle.com:8080
+basePath: /obscfcm-manual-recon-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: manualRecon
+  description: "Service API for Reconciliation, Dereconciliation, Allocation & Deallocation"
+paths:
+  /service/v1/initiateManualRecon:
+    post:
+      tags:
+      - manualRecon
+      summary: "Creates the new reconcilation transaction"
+      description: "Creates the new reconcilation transaction by passing recon category and LHS RHS entities"
+      operationId: createReconTxn
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request body to create recon transaction
+        required: true
+        schema:
+          $ref: "./manualReconServiceDef.yaml#/definitions/ReconServiceTxnCollection"
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./manualReconServiceDef.yaml#/definitions/ResponseServiceDto"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /service/v1/getManualReconDetails:
+    post:
+      tags:
+      - manualRecon
+      summary: "Gets reconcilation transaction detail"
+      description: "Gets reconcilation transaction detail with provided reconcilation category & other filter attributes"
+      operationId: getInvPayManReconDetails
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: invPmtSearchModel
+        in: body
+        description: Request Body to search reconciled transaction detail
+        required: true
+        schema:
+          $ref: "./manualReconServiceDef.yaml#/definitions/InvPmtSearchModel"
+      responses:
+        200:
+          description: Successfully received invoicesPayments details
+          schema:
+            $ref: "./manualReconServiceDef.yaml#/definitions/InvPayManReconCollection"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/initiateManualDerecon:
+    post:
+      tags:
+      - manualRecon
+      summary: "Creates new dereconciliation transaction"
+      description: "Creates new dereconciliation transaction on already reconciled transaction"
+      operationId: createDereconTxn
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request Body to create dereconciliation transaction
+        required: true
+        schema:
+          $ref: "./manualReconServiceDef.yaml#/definitions/DeReconTxnDto"
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/initiateManualAlloc:
+    post:
+      tags:
+      - manualRecon
+      summary: "Creates new manual allocation transaction"
+      description: "Creates new manual allocation transaction for the provided Payments and Virtual account numbers."
+      operationId: createManualAlloc
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: manualAllocServiceCollection
+        in: body
+        description: Request Body to create manual allocation transaction
+        required: true
+        schema:
+          $ref: "./manualReconServiceDef.yaml#/definitions/ManualAllocServiceCollection"
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./manualReconServiceDef.yaml#/definitions/ResponseServiceDto"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /service/v1/getManualAlloc:
+    post:
+      tags:
+      - manualRecon
+      summary: "Gets manual allocation transaction detail"
+      description: "Gets manual allocation transaction detail by given filter attributes."
+      operationId: getManualAlloc
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: manualAllocSearchModel
+        in: body
+        description: Request Body to search allocation transaction detail
+        required: true
+        schema:
+          $ref: "./manualReconServiceDef.yaml#/definitions/ManualAllocSearchModel"
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./manualReconServiceDef.yaml#/definitions/ManualAllocCollection"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                                          

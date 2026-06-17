@@ -1,0 +1,301 @@
+swagger: "2.0"
+info:
+  description: "This is a service which provides APIs for maintaining relationships between corporates and their buyers and sellers"
+  version: "1.0.0"
+  title: "Relationship Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-report-services"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "relationshipmaster"
+    description: "Service APIs for maintaining relationships between corporates and their buyers and sellers"
+
+paths:
+
+  /service/v1/saveRelationshipData:
+    post:
+      tags:
+        - "relationshipmaster"
+      summary: "Saves a new relationshipmaster."
+      description: "Saves a new relationshipmaster"
+      operationId: "saveRelationshipData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: Application id
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "relationshipmaster"
+          in: "body"
+          description: "Request Body that contains data required for creating a new relationshipmaster"
+          required: true
+          schema:
+            $ref: "#/definitions/ObcmTmRelationshipMasterDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          schema:
+            type: boolean
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  ObcmTmRelationshipMasterDTO:
+    type: object
+    properties:
+      checkerDtStamp:
+        type: string
+        description: "Checker Date Stamp"
+      makerDtStamp:
+        type: string
+        description: "Maker Date Stamp"
+      onceAuth:
+        type: string
+        description: "Once Authorized"
+      checkerId:
+        type: string
+        description: "Checker Id"
+      authStat:
+        type: string
+        description: "Authorization Status"
+      recordStat:
+        type: string
+        description: "Record Status"
+      makerId:
+        type: string
+        description: "Maker Id"
+      modNo:
+        type: string
+        description: "Mod Number"
+      id:
+        type: string
+        description: "Id"
+      autoAcceptance:
+        type: string
+        description: "Auto Acceptance"
+      corporateId:
+        type: string
+        description: "Corporate Id"
+      corporateName:
+        type: string
+        description: "Corporate Name"
+      effFromDate:
+        type: string
+        description: "Effective From Date"
+      relationshipCode:
+        type: string
+        description: "Relationship Code"
+      relationshipName:
+        type: string
+        description: "Relationship Name"
+      expiresOn:
+        type: string
+        description: "Expires On"
+      product:
+        type: string
+        description: "Product"
+      noOfDays:
+        type: integer
+        description: "Number Of Days"
+      maxDate:
+        type: string
+        description: "Maximum Date"
+      txnControllerRefNo:
+        type: string
+        description: "Transaction Controller Reference Number"
+      ObcmTmRelationshipDetailsDTO:
+        type: array
+        items:
+          $ref: "#/definitions/ObcmTmRelationshipDetailsDTO"
+  ObcmTmRelationshipDetailsDTO:
+    type: object
+    properties:
+      autoAcceptance:
+        type: string
+        description: "Auto Acceptance"
+      counterpartyid:
+        type: string
+        description: "Counterparty Id"
+      counterpartyname:
+        type: string
+        description: "Counterparty Name"
+      id:
+        type: string
+        description: "Id"
+      partyType:
+        type: string
+        description: "Party Type"
+      relationsMasterId:
+        type: string
+        description: "Relations Master Id"
+      expiresOn:
+        type: string
+        description: "Expires On"
+      noOfDays:
+        type: integer
+        description: "Number Of Days"
+      status:
+        type: string
+        description: "Status"
+      externalCodes:
+        type: array
+        description: "External Codes"
+        items:
+          $ref: "#/definitions/ObcmTmRelationshipDetailsExternalCodeDTO"
+  ObcmTmRelationshipDetailsExternalCodeDTO:
+    type: object
+    properties:
+      externalCode:
+        type: string
+        description: "External Code"
+      divisionCode:
+        type: string
+        description: "Division Code"
+      corporateDivisionCode:
+        type: string
+        description: "Corporate Division Code"
+      id:
+        type: string
+        description: "Id"
+      relationshipDetailId:
+        type: string
+        description: "Relationship Detail Id"
+  ObTmAlertPartyMasterCollection:
+    description: "Collection of obtmalertpartymaster."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObTmAlertPartyMasterDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  ObTmAlertPartyMasterDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          id:
+            type: string
+            description: "Id"
+          action:
+            type: string
+            description: "Action"
+          autoAuth:
+            type: string
+            description: "Auto Auth"
+          modificationStatus:
+            type: string
+            description: "Modification Status"
+          datasegmentCode:
+            type: string
+            description: 'Datasegment Code'
+          checkerRemarks:
+            type: string
+            description: 'Checker Remarks'
+          makerRemarks:
+            type: string
+            description: 'Maker Remarks'
+          partyId:
+            type: string
+            description: "Party Id"
+          partyName:
+            type: string
+            description: "Party Name"
+          applicationCode:
+            type: string
+            description: "Application Code"
+          ObTmAlertPartyContactDetailsModel:
+            type: array
+            items:
+              $ref: '#/definitions/ObTmAlertPartyContactDetailsModel'
+  ObTmAlertPartyContactDetailsModel:
+    type: object
+    properties:
+      id:
+        type: string
+        description: "Id"
+      alertCode:
+        type: string
+        description: "Alert Code"
+      alertPartyMasterId:
+        type: string
+        description: "Alert Party Master Id"
+      alertDesc:
+        type: string
+        description: "Alert Desc"
+      email:
+        type: string
+        description: "Email"
+      mobile:
+        type: string
+        description: "Mobile"
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object

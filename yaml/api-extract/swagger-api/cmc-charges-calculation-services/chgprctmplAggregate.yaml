@@ -1,0 +1,925 @@
+swagger: '2.0'
+info:
+  description: "Provides APIs for price rule maintenance"
+  version: "1.0.0"
+  title: "Price Rule Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/cmc-charges-calculation-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+- name: "ChgPrcTmplAggregateWeb"
+  description: "Provides web APIs for price rule maintenance"
+- name: "ChgPrcTmplAggregateService"
+  description: "Provides service APIs for price rule maintenance"
+
+paths:
+  /service/v1/chgPrcTmpl:
+    post:
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Creates new price rule"
+      description: "Creates new price rule"
+      operationId: createResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: "dataSegmentName"
+        in: "query"
+        description: "Datasegment Name"
+        required: true
+        type: "string"
+      - name: "screenClassCode"
+        in: "query"
+        description: "Screen Class Code"
+        required: true
+        type: "string"
+      - name: chgPrcTmplWebModel
+        in: body
+        description: "Request body to create new price rule"
+        required: true
+        schema:
+         $ref: './chgprctmplAggregateDef.yaml#/definitions/ChgPrcTmplWebModel'
+      responses:
+        201:
+          description: "Provides id of created price rule"
+          headers:
+            Location:
+              description: "URL of created price rule"
+              type: string
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - ChgPrcTmplAggregateWeb
+     summary: "Get all price rules' details"
+     description:  "Get all price rules' details"
+     operationId: "getSummary"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: includecloseandunauth
+       in: query
+       description: "Flag need to be set to fetch rules including closed & unauthorized rules. Defult value is false"
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: "Starting number of rules to be fetched"
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: "Maximum number of rules to be fetched"
+       required: false
+       type: integer
+     - in: query
+       name: applicationCode
+       description: "Application Code"
+       required: false
+       type: string
+     - name: authStat
+       in: query
+       description: "Authorization status of the records to be fetched"
+       required: false
+       type: string
+     - in: query
+       name: chgInTxnCcy
+       description: "Charge In Transaction Currency Flag"
+       required: false
+       type: string
+     - in: query
+       name: chgPrcDesc
+       description: "Price Rule Description"
+       required: false
+       type: string
+     - in: query
+       name: chgPrcTemplateId
+       description: "Price Rule Id"
+       required: false
+       type: string
+     - in: query
+       name: fixedAmt
+       description: "Fixed Amount Value"
+       required: false
+       type: integer
+     - in: query
+       name: fixedPct
+       description: "Fixed Percent Value"
+       required: false
+       type: integer
+     - in: query
+       name: flatChg
+       description: "Flat Charge Flag"
+       required: false
+       type: string
+     - in: query
+       name: maxChgAmount
+       description: "Maximum Charge Amount Value"
+       required: false
+       type: integer
+     - in: query
+       name: maxChgPct
+       description: "Maximum Charge Percentage Value"
+       required: false
+       type: integer
+     - in: query
+       name: minChgAmount
+       description: "Minimum Charge Amount Value"
+       required: false
+       type: integer
+     - in: query
+       name: minChgPct
+       description: "Minimum Charge Amount Percentage"
+       required: false
+       type: integer
+     - in: query
+       name: minMaxValidationCriteria
+       description: "Min-Max Validation Criteria"
+       required: false
+       type: string
+     - in: query
+       name: prcCategory
+       description: "Pricing Category"
+       required: false
+       type: string
+     - in: query
+       name: prcCategoryDesc
+       description: "Pricing Category Description"
+       required: false
+       type: string
+     - in: query
+       name: prcCcy
+       description: "Pricing Currency"
+       required: false
+       type: string
+     - in: query
+       name: prcMethod
+       description: "Price Method"
+       required: false
+       type: string
+     - in: query
+       name: prcMethodDesc
+       description: "Price Method Description"
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: "Records Status Of Rules To Be Fetched"
+       required: false
+       type: string
+     - in: query
+       name: category
+       description: "Category"
+       required: false
+       type: string
+     responses:
+      200:
+       description: "List of all price rules"
+       headers: 
+        Location:
+         description: "Location"
+         type: "string"
+       schema:
+         $ref: './chgprctmplAggregateDef.yaml#/definitions/CmcTmChgPrcTmpltCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /service/v1/chgPrcTmpl/{resourceId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Provides price rule for given resource id"
+      description: "Provides price rule for given resource id"
+      operationId: getByResourceId
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id of required price rule"
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: "Datasegment Code"
+        type: string
+      - name: version
+        in: query
+        description: "Datasegment Version"
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: "Retrieve only latest authorized price rule"
+        required: false
+        default: false
+        type: boolean
+      - name: "resourceName"
+        in: "query"
+        description: "Resource name"
+        required: true
+        type: "string"
+      - name: "dataSegmentName"
+        in: "query"
+        description: "Datasegment Name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Price rule for provided resource id"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ChgPrcTmplWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Updates existing price rule"
+      description: "Updates existing price rule"
+      operationId: updateResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id of price rule that needs to be updated"
+        required: true
+        type: string
+      - name: "dataSegmentName"
+        in: "query"
+        description: "Datasegment Name"
+        required: true
+        type: "string"
+      - name: "screenClassCode"
+        in: "query"
+        description: "Screen Class Code"
+        required: true
+        type: "string"
+      - name: chgPrcTmplWebModel
+        in: body
+        description: "Request body to update required price rule"
+        required: true
+        schema:
+          $ref: './chgprctmplAggregateDef.yaml#/definitions/ChgPrcTmplWebModel'
+      responses:
+        202:
+          description: "Updated price rule details"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /service/v1/chgPrcTmpl/{resourceId}/delete:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Deletes the price rule record for given resource id"
+      description: "Deletes the price rule record for given resource id"
+      operationId: deleteResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id of the price rule which needs to be deleted"
+        required: true
+        type: string
+      - name: "screenClassCode"
+        in: "query"
+        description: "Screen Class Code"
+        required: true
+        type: "string"
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers of price rule which needs to be deleted"
+        required: true
+        schema:
+          $ref: './chgprctmplAggregateDef.yaml#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/chgPrcTmpl/{resourceId}/isValid:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Validates the price rule with provided resource id"
+      description: "Validates the price rule with provided resource id"
+      operationId: validateResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id that needs to be validated"
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: "Version of price rule for which needs to be validated"
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: "Details of validated price rule"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/v1/chgPrcTmpl/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Submits the price rule for provided resource id"
+      description: "Submits the price rule for provided resource id"
+      operationId: submitResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be submited"
+        required: true
+        type: string
+      - name: "dataSegmentName"
+        in: "query"
+        description: "Datasegment Name"
+        required: true
+        type: "string"
+      - name: "screenClassCode"
+        in: "query"
+        description: "Screen Class Code"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Details of submitted price rule"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/chgPrcTmpl/{resourceId}/unauthorized:
+    get:
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Retrives the unauthorized price rule for given resource id"
+      description:  "Retrives the unauthorized price rule for given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be fetched"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Details of price rule for given resource id"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/CmcTmChgPrcTmpltCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/chgPrcTmpl/{resourceId}/authorize:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Authorize the price rule with given resource id"
+      description: "Authorize the price rule with given resource id"
+      operationId: authorizeResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id that needs to be authorized"
+        required: true
+        type: string
+      - name: "screenClassCode"
+        in: "query"
+        description: "Screen Class Code"
+        required: true
+        type: "string"
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers which need to be authorized"
+        required: true
+        schema:
+          $ref: './chgprctmplAggregateDef.yaml#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Details of authorized price rule"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/chgPrcTmpl/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Unlocks the price rule with given resource id"
+      description: "Unlocks the price rule with given resource id"
+      operationId: removeResourceLock
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id that needs to be unlocked"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Details of unlocked price rule"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /service/v1/chgPrcTmpl/{resourceId}/actions:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Provides all applicable actions for price rule of given resource id"
+      description: "Provides all applicable actions for price rule of given resource id"
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: resourceId
+        in: path
+        description: "Resource Id for which actions needs to be fetched"
+        required: true
+        type: string
+      - name: "menuRule"
+        in: "query"
+        description: "VAE Menu Rule"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success message"
+          schema:
+            type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/v1/chgPrcTmpl/{resourceId}/history:
+    get:
+      tags:
+      - ChgPrcTmplAggregateWeb  
+      summary: "Retrives the history for price rule with given Resource Id"
+      description:  "Retrives the history for price rule with given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id for which history needs to be fetched"
+        required: true
+        type: string      
+      responses:
+        200:
+          description: "History details of required price rule"
+          schema:          
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/CmcTmChgPrcTmpltCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /service/v1/chgPrcTmpl/{resourceId}/close:
+    patch:
+      tags:
+      - ChgPrcTmplAggregateWeb  
+      summary: "Closes the price rule with given resource id"
+      description:  "Closes the price rule with given resource id"
+      operationId: "closeResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be closed"
+        required: true
+        type: string
+      - name: "screenClassCode"
+        in: "query"
+        description: "Screen Class Code"
+        required: true
+        type: "string"
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers which need to be closed"
+        required: true
+        schema:
+          $ref: './chgprctmplAggregateDef.yaml#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: "Details of closed price rule"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /service/v1/chgPrcTmpl/{resourceId}/reopen:
+    patch:
+      tags:
+      - ChgPrcTmplAggregateWeb    
+      summary: "Reopens the price rule with given resource id"
+      description:  "Reopens the price rule with given resource id"
+      operationId: "reopenResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be reopned" 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers which need to be reopened"
+        required: true
+        schema:
+         $ref: "./chgprctmplAggregateDef.yaml#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: "Details of reopened price rule"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /service/v1/chgPrcTmpl/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChgPrcTmplAggregateWeb
+      summary: "Get aggregate details of the price rule"
+      description: "Get aggregate details of the price rule"
+      operationId: getResourceAggregate
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App Id"
+        required: true
+      - name: "resourceName"
+        in: "query"
+        description: "Resource name"
+        required: true
+        type: "string"
+      - name: "dataSegmentName"
+        in: "query"
+        description: "Datasegment Name"
+        required: true
+        type: "string"
+      - name: keyId
+        in: path
+        description: "Key id for which the data needs to be fetched"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns Aggregate data for the price rule identified by key id"
+          schema:
+            $ref: './chgprctmplAggregateDef.yaml#/definitions/ChgPrcTmplWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                        

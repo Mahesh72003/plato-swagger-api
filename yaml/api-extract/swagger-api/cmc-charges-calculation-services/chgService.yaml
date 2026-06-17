@@ -1,0 +1,59 @@
+swagger: "2.0"
+info:
+ description: "Provides API to calculate charges" 
+ version: "1.0.0"
+ title: "Charge Calculation Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/cmc-charges-calculation-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargeServiceAPI"
+   description: "Provides service API to calculate charges"
+
+paths:   
+         
+  /service/v1/charges:
+   post:
+     tags:
+       - "chargeService"
+     summary: "Performs Charge Calculation"
+     description: "Performs Charge Calculation"
+     operationId: "getCharges"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       description: "Application Id"
+       type: "string"
+       required: true
+     - name: "chargeDetails" 
+       in: "body" 
+       description: "Request Body For Charge Calculation" 
+       required: true
+       schema:
+        $ref: "./chgDef.yaml#/definitions/ChargeCalculationRequestDto"
+     responses:
+       200:
+         description: "Calculated charges"
+         schema:
+           $ref: "./chgDef.yaml#/definitions/ChargesResponseDto"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"

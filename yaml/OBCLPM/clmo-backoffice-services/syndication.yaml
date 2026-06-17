@@ -1,0 +1,1383 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : syndication.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: This is a Backoffice Integration Service for Creating Loan.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Backoffice Integration Service
+host: whf00bfw:9000
+basePath: /backoffice-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: BACKOFFICE
+  description: API for BACKOFFICE Integration Operations
+schemes:
+- https
+paths:
+  /syndications:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Create Syndication Application through a Backoffice Service
+      description: Create Syndication Application through a Backoffice Service
+      operationId: createSyndicationApplication
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for creating Syndication Application through a backoffice services
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string          
+      responses:
+        201:
+          description: "Returns the Syndication Application reference number success and failure of the Syndication Application creation"
+          schema:
+            $ref: "#/definitions/SyndicationApplicationDTOWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /syndication/facilities:  
+   get:
+      tags:
+        - "Facility"
+      summary: "Query list of Syndication facilities"
+      description:  "Query list of syndication facilities"
+      operationId: "getFacilities"
+      parameters:
+      - name: productCode
+        in: query
+        description: List loan Reference Numbers based on Product Code
+        required: false
+        type: string
+      - name: customerNumber
+        in: query
+        description: List loan Reference Numbers based on the Customer Number
+        required: false
+        type: string
+      - name: facilityName
+        in: query
+        description: short description of facility
+        required: false
+        type: string        
+      - name: facilityContractRefNo
+        in: query
+        description: List syndication facility Reference Numbers based on the specific characters
+        required: false
+        type: string
+      - name: facilityStartDate
+        in: query
+        description: List loan Reference Numbers based on facilityStartDate
+        required: false
+        type: string
+        pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+      - name: facilityEndDate
+        in: query
+        description: List loan Reference Numbers based on facilityEndDate
+        required: false
+        type: string
+        pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+      - name: currencyCode
+        in: query
+        description: List loan Reference Numbers based on currencyCode
+        required: false
+        type: string
+      - name: facilityAmount
+        in: query
+        description: List facility Reference Numbers based on loanAmount
+        required: false
+        type: number
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /syndication/facility/{facilityreferencenumber}:
+    get:
+      tags:
+      - Facility
+      summary: Query Contract Details through a Backoffice Service
+      description: Query Contract Details through a Backoffice Service
+      operationId: getFacilityDetails
+      parameters:
+      - name: facilityreferencenumber
+        in: path
+        description: Request Contract details for a Contract reference number through a backoffice services
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns the facility details for the facility reference number"
+          schema:
+            $ref: "#/definitions/FacilityDetailsDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"             
+  /syndication/tranches:
+   get:
+      tags:
+        - "Tranche"
+      summary: "Query list of Tranches "
+      description:  "Query list of Tranches"
+      operationId: "getTranches"
+      parameters:
+      - name: productCode
+        in: query
+        description: List tranche Reference Numbers based on Product Code
+        required: false
+        type: string
+      - name: customerNumber
+        in: query
+        description: List tranche Reference Numbers based on the Customer Number
+        required: false
+        type: string
+      - name: trancheContractRefNo
+        in: query
+        description: List Tranche Reference Numbers based on the specific characters
+        required: false
+        type: string
+      - name: facilityContractRefNo
+        in: query
+        description: List facility Reference Numbers based on the specific characters
+        required: false
+        type: string        
+      - name: startDate
+        in: query
+        description: List loan Reference Numbers based on valueDate
+        required: false
+        type: string
+        pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+      - name: endDate
+        in: query
+        description: List tranche Reference Numbers based on maturityDate
+        required: false
+        type: string
+        pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+      - name: currencyCode
+        in: query
+        description: List loan Reference Numbers based on currencyCode
+        required: false
+        type: string
+      - name: trancheAmount
+        in: query
+        description: List facility Reference Numbers based on trancheAmount
+        required: false
+        type: number
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /syndication/tranche/{tranchereferencenumber}:
+    get:
+      tags:
+      - Tranche
+      summary: Query Contract Details through a Backoffice Service
+      description: Query Contract Details through a Backoffice Service
+      operationId: getTrancheDetails
+      parameters:
+      - name: tranchereferencenumber
+        in: path
+        description: Request Contract details for a Contract reference number through a backoffice services
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns the facility details for the facility reference number"
+          schema:
+            $ref: "#/definitions/TrancheDetailsDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"           
+  /syndication/consolRollover:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Create ConsolRollover through a Backoffice Service
+      description: Create ConsolRollover through a Backoffice Service
+      operationId: createConsolRollover
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for creating ConsolRollover through a backoffice services
+        required: true
+        type: string
+
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string          
+      responses:
+        201:
+          description: "Returns the contract reference number of consolrollover success and failure of the drawdown creation"
+          schema:
+            $ref: "#/definitions/SyndicationApplicationDTOWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /syndication/splitRollover:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Create SplitRollover through a Backoffice Service
+      description: Create SplitRollover through a Backoffice Service
+      operationId: createSplitRollover
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for creating SplitRollover through a backoffice services
+        required: true
+        type: string
+
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string          
+      responses:
+        201:
+          description: "Returns the contract reference number of consolrollover success and failure of the drawdown creation"
+          schema:
+            $ref: "#/definitions/SyndicationDrawdownDTOWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"        
+  /syndication/drawdowns:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Create Syndication Drawdown through a Backoffice Service
+      description: Create Syndication Drawdown through a Backoffice Service
+      operationId: createSyndicationDrawdown
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for creating drawdown through a backoffice services
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string          
+      responses:
+        201:
+          description: "Returns the drawdown reference number success and failure of the drawdown creation"
+          schema:
+            $ref: "#/definitions/SyndicationDrawdownDTOWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "Drawdown"
+      summary: "Query list of Drawdowns "
+      description:  "Query list of Drawdowns"
+      operationId: "getDrawdowns"
+      parameters:
+      - name: productCode
+        in: query
+        description: List drawdown Reference Numbers based on Product Code
+        required: false
+        type: string
+      - name: customerNumber
+        in: query
+        description: List drawdown Reference Numbers based on the Customer Number
+        required: false
+        type: string
+      - name: trancheContractRefNo
+        in: query
+        description: List tranche Reference Numbers based on the specific characters
+        required: false
+        type: string
+      - name: drawdownContractRefNo
+        in: query
+        description: List drawdown Reference Numbers based on the specific characters
+        required: false
+        type: string
+      - name: facilityContractRefNo
+        in: query
+        description: List facility Reference Numbers based on the specific characters
+        required: false
+        type: string
+      - name: startDate
+        in: query
+        description: List drawdown Reference Numbers based on valueDate
+        required: false
+        type: string
+        pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+      - name: endDate
+        in: query
+        description: List drawdown Reference Numbers based on maturityDate
+        required: false
+        type: string
+        pattern: "[1-9]{4}-[0-1]{1}[0-2]{1}-[0-1]{1}[0-9]{1}"
+      - name: currencyCode
+        in: query
+        description: List drawdown Reference Numbers based on currencyCode
+        required: false
+        type: string
+      - name: drawdownAmount
+        in: query
+        description: List drawdown Reference Numbers based on drawdownAmount
+        required: false
+        type: number
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /syndication/participanttransfer:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Create Syndication Participant Transfer through a Backoffice Service
+      description: Create Syndication Participant Transfer through a Backoffice Service
+      operationId: createParticipantTransfer
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for creating drawdown through a backoffice services
+        required: true
+        type: string
+
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string          
+      responses:
+        201:
+          description: "Returns the drawdown reference number success and failure of the drawdown creation"
+          schema:
+            $ref: "#/definitions/SyndicationParticipantTransferDTOWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"       
+  /syndication/tranche/{trancherefno}/borrowers:
+   get:
+      tags:
+        - "Tranche"
+      summary: "Query list Borrowers for a Tranche "
+      description:  "Query list Borrowers for a Tranche"
+      operationId: "getTrancheBorrowers"
+      parameters:
+      - name: trancheContractRefNo
+        in: query
+        description: List tranche Reference Numbers based on Product Code
+        required: false
+        type: string
+      - name: customerNumber
+        in: query
+        description: List allowed customers for the tranche Reference Number
+        required: false
+        type: string
+      - name: customerName
+        in: query
+        description: List Customer Name
+        required: false
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"          
+  /syndication/tranche/{trancherefno}/utilizationcurrencies:
+   get:
+      tags:
+        - "Tranche"
+      summary: "Query list Borrowers for a Tranche "
+      description:  "Query list Borrowers for a Tranche"
+      operationId: "getTrancheUtilCurrencies"
+      parameters:
+      - name: trancherefno
+        in: path
+        description: List tranche Reference Numbers based on Product Code
+        required: true
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"          
+  /syndication/tranche/{trancherefno}/interestperiods:
+   get:
+      tags:
+        - "Tranche"
+      summary: "Query list Borrowers for a Tranche "
+      description:  "Query list Borrowers for a Tranche"
+      operationId: "getTrancheInterestPeriods"
+      parameters:
+      - name: trancherefno
+        in: path
+        description: List tranche Reference Numbers based on Product Code
+        required: true
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"                    
+  /syndication/entities:
+   get:
+      tags:
+        - "EntityDetails"
+      summary: "Entity Details for a customer "
+      description:  "Entity Details for a customer"
+      operationId: "getEntityDetails"
+      parameters:
+      - name: customerNumber
+        in: query
+        description: List entity details based on customer number
+        required: true
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"          
+  /syndication/premandateprocess:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PreMandateProcessAdapter
+      summary: Adds the Pre Mandate process data available for the application number.
+      description: Adds the Pre Mandate process data available for the application number.
+      operationId: savePreMandateProcessData
+      parameters:
+      - name: preMandateProcessModel
+        in: body
+        description: Request Body that contains pre mandate process data segments data
+        required: true
+        schema:
+          $ref: '#/definitions/PreMandateProcessAdapterModel'
+      responses:
+        201:
+          description: Returns the Id of the pre mandate process adapter
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/premandateprocess/{applicationNumber}:
+    get:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PreMandateProcessAdapter
+      summary: GET the Pre Mandate process data available for the application number.
+      description: GET the Pre Mandate process data available for the application number.
+      operationId: getPreMandateProcessData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application Number
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the pre mandate process data for the given application number.
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/premandateprocess/summary:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - PreMandateProcessAdapter
+      summary: GET the Pre Mandate process applications summary.
+      description: GET the Pre Mandate process applications summary.
+      operationId: getPreMandateProcessSummary
+      responses:
+        200:
+          description: Returns list of application numbers of pre mandate process.
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/postmandateprocess:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PostMandateProcessAdapter
+      summary: Adds the Post Mandate process data available for the application number.
+      description: Adds the Post Mandate process data available for the application number.
+      operationId: savePostMandateProcessData
+      parameters:
+      - name: postMandateProcessModel
+        in: body
+        description: Request Body that contains pre mandate process data segments data
+        required: true
+        schema:
+          $ref: '#/definitions/PostMandateProcessAdapterModel'
+      responses:
+        201:
+          description: Returns the Id of the post mandate process adapter
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/postmandateprocess/{applicationNumber}:
+    get:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PostMandateProcessAdapter
+      summary: GET the Post Mandate process data available for the application number.
+      description: GET the Post Mandate process data available for the application number.
+      operationId: getPostMandateProcessData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application Number
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the post mandate process data for the given application number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/postmandateprocess/summary:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - PostMandateProcessAdapter
+      summary: GET the Post Mandate process applications summary.
+      description: GET the Post Mandate process applications summary.
+      operationId: getPostMandateProcessSummary
+      responses:
+        200:
+          description: Returns list of application numbers of Post mandate process.
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/postmandateparticipantprocess:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PostMandateParticipantProcessAdapter
+      summary: Adds the Post Mandate participant process data available for the application number.
+      description: Adds the Post Mandate participant process data available for the application number.
+      operationId: savePostMandateParticipantProcessData
+      parameters:
+      - name: postMandateParticipantProcessModel
+        in: body
+        description: Request Body that contains post mandate participant process data segments data
+        required: true
+        schema:
+          $ref: '#/definitions/PostMandateParticipantProcessAdapterModel'
+      responses:
+        201:
+          description: Returns the Id of the post mandate participant process adapter
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/postmandateparticipantprocess/{applicationNumber}:
+    get:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PostMandateParticipantProcessAdapter
+      summary: GET the Post Mandate Participant process data available for the application number.
+      description: GET the Post Mandate participant process data available for the application number.
+      operationId: getPostMandateParticipantProcessData
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: Application Number
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the pre mandate participant process data for the given application number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /syndication/postmandateparticipantprocess/summary:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - PostMandateParticipantProcessAdapter
+      summary: GET the Post Mandate Participant process applications summary.
+      description: GET the Post Mandate Participant process applications summary.
+      operationId: getPostMandateParticipantProcessSummary
+      responses:
+        200:
+          description: Returns list of application numbers of Post mandate participant process.
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /backoffice/syndication/drawdowns/query/{drawdownreferencenumber}:
+    get:
+      tags:
+      - SyndicationBackoffice
+      summary: Query Contract Details through a Backoffice Service
+      description: Query Contract Details through a Backoffice Service
+      operationId: querySyndicationDrawdownContract
+      parameters:
+      - name: drawdownreferencenumber
+        in: path
+        description: Request Contract details for a Contract reference number through a backoffice services
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns the loan details for the loan reference number"
+          schema:
+            $ref: "#/definitions/SyndicationDetailsDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /syndication/componentnames:
+   get:
+      tags:
+        - "ComponentNames"
+      summary: "ComponentNames for a product "
+      description:  "ComponentNames for a product"
+      operationId: "getComponentNames"
+      parameters:
+      - name: productCode
+        in: query
+        description: List component Names based on product Code
+        required: true
+        type: string
+      - name: componentType
+        in: query
+        description: componentType filter
+        required: false
+        type: string
+      - name: componentName
+        in: query
+        description: componentName filter
+        required: false
+        type: string
+      produces:
+      - "application/json"
+      - "application/xml"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /syndication/drawdown/amendment:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Amend Financial Data of a Loan through a Backoffice Service
+      description: Amend Financial data of a Loan through a Backoffice Service
+      operationId: drawdownAmendment
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for modifying loan through a backoffice services
+        required: true
+        type: string
+
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      responses:
+        201:
+          description: "Returns the success or failure of the loan modification"
+          schema:
+            $ref: "#/definitions/SyndicationDetailsDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+           description: "Internal error"
+  /syndication/tranche/amendment:
+    post:
+      tags:
+      - SyndicationBackoffice
+      summary: Amend Financial Data of a Loan through a Backoffice Service
+      description: Amend Financial data of a Loan through a Backoffice Service
+      operationId: trancheAmendment
+      parameters:
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for modifying loan through a backoffice services
+        required: true
+        type: string
+
+      - name: branchCode
+        in: header
+        description: branch code from headers
+        required: true
+        type: string
+      responses:
+        201:
+          description: "Returns the success or failure of the loan modification"
+          schema:
+            $ref: "#/definitions/SyndicationDetailsDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+           description: "Internal error"
+definitions:
+  ProductDetailsDtoWrapper:
+    description: "Product Details Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ProductDTO"
+  EntityDtoWrapper:
+    description: "Entity Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/EntityModel"
+  FacilityDtoWrapper:
+    description: "Facility Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/FacilityModel"          
+  FacilityDetailsDtoWrapper:
+    description: "Facility Details Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/FacilityContractDetailsDTO"                    
+  TrancheDtoWrapper:
+    description: "Tranche Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/TrancheModel"
+  TrancheDetailsDtoWrapper:
+    description: "Tranche Details Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/TrancheContractDetailsDTO"          
+  TrancheBorrowersDtoWrapper:
+    description: "Tranche Borrowers Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/TrancheBorrowerModel"          
+  TrancheUtilCurrenciesDtoWrapper:
+    description: "Tranche Util Currencies Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/TrancheUtilCurrencyModel"          
+  TrancheInterestPeriodsDtoWrapper:
+    description: "Tranche Interest Periods Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/TrancheInterestPeriodModel"          
+  DrawdownDtoWrapper:
+    description: "Drawdown Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/DrawdownModel"          
+  SyndicationApplicationDTOWrapper:
+    description: "Create syn application Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/SyndicationApplicationDTO"          
+  SyndicationDrawdownDTOWrapper:
+    description: "Create syn drawdown Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/SyndicationDrawdownDTO"
+  SyndicationParticipantTransferDTOWrapper:
+    description: "Create syn part transfer Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/SyndicationParticipantTransferDTO"
+  ComponentNamesDtoWrapper:
+    description: "Entity Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+       type: "array"
+       items:
+          $ref: "#/definitions/ComponentNamesModel"
+  PreMandateProcessAdapterModel:
+    description: PreMandateProcessAdapterModel
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      id:
+        description: Syndication Application Id
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      borrower:
+        $ref: '#/definitions/BorrowerModel'
+      preferredBank:
+        $ref: '#/definitions/PreferredBankModel'
+      tranche:
+        $ref: '#/definitions/TrancheDsModel'
+      transactionSummary:
+        $ref: '#/definitions/TransactionSummaryModel'
+      fee:
+        $ref: '#/definitions/FeeModel'
+      arrangerAcceptance:
+        $ref: '#/definitions/ArrangeracceptanceModel'
+      collateralInfo:
+        $ref: '#/definitions/CollateralInfoModel' 
+      customerAcceptance:
+        $ref: '#/definitions/CustomerAcceptanceModel'
+      revenueDetails:
+        $ref: '#/definitions/RevenueDetailsModel'
+      marginDetails:
+        $ref: '#/definitions/MarginDetailsModel'
+      exceptionApproval:
+        $ref: '#/definitions/ExceptionApprovalModel'
+      bookValue:
+        $ref: '#/definitions/BookValueModel'
+      settlementCreation:
+        $ref: '#/definitions/SettlementCreationModel' 
+      party:
+        $ref: '#/definitions/PartyModel'
+      arrangerConfirmation:
+        $ref: '#/definitions/ArrangerConfirmationModel'
+      confidentialityAgreementReview:
+        $ref: '#/definitions/ConfidentialityAgreementReviewModel'
+      mandateDocumentReview:
+        $ref: '#/definitions/MandateDocumentReviewModel'
+      initialAnalysis:
+        $ref: '#/definitions/InitialAnalysisModel'
+      syndicationRequirement:
+        $ref: '#/definitions/SyndicationRequirementModel'
+      dealPersonalDetails:
+        $ref: '#/definitions/DealPersonalDetailsModel'
+      arrangerInvitation:
+        $ref: '#/definitions/ArrangerInvitationModel'
+      syndicationPartyInfo:
+        $ref: '#/definitions/SyndicationPartyInfoModel'
+      legalRemarks: 
+        $ref: '#/definitions/LegalRemarksModel'
+      legalCounselInfo:
+        $ref: '#/definitions/LegalCounselInfoModel'
+      borrowerReviewStatus:
+        $ref: '#/definitions/BorrowerReviewStatusModel'
+      internalDepartmentApproval:
+        $ref: '#/definitions/InternalDepartmentApprovalModel'
+      creditApproval:
+        $ref: '#/definitions/CreditApprovalModel'
+  PostMandateProcessAdapterModel:
+    description: PostMandateProcessAdapterModel
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      id:
+        description: Syndication Application Id
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      borrower:
+        $ref: '#/definitions/BorrowerModel'
+      preferredBank:
+        $ref: '#/definitions/PreferredBankModel'
+      tranche:
+        $ref: '#/definitions/TrancheDsModel'
+      transactionSummary:
+        $ref: '#/definitions/TransactionSummaryModel'
+      fee:
+        $ref: '#/definitions/FeeModel'
+      collateralInfo:
+        $ref: '#/definitions/CollateralInfoModel' 
+      revenueDetails:
+        $ref: '#/definitions/RevenueDetailsModel'
+      marginDetails:
+        $ref: '#/definitions/MarginDetailsModel'
+      exceptionApproval:
+        $ref: '#/definitions/ExceptionApprovalModel'
+      bookValue:
+        $ref: '#/definitions/BookValueModel'
+      settlementCreation:
+        $ref: '#/definitions/SettlementCreationModel'
+      confidentialityAgreementReview:
+        $ref: '#/definitions/ConfidentialityAgreementReviewModel' 
+      party:
+        $ref: '#/definitions/PartyModel'
+      dealPersonalDetails:
+        $ref: '#/definitions/DealPersonalDetailsModel'
+      syndicationPartyInfo:
+        $ref: '#/definitions/SyndicationPartyInfoModel'
+      legalRemarks: 
+        $ref: '#/definitions/LegalRemarksModel'
+      legalCounselInfo:
+        $ref: '#/definitions/LegalCounselInfoModel'
+      internalDepartmentApproval:
+        $ref: '#/definitions/InternalDepartmentApprovalModel'
+      furthercp:
+        $ref: '#/definitions/FurtherCPModel'
+      initialcp:
+        $ref: '#/definitions/InitialCPModel'
+      lenderCommitments:
+        $ref: '#/definitions/LenderCommitmentsModel'
+      transactionDocumentReview:
+        $ref: '#/definitions/TransactionDocumentReviewModel'
+      creditApproval:
+        $ref: '#/definitions/CreditApprovalModel'
+      participantInvitation:
+        $ref: '#/definitions/ParticipantInvitationModel'
+      participantConfirmation:
+        $ref: '#/definitions/ParticipantConfirmationModel'
+      participantAcceptance:
+        $ref: '#/definitions/ParticipantAcceptanceModel'
+  PostMandateParticipantProcessAdapterModel:
+    description: PostMandateParticipantProcessAdapterModel
+    type: object
+    properties:
+      applicationNumber:
+        description: Application Number
+        type: string
+      id:
+        description: Syndication Application Id
+        type: string
+      processCode:
+        description: Process Code
+        type: string
+      borrower:
+        $ref: '#/definitions/BorrowerModel'
+      borrowerReviewStatus:
+        $ref: '#/definitions/BorrowerReviewStatusModel'
+      tranche:
+        $ref: '#/definitions/TrancheDsModel'
+      transactionSummary:
+        $ref: '#/definitions/TransactionSummaryModel'
+      fee:
+        $ref: '#/definitions/FeeModel'
+      collateralInfo:
+        $ref: '#/definitions/CollateralInfoModel' 
+      revenueDetails:
+        $ref: '#/definitions/RevenueDetailsModel'
+      marginDetails:
+        $ref: '#/definitions/MarginDetailsModel'
+      exceptionApproval:
+        $ref: '#/definitions/ExceptionApprovalModel'
+      bookValue:
+        $ref: '#/definitions/BookValueModel'
+      settlementCreation:
+        $ref: '#/definitions/SettlementCreationModel'
+      confidentialityAgreementReview:
+        $ref: '#/definitions/ConfidentialityAgreementReviewModel' 
+      party:
+        $ref: '#/definitions/PartyModel'
+      dealPersonalDetails:
+        $ref: '#/definitions/DealPersonalDetailsModel'
+      syndicationPartyInfo:
+        $ref: '#/definitions/SyndicationPartyInfoModel'
+      legalRemarks: 
+        $ref: '#/definitions/LegalRemarksModel'
+      internalDepartmentApproval:
+        $ref: '#/definitions/InternalDepartmentApprovalModel'
+      furthercp:
+        $ref: '#/definitions/FurtherCPModel'
+      initialcp:
+        $ref: '#/definitions/InitialCPModel'
+      lenderCommitments:
+        $ref: '#/definitions/LenderCommitmentsModel'
+      transactionDocumentReview:
+        $ref: '#/definitions/TransactionDocumentReviewModel'
+      creditApproval:
+        $ref: '#/definitions/CreditApprovalModel'
+      participantConfirmation:
+        $ref: '#/definitions/ParticipantConfirmationModel'
+  SyndicationDetailsDtoWrapper:
+    description: "Syndication Details Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/SyndicationDetailsDTO"

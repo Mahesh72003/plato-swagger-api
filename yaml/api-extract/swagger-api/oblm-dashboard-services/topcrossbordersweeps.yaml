@@ -1,0 +1,200 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+- "application/xml"
+produces:
+- "application/json"
+- "application/xml"
+tags:
+- name: "CrossborderSweepsAPI"
+  description: "API for Top Cross Border Sweep Operations"
+
+schemes:
+- "https"
+
+paths:
+  /crossborder:
+    post:
+      tags:
+      - "CrossborderSweepsAPI"
+      summary: "Adds a new Top Cross Border Sweep."
+      description: "Adds a new Top Cross Border Sweep. Add additional information here for this endpoint."
+      operationId: "save"
+      parameters:
+      - name: "crossborder"
+        in: "body"
+        description: "Request Body that contains data required for creating a new crossborder"
+        required: true
+        schema:
+          $ref: "#/definitions/LmdTbTopCrossborderSweepsCollection"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created Top Cross Border Sweep"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "CrossborderSweepsAPI"
+      summary: "Retrieves the list of existing CrossborderSweeps."
+      description:  "Retrieves the list of existing CrossborderSweeps. Add additional information here for the this endpoint."
+      operationId: "getData"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdTbTopCrossborderSweepsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+  LmdTbTopCrossborderSweepsDTO:
+    description: "CrossborderSweeps DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        fromAccountNumber:
+          description: "fromAccountNumber"
+          type: string
+        fromCountryCode:
+          description: "fromCountryCode"
+          type: string
+        fromCurrencyCode:
+          description: "fromCurrencyCode"
+          type: string
+        structureId:
+          description: "structureId"
+          type: string
+        toAccountNumber:
+          description: "toAccountNumber"
+          type: string
+        toCountryCode:
+          description: "toCountryCode"
+          type: string
+        toCurrencyCode:
+          description: "toCurrencyCode"
+          type: string
+        fromAmount:
+          description: "fromAmount"
+          type: number
+        toAmount:
+          description: "toAmount"
+          type: number
+        lcyAmount:
+          description: "lcyAmount"
+          type: number
+        customerId:
+          description: "customerId"
+          type: string
+        customerName:
+          description: "customerName"
+          type: string
+        userId:
+          description: "userId"
+          type: string
+        valueDate:
+          description: "value Date"
+          type: string
+          format: date
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdTbTopCrossborderSweepsCollection:
+    description: Collection of CrossborderSweeps
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmdTbTopCrossborderSweepsDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmdTbTopCrossborderSweepsWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmdTbTopCrossborderSweepsDTO'
+ 

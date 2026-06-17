@@ -1,0 +1,68 @@
+asyncapi: '2.0.0'
+info:
+  title: Kafka Application - File Polling event
+  version: '1.0.0'
+  description: Kafka Application - File Polling event
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  development:
+    url: whf00pfl.in.oracle.com:9092
+    description: Development server
+    protocol: kafka
+channels:
+  FilePollingData:
+    description: This kafka topic is used to invoke the workflow after receiving a file.
+    subscribe:
+      summary: Workflow creation event
+      message:
+        description: Data for invoking workflow
+        $ref: '#/components/messages/FilePollingData'          
+
+components:
+  messages:
+    FilePollingData:
+      name: Workflow message
+      title: Workflow message
+      summary: Data for invoking workflow
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/FilePollingDataPayload"
+  schemas:
+    FilePollingDataPayload:
+      type: object
+      properties:
+        fileRefId:
+          type: string
+          description: ""
+        fileOriginalName:
+          type: string
+          description: ""
+        fileModifiedName:
+          type: string
+          description: ""
+        createdDate:
+          type: string
+          description: ""
+        fileSize:
+          type: string
+          description: ""
+        statusCode:
+          type: string
+          description: ""
+        channelType:
+          type: string
+          description: ""
+        kafkaCommonExceptionDTO:
+          $ref: "#/components/schemas/kafkaCommonExceptionDTO"
+    kafkaCommonExceptionDTO:
+      type: object
+      properties:
+        noOfAttempts:
+          type: integer
+          description: ""
+        exeption:
+          type: string
+          description: ""  
+        

@@ -1,0 +1,775 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server ManualFinance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Limits Factoring Transaction Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/manual-finance-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "limitsFactorTxnWeb"
+    description: "API for Limits Factoring Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/limitsFactorTransaction:
+    post:
+      tags:
+        - "limitsFactorTxnWeb"
+      summary: "Adds a new limits Transaction."
+      description: "Adds a new limits Transaction. Add additional information here for this endpoint."
+      operationId: "createLimitsFactorTransaction"
+      parameters:
+        - name: "limitsTransactionCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new limits Transaction"
+          required: true
+          schema:
+            $ref: "#/definitions/LimitsFactorTransactionCollection"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully created a new limits Transaction"
+          headers:
+            Location:
+              description: "URL of newly created limits Transaction"
+              type: "string"
+          schema:
+              $ref: "./CommonDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "limitsFactorTxnWeb"
+      summary: "Retrieves the limits Transaction by ID."
+      description:  "Retrieves the limits Transaction by ID. Add additional information here for the this endpoint."
+      operationId: "getLimitsFactorTransactionByRefNo"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: transactionRefNo
+          in: "query"
+          type: "string"
+          required: false
+        - name: extTransactionRefNo
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the limits Transaction based on given ReferenceNumber."
+          schema:
+            $ref: "./CommonDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/limitsFactorTransaction/{id}:         
+    delete:
+      tags:
+        - "limitsFactorTxnWeb"
+      summary: "Deletes the limits Transaction identified by given ID"
+      description:  "Deletes the limits Transaction identified by given ID"
+      operationId: "deleteLimitsFactorTransaction"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the limits Transaction that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+          
+  /web/v1/limitsInquiry:
+    get:
+      tags:
+        - "limitsFactorTxnWeb"
+      summary: "Retrives the limits details for the given input request"
+      description:  "Retrives the limits details for the given input request"
+      operationId: "getLimitsInquiry"
+      parameters:
+       - name: "userId"
+         in: "header"
+         description: "userId"
+         required: true
+         type: "string"
+       - name: "appId"
+         in: "header"
+         type: "string"
+         required: true
+       - name: "branchCode"
+         in: "header"
+         type: "string"
+         required: true
+       - name: "lineId"
+         in: "query"
+         type: "string"
+       - name: "referenceBasis"
+         in: "query"
+         type: "string"
+         required: true
+       - name: "txnRefNo"
+         in: "query"
+         type: "string"
+       - name: "limitType" 
+         in: "query" 
+         type: "string"
+       - name: "transactionEvent" 
+         in: "query" 
+         type: "string"
+       - name: "limitEvent" 
+         in: "query" 
+         type: "string"
+       - name: "toDate" 
+         in: "query" 
+         type: "string"
+       - name: "fromDate" 
+         in: "query" 
+         type: "string"                                
+       - name: "entityType"
+         in: "query"
+         type: "string"
+       - name: "entityDesc"
+         in: "query"
+         type: "string"
+       - name: "entityId"
+         in: "query"
+         type: "string"
+       - name: "limitCcy"
+         in: "query"
+         type: "string"
+       - name: offset
+         in: query
+         description: offset is starting no of records to be fetched
+         required: false
+         type: integer
+       - name: limit
+         in: query
+         description: limit is maximum no of records to be fetched
+         required: false
+         type: integer
+      responses:
+        200:
+          description: "Returns the limits Inquiry."
+          schema:
+            $ref: "#/definitions/LimitsFactorTransactionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+definitions:
+  LimitsFactorTransactionCollection:
+    description: "Collection of Limits Transaction Models."
+    type: "object"
+    properties:
+      LimitsTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/LimitsFactorTransactionModel"
+      paging:
+        type: "object"
+  LimitsFactorTransactionModel:
+    description: "Limits Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "int64"
+      limitsAction:
+        type: "string"
+      limitType:
+        type: "string"
+      limitTypeDesc:
+        type: "string"
+      entityType:
+        type: "string"
+      entityId:
+        type: "string"
+      entityDesc:
+        type: "string"
+      structureId:
+        type: "string"
+      structureDesc:
+        type: "string"
+      lineId:
+        type: "string"
+      nodeIdentifier:
+        type: "string"
+      limitCcy:
+        type: "string"
+      limitFreeze:
+        type: string
+      sanctionedLimitAmt:
+        type: "number"
+      availableLimitAmt:
+        type: "number"
+      totalBlockedAmt:
+        type: "number"
+      totalUtilizedAmount:
+        type: "number"
+      adhocSanctionedLmtAmt:
+        type: "number"
+      adhocAvailableLmtAmt:
+        type: "number"
+      adhocTotalBlockedAmt:
+        type: "number"
+      adhocTotalUtilizedAmt:
+        type: "number"
+      txnCcy:
+        type: "string"
+      txnAmt:
+        type: "number"
+      txnAmtLimitCcy:
+        type: "number"
+      exchangeRate:
+        type: "number"
+      txnAmtLimitCcyMain:
+        type: "number"
+      txnAmtLimitCcyAdhoc:
+        type: "number"
+      netTxnAmt:
+        type: "number"
+      netUtilLmtMainLmtCcy:
+        type: "number"
+      netUtilLmtAdhocLmtCcy:
+        type: "number"
+      parentStructureId:
+        type: "string"
+      parentNodeLineId:
+        type: "string"
+      externalLineId:
+        type: "string"
+      status:
+        type: "string"
+      errorCode:
+        type: "string"
+      errorDesc:
+        type: "string"
+      limitsUtilizationMandatory:
+        type: "string"
+      rootEntity:
+        type: "string"
+      rootEntityName:
+        type: "string"
+      depth:
+        type: "number"
+      rootEntityFlag:
+        type: "string"
+      expiresOn:
+        type: "string"
+        format: date
+      effectiveFrom:
+        type: "string"
+        format: date
+      expiredLimitExceptionHandling:
+       type: string
+       description: "Expired Limit Exception Handling"
+      breachLimitExceptionHandling:
+       type: string
+       description: "Breach Limit Exception Handling"
+      expiredAndBreachLimitExceptionHandling:
+       type: string
+       description: "Expired And Breach Limit Exception Handling"
+      txnDate:
+       type: string
+       description: "Transaction Date"
+      transactionRefNo:
+       type: string
+       description: "Transaction Reference Number"        
+      isfactorApplicable:
+       type: string 
+      invoiceRefNo:
+       type: string
+      partyProgramProductId:
+       type: string
+      extTransactionRefNo:
+       type: string
+      txnEvent:
+       type: string
+      invoiceNo:
+       type: string
+      breachType:
+       type: string
+      processingOutcome:
+       type: string
+  ScfTmProdLimitDecnCollection: 
+    description: "Collection of Product Limit Mapping DTO."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/ScfTmProdLimitDecnDTO"         
+  ScfTmProdLimitDecnDTO:
+    type: object
+    properties:
+      eventCode:
+        type: string
+      id:
+        type: string
+      limitType:
+        type: string
+      overrideLimitException:
+        type: string
+      productCode:
+        type: string
+      productMasterId:
+        type: string
+      recourse:
+        type: string
+      rootLimitEntityType:
+        type: string
+      subLevelsApplicable:
+        type: string
+  LimitsTxnBlockDTO:
+    type: object
+    properties:     
+      rootEntity:
+       type: string
+      limitType:
+       type: string
+      levels:
+       type: string
+      buyerId:
+       type: string
+      supplierId:
+       type: string
+      productId:
+       type: string
+      programId:
+       type: string
+      poolId:
+       type: string
+      insuraneCompanyId:
+       type: string
+      importFactorId:
+       type: string
+  LimitsNodeCollection: 
+    description: "Collection of Nodes."
+    type: "object"
+    properties:
+     errorCode:
+      type: string
+     errorDescription:
+      type: string
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LimitsNodeDTO"
+  LimitsNodeDTO:
+    type: object
+    properties:
+     adhocBlockedLimitAmt:
+      type: number
+      description: "Adhoc Blocked Limit Amount"
+     adhocLimitEffectDate:
+      type: string
+      format: date
+      description: "Adhoc Limit Effect Date"
+     adhocLimitExpiryDate:
+      type: string
+      format: date
+      description: "Adhoc Limit Expiry Date"
+     adhocSanctionedLimitAmt:
+      type: number
+      description: "Adhoc Sanctioned Limit Amount"
+     availableAdhocLimitAmt:
+      type: number
+      description: "Available Adhoc Limit Amount"
+     availableLimitAmt:
+      type: number
+      description: "Available Limit Amount"
+     blockedLimitAmt:
+      type: number
+      description: "Blocked Limit Amount"
+     effectiveFrom:
+      type: string
+      format: date
+      description: "Effective From"
+     entityDesc:
+      type: string
+      description: "Entity Description"
+     entityId:
+      type: string
+      description: "Entity Id"
+     entityType:
+      type: string
+      description: "Entity Type"
+     exchangeRate:
+      type: number
+      description: "Exchange Rate"
+     expiresOn:
+      type: string
+      format: date
+      description: "Expires On"
+     externalLineId:
+      type: string
+      description: "External Line Id"
+     id:
+      type: string
+      description: "Id"
+     interchangeabilityAllowed:
+      type: string
+      description: "Interchangeability Allowed"
+     isPolicyAdded:
+      type: string
+      description: "Is Policy Added"
+     isRootEntity:
+      type: string
+      description: "Is Root Entity"
+     isStructureLinked:
+      type: string
+      description: "Is Structure Linked"
+     limitsId:
+      type: string
+      description: "Limits Id"
+     limitCurrency:
+      type: string
+      description: "Limit Currency"
+     limitType:
+      type: string
+      description: "Limit Type"
+     limitFreeze:
+       type: string
+       description: "Limit Freeze"
+     lineId:
+      type: string
+      description: "Line Id"
+     nodeIdentifier:
+      type: string
+      description: "Node Identifier"
+     parentCcy:
+      type: string
+      description: "Parent Currency"
+     parentNodeIdentifier:
+      type: string
+      description: "Parent Node Identifier"
+     parentSanctionedAdhocLimit:
+      type: number
+      description: "Parent Sanctioned Adhoc Limit"
+     parentSanctionedAmt:
+      type: number
+      description: "Parent Sanctioned Amount"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     sanctionedLimitAmt:
+      type: number
+      description: "Sanctioned Limit Amount"
+     structureDescription:
+      type: string
+      description: "Structure Description"
+     structureHierarchy:
+      type: string
+      description: "Structure Hierarchy"
+     structureId:
+      type: string
+      description: "Structure Id"
+     totalAvailableLimitAmt:
+      type: number
+      description: "Total Available Limit Amount"
+     totalBlockedLimitAmt:
+      type: number
+      description: "Total BLocked Limit Amount"
+     totalSanctionedLimitAmt:
+      type: number
+      description: "Total Sanctioned Limit Amount"
+     totalUtilizedLimitAmt:
+      type: number
+      description: "Total Utilized Limit Amount"
+     utilizedAdhocLimitAmt:
+      type: number
+      description: "Utilized Adhoc Limit Amount"
+     utilizedLimitAmt:
+      type: number
+      description: "Utilized Limit Amount"
+     limitsUtilizationMandatory:
+      type: string
+      description: "Limits Utilization Mandatory"
+     depth:
+      type: number
+      description: "Depth"
+     rootEntityName:
+      type: string
+      description: "Root Entity Name"
+     rootEntity:
+      type: string
+      description: "Root Entity"
+  LimitsLineIdBlockDTO:
+   type: object
+   properties:     
+     requestId:
+      type: string
+      description: "Request Id"
+     seqNO:
+      type: integer
+      description: "Sequence Number"
+     businessDate:
+      type: string
+      format: date
+      description: "Business Date"
+     status:
+      type: string
+      description: "Status"   
+     LimitsAmountDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LimitsAmountDTO' 
+  LimitsAmountDTO:
+   type: object
+   properties:
+    lineId:
+     type: string
+     description: "Line Id"
+    externalLineId:
+     type: string
+     description: "External Line Id"
+    partyCode:
+     type: string
+     description: "Party Code"
+    currency:
+     type: string
+     description: "Currency"   
+    blockAmount:
+     type: number
+     description: "BLock Amount"
+    txnMainLimitAmount:
+     type: number
+     description: "Transaction Main Limit Amount" 
+    txnAdhocLimitAmount:
+     type: number
+     description: "Transaction Adhoc Limit Amount"
+    totalBlockAmount:
+     type: number
+     description: "Total Block Amount"
+    totalUtilizeAmount:
+     type: number
+     description: "Total Utilize Amount"
+    totalAvailableAmount:
+     type: number
+     description: "Total Available Amount" 
+    totalAdhocBlockAmount:
+     type: number
+     description: "Total Adhoc Block Amount"
+    totalAdhocUtilizeAmount:
+     type: number
+     description: "Total Adhoc Utilize Amount"
+    totalAdhocAvailableAmount:
+     type: number
+     description: "Total Adhoc Available Amount"
+    limitsAction:
+     type: string
+     description: "Limits Action"
+    limitsType:
+     type: string
+     description: "Limits Type"
+    expiresOn:
+     type: string
+     format: date
+     description: "Expires on"
+    effectiveFrom:
+     type: string
+     format: date
+     description: "Effective From"
+    overrideLimitException:
+     type: string
+     description: "Override Limit Exception"
+    subLevelApplicable:
+     type: string
+     description: "Sub Level Applicable"
+    expiredLimitExceptionHandling:
+     type: string
+     description: "Expired Limit Exception Handling"
+    breachLimitExceptionHandling:
+     type: string
+     description: "Breach Limit Exception Handling"
+    expiredAndBreachLimitExceptionHandling:
+     type: string
+     description: "Expired And Breach Limit Exception Handling" 
+    errorCode:
+     type: string
+     description: "Error Code"
+    errorDesc:
+     type: string
+     description: "Error Description"
+    breachType:
+     type: string
+     description: "Breach Type" 
+    processingOutcome:
+     type: string
+     description: "Limits Action Processing Outcome"     
+  MainAdhocAmtDTO:
+   type: object 
+   properties:
+    mainAmt:
+     type: number
+     description: "Main Amount"
+    adhocAmt:
+     type: number
+     description: "Adhoc Amount"
+    netTxn:
+     type: number
+     description: "Net Transaction"
+    netMainAmt:
+     type: number
+     description: "Net Main Amount"
+    netAdhocAmt:
+     type: number
+     description: "Net Adhoc Amount"
+    errorMsg:
+     type: string
+     description: "Error Message"    
+  LimitsInquiryRequestDto:
+   type: object
+   properties:
+    invoiceRefNo:
+     type: string
+    refNo:
+     type: string
+    lineId:
+     type: string
+    transactionEvent:
+     type: string
+    limitEvent:
+     type: string
+    toDate:
+     type: string
+    fromDate:
+     type: string
+    limitType:
+     type: string
+    entityType:
+     type: string
+    entityDesc:
+     type: string
+    entityId:
+     type: string   
+    limitCcy:
+     type: string
+    referenceBasis:
+     type: string
+    invoiceNo:
+     type: string
+  

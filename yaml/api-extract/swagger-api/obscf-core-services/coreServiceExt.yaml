@@ -1,0 +1,789 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides v2 APIs to perform operations on product and program"
+ version: "1.0.0"
+ title: "Core Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-core-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "productService"
+   description: "v2 APIs for product related operations"
+ - name: "programService"
+   description: "v2 APIs for program related operations"
+ - name: "ExpiryCheckController"
+   description: "APIs for check expiry of each program and product & mark inactive if expired"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../product
+
+ /service/v2/product:
+  get:
+   tags:
+    - "productService"
+   summary: "Get all valid product."
+   description:  "Get all valid product."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true     
+   - name: includecloseandunauth
+     in: query
+     description: "Include close and unauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: "Offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "Limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - in: query
+     name: recordStat
+     description: "Record Status"
+     required: false
+     type: string
+   - in: query
+     name: debtor
+     description: "Debtor"
+     required: false
+     type: string
+   - in: query
+     name: productCategory
+     description: "Product Category"
+     required: false
+     type: string
+   - in: query
+     name: branchCode
+     description: "Branch Code"
+     required: false
+     type: string
+   - in: query
+     name: productCode
+     description: "Product Code"
+     required: false
+     type: string
+   - in: query
+     name: productDescription
+     description: "Product Description"
+     required: false
+     type: string
+   - in: query
+     name: productType
+     description: "Product Type"
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProductMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v2/productlimitmapping:
+  get:
+   tags:
+    - "productService"
+   summary: "Get all valid product."
+   description:  "Get all valid product limit map."
+   operationId: "getAllProductLimit"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true     
+   - name: limit
+     in: query
+     description: "limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - in: query
+     name: recordStat
+     description: "Record Status"
+     required: false
+     type: string
+   - in: query
+     name: eventCode
+     description: "Event Code"
+     required: true
+     type: string
+   - in: query
+     name: productCode
+     description: "Product Code"
+     required: true
+     type: string
+   - in: query
+     name: recourse
+     description: "Recourse"
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProdLimitDecnCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+      
+ /service/v1/product/productWithDesc:
+  get:
+   tags:
+    - "productService"
+   summary: "Get all valid product."
+   description:  "Get all valid product with description."
+   operationId: "getAllDesc"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: "Include close and unauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: "Offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "Limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - in: query
+     name: recordStat
+     description: "Record Status"
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ProductDescCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v2/product/{productCode}/{branchCode}:
+  get:
+   tags:
+    - "productService"
+   summary: "Retrieves the product by ID."
+   description:  "Retrieves the product by ID."
+   operationId: "getById"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "productCode"
+      in: "path"
+      description: "ProductCode of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "path"
+      description: "BranchCode of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - in: query
+      name: recordStat
+      description: "Record Status"
+      required: false
+      type: string
+   responses:
+    200:
+     description: "Returns the program based on given id."
+     schema:
+      $ref: "./coreDef.yaml#/definitions/ScfTmProductMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/v2/program:
+  post:
+   tags:
+    - "programService"
+   summary: "Adds a new program."
+   description: "Create a new program."
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "program" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new program" 
+      required: true
+      schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProgramRequestV2DTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created program" 
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "programService"
+   summary: "Get all valid program."
+   description:  "Get all valid program."
+   operationId: "getAllPrograms"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: "Include close and unauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - in: query
+     name: recordStat
+     description: "Record Status"
+     required: false
+     type: string
+   - in: query
+     name: anchorId
+     description: "Anchor Id"
+     required: false
+     type: string
+   - in: query
+     name: programCode
+     description: "Program Code"
+     required: false
+     type: string
+   - in: query
+     name: productCode
+     description: "Product Code"
+     required: false
+     type: string
+   - in: query
+     name: spokeId
+     description: "Spoke Id"
+     required: false
+     type: string
+   - in: query
+     name: debtor
+     description: "Debtor"
+     required: false
+     type: string
+   - in: query
+     name: buyerId
+     description: "Buyer Id"
+     required: false
+     type: string
+   - in: query
+     name: supplierId
+     description: "Supplier Id"
+     required: false
+     type: string
+   - in: query
+     name: relationshipCode
+     description: "Relationship Code"
+     required: false
+     type: string
+   - in: query
+     name: programName
+     description: "Program Name"
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProgramMasterV2Collection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/program/programWithDesc:
+  get:
+   tags:
+    - "programService"
+   summary: "Get all valid Program."
+   description:  "Get all valid Program with description."
+   operationId: "getDesc"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - in: query
+     name: recordStat
+     description: "Record Status"
+     required: false
+     type: string
+   - in: query
+     name: anchorId
+     description: "Anchor Id"
+     required: false
+     type: string
+   - in: query
+     name: productCode
+     description: "Product Code"
+     required: false
+     type: string
+   - in: query
+     name: spokeId
+     description: "Spoke Id"
+     required: false
+     type: string
+   - in: query
+     name: debtor
+     description: "Debtor"
+     required: false
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ProgramDescCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"     
+
+ /service/v2/program/{id}:
+  put:
+   tags:
+    - "programService"
+   summary: "Update an existing program."
+   description:  "Update an existing program."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "key of the program Maintenance"
+      required: true
+      type: "string"
+    - name: "program"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing program"
+      required: true
+      schema:
+       $ref: "./coreDef.yaml#/definitions/ScfTmProgramRequestV2DTO"
+   responses:
+    200:
+     description: "Returns updated program"
+     schema:
+      $ref: "./coreDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/checkProgramExpiry:  
+  get:
+   tags:
+    - "ExpiryCheckController"
+   summary: "Check expiry of each program at the end of the day"
+   description:  "Check expiry of each program & mark inactive if expired"
+   operationId: "checkProgramExpiry"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     type: "string"
+     required: true
+   - name: "branchDate" 
+     in: "query" 
+     description: "Branch Date"
+     type: "string" 
+   - name: "nextWorkingDate" 
+     in: "query" 
+     description: "Next Working Date"
+     type: "string"
+   - name: "holidayCheckReq" 
+     in: "query" 
+     description: "Holiday Check Required"
+     type: "string"   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     schema:
+       type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/checkProductExpiry:  
+  get:
+   tags:
+    - "ExpiryCheckController"
+   summary: "Check expiry of each product at the end of the day"
+   description:  "Check expiry of each product & mark inactive if expired"
+   operationId: "checkProductExpiry"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     type: "string"
+     required: true
+   - name: "branchDate" 
+     in: "query" 
+     description: "Branch Date"
+     type: "string" 
+   - name: "nextWorkingDate" 
+     in: "query" 
+     description: "Next Working Date"
+     type: "string"
+   - name: "holidayCheckReq" 
+     in: "query" 
+     description: "Holiday Check Required"
+     type: "string" 
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     schema:
+       type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/productProgramMap:
+  get:
+   tags:
+    - "programService"
+   summary: "Get all valid program Code and product type for given program Code."
+   description:  "Get all valid program Code and product type for given program Code."
+   operationId: "getProductProgramMap"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true     
+   - in: query
+     name: programCodes
+     description: "Program Code"
+     required: true
+     type: "array"
+     items:
+       type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/ProgProdMap"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /service/v1/partyDetails:
+  get:
+   tags:
+    - "partyService"
+   summary: "Get all party ids for all programs"
+   description:  "Get all party ids for all programs"
+   operationId: "getAllPartyDetails"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id"
+     type: "string"
+     required: true
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     schema:
+       $ref: "./coreDef.yaml#/definitions/PartyDetailsResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"

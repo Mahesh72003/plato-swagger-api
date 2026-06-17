@@ -1,0 +1,1190 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+ description: "This is a sample server paymentinterface server."
+ version: "1.0.0"
+ title: "paymentinterface Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "paymentinterface"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../paymentinterface
+
+ /paymentinterface:
+  post:
+   tags:
+    - "paymentinterface"
+   summary: "Adds a new paymentinterface."
+   description: "Adds a new paymentinterface. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "paymentinterface"
+      in: "body"
+      description: "Request Body that contains data required for creating a new paymentinterface"
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+   responses:
+    201:
+     description: "Returns message of succes or failure "
+     headers:
+      Location:
+       description: "URL of newly created paymentinterface"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Get all valid paymentinterface."
+   description:  "Get all valid paymentinterface. This endpoints will be used to Get all valid paymentinterface maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: externalSystemDetailsId
+     required: false
+     type: string
+   - in: query
+     name: externalSystemId
+     required: false
+     type: string
+   - in: query
+     name: serviceName
+     required: false
+     type: string
+   - in: query
+     name: templateName
+     required: false
+     type: string     
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../paymentinterface/xxx
+#   DELETE    .../paymentinterface/xxx
+#   GET       .../paymentinterface/xxx
+#   GET       .../paymentinterface/xxx?version=latestrecord
+#   GET       .../paymentinterface/xxx?version=1
+
+ /paymentinterface/{id}:
+  put:
+   tags:
+    - "paymentinterface"
+   summary: "Update an existing paymentinterface."
+   description:  "Update an existing paymentinterface."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the paymentinterface Maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing paymentinterface"
+      required: true
+      schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+   responses:
+    200:
+     description: "Returns updated paymentinterface"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves the paymentinterface by ID."
+   description:  "Retrieves the paymentinterface by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface based on given id."
+     schema:
+      $ref: "#/definitions/LmxTmInterfaceMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "paymentinterface"
+   summary: "Deletes the paymentinterface identified by given ID."
+   description:  "Deletes the paymentinterface identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../paymentinterface/xxx/approve
+
+ /paymentinterface/{id}/approve:
+  patch:
+   tags:
+    - "paymentinterface"
+   summary: "Authorize the paymentinterface by given ID."
+   description:  "Authorize the paymentinterface identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../paymentinterface/xxx/close
+ /paymentinterface/{id}/close:
+  patch:
+   tags:
+    - "paymentinterface"
+   summary: "Close the paymentinterface by given ID."
+   description:  "Close the paymentinterface identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../paymentinterface/xxx/reopen
+
+ /paymentinterface/{id}/reopen:
+  patch:
+   tags:
+    - "paymentinterface"
+   summary: "reopen the paymentinterface by given ID."
+   description:  "reopen the paymentinterface identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the paymentinterface maintenance"
+      required: true
+      type: "string"
+    - name: "paymentinterface"
+      in: "body"
+      description: Request body contain paymentinterface and Modification no of paymentinterface maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../paymentinterface/xxx/unauthorized
+
+ /paymentinterface/{id}/unauthorized:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrives the paymentinterface by given ID."
+   description:  "Retrives the paymentinterface identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface based on given id."
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../paymentinterface/xxx/history
+
+ /paymentinterface/{id}/history:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrives the paymentinterface by given ID."
+   description:  "Retrives the paymentinterface by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface based on given id."
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /paymentinterface/interfacedetails/{externalSystemId}/{methodName}:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves the paymentinterface details by external system id and method name."
+   description:  "Retrieves the paymentinterface details by external system id and method name."
+   operationId: "getInterfaceDetails"
+   parameters:
+    - name: "externalSystemId"
+      in: "path"
+      description: "External System Id"
+      required: true
+      type: "string"
+    - name: "methodName"
+      in: "path"
+      description: "External system id method name"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "version"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface details by external system id and method name."
+     schema:
+      $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /paymentinterface/interfacetemplate/{externalSystemId}/{methodName}:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves the paymentinterface templates based on external system id."
+   description:  "Retrieves the paymentinterface templates based on external system id and base method name."
+   operationId: "getInterfaceListBySystem"
+   parameters:
+    - name: "externalSystemId"
+      in: "path"
+      description: "External System Id"
+      required: true
+      type: "string"
+    - name: "methodName"
+      in: "path"
+      description: "External system id method name"
+      required: true
+      type: "string"      
+    - name: "version"
+      in: "query"
+      description: "version"
+      #required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentinterface details by external system id and method name."
+     schema:
+      $ref: "#/definitions/LmmTmBrnExternalSysDetailsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /paymentinterface/interfacetype:
+  get:
+   tags:
+    - "paymentinterface"
+   summary: "Retrieves all the interface types in system."
+   description:  "Retrieves all paymentinterface templates."
+   operationId: "getInterfaceType"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTmInterfaceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"            
+definitions:
+ LmxTmInterfaceMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     externalSystemDetailsId:
+      type: string
+      description: ""
+     externalSystemId:
+      type: string
+      description: ""
+     serviceName:
+      type: string
+      description: ""
+     templateName:
+      type: string
+      description: ""
+     LmxTmInterfaceDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterfaceDetailsDTO'
+     LmxTmInterfaceServiceDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterfaceServiceDetailsDTO'
+     LmxTmInterfaceEventDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmxTmInterfaceEventDetailsDTO'
+    required:
+     - externalSystemDetailsId
+ LmxTmInterfaceDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+ LmxTmInterfaceServiceDetailsDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+ LmxTmInterfaceEventDetailsDTO:
+  type: object
+  properties:
+     eventCode:
+      type: string
+      description: ""
+     eventDescription:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmxTmInterfaceMasterCollection:
+  description: "Collection of interface."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmxTmInterfaceMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmxTmInterfaceMasterDTO"
+ LmmTmBrnExternalSysDetailsDTO:
+  type: object
+  properties:
+   branchCode:
+    type: string
+    description: ''
+   externalSystemId:
+    type: string
+    description: ''
+   methodName:
+    type: string
+    description: ''
+   messageType:
+    type: string
+    description: ''
+   networkType:
+    type: string
+    description: ''
+   interfaceMasterId:
+    type: string
+    description: ''        
+ LmmTmBrnExternalSysDetailsCollection:
+  description: Collection of branch and external system details.
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmBrnExternalSysDetailsDTO'
+ SinglePayOutDTO:
+  type: object
+  properties:
+   source:
+    type: string
+    default: ''
+    description: ''
+   ubscomp:
+    type: string
+    default: ''
+    description: ''
+   msgid:
+    type: string
+    default: ''
+    description: ''
+   correlid:
+    type: string
+    default: ''
+    description: ''
+   userid:
+    type: string
+    default: ''
+    description: ''
+   branch:
+    type: string
+    default: ''
+    description: ''
+   moduleid:
+    type: string
+    default: ''
+    description: ''
+   service:
+    type: string
+    default: ''
+    description: ''
+   operation:
+    type: string
+    default: ''
+    description: ''
+   source_operation:
+    type: string
+    default: ''
+    description: ''
+   source_userid:
+    type: string
+    default: ''
+    description: ''
+   destination:
+    type: string
+    default: ''
+    description: ''
+   multitripid:
+    type: string
+    default: ''
+    description: ''
+   functionid:
+    type: string
+    default: ''
+    description: ''
+   action:
+    type: string
+    default: ''
+    description: ''
+   entity:
+    type: string
+    default: ''
+    description: ''
+   password:
+    type: string
+    default: ''
+    description: ''
+   GrpHdr_NbOfTxs:
+    type: string
+    default: ''
+    description: ''
+   GrpHdr_CreDtTm:
+    type: string
+    default: ''
+    description: ''
+   GrpHdr_MsgId:
+    type: string
+    default: ''
+    description: ''
+   GrpHdr_AuthStn:
+    type: string
+    default: ''
+    description: ''
+   GrpHdr_InitGpty:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_ReqdExctnDt:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_PmtInfId:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_Dbtr_Id_OrgId_Othr_SchmeNm_Cd:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_PmtTpInf_SvcLvl_Cd:
+    type: string
+    default: ''
+    description: ''
+   CtgyPurp_Cd:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_DbtrAgt_BICFI:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_DbtrAgtAcct_Id_Othr_Id:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_Dbtr_Id_OrgId_Othr_Prtry:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_Dbtr_PstlAdr:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_PmtTpInf_InstrPrty:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_DbtrAcct_Id_IBAN:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_DbtrAcct_Id_Othr_Id:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_Dbtr_Id_OrgId_Othr_Id:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_chrgBr_cd:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_PmtMtd:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_Dbtr_Nm:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_PmtId_InstrId:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Cdtr_PstlAdr_AdrLine3:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Amt_InstdAmt_Ccy:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Cdtr_Nm:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Amt_InstdAmt_value:
+    type: number
+    description: ''
+   CdtTrfTxInf_Cdtr_PstlAdr_AdrLine2:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Amt_EqvtAmt_CcyOfTrf:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_IntrMyagt1_PstlAdr:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_CdtrAgtAcct_BICFI:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_CdtrAgtAcct_Id_Othr:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Amt_EqvtAmt_value:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_CdtrAgt_BICFI:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_CdtrAgt_PstlAdr:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Cdtr_PstlAdr:
+    type: array
+    items:
+     type: string
+   CdtTrfTxInf_PmtId_EndToEndId:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_Amt_EqvtAmt_Ccy:
+    type: string
+    default: ''
+    description: ''
+   CdtTrfTxInf_CdtrAcct_Id_Othr_Id:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_CustCrDtRfInitAddInf_BeneficiaryInst:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_CustCrDtRfInitAddInf_BeneficiaryInstAcct_Id_Othr:
+    type: string
+    default: ''
+    description: ''
+   PmtInf_MisDtails:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_NetworkCode:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_SourceCode:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_HostCode:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_TransferType:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_PrefundedPayments:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_TxnBranch:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_TxnRefNo:
+    type: number
+    description: ''
+   GrpTlr_CustomerNo:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_SsiLabel:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_ActivationDate:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_Remarks:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_CreditToGL:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_ConsolReq:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_FileRefNo:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_PriceCd:
+    type: string
+    default: ''
+    description: ''
+   GrpTlr_GpiPreferred:
+    type: string
+    default: ''
+    description: ''
+ MsgOut101DetailDTO:
+  type: object
+  properties:
+   tag57AWIOPT:
+    type: string
+    default: ''
+    description: ''
+   tag57AWIBIC:
+    type: string
+    default: ''
+    description: ''
+   tag59ACC:
+    type: string
+    default: ''
+    description: ''
+   tag59ADD1:
+    type: string
+    default: ''
+    description: ''
+   tag71A:
+    type: string
+    default: ''
+    description: ''
+   tag23ELINE1:
+    type: string
+    default: ''
+    description: ''
+   tag32BCCY:
+    type: string
+    default: ''
+    description: ''
+   tag32BAMOUNT:
+    type: number
+    default: ''
+    description: ''
+ RftOutDTO:
+  type: object
+  properties:
+   source:
+    type: string
+    default: ''
+    description: ''
+   ubscomp:
+    type: string
+    default: ''
+    description: ''
+   msgid:
+    type: string
+    default: ''
+    description: ''
+   correlid:
+    type: string
+    default: ''
+    description: ''
+   userid:
+    type: string
+    default: ''
+    description: ''
+   branch:
+    type: string
+    default: ''
+    description: ''
+   moduleid:
+    type: string
+    default: ''
+    description: ''
+   service:
+    type: string
+    default: ''
+    description: ''
+   operation:
+    type: string
+    default: ''
+    description: ''
+   source_operation:
+    type: string
+    default: ''
+    description: ''
+   source_userid:
+    type: string
+    default: ''
+    description: ''
+   destination:
+    type: string
+    default: ''
+    description: ''
+   multitripid:
+    type: string
+    default: ''
+    description: ''
+   functionid:
+    type: string
+    default: ''
+    description: ''
+   action:
+    type: string
+    default: ''
+    description: ''
+   entity:
+    type: string
+    default: ''
+    description: ''
+   password:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_referenceno:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_hostcode:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_branchcode:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_customerno:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_receiver:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_tag28DMSGINX:
+    type: number
+    description: ''
+   RftOutCreateIOType_tag28DMSGTOT:
+    type: number
+    description: ''
+   RftOutCreateIOType_tag50ORDOPT:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_tag50ORDACC:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_tag50ORDADD1:
+    type: string
+    default: ''
+    description: ''  
+   RftOutCreateIOType_tag30:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_tag25:
+    type: string
+    default: ''
+    description: ''
+   RftOutCreateIOType_sourcecode:
+    type: string
+    default: ''
+    description: ''
+   MsgOut101Detail1:
+    type: array
+    items:
+     $ref: '#/definitions/MsgOut101DetailDTO'

@@ -1,0 +1,149 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Batch server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Batch Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "RoutingAPI"
+    description: "API for Routing Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/routing:
+    get:
+      tags:
+        - "routing"
+      summary: "Retrieves the list of Routing data"
+      description:  "Retrieves the list of Bank Details with Routing Code"
+      operationId: "getRoutingData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "routingCode"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "bankCode"
+          in: "query"
+          description: "bank Code  of the bank to get the details"
+          required: false
+          type: "string"
+        - name: "branchCode"
+          in: "query"
+          description: "branchCode  of the bank to get the details"
+          required: false
+          type: "string"
+        - name: "bankName"
+          in: "query"
+          description: "Bank Name of to get the details"
+          required: false
+          type: "string"
+        - name: "branchName"
+          in: "query"
+          description: "Branch Name of to get the details"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+   
+definitions:          
+  RoutingModel:
+    description: "To get the routing data"
+    type: object
+    properties:
+      routingCode:
+        type: number
+        description: ""
+      bankCode:
+        type: string
+        description: ""
+      bankName:
+        type: string
+        description: ""
+      branchName:
+        type: string
+        description: ""
+      branchCode:
+        type: string
+        description: ""
+      locationCode:
+        type: string
+        description: ""
+      locationDescription:
+        type: string
+        description: ""
+      locationClusterCode:
+        type: string
+        description: ""
+      locationClusterDesc:
+        type: string
+        description: ""
+
+  RoutingModelCollection:
+    description: "Collection of RoutingModel"
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/RoutingModel"
+      paging:
+          $ref: "#/definitions/PagingDto" 

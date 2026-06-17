@@ -1,0 +1,391 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on customer's division code." 
+ version: "1.0.0"
+ title: "Division Code APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: /obscfcm-core-services
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "divisionCodeService"
+   description: "APIs for Customer Division Code Operations"
+
+paths:
+ /service/v1/divisioncode/division:
+  post:
+   tags:
+    - "divisionCodeService"
+   summary: "Adds a new divisioncode."
+   description: "Adds a new divisioncode."
+   operationId: "createRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "divisioncode" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new divisioncode" 
+      required: true
+      schema:
+       $ref: "#/definitions/CreateServiceCollection"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created divisioncode" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/CreateDivCode"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  patch:
+   tags:
+    - "divisionCodeService"
+   summary: "Deletes/Closes a new divisioncode."
+   description: "Deletes/Closes a new divisioncode."
+   operationId: "deleteCloseRecord"
+   parameters:
+    - name: "divCodeDeleteDTO" 
+      in: body
+      description: "Request Body that contains data required for creating a new divisioncode" 
+      required: true
+      schema:
+       $ref: "#/definitions/DivCodeDeleteDTO"
+   responses:
+    200: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created divisioncode" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/DeleteDivCode"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "divisionCodeService"
+   summary: "Get all valid divisioncode."
+   description:  "Get all valid divisioncode. This endpoints will be used to Get all valid divisioncode maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+   - in: query
+     name: corporateId
+     required: false
+     type: string
+   - in: query
+     name: divisionCode
+     required: false
+     type: string
+   - in: query
+     name: divisionName
+     required: false
+     type: string
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer    
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     schema:
+       $ref: "#/definitions/ScfTmDivCodeServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ DeleteDivCode:
+   type: object
+   properties:
+    corporateId:
+     type: string
+     description: "Corporate id"
+    divisionCodes:
+     type: array
+     description: "div code"
+     items:
+      $ref: "#/definitions/divisionCodeResponseDTOColl"
+      description: "division code"
+    recordStatus:
+     type: string
+     description: "recordStatus"
+    authStatus:
+     type: string
+     description: "Authorization Status"
+    errors:
+     type: array
+     description: "Error List"
+     items:
+      $ref: "#/definitions/ErrorDto"
+    responseCode:
+     type: string
+     description: "Response - SUCCESS/FAILURE"
+    modNo:
+     type: string
+     description: "Latest Modification No."    
+ CreateDivCode:
+   type: object
+   properties:
+    corporateId:
+     type: string
+     description: "Corp id"
+    divisionCodeResponseDTO:
+     type: array
+     description: "div code"
+     items:
+      $ref: "#/definitions/divisionCodeResponseDTOColl"
+    id:
+     type: string
+     description: "Id"
+    authStatus:
+     type: string
+     description: "Authorization Status"
+    responseCode:
+     type: string
+     description: "Response Code"
+    modNo:
+     type: string
+     description: "Mod Number"
+    errors:
+     type: array
+     description: "Error List"
+     items:
+      $ref: "#/definitions/ErrorDto"
+ divisionCodeResponseDTOColl:
+   type: object
+   properties:
+    divisionCode:
+     type: string
+     description: "Division Code"
+    divisionName:
+     type: string
+     description: "Division Name"   
+ ScfTmDivCodeServiceCollection: 
+  allOf:
+   - $ref: "#/definitions/ScfTmCustDivisionCodeCollection"
+   - type: object
+     properties:
+      message:
+       type: object
+       description: "Error Message"
+       $ref: "#/definitions/ErrorDto"
+ CreateServiceCollection:
+  allOf:
+   - $ref: "#/definitions/ScfTmCustDivisionMasterDTO"
+   - type: object
+     properties:
+      authRequire:
+       type: string
+       description: "Auth Status Y/N"
+ DivCodeDeleteDTO:
+   type: object
+   properties:
+    corporateId:
+      description: "Corporate Id"
+      type: "string"
+    divisionCode:
+      description: "Division Code to be deleted or closed."
+      type: "string"
+    deleteClose:
+      type: "string"
+      description: "Delete or Close"
+    authRequire:
+      type: "string"
+      description: "Post Authorization is required or Not."
+ ErrorDto:
+   type: object
+   properties:
+    errorCode:
+     type: string
+     description: "Error Code"
+    errorDesc:
+     type: string
+     description: "Error Desc"
+ ScfTmCustDivisionCodeCollection: 
+   description: "Collection of custdivision."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ScfTmCustDivisionCodeDTO"
+    paging:
+      $ref: "#/definitions/PagingDto"
+ ScfTmCustDivisionMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     partyId:
+      type: string
+      description: "Party Id"
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference Number"        
+     partyName:
+      type: string
+      description: "Party Name"
+     action:
+       type: string
+       description: "Action"
+     ScfTmCustDivisionCodeDTO:
+      type: array
+      items:
+       $ref: "#/definitions/ScfTmCustDivisionCodeDTO"
+    required:
+     - partyId
+     - partyName
+ GenericDto:
+   allOf:
+     - type: object
+       discriminator: resource_type
+ ScfTmCustDivisionCodeDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     countryCode:
+      type: string
+      description: "Country Code"
+     countryName:
+      type: string
+      description: "Country Name"
+     custDivisionMasterId:
+      type: string
+      description: "Customer Division Master ID"
+     divisionAddressLine1:
+      type: string
+      description: "Address Line 1"
+     divisionAddressLine2:
+      type: string
+      description: "Address Line 2"
+     divisionAddressLine3:
+      type: string
+      description: "Address Line 3"
+     divisionAddressLine4:
+      type: string
+      description: "Address Line 4"
+     divisionCode:
+      type: string
+      description: "Division Code"
+     divisionName:
+      type: string
+      description: "Division Name"
+     email:
+      type: string
+      description: "Email"
+     partyId:
+      type: string
+      description: "Party ID"
+     partyName:
+      type: string
+      description: "Party Name"
+     telNo:
+      type: string
+      description: "Tell number"
+     authStatus:
+      type: string
+      description: "Auth Status"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer

@@ -1,0 +1,393 @@
+swagger: '2.0'
+info:
+   description: This is a sample server Manual Recon Service.  You can find out more about Swagger at [swagger.io](http://swagger.io)
+      and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+   version: 1.0.0
+   title: Invoice Reconciliation Service
+host: api-plato.us.oracle.com:8080
+basePath: /obscfcm-manual-recon-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+-  name: invoiceReconService
+   description: APIs for invoice recon
+schemes:
+- https
+paths:
+
+   /web/v1/getCreditNotes:
+    post:
+      tags:
+      - invoiceReconService
+      summary: Get Credit Note list.
+      description: Get Credit Note list.
+      operationId: getCreditNotes
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: invPmtSearchModelCollection
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './manualReconDef.yaml#/definitions/InvPmtSearchModelCollection'
+      responses:
+        200:
+          description: Successfully received invoicesPayments details
+          schema:
+            $ref: './manualReconDef.yaml#/definitions/CreditNoteCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+   /web/v1/invoicePaymentSearch:
+      post:
+         tags:
+         - invoiceReconService
+         summary: Get invoices and payment list.
+         description: Get invoices and payment list to reconcile.
+         operationId: getInvoicePaymentsForRecon
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: invPmtSearchModel
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: './manualReconDef.yaml#/definitions/InvPmtSearchModel'
+         responses:
+            200:
+               description: Successfully received invoicesPayments details
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/InvoicePaymentCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/deRecon:
+      post:
+         tags:
+         - invoiceReconService
+         summary: Get invoices and its payment list.
+         description: Get invoices and payment list which has been reconciled.
+         operationId: getInvPayForDeRecon
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: deReconSearchModel
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: './manualReconDef.yaml#/definitions/DeReconSearchModel'
+         responses:
+            201:
+               description: Successfully received invoicesPayments details
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/ReconInvPmtDtoCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/getInvPmtReconDet:
+      get:
+         tags:
+         - invoiceReconService
+         summary: Updates human task in conductor server
+         description: Updates human task in conductor server
+         operationId: getInvPmtReconDetails
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: tenantId
+            in: header
+            type: string
+            required: false
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: user id for SMS
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: authToken
+            in: header
+            type: string
+            required: false
+         -  name: contentType
+            in: header
+            type: string
+            required: false
+         -  name: branchDate
+            in: header
+            type: string
+            format: date-time
+            required: false
+         -  name: invoiceRefNo
+            in: query
+            type: string
+            description: Request parameter
+            required: false
+         -  name: paymentRefNo
+            in: query
+            type: string
+            description: Request parameter
+            required: false
+         -  name: cnNumber
+            in: query
+            type: string
+            description: Request parameter
+            required: false
+         responses:
+            200:
+               description: Search performed successfully
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/ReconInvPmtDtoCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/getInvCnReconDetails:
+      get:
+         tags:
+         - invoiceReconService
+         summary: Updates human task in conductor server
+         description: Updates human task in conductor server
+         operationId: getInvCnReconDetails
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true         
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: user id for SMS
+         -  name: branchCode
+            in: header
+            type: string
+            required: true  
+         -  name: invoiceRefNo
+            in: query
+            type: string
+            description: Request parameter
+            required: false                  
+         -  name: cnNumber
+            in: query
+            type: string
+            description: Request parameter
+            required: false
+         responses:
+            200:
+               description: Search performed successfully
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/ReconInvCnDtoCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error            
+   /web/v1/getTopInvoiceRecords:
+      post:
+         tags:
+         - invoiceReconService
+         summary: Get top matching invoices based on the payment remarks.
+         description: Get top matching invoices based on the payment remarks.
+         operationId: getTopInvoiceRecord
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+            description: Application id
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: User id
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+            description: Branch Code
+         -  name: invoicePaymentCollection
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: './manualReconDef.yaml#/definitions/InvoicePaymentCollection'
+         responses:
+            200:
+               description: Successfully received invoicesPayments details
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/InvoicePaymentCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/acquireInvoiceTask:
+      post:
+         tags:
+         - invoiceReconService
+         summary: Acquire invoice task for operation.
+         description: Acquire invoice task for operation.
+         operationId: acquireInvoiceTask
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: userId
+            in: header
+            type: string
+            required: true
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: workFlowModel
+            in: body
+            description: Request Body that contains data required for initiating a new txn
+            required: true
+            schema:
+               $ref: './manualReconDef.yaml#/definitions/ConductorWorkFlowModel'
+         responses:
+            200:
+               description: Success
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/ConductorWorkFlowModel'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /web/v1/getReconPmtDetail:
+      get:
+         tags:
+         - invoiceReconService
+         summary: fetch flags to get Recon details
+         description: fetch flags to get Recon details
+         operationId: getReconPmtDetail
+         parameters:
+         -  name: appId
+            in: header
+            type: string
+            required: true
+         -  name: userId
+            in: header
+            type: string
+            required: true
+            description: user id for SMS
+         -  name: branchCode
+            in: header
+            type: string
+            required: true
+         -  name: paymentRefNo
+            in: query
+            type: string
+            description: Request parameter
+            required: true
+         responses:
+            200:
+               description: Search performed successfully
+               schema:
+                  $ref: './manualReconDef.yaml#/definitions/ReconFlagsDtoCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error

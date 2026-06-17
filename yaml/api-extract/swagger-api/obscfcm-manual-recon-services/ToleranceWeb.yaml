@@ -1,0 +1,630 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : ToleranceMaintenance
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server tolerance server." 
+ version: "1.0.0"
+ title: "Tolerance Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "tolerance"
+   description: "Tolerance-Maintenance. end-point for services related to Tolerance-Maintenance.Reconciliation of repayments with invoices/cashflows may be based on several auto-reconcilation rules such as FIFO, LIFO etc. This document pertains to allowing the use of a certain tolerance as an acceptable discrepancy between invoice/cashflow and payment receipt to match invoices/cashflow with the respective payment receipts."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../tolerance
+
+ /web/v1/tolerance:
+  post:
+   tags:
+    - "tolerance"
+   summary: "Adds a new tolerance."
+   description: "Adds a new tolerance. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "tolerance" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new tolerance" 
+      required: true
+      schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/ObscfcmTmToleranceMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created tolerance" 
+       type: "string"
+     schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "tolerance"
+   summary: "Get all valid tolerance."
+   description:  "Get all valid tolerance. This endpoints will be used to Get all valid tolerance maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: filterCriteria
+     in: query
+     description: Filter Criteria for Payment Terms.
+     required: false
+     type: "string"  
+   - name: authStat
+     in: query
+     description: Auth stat can be A for authorized and U for unauthorized
+     required: false
+     type: "string"
+   - name: recordStat
+     in: query
+     description: record stat should be either O for open or C for closed
+     required: false
+     type: "string"  
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true     
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/ObscfcmTmToleranceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../tolerance/xxx
+#   DELETE    .../tolerance/xxx
+#   GET       .../tolerance/xxx
+#   GET       .../tolerance/xxx?version=latestrecord
+#   GET       .../tolerance/xxx?version=1
+
+ /web/v1/tolerance/{id}:
+  put:
+   tags:
+    - "tolerance"
+   summary: "Update an existing tolerance."
+   description:  "Update an existing tolerance."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "key of the tolerance Maintenance"
+      required: true
+      type: "string"
+    - name: "tolerance"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing tolerance"
+      required: true
+      schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/ObscfcmTmToleranceMasterDTO"
+   responses:
+    200:
+     description: "Returns updated tolerance"
+     schema:
+      $ref: "./ToleranceWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "tolerance"
+   summary: "Retrieves the tolerance by ID."
+   description:  "Retrieves the tolerance by ID."
+   operationId: "getById"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "applicationCode"
+      in: "query"
+      description: "applicationCode"
+      required: false
+      type: "string"  
+   responses:
+    200:
+     description: "Returns the tolerance based on given id."
+     schema:
+      $ref: "./ToleranceWebDef.yaml#/definitions/ObscfcmTmToleranceMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /web/v1/tolerance/{id}/delete:    
+  patch:
+   tags:
+    - "tolerance"
+   summary: "Deletes the tolerance identified by given ID."
+   description:  "Deletes the tolerance identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Key of the tolerance maintenance"
+      required: true
+      type: "string"
+    - name: "orchestratorDTO"
+      in: "body"
+      description: Request body contain transactionmaintenance and Modification no of transactionmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./ToleranceWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /web/v1/tolerance/{id}/actions:
+  get:
+   tags:
+    - "tolerance"
+   summary: "Retrieves the tolerance actions by ID."
+   description:  "Retrieves the tolerance actions by ID."
+   operationId: "getAvailableUserActions"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the paymentterms actions based on given id."
+     schema:
+      type: string
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"    
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../tolerance/xxx/approve
+
+ /web/v1/tolerance/{id}/approve:
+  patch:
+   tags:
+    - "tolerance"
+   summary: "Authorize the tolerance by given ID."
+   description:  "Authorize the tolerance identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Key of the tolerance maintenance"
+      required: true
+      type: "string"
+    - name: "orchestratorDTO"
+      in: "body"
+      description: Request body contain transactionmaintenance and Modification no of transactionmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./ToleranceWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../tolerance/xxx/close
+ /web/v1/tolerance/{id}/close:
+  patch:
+   tags:
+    - "tolerance"
+   summary: "Close the tolerance by given ID."
+   description:  "Close the tolerance identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Key of the tolerance maintenance"
+      required: true
+      type: "string"
+    - name: "orchestratorDTO"
+      in: "body"
+      description: Request body contain transactionmaintenance and Modification no of transactionmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./ToleranceWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../tolerance/xxx/reopen
+
+ /web/v1/tolerance/{id}/reopen:
+  patch:
+   tags:
+    - "tolerance"
+   summary: "reopen the tolerance by given ID."
+   description:  "reopen the tolerance identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Key of the tolerance maintenance"
+      required: true
+      type: "string"
+    - name: "orchestratorDTO"
+      in: "body"
+      description: Request body contain transactionmaintenance and Modification no of transactionmaintenance maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./ToleranceWebDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../tolerance/xxx/unauthorized
+
+ /web/v1/tolerance/{id}/unauthorized:
+  get:
+   tags:
+    - "tolerance"
+   summary: "Retrives the tolerance by given ID."
+   description:  "Retrives the tolerance identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the tolerance based on given id."
+     schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/ObscfcmTmToleranceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../tolerance/xxx/history
+
+ /web/v1/tolerance/{id}/history:
+  get:
+   tags:
+    - "tolerance"
+   summary: "Retrives the tolerance by given ID."
+   description:  "Retrives the tolerance by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true   
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the tolerance based on given id."
+     schema:
+       $ref: "./ToleranceWebDef.yaml#/definitions/ObscfcmTmToleranceMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"

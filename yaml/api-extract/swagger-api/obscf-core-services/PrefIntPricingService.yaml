@@ -1,0 +1,383 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBSCF
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on preferential interest pricing" 
+ version: "1.0.0"
+ title: "Preferential Interest Pricing Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-core-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "intPrcService"
+   description: "APIs for preferential interest pricing related operations"
+
+paths:
+
+ /service/v1/intPrcService/filteredIntPric:
+  get:
+   tags:
+    - "intPrcService"
+   summary: "Retrives the filtered preferential interest pricing"
+   description:  "Retrives the filtered preferential interest pricing by ID."
+   operationId: "getFilteredIntPric"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "businessDate"
+      in: "query"
+      description: "Business Date"
+      type: "string"
+      required: true
+    - name: "programId"
+      in: "query"
+      description: "Program Id"
+      type: "string"
+      required: true
+    - name: "partyId"
+      in: "query"
+      description: "Party Id"
+      type: "string"
+      required: true
+    - name: "productCode"
+      in: "query"
+      description: "Product Code"
+      type: "string"
+      required: true
+    - name: "applicationCode"
+      in: "query"
+      description: "Application Code"
+      type: "string"
+      required: true
+    - name: "adhocPricing"
+      in: "query"
+      description: "Adhoc Pricing"
+      type: "string"
+      required: false
+   responses:
+    200:
+     description: "Returns the filtered preferential interest pricing based on given criteria."
+     schema:
+       $ref: "#/definitions/PrefInterestResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ PrefInterestResponse:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      prefInterestWrapperDTO:
+        type: "array"
+        items:
+          $ref: "#/definitions/PrefInterestWrapperDTO"
+ PrefInterestWrapperDTO:
+  type: object
+  properties:
+   scfTmPrefIntPricingDTO:
+    $ref: "#/definitions/ScfTmPrefIntPricingModel"
+   scfTmIntDecisioningDTO:
+    $ref: "#/definitions/ScfTmIntDecisioningServiceModel"
+   interestComponent:
+    type: "string"
+    description: "Interest Component"
+ ScfTmPrefIntPricingModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     id:
+      type: string
+      description: "Id"
+     action:
+      type: string
+      description: "Action"
+     autoAuth:
+      type: string
+      description: "Auto Authorized"
+     modificationStatus:
+      type: string
+      description: "Modification Status"   
+     datasegmentCode:
+      type: string
+      description: "Datasegment Segment"
+     checkerRemarks:
+      type: string
+      description: "Checker Remarks" 
+     makerRemarks:
+      type: string
+      description: "Maker Remarks"                           
+     fixedRateType:
+      type: string
+      description: "Fixed Rate Type"
+     frequency:
+      type: string
+      description: "Frequency"
+     noOfUnits:
+      type: number
+      description: "Number Of Units"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     pricingTemplateDesc:
+      type: string
+      description: "Pricing Template Description"
+     rate:
+      type: number
+      description: "Rate"
+     rateBasis:
+      type: string
+      description: "Rate Basis"
+     rateCalcType:
+      type: string
+      description: "Rate Calculate Type"
+     rateCode:
+      type: string
+      description: "Rate Code"
+     rateCodeUsage:
+      type: string
+      description: "Rate Code Usage"
+     rateFixingDays:
+      type: number
+      description: "Rate Fixing Days"
+     rateRevisionFreq:
+      type: string
+      description: "Rate Revision Frequency"
+     rateType:
+      type: string
+      description: "Rate Type"
+     resetTenor:
+      type: number
+      description: "Reset Tenor"
+     spread:
+      type: number
+      description: "Spread"
+     tierBasedSpread:
+      type: string
+      description: "Tier Based Spread"
+     tierType:
+      type: string
+      description: "Tier Type"
+     intDecId:
+      type: string
+      description: "Interest Dec Id"
+     spreadApplication:
+       type: string
+       description: "Spread Application"
+     ScfTmPrefIntAmtTiersModel:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmPrefIntAmtTiersModel'
+     ScfTmPrefIntMixedTiersModel:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmPrefIntMixedTiersModel'
+     ScfTmPrefIntTenorTiersModel:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmPrefIntTenorTiersModel'
+ ScfTmPrefIntAmtTiersModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     fromAmt:
+      type: number
+      description: "From Amount"
+     prefIntPricingId:
+      type: string
+      description: "Pref Interest Pricing Id"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     spread:
+      type: number
+      description: "Spread"
+     tierCcy:
+      type: string
+      description: "Tier Currency"
+     tierSeq:
+      type: number
+      description: "Tier Sequence"
+     toAmt:
+      type: number
+      description: "To Amount"
+ ScfTmPrefIntMixedTiersModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     amtTierSeq:
+      type: number
+      description: "Amount Tier Sequence"
+     fromAmt:
+      type: number
+      description: "From Amount"
+     fromTenor:
+      type: number
+      description: "From Tenor"
+     prefIntPricingId:
+      type: string
+      description: "Pref Interest Pricing Id"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     spread:
+      type: number
+      description: "Spread"
+     tenorTierSeq:
+      type: number
+      description: "Tenor Tier Sequence"
+     tierCcy:
+      type: string
+      description: "Tier Currency"
+     toAmt:
+      type: number
+      description: "To Amount"
+     toTenor:
+      type: number
+      description: "To Tenor"
+ ScfTmPrefIntTenorTiersModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     fromTenor:
+      type: number
+      description: "From Tenor"
+     prefIntPricingId:
+      type: string
+      description: "Pref Interest Pricing Id"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     spread:
+      type: number
+      description: "Spread"
+     tierSeq:
+      type: number
+      description: "Tier Sequence"
+     toTenor:
+      type: number
+      description: "To Tenor"
+ ScfTmIntDecisioningServiceModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:                          
+     effectiveDate:
+      type: string
+      format: date
+      description: "Effective Date"
+     expiryDate:
+      type: string
+      format: date
+      description: "Expiry Date"
+     filterAttr1:
+      type: string
+      description: "Filter Attribute 1"
+     filterAttr2:
+      type: string
+      description: "Filter Attribute 2"
+     filterAttr3:
+      type: string
+      description: "Filter Attribute 3"
+     filterAttr4:
+      type: string
+      description: "Filter Attribute 4"
+     filterAttr5:
+      type: string
+      description: "Filter Attribute 5"
+     filterCriteria:
+      type: string
+      description: "Filter Criteria"
+     interestComponent:
+      type: string
+      description: "Interest Component"
+     intCollectionType:
+      type: string
+      description: "Interest Collection Type"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     productCode:
+      type: string
+      description: "Product Code"
+     referenceDate:
+      type: string
+      description: "Reference Date"
+     scheduleType:
+      type: string
+      description: "Schedule Type"
+     intDecId:
+      type: string
+      description: "Interest Dec Id"
+     pricingTemplateDesc:
+      type: string
+      description: "Pricing Template Description"
+     productDesc:
+      type: string
+      description: "Product Description" 
+     adhocPricing:
+      type: string
+      description: "Adhoc Pricing"                  
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type

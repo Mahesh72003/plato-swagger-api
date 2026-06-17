@@ -1,0 +1,209 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+- "application/xml"
+produces:
+- "application/json"
+- "application/xml"
+tags:
+- name: "AccountAPI"
+  description: "API for Account Operations"
+
+schemes:
+- "https"
+
+paths:
+  /accounts:
+    post:
+      tags:
+      - "AccountAPI"
+      summary: "Persists Accounts"
+      description:  "Persists accounts. Add additional information here for the this endpoint."
+      operationId: "save"
+      parameters:
+      - name: "account"
+        in: "body"
+        description: "Request Body that contains data required for creating a new account"
+        required: true
+        schema:
+          $ref: "#/definitions/LmdTbAccountDTOCollection"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created account"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /accounts/updatebalance:
+    post:
+      tags:
+      - "AccountAPI"
+      summary: "Persists Accounts"
+      description:  "Persists accounts. Add additional information here for the this endpoint."
+      operationId: "updateBalance"
+      parameters:
+      - name: "account"
+        in: "body"
+        description: "Request Body that contains data required for creating a new account"
+        required: true
+        schema:
+          $ref: "#/definitions/LmdTbAccountDTOCollection"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created account"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  LmdTbAccountDTO:
+    description: "Account DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: string
+        branchCode:
+          type: string
+        currencyCode:
+          type: string
+        customerId:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        cityName:
+          type: string
+        countryName:
+          type: string
+        region:
+          type: string
+        structureId:
+          type: string
+        LmdTbAccountBalancesDTO:
+          type: array
+          items:
+            $ref: '#/definitions/LmdTbAccountBalancesDTO'
+  LmdTbAccountBalancesDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      accountMaster:
+        type: string
+        description: ""
+      valueDate:
+        type: string
+        format: date
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        example: 2018-12-25
+      availableBalance:
+        type: number
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdTbAccountDTOCollection:
+    description: Collection of Account
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmdTbAccountDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmdTbAccountWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmdTbAccountDTO'

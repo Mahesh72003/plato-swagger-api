@@ -1,0 +1,208 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: PricingSystem Services
+host: 10.184.157.121:9000
+basePath: /cmc-charges-calculation-services
+tags:
+- name: PricingSystemAggregateWeb
+  description: API for data segment crud operations for UI
+- name: PricingSystemAggregateService
+  description: API for data segment crud operations for Services
+schemes:
+- http
+
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+                     
+definitions:
+  PricingSystemAggregateModel:
+    description: PricingSystemAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       cmcTmPricingSystem:
+        $ref: '#/definitions/CmcTmPricingSystemModel'
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+  BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type                         
+  PricingSystemAggregateModelCollection:
+    description: Collection of  PricingSystemAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PricingSystemAggregateModel'
+  PricingSystemWebModel:
+    description: PricingSystemWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      makerId:
+        description: maker id
+        type: string
+      makerDateStamp:
+        description: make date stamp
+        type: string
+        format: date-time
+      checkerId:
+        description: check id
+        type: string
+      checkerDateStamp:
+        description: checker date stamp
+        type: string
+        format: date-time
+      modNo:
+        description: mod no
+        type: integer
+      recordStatus:
+        description: record status flag
+        type: string
+      authStatus:
+        description: auth status flag
+        type: string
+      onceAuth:
+        description: once auth flag
+        type: string
+      doerRemarks:
+        description: doer remarks
+        type: string
+      approverRemarks:
+        description: approver  remarks
+        type: string        
+      cmcTmPricingSystem:
+        $ref: '#/definitions/CmcTmPricingSystemModel'          
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType         
+  PricingSystemWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PricingSystemWebModel'   
+  CmcTmPricingSystemModel:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      id:
+       type: string
+       description: "Id"
+      action:
+       type: string
+       description: "Action"
+      autoAuth:
+       type: string
+       description: "Auto Authorized"
+      modificationStatus:
+       type: string
+       description: "Modification Status"   
+      datasegmentCode:
+       type: string
+       description: "Datasegment Code"
+      checkerRemarks:
+       type: string
+       description: "Checker Remarks"
+      makerRemarks:
+       type: string
+       description: "Maker Remarks"                            
+      pricingSrcCode:
+       type: string
+       description: "Pricing Source Code"
+      pricingSrcDesc:
+       type: string
+       description: "Pricing Source Description"   
+  GenericDto:
+   allOf:
+    - type: object
+      discriminator: resource_type 
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/ResponseCode"
+    requestId:
+     type: string
+  ResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+    args:
+     type: array
+     items:
+      type: object
+    arg:
+     type: string
+  CmcTmPricingSystemCollection: 
+   description: "Collection of cmctmpricingsystem."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmPricingSystemModel"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  PagingDto:
+   type: object
+   properties:
+    totalResults:
+     type: integer
+  ResponseDtoWrapper:
+   type: object
+   properties:
+    messages:
+     $ref: "#/definitions/ResponseDto"
+    data:
+     $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+   type: object  
+  OrchestratorDTO:
+   type: object

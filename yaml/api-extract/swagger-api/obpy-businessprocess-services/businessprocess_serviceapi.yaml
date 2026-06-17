@@ -1,0 +1,872 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN -----------------------------
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East),
+#  Mumbai - 400 063, India.
+#
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : businessprocess_webapi.yaml
+#  **
+#  ** Module     :
+#  **
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Business Process Service
+host: 10.184.157.121:9000
+basePath: /business-process-service
+tags:
+  - name: BusinessProcessAPI
+    description: API for business Process Operations
+schemes:
+  - http
+paths:
+  /service-api/v1/businessprocess/summary:
+    get:
+      tags:
+        - "BusinessProcessServiceSummary"
+      summary: "Get all valid business process with only id and name values."
+      description:  " Get all valid business process with only id and name values..This endpoints will be used to Get all valid business process maintanence records."
+      operationId: "getBusinessProcesses"
+      produces:
+        - "application/json"
+        - "application/xml"
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            type: object
+            $ref: "#/definitions/BusinessProcessServiceSummaryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service-api/v1/businessprocess/datasegments/{businessProductCode}/{lifeCycleCode}:
+    get:
+      tags:
+        - "BusinessProcessServiceSummary"
+      summary: "Returns all data segments of the process corresponding to given product  and life cycles codes as  json string "
+      description:  "Returns all data segments of the process corresponding to given product  and life cycles codes "
+      operationId: "getDataSegmentDetails"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - name: "businessProductCode"
+          in: "path"
+          description: "businessProductCode of the process for which all  data segments to be fetched"
+          required: true
+          type: "string"
+        - name: "lifeCycleCode"
+          in: "path"
+          description: "lifeCycleCode of the process for which all  data segments to be fetched"
+          required: true
+          type: "string"
+        - name: "includeStageInfo"
+          in: "query"
+          description: "Flag to indicate if stage information is required in the response"
+          required: false
+          type: boolean
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            type: object
+            $ref: "#/definitions/String"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessprocess/transactioncontroller/{businessProcessCode}:
+    post:
+      tags:
+        - "BusinessProcessServiceSummary"
+      summary: "Adds a new businessprocess to TCM."
+      description: "Adds a new businessprocess. Add additional information here for this endpoint."
+      operationId: "saveTransactionControllerRecord"
+      parameters:
+        - name: "businessProcessCode"
+          in: "path"
+          description: "Request Body that contains data required for creating a new businessprocess in TCM"
+          required: true
+          type: "string"
+        - name: "productCode"
+          in: "query"
+          description: "Request Body that contains data required for creating a new businessprocess in TCM"
+          required: false
+          type: "string"
+        - name: "lifecycleCode"
+          in: "query"
+          description: "Request Body that contains data required for creating a new businessprocess in TCM"
+          required: false
+          type: "string"                    
+        - name: "BPCModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new processCode in TCM"
+          required: true
+          schema:
+            $ref: "#/definitions/BPCModel"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created businessprocess"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ObpyTmBusinessProcessWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  BusinessProcessServiceSummaryCollection:
+    description: "Collection of business process summary."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProcessServiceSummaryModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  BusinessProcessServiceSummaryModel:
+    description: "BusinessProcessService Summary Model"
+    type: "object"
+    required:
+      - businessProcessName
+      - businessProcessDesc
+    properties:
+      businessProcessName:
+        description: "business Process Name"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      businessProcessDesc:
+        description: "business Process Description"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      lifecycleCode:
+        description: "Life Cycle Code"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      lifecycleDescription:
+        description: "Life Cycle Description"
+        type: "string"
+        minLength: 0
+        maxLength: 105
+      businessProductCode:
+        description: "business Product Code"
+        type: "string"
+        minLength: 0
+        maxLength: 16
+
+  BPCModel:
+    type: object
+    allOf:
+      - $ref: '#/definitions/ResponseResourceSupport'
+      - type: object
+        properties:
+          referenceNumber:
+            description: "Reference Number"
+            type: string
+          businessProcessCode:
+            description: "businessProcessCode"
+            type: string
+            minLength: 0
+            maxLength: 16
+  ObpyTmBusinessSubProcessDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          businessProcessCode:
+            type: string
+            description: ""
+          businessProcessDesc:
+            type: string
+            description: ""
+          processCode:
+            type: string
+            description: ""
+          processDesc:
+            type: string
+            description: ""
+  ObpyTmBusinessProcessDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          businessProcessCode:
+            type: string
+            description: ""
+          businessProcessDesc:
+            type: string
+            description: ""
+          processCode:
+            type: string
+            description: ""
+          processDesc:
+            type: string
+            description: ""
+          stageDetails:
+            type: array
+            items:
+              $ref: '#/definitions/ObpyTmBpStageDTO'
+        required:
+          - businessProcessCode
+          - processCode
+  ObpyTmBpStageDTO:
+    type: object
+    properties:
+      businessProcessId:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      seqOrder:
+        type: number
+        description: ""
+      seqType:
+        type: string
+        description: ""
+      stageCode:
+        type: string
+        description: ""
+      dataSegmentList:
+        type: array
+        items:
+          $ref: '#/definitions/ObpyTmBpStageDsDTO'
+      documentTypeList:
+        type: array
+        items:
+          $ref: '#/definitions/ObpyTmBpStageDocumentTypeDTO'
+      clausesList:
+        type: array
+        items:
+          $ref: '#/definitions/ObpyTmBpStageClausesDTO'
+      checklistList:
+        type: array
+        items:
+          $ref: '#/definitions/ObpyTmBpStageChecklistDTO'
+      adviceTypeList:
+        type: array
+        items:
+          $ref: '#/definitions/ObpyTmBpStageAdviceTypeDTO'
+    required:
+      - stageCode
+  ObpyTmBpStageDsDTO:
+    type: object
+    properties:
+      bpStageId:
+        type: string
+        description: ""
+      dsDescription:
+        type: string
+        description: ""
+      dsScreenClassCode:
+        type: string
+        description: ""
+      isVisited:
+        type: boolean
+        description: ""
+      bpDSComponent:
+        type: array
+        items:
+          $ref: '#/definitions/BPComponentModel'
+      bpDSComponentField:
+        type: array
+        items:
+          $ref: '#/definitions/BPFieldModel'
+      id:
+        type: string
+        description: ""
+      isEditable:
+        type: boolean
+        description: ""
+      isMandatory:
+        type: boolean
+        description: ""
+      isScreenclass:
+        type: boolean
+        description: ""
+      sequence:
+        type: number
+        description: ""
+    required:
+      - dsDescription
+      - dsScreenClassCode
+      - sequence
+      - isMandatory
+      - isScreenclass
+  ObpyTmBpStageDocumentTypeDTO:
+    type: object
+    properties:
+      bpStageId:
+        type: string
+        description: ""
+      documentTypeCategory:
+        type: string
+        description: ""
+      documentTypeDesc:
+        type: string
+        description: ""
+      documentTypeName:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      mandatory:
+        type: boolean
+        description: ""
+      originalReqd:
+        type: string
+        description: ""
+      uploadType:
+        type: string
+        description: ""
+      versioning:
+        type: boolean
+        description: ""
+    required:
+      - documentTypeCategory
+      - versioning
+  ObpyTmBpStageClausesDTO:
+    type: object
+    properties:
+      bpStageId:
+        type: string
+        description: ""
+      clauseCode:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+    required:
+      - clauseCode
+  ObpyTmBpStageChecklistDTO:
+    type: object
+    properties:
+      bpStageId:
+        type: string
+        description: ""
+      checklistCode:
+        type: string
+        description: ""
+      checklistData:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      mandatory:
+        type: boolean
+        description: ""
+    required:
+      - checklistCode
+  ObpyTmBpStageAdviceTypeDTO:
+    type: object
+    properties:
+      adviceTypeName:
+        type: string
+        description: ""
+      bpStageId:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+    required:
+      - adviceTypeName
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  BindingResult:
+    type: object
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  ObpyTmBusinessProcessCollection:
+    description: "Collection of businessprocess."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObpyTmBusinessProcessDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  ObpyTmBusinessSubProcessCollection:
+    description: "Collection of businessprocess."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObpyTmBusinessSubProcessDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  ObpyTmBusinessProcessWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/ObpyTmBusinessProcessDTO"
+  TransactionControllerModel:
+    allOf:
+      - $ref: '#/definitions/ResponseResourceSupport'
+      - type: object
+        properties:
+          referenceNumber:
+            description: Reference Number
+            type: string
+          processCode:
+            description: "processCode"
+            type: "string"
+            minLength: 0
+            maxLength: 20
+          businessProcessCode:
+            description: "businessProcessCode"
+            type: "string"
+            minLength: 0
+            maxLength: 16
+          businessProductCode:
+            description: "businessProductCode"
+            type: "string"
+            minLength: 0
+            maxLength: 16
+          lifeCycleCode:
+            description: "lifeCycleCode"
+            type: "string"
+          tasks:
+            description: "tasks"
+            type: "array"
+            items:
+              $ref: "#/definitions/EventModel"
+  EventModel:
+    description: "Event model"
+    type: "object"
+    required:
+      - eventCode
+    properties:
+      eventCode:
+        description: "eventCode"
+        type: "string"
+      datasegment:
+        description: "datasegment list"
+        type: "array"
+        items:
+          $ref: "#/definitions/DataSegmentModel"
+      documentList:
+        description: "document list"
+        type: "array"
+        items:
+          $ref: "#/definitions/DocumentModel"
+      clausesList:
+        description: "clauses list"
+        type: "array"
+        items:
+          $ref: "#/definitions/ClauseModel"
+      advicesList:
+        description: "advices list"
+        type: "array"
+        items:
+          $ref: "#/definitions/AdviceModel"
+      checkList:
+        description: "check list"
+        type: "array"
+        items:
+          $ref: "#/definitions/CheckListModel"
+  DataSegmentModel:
+    description: "data segment model"
+    type: "object"
+    required:
+      - dataSegmentCode
+      - sequence
+      - editFlag
+    properties:
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      dataSegmentCode:
+        description: "data segment code name"
+        type: "string"
+      dataSegmentName:
+        description: "dataSegmentName"
+        type: "string"
+      sequence:
+        description: "sequence"
+        type: "integer"
+        format: "int64"
+      editFlag:
+        description: "mandatory"
+        type: boolean
+        default: false
+      domain:
+        description: "Domain Name"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      classCode:
+        description: "classCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      groupCode:
+        description: "groupCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+  DocumentModel:
+    description: "Document model"
+    type: "object"
+    required:
+      - documentTypeName
+    properties:
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      documentTypeDesc:
+        description: "documentTypeDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      documentTypeName:
+        description: "documentTypeName"
+        type: "string"
+      documentTypeCategory:
+        description: "documentTypeCategory"
+        type: "string"
+      originalRequired:
+        description: "originalRequired"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      versioning:
+        description: "versioning"
+        type: boolean
+        maxLength: 1
+      uploadType:
+        description: "uploadType"
+        type: "string"
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+  AdviceModel:
+    description: "Advice model"
+    type: "object"
+    required:
+      - adviceTypeName
+    properties:
+      adviceTypeDesc:
+        description: "adviceTypeDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      adviceTypeName:
+        description: "adviceTypeName"
+        type: "string"
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+  CheckListModel:
+    description: "CheckList model"
+    type: "object"
+    required:
+      - checkListCode
+    properties:
+      checkListData:
+        description: "checkListData"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      checkListCode:
+        description: "checkListCode"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      sequenceNo:
+        description: "sequenceNo"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+  ClauseModel:
+    description: "Clause model"
+    type: "object"
+    required:
+      - clauseCode
+    properties:
+      clauseCode:
+        description: "clauseCode"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      clauseName:
+        description: "clauseName"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      clauseDesc:
+        description: "clauseDesc"
+        type: "string"
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+  TransactionControllerStatus:
+    description: TransactionControllerModel
+    type: string
+    enum:
+      - INCOMPLETE
+      - COMPLETE
+      - WIP
+  BPComponentModel:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          bpComponentFields:
+            type: array
+            items:
+              $ref: '#/definitions/BPFieldModel'
+          subBpDSComponentList:
+            type: array
+            items:
+              $ref: '#/definitions/BPComponentModel'
+          subBpComponentList:
+            type: array
+            items:
+              $ref: '#/definitions/BPSubComponentModel'
+          componentName:
+            description: "componentName"
+            type: "string"
+          isVisited:
+            description: "isVisited"
+            type: "boolean"
+          parentComponentId:
+            description: "componentName"
+            type: "string"
+          isSubCompExist:
+            type: "boolean"
+          isFieldExist:
+            type: "boolean"
+          componentDesc:
+            description: "componentDesc"
+            type: "string"
+          isDataSegment:
+            type: "boolean"
+          recordId:
+            description: "id"
+            type: "string"
+          parentId:
+            type: "string"
+  BPSubComponentModel:
+    type: object
+    properties:
+      subComponentName:
+        description: "componentName"
+        type: "string"
+      componentId:
+        type: "string"
+      parentId:
+        type: "string"
+      labelDesc:
+        type: "string"
+      bpDSComponentField:
+        type: array
+        items:
+          $ref: '#/definitions/BPFieldModel'
+      id:
+        type: "string"
+  BpComponentModelWrapper:
+    description: "BPComponentModelWrapper model"
+    type: "object"
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/BPComponentModel'
+
+  BPFieldModel:
+    description: "BPField model"
+    type: "object"
+    properties:
+      labelCode:
+        type: "string"
+      id:
+        description: "id"
+        type: "string"
+      parentId:
+        description: "id"
+        type: "string"
+      componentId:
+        description: "componentId"
+        type: "string"
+      fieldName:
+        description: "fieldName"
+        type: "string"
+      defaultValue:
+        description: "defaultValue"
+        type: "string"
+      valueType:
+        description: "defaultValue"
+        type: "string"
+      fieldValue:
+        description: "defaultValue"
+        type: "string"
+      fieldDesc:
+        description: "fieldDesc"
+        type: "string"
+      fieldType:
+        description: "fieldType"
+        type: "string"
+  ResponseModel:
+    properties:
+      errors:
+        type: object
+      data:
+        type: object
+      paging:
+        type: object

@@ -1,0 +1,106 @@
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform Finance Operations on Instruments" 
+ version: "1.0.0"
+ title: "Instrument Finance Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-instruments-receivables-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "instrumentFinanceService"
+   description: "APIs for Instruments Finance Service layer Operations"
+
+paths:    
+ /service/v1/initiateFinance:
+  post:
+   tags:
+    - "instrumentFinanceService"
+   summary: "Initiates Finance for the list of Instrument Reference Numbers recieved"
+   description: "Initiates Finance for the list of Instrument Reference Numbers recieved"
+   operationId: "initiateInstrumentFinance"
+   parameters:
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "User Id"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      type: "string"
+      required: true
+    - name: "instrumentRefCollection" 
+      in: "body" 
+      description: "Request Body that contains data required for initiating finance on Instruments" 
+      required: true
+      schema:
+       $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/InstrumentFinanceRefCollection"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     schema:
+       type: "object"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/instrumentUpdate:
+    put:
+      tags:
+        - "instrumentFinanceService"
+      summary: "Updates status of Invoice Finance Batches"
+      description: "Updates status of Invoice Finance Batches"
+      operationId: "instrumentUpdate"
+      parameters:
+        - name: "financeTransactionDtoWrapper"
+          in: "body"
+          description: "Request Body that contains data required for updating finance attributes"
+          required: true
+          schema:
+            $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/FinanceTransactionDtoWrapper"
+        - name: appId
+          in: header
+          description: "Application Id"
+          type: string
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successfully updated instruments"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "./CommonDef.yaml#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"

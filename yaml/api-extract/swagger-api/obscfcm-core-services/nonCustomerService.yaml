@@ -1,0 +1,408 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on non-customer." 
+ version: "1.0.0"
+ title: "Non-Customer Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: /obscfcm-core-services
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "NonCustomerService"
+   description: "APIs for non-customer Operations. User will be able to on-board new counter party with its attributes."
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../product
+
+ /service/v1/noncustomers:
+  post:
+   tags:
+    - "NonCustomerService"
+   summary: "On boards Counter Party."
+   description: "On boards a new Non-Customer"
+   operationId: "saveRecords"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "nonCustomerRequestList" 
+      in: "body" 
+      description: "Request Body that contain data required for creating a new counter party" 
+      required: true
+      schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ScfTmNonCustomerMasterRequestList"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created program" 
+       type: "string"
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  put:
+   tags:
+    - "NonCustomerService"
+   summary: "On boards Counter Party."
+   description: "Modifies an existing Non-Customer Detail"
+   operationId: "modifyRecords"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "nonCustomerRequestList" 
+      in: "body" 
+      description: "Request Body that contain data required for creating a new counter party" 
+      required: true
+      schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ScfTmNonCustomerMasterRequestList"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created program" 
+       type: "string"
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/noncustomer:
+  get:
+   tags:
+    - "NonCustomerService"
+   summary: "Get all valid Non Customer."
+   description:  "Get all valid Non Customer. This endpoints will be used to Get all valid Non Customer maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: registrationNumber
+     required: false
+     type: string
+     in: query
+   - name: nonCustomerId
+     required: false
+     type: string
+     in: query
+   - name: name
+     required: false
+     type: string
+     in: query
+   - name: relationshipRefNo
+     required: false
+     type: string
+     in: query
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ScfTmNonCustomerMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  put:
+   tags:
+    - "NonCustomerService"
+   summary: "Modify counter party if exist."
+   description:  "Modify Counter Party API will update with the given parameters any customer or counterparty exists in the system."
+   operationId: "modifyRecord"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true     
+   - name: "nonCustomer" 
+     in: "body" 
+     description: "Request Body that contains data required for creating a new counter party" 
+     required: true
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ScfTmNonCustomerRequestDTO"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/generateNonCustId:
+  get:
+   tags:
+    - "NonCustomerService"
+   summary: "Generate Non Customer ID."
+   description:  "Generate a new Non Customer ID. This endpoints will be used to generate valid Non Customer id."
+   operationId: "generateNonCustId"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/NonCustIdResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/getNonCustomerCode:
+  get:
+   tags:
+    - "NonCustomerService"
+   summary: "Get all valid Non Customer code."
+   description:  "Get all valid Non Customer code. This endpoints will be used to Get all valid Non Customer code."
+   operationId: "getNonCustCode"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+   - name: "offset"
+     in: "query"
+     description: "offset"
+     required: false
+     type: "integer"
+   - name: "limit"
+     description: "limit"
+     in: "query"
+     type: "integer"
+     required: false
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "./nonCustomerDef.yaml#/definitions/ScfTmNonCustomerCodeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ # path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../noncustomer/xxx/approve
+
+ /service/v1/noncustomers/{relRefId}/approve:
+  put:
+   tags:
+    - "NonCustomerService"
+   summary: "Authorize the noncustomer by given rel_ref_id."
+   description:  "Authorize the noncustomer identified by given rel_ref_id."
+   operationId: "authorizeNonCustomers"
+   parameters:
+    - name: userId
+      in: header
+      description: userId
+      required: true
+      type: string
+    - name: branchCode
+      in: header
+      description: branchCode
+      required: true
+      type: "string"
+    - name: appId
+      in: header
+      type: string
+      required: true
+    - name: "relRefId"
+      in: "path"
+      description: "Key of the noncustomer maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "./nonCustomerDef.yaml#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"

@@ -1,0 +1,248 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "These APIs can be used to fetch Recon category and Attributes detail" 
+ version: "1.0.0"
+ title: "Reconciliation Rule Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-manual-recon-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "reconCategoryService"
+   description: "Using reconcilation rule Service api, user gets attributes on which reconcilation and allocation happens"
+                                                                                                     
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../RuleDef
+
+  /service/v1/reconCategories:
+    get:
+      tags:
+        - "reconCategoryService"
+      summary: "Provides all reconcilation categories for a specific language"
+      description: "Provides all reconcilation categories for a specific language"
+      operationId: "getReconCategories"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: "language" 
+        in: "query" 
+        description: "Language"
+        type: "string"
+        required: false
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/ReconCategoriesResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/reconAttributes:
+    get:
+      tags:
+        - "reconCategoryService"
+      summary: "Provides all reconcilation attributes for a specific language"
+      description: "Provides all reconcilation attributes for given Recon category, type & language"
+      operationId: "getReconAttributes"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: "language" 
+        in: "query" 
+        description: "Language"
+        type: "string"
+        required: false
+      - name: "reconCategory" 
+        in: "query" 
+        description: "Recon Category"
+        type: "string"
+        required: true
+      - name: "ruleType" 
+        in: "query" 
+        description: "Rule Type"
+        type: "string"
+        required: true
+      - name: "allocationApplicable" 
+        in: "query" 
+        description: "Allocation Applicable"
+        type: "string"
+        required: false        
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/ReconEntityAttributesResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+                  
+  /service/v1/postAllocation:
+    post:
+      tags:
+        - "reconCategoryService"
+      summary: "posts a new allocation transaction to VAM"
+      description: "posts a new allocation transaction to VAM"
+      operationId: "postAllocation"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: "workFlowModel" 
+        in: "body"  
+        description: "Request Body that contains data required for initiating a new txn"  
+        required: true  
+        schema: 
+          $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/ConductorWorkflowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/v1/postAutoAllocation:
+    get:
+      tags:
+        - "reconCategoryService"
+      summary: "Posts a new auto allocation transaction to VAM"
+      description: "Posts a new auto allocation transaction to VAM"
+      operationId: "postAutoAllocation"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: "reconTxnRefNo" 
+        in: "query" 
+        description: "Recon Transaction Reference Numbery"
+        type: "string"
+        required: true
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "./ReconRuleWebDef.yaml#/definitions/AllocationRequestCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"

@@ -1,0 +1,185 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2020 , 2020 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : BranchEod.yaml
+#  **
+#  ** Module     : branchEod
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Yamuna
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "API to run Branch EOD"
+  version: "1.0.0"
+  title: "BranchEod Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+tags:
+  - name: "brancheod"
+    description: "API for branchEod Operations"
+schemes:
+  - "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supprorted http methods POST and GET
+  #
+  # path example ../eodBranches
+
+  /service/brancheod/start:
+    post:
+      tags:
+        - "brancheodService"
+      summary: "Invoke EOD for a branch"
+      description: "Starts EOD process for a branch"
+      operationId: "startEodService"
+      parameters:
+        - name: "startBrnEodDTO"
+          in: "body"
+          description: "Request Body that contains data required to start EOD process"
+          required: true
+          schema:
+            $ref: "#/definitions/StartBranchEodDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created Branch Eod instance"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/brancheod/{branchCode}/{eodDate}:
+    get:
+      tags:
+        - "brancheodService"
+      summary: "Get EOD process status of a given branch"
+      description:  "Get the detailed status report of EOD process for a branch"
+      operationId: "getWorkflowStatusByBranchService"
+      parameters:
+        - name: "brancheodService"
+          in: "path"
+          description: "Branch code for which EOD status should be retrieved"
+          required: true
+          type: "string"
+        - name: "eodDate"
+          in: "path"
+          description: "EOD date for which process status should be retrieved"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns Branch EOD details"
+          schema:
+            $ref: "../api/branchEod.yaml#/definitions/WorkFlowTaskStatus"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+  /service/brancheod/{workflowId}/retry:
+    post:
+      tags:
+        - "brancheodService"
+      summary: "Retry EOD"
+      description:  "Retry EOD with the given Workflow ID"
+      operationId: "retryEODService"
+      parameters:
+        - name: "workflowId"
+          in: "path"
+          description: "Workflow ID that should be retried"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns success or failure message"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+definitions:
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string  
+ StartBranchEodDTO:
+    type: object
+    properties:
+      branchCode:
+        type: string
+        minLength: 3
+        maxLength: 3         

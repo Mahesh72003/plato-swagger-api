@@ -1,0 +1,385 @@
+swagger: '2.0'
+info:
+   description: Maintenance service for oracle banking integration hub.
+   version: 1.0.0
+   title: OBIH Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: ServiceConsumer
+   description: This service will be used for registering the serviceConsumer with service and route information in order
+      to integrate the 3rd party serviceconsumers with OBDX. Collectively all services will be called as Integration Hub
+schemes:
+- https
+paths:
+   /serviceconsumer:
+      post:
+         tags:
+         - ServiceConsumer
+         summary: Adds a new serviceConsumer.
+         description: Adds a new serviceConsumer. Add additional information here for this endpoint.
+         operationId: createRecord
+         parameters:
+         -  name: serviceConsumer
+            in: body
+            description: Request Body that contains data required for creating a new serviceConsumer
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceConsumerDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceConsumer
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceConsumer
+         summary: Get all valid serviceConsumer.
+         description: Get all valid serviceConsumer. This endpoints will be used to Get all valid serviceConsumer maintenance
+            records.
+         operationId: getAll
+         parameters:
+         -  name: offset
+            in: query
+            description: offset is starting no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: limit
+            in: query
+            description: limit is maximum no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: filterBy
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterValue
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterExactMatch
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: boolean
+         -  name: name
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         responses:
+            201:
+               description: Returns message of succes or failure
+               headers:
+                  Location:
+                     description: ''
+                     type: string
+               schema:
+                  $ref: '#/definitions/ServiceConsumerCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/{id}:
+      put:
+         tags:
+         - ServiceConsumer
+         summary: Update an existing serviceConsumer.
+         description: Update an existing serviceConsumer.
+         operationId: modifyRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceConsumer Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceConsumer
+            in: body
+            description: Request Body that contains data required for updating an existing serviceConsumer
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceConsumerDTO'
+         responses:
+            200:
+               description: Returns updated serviceConsumer
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceConsumer
+         summary: Retrieves the serviceConsumer by ID.
+         description: Retrieves the serviceConsumer by ID.
+         operationId: getById
+         parameters:
+         -  name: id
+            in: path
+            description: Id of the user that needs to be fetched
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns the serviceConsumer based on given id.
+               schema:
+                  $ref: '#/definitions/ServiceConsumerWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+      delete:
+         tags:
+         - ServiceConsumer
+         summary: Deletes the serviceConsumer identified by given ID.
+         description: Deletes the serviceConsumer identified by given ID. Add additional information here for the this endpoint.
+         operationId: deleteRecord
+         parameters:
+         -  name: id
+            in: path
+            description: Key of the serviceConsumer maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Successful operation.
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/export:
+      get:
+         tags:
+         - ServiceConsumer
+         summary: Export Consumer Details to a file.
+         description: Update an existing serviceConsumer.
+         operationId: exportConsumer
+         produces:
+         - application/json
+         - application/octet-stream
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceConsumer Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: allProviders
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: true
+            type: boolean
+         -  name: providers
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: exportType
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         responses:
+            200:
+               description: Returns updated serviceConsumer
+               schema:
+                  type: object
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/import:
+      post:
+         tags:
+         - ServiceConsumer
+         summary: Export Consumer Details to a file.
+         description: Update an existing serviceConsumer.
+         operationId: importConsumer
+         consumes:
+         - multipart/form-data
+         parameters:
+         -  name: allProviders
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: true
+            type: boolean
+         -  name: providers
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: consumerName
+            in: formData
+            description: Request Body that contains data required for creating a new serviceConsumer
+            required: true
+            type: string
+         -  name: file
+            in: formData
+            description: Request Body that contains data required for creating a new serviceConsumer
+            required: true
+            type: file
+         responses:
+            200:
+               description: Returns updated serviceConsumer
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/processjson:
+      post:
+         tags:
+         - ServiceConsumer
+         summary: Used to process the Json before import operation.
+         description: Used to process the Json before import operation. Add additional information here for this endpoint.
+         operationId: processJson
+         consumes:
+         - multipart/form-data
+         parameters:
+         -  name: file
+            in: formData
+            description: Request Body that contains data required for creating a new serviceConsumer
+            required: true
+            type: file
+         responses:
+            200:
+               description: Returns searched Consumer and ProducerList
+               schema:
+                  $ref: '#/definitions/ServiceConsumerWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+definitions:
+   ServiceConsumerDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            description:
+               type: string
+               description: ''
+               maxLength: 1000
+            name:
+               type: string
+               description: ''
+               maxLength: 255
+            environmentVariables:
+               type: string
+            serviceProviderList:
+               type: array
+               items:
+                  $ref: '#/definitions/ServiceProviderDTO'
+            isFactoryShipped:
+               type: string
+               description: ''
+               maxLength: 1
+         required:
+         - name
+   ServiceConsumerCollection:
+      description: Collection of serviceConsumer.
+      type: object
+      properties:
+         data:
+            type: array
+            items:
+               $ref: '#/definitions/ServiceConsumerDTO'
+         paging:
+            $ref: '#/definitions/PagingDto'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   ServiceConsumerWrapperDTO:
+      type: object
+      properties:
+         data:
+            $ref: '#/definitions/ServiceConsumerDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'
+   GenericDto:
+      allOf:
+      -  type: object
+         discriminator: resource_type
+   EnvironmentGroupDTO:
+      type: object
+      properties:
+         name:
+            type: string
+         variables:
+            type: array
+            items:
+               $ref: '#/definitions/EnvironmentVariableDTO'     
+   EnvironmentVariableDTO:
+      type: object
+      properties:
+         name:
+            type: string
+         value:
+            type: string         

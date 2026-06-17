@@ -1,0 +1,710 @@
+swagger: '2.0'
+info:
+  description: "External Service API"
+  version: 1.0.0
+  title: Payment Service
+host: 10.184.157.121:9000
+basePath: /payment-services
+tags:
+- name: Logging
+  description: API for Logging Operations
+schemes:
+- http
+paths:
+  /service/v1/payment/externalAccTransfer:
+    post:
+      tags:
+      - "ExternalPaymentTransactionDSService"
+      summary: "This API is used to do Account transfer"
+      description: "This API is used to do Account transfer"
+      operationId: "externalAccTransfer"
+      parameters:
+      - name: "externalAccTransferModel"
+        in: "body"
+        description: "Request Body that contains data required for Account transfer"
+        required: true
+        schema:
+          $ref: "#/definitions/ExternalFtTxnDSModel"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "authToken"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "tenantId"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "contentType"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "branchDate"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "sourceCode"
+        in: "header"
+        type: "string"
+        required: true  
+      responses:
+        201:
+          description: "Create Account Transfer description"
+          schema:
+            $ref: "#/definitions/APIDTOWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+
+definitions:          
+  CoreAccountDTO:
+     type: object
+     allOf:
+     - $ref: '#/definitions/GenericDto'
+     - type: object
+       properties:
+        countryCode:
+         type: string
+         description: "Country Code"
+         minLength: 0
+         maxLength: 4
+        address4:
+         type: string
+         description: "Fourth line of the customer?s address"
+         minLength: 0
+         maxLength: 105
+        address3:
+         type: string
+         description: "Third line of the customer?s address"
+         minLength: 0
+         maxLength: 105
+        address2:
+         type: string
+         description: "Second line of the customer?s address"
+         minLength: 0
+         maxLength: 105
+        address1:
+         type: string
+         description: "First line of the customer?s address"
+         minLength: 0
+         maxLength: 105
+        ecaCheckReq:
+         type: string
+         description: "Indicates that ECA check is required for the external customer account"
+         minLength: 0
+         maxLength: 1
+         pattern: '[Y,N]'
+        accountClass:
+         type: string
+         description: "Account class of the external customer account. It can be Normal account or Nostro account"
+        acStatDormant:
+         type: string
+         description: "Indicates that the account status is dormant"
+         minLength: 1
+         maxLength: 1
+         pattern: '[Y,N]'
+        acStatFrozen:
+         type: string
+         description: "Indicate that the account status is frozen"
+         minLength: 0
+         maxLength: 1
+         pattern: '[Y,N]'
+        glStatBlocked:
+         type: string
+         description: "Indicates that the account status is blocked"
+         minLength: 0
+         maxLength: 1
+         pattern: '[Y,N]'
+        acStatNoDr:
+         type: string
+         description: "Indicates that the account does not have any debit facility"
+         minLength: 0
+         maxLength: 1
+         pattern: '[Y,N]'
+        acStatNoCr:
+         type: string
+         description: "Indicates that the account does not have any credit facility"
+         minLength: 0
+         maxLength: 1
+         pattern: '[Y,N]'
+        acOpenDate:
+         type: string
+         pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+         description: "The date on which account is being opened"
+        custAcName:
+         type: string
+         description: "Name of the account holder"
+         minLength: 0
+         maxLength: 105
+         #pattern: '[a-zA-Z0-9\s]+'
+        custAcCcy:
+         type: string
+         description: "Currency in which the account is being created"
+        customerNo:
+         type: string
+         description: "Customer number to which the account number is being linked"
+        sourceSystemAccBrn:
+         type: string
+         description: "Branch to which the account belongs to"
+        sourceSystemAccNo:
+         type: string
+         description: "Account number as in the source system"
+         minLength: 0
+         maxLength: 35
+         pattern: '[a-zA-Z0-9]+'
+        sourceSystem:
+         type: string
+         description: "Name of the source system"
+        custAcIban:
+         type: string
+         description: "IBAN that is linked to the customer"
+         minLength: 0
+         maxLength: 35
+         pattern: '[a-zA-Z0-9]+'
+        hostCode:
+         type: string
+         description: "The host code that is linked to the logged in user of the branch."
+        custAccountNo:
+         type: string
+         description: "Account number of the External customer"
+         minLength: 1
+         maxLength: 20
+         pattern: '[a-zA-Z0-9]+'
+       required:
+        - custAcName
+        - customerNo
+        - sourceSystemAccBrn
+        - sourceSystemAccNo
+        - hostCode
+        - custAccountNo
+  APIDTOWrapper: 
+     properties: 
+      data: 
+        description: ""
+        type: object
+      messages: 
+        $ref: "#/definitions/APIDTO"
+      type: object
+  APICode: 
+     properties: 
+      arg: 
+        type: string
+      args: 
+        items: 
+          type: object
+        type: array
+      code: 
+        type: string
+      desc: 
+        type: string
+      error: 
+        type: string
+      information: 
+        type: string
+      language: 
+        type: string
+      override: 
+        type: string
+      overrideAuthLevelsReqd: 
+        type: string
+      type: 
+        type: string
+     type: object
+  APIDTO: 
+     properties: 
+      codes: 
+        items: 
+          $ref: "#/definitions/APICode"
+        type: array
+      httpStatusCode: 
+        type: string
+      keyId: 
+        type: string
+      overrideAuthLevelsReqd: 
+        type: string
+      requestId: 
+        type: string
+      status: 
+        type: string
+     type: object
+  ExternalFtTxnDSModel:
+     type: object
+     description: "User Limits Model"
+     properties:
+      chequeDate:
+         type: string
+         format: date
+         description: "Cheque Date"
+      chequeNumber:
+         type: string
+         description: "Cheque Number"
+      fromAccountBranch:
+         type: string
+         description: "From Account Branch"
+      fromAccountCcy:
+         type: string
+         description: "From Account Currency"
+      fromAccountNumber:
+         type: string
+         description: "From Account Number"
+      fromAccountAmt:
+         type: number
+         description: "From Account Amount"
+      mobileNumber:
+         type: string
+         description: "Mobile Number"
+      narrative:
+         type: string
+         description: "Narrative"
+      toAccountBranch:
+         type: string
+         description: "To Account Branch"
+      toAccountCcy:
+         type: string
+         description: "To Account Currency"
+      toAccountNumber:
+         type: string
+         description: "To Account Number"
+      toAccountAmt:
+         type: number
+         description: "To Account Amount"
+      txnBranchCode:
+         type: string
+         description: "Txn Branch Code"
+      txnCustomer:
+         type: string
+         description: "Txn Customer"
+      txnRefNumber:
+         type: string
+         description: "Transaction Ref. No"    
+      txnDate:
+         type: string
+         format: date
+         description: "Txn Date"
+      addDtls:
+         $ref: '#/definitions/AdditionalTransactionDetails'
+#         $ref: "../../../api/commonWeb.yaml#/definitions/AdditionalTransactionDetails"
+      txnDtls:
+         $ref: '#/definitions/TransactionDetails'
+#         $ref: "../../../api/commonWeb.yaml#/definitions/TransactionDetails"
+      extSysDtls:
+         $ref: '#/definitions/ExtSysDtls'
+         description: "" 
+      demDtls:
+         type: array
+         items:
+            $ref: "#/definitions/DenomTxnDtlsModel"
+#            $ref: "../../../api/cash/cashWeb.yaml#/definitions/DenomTxnDtlsModel"
+      prcDtls:
+         type: array
+         items:
+            $ref: "#/definitions/PrcDtlsModel"
+#            $ref: "../../../api/branchcommon/branchCommonWeb.yaml#/definitions/PrcDtlsModel"
+      pcDtls:
+       $ref: '#/definitions/pcDtlsModel'
+  ExtSysDtls: 
+     allOf: 
+      - 
+        properties: 
+          sourceCode: 
+            description: ""
+            type: string
+          sourceRefNo: 
+            description: ""
+            type: string
+          sourceRole: 
+            description: ""
+            type: string
+          sourceUser: 
+            description: ""
+            type: string
+          stationId: 
+            description: ""
+            type: string
+          txnBranch: 
+            description: ""
+            type: string
+        type: object
+     description: "User Misc GL Credit Request"
+     type: object
+  pcDtlsModel:
+     type: object
+     properties:
+      benAcctType:
+       type: string
+       description: "Beneficiary Account type"
+      benAddr1:
+       type: string
+       description: "Beneficiary address 1"
+      benAddr2:
+       type: string
+       description: "Beneficiary address 2 "
+      benAddr3:
+       type: string
+       description: "Beneficiary address 3"
+      benAddr4:
+       type: string
+       description: "Beneficiary address 4"
+      benName:
+       type: string
+       description: "Beneficiary name"
+      branch:
+       type: string
+       description: "branch"
+      commMode:
+       type: string
+       description: "Communication Mode"
+      custAddr1:
+       type: string
+       description: "Customer address 1 "
+      custAddr2:
+       type: string
+       description: "Customer address 2"
+      custAddr3:
+       type: string
+       description: "Customer address 3"
+      custAddr4:
+       type: string
+       description: "Customer address 4"
+      custName:
+       type: string
+       description: "Customer name"
+      emailid:
+       type: string
+       description: "email id"
+      mobileno:
+       type: string
+       description: "mobile number"
+      parentId:
+       type: string
+       description: "Parent Id"
+      pcAccountNo:
+       type: string
+       description: "Beneficiary account number"
+      pcBankCode:
+       type: string
+       description: "Bank code"
+      pcNetworkId:
+       type: string
+       description: "Network Code"
+      senderRecvrInfo1:
+       type: string
+       description: "Sender Receiver information 1"
+      senderRecvrInfo2:
+       type: string
+       description: "Sender Receiver information 2"
+      senderRecvrInfo3:
+       type: string
+       description: "Sender Receiver information 3"
+      senderRecvrInfo4:
+       type: string
+       description: "Sender Receiver information 4"   
+      benSwiftBicCode:
+       type: string
+       description: "Ben Swift BIC code"    
+      remBicCode:
+       type: string
+       description: "Rem BIC code"
+  AdditionalTransactionDetails: 
+     description: "Additional Configuration Master Model"
+     properties: 
+      adviceName: 
+        description: "Advice Name"
+        type: string
+      cashInOutIndicator: 
+        description: "Cash In/Out Indicator Possible Values  I,O, IO (FX case)"
+        type: string
+      crossCcyEnabled: 
+        description: "crossCcyEnabled Indicator Possible Values N,Y"
+        type: string
+      ejLoggingRequired: 
+        description: "Teller Sq required/logged  Default Value Y Possible Values Y-Yes, N-No"
+        type: string
+      ejTxnAmtMapping: 
+        description: "EJ TXN Amount Mapping Possible Values FROM or TO"
+        type: string
+      ejTxnCcyMapping: 
+        description: "EJ TXN Currency Mapping Possible Values FROM or TO"
+        type: string
+      email: 
+        description: email
+        type: string
+      hostMultiTripId: 
+        description: "Host Multitrip ID"
+        type: string
+      hostStatus: 
+        description: "Host Status"
+        type: string
+      ignoreApproval: 
+        default: false
+        description: "ignore approval or not"
+        type: boolean
+      ignoreWarning: 
+        default: false
+        description: "ignore warning or not"
+        type: boolean
+      isAdvice: 
+        default: "N"
+        description: "is advice generation required or not"
+        type: string
+      isExternal: 
+        default: false
+        description: "Is External call"
+        type: boolean
+      isFetchAccImages: 
+        description: "isFetchAccImages Indicator Possible Values  N,Y"
+        type: string
+      isNewChargesEnabled: 
+        description: "isNewChargesEnabled Indicator Possible Values  N,Y"
+        type: string
+      isReversal: 
+        default: "N"
+        description: "is it reversal"
+        type: string
+      isTotChargesReq: 
+        description: "isTotChargesReq Indicator Possible Values  N,Y"
+        type: string
+      mobile: 
+        description: "Mobile number"
+        type: string
+      orchestratorId: 
+        description: "Orchestrator Id"
+        type: string
+      ovdDefault: 
+        default: false
+        description: "Override Default"
+        type: boolean
+      reversalButton: 
+        default: "N"
+        description: "Reversal button"
+        type: string
+      rsp: 
+        description: "Reversal Supported Possible Values Y-Yes, N-No"
+        type: string
+      signatureVerifyIndicator: 
+        description: "Signature Verify Indicator"
+        type: string
+      tillUpdate: 
+        default: true
+        description: "Till Update"
+        type: boolean
+      txnBranchCcy: 
+        description: "Txn Branch Currency"
+        type: string
+      txnBranchDate: 
+        description: "Txn Branch Date"
+        format: date
+        type: string
+      txnType: 
+        description: "Transaction Type"
+        type: string
+     type: object
+  TransactionDetails: 
+     description: "Transaction Master Model"
+     properties: 
+      accountType: 
+        description: "Account Type"
+        type: string
+      assignmentMode: 
+        description: "Assigment Mode"
+        type: string
+      authoriserComments: 
+        description: "Authoriser Comments"
+        type: string
+      eventCode: 
+        description: "Event Code"
+        type: string
+      functionCode: 
+        description: "Function Code"
+        type: string
+      inflowAmt: 
+        description: "Inflow Amount"
+        type: number
+      inflowCcy: 
+        description: "Inflow Currency"
+        type: string
+      onlineOfflineTxn: 
+        description: "Offline Support Default Value N No"
+        type: string
+      outflowAmt: 
+        description: "Outflow Amount"
+        type: number
+      outflowCcy: 
+        description: "Outflow Currency"
+        type: string
+      overrideConfirmFlag: 
+        description: "Override confirm flag"
+        type: string
+      requestStatus: 
+        description: "Request Status"
+        type: string
+      sourceRefNumber: 
+        description: "Source Ref. No"
+        type: string
+      subScreenClass: 
+        description: "SUB SCREEN CLASS"
+        type: string
+      supervisorId: 
+        description: "Supervisor Id"
+        type: string
+      tellerSeqNumber: 
+        description: "Teller Sequence Number"
+        type: string
+      txnAmount: 
+        description: "transaction amount"
+        type: string
+      txnBranchCcy: 
+        description: "Txn Branch Currency"
+        type: string
+      txnBranchCode: 
+        description: "Transaction Branch Code"
+        type: string
+      txnBranchDate: 
+        description: "Txn Branch Date"
+        format: date
+        type: string
+      txnCcy: 
+        description: "transaction currency code"
+        type: string
+      txnId: 
+        description: "Transaction ID"
+        type: string
+      txnRefNumber: 
+        description: "Transaction Ref. No"
+        type: string
+      userComments: 
+        description: "User Comments"
+        type: string
+      vamApplicable: 
+        default: "N"
+        description: "Vam account or not"
+        type: string
+     type: object
+  DenomTxnDtlsModel: 
+     properties: 
+      denomCode: 
+        description: "Demon Code"
+        type: string
+      denomCodeValue: 
+        description: "Demon Code Value"
+        type: string
+      denomType: 
+        description: "Demon Type"
+        type: string
+      inOutIndicator: 
+        description: "InOut Indicator"
+        type: string
+      parentId: 
+        description: "Parent ID"
+        type: string
+      recordId: 
+        description: "Record Id"
+        type: string
+      tellerId: 
+        description: "User ID"
+        type: string
+      units: 
+        description: Units
+        type: number
+      value: 
+        description: Value
+        type: number
+     type: object
+  PrcDtlsModel:
+     type: object
+     properties:
+       recordId:
+         type: string
+         description: "id"
+       parentId:
+         type: string
+         description: "parent id"
+       chargeCode:
+         type: string
+         description: "Charge Code"
+       chargeCcy:
+         type: string
+         description: "Charge Currency"
+       chargeDescription:
+         type: string
+         description: "Charge Description"           
+       originalChargeAmt:
+         type: number
+         description: "Original Charge Amount"
+       chargeAmt:
+         type: number
+         description: "Charge Amount"
+       waiver:
+         type: string
+         description: "Waiver"
+       chargeDebitLeg:
+         type: string
+         description: "Charge debit leg (Whom)"
+       detailsId:
+         type: string
+         description: "Pickup Charge details Id to use in accounting"
+       chargeId:
+         type: string
+         description: "Pick up Charge id to use in accounting "
+       additionalFields:
+         type: string
+         description: ""
+       chargeSharing:
+         type: string
+         description: ""
+       exchangeRate:
+         type: number
+         description: ""
+       minMaxValidationCriteria:
+         type: string
+         description: ""
+       maxChgAmount:
+         type: number
+         description: ""
+       maxChgPct:
+         type: number
+         description: ""
+       minChgAmount:
+         type: number
+         description: ""
+       minChgPct:
+         type: number
+         description: ""
+       chgCrTxnCode:
+         type: string
+         description: ""
+       chgDrTxnCode:
+         type: string
+         description: ""
+       chargeCreditAccount:
+         type: string
+         description: ""
+       chargeDebitAccount:
+         type: string
+         description: ""
+       chargeCategory:
+         type: string
+         description: ""
+       chargeBasis:
+         type: string
+         description: ""
+       chargeByCash:
+         type: string
+         description: ""     

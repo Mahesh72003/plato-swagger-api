@@ -1,0 +1,861 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBCM
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on relationship master." 
+ version: "1.0.0"
+ title: "Relationship Service APIs"
+host: 10.184.157.121:9000
+basePath: /obscfcm-core-services
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "relationshipmasterservice"
+   description: "API's for maintaining relationships between corporate and its buyers and sellers. All parameter related to relationship will be configured through this service.
+Service will have all operations for ADD/MODIFY/DELETE/AUTHORIZE"
+ - name: "ExpiryCheckController"
+   description: "APIs for check expiry of each relationship & mark inactive if expired"
+
+paths:
+
+# path fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../relationshipmaster
+
+ /service/v1/relationshipmaster/noncustomer:
+  post:
+   tags:
+    - "relationshipmasterservice"
+   summary: "Adds a new relationshipmaster."
+   description: "Onboards a new Customer/Non-Customer"
+   operationId: "saveRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "appId"
+      type: "string"
+      required: true
+    - name: "relationshipmaster" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new relationshipmaster" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObcmTmRelationshipMasterNonCustDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created relationshipmaster" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmTmRelationshipMasterSaveResponseDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/buyerseller/relationshipmaster:
+  get:
+   tags:
+    - "relationshipmasterservice"
+   summary: "Get all valid relationshipmaster."
+   description:  "Get all valid relationshipmaster. This endpoints will be used to Get all valid relationshipmaster maintenance records."
+   operationId: "getRelationshipMasterByBuyerSeller"
+   parameters:
+   - name: buyerId
+     in: query
+     description: buyerId need to be set to fetch summary record
+     required: false
+     type: string
+   - name: sellerId
+     in: query
+     description: buyerId need to be set to fetch summary record
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "./obcmtmrelationshipmaster.yaml#/definitions/ObcmTmRelationshipMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error" 
+ 
+ /service/v1/relationshipmaster/associatedPartiesList:
+  get:
+   tags:
+    - "relationshipmasterservice"
+   summary: "Fetch relationshipmaster for given associated party."
+   description: "Fetch relationshipmaster for given associated party."
+   operationId: "getAssociatedParties"
+   parameters:
+    - name: userId
+      in: header
+      description: userId
+      required: true
+      type: string
+    - name: branchCode
+      in: header
+      description: branchCode
+      required: true
+      type: "string"
+    - name: appId
+      in: header
+      type: string
+      required: true
+    - name: "partyId" 
+      type: "string"
+      in: "query" 
+      description: "The party whose associated parties have to be identified. Either partyId or name is required. If party id and name both are sent, then system will use party id." 
+      required: false
+    - name: "name" 
+      in: "query"
+      type: "string"
+      description: "Party Name whose associated parties have to be found."
+      required: false
+    - name: "authStatus" 
+      in: "query"
+      type: "string"
+      description: "Corporate can check list of authorized, non-authorized counterparty. If value of this field is blank than all parties would be returned." 
+      required: false
+    - name: "associatedPartyType" 
+      in: "query"
+      type: "string"
+      description: "Can be either C/CP. C- Corporate, CP-Counterparty." 
+      required: false
+    - name: "associatedPartyRole" 
+      in: "query"
+      type: "string"
+      description: "Can be either B/S. B-Buyer, S- Supplier." 
+      required: false
+    - name: "relationshipCode" 
+      in: "query"
+      type: "string"
+      description: "Relationship code for filter" 
+      required: false
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created relationshipmaster" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/AssociatedPartiesResponseList"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/relationshipmaster/externalCode:
+  get:
+   tags:
+    - "relationshipmasterservice"
+   summary: "Fetch external code for given associated party."
+   description: "Fetch external code for given associated party."
+   operationId: "getExternalCodes"
+   parameters:
+    - name: "relationshipCode" 
+      type: "string"
+      in: "query" 
+      description: "relationship code for filter" 
+      required: true
+    - name: "buyerId" 
+      in: "query"
+      type: "string"
+      description: "Buyer Id for filtration."
+      required: false
+    - name: "sellerId" 
+      in: "query"
+      type: "string"
+      description: "Seller Role for filtration." 
+      required: false
+    - name: "offset"
+      in: "query"
+      description: "offset is starting no of records to be fetched"
+      required: false
+      type: "integer"
+    - name: "limit"
+      in: "query"
+      description: "limit is maximum no of records to be fetched"
+      required: false
+      type: "integer"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created relationshipmaster" 
+       type: "string"
+     schema:
+       $ref: "./obcmtmrelationshipmaster.yaml#/definitions/ObcmTmRelationshipDetailsExternalCodeCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/relationshipmaster/nonCustomerDetails/{externalCode}:
+  get:
+   tags:
+    - "relationshipmasterservice"
+   summary: "Fetch CounterParty Details for given External Code."
+   description: "Fetch CounterParty Details for given External Code."
+   operationId: "getCounterPartyDetails"
+   parameters:
+    - name: "externalCode" 
+      type: "string"
+      in: "path" 
+      description: "relationship code for filter" 
+      required: true
+    - name: "userId"
+      in: header
+      description: userId
+      required: true
+      type: string
+    - name: "appId"
+      in: header
+      type: string
+      required: true
+   responses:
+    200: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created relationshipmaster" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/NonCustomerDetailsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+  
+ 
+ /service/v1/checkRelationshipExpiry:  
+  get:
+   tags:
+    - "ExpiryCheckController"
+   summary: "Check expiry of each relationship at the end of the day"
+   description:  "Check expiry of each relationship & mark inactive if expired"
+   operationId: "checkRelationshipExpiry"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      type: "string"
+      required: true
+    - name: "branchDate" 
+      in: "query" 
+      description: "Branch Date"
+      type: "string" 
+    - name: "nextWorkingDate" 
+      in: "query" 
+      description: "Next Working Date"
+      type: "string"
+    - name: "holidayCheckReq" 
+      in: "query" 
+      description: "Holiday Check Required"
+      type: "string"   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     schema:
+       type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+        
+definitions:
+ ObcmTmRelationshipMasterNonCustDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     autoAcceptance:
+      type: string
+      description: "Auto Acceptance"
+     corporateId:
+      type: string
+      description: "Corporate Id"
+     counterPartyCategory:
+      type: string
+      description: "Counter Party Category"
+     noOfDays:
+      type: integer
+      description: "Number Of Days"
+     nonCustomer:
+      type: array
+      items:
+       $ref: './nonCustomerDef.yaml#/definitions/ScfTmNonCustomerMasterDTO' 
+ 
+ ObcmTmRelationshipNonCustDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     autoAcceptance:
+      type: string
+      description: "Auto Acceptance"
+     corporateId:
+      type: string
+      description: "Corporate Id"
+     corporateName:
+      type: string
+      description: "Corporate Name"
+     effFromDate:
+      type: string
+      description: "Effective From Date"
+     expiresOn:
+      type: string
+      description: "Expires On"
+     product:
+      type: string
+      description: "Product"
+     holidayTreatment:
+      type: string
+      description: "Holiday Treatment"
+     autoDebitApplicable:
+      type: string
+      description: "Auto Debit Applicable"            
+     noOfDays:
+      type: integer
+      description: "Number Of Days"
+     ObcmTmRelationshipDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObcmTmRelationshipDetailsDTO'
+
+ ObcmTmRelationshipMasterSaveResponseDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     relationshipCode:
+      type: string
+      description: "Relationship Code"
+     existingRelationshipCode:
+      type: string
+      description: "Existing Relationship Code"
+     cifStatus:
+      type: string
+      description: "Cif Status"
+     existingCounterParty:
+      type: string
+      description: "Existing Counter Party"
+     partyId:
+      type: string
+      description: "Party Id"
+     authStatus:
+      type: string
+      description: "Authorization status"
+     errorCode:
+      type: string
+      description: "Error Code"
+     errorDesc:
+      type: array
+      items:
+       $ref: "#/definitions/ResponseCode"
+ AssociatedPartiesResponseList:
+  description: "Response of Associated Parties Respose"
+  type: object
+  properties:
+     partyId:
+      type: string
+      description: "Party Id"
+     counterparties:
+      type: object
+      description: "Counterparties"
+      properties:
+       buyer:
+         type: array
+         description: "Contains all associated buyer Counterparty details of party Id"
+         items:
+          $ref: "#/definitions/AssociatedParties"
+       seller:
+        type: array
+        description: "Contains all associated seller Counterparty details of party Id"
+        items:
+         $ref: "#/definitions/AssociatedParties"
+     corporates:
+      type: object
+      properties:
+       buyer:
+         type: array
+         description: "Contains all associated corporate details of Buyer party Id"
+         items:
+          $ref: "#/definitions/AssociatedParties"
+       seller:
+        type: array
+        description: "Contains all associated corporate details of Seller party Id"
+        items:
+         $ref: "#/definitions/AssociatedParties"
+ AssociatedPartiesLov:
+  description: "Response of Associated Parties Respose"
+  type: object
+  properties:
+     data:
+      type: array
+      description: "Contains all associated buyer Counterparty details of party Id"
+      items:
+       $ref: "#/definitions/AssociatedPartyLovData"
+     paging:
+      $ref: "./obcmtmrelationshipmaster.yaml#/definitions/PagingDto"
+ AssociatedPartyLovData:
+  description: "Response of Associated Parties Response"
+  type: object
+  properties:
+     customerId:
+      type: string
+      description: "Associated Counter/Corporate Id"
+     customerName:
+      type: string
+      description: "Name of associated Counter/Corporate Id"
+ AssociatedParties:
+  description: "Response of Associated Parties Response"
+  type: object
+  properties:
+     associatedPartyId:
+      type: string
+      description: "Associated Counter/Corporate Id"
+     associatedPartyName:
+      type: string
+      description: "Name of associated Counter/Corporate Id"
+     authStatus:
+      type: string
+      description: "Contains A/U"
+     status:
+      type: string
+      description: "Active/Inactive"
+     cifStatus:
+      type: string
+      description: "Conatins Y/N"
+     existingCounterparty:
+      type: string
+      description: "Contains Y/N"
+     relationshipCode:
+      type: string
+      description: "Relationship Code in BO"
+     relationshipDesc:
+      type: string
+      description: "Relationship Desc in BO"
+     autoAcceptanceFlag:
+      type: string
+      description: "Auto Acceptance Flag"
+     autoAcceptanceDays:
+      type: string
+      description: "Auto Acceptance Days"
+     divisionDetails:
+      type: array
+      description: "Division Details for each record of counterparties"
+      items:
+       $ref: "#/definitions/DivisionDetails"
+ DivisionDetails:
+  type: object
+  properties:
+     associatedPartyCode:
+      type: string
+      description: "CounterParty Code"
+     associatedPartyDivisionCode:
+      type: string
+      description: "Counter Party Division Code"
+     corporateDivisionCode:
+      type: string
+      description: "Corporate Divisio Code"
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ NonCustomerDetailsDTO:
+  type: object
+  properties:
+   corporateId:
+    type: string
+   corporateName:
+    type: string
+   relationshipCode:
+    type: string
+   relationshipName:
+    type: string
+   counterpartyid:
+    type: string
+   counterpartyname:
+    type: string
+   counterpartyRole:
+    type: string
+   externalCode:
+    type: string
+ NonCustomerDetailsCollection:
+  description: "Response of Associated Parties Respose"
+  type: object
+  properties:
+     nonCustomerDetailsDTOList:
+      type: array
+      items:
+       $ref: "#/definitions/NonCustomerDetailsDTO"
+ ScfTmProgramMasterDTO:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      anchorId:
+       type: string
+       description: "Anchor Id"
+      anchorName:
+       type: string
+       description: "Anchor Name"
+      authorizationRequired:
+       type: string
+       description: "Authorization Required"
+      autoAcceptanceApplicable:
+       type: string
+       description: "Auto Acceptance Applicable"
+      autoAcceptanceDays:
+       type: number
+       description: "Auto Acceptance Days"
+      autoFinanceApplicable:
+       type: string
+       description: "Auto Finance Applicable"
+      autoSettlementApplicable:
+       type: string
+       description: "Auto Settlement Applicable"
+      disbursementCcy:
+       type: string
+       description: "Disbursement Currency"
+      effectiveFrom:
+       type: string
+       format: date
+       description: "Effective From"
+      expiresOn:
+       type: string
+       format: date
+       description: "Expires On"
+      maxFinancePercentage:
+       type: number
+       description: "Maximum Finance Percentage"
+      maxTenorAllowed:
+       type: number
+       description: "Maximum Tenor Allowed"
+      minFinancePercentage:
+       type: number
+       description: "Minimum Finance Percentage"
+      minTenorAllowed:
+       type: number
+       description: "Minimum Tenor Allowed"
+      preferredDisbursementMode:
+       type: string
+       description: "Preferred Disbursement Mode"
+      preferredSettlementMode:
+       type: string
+       description: "Preferred Settlement Mode"
+      productCode:
+       type: string
+       description: "Product Code"
+      productDescription:
+       type: string
+       description: "Product Description"
+      programCode:
+       type: string
+       description: "Program Code"
+      programName:
+       type: string
+       description: "Program Name"
+      withRecourse:
+       type: string
+       description: "With Recourse"
+      graceDays:
+       type: number
+      interestBearingParty:
+       type: string
+       description: "Interest Bearing Party"
+      relationshipCode:
+       type: string
+       description: "Relationship Code" 
+      reconciliationTowards:
+       type: string
+      txnControllerRefNo:
+       type: string
+       description: "Transaction Controller Reference Number" 
+      twoFactorApp:
+       type: string
+       default: N
+       description: "Two Factor App"
+      insuranceApp:
+       type: string
+       default: N
+       description: "Insurance App" 
+      interestRefundHandling:
+       type: string
+       description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+       type: string
+       description: "Interest Refund Payment Mode"
+      marginHandling:
+       type: string
+       description: "Margin Handling"
+      marginPaymentMode:
+       type: string
+       description: "Margin PaymentMode"
+      autoDebitApplicable:
+       type: string
+       description: "Auto Debit Applicable"
+      ScfTmProgramSpokeMasterDTO:
+       type: array
+       items:
+         $ref: '#/definitions/ScfTmProgramSpokeMasterDTO'
+ ScfTmProgramSpokeMasterDTO:
+   type: object
+   properties:
+    authorizationRequired:
+     type: string
+     description: "Authorization Required"
+    autoFinanceApplicable:
+     type: string
+     description: "Auto Settlement Applicable"
+    autoSettlementApplicable:
+     type: string
+     description: "Auto Settlement Applicable"
+    disbursementCcy:
+     type: string
+     description: "Disbursement Currency"
+    id:
+     type: string
+     description: "Id"
+    maxFinancePercentage:
+     type: number
+     description: "Maximum Finance Percentage"
+    maxTenorAllowed:
+     type: number
+     description: "Maximum Tenor Allowed"
+    minFinancePercentage:
+     type: number
+     description: "Minimum Finance Percentage"
+    minTenorAllowed:
+     type: number
+     description: "Minimum Tenor Allowed"
+    preferredDisbursementMode:
+     type: string
+     description: "Preferred Disbursement Mode"
+    preferredSettlementMode:
+     type: string
+     description: "Preferred Settlement Mode"
+    programCode:
+     type: string
+     description: "Program Code"
+    programMasterId:
+     type: string
+     description: "Program Master Id"
+    spokeId:
+     type: string
+     description: "Spoke Id"
+    spokeName:
+     type: string
+     description: "Spoke Name"
+    withRecourse:
+     type: string
+     description: "With Recourse"
+    graceDays:
+     type: number
+    interestBearingParty:
+     type: string
+     description: "Interest Bearing Party"
+    importFactorId:
+     type: string
+     description: "Import Factor Id"
+    importFactorName:
+     type: string
+     description: "Import Factor Name"
+    insuranceCoId:
+     type: string
+     description: "Insurance Co Id"
+    insuranceCoName:
+     type: string
+     description: "Insurance Co Name"
+    interestRefundHandling:
+     type: string
+     description: "Interest Refund Handling"
+    interestRefundPaymentMode:
+     type: string
+     description: "Interest Refund Payment Mode"
+    marginHandling:
+     type: string
+     description: "Margin Handling"
+    marginPaymentMode:
+     type: string
+     description: "Margin Payment Mode"
+    autoDebitApplicable:
+     type: string
+     description: "Auto Debit Applicable"
+    ScfTmProgramSpokeCodeMasterDTO:
+     type: array
+     items:
+      $ref: '#/definitions/ScfTmProgramSpokeCodeMasterDTO'
+ ScfTmProgramSpokeCodeMasterDTO:
+   type: object
+   properties:
+    id:
+     type: string
+     description: "Id"
+    spokeMasterId:
+     type: string
+     description: "Spoke Master Id"
+    programCode:
+     type: string
+     description: "Program Code"
+    spokeId:
+     type: string
+     description: "Spoke Id"
+    spokeName:
+     type: string
+     description: "Spoke Name"
+    spokeExternalCode:
+     type: string
+     description: "Spoke External Code"
+    spokeDivisionCode:
+     type: string
+     description: "Spoke Division Code"
+    spokeDivisionName:
+     type: string
+     description: "Spoke Division Name"
+    anchorDivisionCode:
+     type: string
+     description: "Anchor Division Code"
+    anchorDivisionName:
+     type: string
+     description: "Anchor Division Name"
+ ScfTmProgramMasterCollection: 
+  description: "Collection of program."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ScfTmProgramMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ ScfTmProgramRequestDTO:
+  type: object
+  properties:
+    data:
+     $ref: "#/definitions/ScfTmProgramMasterDTO"
+    autoApproval:
+     type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+     description: "All Of"     

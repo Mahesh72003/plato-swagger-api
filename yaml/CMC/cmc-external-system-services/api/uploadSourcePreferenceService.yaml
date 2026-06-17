@@ -1,0 +1,755 @@
+#  This source is part of the Oracle Banking Software Product.
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East),
+#  Mumbai - 400 063, India.
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : uploadsourcepreference
+#  **
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+ description: "This is a sample server uploadsourcepreferences server."
+ version: "1.0.0"
+ title: "uploadsourcepreferences Service"
+host: "ofss220245:7001"
+basePath: "/cmc-upload-source-preferences-services"
+
+tags:
+ - name: "uploadsourcepreferences"
+   description: "API for uploadsourcepreferences Operations"
+
+schemes:
+ - "http"
+
+paths:
+ /service/uploadsources:
+  post:
+   tags:
+    - "uploadsourcesService"
+   summary: "Adds a new uploadsources."
+   description: "Adds a new uploadsources. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadsources"
+      in: "body"
+      description: "Request Body that contains data required for creating a new uploadsources"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmUploadSourceDto"
+   responses:
+    201:
+     description: "Returns message of succes or failure "
+     headers:
+      Location:
+       description: "URL of newly created uploadsources"
+       type: "string"
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourceServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "uploadsourcesService"
+   summary: "Get all valid uploadsources."
+   description: "Get all valid uploadsources. This endpoints will be used to Get all valid uploadsourcesmaintanence records."
+   operationId: "getAll"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - in: query
+      name: sourceCode
+      required: false
+      type: string
+    - in: query
+      name: recordStatus
+      required: false
+      type: string
+    - in: query
+      name: authStatus
+      required: false
+      type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourceServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+  # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+  #
+  #  supprorted http methods PUT, DELETE and GET
+  #
+  # path examples----
+  #   PUT       .../uploadsources/xxx
+  #   DELETE    .../uploadsources/xxx
+  #   GET       .../uploadsources/xxx
+  #   GET       .../uploadsources/xxx?version=latestrecord
+  #   GET       .../uploadsources/xxx?version=1
+
+ /service/uploadsources/{uploadSourceCode}:
+  put:
+   tags:
+    - "uploadsourcesService"
+   summary: "Update an existing rule."
+   description: "Update an existing uploadsources."
+   operationId: "modifyRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadSourceCode"
+      in: "path"
+      description: "key of the uploadsources Maintenance"
+      required: true
+      type: "string"
+    - name: "uploadsources"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing uploadsources"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmUploadSourceDto"
+   responses:
+    200:
+     description: "Returns updated uploadsources"
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourceServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+  # path to reopen existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../uploadsources/xxx/reopen
+
+ /service/uploadsources/{uploadSourceCode}/reopen:
+  patch:
+   tags:
+    - "uploadsourcesService"
+   summary: "reopen the uploadsources by given ID."
+   description: "reopen the uploadsources identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadSourceCode"
+      in: "path"
+      description: "Key of the uploadsources maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourceServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+  # path to close existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../uploadsources/xxx/close
+ /service/uploadsources/{uploadSourceCode}/close:
+  patch:
+   tags:
+    - "uploadsourcesService"
+   summary: "Close the uploadsources by given ID."
+   description: "Close the uploadsources identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadSourceCode"
+      in: "path"
+      description: "Key of the uploadsources maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourceServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+
+ # path to create a new record and fetch all valid records or by intent
+ #
+ #  supprorted http methods POST and GET
+ #
+ # path example ../uploadsourcepreferences
+
+ /service/uploadsourcepreferences:
+  post:
+   tags:
+    - "uploadsourcepreferencesService"
+   summary: "Adds a new uploadsourcepreferences."
+   description: "Adds a new uploadsourcepreferences. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadsourcepreferences"
+      in: "body"
+      description: "Request Body that contains data required for creating a new uploadsourcepreferences"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmUploadSourcePrefDto"
+   responses:
+    201:
+     description: "Returns message of succes or failure "
+     headers:
+      Location:
+       description: "URL of newly created uploadsourcepreferences"
+       type: "string"
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourcePrefServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "uploadsourcepreferencesService"
+   summary: "Get all valid uploadsourcepreferences."
+   description: "Get all valid uploadsourcepreferences. This endpoints will be used to Get all valid uploadsourcepreferencesmaintanence records."
+   operationId: "getAll"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - in: query
+      name: sourceCode
+      required: false
+      type: string
+    - in: query
+      name: moduleCode
+      required: false
+      type: string
+    - in: query
+      name: recordStatus
+      required: false
+      type: string
+    - in: query
+      name: authStatus
+      required: false
+      type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers:
+      Location:
+       description: ""
+       type: "string"
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourcePrefServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+ #
+ #  supprorted http methods PUT, DELETE and GET
+ #
+ # path examples----
+ #   PUT       .../uploadsourcepreferences/xxx
+ #   DELETE    .../uploadsourcepreferences/xxx
+ #   GET       .../uploadsourcepreferences/xxx
+ #   GET       .../uploadsourcepreferences/xxx?version=latestrecord
+ #   GET       .../uploadsourcepreferences/xxx?version=1
+
+ /service/uploadsourcepreferences/{uploadSourceCode}:
+  put:
+   tags:
+    - "uploadsourcepreferencesService"
+   summary: "Update an existing rule."
+   description: "Update an existing uploadsourcepreferences."
+   operationId: "modifyRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadSourceCode"
+      in: "path"
+      description: "key of the uploadsourcepreferences Maintenance"
+      required: true
+      type: "string"
+    - name: "uploadsourcepreferences"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing uploadsourcepreferences"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmUploadSourcePrefDto"
+   responses:
+    200:
+     description: "Returns updated uploadsourcepreferences"
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourcePrefServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+ # path to close existing record
+ #
+ #  supprorted http methods PATCH
+ #
+ # path examples----
+ #   PATCH       .../uploadsourcepreferences/xxx/close
+ /service/uploadsourcepreferences/{uploadSourceCode}/close:
+  patch:
+   tags:
+    - "uploadsourcepreferencesService"
+   summary: "Close the uploadsourcepreferences by given ID."
+   description: "Close the uploadsourcepreferences identified by given ID."
+   operationId: "closeRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadSourceCode"
+      in: "path"
+      description: "Key of the uploadsourcepreferences maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourcePrefServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ # path to reopen existing record
+ #
+ #  supprorted http methods PATCH
+ #
+ # path examples----
+ #   PATCH       .../uploadsourcepreferences/xxx/reopen
+
+ /service/uploadsourcepreferences/{uploadSourceCode}/reopen:
+  patch:
+   tags:
+    - "uploadsourcepreferencesService"
+   summary: "reopen the uploadsourcepreferences by given ID."
+   description: "reopen the uploadsourcepreferences identified by given ID."
+   operationId: "reopenRecord"
+   consumes:
+    - "application/json"
+    - "application/xml"
+   produces:
+    - "application/json"
+    - "application/xml"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "uploadSourceCode"
+      in: "path"
+      description: "Key of the uploadsourcepreferences maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/CmcTmUploadSourcePrefServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+
+definitions:
+ CmcTmUploadSourcePrefServiceDto:
+  type: object
+  allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      sourceCode:
+       type: string
+       minLength: 0
+       maxLength: 15
+      uploadedStatus:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(?:H|U|A)$
+      onError:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(E)$
+      onOverride:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(?:E|I|O)$
+      proceedWithEod:
+       type: string
+       minLength: 0
+       maxLength: 1
+      deleteAllowed:
+       type: string
+       minLength: 0
+       maxLength: 1
+      reverseAllowed:
+       type: string
+       minLength: 0
+       maxLength: 1
+      amendAllowed:
+       type: string
+       minLength: 0
+       maxLength: 1
+      purgeDays:
+       type: number
+       minLength: 0
+       maxLength: 4
+      allowDeferredProcessing:
+       type: string
+       minLength: 0
+       maxLength: 1
+      allowEodWithDeferred:
+       type: string
+       minLength: 0
+       maxLength: 1
+      allowDelete:
+       type: string
+       minLength: 0
+       maxLength: 1
+      onQueueException:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(?:E|I)$
+      onRepairableException:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(?:E|I)$
+     required:
+      - sourceCode
+      - uploadedStatus
+      - onError
+      - onOverride
+ CmcTmUploadSourceServiceDto:
+  type: object
+  allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      sourceCode:
+       type: string
+       minLength: 0
+       maxLength: 15
+       pattern: ^[A-Z0-9*_]*$
+      sourceDesc:
+       type: string
+       minLength: 0
+       maxLength: 105
+      baseDataFromFc:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(?:Y|N)$
+      sysAuthReq:
+       type: string
+       minLength: 0
+       maxLength: 1
+       pattern: ^(?:Y|N)$
+     required:
+      - sourceCode
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+    $ref: "#/definitions/ResponseDto"
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmcTmUploadSourcePrefServiceCollection:
+  description: "Collection of uploadsourcepref."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/CmcTmUploadSourcePrefServiceDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CmcTmUploadSourcePrefServiceResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/CmcTmUploadSourcePrefServiceDto"
+
+ CmcTmUploadSourceServiceCollection:
+  description: "Collection of uploadsource."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/CmcTmUploadSourceServiceDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmcTmUploadSourceServiceResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/CmcTmUploadSourceServiceDto"
+

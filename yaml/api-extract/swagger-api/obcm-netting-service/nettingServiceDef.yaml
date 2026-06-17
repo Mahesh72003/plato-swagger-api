@@ -1,0 +1,368 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Netting Tracsactions Definitions Yaml file"
+ 
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+ 
+definitions:
+  NettingTransactionCollection:
+    description: "Collection of Netting Transactions."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/NettingTransactionModel"
+      paging:
+       description: "Paging DTO Model"
+       $ref: "#/definitions/PagingDto"
+      responseStatus:
+       type: string
+      message:
+       type: string     
+  NettingTransactionModel:
+    description: "Service Get API Netting Transactions model"
+    type: "object"
+    properties:
+      nettingTxnNo:
+        type: "string"
+        description: "Back office reference no of Netting Txn"
+      corporateId:
+        type: "string"
+        description: "Logged in CIF id of source system"
+      nettingCcy:
+        type: "string"
+        description: "Currency of netting transaction"
+      counterpartyId:
+        type: "string"
+        description: "Associated party id/counterparty id linked to netted transactions" 
+      nettingAgreement:
+        type: "string"
+        description: "Agreement id associated with netting transaction"
+      creationDate:
+        type: "string"
+        description: "Creation date of netting transaction"
+      acceptRejectDate:
+        type: "string"
+        description: "Acceptance/rejection date of netting transaction"
+      settlementDate:
+        type: "string"
+        description: "Settlement date range of netting transaction"
+      nettingAmount:
+        type: "number"
+        description: "Netting transaction Amount"
+      relationshipCode:
+        type: "string"
+        description: "Relationship Code"
+      totalReceivables:
+        type: "number"
+        description: "Total Receivables"
+      totalPayables:
+        type: "number"
+        description: "Total Payables"
+      netReceivablesDue:
+        type: "number"
+        description: "Net Receivables Due"
+      netPayablesDue:
+        type: "number"
+        description: "Net Payables Due"
+      nettingTxnStatus:
+        type: "string"
+        description: "Netting Transaction Status"
+      counterpartyName:
+        type: "string"
+        description: "Counterparty Name"
+      corporateName:
+        type: "string"
+        description: "Corporate Name"
+      isSettlementFlag:
+        type: "string"
+        description: "Is Settlement Flag"
+      remarks:   
+        type: "string"
+        description: "Remarks"     
+      lastUpdatedDate:
+         type: "string"
+         description: "Last Updated Date"                            
+  PagingDto:
+   type: object
+   description: "Paging Dto Model"
+   properties:
+    totalResults:
+     description: "Total Results"
+     type: integer
+  EODResponseDetails:
+   type: "object"
+   description: "EOD Response Details"
+   properties:
+     status:
+       type: "string"
+       description: "EOD Event Status"
+     errors:
+       type: "array"
+       description: "Error Codes"
+       items:
+         $ref: "#/definitions/Error"
+  Error:
+   type: "object"
+   properties:
+     ecode:
+       type: "string"
+     etype:
+       type: "string"
+     edesc:
+       type: "string"
+  NettingTransactionStatusModel:
+    description: "Service Put API Netting Transactions Status Update"
+    type: "object"
+    properties:
+      nettingTxnNo:
+        type: "string"
+        description: "Back office reference no of Netting Txn"
+      nettingTxnStatus:
+        type: "string"
+        description: "Status of netting transaction"
+      corporateId:
+        type: "string"
+        description: "Corporate id associated with netting transaction"
+      acceptRejectDate:
+        type: "string"
+        description: "Accept/Reject Date"
+      responseStatus:
+        type: string
+      error:
+        type: "object"
+        $ref: "#/definitions/ErrorDTO"                        
+  NettingTransactionStatusRequestModel:
+    description: "Service Put API Netting Transactions Status Update Request"
+    type: "object"
+    properties:
+     list:
+       type: "array"
+       description: "List of Transaction with Status Details"
+       items:
+         $ref: "#/definitions/NettingTransactionStatusUpdateModel"
+  NettingTransactionStatusUpdateModel:
+    description: "Service Put API Netting Transactions Status Update Model"
+    type: "object"
+    properties:
+      nettingTxnNo:
+        type: "string"
+        description: "Netting Transaction Number"
+      nettingTxnStatus:
+        type: "string"
+        description: "Currency of netting transaction"
+      corporateId:
+        type: "string"
+        description: "Corporate id associated with netting transaction"        
+  ErrorDTO:
+    description: "Put API Netting Transactions Status Update Errors"
+    type: "object"
+    properties:
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDesc:
+        type: "string"
+        description: "Error Description"        
+  NettingTransactionStatusCollection:
+    description: "Response of Netting Transaction Status Update"
+    type: "object"
+    properties:
+      responseStatus:
+        type: string
+      message:
+        type: string
+      errDto:
+        type: "array"
+        items:
+          $ref: "#/definitions/ErrorDTO" 
+      data:
+        type: "array"
+        description: "List of Transaction with Updated Status Details"
+        items:
+          $ref: "#/definitions/NettingTransactionStatusModel"         
+  InvoicesTransactionCollection:
+    type: "object"
+    properties:
+      receivableDto:
+        type: "array"
+        items:
+          $ref: "#/definitions/NettingInvoicesModel"
+      payableDto:
+        type: "array"
+        items:
+          $ref: "#/definitions/NettingInvoicesModel"   
+      paging:
+       description: "Paging DTO Model"
+       $ref: "#/definitions/PagingDto"
+      responseStatus:
+       type: string
+      message:
+       type: string
+      errors:
+        type: "array"
+        items:
+          $ref: "#/definitions/ErrorDTO"                             
+  NettingInvoicesModel:
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      nettingTxnNo:
+        type: "string"
+        description: "Netting Transaction Number"
+      sourceRefNo:
+        type: "string"
+        description: "Source Ref No"
+      identifier:
+        type: "string"
+        description: "Identifier For Receivable or Payable"
+      invoiceRefNo:
+        type: "string"
+        description: "Invoice Ref No"
+      invoiceStatus:
+        type: "string"
+        description: "Invoice Status"
+      paymentStatus:
+        type: "string"
+        description: "Invoice Payment Status"
+      nettingStatus:
+        type: "string"
+        description: "Invoice Netting Status" 
+      outStandingAmount:
+        type: "number"
+        description: "Invoice OutStanding Amount"
+      invoiceAmount:
+        type: "number"
+        description: "Invoice Amount"
+      paymentDueDate:
+        type: "string"
+        description: "Invoice Payment Due Date"
+      nettedInvAmount:
+        type: "number"
+        description: "Netted Inv Amount"  
+      remainingOutStandingAmount:
+        type: "number"
+        description: "Remaining Out Standing Amount"
+      invoiceCcy:
+        type: "string"
+        description: "Invoice Currency"   
+  ConductorWorkflowModel:
+    description: "ConductorWorkflowModel"
+    type: "object"
+    properties:
+      processCode:
+        type: "string"
+        description: "Process Code to identify workflow"
+      processName:
+        type: "string"
+        description: "Process Name to identify workflow"
+      userId:
+        type: "string"
+        description: "User Id"
+      stageId:
+        type: "string"
+        description: "Stage Id"
+      stageDescription:
+        type: "string"
+        description: "Stage desc"
+      branchCode:     
+        type: "string"
+        description: "Branch Code"
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDesc:
+        type: "string"
+        description: "Error Desc"
+      transactionReferenceNo:
+        type: "string"
+        description: "Transaction Referenec No"
+      processingDate:
+        description: "Processing Date"
+        type: "string"
+      businessDate:
+        description: "Business Date"
+        type: "string"
+      workflowInstanceId:
+        description: "Workflow Instance Id"
+        type: "string"
+      taskInstanceId:
+        description: "Task Instance Id"
+        type: "string"
+      appId:
+        description: "AppId of Workflow Service"
+        type: "string"
+      uri:
+        description: "EndPoint of Workflow Service"
+        type: "string"
+      product:
+        description: "Product type to identify service for instrument"
+        type: "string"
+      applicationCode:
+        description: "Application code"
+        type: "string"
+      acceptedInvoicesModel:
+        $ref: "#/definitions/AcceptedInvoicesModel"  
+      workflowType:
+        description: "Work Flow Type"
+        type: "string"    
+      productCode:
+        description: "Product Code"
+        type: "string"    
+      event:
+        description: "Event or Operation"
+        type: "string"
+      priority:
+        type: "string"
+        description: "Priority"
+      productCategory:
+        type: "string"
+        description: "Product Category"
+      applicationNumber:
+        description: "Reference number without seqno"
+        type: "string" 
+      server:
+        type: "string"
+        description: "Server"
+      isInProgKafkaTaskReqd:
+        type: "string"
+        description: "Is In Prog Kafka Task Reqd"
+  AcceptedInvoicesModel:
+    description: "AcceptedInvoicesModel"
+    properties:
+      nettingTransactionNo:
+        description: "Netting Transacation No"
+        type: "string" 
+      nettingAmount:
+        type: "number"
+        description: "Netted Amount for transaction"
+      nettingCcy:
+        description: "Netting Currency"
+        type: "string"
+      corporateId:
+        description: "Corporate Id"
+        type: "string" 
+      counterPartyId:
+        description: "CounterParty Id"
+        type: "string"
+      relationShipCode:
+        description: "Relation Ship Code"
+        type: "string"  
+      paymentTransactionNo :
+        type: "string"
+        description: "Payment Transaction No"        
+      invoiceTransactionNo :  
+        description: "Transaction No for invoices"
+        type: "string"     
+      invoiceDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/NettingInvoicesModel"

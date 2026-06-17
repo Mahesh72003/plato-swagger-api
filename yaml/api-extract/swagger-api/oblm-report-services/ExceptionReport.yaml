@@ -1,0 +1,325 @@
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Ketki
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Report Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: ExceptionReportAPI
+  description: API for Exception Report Operations
+schemes:
+- https
+paths:
+  /exceptionReport/generateReport:
+    post:
+      tags:
+      - ExceptionReportAPI
+      summary: Adds a new Exception data.
+      description: Adds a new Exception data. Add additional information here for this endpoint.
+      operationId: generateReport
+      parameters:
+      - name: ExceptionsInDTO
+        in: body
+        description: Request Body that contains data required for creating a new exception
+        required: true
+        schema:
+          $ref: '#/definitions/ExceptionsInDTO'
+      responses:
+        201:
+          description: 'Returns message of success or failure '
+          headers:
+            Location:
+              description: URL of newly created exception
+              type: string
+          schema:
+            $ref: '#/definitions/ExceptionReportDTOCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /exceptionReport/save:
+    post:
+      tags:
+        - "ExceptionReportAPI"
+      summary: Adds a new exceptionReport data.
+      description: Adds a new exceptionReport data. Add additional information here for this endpoint.
+      operationId: save
+      parameters:
+        - name: ExceptionReportbodyDTO
+          in: body
+          description: Request Body that contains data required for creating a new exception
+          required: true
+          schema:
+            $ref: '#/definitions/ExceptionReportbodyDTO'
+      responses:
+        201:
+          description: 'Returns message of success or failure '
+          headers:
+            Location:
+              description: URL of newly created exception
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /exceptionReport:
+    post:
+      tags:
+        - "ExceptionReportAPI"
+      summary: "Get exception Report."
+      description: "Get exception Report. This endpoints will be used to Get all exceptions."
+      operationId: "fetchExceptions"
+      parameters:
+        - name: ExceptionsInDTO
+          in: "body"
+          description: "Request Body that contains data required for fetching exceptions"
+          required: true
+          schema:
+            $ref: '#/definitions/ExceptionsInDTO'
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: '#/definitions/ExceptionDTOCollection'
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  ExceptionsInDTO:
+    description: Exceptions input DTO
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        structureId:
+          description: Structure Id for Exceptions
+          type: string
+        structureType:
+          description: Structure Type for Exceptions
+          type: string
+        customerId:
+          description: Customer Id for Exceptions
+          type: string            
+        fromDate:
+          description: From Date of Exceptions
+          type: string
+          format: date
+        toDate:
+          description: To Date of Exceptions
+          type: string
+          format: date
+        eventSource:
+          description: Event Source
+          type: string
+  ExceptionDTO:
+   type: object
+   properties:
+    ExceptionReportheaderDTO:
+     $ref: "#/definitions/ExceptionReportheaderDTO"
+    ExceptionReportbodyDTO:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ExceptionReportbodyDTO"
+  ExceptionReportheaderDTO:
+   type: object
+   properties:
+       structureId:
+          description: Structure Id for Exceptions
+          type: string
+       structureType:
+          description: Structure Type for Exceptions
+          type: string
+       customerId:
+          description: Customer Id for Exceptions
+          type: string            
+       fromDate:
+          description: From Date of Exceptions
+          type: string
+          format: date
+       toDate:
+          description: To Date of Exceptions
+          type: string
+          format: date
+       userId:
+          type: string
+          description: Generated By user id
+       dateAndTime:
+          type: string
+          description: Generated At time    
+  ExceptionReportbodyDTO:
+   type: object
+   properties: 
+        logDate:
+          type: string
+          format: date
+        logDescription:
+          type: string
+          description: Exception occured
+        structureId:
+          type: string
+          description: Exception occured 
+        startDate:
+          description: Start Date for Exceptions
+          type: string
+          format: date
+        transactionRef:
+          description: Transaction Ref for Exceptions
+          type: string
+        fromAccountNumber:
+          description: From Account Number for Exceptions
+          type: string
+        fromBranchCode:
+          description: From Branch Code for Exceptions
+          type: string
+        fromCurrencyCode:
+          description: From Currency Code for Exceptions
+          type: string          
+        toAccountNumber:
+          description: To Account Number for Exceptions
+          type: string
+        toBranchCode:
+          description: To Branch Code for Exceptions
+          type: string
+        toCurrencyCode:
+          description: To Currency Code for Exceptions
+          type: string
+        userId:
+          description: User Id for Exceptions
+          type: string
+        structureType:
+          description: Structure Type for Exceptions
+          type: string
+        customerId:
+          description: Customer Id for Exceptions
+          type: string
+        eventSource:
+          description: Event Source
+          type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  ExceptionDTOCollection:
+   description: Collection of Exceptions
+   type: object
+   properties:
+     data:
+       $ref: "#/definitions/ExceptionDTO"
+     paging:
+       $ref: '#/definitions/PagingDto'
+     message:
+       $ref: '#/definitions/ResponseDto'
+  ExceptionReportDTOCollection: 
+   description: "Collection of entries."
+   type: "object"
+   properties:
+    data:
+     $ref: "#/definitions/ReportResponse"
+    messages:
+     $ref: "#/definitions/ResponseDto"

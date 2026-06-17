@@ -1,0 +1,1179 @@
+swagger: "2.0"
+info:
+ description: "This is a sample server information server." 
+ version: "1.0.0"
+ title: "Purchse Order Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "poWeb"
+   description: "Po-Information data segment"
+
+schemes:
+- "https"
+
+paths:
+
+ /web/v1/po/genratePoInternalNo:
+  get:
+   tags:
+    - "poWeb"
+   summary: "Get all valid information."
+   description:  "Get all valid information. This endpoints will be used to Get all valid po records."
+   operationId: "getPoInternalNo"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     schema:
+       $ref: "#/definitions/PoInternalNoDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /web/v1/po/information:
+  post:
+   tags:
+    - "poWeb"
+   summary: "Adds a new information."
+   description: "Adds a new information. Add additional information here for this endpoint."
+   operationId: "saveInformationRecord"
+   parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for creating a new information"
+      required: true
+      schema:
+        $ref: "#/definitions/PoInformationDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of newly created information" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /web/v1/po/information/{id}:
+  put:
+   tags:
+    - "poWeb"
+   summary: "Update an existing information."
+   description:  "Update an existing information."
+   operationId: "modifyInformationRecord"
+   parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "id"
+      in: "path"
+      description: "key of the information Maintenance"
+      required: true
+      type: "string"
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing po"
+      required: true
+      schema:
+       $ref: "#/definitions/PoInformationDTO"
+   responses:
+    200:
+     description: "Returns updated information"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /web/v1/po:
+  get:
+   tags:
+    - "poWeb"
+   summary: "Retrieves the PO."
+   description:  "Retrieves the PO."
+   operationId: "getByTransactionRefNo"
+   parameters:
+    - name: "poTransactionRefNo"
+      in: "query"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the information based on given id."
+     schema:
+      $ref: "#/definitions/PurchaseOrderCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  patch:
+   tags:
+    - "poWeb"
+   summary: "Updates existing PO."
+   description:  "Update existing PO."
+   operationId: "updatePurchaseOrder"
+   parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "poList"
+      in: "body"
+      description: "Request Body that contains poList required for updating an existing pos"
+      required: true
+      schema:
+       $ref: "#/definitions/PurchaseOrderCollection"
+   responses:
+    200:
+     description: "Returns the information based on given id."
+     schema:
+      $ref: "#/definitions/DtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  post:
+   tags:
+    - "poWeb"
+   summary: "Adds a new information."
+   description: "Adds a new information. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "po" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new information" 
+      required: true
+      schema:
+       $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/PurchaseOrderDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of newly created information" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /web/v1/po/search:
+  get:
+   tags:
+    - "poWeb"
+   summary: "Get all valid information."
+   description:  "Get all valid information. This endpoints will be used to Get all valid po records."
+   operationId: "poSearch"
+   parameters:
+   - name: "poExternalNumber"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "programId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "programName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "buyerName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "supplierName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "buyerId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "supplierId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "buyerDivCode"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "supplierDivCode"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "from"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "to"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "range"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "poStatus"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "relationshipId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "fileRefName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "poTransactionRefNo"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "preAccepted"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "poInternalNumber"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "accepted"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "rejected"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "financiable"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "linkedProgram"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "inProgress"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "currency"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "fromAmount"
+     in: "query"
+     required: false
+     type: "number"
+   - name: "toAmount"
+     in: "query"
+     required: false
+     type: "number"
+   - name: "action"
+     in: "query"
+     required: false
+     type: "string"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/PurchaseOrderCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /web/v1/po/getNewPoBasedOnUser:
+  get:
+   tags:
+    - "poWeb"
+   summary: "Get Maker's PO by External Ref No."
+   description: "Get Maker's PO by External Ref No."
+   operationId: "getNewPoBasedOnUser"
+   parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "poExternalNumber"
+      in: "query"
+      required: false
+      type: "string"
+    - name: "offset"
+      in: "query"
+      description: "offset is starting no of records to be fetched"
+      required: false
+      type: "integer"
+    - name: "limit"
+      in: "query"
+      description: "limit is maximum no of records to be fetched"
+      required: false
+      type: "integer"
+   responses:
+    200:
+     description: "Successful performs the operation"
+     schema:
+      $ref: "#/definitions/PurchaseOrderCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+      
+ /web/v1/po/shipment/{id}:
+  put:
+   tags:
+    - "poWeb"
+   summary: "Update an existing information."
+   description:  "Update an existing information."
+   operationId: "modifyShipmentRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the information Maintenance"
+      required: true
+      type: "string"
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing po"
+      required: true
+      schema:
+       $ref: "#/definitions/PoShipmentDTO"
+   responses:
+    200:
+     description: "Returns updated information"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /web/v1/po/commodity/{id}:
+  put:
+   tags:
+    - "poWeb"
+   summary: "Update an existing information."
+   description:  "Update an existing information."
+   operationId: "modifyCommodityRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the information Maintenance"
+      required: true
+      type: "string"
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing po"
+      required: true
+      schema:
+       $ref: "#/definitions/PoCommodityPricingDTO"
+   responses:
+    200:
+     description: "Returns updated information"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /web/v1/po/pricing/{id}:
+  put:
+   tags:
+    - "poWeb"
+   summary: "Update an existing information."
+   description:  "Update an existing information."
+   operationId: "modifyPricingRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the information Maintenance"
+      required: true
+      type: "string"
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing po"
+      required: true
+      schema:
+       $ref: "#/definitions/PoPricingDTO"
+   responses:
+    200:
+     description: "Returns updated information"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /web/v1/po/summary/{id}:
+  put:
+   tags:
+    - "poWeb"
+   summary: "Update an existing information."
+   description:  "Update an existing information."
+   operationId: "saveSummaryRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the information Maintenance"
+      required: true
+      type: "string"
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing po"
+      required: true
+      schema:
+       $ref: "#/definitions/PoInternalNoDTO"
+   responses:
+    200:
+     description: "Returns updated information"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /web/v1/po/{id}:
+  put:
+   tags:
+    - "poWeb"
+   summary: "Update an existing information."
+   description:  "Update an existing information."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the information Maintenance"
+      required: true
+      type: "string"
+    - name: "po"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing po"
+      required: true
+      schema:
+       $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/PurchaseOrderDTO"
+   responses:
+    200:
+     description: "Returns updated information"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "poWeb"
+   summary: "Retrieves the information by ID."
+   description:  "Retrieves the information by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the information based on given id."
+     schema:
+      $ref: "#/definitions/PoMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /web/v1/po/inquiry:
+  get:
+   tags:
+    - "poWeb"
+   summary: "Get all valid information."
+   description:  "Get all valid information. This endpoints will be used to Get all valid po records."
+   operationId: "poInquiry"
+   parameters:
+   - name: "poExternalNumber"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "programId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "buyerName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "supplierName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "buyerId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "supplierId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "buyerDivCode"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "supplierDivCode"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "fromPoDate"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "toPoDate"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "fromPromisedDate"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "toPromisedDate"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "poStatus"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "relationshipId"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "fileRefName"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "preAccepted"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "poInternalNumber"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "linkedProgram"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "authStatus"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "fromPoAmount"
+     in: "query"
+     required: false
+     type: "number"
+   - name: "toPoAmount"
+     in: "query"
+     required: false
+     type: "number"
+   - name: "fromPoNetAmount"
+     in: "query"
+     required: false
+     type: "number"
+   - name: "toPoNetAmount"
+     in: "query"
+     required: false
+     type: "number"
+   - name: "currency"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "offset"
+     in: "query"
+     description: "offset is starting no of records to be fetched"
+     required: false
+     type: "integer"
+   - name: "limit"
+     in: "query"
+     description: "limit is maximum no of records to be fetched"
+     required: false
+     type: "integer"
+   - name: "amountRefBasis"
+     in: "query"
+     required: false
+     type: "string"
+   - name: "financeStatus"
+     in: "query"
+     required: false
+     type: "string"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     schema:
+       $ref: "#/definitions/PoSearchResponse"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /web/v1/po/poLinkedFinances:
+   get:
+     tags:
+       - "poWeb"
+     summary: "Retrieves the list po linked finances."
+     description:  "Retrieves the list po linked finances."
+     operationId: "getPOLinkedFinances"
+     parameters:
+       - name: "appId"
+         in: "header"
+         type: "string"
+         required: true
+       - name: "userId"
+         in: "header"
+         type: "string"
+         required: true
+       - name: "branchCode"
+         in: "header"
+         type: "string"
+       - name: "poExternalNumber"
+         in: "query"
+         type: "string"
+         required: true
+     responses:
+       201:
+         description: "Returns message of success or failure"
+         schema:
+           $ref: "#/definitions/poLinkedFinancesCollection"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+
+ /web/v1/po/poLinkedInvoices:
+   get:
+     tags:
+       - "poWeb"
+     summary: "Retrieves the list po linked invoices."
+     description:  "Retrieves the list po linked invoices."
+     operationId: "getPOLinkedInvoices"
+     parameters:
+       - name: "appId"
+         in: "header"
+         type: "string"
+         required: true
+       - name: "userId"
+         in: "header"
+         type: "string"
+         required: true
+       - name: "branchCode"
+         in: "header"
+         type: "string"
+       - name: "poExternalNumber"
+         in: "query"
+         type: "string"
+         required: true
+     responses:
+       201:
+         description: "Returns message of success or failure"
+         schema:
+           $ref: "#/definitions/poLinkedInvoiceCollection"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+
+ /web/v1/po/linkedPOs/{financeRefNo}:
+    get:
+      tags:
+        - "poWeb"
+      summary: "Retrieves the List of POs linked to the Finance"
+      description:  "Retrieves the List of POs linked to the Finance"
+      operationId: "getLinkedPOs"
+      parameters:
+        - name: "financeRefNo"
+          in: "path"
+          description: "ReferenceNumber for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/PurchaseOrderCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+ 
+ PoInformationDTO:
+  type: object
+  properties:
+     buyerId:
+      type: string
+      description: "Buyer Id"
+     buyerDivCode:
+      type: string
+      description: "Buyer Division Code"
+     buyerDivName:
+      type: string
+      description: "Buyer Division Name"
+     buyerName:
+      type: string
+      description: "Buyer Name"
+     currency:
+      type: string
+      description: "Currency"
+     poDate:
+      type: string
+      description: "Po Date"
+     poExternalNumber:
+      type: string
+      description: "Po External Number"
+     poInternalNumber:
+      type: string
+      description: "Po Internal Number"
+     seqNo:
+      type: string
+      description: "Sequence Number"
+     programId:
+      type: string
+      description: "Program Id"
+     programName:
+      type: string
+      description: "Program Name"
+     relationshipCode:
+      type: string
+      description: "Relationship Code"
+     relationshipName:
+      type: string
+      description: "Relationship name"
+     supplierId:
+      type: string
+      description: "Supplier Id"
+     supplierDivCode:
+      type: string
+      description: "Supplier Division Code"
+     supplierDivName:
+      type: string
+      description: "Supplier Division Name"
+     supplierName:
+      type: string
+      description: "Supplier Name"
+     preAccepted:
+      type: string
+     remarks:
+      type: string
+     srcAppCd:
+      type: "string"
+      description: "Source Application Code"
+ PoShipmentDTO:
+  type: object
+  properties:
+     reqShipmentDate:
+      type: string
+      description: "Required Shipment Date"
+     shipTo:
+      type: string
+      description: "Ship To"
+     shipmentAddr:
+      type: string
+      description: "Shipment Address"
+     shipmentCountry:
+      type: string
+      description: "Shipment Country"
+     zipCode:
+      type: string
+      description: "Zip Code"
+     termsOfSale:
+      type: string
+      description: "Terms of Sale"
+     paymentTerms:
+      type: string
+      description: "Payment Terms"
+     countryOfOrigin:
+      type: string
+      description: "Country of Origin"
+     promisedShipmentDate:
+      type: string
+      description: "Promised Shipment Date"
+     phoneNumber:
+      type: string
+      description: "Phone Number"
+     taxId:
+      type: string
+      description: "Tax Id"
+     city:
+      type: string
+      description: "City"
+     miscChrg1Amt:
+      type: number
+      description: "Miscellaneous Charge 1 Amount"
+     miscChrg1Desc:
+      type: string
+      description: "Miscellaneous Charge 1 Description"
+     miscChrg2Amt:
+      type: number
+      description: "Miscellaneous Charge 2 Amount"
+     miscChrg2Desc:
+      type: string
+      description: "Miscellaneous Charge 2 Description"
+     remarks:
+      type: string
+     reasonForExport:
+      type: string
+ PoCommodityPricingDTO:
+  type: object
+  properties:
+     miscChrg1Amt:
+      type: number
+      description: "Miscellaneous Charge 1 Amount"
+     miscChrg1Desc:
+      type: string
+      description: "Miscellaneous Charge 1 Description"
+     miscChrg2Amt:
+      type: number
+      description: "Miscellaneous Charge 2 Amount"
+     miscChrg2Desc:
+      type: string
+      description: "Miscellaneous Charge 2 Description"
+     basePoAmount:
+      type: number
+      description: "Base Po Amount"
+     discountAmount:
+      type: number
+      description: "Discount Amount"
+     discountPercent:
+      type: number
+      description: "Discount Percent"
+     keyId:
+      type: string
+      description: "Key Id"
+     netPoAmount:
+      type: number
+      description: "Net Po Amount"
+     taxAmount:
+      type: number
+      description: "Tax Amount"
+     taxPercent:
+      type: number
+      description: "Tax Percent"
+     totalPoAmount:
+      type: number
+      description: "Total Po Amount"
+     commodityList:
+      type: array
+      items:
+       $ref: './RecInstrumentInvoiceDef.yaml#/definitions/PoCommodityListDTO'
+ PoPricingDTO:
+  type: object
+  properties:
+     basePoAmount:
+      type: number
+      description: "Base Po Amount"
+     discountAmount:
+      type: number
+      description: "Discount Amount"
+     discountPercent:
+      type: number
+      description: "Discount Percent"
+     keyId:
+      type: string
+      description: "Key Id"
+     netPoAmount:
+      type: number
+      description: "Net Po Amount"
+     taxAmount:
+      type: number
+      description: "Tax Amount"
+     taxPercent:
+      type: number
+      description: "Tax Percent"
+     totalPoAmount:
+      type: number
+      description: "Total Po Amount"
+ PoInternalNoDTO:
+  type: object
+  properties:
+   poInternalNo:
+    type: string
+    description: "Po Internal Number"
+   seqNo:
+    type: string
+    description: "Sequence Number"
+   isTxnCreationReqd:
+    type: string
+    description: "Is transaction creation needed"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "./CommonDef.yaml#/definitions/ResponseCode"
+   requestId:
+    type: string 
+ PurchaseOrderCollection: 
+  description: "Collection of po."
+  type: "object"
+  properties:
+   status:
+    type: string
+   data:
+    type: "array"
+    items: 
+     $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/PurchaseOrderDTO"
+   paging:
+     $ref: "#/definitions/PagingDto"
+ DtoWrapper:
+  type: object
+  properties:
+    data:
+     type: "string"
+    response:
+     type: "object"
+     $ref: "#/definitions/ResponseDtoWrapper"
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ PoMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/PurchaseOrderDTO"
+ poLinkedFinancesCollection:
+   description: "Collection of PO Linked Finances."
+   type: "object"
+   properties:
+     poLinkedFinancesList:
+       type: "array"
+       items:
+         $ref: "#/definitions/poLinkedFinancesModel"
+ poLinkedFinancesModel:
+   type: object
+   properties:
+     financeReferenceNumber:
+       type: "string"
+       description: "Reference Number of finance linked to po"
+     financeStartDate:
+       type: "string"
+       description: "Start date of the finance"
+     financeMaturity:
+       type: "string"
+       description: "Due Date of the finance"
+     currency:
+       type: "string"
+       description: "Currency of the Finance"
+     financeAmount:
+       type: "number"
+       description: "Finance Amount"
+     totalOSAmount:
+       type: "number"
+       description: "Total Outstanding amount includes interest, overdue and penalty, if any"
+     financeStatus:
+       type: "string"
+       description: "Status of the finance"
+
+ poLinkedInvoiceCollection:
+   description: "Collection of PO Linked invoices."
+   type: "object"
+   properties:
+     poLinkedInvoicesList:
+       type: "array"
+       items:
+         $ref: "#/definitions/poLinkedInvoicesModel"
+ poLinkedInvoicesModel:
+   type: object
+   properties:
+     invoiceNumber:
+       type: "string"
+       description: "Invoice number linked to po"
+     invoiceDate:
+       type: "string"
+       description: "Start date of the invoice"
+     invoiceDueDate:
+       type: "string"
+       description: "Due Date of the invoice"
+     currency:
+       type: "string"
+       description: "Currency of the invoice"
+     invoiceAmount:
+       type: "number"
+       description: "invoice Amount"
+     invoiceStatus:
+       type: "number"
+       description: "status of invoice"
+     paymentStatus:
+       type: "string"
+       description: "Status of payment"

@@ -1,0 +1,1362 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : BusinessProcess.yaml
+#  **
+#  ** Module     : obcfpm-businessprocess
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server businessprocess server." 
+ version: "1.0.0"
+ title: "businessprocess Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "businessprocess"
+   description: "Business Process Service"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../businessprocess
+
+ /businessprocess:
+  post:
+   tags:
+    - "businessprocess"
+   summary: "Adds a new businessprocess."
+   description: "Adds a new businessprocess. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "businessprocess" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new businessprocess" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmBusinessProcessDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created businessprocess" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "businessprocess"
+   summary: "Get all valid businessprocess."
+   description:  "Get all valid businessprocess. This endpoints will be used to Get all valid businessprocess maintenance records."
+   operationId: "getAllBusinessProcess"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: businessProcessCode
+     required: false
+     type: string
+   - in: query
+     name: id
+     required: false
+     type: string
+   - in: query
+     name: processCode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmBusinessSubProcessCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"     
+ /businessprocess/transactioncontroller/{businessProcessCode}:
+  post:
+   tags:
+    - "businessprocess"
+   summary: "Adds a new businessprocess to TCM."
+   description: "Adds a new businessprocess. Add additional information here for this endpoint."
+   operationId: "saveTransactionControllerRecord"
+   parameters:
+    - name: "businessProcessCode" 
+      in: "path" 
+      description: "Request Body that contains data required for creating a new businessprocess in TCM" 
+      required: true
+      type: "string"
+    - name: "BPCModel" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new processCode in TCM" 
+      required: true
+      schema:
+       $ref: "#/definitions/BPCModel"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created businessprocess" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmBusinessProcessWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../businessprocess/xxx
+#   DELETE    .../businessprocess/xxx
+#   GET       .../businessprocess/xxx
+#   GET       .../businessprocess/xxx?version=latestrecord
+#   GET       .../businessprocess/xxx?version=1
+
+ /businessprocess/{id}:
+  put:
+   tags:
+    - "businessprocess"
+   summary: "Update an existing businessprocess."
+   description:  "Update an existing businessprocess."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the businessprocess Maintenance"
+      required: true
+      type: "string"
+    - name: "businessprocess"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing businessprocess"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmBusinessProcessDTO"
+   responses:
+    200:
+     description: "Returns updated businessprocess"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "businessprocess"
+   summary: "Retrieves the businessprocess by ID."
+   description:  "Retrieves the businessprocess by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the businessprocess based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmBusinessProcessWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "businessprocess"
+   summary: "Deletes the businessprocess identified by given ID."
+   description:  "Deletes the businessprocess identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the businessprocess maintenance"
+      required: true
+      type: "string"
+    - name: "businessprocess"
+      in: "body"
+      description: Request body contain businessprocess and Modification no of businessprocess maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ /businessprocess/businessprocesscode/{businessprocess}:  
+  get:
+   tags:
+    - "businessprocess"
+   summary: "Retrieves the businessprocess by businessprocess."
+   description:  "Retrieves the businessprocess by businessprocess."
+   operationId: "getByBusinessProcess"
+   parameters:
+    - name: "businessprocess"
+      in: "path"
+      description: "businessprocess of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the businessprocess based on given businessprocess."
+     schema:
+      $ref: "#/definitions/CfpmTmBusinessProcessWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /businessprocess/byProcessCodeAndStage/{businessprocess}/{stageCode}:  
+  get:
+   tags:
+    - "businessprocess"
+   summary: "Retrieves the businessprocess by businessprocess."
+   description:  "Retrieves the businessprocess by businessprocess."
+   operationId: "getByProcessCodeAndStage"
+   parameters:
+    - name: "businessprocess"
+      in: "path"
+      description: "businessprocess of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "stageCode"
+      in: "path"
+      description: "stage code"
+      required: true
+      type: "string"      
+   responses:
+    200:
+     description: "Returns the businessprocess based on given businessprocess."
+     schema:
+       type: "object"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+        
+ /businessprocess/get/stageConfig/{processCode}/{stageCode}/{componentName}:  
+  get:
+   tags:
+    - "stagefieldconfig"
+   summary: "Retrieves the businessprocess by businessprocess."
+   description:  "Retrieves the businessprocess by businessprocess."
+   operationId: "getAllStageConfig"
+   parameters:
+    - name: "processCode"
+      in: "path"
+      description: "businessprocess of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "stageCode"
+      in: "path"
+      description: "stage code"
+      required: true
+      type: "string"
+    - name: "componentName"
+      in: "path"
+      description: "stage code"
+      required: true
+      type: "string"      
+   responses:
+    200:
+     description: "Returns the businessprocess based on given businessprocess."
+     schema:
+      $ref: "#/definitions/CfpmTmBpStageDsDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"  
+ /businessprocess/create/fieldConfig:  
+  post:
+   tags:
+    - "stagefieldconfig"
+   summary: "Retrieves the businessprocess by businessprocess."
+   description:  "Retrieves the businessprocess by businessprocess."
+   operationId: "createFieldConfig"
+   parameters:
+    - name: "stageConfigDTO"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing businessprocess"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmBpStageDsDTO"   
+   responses:
+    200:
+     description: "Returns the businessprocess based on given businessprocess."
+     schema:
+      $ref: "#/definitions/CfpmTmBpStageDsDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /businessprocess/update/fieldConfig/{id}:  
+  put:
+   tags:
+    - "stagefieldconfig"
+   summary: "Retrieves the businessprocess by businessprocess."
+   description:  "Retrieves the businessprocess by businessprocess."
+   operationId: "updateFieldConfig"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Request Body that contains data required for updating an existing businessprocess"
+      required: true
+      type: "string"
+    - name: "stageConfigDTO"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing businessprocess"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmStageConfigDTO"   
+   responses:
+    200:
+     description: "Returns the businessprocess based on given businessprocess."
+     schema:
+      $ref: "#/definitions/CfpmTmStageConfigDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../businessprocess/xxx/approve
+
+ /businessprocess/{id}/approve:
+  patch:
+   tags:
+    - "businessprocess"
+   summary: "Authorize the businessprocess by given ID."
+   description:  "Authorize the businessprocess identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the businessprocess maintenance"
+      required: true
+      type: "string"
+    - name: "businessprocess"
+      in: "body"
+      description: Request body contain businessprocess and Modification no of businessprocess maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../businessprocess/xxx/close
+ /businessprocess/{id}/close:
+  patch:
+   tags:
+    - "businessprocess"
+   summary: "Close the businessprocess by given ID."
+   description:  "Close the businessprocess identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the businessprocess maintenance"
+      required: true
+      type: "string"
+    - name: "businessprocess"
+      in: "body"
+      description: Request body contain businessprocess and Modification no of businessprocess maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../businessprocess/xxx/reopen
+
+ /businessprocess/{id}/reopen:
+  patch:
+   tags:
+    - "businessprocess"
+   summary: "reopen the businessprocess by given ID."
+   description:  "reopen the businessprocess identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the businessprocess maintenance"
+      required: true
+      type: "string"
+    - name: "businessprocess"
+      in: "body"
+      description: Request body contain businessprocess and Modification no of businessprocess maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../businessprocess/xxx/unauthorized
+
+ /businessprocess/{id}/unauthorized:
+  get:
+   tags:
+    - "businessprocess"
+   summary: "Retrives the businessprocess by given ID."
+   description:  "Retrives the businessprocess identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the businessprocess based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmBusinessProcessCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../businessprocess/xxx/history
+
+ /businessprocess/{id}/history:
+  get:
+   tags:
+    - "businessprocess"
+   summary: "Retrives the businessprocess by given ID."
+   description:  "Retrives the businessprocess by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the businessprocess based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmBusinessProcessCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ BPCModel:
+  type: object
+  allOf:
+    - $ref: '#/definitions/ResponseResourceSupport'
+    - type: object
+      properties:
+        referenceNumber:
+          description: "Reference Number"
+          type: string
+        businessProcessCode:
+          description: "businessProcessCode"
+          type: string
+          minLength: 0
+          maxLength: 16
+ CfpmTmBusinessSubProcessDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     businessProcessCode:
+      type: string
+      description: ""
+     businessProcessDesc:
+      type: string
+      description: ""
+     processCode:
+      type: string
+      description: ""
+     processDesc:
+      type: string
+      description: ""          
+ CfpmTmBusinessProcessDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     businessProcessCode:
+      type: string
+      description: ""
+     businessProcessDesc:
+      type: string
+      description: ""
+     processCode:
+      type: string
+      description: ""
+     processDesc:
+      type: string
+      description: ""
+     stageDetails:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBpStageDTO'
+    required:
+     - businessProcessCode
+     - processCode
+ CfpmTmBpStageDTO:
+  type: object
+  properties:
+     businessProcessId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     seqOrder:
+      type: number
+      description: ""
+     seqType:
+      type: string
+      description: ""
+     stageCode:
+      type: string
+      description: ""
+     stageConfig:
+      type: string
+      description: ""      
+     dataSegmentList:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBpStageDsDTO'
+     documentTypeList:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBpStageDocumentTypeDTO'
+     clausesList:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBpStageClausesDTO'
+     checklistList:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBpStageChecklistDTO'
+     adviceTypeList:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmBpStageAdviceTypeDTO'
+  required:
+   - stageCode
+ CfpmTmBpDsStageConfigDTO:
+  type: object
+  properties:
+     stageId:
+      type: string
+      description: ""
+     processCode:
+      type: string
+      description: ""
+     isUpdated:
+      type: boolean
+      description: ""      
+     dsDescription:
+      type: string
+      description: ""
+     dsScreenClassCode:
+      type: string
+      description: ""
+     isVisited:
+      type: boolean
+     bpDSComponent:
+      type: array
+      items:
+       $ref: '#/definitions/BPComponentModel'   
+     bpDSComponentField:
+      type: array
+      items:
+       $ref: '#/definitions/BPFieldModel'              
+     details:
+      $ref: "#/definitions/CfpmTmStageConfigDTO"      
+ CfpmTmStageConfigDTO:
+  type: object
+  properties:
+     stageId:
+      type: string
+      description: ""
+     processCode:
+      type: string
+      description: ""
+     isDeleted:
+      type: string
+      description: ""      
+     dsDescription:
+      type: string
+      description: ""
+     dsScreenClassCode:
+      type: string
+      description: ""
+     isVisited:
+      type: boolean      
+     stageDetail:
+      type: string           
+     id:
+      type: string
+      description: ""
+     bpDSComponent:
+      type: array
+      items:
+       $ref: '#/definitions/BPComponentModel'   
+     bpDSComponentField:
+      type: array
+      items:
+       $ref: '#/definitions/BPFieldModel'         
+ CfpmTmBpStageDsDTO:
+  type: object
+  properties:
+     bpStageId:
+      type: string
+      description: ""
+     dsDescription:
+      type: string
+      description: ""
+     dsScreenClassCode:
+      type: string
+      description: ""
+     isVisited:
+      type: boolean
+      description: ""      
+     id:
+      type: string
+      description: ""
+     isEditable:
+      type: boolean
+      description: ""
+     isMandatory:
+      type: boolean
+      description: ""
+     isScreenclass:
+      type: boolean
+      description: ""
+     sequence:
+      type: number
+      description: ""
+     stageDetail:
+      type: string
+      description: ""
+     stageId:
+      type: string
+      description: ""
+     processCode:
+      type: string     
+     bpDSComponent:
+      type: array
+      items:
+       $ref: '#/definitions/BPComponentModel'   
+     bpDSComponentField:
+      type: array
+      items:
+       $ref: '#/definitions/BPFieldModel'         
+  required:
+   - dsDescription
+   - dsScreenClassCode
+   - sequence
+   - isMandatory
+   - isScreenclass
+ CfpmTmBpStageDocumentTypeDTO:
+  type: object
+  properties:
+     bpStageId:
+      type: string
+      description: ""
+     documentTypeCategory:
+      type: string
+      description: ""
+     documentTypeDesc:
+      type: string
+      description: ""
+     documentTypeName:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     mandatory:
+      type: boolean
+      description: ""
+     originalReqd:
+      type: string
+      description: ""
+     uploadType:
+      type: string
+      description: ""
+     versioning:
+      type: boolean
+      description: ""
+  required:
+   - documentTypeCategory
+   - versioning
+ CfpmTmBpStageClausesDTO:
+  type: object
+  properties:
+     bpStageId:
+      type: string
+      description: ""
+     clauseCode:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+  required:
+   - clauseCode
+ CfpmTmBpStageChecklistDTO:
+  type: object
+  properties:
+     bpStageId:
+      type: string
+      description: ""
+     checklistCode:
+      type: string
+      description: ""
+     checklistData:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     mandatory:
+      type: boolean
+      description: ""
+  required:
+   - checklistCode
+ CfpmTmBpStageAdviceTypeDTO:
+  type: object
+  properties:
+     adviceTypeName:
+      type: string
+      description: ""
+     bpStageId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+  required:
+   - adviceTypeName
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmBusinessProcessCollection: 
+  description: "Collection of businessprocess."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmBusinessProcessDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CfpmTmBusinessSubProcessCollection: 
+  description: "Collection of businessprocess."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmBusinessSubProcessDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"    
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmBusinessProcessWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmBusinessProcessDTO"
+ TransactionControllerModel:
+    allOf:
+    - $ref: '#/definitions/ResponseResourceSupport'
+    - type: object
+      properties:
+        referenceNumber:
+          description: Reference Number
+          type: string
+        processCode:
+          description: "processCode"
+          type: "string"
+          minLength: 0
+          maxLength: 20
+        businessProcessCode:
+          description: "businessProcessCode"
+          type: "string"
+          minLength: 0
+          maxLength: 16
+        businessProductCode:
+          description: "businessProductCode"
+          type: "string"
+          minLength: 0
+          maxLength: 16
+        lifeCycleCode:
+          description: "lifeCycleCode"
+          type: "string"
+        tasks:
+          description: "tasks"
+          type: "array"
+          items: 
+            $ref: "#/definitions/EventModel"
+ EventModel:
+    description: "Event model"
+    type: "object"
+    required:
+    - eventCode
+    properties:
+      eventCode:
+        description: "eventCode"
+        type: "string"
+      datasegment:
+        description: "datasegment list"
+        type: "array"
+        items:
+          $ref: "#/definitions/DataSegmentModel"
+      documentList:
+        description: "document list"
+        type: "array"
+        items:
+          $ref: "#/definitions/DocumentModel"
+      clausesList:
+        description: "clauses list"
+        type: "array"
+        items:
+          $ref: "#/definitions/ClauseModel"
+      advicesList:
+        description: "advices list"
+        type: "array"
+        items:
+          $ref: "#/definitions/AdviceModel"
+      checkList:
+        description: "check list"
+        type: "array"
+        items:
+          $ref: "#/definitions/CheckListModel"
+ DataSegmentModel:
+    description: "data segment model"
+    type: "object"
+    required:
+    - dataSegmentCode
+    - sequence
+    - editFlag
+    properties:
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      dataSegmentCode:
+        description: "data segment code name"
+        type: "string"
+      dataSegmentName:
+        description: "dataSegmentName"
+        type: "string"
+      sequence:
+        description: "sequence"
+        type: "integer"
+        format: "int64"
+      editFlag:
+        description: "mandatory"
+        type: boolean
+        default: false
+      domain:                           
+        description: "Domain Name"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      classCode:
+        description: "classCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      groupCode:
+        description: "groupCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+ DocumentModel:
+    description: "Document model"
+    type: "object"
+    required:
+    - documentTypeName
+    properties:
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      documentTypeDesc:
+        description: "documentTypeDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      documentTypeName:
+        description: "documentTypeName"
+        type: "string" 
+      documentTypeCategory:
+        description: "documentTypeCategory"
+        type: "string"
+      originalRequired:
+        description: "originalRequired"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      versioning: 
+        description: "versioning"
+        type: boolean
+        maxLength: 1
+      uploadType:
+        description: "uploadType"
+        type: "string"
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+ AdviceModel:
+    description: "Advice model"
+    type: "object"
+    required:
+    - adviceTypeName
+    properties:
+      adviceTypeDesc:
+        description: "adviceTypeDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      adviceTypeName:
+        description: "adviceTypeName"
+        type: "string"
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+ CheckListModel:
+    description: "CheckList model"
+    type: "object"
+    required:
+    - checkListCode
+    properties:
+      checkListData:
+        description: "checkListData"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      checkListCode:
+        description: "checkListCode"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      sequenceNo:
+        description: "sequenceNo"
+        type: "string" 
+        minLength: 0
+        maxLength: 20
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+ ClauseModel:
+    description: "Clause model"
+    type: "object"
+    required:
+    - clauseCode
+    properties:
+      clauseCode:
+        description: "clauseCode"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      clauseName:
+        description: "clauseName"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      clauseDesc:
+        description: "clauseDesc"
+        type: "string" 
+      eventId:
+        description: "eventId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      status:
+        $ref: '#/definitions/TransactionControllerStatus'
+ TransactionControllerStatus:
+    description: TransactionControllerModel
+    type: string
+    enum:
+    - INCOMPLETE
+    - COMPLETE
+    - WIP
+ BPComponentModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+      bpComponentFields:
+        type: array
+        items:
+          $ref: '#/definitions/BPFieldModel'
+      subBpDSComponentList:
+        type: array
+        items:
+          $ref: '#/definitions/BPComponentModel'          
+      subBpComponentList:
+        type: array
+        items:
+          $ref: '#/definitions/BPSubComponentModel'                  
+      componentName:
+        description: "componentName"
+        type: "string" 
+      isVisited:
+        description: "isVisited"
+        type: "boolean"         
+      parentComponentId:
+        description: "componentName"
+        type: "string"
+      isSubCompExist:
+        type: "boolean"
+      isFieldExist:
+        type: "boolean"                                
+      componentDesc:
+        description: "componentDesc"
+        type: "string"
+      isDataSegment:
+        type: "boolean"
+      recordId:
+        description: "id"
+        type: "string"         
+      parentId:
+        type: "string"   
+ BPSubComponentModel:
+    type: object
+    properties:  
+      subComponentName:
+       description: "componentName"
+       type: "string" 
+      componentId:
+       type: "string"
+      parentId:
+       type: "string"
+      labelDesc:
+       type: "string"       
+      bpDSComponentField:
+       type: array
+       items:
+        $ref: '#/definitions/BPFieldModel'      
+      id:
+       type: "string"               
+ BpComponentModelWrapper:
+    description: "BPComponentModelWrapper model"
+    type: "object"
+    properties:
+      data:
+        type: array
+        items:
+         $ref: '#/definitions/BPComponentModel'
+    
+ BPFieldModel:
+    description: "BPField model"
+    type: "object"
+    properties:
+      labelCode:
+        type: "string"      
+      id:
+        description: "id"
+        type: "string" 
+      parentId:
+        description: "id"
+        type: "string"         
+      componentId:
+        description: "componentId"
+        type: "string"
+      fieldName:
+        description: "fieldName"
+        type: "string"
+      defaultValue:
+        description: "defaultValue"
+        type: "string"  
+      valueType:
+        description: "defaultValue"
+        type: "string"          
+      fieldValue:
+        description: "defaultValue"
+        type: "string"               
+      fieldDesc:
+        description: "fieldDesc"
+        type: "string"  
+      fieldType:
+        description: "fieldType"
+        type: "string"         

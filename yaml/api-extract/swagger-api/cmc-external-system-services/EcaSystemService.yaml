@@ -1,0 +1,382 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server ecasystems server." 
+ version: "1.0.0"
+ title: "ecasystems Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ecasystemsService"
+   description: "External Credit Approval System (ECA System) can be maintained using this service. This field is also referred as Source System which identifies the source of the maintenance (Customer, Account, Branch, Bank, Transaction code etc)."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supported http methods POST and GET
+#
+# path example ../ecasystems
+
+ /service/ecasystems:
+  post:
+   tags:
+    - "ecasystemsService"
+   summary: "Adds a new ecasystems."
+   description: "Adds a new ecasystems. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "ecasystems" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new ecasystems" 
+      required: true
+      schema:
+       $ref: "#/definitions/ECASystemServiceDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of newly created ecasystems" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ECASystemServiceResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "ecasystemsService"
+   summary: "Get all valid ecasystems."
+   description:  "Get all valid ecasystems. This endpoints will be used to Get all valid ecasystems maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: ecaSystem
+     required: false
+     type: string
+   - in: query
+     name: ecaSystemDescription
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: sourceCode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ECASystemServiceCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+  # path to reopen existing record
+  #
+  #  supported http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../ecasystems/xxx/reopen
+
+ /service/ecasystems/{ecaSystem}/reopen:
+   patch:
+     tags:
+       - "ecasystemsService"
+     summary: "reopen the ecasystems by given ID."
+     description:  "reopen the ecasystems identified by given ID."
+     operationId: "reopenRecord"
+     parameters:
+       - name: sourceCode
+         description: "Source from which request is initiated"
+         in: header
+         required: true
+         type: string
+       - name: "ecaSystem"
+         in: "path"
+         description: "Key of the ecasystems maintenance"
+         required: true
+         type: "string"
+     responses:
+       200:
+         description: "Successful operation."
+         schema:
+           $ref: "#/definitions/ECASystemServiceResponseDtoWrapper"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"
+ /service/ecasystems/{ecaSystem}:
+  put:
+    tags:
+      - "ecasystemsService"
+    summary: "Update an existing ecasystems."
+    description:  "Update an existing ecasystems."
+    operationId: "modifyRecord"
+    parameters:
+      - name: sourceCode
+        description: "Source from which request is initiated"
+        in: header
+        required: true
+        type: string
+      - name: "ecaSystem"
+        in: "path"
+        description: "key of the ecasystems Maintenance"
+        required: true
+        type: "string"
+      - name: "ecasystems"
+        in: "body"
+        description: "Request Body that contains data required for updating an existing ecasystems"
+        required: true
+        schema:
+          $ref: "#/definitions/ECASystemServiceDTO"
+    responses:
+      200:
+        description: "Returns updated ecasystems"
+        schema:
+          $ref: "#/definitions/ECASystemServiceResponseDtoWrapper"
+      400:
+        description: "Malformed syntax."
+      401:
+        description: "Request does not have sufficient credentials."
+      403:
+        description: "Request is not authorized."
+      405:
+        description: "Invalid input"
+      500:
+        description: "Internal error"
+  # path to close existing record
+  #
+  #  supported http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../ecasystems/xxx/close
+ /service/ecasystems/{ecaSystem}/close:
+   patch:
+     tags:
+       - "ecasystemsService"
+     summary: "Close the ecasystems by given ID."
+     description:  "Close the ecasystems identified by given ID."
+     operationId: "closeRecord"
+     parameters:
+       - name: sourceCode
+         description: "Source from which request is initiated"
+         in: header
+         required: true
+         type: string
+       - name: "ecaSystem"
+         in: "path"
+         description: "Key of the ecasystems maintenance"
+         required: true
+         type: "string"
+     responses:
+       200:
+         description: "Successful operation."
+         schema:
+           $ref: "#/definitions/ECASystemServiceResponseDtoWrapper"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"
+
+definitions:
+ ECASystemServiceDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     ecaSystem:
+      type: string
+      description: "Name of the ECA system"
+      minLength: 1
+      maxLength: 15
+      pattern: '[a-zA-Z0-9\s]+'
+     ecaSystemDescription:
+      type: string
+      description: "Description for ECA system"
+      minLength: 0
+      maxLength: 105
+    required:
+     - ecaSystem
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ NKValuesDto:
+  type: object
+  properties:
+    id:
+      type: string
+    modNo:
+      type: integer
+    wrapper:
+      $ref: "#/definitions/ResponseDto"
+ ECASystemServiceCollection: 
+  description: "Collection of ecasystem."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ECASystemServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ECASystemServiceResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ECASystemServiceDTO"

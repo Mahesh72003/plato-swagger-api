@@ -1,0 +1,458 @@
+swagger: "2.0"
+info:
+  description: "Provides APIs to perform Charges Operations on Invoices"
+  version: "1.0.0"
+  title: "Invoice Charges Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-instruments-receivables-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "InvoiceChargesService"
+    description: "API for Invoice Charge Operations"
+
+paths:
+  /service/v1/invoiceCharges:
+    get:
+      tags:
+        - "InvoiceChargesService"
+      summary: "Calculate the online charges for Invoices"
+      description:  "Calculate the online charges for Invoices."
+      operationId: "getInvoiceChargeDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          description: "Tenant Id"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id"
+        - name: "branchCode"
+          in: "header"
+          description: "Branch Code"
+          type: "string"
+          required: true
+        - name: "applicationCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application Code"
+        - name: "event"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Event"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/ObChargesTxnDTOCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not auhorized."
+        500:
+          description: "Internal error"
+definitions:
+  ChargesRequestDto:
+    type: object
+    properties:
+      applicationCode:
+        type: string
+        description: "Application Code"
+      category:
+        type: string
+        description: "Category"
+      txnMap:
+        $ref: "#/definitions/StringStringMap"
+      chargeCodes:
+        type: "array"
+        description: "List of Charge Codes"
+        items:
+          $ref: "string"
+  
+  StringStringMap:
+    type: object
+    additionalProperties:
+      type: string
+              
+  ChargesResponseDto:
+    type: object
+    properties:
+      applicationCode:
+        type: string
+        description: "Application Code"
+      txnDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/TransactionDetailsResponseDto"
+          
+  ChargesDetails:
+    type: object
+    properties:
+      txnRefNo:
+        type: string
+        description: "Transaction Reference Number"
+      partyId:
+        type: string
+        description: "Party Id"
+      chargeCode:
+        type: string
+        description: "Charge Code"
+      partyToCharge:
+        type: string
+        description: "Party To Charge"
+      priceMethod:
+        type: string
+        description: "Price Method"
+      charge:
+        type: number
+        description: "Charge"
+      chargeCcy:
+        type: string
+        description: "Charge Currency"
+      exchangeRate:
+        type: number
+        description: "Exchange Rate"
+  SlabDetails:
+    type: object
+    properties:
+      fromSlab:
+        type: number
+        description: "From Slab"
+      toSlab:
+        type: number
+        description: "To Slab"
+      amount:
+        type: number
+        description: "Amount"
+      percentage:
+        type: number
+        description: "Percentage"
+      unit:
+        type: number
+        description: "Unit"
+        
+  ChargeCodeDetails:
+    type: object
+    properties:
+      txnRefNo:
+        type: string
+        description: "Transaction Reference Number"
+      chargeCode:
+        type: string
+        description: "Charge Code"
+      chargeCodeDesc:
+        type: string
+        description: "Charge Code Description"
+      parentChargeCode:
+        type: string
+        description: "Parent Charge Code"
+      chargeGroup:
+        type: string
+        description: "Charge Group"
+      chargeCategory:
+        type: string
+        description: "Charge Category"
+      chargeType:
+        type: string
+        description: "Charge Type"
+      chargeSharing:
+        type: string
+        description: "Charge Sharing"
+      chargeSharingPct:
+        type: number
+        description: "Charge Sharing Percentage"
+      partyId:
+        type: string
+        description: "Party Id"
+      partyToCharge:
+        type: string
+        description: "Party To Charge"
+      chargeCriteria:
+        type: string
+        description: "Charge Criteria"
+      chargeCriteriaValue:
+        type: number
+        description: "Charge Criteria Value"
+      referenceStartDate:
+        type: string
+        description: "Reference Start Date"
+      referenceStartDateValue:
+        type: string
+        description: "Reference Start Date Value"
+      referenceEndDate:
+        type: string
+        description: "Reference End Date"
+      referenceEndDateValue:
+        type: string
+        description: "Reference End Date Value"
+      tenor:
+        type: number
+        description: "Tenor"
+      priceTemplateId:
+        type: string
+        description: "Price Template Id"
+      priceMethod:
+        type: string
+        description: "Price Method"
+      priceMethodDesc:
+        type: string
+        description: "Price Method Description"
+      txnCcy:
+        type: string
+        description: "Transaction Currency"
+      priceCcy:
+        type: string
+        description: "Price Currency"
+      chargeInTxnCcy:
+        type: string
+        description: "Charge In Transaction Currency"
+      flatCharge:
+        type: string
+        description: "Flat Charge"
+      fixedAmt:
+        type: number
+        description: "Fixed Amount"
+      fixedPct:
+        type: number
+        description: "Fixed Percentage"
+      annumBasis:
+        type: number
+        description: "Annum Basis"
+      allowWaive:
+        type: string
+        description: "Allow Waive"
+      autoWaive:
+        type: string
+        description: "Auto Waive"
+      allowOverride:
+        type: string
+        description: "Allow Override"
+      collectionType:
+        type: string
+        description: "Collection Type"
+      collectionFreq:
+        type: string
+        description: "Collection Frequency"
+      collectionRefPeriod:
+        type: string
+        description: "Collection Reference Period"
+      collectionUnits:
+        type: number
+        description: "Collection Units"
+      calcType:
+        type: string
+        description: "Calculation Type"
+      calcFreq:
+        type: string
+        description: "Calculation Frequency"
+      calcRefPeriod:
+        type: string
+        description: "Calculation Reference Period"
+      calcUnits:
+        type: number
+        description: "Calculation Units"
+      allowPrcModify:
+        type: string
+        description: "Allow Price Modify"
+      slabDetails:
+        description: "Slab Details"
+        type: "array"
+        items:
+          $ref: "#/definitions/SlabDetails"  
+          
+  ChargeCodeDetailsCollection:
+    type: object
+    properties:
+      priceMethods:
+        description: "Price Methods"
+        type: "array"
+        items:
+          $ref: "#/definitions/ChargeCodeDetails"     
+          
+  ChargeCalculationDetails:
+    type: object
+    properties:
+      partyId:
+        description: "Party Id which needs to be charged"
+        type: string
+      chargeCode:
+        description: "Charge Code"
+        type: string
+      chargeCodeDesc:
+        description: "Charge Code Description"
+        type: string
+      parentChargeCode:
+        description: "Parent Charge Code"
+        type: string
+      chargeGroup:
+        description: "Charge Group"
+        type: string
+      chargeCategory:
+        description: "Charge Category"
+        type: string
+      chargeType:
+        description: "Charge Type"
+        type: string
+      chargeSharing:
+        description: "Flag to indicate if charge sharing is available"
+        type: string
+      partyToCharge:
+        description: "Party which needs to be charged"
+        type: string
+      chargeSharingPct:
+        description: "Percentage of charge which will be charged to the given party"
+        type: number
+      chargeCriteria:
+        description: "Amount/Count on which charge needs to be calculated. e.g. FINANCE_AMOUNT, INVOICE_COUNT"
+        type: string
+      chargeCriteriaValue:
+        description: "Amount/Count Value on which charge needs to be calculated"
+        type: number
+      tenor:
+        description: "Period for which charge will be calculated"
+        type: number
+      txnCcy:
+        description: "Transaction currency. It should be sent when chargeInTxnCcy is Y"
+        type: string
+      exchangeRate:
+        description: "Exchange Rate"
+        type: number
+      externalPricingApplicable:
+        type: string
+        description: "External Pricing Applicable"
+      externalPricingSystem:
+        type: string
+        description: "External Pricing System"
+      isChargeCalculated:
+        type: string
+        description: "Is Charge Calculated"
+      priceRuleId:
+        type: string
+        description: "Price Rule Id"
+          
+  TransactionDetailsResponseDto:
+    type: object
+    properties:
+      txnRefNo:
+        type: "string"
+        description: "Transaction Reference Number"
+      chargeDetails:
+        description: "Collection of calculated charges"
+        type: "array"
+        items:
+          $ref: "#/definitions/ChargesDetails"
+          
+  TransactionDetailsRequestDto:
+    type: object
+    properties:
+      txnRefNo:
+        type: "string"
+        description: "Transaction Reference Number"
+      priceMethods:
+        description: "Details of each charge to be calculated"
+        type: "array"
+        items:
+          $ref: "#/definitions/ChargeCalculationDetails"
+      txnAttributes:
+        type: "array"
+        items:
+          $ref: "#/definitions/TransactionAttribute"
+          
+  TransactionAttribute:
+    type: object
+    properties:
+      attrName:
+        type: "string"
+      attrValue:
+        type: "string"
+        
+  ChargeCalculationRequestDto:
+    type: object
+    properties:
+      applicationCode:
+        type: "string"
+      txnDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/TransactionDetailsRequestDto"     
+
+  InstrumentTxnDTOCollection:
+    description: "Collection of InstrumentTxnDTO."
+    type: "object"
+    properties:
+      obChargesTxnDTOList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InstrumentTxnDTO"
+     
+  InstrumentTxnDTO:
+    description: "Instrument Transaction DTO."
+    type: object
+    properties:
+      txnRefNo:
+        type: string
+        description: "Transaction Reference Number"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      invoiceStatus:
+        type: string
+        description: "Invoice Status"
+      invoiceCcy:
+        type: string
+        description: "Invoice Currency"
+      netInvoiceAmt:
+        type: number
+        description: "Net Invoice Amount"
+      acceptanceAmount:
+        type: number
+        description: "Acceptance Amount"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      invoiceDate:
+        type: string
+        description: "Invoice Date"
+      invoiceDueDate:
+        type: string
+        description: "Invoice Due Date"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      programCode:
+        type: string
+        description: "Program Code"
+      relation:
+        type: string
+        description: "Relation"
+      extInvoiceRefNo:
+        type: string
+        description: "External Invoice Reference Number"
+      processingDate:
+        type: string
+        description: "Processing Date"
+      event:
+        type: string
+        description: "Event"

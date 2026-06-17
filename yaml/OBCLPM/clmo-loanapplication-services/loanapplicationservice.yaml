@@ -1,0 +1,1144 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service API
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /service/api/v1/loans/originationapplications:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LoanOriginationApplication
+      summary: Creates a new Loan Origination Application with all the details provided
+      description: Creates a new Loan Origination Application with all the details provided.Upon successful creation, returns the appliacation number of the newly created Loan Origination Application.
+      operationId: createLoanOriginationApplication
+      parameters:
+      - name: LoanApplicationService
+        in: body
+        description: Request Body that contains data required for creating a new Loan Origination Application
+        required: true
+        schema:
+          $ref: '#/definitions/LoanOriginationApplicationServiceModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Loan Origination Application
+          headers:
+            Location:
+              description: URL of newly created Loan Origination Application
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loanapplications/{applicationNumber}/{processRefNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LoanApplicationAggregateChannel
+      summary: Gets the Loan Origination/Restructuring Application deatils of the given application Number.
+      description: Gets the Loan Origination/Restructuring Application deatils of the given application Number.
+      operationId: getLoanApplicationServiceByApplicationNumber
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the required Loan origination/restructuring Application.
+        required: true
+        type: string
+      - name: processRefNumber
+        in: path
+        description: process ref number of the required Loan origination/restructuring Application.
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Loan Origination/Restructuring Application details of the given  application number.
+          schema:
+            $ref: '../../commondefinitions.yaml#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/paymentdetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymentDetailsService
+      summary: Updates the Payment Details of the loan origination/restructuring application of the given application number.
+      description: Updates the given applicant details of the loan origination/restructuring application of the given application number.
+      operationId: updatePaymentDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber of the Loan origination/restructuring applicantion
+        required: true
+        type: string 
+      - name: PaymentDetails
+        in: body
+        description: Request Body containing the Payment Details Loan  of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/PaymentDetailsModel'
+      responses:
+        200:
+          description: Returns updated PaymentDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/commercialconstructionloan/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - CommercialConstructionLoanService
+      summary: Updates the Commercial Construction Loan of the loan origination/restructuring application of the given application number.
+      description: Updates the given applicant details of the loan origination/restructuring application of the given application number.
+      operationId: updateCommercialConstructionLoan
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: applicationNumber of the Loan origination/restructuring applicantion
+        required: true
+        type: string 
+      - name: CommercialConstructionLoan
+        in: body
+        description: Request Body containing the Commercial Construction Loan  of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/CommercialConstructionLoanModel'
+      responses:
+        200:
+          description: Returns updated CommercialConstructionLoan
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loans/restructuringapplications:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LoanRestructuringService
+      summary: Creates a new Loan Restructuring Application.
+      description: Creates a new Loan Restructuring Application with all the given details.Upon successful creation, returns the application number of the newly created Loan Restructuring application.
+      operationId: createLoanRestructuringApplication
+      parameters:
+      - name: LoanRestructuringService
+        in: body
+        description: Request Body that contains data required for creating a new loan restructuring application
+        required: true
+        schema:
+          $ref: '#/definitions/LoanRestructuringApplicationServiceModel'
+      responses:
+        201:
+          description: Returns the application number of the newly created loan restructuring application
+          headers:
+            Location:
+              description: URL of newly created loan restructuring application
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loans/draftproposalapplications:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DraftProposalService
+      summary: Creates a new Draft Proposal Application with the given details.
+      description: Creates a new Draft Proposal Application and returns the application number of the newly created Draft Proposal application upon successful creation.
+      operationId: createDraftProposalApplication
+      parameters:
+      - name: DraftProposalService
+        in: body
+        description: Request Body that contains data required for creating a new Draft Proposal application
+        required: true
+        schema:
+          $ref: '#/definitions/DraftProposalApplicationServiceModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Draft Proposal application
+          headers:
+            Location:
+              description: URL of newly created Draft Proposal application
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /service/api/v1/applicantfinancials/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicantFinancialsService
+      summary: Updates applicant's financial details of the loan origination/restructuring application of the given application number.
+      description: Updates applicant' financial details of the loan origination/restructuring application of the given application number.
+      operationId: updateApplicantFinancials
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: ApplicantFinancials
+        in: body
+        description: Request Body containing the applicant's financial details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicantFinancialsModel'
+      responses:
+        200:
+          description: Returns updated ApplicantFinancials
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/liabilities/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LiabilityService
+      summary: Updates the liability details of the loan origination/restructuring application of the given application number.
+      description: Updates the liability details of the loan origination/restructuring application of the given application number.
+      operationId: updateLiability
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: Liability
+        in: body
+        description: Request Body containing the liability details for the application mumber
+        required: true
+        schema:
+          $ref: '#/definitions/LiabilityModel'
+      responses:
+        200:
+          description: Returns updated Liability
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/disbursement/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DisbursementService
+      summary: Updates Disbursement details of the loan origination/restructuring application of the given application number.
+      description: Updates Disbursement details of the loan origination/restructuring application of the given application number.
+      operationId: updateDisbursement
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: disbursement
+        in: body
+        description: Request Body containing the Disbursement details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/DisbursementModel'
+      responses:
+        200:
+          description: Returns updated Disbursement Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/interestdetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestDetailsService
+      summary: Updates Interest details of the loan origination/restructuring application of the given application number.
+      description: Updates Interest details of the loan origination/restructuring application of the given application number.
+      operationId: updateInterestDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: interestDetails
+        in: body
+        description: Request Body containing the Disbursement details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/InterestDetailsModel'
+      responses:
+        200:
+          description: Returns updated InterestDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/holidaypreferences/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - HolidayPreferencesService
+      summary: Updates Holiday Prerfernce details of the loan origination/restructuring application of the given application number.
+      description: Updates Holiday Preference details of the loan origination/restructuring application of the given application number.
+      operationId: updateHolidayPreferences
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: holidayPreferences
+        in: body
+        description: Request Body containing the Holiday Preference details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/HolidayPreferencesModel'
+      responses:
+        200:
+          description: Returns updated HolidayPreferences
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loandetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LoanDetailsService
+      summary: Updates Loan details of the loan origination/restructuring application of the given application number.
+      description: Updates Loan details of the loan origination/restructuring application of the given application number.
+      operationId: updateLoanDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: loanDetails
+        in: body
+        description: Request Body containing the Loan details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/LoanDetailsModel'
+      responses:
+        200:
+          description: Returns updated Loan Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/additionalloandetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - AdditionalLoanDetailsService
+      summary: Updates Additional Loan details of the loan origination/restructuring application of the given application number.
+      description: Updates Additional Loan details of the loan origination/restructuring application of the given application number.
+      operationId: updateAdditionalLoanDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: additionalLoanDetails
+        in: body
+        description: Request Body containing the Additional Loan details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/AdditionalLoanDetailsModel'
+      responses:
+        200:
+          description: Returns updated Additional Loan Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loanschedules/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LoanScheduleService
+      summary: Updates Loan Schedule details of the loan origination/restructuring application of the given application number.
+      description: Updates Loan Schedule details of the loan origination/restructuring application of the given application number.
+      operationId: updateLoanSchedules
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the Loan origination/restructuring application
+        required: true
+        type: string
+      - name: loanSchedules
+        in: body
+        description: Request Body containing the Loan Schedule details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/LoanScheduleModel'
+      responses:
+        200:
+          description: Returns updated Loan Schedule Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/statementpreferences/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - StatementPreferencesService
+      summary: Updates the StatementPreferences of the loan origination/restructuring application of the given application number.
+      description: Updates the StatementPreferences of the loan origination/restructuring application of the given application number.
+      operationId: updateStatementPreferences
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: StatementPreferences
+        in: body
+        description: Request Body containing the Statement Preferences details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/StatementPreferencesModel'
+      responses:
+        200:
+          description: Returns updated StatementPreferences
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/tradedetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - TradeDetailsService
+      summary: Updates the TradeDetails of the loan origination/restructuring application of the given application number.
+      description: Updates the TradeDetails of the loan origination/restructuring application of the given application number.
+      operationId: updateTradeDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: TradeDetails
+        in: body
+        description: Request Body containing the TradeDetails of given application number
+        required: true
+        schema:
+          $ref: '#/definitions/TradeDetailsModel'
+      responses:
+        200:
+          description: Returns updated TradeDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/existingloans/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExistingLoanService
+      summary: Updates overall details of Loan origination/restructuring application  for given application number.
+      description: Updates overall details of Loan origination/restructuring application  for given application number.
+      operationId: updateExistingLoan
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: ExistingLoan
+        in: body
+        description: Request Body containing the loan origination/restructuring application data for given application number
+        required: true
+        schema:
+          $ref: '#/definitions/ExistingLoanModel'
+      responses:
+        200:
+          description: Returns updated ExistingLoan
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/managementprofiles/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ManagementProfileService
+      summary: Updates the Management Profile details of the loan origination/restructuring application of the given application number.
+      description: Updates the Management Profile details of the loan origination/restructuring application of the given application number.
+      operationId: updateManagementProfile
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: ManagementProfile
+        in: body
+        description: Request Body containing the Management Profile details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/ManagementProfileModel'
+      responses:
+        200:
+          description: Returns updated ManagementProfile
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/businessactivities/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - BusinessActivityService
+      summary: Updates the business activies details of the loan origination/restructuring application of the given application number.
+      description: Updates the business activies details of the loan origination/restructuring application of the given application number.
+      operationId: updateBusinessActivity
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: BusinessActivity
+        in: body
+        description: Request Body containing the business activity details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessActivityModel'
+      responses:
+        200:
+          description: Returns updated BusinessActivity
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/realestate/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RealEstateService
+      summary: Updates the real estate details of the loan origination/restructuring application of the given application number.
+      description: Updates the real estate details of the loan origination/restructuring application of the given application number.
+      operationId: updateRealEstate
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: RealEstate
+        in: body
+        description: Request Body containing the real estate details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/RealEstateModel'
+      responses:
+        200:
+          description: Returns updated RealEstate
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/equipmentdetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - EquipmentDetailsService
+      summary: Updates the equipment details of the loan origination/restructuring application of the given application number.
+      description: Updates the equipment details of the loan origination/restructuring application of the given application number.
+      operationId: updateEquipmentDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: EquipmentDetails
+        in: body
+        description: Request Body containing the equipment details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/EquipmentDetailsModel'
+      responses:
+        200:
+          description: Returns updated EquipmentDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/amendmentDetails/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - AmendmentDetailsService
+      summary: Updates the amendment details of the loan origination/restructuring application of the given application number.
+      description: Updates the amendment details of the loan origination/restructuring application of the given application number.
+      operationId: updateAmendmentDetails
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: AmendmentDetails
+        in: body
+        description: Request Body containing the amendment details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/AmendmentDetailsModel'
+      responses:
+        200:
+          description: Returns updated EquipmentDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/rolloverpreferences/{applicationNumber}:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RolloverPreferencesService
+      summary: Updates the rolloverpreferences details of the loan origination/restructuring application of the given application number.
+      description: Updates the rolloverpreferences details of the loan origination/restructuring application of the given application number.
+      operationId: updateRolloverPreferences
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the loan origination/restructuring application
+        required: true
+        type: string
+      - name: RolloverPreferences
+        in: body
+        description: Request Body containing the rolloverpreferences details of the application number
+        required: true
+        schema:
+          $ref: '#/definitions/RolloverPreferencesModel'
+      responses:
+        200:
+          description: Returns updated rolloverpreferences
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loanapplications/getLoanApplicationsByCustomerNumber/{customerNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LoanApplicationAggregateChannel
+      summary: Lists all the loan origination/restructuring applications for the given customer number.
+      description: Lists all the loan origination/restructuring applications for the given customer number.
+      operationId: getLoanApplicationsByCustomerNumber
+      parameters:
+      - name: customerNumber
+        in: path
+        description: Customer number for which all the loan origination/restructuring application data needs to be listed
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the details of all the loan origination/restructuring applications of the customer number
+          schema:
+            $ref: '../../commondefinitions.yaml#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/loans/drawdownapplications:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DrawdownApplication
+      summary: Creates a new Loan draw down Application with all the details provided
+      description: Creates a new Loan draw down Application with all the details provided.Upon successful creation, returns the appliacation number of the newly created Loan Origination Application.
+      operationId: createDrawdownApplication
+      parameters:
+      - name: drawdownRequest
+        in: body
+        description: Request Body that contains data required for creating a new Loan draw down Application
+        required: true
+        schema:
+          $ref: '#/definitions/DrawdownApplicationServiceModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Loan Origination Application
+          headers:
+            Location:
+              description: URL of newly created Loan draw down Application
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error         
+definitions:
+  LoanOriginationApplicationServiceModel:
+    description: LoanOriginationApplicationServiceModel
+    type: object
+    properties:
+      basicapplicationDetails:
+        $ref: '#/definitions/BasicApplicationDetailsModel'
+      loanDetails:
+        $ref: '#/definitions/LoanDetailsModel'
+      additionalLoanDetails:
+        $ref: '#/definitions/AdditionalLoanDetailsModel'
+      businessActivity:
+        $ref: '#/definitions/BusinessActivityModel'
+      commercialConstructionLoan:
+        $ref: '#/definitions/CommercialConstructionLoanModel'
+      paymentDetails:
+        $ref: '#/definitions/PaymentDetailsModel'
+      liability:
+        $ref: '#/definitions/LiabilityModel'
+      disbursement:
+        $ref: '#/definitions/DisbursementModel'
+      loanSchedule:
+        $ref: '#/definitions/LoanScheduleModel'
+      managementProfile:
+        $ref: '#/definitions/ManagementProfileModel'
+      statementPreferences:
+        $ref: '#/definitions/StatementPreferencesModel'
+      holidayPreferences:
+        $ref: '#/definitions/HolidayPreferencesModel'
+      tradeDetails:
+        $ref: '#/definitions/TradeDetailsModel'
+      realEstate:
+        $ref: '#/definitions/RealEstateModel'
+      equipmentDetails:
+        $ref: '#/definitions/EquipmentDetailsModel'
+      interestDetails:
+        $ref: '#/definitions/InterestDetailsModel'
+      documentIds:
+        description: document Ids
+        type: array
+        items: 
+         type: string
+      party:
+        $ref: '#/definitions/PartyModel'
+  LoanOriginationServiceCollection:
+    description: Collection of LoanOriginationServiceModel
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LoanOriginationApplicationServiceModel'
+  LoanRestructuringApplicationServiceModel:
+    description: LoanRestructuringApplicationServiceModel
+    type: object
+    properties:
+      restructuringEntryDetails:
+        $ref: '#/definitions/RestructuringEntryDetailsModel'
+      amendmentDetails:
+        $ref: '#/definitions/AmendmentDetailsModel'
+      loanDetails:
+        $ref: '#/definitions/LoanDetailsModel'
+      commercialConstructionLoan:
+        $ref: '#/definitions/CommercialConstructionLoanModel'
+      paymentDetails:
+        $ref: '#/definitions/PaymentDetailsModel'
+      additionalLoanDetails:
+        $ref: '#/definitions/AdditionalLoanDetailsModel'
+      businessActivity:
+        $ref: '#/definitions/BusinessActivityModel'
+      liability:
+        $ref: '#/definitions/LiabilityModel'
+      disbursement:
+        $ref: '#/definitions/DisbursementModel'
+      loanSchedule:
+        $ref: '#/definitions/LoanScheduleModel'
+      managementProfile:
+        $ref: '#/definitions/ManagementProfileModel'
+      statementPreferences:
+        $ref: '#/definitions/StatementPreferencesModel'
+      holidayPreferences:
+        $ref: '#/definitions/HolidayPreferencesModel'
+      rolloverPreferences:
+        $ref: '#/definitions/RolloverPreferencesModel'
+      tradeDetails:
+        $ref: '#/definitions/TradeDetailsModel'
+      realEstate:
+        $ref: '#/definitions/RealEstateModel'
+      equipmentDetails:
+        $ref: '#/definitions/EquipmentDetailsModel'
+      interestDetails:
+        $ref: '#/definitions/InterestDetailsModel'
+      party:
+        $ref: '#/definitions/PartyModel'
+      documentIds:
+        description: document Ids
+        type: array
+        items: 
+         type: string
+  DraftProposalApplicationServiceModel: 
+    description: DraftProposalApplicationServiceModel
+    type: object
+    properties:
+      basicapplicationDetails:
+        $ref: '#/definitions/BasicApplicationDetailsModel'
+      loanDetails:
+        $ref: '#/definitions/LoanDetailsModel'
+      additionalLoanDetails:
+        $ref: '#/definitions/AdditionalLoanDetailsModel'
+      businessActivity:
+        $ref: '#/definitions/BusinessActivityModel'
+      liability:
+        $ref: '#/definitions/LiabilityModel'
+      disbursement:
+        $ref: '#/definitions/DisbursementModel'
+      commercialConstructionLoan:
+        $ref: '#/definitions/CommercialConstructionLoanModel'
+      paymentDetails:
+        $ref: '#/definitions/PaymentDetailsModel'
+      loanSchedule:
+        $ref: '#/definitions/LoanScheduleModel'
+      managementProfile:
+        $ref: '#/definitions/ManagementProfileModel'
+      statementPreferences:
+        $ref: '#/definitions/StatementPreferencesModel'
+      holidayPreferences:
+        $ref: '#/definitions/HolidayPreferencesModel'
+      rolloverPreferences:
+        $ref: '#/definitions/RolloverPreferencesModel'
+      tradeDetails:
+        $ref: '#/definitions/TradeDetailsModel'
+      realEstate:
+        $ref: '#/definitions/RealEstateModel'
+      equipmentDetails:
+        $ref: '#/definitions/EquipmentDetailsModel'
+      interestDetails:
+        $ref: '#/definitions/InterestDetailsModel'
+      party:
+        $ref: '#/definitions/PartyModel'
+      documentIds:
+        description: document Ids
+        type: array
+        items: 
+         type: string
+  DrawdownApplicationServiceModel:
+   allOf:
+    - $ref: '#/definitions/LoanOriginationApplicationServiceModel'

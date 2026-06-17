@@ -1,0 +1,65 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server ManualFinance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Loan and Payment Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-finance-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "LoanAndPaymentWeb"
+    description: "API for Loan and Payment Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/loanPayment:
+    post:
+      tags:
+      - "LoanAndPaymentWeb"
+      summary: Create Payment through a OBSCF Service
+      description: Create Payment through a OBSCF Service
+      operationId: loanPaymentService
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: user id
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: Branch Code
+      - name: "financeTransaction"
+        in: "body"
+        description: "Request Body that contains data required for creating payment through a OBSCF services"
+        required: true
+        schema:
+          $ref: "./loanAndPaymentDef.yaml#/definitions/FinanceTransactionCollection"
+      responses:
+        201:
+          description: "Returns the payment reference number success and failure of the payment creation"
+          schema:
+            $ref: "./loanAndPaymentDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"

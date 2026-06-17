@@ -1,0 +1,429 @@
+swagger: "2.0"
+info:
+  description: "This Service is called when transaction flows through KAFKA, to build daily summary"
+  version: "1.0.0"
+  title: "Cashflow Forecasting Daily Summary Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Cashflow-Daily-Summary-API"
+    description: "This Service is called when transaction flows through KAFKA, to build daily summary"
+
+paths:  
+  /service/v1/summarizeDailyCashflows:
+    post:
+      tags:
+        - "Cashflow-Daily-Summary"
+      summary: "API to update Daily Cashflow Summary"
+      description:  "Updates Daily Cashflow Summary for newly posted cashflow records"
+      operationId: "SummarizeDailyCashflowsTxns"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "Application Id"
+        required: true
+      - name: "cashflowTxn" 
+        in: "body" 
+        description: "Request Body that contains data required for creating a new Cashflow Txn" 
+        required: true
+        schema:
+         $ref: "#/definitions/ObcmsCashflowTxnCollection"             
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            type: boolean
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"
+  /service/v1/dataForMlRefNumber/{mlReferenceNo}:
+    get:
+      tags:
+        - "Cashflow-Daily-Summary"
+      summary: "API to get data for ML ref number"
+      description:  "get data for ML ref number"
+      operationId: "fetchDataForMlRefNumber"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "Application Id"
+        required: true
+      - name: "mlReferenceNo" 
+        in: "path" 
+        description: "ML Reference Number" 
+        required: true
+        type: "string"           
+      responses:
+        200: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "#/definitions/ObcmsCashflowTransactionDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        406:
+          description: "File is not configured."
+        500:
+          description: "Internal error"
+definitions:
+  ObcmsCashflowTxnCollection: 
+   description: "Collection of Cashflow Txns."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+       $ref: "#/definitions/ObcmsCashflowTransactionDTO"  
+  ObcmsCashflowTransactionDTO:
+    description: "ObcmsCashflowTransactionDTO Model"
+    properties:  
+     externalReferenceNo:
+      type: "string"
+      description: "External Reference No"   
+     cashflowType:
+      type: "string"
+      description: "Cash Flow Type"
+     corporateId:
+      type: "string"
+      description: "Corporate Id"
+     corporateName:
+      type: "string"
+      description: "Corporate Name"
+     code:
+      type: "string"
+      description: "Code"
+     description:
+      type: "string"
+      description: "Description"
+     bankAccountNumber:
+      type: "string"
+      description: "Bank Account Number"
+     amount:
+      type: "string"
+      description: "Amount"
+     ccy:
+      type: "string"
+      description: "Currency"
+     expectedDate:
+      type: "string"
+      description: "Expected Date"
+     actualDate:
+      type: "string"
+      description: "Actual Date"
+     revisedExpectedDate:
+      type: "string"
+      description: "Revised Expected Date"
+     channel:
+      type: "string"
+      description: "Channel"
+     applicationName:
+      type: "string"
+      description: "Application Name"
+     partyName:
+      type: string
+      description: "Party Name"
+     partyId:
+      type: string
+      description: "Party Id"
+     virtualAcctNo:
+      type: string
+      description: "Virtual Acct No"
+     actualCashflowAmt:
+      type: string
+      description: "Actual Cashflow Amt"
+     narration:
+      type: string
+      description: "Narration"
+     recordStat:
+      type: string
+      description: "Record Status"             
+     udfTx1:
+      type: string
+      description: "User Defined Text 1"
+     udfTxt2:
+      type: string
+      description: "User Defined Text 2"
+     udfTx3:
+      type: string
+      description: "User Defined Text 3"
+     udfTx4:
+      type: string
+      description: "User Defined Text 4"
+     udfTx5:
+      type: string
+      description: "User Defined Text 5"
+     udfTx6:
+      type: string
+      description: "User Defined Text 6"
+     udfTx7:
+      type: string
+      description: "User Defined Text 7"
+     udfTx8:
+      type: string
+      description: "User Defined Text 8"
+     udfTx9:
+      type: string
+      description: "User Defined Text 9"
+     udfTx10:
+      type: string
+      description: "User Defined Text 10"
+     reconStatus:
+      type: string
+      description: "Recon status"
+     customerRefNo:
+      type: string
+      description: "Customer reference No"
+     modNo:
+      type: string
+      description: "Mod No"
+     id:
+      type: string
+      description: "Transaction Id"
+     parentId:
+      type: string
+      description: "ParentId Id"
+     summaryProcessed:
+      type: string
+      description: "Summary processed"
+     reverseFlag:
+      type: string
+      description: "Reverse Flag"
+     fyStartDate:
+      type: string
+      description: "Financial Start Date"
+     quarter1:
+      type: string
+      description: "Quarter1 JAN-MAR"
+     quarter2:
+      type: string
+      description: "Quarter2 APR-JUN "
+     quarter3:
+      type: string
+      description: "Quarter3 JUL-SEP"
+     quarter4:
+      type: string
+      description: "Quarter4 OCT-DEC"
+     mlStatus:
+      type: string
+      description: "ML Status"
+     mlProcessingDate:
+      type: string
+      description: "ML Processing Date"   
+     mlRefNumber:
+      type: string
+      description: "ML Ref Number"
+     qtrMonth:
+      description: "Quarter Month"
+      type: string
+     cfMonth:
+      description: "Month"
+      type: string
+     quaterNo:
+      description: "Quarter"
+      type: string        
+     yearNo:
+      description: "Year"
+      type: string
+     excludeRecon:
+      type: string
+      description: "Exclude Recon"
+     transactionStatus:
+      type: string
+      description: "Transaction Status"
+     lastActionPerformed:
+      type: string
+      description: "Last Action Performed"
+     startOfWeek:
+      type: "string"
+      description: "Start Of Week"
+     endOfWeek:
+      type: "string"
+      description: "End Of Week"
+  ObcmMLTBCashflowFeaturesDTO:
+    description: "MLTB Cashflow features Dto"
+    properties:  
+     refNum:
+      type: "string"
+      description: "Reference Number"   
+     corporateId:
+      type: "string"
+      description: "Corporate Id"
+     accountNo:
+      type: "string"
+      description: "Account Number"
+     virtualAccountNo:
+      type: "string"
+      description: "Virtual Account Number"
+     sourceApplication:
+      type: "string"
+      description: "Source Application"
+     sorRefNo:
+      type: "string"
+      description: " Source Ref No"
+     corpRefNo:
+      type: "string"
+      description: "Corporate Ref No"
+     counterpartyId:
+      type: "string"
+      description: "Counter party Id"
+     cashflowCode:
+      type: "string"
+      description: "Cashflow Code"
+     cashflowType:
+      type: "string"
+      description: "Cashflow Type"
+     startDay:
+      type: "number"
+      description: "Start Day"
+     startMonth:
+      type: "string"
+      description: "Start Month"
+     expectedAmt:
+      type: number
+      description: "Expected Amt"
+     ccy:
+      type: string
+      description: "ccy"
+     channel:
+      type: string
+      description: "Channel"
+     paymtDueInDays:
+      type: number
+      description: "Payment Due In Days"
+     disputed:
+      type: string
+      description: "Disputed"
+     dueMonthEnd:
+      type: string
+      description: "Due Month End"
+     dueMonth1Half:
+      type: string
+      description: "Due Month 1st Half"             
+     dueMonth2Half:
+      type: string
+      description: "Due Month 2nd Half"
+     dueMonth:
+      type: number
+      description: "Due Month"
+     totalSettleTrancheCnt:
+      type: number
+      description: "Total Settle Tranche Cnt"
+     firstTrDelayDays:
+      type: number
+      description: "First Tr Delay Days"
+     avgTranchePayGap:
+      type: number
+      description: "Avg Tranche Pay Gap"
+     totalAmtPaid:
+      type: number
+      description: "Total Amt Paid"
+     overdueAmount:
+      type: number
+      description: "Overdue Amount"
+     histAvgGapBetweenPayments:
+      type: number
+      description: "Hist Avg Gap Between Payments"
+     histDelayRatio:
+      type: number
+      description: "Hist Delay Ratio"
+     histCashflowCodeDelayRatio:
+      type: number
+      description: "Hist Cashflow Code Delay Ratio"
+     histFirstPayDelayRatio:
+      type: number
+      description: "Hist First Pay Delay Ratio"
+     hisAvgPrepaidFirstTrDelay:
+      type: number
+      description: "His Avg Prepaid First Tr Delay"
+     totPrepaidFirstTrCnt:
+      type: number
+      description: "Total Prepaid First Tr Cnt"
+     lastPaidStat:
+      type: string
+      description: "Last Paid Stat"
+     totPaidCnt:
+      type: number
+      description: "Total Paid Cnt"
+     totPaidAmt:
+      type: number
+      description: "Total Paid Amt"
+     totPaidLateCnt:
+      type: number
+      description: "Total Paid Late Cnt"
+     totPaidLateAmt:
+      type: number
+      description: " Total Paid Late Amt"
+     totOverdueCnt:
+      type: number
+      description: "Total Overdue Cnt" 
+     totOverdueAmt:
+      type: number
+      description: "Total Overdue Amt" 
+     totOutstandingCnt:
+      type: number
+      description: "Total Outstanding Cnt" 
+     totOutstandingAmt:
+      type: number
+      description: "Total Outstanding Amt" 
+     totAvgDaysLate:
+      type: number
+      description: "Total Avg Days Late" 
+     totAvgDaysOsLate:
+      type: number
+      description: "Total Avg Days Os Late" 
+     totOnetimeSettlement:
+      type: number
+      description: "Total Onetime Settlement" 
+     dueDatePaymentFlag:
+      type: number
+      description: "Due Date Payment Flag" 
+     predDuedatePayment:
+      type: number
+      description: "Pred Due date Payment" 
+     firstPaymtSpanInDays:
+      type: number
+      description: "First Paymt Span In Days"
+     mlProcessedFlag:
+      type: string
+      description: "ML Processed Flag" 
+     version:
+      type: number
+      description: "Version"

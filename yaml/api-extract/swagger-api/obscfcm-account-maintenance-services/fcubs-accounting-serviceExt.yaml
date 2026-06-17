@@ -1,0 +1,224 @@
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform Operations on FCUBS" 
+ version: "1.0.0"
+ title: "FCUBS Accounting APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-account-maintenance-services"
+consumes:
+ - "application/json"
+ - "application/xml"
+produces:
+ - "application/json"
+ - "application/xml"
+tags:
+ - name: "fcubsaccountingservices"
+   description: "API for FCUBS related Operations"
+
+paths:
+  /service/v1/createEca:     
+    get:
+      tags:
+      - "fcubsaccountingservices"
+      summary: "Create ECA Block"
+      description: "Create ECA Block"
+      operationId: "createEca"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "refNo" 
+        in: "query" 
+        description: "Finance Reference Number" 
+        required: true
+        type: "string"
+      - name: "action" 
+        in: "query" 
+        description: "Operation/Event Code" 
+        required: false
+        type: "string"
+      - name: "chargeCode" 
+        in: "query" 
+        description: "Charge Code" 
+        required: false
+        type: "string"
+      - name: "partialBlkReqd" 
+        in: "query" 
+        description: "Partial Block Requested" 
+        required: false
+        type: "string"
+      - name: "forceBlk" 
+        in: "query" 
+        description: "Force Block" 
+        required: false
+        type: "string"          
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "./obscfcm-accounting-def.yaml#/definitions/EcaBlockAmountDetailsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /service/v1/cancelEca:     
+    get:
+      tags:
+      - "fcubsaccountingservices"
+      summary: "Cancel ECA Block"
+      description: "Cancel ECA Block"
+      operationId: "cancelEca"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "refNo" 
+        in: "query" 
+        description: "Finance Reference Number" 
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            type: boolean
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+                  
+  /service/v1/postAcc:     
+    get:
+      tags:
+      - "fcubsaccountingservices"
+      summary: "Post Accounting Entries to FCUBS"
+      description: "Post Accounting Entries to FCUBS"
+      operationId: "postAccountingEntries"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "refNo" 
+        in: "query" 
+        description: "Finance Reference Number" 
+        required: true
+        type: "string"
+      - name: "action" 
+        in: "query" 
+        description: "Operation/Event Code" 
+        required: false
+        type: "string"
+      - name: "isRolloverApplicable" 
+        in: "query" 
+        description: "Rollover flag" 
+        required: true
+        type: "boolean"
+      - name: "chargeCode" 
+        in: "query" 
+        description: "Charge Code" 
+        required: false
+        type: "string"
+      - name: "applicationCode" 
+        in: "query" 
+        description: "Application Code" 
+        required: false
+        type: "string"
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/AccountEntryPostingResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+definitions:
+    
+  AccountEntryPostingResponse:
+    description: "Accounting entry posting response collection"
+    type: "object"
+    properties:
+      status:
+        description: "Account posting block status"
+        type: "string"
+      postingErrorDetails:
+        description: "Account posting error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/PostingErrorDetails"
+          
+  PostingErrorDetails:
+    description: "Posting error code collection"
+    type: "object"
+    properties:
+      errorCode:
+        description: "Error code"
+        type: "string"
+      errorDesc:
+        description: "Error description"
+        type: "string"

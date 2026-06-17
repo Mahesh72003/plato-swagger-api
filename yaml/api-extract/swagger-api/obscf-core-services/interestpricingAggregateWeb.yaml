@@ -1,0 +1,1268 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Interest Pricing Aggregate Web
+host: 10.184.157.121:9000
+basePath: /obscf-core-services
+tags:
+- name: InterestPricingAggregateWeb
+  description: API for interest pricing operations
+
+schemes:
+- http
+paths:
+  /web/v1/intPrc:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Adds a new datasegment details.
+      description: Adds a new datasegment details.
+      operationId: createResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: interestPricingWebModel
+        in: body
+        description: Request Body that contains data required for creating a new datasegment
+        required: true
+        schema:
+         $ref: '#/definitions/InterestPricingWebModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created datasegment
+          headers:
+            Location:
+              description: URL of newly created datasegment
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - InterestPricingAggregateWeb
+     summary: "Get all valid master datasegment details"
+     description:  "Get all valid master datasegment. This endpoints will be used to Get all valid master datasegment maintenance records."
+     operationId: "getSummary"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "userId"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "branchCode"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       description: "Application Id"
+       type: "string"
+       required: true
+     - name: includecloseandunauth
+       in: query
+       description: includecloseandunauth need to be set to fetch summary record, defult value is false
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: offset is starting no of records to be fetched
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: limit is maximum no of records to be fetched
+       required: false
+       type: integer
+     - name: fixedRateType
+       in: query
+       description: fixedRateType of the records to be fetched
+       required: false
+       type: string
+     - name: pricingTemplateCode
+       in: query
+       description: pricingTemplateCode of the records to be fetched
+       required: false
+       type: string
+     - name: pricingTemplateDesc
+       in: query
+       description: pricingTemplateDesc of the records to be fetched
+       required: false
+       type: string
+     - name: rateCode
+       in: query
+       description: rateCode of the records to be fetched
+       required: false
+       type: string
+     - name: rateType
+       in: query
+       description: rateType of the records to be fetched
+       required: false
+       type: string
+     - name: authStat
+       in: query
+       description: auth status of the records to be fetched
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: records status of the records to be fetched
+       required: false
+       type: string       
+     responses:
+      200:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         $ref: '#/definitions/ScfTmPrefIntPricingCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /web/v1/intPrc/{resourceId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Retrieves the datasegment deatils by resourceId.
+      description: Retrieves the datasegment deatils by resourceId.
+      operationId: getByResourceId
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the datasegment that needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: datasegmentCode of the datasegment
+        type: string
+      - name: version
+        in: query
+        description: version of the datasegment
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: "provides only latest lates auth records if true"
+        required: false
+        default: false
+        type: boolean               
+      responses:
+        200:
+          description: Returns the datasegment based on given resourceId.
+          schema:
+            $ref: '#/definitions/InterestPricingWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Update an existing datasegment.
+      description: Update an existing datasegment.
+      operationId: updateResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be updated
+        required: true
+        type: string
+      - name: interestPricingWebModel
+        in: body
+        description: Request Body that contains data required for updating an existing datasegment
+        required: true
+        schema:
+          $ref: '#/definitions/InterestPricingWebModel'
+      responses:
+        202:
+          description: Returns updated datasegment Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/intPrc/{resourceId}/delete:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Delete the resource based on the resourceId and version.
+      description: Deleting the resource.
+      operationId: deleteResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be deleted
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be deleted
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/intPrc/{resourceId}/isValid:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Validates the resource by Resource Id.
+      description: Validates the resource by Resource Id.
+      operationId: validateResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be validated
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: version for which validation is required
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/intPrc/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Submit for the Resource.
+      description: Validates datasegments and submits the resource.
+      operationId: submitResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be submited
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/intPrc/{resourceId}/unauthorized:
+    get:
+      tags:
+      - InterestPricingAggregateWeb
+      summary: "Retrives the unauthorized resource by given resource id"
+      description:  "Retrives the unauthorized resource identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ScfTmPrefIntPricingCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/intPrc/{resourceId}/authorize:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Authorize the resource.
+      description: Authorize the resource and moves the latest data from all worktables to main tables.
+      operationId: authorizeResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource id of the resource
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be authorized
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/intPrc/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: removes the advisory lock on the resource.
+      description: removes the advisory lock on the resource.
+      operationId: removeResourceLock
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /web/v1/intPrc/{resourceId}/actions:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: provides action for Resource Id.
+      description: provides action for Resource Id.
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id for which actions needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/intPrc/{resourceId}/history:
+    get:
+      tags:
+      - InterestPricingAggregateWeb  
+      summary: "Retrives the history by given Resource Id"
+      description:  "Retrives the history by given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Successful operation.
+          schema:          
+            $ref: '#/definitions/ScfTmPrefIntPricingCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /web/v1/intPrc/{resourceId}/close:
+    patch:
+      tags:
+      - InterestPricingAggregateWeb  
+      summary: "Closes the resource by given Resource Id"
+      description:  "Closes the resource by given Resource Id"
+      operationId: "closeResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be closed
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be closed
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /web/v1/intPrc/{resourceId}/reopen:
+    patch:
+      tags:
+      - InterestPricingAggregateWeb    
+      summary: "reopen the resource by given Resource Id"
+      description:  "reopen the resource by given Resource Id"
+      operationId: "reopenResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be reopned 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be reopened
+        required: true
+        schema:
+         $ref: "#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/intPrc/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - InterestPricingAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceAggregate
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: keyId
+        in: path
+        description: keyId for which the data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/InterestPricingWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                        
+definitions:
+ InterestPricingAggregateModel:
+    description: InterestPricingAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       scfTmPrefIntPricing:
+        $ref: '#/definitions/ScfTmPrefIntPricingModel'
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+ BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type                         
+ InterestPricingAggregateModelCollection:
+    description: Collection of  InterestPricingAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/InterestPricingAggregateModel'
+ InterestPricingWebModel:
+    description: InterestPricingWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      makerId:
+        description: maker id
+        type: string
+      makerDateStamp:
+        description: make date stamp
+        type: string
+        format: date-time
+      checkerId:
+        description: check id
+        type: string
+      checkerDateStamp:
+        description: checker date stamp
+        type: string
+        format: date-time
+      modNo:
+        description: mod no
+        type: integer
+      recordStatus:
+        description: record status flag
+        type: string
+      authStatus:
+        description: auth status flag
+        type: string
+      onceAuth:
+        description: once auth flag
+        type: string
+      doerRemarks:
+        description: doer remarks
+        type: string
+      approverRemarks:
+        description: approver  remarks
+        type: string        
+      scfTmPrefIntPricing:
+        $ref: '#/definitions/ScfTmPrefIntPricingModel'
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType         
+ InterestPricingWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/InterestPricingWebModel'
+ ScfTransOutputResponse:
+    description: "Output response from transaction API"
+    type: "object"
+    properties:
+      queryList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfFilterQueryModel"
+          
+ ScfFilterQueryModel:
+    description: "Query and attribute list model"
+    type: "object"
+    properties:
+      queryId:
+        description: "Query Id"
+        type: number
+      query:
+        description: "Filter Query"
+        type: "string"
+      ScfTransCriteriaQueryAttributeModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfTransCriteriaQueryAttributeModel"   
+ ScfTransCriteriaQueryAttributeModel:
+    description: "Query for each type of given category"
+    type: "object"
+    properties:
+      paramIndex:
+        description: "input parameter index in the query"
+        type: "integer"
+      paramName:
+        description: "input parameter name in the query"
+        type: "string"
+      columnName:
+        description: "corresponding column of the input parameter index in the query"
+        type: "string"
+ ScfFilterParamModelCollection:
+    description: "Collection of Scf filter parameters"
+    type: "object"
+    properties:
+      type:
+        description: "Filter criteria"
+        type: "string"
+      hierarchy:
+        description: "hierarchy of the criteria"
+        type: "string"
+      ScfFilterParamModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfFilterParamModel" 
+ ScfFilterCriteriaModelKeyCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      category:
+        description: "category of the param"
+        type: "string"
+      ScfFilterParamModelCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfFilterParamModelCollection"
+ ScfFilterParamModel:
+    description: "Scf Filter Parameters model"
+    type: "object"
+    properties:
+      parameter:
+        description: "Name of the parameter"
+        type: "string"
+      label:
+        description: "Label of the parameter for given language"
+        type: "string"
+      columnName:
+        description: "Name of the mapped column for given parameter"
+        type: "string"
+ ScfFilterInput:
+   description: "Represents the input request of the final filter service call from transaction services"
+   type: "object"
+   properties:
+     applicationCode:
+      type: "string"
+     category:
+      description: "Represents the category of the filter"
+      type: "string"
+     filterRecords:
+      type: "array"
+      items:
+        $ref: "#/definitions/ScfFilterRecords"
+
+ ScfFilterOutput:
+   description: "Represents the best possible combination for the given category"
+   type: "object"
+   properties:
+    attributeList:
+      type: "array"
+      items:
+        $ref: "#/definitions/ScfAttribute"
+
+ ScfFilterRecords:
+    description: "Represents the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+     attributeList:
+      type: "array"
+      items:
+        $ref: "#/definitions/ScfAttribute"
+
+ ScfAttribute:
+    description: "Represents each attribute of the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeName:
+        description: "Name of the attribute representing DB column name"
+        type: "string"
+      attributeValue:
+        description: "Value of the corresponding column in DB"
+        type: "string"
+ StringStringMap:
+    type: object
+    additionalProperties:
+      type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ScfTmPrefIntPricingCollection: 
+  description: "Collection of scftmprefintpricing."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ScfTmPrefIntPricingModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ScfTmPrefIntPricingWrapperModel:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/ScfTmPrefIntPricingModel"
+ OrchestratorDTO:
+  type: object
+ ScfTmPrefIntPricingModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     id:
+      type: string
+      description: "Id"
+     action:
+      type: string
+      description: "Action"
+     autoAuth:
+      type: string
+      description: "Auto Authorized"
+     modificationStatus:
+      type: string
+      description: "Modification Status"   
+     datasegmentCode:
+      type: string
+      description: "Datasegment Segment"
+     checkerRemarks:
+      type: string
+      description: "Checker Remarks" 
+     makerRemarks:
+      type: string
+      description: "Maker Remarks"                           
+     fixedRateType:
+      type: string
+      description: "Fixed Rate Type"
+     frequency:
+      type: string
+      description: "Frequency"
+     noOfUnits:
+      type: number
+      description: "Number Of Units"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     pricingTemplateDesc:
+      type: string
+      description: "Pricing Template Description"
+     rate:
+      type: number
+      description: "Rate"
+     rateBasis:
+      type: string
+      description: "Rate Basis"
+     rateCalcType:
+      type: string
+      description: "Rate Calculate Type"
+     rateCode:
+      type: string
+      description: "Rate Code"
+     rateCodeUsage:
+      type: string
+      description: "Rate Code Usage"
+     rateFixingDays:
+      type: number
+      description: "Rate Fixing Days"
+     rateRevisionFreq:
+      type: string
+      description: "Rate Revision Frequency"
+     rateType:
+      type: string
+      description: "Rate Type"
+     resetTenor:
+      type: number
+      description: "Reset Tenor"
+     spread:
+      type: number
+      description: "Spread"
+     tierBasedSpread:
+      type: string
+      description: "Tier Based Spread"
+     tierType:
+      type: string
+      description: "Tier Type"
+     intDecId:
+      type: string
+      description: "Interest Dec Id"
+     spreadApplication:
+       type: string
+       description: "Spread Application"
+     ScfTmPrefIntAmtTiersModel:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmPrefIntAmtTiersModel'
+     ScfTmPrefIntMixedTiersModel:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmPrefIntMixedTiersModel'
+     ScfTmPrefIntTenorTiersModel:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmPrefIntTenorTiersModel'
+ ScfTmPrefIntAmtTiersModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     fromAmt:
+      type: number
+      description: "From Amount"
+     prefIntPricingId:
+      type: string
+      description: "Pref Interest Pricing Id"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     spread:
+      type: number
+      description: "Spread"
+     tierCcy:
+      type: string
+      description: "Tier Currency"
+     tierSeq:
+      type: number
+      description: "Tier Sequence"
+     toAmt:
+      type: number
+      description: "To Amount"
+ ScfTmPrefIntMixedTiersModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     amtTierSeq:
+      type: number
+      description: "Amount Tier Sequence"
+     fromAmt:
+      type: number
+      description: "From Amount"
+     fromTenor:
+      type: number
+      description: "From Tenor"
+     prefIntPricingId:
+      type: string
+      description: "Pref Interest Pricing Id"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     spread:
+      type: number
+      description: "Spread"
+     tenorTierSeq:
+      type: number
+      description: "Tenor Tier Sequence"
+     tierCcy:
+      type: string
+      description: "Tier Currency"
+     toAmt:
+      type: number
+      description: "To Amount"
+     toTenor:
+      type: number
+      description: "To Tenor"
+ ScfTmPrefIntTenorTiersModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     fromTenor:
+      type: number
+      description: "From Tenor"
+     prefIntPricingId:
+      type: string
+      description: "Pref Interest Pricing Id"
+     pricingTemplateCode:
+      type: string
+      description: "Pricing Template Code"
+     spread:
+      type: number
+      description: "Spread"
+     tierSeq:
+      type: number
+      description: "Tier Sequence"
+     toTenor:
+      type: number
+      description: "To Tenor"

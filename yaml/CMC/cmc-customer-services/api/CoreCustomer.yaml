@@ -1,0 +1,765 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server corecustomers server." 
+ version: "1.0.0"
+ title: "corecustomers Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "corecustomers"
+   description: "This is the service to  maintain the record for  external customers.It has the option to create different type and different category for the customers, also it takes the source system and source system customer number as input and maps the source system customer number to a unique customer."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../corecustomers
+
+ /corecustomers:
+  post:
+   tags:
+    - "corecustomers"
+   summary: "Adds a new corecustomers."
+   description: "Adds a new corecustomers. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "corecustomers" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new corecustomers" 
+      required: true
+      schema:
+       $ref: "#/definitions/CoreCustomerDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created corecustomers" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "corecustomers"
+   summary: "Get all valid corecustomers."
+   description:  "Get all valid corecustomers. This endpoints will be used to Get all valid corecustomers maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: country
+     required: false
+     type: string
+   - in: query
+     name: language
+     required: false
+     type: string
+   - in: query
+     name: nationality
+     required: false
+     type: string
+   - in: query
+     name: deceased
+     required: false
+     type: string
+   - in: query
+     name: frozen
+     required: false
+     type: string
+   - in: query
+     name: rmId
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: walkinCustomer
+     required: false
+     type: string
+   - in: query
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query
+     name: sourceSystemCustNo
+     required: false
+     type: string
+   - in: query
+     name: customerNo
+     required: false
+     type: string
+   - in: query
+     name: hostCode
+     required: false
+     type: string
+   - in: query
+     name: customerType
+     required: false
+     type: string
+   - in: query
+     name: customerCategory
+     required: false
+     type: string
+   - in: query
+     name: customerName1
+     required: false
+     type: string
+   - in: query
+     name: shortName
+     required: false
+     type: string
+   - in: query
+     name: addressLine1
+     required: false
+     type: string
+   - in: query
+     name: pincode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CoreCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../corecustomers/xxx
+#   DELETE    .../corecustomers/xxx
+#   GET       .../corecustomers/xxx
+#   GET       .../corecustomers/xxx?version=latestrecord
+#   GET       .../corecustomers/xxx?version=1
+
+ /corecustomers/{id}:
+  put:
+   tags:
+    - "corecustomers"
+   summary: "Update an existing corecustomers."
+   description:  "Update an existing corecustomers."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the corecustomers Maintenance"
+      required: true
+      type: "string"
+    - name: "corecustomers"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing corecustomers"
+      required: true
+      schema:
+       $ref: "#/definitions/CoreCustomerDTO"
+   responses:
+    200:
+     description: "Returns updated corecustomers"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "corecustomers"
+   summary: "Retrieves the corecustomers by ID."
+   description:  "Retrieves the corecustomers by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the corecustomers based on given id."
+     schema:
+      $ref: "#/definitions/CoreCustomerWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "corecustomers"
+   summary: "Deletes the corecustomers identified by given ID."
+   description:  "Deletes the corecustomers identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the corecustomers maintenance"
+      required: true
+      type: "string"
+    - name: "corecustomers"
+      in: "body"
+      description: Request body contain corecustomers and Modification no of corecustomers maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../corecustomers/xxx/approve
+
+ /corecustomers/{id}/approve:
+  patch:
+   tags:
+    - "corecustomers"
+   summary: "Authorize the corecustomers by given ID."
+   description:  "Authorize the corecustomers identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the corecustomers maintenance"
+      required: true
+      type: "string"
+    - name: "corecustomers"
+      in: "body"
+      description: Request body contain corecustomers and Modification no of corecustomers maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../corecustomers/xxx/close
+ /corecustomers/{id}/close:
+  patch:
+   tags:
+    - "corecustomers"
+   summary: "Close the corecustomers by given ID."
+   description:  "Close the corecustomers identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the corecustomers maintenance"
+      required: true
+      type: "string"
+    - name: "corecustomers"
+      in: "body"
+      description: Request body contain corecustomers and Modification no of corecustomers maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../corecustomers/xxx/reopen
+
+ /corecustomers/{id}/reopen:
+  patch:
+   tags:
+    - "corecustomers"
+   summary: "reopen the corecustomers by given ID."
+   description:  "reopen the corecustomers identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the corecustomers maintenance"
+      required: true
+      type: "string"
+    - name: "corecustomers"
+      in: "body"
+      description: Request body contain corecustomers and Modification no of corecustomers maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../corecustomers/xxx/unauthorized
+
+ /corecustomers/{id}/unauthorized:
+  get:
+   tags:
+    - "corecustomers"
+   summary: "Retrives the corecustomers by given ID."
+   description:  "Retrives the corecustomers identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the corecustomers based on given id."
+     schema:
+       $ref: "#/definitions/CoreCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../corecustomers/xxx/history
+
+ /corecustomers/{id}/history:
+  get:
+   tags:
+    - "corecustomers"
+   summary: "Retrives the corecustomers by given ID."
+   description:  "Retrives the corecustomers by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the corecustomers based on given id."
+     schema:
+       $ref: "#/definitions/CoreCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CoreCustomerDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     country:
+      type: string
+      description: "Country code of the customer?s address"
+      pattern: '([a-zA-Z0-9]+)?'
+     language:
+      type: string
+      description: "Customer's preferred language of communication"
+     nationality:
+      type: string
+      description: "Nationality of the customer"
+     locale:
+      type: string
+      description: "Locale of the customer"     
+     deceased:
+      type: string
+      description: "Identifies that customer is deceased"
+     frozen:
+      type: string
+      description: "Identifies that the customer's account is frozen"
+      pattern: '[Y,N]'
+     whereaboutsUnknown:
+      type: string
+      description: "Identifies that the customer's whareabouts not known"
+      pattern: '[Y,N]'
+     rmId:
+      type: string
+      description: "Relational Manager's Id"
+      minLength: 0
+      maxLength: 12
+      pattern: '([a-zA-Z0-9]+)?'
+     sanctionsChecksRequired:
+      type: string
+      description: "Indicates that the sanction check should be done or not"
+      pattern: '[Y,N]'
+     staff:
+      type: string
+     walkinCustomer:
+      type: string
+      description: "Walkin Customer"
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     sourceSystemCustNo:
+      type: string
+      description: "Customer identification details as per the source system."
+      minLength: 1
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     customerNo:
+      type: string
+      description: "Customer Number of the external customer"
+      minLength: 1
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+     hostCode:
+      type: string
+      description: "Displays the host code that is linked to the transaction branch of the customer"
+     customerType:
+      type: string
+      description: "Customer type can be Individual,Corporate or Bank"
+      pattern: '[I,C,B]'
+     customerCategory:
+      type: string
+      description: "Category to which the customer belongs to"
+     customerName1:
+      type: string
+      description: "Name of the external customer"
+      minLength: 0
+      maxLength: 105
+      #pattern: '([a-zA-Z0-9_\s]+)?'
+     shortName:
+      type: string
+      description: "Short name of the custome"
+      minLength: 0
+      maxLength: 20
+      #pattern: '([a-zA-Z0-9\s]+)?'
+     addressLine1:
+      type: string
+      description: "First line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine2:
+      type: string
+      description: "Second line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine3:
+      type: string
+      description: "Third line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine4:
+      type: string
+      description: "Fourth line of the customer?s address"
+      minLength: 0
+      maxLength: 35          
+     pincode:
+      type: string
+      description: "Pincode of the customer?s address"
+      minLength: 0
+      maxLength: 15
+      pattern: '([a-zA-Z0-9]+)?'
+    required:
+     - sourceSystem
+     - sourceSystemCustNo
+     - customerNo
+     - customerType
+     - customerName1
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CoreCustomerCollection: 
+  description: "Collection of corecustomer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CoreCustomerDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CoreCustomerWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CoreCustomerDTO"
+ StepStatusUpdateDto:
+  type: object
+  properties:
+     id:
+      type: string
+     branchId:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currentDate:
+      type: string
+     jobId:
+      type: string
+     stepId:
+      type: string
+     action:
+      type: string
+     status:
+      type: string
+     statusDescription:
+      type: string
+
+ InvokeForgetBatchDTO:
+  type: object
+  properties:
+     retentionPeriod:
+      type: number
+     branchCode:
+      type: string
+     eodDate:
+      type: string
+     eodId:
+      type: string
+     eodJobId:
+      type: string
+     eodStepId:
+      type: string
+ CmcTmLocaleDTO:
+  type: object
+  properties:
+   languageCode:
+    type: string
+    minLength: 0
+    maxLength: 3
+    pattern: ^[A-Z0-9*_]*$
+   countryCode:
+    type: string
+    minLength: 0
+    maxLength: 3
+   locale:
+    type: string
+    minLength: 0
+    maxLength: 10

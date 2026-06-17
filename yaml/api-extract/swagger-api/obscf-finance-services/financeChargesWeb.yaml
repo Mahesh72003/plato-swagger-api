@@ -1,0 +1,110 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server FinanceCharges server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Finance Charges Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/finance-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "FinanceChargesWeb"
+    description: "API for Finance Charge Operations"
+    
+schemes:
+- "https"
+
+paths:
+
+  /web/v1/financeCharges:
+    get:
+      tags:
+        - "FinanceChargesWeb"
+      summary: "Calculate the online charges for Finances"
+      description:  "Calculate the online charges for Finances."
+      operationId: "getFinanceChargeDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "Application Id"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          description: "Branch Code"
+          required: true
+        - name: "applicationCode"
+          in: "query"
+          type: "string"
+          required: true
+          description: "Application Code"
+        - name: "financeRefNo"
+          in: "query"
+          type: "string"
+          required: true
+          description: "Finance Reference Number"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ObChargesTxnDTOCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not auhorized."
+        500:
+          description: "Internal error"
+  
+  /web/v1/chargesAccounting:
+    post:
+      tags:
+        - "FinanceChargesWeb"
+      summary: "Create finance charges accounting entries"
+      description:  "Create finance charges accounting entries"
+      operationId: "getChargesAccounting"
+      parameters:
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "obChargesTxnDTOCollection"
+          in: "body"
+          description: "Request Body that contains data required for a run Eod Job"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ObChargesTxnDTOCollection"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/AccountingTransactionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not auhorized."
+        500:
+          description: "Internal error"        

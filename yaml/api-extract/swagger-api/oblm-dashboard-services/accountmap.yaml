@@ -1,0 +1,156 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+- "application/xml"
+produces:
+- "application/json"
+- "application/xml"
+tags:
+- name: "AccountMapAPI"
+  description: "API for Account Map Operations"
+
+schemes:
+- "https"
+
+paths:
+  /accountmap:
+    get:
+      tags:
+      - "AccountMapAPI"
+      summary: "Retrieves the list of total account map."
+      description:  "Retrieves the list of total account map. Add additional information here for the this endpoint."
+      operationId: "getData"
+      parameters:
+      - name: customerId
+        in: query
+        description: fetch record according to customerId
+        required: false
+        type: string
+      - name: structureId
+        in: query
+        description: fetch record according to structureId
+        required: false
+        type: string
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdRdAccountMapCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  LmdRdAccountMapDTO:
+    description: "AccountMap DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        customerId:
+          description: "Customer Id for Account Map"
+          type: string
+        availableBalance:
+          description: "Available Balance in Account Map"
+          type: number
+        currencyCode:
+          description: "Currency code in Account Map"
+          type: string
+        latitude:
+          description: "latitude  in the Account Map"
+          type: number
+        longitude:
+          description: "longitude  in the Account Map"
+          type: number
+        cityName:
+          description: "City Name in Account Map"
+          type: string
+        countryName:
+          description: "Country Name in Account Map"
+          type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdRdAccountMapCollection:
+    description: Collection of Account Map
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmdRdAccountMapDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmdRdAccountMapWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmdRdAccountMapDTO'      
+ 

@@ -1,0 +1,1409 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Limits Aggregate
+host: 10.184.157.121:9000
+basePath: /obscf-limits-services
+tags:
+- name: LimitsAggregateWeb
+  description: API for data segment crud operations for UI
+
+schemes:
+- http
+paths:
+  /web/v1/limits:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Adds a new datasegment details.
+      description: Adds a new datasegment details.
+      operationId: createResource
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true             
+      - name: limitsWebModel
+        in: body
+        description: Request Body that contains data required for creating a new datasegment
+        required: true
+        schema:
+         $ref: '#/definitions/LimitsWebModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created datasegment
+          headers:
+            Location:
+              description: URL of newly created datasegment
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - LimitsAggregateWeb
+     summary: "Get all valid master datasegment details"
+     description:  "Get all valid master datasegment. This endpoints will be used to Get all valid master datasegment maintenance records."
+     operationId: "getSummary"
+     parameters:
+     - name: "userId"
+       description: "userId"
+       in: "header"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       description: "branchCode"
+       in: "header"
+       required: true
+       type: "string"
+     - name: "appId"
+       description: "appId"
+       in: "header"
+       type: "string"
+       required: true     
+     - name: includecloseandunauth
+       in: query
+       description: includecloseandunauth need to be set to fetch summary record, defult value is false
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: offset is starting no of records to be fetched
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: limit is maximum no of records to be fetched
+       required: false
+       type: integer
+     - in: query
+       name: structureId
+       description: "Structure Id"
+       required: false
+       type: string
+     - in: query
+       name: structureDescription
+       description: "Structure Description"
+       required: false
+       type: string
+     - in: query
+       name: entityId
+       description: "Entity Id"
+       required: false
+       type: string
+     - in: query
+       name: entityDesc
+       description: "Entity Description"
+       required: false
+       type: string
+     - in: query
+       name: entityType
+       description: "Entity Type"
+       required: false
+       type: string
+     - in: query
+       name: limitId
+       description: "Limit Id"
+       required: false
+       type: string
+     - in: query
+       name: limitType
+       description: "Limit Type"
+       required: false
+       type: string
+     - in: query
+       name: nodeIdentifier
+       description: "Node Identifier"
+       required: false
+       type: string       
+     - name: authStat
+       in: query
+       description: auth status of the records to be fetched
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: records status of the records to be fetched
+       required: false
+       type: string       
+     responses:
+      200:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         $ref: '#/definitions/ScfTmLimitsCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /web/v1/limits/{resourceId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Retrieves the datasegment deatils by resourceId.
+      description: Retrieves the datasegment deatils by resourceId.
+      operationId: getByResourceId
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id of the datasegment that needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: datasegmentCode of the datasegment
+        type: string
+      - name: version
+        in: query
+        description: version of the datasegment
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: "provides only latest lates auth records if true"
+        required: false
+        default: false
+        type: boolean               
+      responses:
+        200:
+          description: Returns the datasegment based on given resourceId.
+          schema:
+            $ref: '#/definitions/LimitsWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Update an existing datasegment.
+      description: Update an existing datasegment.
+      operationId: updateResource
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be updated
+        required: true
+        type: string
+      - name: limitsWebModel
+        in: body
+        description: Request Body that contains data required for updating an existing datasegment
+        required: true
+        schema:
+          $ref: '#/definitions/LimitsWebModel'
+      responses:
+        202:
+          description: Returns updated datasegment Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/limits/{resourceId}/delete:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Delete the resource based on the resourceId and version.
+      description: Deleting the resource.
+      operationId: deleteResource
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be deleted
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be deleted
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/{resourceId}/isValid:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Validates the resource by Resource Id.
+      description: Validates the resource by Resource Id.
+      operationId: validateResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be validated
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: version for which validation is required
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/limits/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Submit for the Resource.
+      description: Validates datasegments and submits the resource.
+      operationId: submitResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be submited
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/{resourceId}/unauthorized:
+    get:
+      tags:
+      - LimitsAggregateWeb
+      summary: "Retrives the unauthorized resource by given resource id"
+      description:  "Retrives the unauthorized resource identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ScfTmLimitsCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/{resourceId}/authorize:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Authorize the resource.
+      description: Authorize the resource and moves the latest data from all worktables to main tables.
+      operationId: authorizeResource
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource id of the resource
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be authorized
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: removes the advisory lock on the resource.
+      description: removes the advisory lock on the resource.
+      operationId: removeResourceLock
+      parameters:
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /web/v1/limits/{resourceId}/actions:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: provides action for Resource Id.
+      description: provides action for Resource Id.
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id for which actions needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/limits/{resourceId}/history:
+    get:
+      tags:
+      - LimitsAggregateWeb  
+      summary: "Retrives the history by given Resource Id"
+      description:  "Retrives the history by given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Successful operation.
+          schema:          
+            $ref: '#/definitions/ScfTmLimitsCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /web/v1/limits/{resourceId}/close:
+    patch:
+      tags:
+      - LimitsAggregateWeb  
+      summary: "Closes the resource by given Resource Id"
+      description:  "Closes the resource by given Resource Id"
+      operationId: "closeResource"
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be closed
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be closed
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /web/v1/limits/{resourceId}/reopen:
+    patch:
+      tags:
+      - LimitsAggregateWeb    
+      summary: "reopen the resource by given Resource Id"
+      description:  "reopen the resource by given Resource Id"
+      operationId: "reopenResource"
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be reopned 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be reopened
+        required: true
+        schema:
+         $ref: "#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/limits/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceAggregate
+      parameters:
+      - name: keyId
+        in: path
+        description: keyId for which the data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/LimitsWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/generatePoolId:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Generate the unique pool id
+      description: Generate the unique pool id
+      operationId: generatePoolId
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: Returns the generated unique pool id.
+          schema:
+            type: object
+            additionalProperties:
+              type: string            
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/getPoolDetails:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Retrieves the pool details.
+      description: Retrieves the pool details.
+      operationId: getPoolDetails
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "entityId"
+        in: "query"
+        description: "entityId"
+        required: false
+        type: "string"
+      - name: "entityDesc"
+        in: "query"
+        description: "entityDesc"
+        required: false
+        type: "string"                
+      - name: "offset"
+        in: "query"
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "imit is maximum no of records to be fetched"
+        type: "integer"
+        required: false         
+      responses:
+        200:
+          description: Returns the pool details.
+          schema:
+            $ref: "#/definitions/ScfTmLimitsNodeCollection"            
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limits/getStructureDetails:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Retrieves the Structure details.
+      description: Retrieves the Structure details.
+      operationId: getStructureDetails
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "rootEntity"
+        in: "query"
+        description: "Root Entity"
+        type: "string"
+        required: true
+      - name: "nodeIdentifier"
+        in: "query"
+        description: "Node Identifier"
+        type: "string"
+        required: true
+      - name: "currency"
+        in: "query"
+        description: "Currency"
+        type: "string"
+        required: true
+      - name: "excludeStructure"
+        in: "query"
+        description: "Exclude Structure"
+        type: "string"
+        required: true
+      - name: "structureDescription"
+        in: "query"
+        description: "Structure Description"
+        type: "string"
+        required: false        
+      - name: "offset"
+        in: "query"
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "imit is maximum no of records to be fetched"
+        type: "integer"
+        required: false         
+      responses:
+        200:
+          description: Returns the pool details.
+          schema:
+            $ref: "#/definitions/ScfTmLimitsNodeCollection"            
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/limitsEnquiry:
+    get:
+      tags:
+      - "LimitsAggregateWeb"
+      summary: "Retrives the limits details for the given input request"
+      description:  "Retrives the limits details for the given input request"
+      operationId: "getLimitEnquiry"
+      parameters:
+      - name: "userId"
+        description: "userId"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        description: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        description: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "entityType"
+        description: "entityType"
+        in: "query"
+        type: "string"
+        required: true
+      - name: "entityId"
+        description: "entityId"
+        in: "query"
+        type: "string"
+        required: true
+      - name: "limitType"
+        description: "limitType"
+        in: "query"
+        type: "string"
+      - name: "externalLineId"
+        description: "externalLineId"
+        in: "query"
+        type: "string"
+      - name: "dateReference"
+        description: "dateReference"
+        in: "query"
+        type: "string"
+      - name: "fromDate"
+        description: "fromDate"
+        in: "query"
+        type: "string"
+      - name: "toDate"
+        description: "toDate"
+        in: "query"
+        type: "string"
+      - name: "interchangeabilityAllowed"
+        description: "interchangeabilityAllowed"
+        in: "query"
+        type: "string"
+      - name: "limitCurrency"
+        description: "limitCurrency"
+        in: "query"
+        type: "string"
+      - name: "rootEntity"
+        description: "rootEntity"
+        in: "query"
+        type: "string"
+      - name: "rootEntityId"
+        description: "rootEntityId"
+        in: "query"
+        type: "string"
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      responses:
+        200:
+          description: "Returns the anchorlimits based on given id."
+          schema:
+            $ref: "#/definitions/LimitsNodeInquiryWebCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/limits/externalLine:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LimitsAggregateWeb
+      summary: Get External Line Id.
+      description: Get External Line Id.
+      operationId: getExternalLine
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: "customerId"
+        in: "query"
+        description: "customerId"
+        type: "string"
+        required: true
+      - name: "currency"
+        in: "query"
+        description: "currency"
+        type: "string"
+        required: false
+      - name: "externalLineId"
+        in: "query"
+        description: "External Line Id"
+        type: "string"
+        required: false
+      - name: "callFromLov"
+        in: "query"
+        description: "Lov Filter"
+        type: boolean
+        required: false
+      - name: "offset"
+        in: "query"
+        description: "offset is starting no of records to be fetched"
+        type: "integer"
+        required: false
+      - name: "limit"
+        in: "query"
+        description: "imit is maximum no of records to be fetched"
+        type: "integer"
+        required: false         
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers: 
+            Location:
+              description: "Location"
+              type: "string"          
+          schema:
+            $ref: "#/definitions/ExternalLineDetailCollection"            
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                    
+definitions:
+  LimitsAggregateModel:
+    description: LimitsAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       scfTmLimits:
+        $ref: '#/definitions/ScfTmLimitsModel'       
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+  BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type                         
+  LimitsAggregateModelCollection:
+    description: Collection of  LimitsAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LimitsAggregateModel'
+  LimitsWebModel:
+    description: LimitsWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      scfTmLimits:
+        $ref: '#/definitions/ScfTmLimitsModel'            
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType         
+  LimitsWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LimitsWebModel'
+  LimitsNodeRequestDto:
+    type: object
+    properties:
+      limitType:
+        type: string
+        description: "Limit Type"
+      limitEntityType: 
+        type: string
+        description: "Limit Entity Type"
+      limitEntityId: 
+        type: string
+        description: "Limit Entity Id"
+      limitEntity: 
+        type: string
+        description: "Limit Entity"
+      partyId: 
+        type: string
+        description: "Party Id"
+      limitExpirySwitch:  
+        type: string
+        description: "Limit Expiry Switch"
+      externalLineId:  
+        type: string
+        description: "External Line Id"
+      dateReference:
+        type: string
+        description: "Date Reference"
+      fromDate:
+        type: string
+        description: "From Date"
+      toDate:
+        type: string
+        description: "To Date"
+      interchangeabilityAllowed:
+        type: string
+        description: "Interchangeability Allowed"
+      limitCurrency:
+        type: string
+        description: "Limit Currency"
+      rootEntity:
+        type: string
+        description: "Root Entity"
+      rootEntityId:
+        type: string
+        description: "Root Entity Id"
+      limitFreeze:
+        type: string
+        description: "Limit Freeze"
+  LimitsNodeInquiryWebDTO:
+    type: object
+    properties:
+      adhocBlockedLimitAmt:
+        type: number
+        description: "Adhoc Blocked Limit Amount"
+      adhocLimitEffectDate:
+        type: string
+        format: date
+        description: "Adhoc Limit Effect Date"
+      adhocLimitExpiryDate:
+        type: string
+        format: date
+        description: "Adhoc Limit Expiry Date"
+      adhocSanctionedLimitAmt:
+        type: number
+        description: "Adhoc Sanctioned Limit Amount"
+      availableAdhocLimitAmt:
+        type: number
+        description: "Available Adhoc Limit Amount"
+      availableLimitAmt:
+        type: number
+        description: "Available Limit Amount"
+      blockedLimitAmt:
+        type: number
+        description: "Blocked Limit Amount"
+      depth:
+        type: number
+        description: "Depth"
+      effectiveFrom:
+        type: string
+        format: date
+        description: "Effective From"
+      entityDesc:
+        type: string
+        description: "Entity Description"
+      entityId:
+        type: string
+        description: "Entity Id"
+      entityType:
+        type: string
+        description: "Entity Type"
+      exchangeRate:
+        type: number
+        description: "Exchange Rate"
+      expiresOn:
+        type: string
+        format: date
+        description: "Expires On"
+      externalLineId:
+        type: string
+        description: "External Line Id"
+      id:
+        type: string
+        description: "Id"
+      interchangeabilityAllowed:
+        type: string
+        description: "Interchangeability Allowed"
+      isPolicyAdded:
+        type: string
+        description: "Is Policy Added"
+      isRootEntity:
+        type: string
+        description: "Is Root Entity"
+      isStructureLinked:
+        type: string
+        description: "Is Structure Linked"
+      limitsId:
+        type: string
+        description: "Limits Id"
+      limitCurrency:
+        type: string
+        description: "Limit Currency"
+      limitType:
+        type: string
+        description: "Limit Type"
+      lineId:
+        type: string
+        description: "Line Id"
+      nodeIdentifier:
+        type: string
+        description: "Node Identifier"
+      parentCcy:
+        type: string
+        description: "Parent Currency"
+      parentNodeIdentifier:
+        type: string
+        description: "Parent Node Identifier"
+      parentSanctionedAdhocLimit:
+        type: number
+        description: "Parent Sanctioned Adhoc Limit"
+      parentSanctionedAmt:
+        type: number
+        description: "Parent Sanctioned Amount"
+      pctAllocation:
+        type: number
+        description: "Pct Allocation"
+      sanctionedLimitAmt:
+        type: number
+        description: "Sanctioned Limit Amount"
+      structureDescription:
+        type: string
+        description: "Structure Description"
+      structureHierarchy:
+        type: string
+        description: "Structure Hierarchy"
+      structureId:
+        type: string
+        description: "Structure Id"
+      totalAvailableLimitAmt:
+        type: number
+        description: "Total Available Limit Amount"
+      totalBlockedLimitAmt:
+        type: number
+        description: "Total Blocked Limit Amount"
+      totalSanctionedLimitAmt:
+        type: number
+        description: "Total Sanctioned Limit Amount"
+      totalUtilizedLimitAmt:
+        type: number
+        description: "Total Utilized Limit Amount"
+      utilizedAdhocLimitAmt:
+        type: number
+        description: "Utilized Adhoc Limit Amount"
+      utilizedLimitAmt:
+        type: number
+        description: "Utilized Limit Amount"
+      rootEntity:
+        type: string
+        description: "Root Entity"
+      rootEntityId:
+        type: string
+        description: "Root Entity Id"
+      rootEntityName:
+        type: string
+        description: "Root Entity Name"
+      rootEntityLimitType:
+        type: string
+        description: "Root Entity Limit Type"
+      ScfTmLimitsInsPoliciesDTO:
+        type: array
+        items:
+          $ref: '#/definitions/ScfTmLimitsInsPoliciesModel'
+      ScfTmLimitsLinkedStructDTO:
+        type: array
+        items:
+          $ref: '#/definitions/ScfTmLimitsLinkedStructModel'
+  LimitsNodeInquiryWebCollection: 
+    description: "Collection of Nodes for Web Inquiry."
+    type: "object"
+    properties:
+      errorCode:
+        type: string
+        description: "Error Code"
+      errorDescription:
+        type: string
+        description: "Error Description"
+      status:
+        type: string
+        description: "Status"
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/LimitsNodeInquiryWebDTO"
+      paging:
+        type: "object"
+  ExternalLineDetailCollection: 
+    description: "Collection of ExternalLineDetailDTO."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/ExternalLineDetailDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  LimitsPolicyAllocateDTO:
+    type: object
+    properties:     
+      requestId:
+        type: string
+        description: "Request Id"
+      seqNO:
+        type: integer
+        description: "Sequence Number"
+      businessDate:
+        type: string
+        format: date
+        description: "BusinessDate"
+      status:
+        type: string
+        description: "Status"
+      listOfPolicyDTO:
+        type: array
+        items:
+          $ref: '#/definitions/ScfTmLimitsPolicyDetailsDTO'
+  ScfTmLimitsPolicyDetailsDTO:
+    type: object
+    properties:
+      insurancePolicyNumber:
+        type: string
+        description: "Insurance Policy Number"
+      policyAllocatedAmt:
+        type: number
+        description: "Policy Allocated Amount"
+                               

@@ -1,0 +1,661 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : creditdecision.yaml
+#  **
+#  ** Module     : cmc-opds-services
+#  **
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  **
+#  **
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  **
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: This is a sample server cds server.
+  version: 1.0.0
+  title: cds Service
+host: 10.40.74.50:7003
+basePath: /cmc-opds-services
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  -  name: cds
+     description: creditdecision
+schemes:
+  - https
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../cds
+
+paths:
+  /cds/creditdecision:
+    post:
+      tags:
+        - cds
+      summary: "Adds a new cds."
+      description: "Adds a new cds. Add additional information here for this endpoint."
+      operationId: "fetchCreditDecisionScore"
+      parameters:
+        -  name: "cds"
+           in: "body"
+           description: "Request Body that contains data required for creating a new cds."
+           required: true
+           schema:
+             $ref: '#/definitions/CreditDecisionRequestDTO'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of newly created cds
+              type: string
+          schema:
+            $ref: '#/definitions/CreditDecisionResponseDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /cds/fetchQuestionnaire:
+    post:
+      tags:
+        - cds
+      summary: "Fetches a questionnaire along with dml code."
+      description: "Evaluates a decision model and returns a questionnaire along with the dml code."
+      operationId: "fetchQuestionnaire"
+      parameters:
+        -  name: "cds"
+           in: "body"
+           description: "Request Body that contains data required for selecting a decision model and fetching the questionnaire."
+           required: true
+           schema:
+             $ref: '#/definitions/CreditDecisionRequestDTO'
+      responses:
+        201:
+          description: 'Returns message of succes or failure '
+          headers:
+            Location:
+              description: URL of selected questionnaire
+              type: string
+          schema:
+            $ref: '#/definitions/QuestionnaireResponseWrapperDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  CreditDecisionRequestDTO:
+    type: object
+    properties:
+      context:
+        $ref: '#/definitions/RequestContext'
+      dictionary:
+        $ref: '#/definitions/DictionaryDTO'
+      request:
+        type: object
+      applicants:
+        type: object  
+  RequestContext:
+    type: object
+    properties:
+      productProcessor:
+        type: string
+        description: ''
+      isCreditBureauCallRequired:
+        type: boolean
+        description: ''
+      postingDate:
+        type: string
+        description: ''
+      requestMode:
+        type: string
+        description: ''
+      requestType:
+        type: string  
+      isApplicationDecisionRequired:
+        type: boolean
+        description: ''
+      isOnlyPrimaryApplicantDecisionRequired:
+        type: boolean
+        description: ''
+      isLogicalRequired:
+        type: boolean       
+      isBorrowingCapacityRequired:
+        type: boolean
+        description: ''
+      isAfterDecisionBwcRequired:
+        type: boolean  
+      isQualitativeScoreRequired:
+        type: boolean
+        description: ''
+      isQuantitativeScoreRequired:
+        type: boolean
+        description: ''
+      isDecisionRequired:
+        type: boolean
+        description: ''
+      isPricingCallRequired:
+        type: boolean
+        description: ''
+      isMultiApplicant:
+        type: boolean
+        description: ''
+      contractNumber:
+        type: string
+        description: ''
+      strategyCode:
+        type: string
+        description: ''  
+      customizeConfig:
+        type: boolean
+      validationModelCode:
+        type: string
+        description: ''                               
+  DictionaryDTO:
+    type: object
+    properties:
+      inputParams:
+        type: array
+        items:
+          $ref: '#/definitions/NameValuePairDTO'
+  NameValuePairDTO:
+    type: object
+    properties:
+      key:
+        type: string
+        description: ''
+      value:
+        type: string
+        description: ''
+  CreditDecisionResponseDTO:
+    type: object
+    properties:
+      requestType:
+        type: string
+        description: ''  
+      cdmsReferenceNumber:
+        type: string
+        description: ''
+      requestReferenceNumber:
+        type: string
+        description: ''
+      contractNumber:
+        type: string
+        description: ''  
+      errorDetails:
+        type: string
+        description: ''
+      isQuantitativeScoreRequired:
+        type: boolean
+      isQualitativeScoreRequired:
+        type: boolean
+      isLogicalRequired:
+        type: boolean  
+      isBorrowingCapacityRequired:
+        type: boolean
+      isAfterDecisionBwcRequired:
+        type: boolean  
+      isPricingRequired:
+        type: boolean
+      isDecisionRequired:
+        type: boolean
+      requestedLoanAmount:
+        type: string            
+      logicalModelDetails:
+        type: object
+        properties:
+          sequenceNumber:
+            type: string
+          logicalModel:  
+            $ref: '#/definitions/LogicalModelOutcomeDTO'       
+      borrowingCapacityDetails:
+        type: object
+        properties:
+          sequenceNumber:
+            type: string
+          borrowingCapacityModel:  
+            $ref: '#/definitions/BorrowingCapacityDTO'  
+      quantitativeScoringDetails:
+        type: object
+        properties:
+          sequenceNumber:
+            type: string
+          quantitativeScores: 
+            type: array
+            items:
+              $ref: '#/definitions/CreditDecisionOutcomeDTO'
+      qualitativeScoringDetails:
+        type: object
+        properties:
+          sequenceNumber:
+            type: string
+          qualitativeScores:
+            type: array
+            items:
+              $ref: '#/definitions/CreditDecisionOutcomeDTO'
+      decisionGradeDetails:
+        type: object
+        properties:
+          sequenceNumber:
+            type: string
+          decisionGradeModel:  
+            $ref: '#/definitions/DecisionGradeOutcomeDTO'    
+      pricingDetails:
+        type: object
+        properties:
+          sequenceNumber:
+            type: string
+          pricingModel:  
+            type: array
+            items:
+              $ref: '#/definitions/PricingOutcomeDTO'
+  BorrowingCapacityDTO:
+    type: object
+    properties:
+      maxLendableAmount:
+        type: string
+      bwcCode:
+        type: string
+      bwcDesc:
+        type: string
+      bwcExecStage:
+        type: string
+      bwcRule:
+        type: string
+        description: ''
+      bwcReqId:
+        type: string
+        description: ''
+      eligibilityDTO:
+        type: array
+        items:
+          $ref: '#/definitions/CdsTmEligibilityDTO'
+      errorDetailsForFailedBwcModels:
+        type: array
+        items:
+          type: string
+      failureDetails:
+        type: string
+      status:
+        type: string                        
+  PricingDetailsDTO:
+    type: object
+    properties:
+      prcCode:
+        type: string
+        description: ''
+      prcDesc:
+        type: string
+        description: ''
+      prcPriority:
+        description: ""
+        type: integer
+        minimum: 1
+        maximum: 100
+      pricingDefinition:
+        $ref: '#/definitions/PricingDefinitionDTO'
+  PricingDefinitionDTO:
+    type: object
+    properties:
+      pdnMinRate:
+        description: ""
+        type: number
+      pdnMaxRate:
+        description: ""
+        type: number
+      pdnRateType:
+        description: ""
+        type: string
+      pdnRatePercent:
+        description: ""
+        type: number
+      pdnIsRuleLinked:
+        description: ""
+        type: boolean
+      pdnRuleId:
+        description: ""
+        type: string
+      pdnReqId:
+        type: string
+        description: ''
+      featuresForPricingEvaluation:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureDTOForDecisionEvaluation'            
+  LogicalModelOutcomeDTO:
+    type: object
+    properties:
+      lmlCode:
+        description: "The logical model code which was resolved for credit decision"
+        type: string
+      lmlDesc:
+        description: "The logical model description which was resolved for credit decision"
+        type: string
+      lmlRuleId:
+        description: "The logical model rule id which was resolved for credit decision"
+        type: string
+      lmlReqId:
+        type: string
+        description: ''
+      logicalModelDetails:
+        type: array
+        items:
+          $ref: '#/definitions/LogicalModelDetailOutcomeDTO'
+      errorDetailsForFailedLmlModels:
+        type: array
+        items:
+          type: string
+      status:
+        description: "The status of logical model processing"
+        type: string
+      failureDetails:
+        description: "The error while logical model processing"
+        type: string
+  PricingOutcomeDTO:
+    type: object
+    properties:
+      rate:
+        description: ""
+        type: number
+      status:
+        type: string
+        description: ''
+      details:
+        $ref: '#/definitions/PricingDetailsDTO'
+      PricingRule:
+        type: string
+        description: ''      
+      isPricingRuleBased:
+        type: boolean
+      PricingReqId:
+        type: string
+        description: ''
+      errorDetailsForFailedModels:
+        type: array
+        items:
+          type: string  
+      failureDetails:
+        type: string
+        description: ''  
+      prcRule:
+        type: string
+        description: ''
+      prcReqId:
+        type: string
+        description: ''
+  CreditDecisionOutcomeDTO:
+    type: object
+    properties:
+      score:
+        type: number
+        description: ''
+      scoreRuleId:
+        type: string
+        description: ''
+      scoreReqId:
+        type: string
+        description: ''  
+      status:
+        type: string
+        description: ''
+      name:
+        type: string
+        description: ''
+      applicantId:
+        type: string
+        description: ''  
+      isApplicantLevel:
+        type: boolean
+        description: ''
+      isApplicationLevel:
+        type: boolean
+        description: '' 
+      decDmlRule:
+        type: string
+        description: '' 
+      decDmlReqId:
+        type: string
+        description: ''     
+      details:
+        $ref: '#/definitions/DecisionModelDTO'
+      errorDetailsForFailedScoringModels:
+        type: array
+        items:
+          type: string 
+      failureDetails:
+        type: string
+        description: '' 
+  FeatureDTOForDecisionEvaluation:
+    type: object
+    properties:
+      featureName:
+        type: string
+      featureValue:
+        type: string
+      featureRangeFrom:
+        type: string
+      featureRangeTo:
+        type: string 
+      isFeatureRuleBased:
+        type: boolean
+      featureRuleId:
+        type: string
+        description: ''
+      featureReqId:
+        type: string
+        description: ''              
+  DecisionModelDTO:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          modelCode:
+            description: "Code"
+            type: string
+            maxLength: 30
+          modelDesc:
+            description: "Description"
+            type: string
+            maxLength: 240
+          modelPriority:
+            description: "Priority"
+            type: integer
+          modleProductProcessor:
+            description: "Product Processor"
+            type: string
+            maxLength: 30
+          modelFeatures:
+            type: array
+            items:
+              $ref: '#/definitions/DecisionModelFeatureDTO' 
+  DecisionModelFeatureDTO:
+    type: object
+    properties:
+      giveValue:
+        description: ''
+        type: string
+      modelFeatureCode:
+        description: "Feature Code"
+        type: string
+        maxLength: 30
+      isModelFeatureRuleBased:
+        type: boolean
+      modelFeatureReqId:
+        type: string
+        description: ''
+      modelFeatureCodeDesc:
+        description: "Feature Code Description"
+        type: string  
+      modelFeatureShortName:
+        description: "Feature Short Name"
+        type: string  
+      modelFeatureWeightage:
+        description: "Weightage"
+        type: number
+      modelFeatureWeightageScore:
+        description: "Calculated Score"
+        type: number
+      modelFeatureRangeType:
+        description: "Range Type"
+        type: string
+      rangeDefinitionDetails:
+        $ref: '#/definitions/RangeDefinitionDTO'
+  DecisionMatrixDTO:
+    type: object
+    properties:
+      scoreFrom:
+        description: "Score From"
+        type: number
+      scoreTo:
+        description: "Score To"
+        type: number
+      decision:
+        description: "Decision Code"
+        type: string
+        maxLength: 30
+  GradeMatrixDTO:
+    type: object
+    properties:
+      scoreFrom:
+        description: "Score From"
+        type: number
+      scoreTo:
+        description: "Score To"
+        type: number
+      grade:
+        description: "Grade"
+        type: string
+        maxLength: 30
+  RangeDefinitionDTO:
+    type: object
+    properties:
+      valueFrom:
+        type: number
+        description: "Value From"
+      valueTo:
+        type: number
+        description: "Value To"
+      value:
+        type: string
+        description: "Value"
+      score:
+        type: number
+        description: "Score"
+      category:
+        type: string
+        description: "Category Code"
+        maxLength: 30
+      categoryDesc:
+        type: string
+        description: "Category description"
+      percentage:
+        type: number
+        description: "Percentage"  
+  QuestionnaireResponseWrapperDTO:
+    type: object
+    properties:
+      questionnaireResponses:
+        type: array
+        items:
+          $ref: '#/definitions/QuestionnaireResponseDTO'
+      errorDetails:
+        type: string
+        description: ''  
+  QuestionnaireResponseDTO:
+    type: object
+    properties:
+      qnrDmlCode:
+        type: string
+        description: "Qualitative Decision Model Code"
+      applicantId:
+        type: string
+        description: "Applicant Identifier"
+      questionnaireWrapperDto:
+        $ref: '#/definitions/CdsTmQuestionnaireWrapperDTO'
+  DecisionGradeOutcomeDTO:
+    type: object
+    properties:
+      gradeDecisionModelCode:
+        type: string
+      gradeDecisionModelDesc:
+        type: string  
+      decision:
+        type: string
+      decisionDesc:
+        type: string
+      featuresForDecisionEvaluation:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureDTOForDecisionEvaluation'
+      grade:
+        type: string
+      featuresForGradeEvaluation:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureDTOForDecisionEvaluation'      
+      errorDetailsForFailedDecisionGradeModels:
+        type: array
+        items:
+          type: string
+      status:
+        type: string
+      failureDetails:
+        type: string
+      decisionRule:
+        type: string
+        description: ''
+      gradeRule:
+        type: string
+        description: ''      
+      isDecisionRuleBased:
+        type: boolean
+      isGradeRuleBased:
+        type: boolean
+      decisionReqId:
+        type: string
+        description: ''
+      gradeReqId:
+        type: string
+        description: '' 
+      dgxRule:
+        type: string
+        description: ''
+      dgxReqId:
+        type: string
+        description: ''                          

@@ -1,0 +1,585 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server multiccyaccount server." 
+ version: "1.0.0"
+ title: "multiccyaccount Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "multiccyaccount"
+   description: "This service is used to maintain multi currency accounts by linking it with sub accounts"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supported http methods POST and GET
+#
+# path example ../multi-currency-accounts/linkage
+
+ /multi-currency-accounts/linkage:
+  post:
+   tags:
+    - "multiccyaccounts"
+   summary: "Adds a new multiccyaccounts linkage."
+   description: "Adds a new multiccyaccounts linkage."
+   operationId: "saveRecord"
+   parameters:
+    - name: "multiccyaccounts" 
+      in: "body" 
+      description: "Request Body that contains data required for mapping multiccyaccounts" 
+      required: true
+      schema:
+       $ref: "#/definitions/MultiCcyAccLinkageDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     headers:
+      Location:
+       description: "URL of newly created multiccyaccounts linkage" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+  get:
+   tags:
+    - "multiccyaccounts"
+   summary: "Get all valid multiccyaccounts linkage."
+   description:  "Get all valid multiccyaccounts linkage. This endpoints will be used to Get all valid multiccyaccounts linkage maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, default value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: onceAuth
+     required: false
+     type: string
+   - in: query
+     name: modNo
+     required: false
+     type: integer
+   - in: query
+     name: checkerId
+     required: false
+     type: string
+   - in: query
+     name: makerId
+     required: false
+     type: string
+   - name: customerNo
+     in: query
+     description: customer number to be fetched
+     required: false
+     type: string
+   - name: multiCurrencyAccNo
+     in: query
+     description: multi-Currency Account number to be fetched
+     required: false
+     type: "string"
+  
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/MultiCcyAccLinkageCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../multi-currency-accounts/linkage/xxx
+#   DELETE    .../multi-currency-accounts/linkage/xxx
+#   GET       .../multi-currency-accounts/linkage/xxx
+#   GET       .../multi-currency-accounts/linkage/xxx?version=latestrecord
+#   GET       .../multi-currency-accounts/linkage/xxx?version=1
+
+ /multi-currency-accounts/linkage/{id}:
+  put:
+   tags:
+    - "multiccyaccounts"
+   summary: "Update an existing multiccyaccounts linkage."
+   description:  "Update an existing multiccyaccounts linkage."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the multiccyaccounts linkage Maintenance"
+      required: true
+      type: "string"
+    - name: "multiCcyAccLinkage"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing multiccyaccounts linkage"
+      required: true
+      schema:
+       $ref: "#/definitions/MultiCcyAccLinkageDTO"
+   responses:
+    200:
+     description: "Returns updated multiccyaccounts linkage"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "multiccyaccounts"
+   summary: "Retrieves the multiccyaccounts linkage by ID."
+   description:  "Retrieves the multiccyaccounts linkage by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the multiccyaccounts linkage that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "version of the multiccyaccounts linkage that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the multiccyaccounts linkage based on given id."
+     schema:
+      $ref: "#/definitions/MultiCcyAccLinkageWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "multiccyaccounts"
+   summary: "Deletes the multiccyaccounts linkage identified by given ID."
+   description:  "Deletes the multiccyaccounts linkage identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the multiccyaccounts linkage maintenance"
+      required: true
+      type: "string"
+    - name: "multiccyaccounts"
+      in: "body"
+      description: Request body contain multiccyaccounts and Modification no of multiccyaccounts maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../multi-currency-accounts/linkage/xxx/approve
+
+ /multi-currency-accounts/linkage/{id}/approve:
+  patch:
+   tags:
+    - "multiccyaccounts"
+   summary: "Authorize the multiccyaccounts linkage by given ID."
+   description:  "Authorize the multiccyaccounts linkage identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the multiccyaccounts linkage maintenance"
+      required: true
+      type: "string"
+    - name: "multiccyaccounts"
+      in: "body"
+      description: "Request body contain multiccyaccounts and Modification no of multiccyaccounts linkage maintenance"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../multi-currency-accounts/linkage/xxx/close
+ /multi-currency-accounts/linkage/{id}/close:
+  patch:
+   tags:
+    - "multiccyaccounts"
+   summary: "Close the multiccyaccounts linkage by given ID."
+   description:  "Close the multiccyaccounts linkage identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the multiccyaccounts linkage maintenance"
+      required: true
+      type: "string"
+    - name: "multiccyaccounts"
+      in: "body"
+      description: Request body contain multiccyaccounts linkage and Modification no of multiccyaccounts linkage maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../multi-currency-accounts/linkage/xxx/reopen
+
+ /multi-currency-accounts/linkage/{id}/reopen:
+  patch:
+   tags:
+    - "multiccyaccounts"
+   summary: "reopen the multiccyaccounts linkage by given ID."
+   description:  "reopen the multiccyaccounts linkage identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the multiccyaccounts linkage maintenance"
+      required: true
+      type: "string"
+    - name: "multiccyaccounts"
+      in: "body"
+      description: "Request body contain multiccyaccounts linkage and Modification no of multiccyaccounts linkage maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../multi-currency-accounts/linkage/xxx/unauthorized
+
+ /multi-currency-accounts/linkage/{id}/unauthorized:
+  get:
+   tags:
+    - "multiccyaccounts"
+   summary: "Retrives the multiccyaccounts linkage by given ID."
+   description:  "Retrives the multiccyaccounts linkage identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the multiccyaccounts linkage that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the multiccyaccounts linkage based on given id."
+     schema:
+       $ref: "#/definitions/MultiCcyAccLinkageCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /multi-currency-accounts/linkage/unauthorizedcount:
+  get:
+   tags:
+    - "multiccyaccounts"
+   summary: "Retrives the unauthorized multi currency account records."
+   description:  "Retrives the unauthorized multi currency account records."
+   operationId: "getUnauthorizedCount"
+   responses:
+    200:
+     description: "Returns unauthorized multi currency account records."
+     schema:
+       type: integer
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ MultiCcyAccLinkageDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     customerNo:
+      type: string
+      description: "Customer Number"
+      minLength: 0
+      maxLength: 80
+     branchCode:
+      type: string
+      description: "branch code"
+      minLength: 0
+      maxLength: 12
+     multiCurrencyAccNo:
+      type: string
+      description: "Multi-Currency Account Number"
+      minLength: 0
+      maxLength: 80
+     subAccounts:
+      type: array
+      items:
+        $ref: '#/definitions/SubAccount'
+      description: "List of Sub Accounts"
+    required:
+     - customerNo
+     - branchCode
+     - multiCurrencyAccNo
+     - subAccounts
+ SubAccount:
+  type: object
+  properties:
+   keyId: 
+    type: string
+    description: "id"
+   modNo: 
+    type: integer
+    description: "modification number"
+   subAccountNo:
+    type: string
+    description: "sub account Number"
+    minLength: 0
+    maxLength: 80
+   subAccountCcy:
+    type: string
+    description: "sub account currency"
+    minLength: 0
+    maxLength: 12
+   primaryAccount:
+    type: boolean
+    description: "denotes if account is primary"
+  required:
+   - subAccountNo
+   - subAccountCcy
+   
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ MultiCcyAccLinkageCollection: 
+  description: "Collection of multiccyaccounts linkage."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/MultiCcyAccLinkageDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ MultiCcyAccLinkageWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/MultiCcyAccLinkageDTO"

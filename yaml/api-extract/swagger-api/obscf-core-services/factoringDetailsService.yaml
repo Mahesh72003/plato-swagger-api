@@ -1,0 +1,134 @@
+swagger: '2.0'
+info:
+  description: Retrieves all the export and import factoring details.
+  version: 1.0.0
+  title: Factoring Details Service
+host: 10.184.157.121:9000
+basePath: /obscf-core-services
+tags:
+- name: FactoringDetailsWeb
+  description: API for get factoring details
+
+schemes:
+- http
+paths:
+  /service/v1/getExportImportFactorDtls:
+   get:
+      produces:
+      - application/json
+      tags:
+      - ExportImportFactorDtls
+      summary: Get all export and import factoring details.
+      description: Retrieves all the export and import factoring details.
+      operationId: getExportImportFactorDtls
+      parameters:
+        - name: userId
+          in: header
+          description: userId
+          required: true
+          type:  string
+        - name:  branchCode
+          in: header
+          description: branchCode
+          required: true
+          type: string
+        - name: appId
+          description: Application Id
+          in: header
+          type: string
+          required: true
+        - name: buyerId
+          in: query
+          description: Id of the buyer
+          required: false
+          type: string
+        - name: sellerId
+          in: query
+          description: Id of the seller
+          required: false
+          type: string
+        - name: factor
+          in: query
+          description: It can be either I for Import or E for Export.
+          required: true
+          type: string
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer 
+      responses:
+        200:
+          description: Returns the all export/import details based on chosen factoring.
+          schema:
+            $ref: '#/definitions/FactorModelCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error                    
+
+definitions:
+          
+ FactorModelCollection:
+    description: Collection of  factor model.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/FactorModel'
+      paging:
+          $ref: '#/definitions/PagingDto'
+      responseStatus:
+        type: string
+      message:
+        type: string         
+
+ FactorModel:
+   description: FactorModel
+   type: object
+   properties:
+      id:
+        description: Id
+        type: string
+      factorIdentifier:
+        description: Factor Identifier
+        type: string
+      exportFactorCode:
+        description: Export Factor Code
+        type: string
+      importFactorCode:
+        description: Import Factor Code
+        type: string
+      sellerId:
+        description: Seller Number
+        type: string
+      sellerName:
+        description: Seller Name
+        type: string
+      buyerId:
+        description: Buyer Number
+        type: string
+      buyerName:
+        description: Name Of The Buyer
+        type: string
+      ccy:
+        description: Currency
+        type: string
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+         

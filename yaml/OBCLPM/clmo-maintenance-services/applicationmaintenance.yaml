@@ -1,0 +1,891 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : applicationmaintenance.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Application Maintenance Service
+host: 10.184.157.121:9000
+basePath: /applicationmaintenance-services
+tags:
+- name: ApplicationMaintenance
+  description: API for Loan application Maintenance
+schemes:
+- http
+paths:
+  /web/v1/applicationmaintenance/{type}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationMaintenance
+      summary: Get the application maintenance details for a given type
+      description: Get the application maintenance details for a given type. Add additional information here for the this endpoint.
+      operationId: getApplicationMaintenanceDetails
+      parameters:
+      - name: type
+        in: path
+        description: Type for which the maintenance details to be fetched
+        required: true
+        type: string
+      - name: code
+        in: query
+        description: Code for which the maintenance details to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns maintenance data for the given type
+          schema:
+            $ref: '#/definitions/ApplicationMaintenanceModelCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicationmaintenance/utilities/calculatepercentage/{partValue}/{wholeValue}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationMaintenance
+      summary: Get the Percentage for the given partValue and whole value
+      description: calculate (partValue/wholeValue) * 100
+      operationId: calculatePercentage
+      parameters:
+      - name: partValue
+        in: path
+        description: Part Value for which the Percentage to be calculated
+        required: true
+        type: string
+      - name: wholeValue
+        in: path
+        description: Whole Value for which the Percentage to be calculated
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns String value of the percentage
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicationmaintenance/utilities/calculatepartvalue/{percentage}/{wholeValue}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationMaintenance
+      summary: Get the Part Value for the given percentage and wholevalue
+      description: calculate (percentage * wholeValue)/100
+      operationId: calculatePartValue
+      parameters:
+      - name: percentage
+        in: path
+        description: Percentage for which the PartValue to be calculated
+        required: true
+        type: string
+      - name: wholeValue
+        in: path
+        description: Whole Value for which the PartValue to be calculated
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns String value of the part value
+          schema:
+            type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicationmaintenance/utilities/summation:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationMaintenance
+      summary: Get the Sum for the given list of numbers
+      description: Sum(1..N)
+      operationId: calculateSummation
+      parameters:
+      - name: SummationDetails
+        in: body
+        description: Request Body that contains datasegmentCode required for creating a new Datasegment Dependency
+        required: true
+        schema:
+          $ref: '#/definitions/SummationCollection'
+      responses:
+        201:
+          description: Returns String value of the sum of values
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+
+  /web/v1/applicationmaintenance/utilities/amountsummation:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationMaintenance
+      summary: Get the Sum for the given list of numbers
+      description: Sum(1..N)
+      operationId: calculateAmountSummation
+      parameters:
+      - name: SummationDetails
+        in: body
+        description: Request Body that contains datasegmentCode required for creating a new Datasegment Dependency
+        required: true
+        schema:
+          $ref: '#/definitions/AmountSummationModel'
+      responses:
+        201:
+          description: Returns String value of the sum of values
+          schema:
+            $ref: '#/definitions/AmountSummationModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/datasegmentmaintenance:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DatasegmentMaintenance
+      summary: Get the DatasegmentMaintenance details for a given DatasegmentCode
+      description: Get the DatasegmentMaintenance details for a given datasegmentCode. Add additional information here for the this endpoint.
+      operationId: getDatasegmentMaintenanceDetails
+      responses:
+        200:
+          description: Returns maintenance data for the given type
+          schema:
+            $ref: '#/definitions/DatasegmentMaintenanceCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/datasegmentmaintenance/valid/{datasegmentCode}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DatasegmentMaintenance
+      summary: Get the DatasegmentMaintenance details for a given DatasegmentCode
+      description: Get the DatasegmentMaintenance details for a given datasegmentCode. Add additional information here for the this endpoint.
+      operationId: lovDatasegmentMaintenanceDetails
+      parameters:
+      - name: datasegmentCode
+        in: path
+        description: Get the DatasegmentMaintenance details for a given DatasegmentCode
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Returns maintenance data for the given type
+          type: boolean
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/datasegmentmaintenance/lifecycledatasegmentmapping:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DatasegmentMapping 
+      summary: Adds a new Datasegment Mapping.
+      description: Adds a new Datasegment Mapping.
+      operationId: saveDatasegmentMapping
+      parameters:
+        - name: "lifecycleCode"
+          in: "body"
+          description: "Request Body that contains lifecycleCode required for creating a new Datasegment Mapping"
+          required: true
+          schema:
+            $ref: '#/definitions/LifecycleDatasegmentMappingModel'
+      responses:
+        201:
+          description: Returns the Id of the newly  Datasegment Mapping
+          headers:
+            Location:
+              description: URL of newly created  Datasegment Mapping
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/datasegmentmaintenance/lifecycledatasegmentmapping/{lifecycleCode}:
+    get:
+      tags:
+        - DatasegmentMapping
+      summary: Datasegment Mapping lifecycleCode
+      description: Datasegment Mapping lifecycleCode
+      operationId: getByLifecycleCode
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: lifecycleCode
+        in: path
+        description: lifecycleCode
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns Datasegment Mapping based on lifecycleCode "
+          schema:
+            $ref: "#/definitions/LifecycleDatasegmentMappingCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"   
+  /web/v1/datasegmentmaintenance/datasegmentdependency:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - DatasegmentDependency 
+      summary: Adds a new Datasegment Dependency.
+      description: Adds a new Datasegment Dependency.
+      operationId: saveDatasegmentDependency
+      parameters:
+        - name: "lifecycleCode"
+          in: "body"
+          description: "Request Body that contains datasegmentCode required for creating a new Datasegment Dependency"
+          required: true
+          schema:
+            $ref: '#/definitions/DatasegmentDependencyModel'
+      responses:
+        201:
+          description: Returns the Id of the newly  Datasegment Dependency
+          headers:
+            Location:
+              description: URL of newly created  Datasegment Dependency
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/datasegmentmaintenance/datasegmentdependency/{datasegmentCode}:
+    get:
+      tags:
+        - DatasegmentDependency
+      summary: Datasegment 
+      description: Datasegment Mapping lifecycleCode
+      operationId: getByDatasegmentCode
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: datasegmentCode
+        in: path
+        description: datasegmentCode
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns Datasegment deependancy bassed on datasegmentCode "
+          schema:
+            $ref: "#/definitions/DependencyCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /web/v1/applicationmaintenance/utilities/differenceAmount:
+    post:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationMaintenance
+      summary: Get the Difference for the given two numbers
+      description: Diff(1..N)
+      operationId: calculateAmountDifference
+      parameters:
+      - name: AmountDetails
+        in: body
+        description: Request Body that contains datasegmentCode required for creating a new Datasegment Dependency
+        required: true
+        schema:
+          $ref: '#/definitions/AmountDifferenceModel'
+      responses:
+        201:
+          description: Returns String value of the sum of values
+          schema:
+            $ref: '#/definitions/AmountDifferenceModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                                               
+  /web/v1/applicationdomainmap:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationDomainMap
+      summary: Get the application domain details for a given type
+      description: Get the application domain details for a given type. Add additional information here for the this endpoint.
+      operationId: getApplicationDomainMapByDomain
+      parameters:
+      - name: domain
+        in: query
+        description: domain for which the details to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns  data for the given domain
+          schema:
+            $ref: '#/definitions/ApplicationDomainMapCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationDomainMap
+      summary: Adds a new domain.
+      description: Adds a new domain.
+      operationId: saveApplicationDomainMap
+      parameters:
+        - name: "ApplicationDomainMap"
+          in: "body"
+          description: "Request Body that contains domain required for creating a new Datasegment Dependency"
+          required: true
+          schema:
+            $ref: '#/definitions/ApplicationDomainMapModel'
+      responses:
+        201:
+          description: Returns the Id of the newly  Datasegment Dependency
+          headers:
+            Location:
+              description: URL of newly created  Datasegment Dependency
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/applicationdomainmap/{id}:
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ApplicationDomainMap
+      summary: Deletes the domain identified by given ID.
+      description: Deletes the domain identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteApplicationDomainMap
+      parameters:
+      - name: id
+        in: path
+        description: Id of the domain that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/processdomaindataelements:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDomainDataElements
+      summary: Get the application domain details for a given type
+      description: Get the application domain details for a given type. Add additional information here for the this endpoint.
+      operationId: getProcessDomainDataElements
+      parameters:
+      - name: processCode
+        in: query
+        description: processCode for which the details to be fetched
+        required: true
+        type: string
+      - name: domain
+        in: query
+        description: domain for which the details to be fetched
+        required: false
+        type: string
+      responses:
+        200:
+          description: Returns  data for the given processCode
+          schema:
+            $ref: '#/definitions/ProcessDomainDataElementsCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDomainDataElements
+      summary: Adds a new process and related domain data elements.
+      description: Adds a new domain.
+      operationId: saveProcessDomainDataElements
+      parameters:
+        - name: "ProcessDomainDataElements"
+          in: "body"
+          description: "Request Body that contains domain required for creating a new process and domain data elements"
+          required: true
+          schema:
+            $ref: '#/definitions/ProcessDomainDataElementsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly Process Domain Data Elements
+          headers:
+            Location:
+              description: URL of newly created Process Domain Data Elements
+              type: string
+          schema:
+            $ref: '../commondefinitions.yaml#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/processdomaindataelements/{id}:
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ProcessDomainDataElements
+      summary: Deletes the process domain data elements identified by given ID.
+      description: Deletes the process domain data elements identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteProcessDomainDataElements
+      parameters:
+      - name: id
+        in: path
+        description: Id of the domain that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  ApplicationMaintenanceModel:
+    description: Application Maintenance model
+    type: object
+    properties:
+      code:
+        description: Code
+        type: string
+      description:
+        description: Description
+        type: string
+  LifecycleDatasegmentMappingModel:
+    description: Lifecycle Datasegment Mapping Model
+    type: object
+    properties:
+      Id:
+        description: Id
+        type: string    
+      lifecycleCode:
+        description: LifecycleCode
+        type: string
+      datasegmentCodes:
+        description: DatasegmentCode
+        type: array
+        items:
+          type: object
+          properties:
+            datasegmentCode:
+              type: string
+  DatasegmentDependencyModel:
+    description:  Datasegment Dependency Model
+    type: object
+    properties:
+      Id:
+        description: Id
+        type: string    
+      datasegmentDependency:
+        description: DatasegmentDependencyCode
+        type: array
+        items:
+          type: object
+          properties:
+            datasegmentDependencyCode:
+              type: string
+      datasegmentCode:
+        description: DatasegmentCode
+        type: string  
+  DependencyModel:
+    description:   Dependency Model
+    type: object
+    properties:
+      datasegmentDependencyCode:
+        description: DatesegmentDependencyCode
+        type: string                  
+  DatasegmentMaintenanceModel:
+    description: Application Maintenance model
+    type: object
+    properties:
+      keyId:
+        description: keyId
+        type: string    
+      datasegmentCode:
+        description: DatasegmentCode
+        type: string
+      datasegmentDesc:
+        description: DatasegmentDesc
+        type: string
+      datasegmentName:
+        description: DatasegmentName
+        type: string
+      tag:
+        description: Tag
+        type: string        
+      domain:
+        description: Domain
+        type: string
+      editable:
+        description: Editable
+        type: string
+  AmountSummationModel:
+    description: Amount Summation model
+    type: object
+    properties:
+      amounts:
+        type: array
+        items:
+          $ref: '#/definitions/AmountModel'
+      targetCurrency:
+        description: Target Currency
+        type: string
+      sumOfAmounts:
+        description: Sum of Amounts
+        type: number
+  AmountDifferenceModel:
+    description: Amount Difference model
+    type: object
+    properties:
+      amounts:
+        type: array
+        items:
+          $ref: '#/definitions/AmountModel'
+      targetCurrency:
+        description: Target Currency
+        type: string
+      differenceOfAmounts:
+        description: Difference of Amounts
+        type: number
+  AmountModel:
+    description: Amount model
+    type: object
+    properties:
+      currency:
+        description: currency
+        type: string        
+      amount:
+        description: amount
+        type: number
+  ApplicationMaintenanceModelCollection:
+    description: Collection of ApplicationMaintenanceModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicationMaintenanceModel'
+      paging:
+        $ref: '../commondefinitions.yaml#/definitions/PagingDto'                          
+  DatasegmentMaintenanceCollection:
+    description: Collection of DatasegmentMaintenanceModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DatasegmentMaintenanceModel'
+      paging:
+        $ref: '../commondefinitions.yaml#/definitions/PagingDto'
+  LifecycleDatasegmentMappingCollection:
+    description: Collection of LifecycleDatasegmentMappingModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LifecycleDatasegmentMappingModel'
+      paging:
+        $ref: '../commondefinitions.yaml#/definitions/PagingDto' 
+  DatasegmentDependencyCollection:  
+    description: Collection of DatasegmentDependencyModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DatasegmentDependencyModel'
+      paging:
+        $ref: '../commondefinitions.yaml#/definitions/PagingDto'      
+  DependencyCollection:  
+    description: Collection of DependencyModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DependencyModel'          
+  SummationCollection:
+    description: Collection of Summation.
+    type: object
+    properties:
+      SummationList:
+        type: array
+        items:
+          type: string
+  ApplicationDomainMapModel:
+    description: Application Domain Mapping model
+    type: object
+    properties:
+      Id:
+        description: Id
+        type: string    
+      domain:
+        description: domain
+        type: string
+      appId:
+        description: appid
+        type: string
+      appName:
+        description: appname
+        type: string
+  ApplicationDomainMapCollection:  
+    description: Collection of ApplicationDomainMap.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ApplicationDomainMapModel'
+  ProcessDomainDataElementsModel:
+    description: ProcessDomainDataElementsModel
+    type: object
+    properties:
+      Id:
+        description: Id
+        type: string    
+      processCode:
+        description: processCode
+        type: string
+      domain:
+        description: domain
+        type: string
+      datasegmentName:
+        description: datasegmentName
+        type: string
+      dataElements:
+        type: array
+        items:
+          $ref: '#/definitions/DatasegmentElementsModel'
+  ProcessDomainDataElementsCollection:  
+    description: Collection of ProcessDomainDataElementsModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ProcessDomainDataElementsModel'
+  DatasegmentElementsModel:
+    description: DatasegmentElementsModel
+    type: object    
+    properties:
+      id:
+        description: Id of the DatasegmentElements
+        type: string
+        maxLength: 36
+      processDomainDataElementsId:
+        description: processDomainDataElementsId of the DatasegmentElements
+        type: string
+        maxLength: 36
+      dataElementName:
+        description: dataSegmentElements to be used
+        type: string
+        maxLength: 35
+      processDataElementName:
+        description: processDataElementName of the DatasegmentElements
+        type: string
+        maxLength: 36
+  DatasegmentElementsCollection:
+    description: Collection of DatasegmentElements.
+    type: object
+    properties:
+      DatasegmentElementsList:
+        type: array
+        items:
+          $ref: '#/definitions/DatasegmentElementsModel'

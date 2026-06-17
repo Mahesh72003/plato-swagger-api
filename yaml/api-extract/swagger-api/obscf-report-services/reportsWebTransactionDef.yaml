@@ -1,0 +1,5708 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Report Service server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Report Web Transaction Definitions"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-report-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+    
+schemes:
+- "https"
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+                 
+definitions:
+  TopBorrowerList:
+    description: "Top 5 borrowers of current & previous year"
+    type: "object"
+    properties:
+     branchCcy:
+        type: string
+        description: "Branch Currency"
+     previousYear:
+        description: "Top 5 borrowers of previous year"
+        $ref: "#/definitions/YearDetails"
+     currentYear:
+        description: "Top 5 borrowers of current year"
+        $ref: "#/definitions/YearDetails"
+              
+  YearDetails:
+    type: "object"
+    properties:
+      startDate:
+        type: "string"
+        description: "Start Date"
+      endDate:
+        type: "string"
+        description: "End Date"
+      borrowerDetails:
+        type: "array"
+        description: "Borrower Details"
+        items:
+          $ref: "#/definitions/BorrowerDetails"
+  
+  BorrowerDetails:
+    description: "Borrower Details"
+    type: "object"
+    properties:
+     debtor:
+        type: "string"
+        description: "Debtor"
+     customerName:
+        type: "string"
+        description: "Customer Name"
+     financeAmt:
+        type: "number"
+        description: "Finance Amount"
+     financeCcy:
+        type: "string"
+        description: "Finance Currency"
+        
+  TopDefaulterList:
+    description: "Top 5 defaulters of current & previous month"
+    type: "object"
+    properties:
+     previousMonth:
+        description: "Top 5 defaulters of previous month"
+        type: "array"
+        items:
+          $ref: "#/definitions/DefaulterDetails"
+     currentMonth:
+        description: "Top 5 defaulters of current month"
+        type: "array"
+        items:
+          $ref: "#/definitions/DefaulterDetails"
+  
+  DefaulterDetails:
+    description: "Defaulter Details"
+    type: "object"
+    properties:
+     debtor:
+        type: "string"
+        description: "Debtor"
+     customerName:
+        type: "string"
+        description: "Customer Name"
+     outstandingAmt:
+        type: "number"
+        description: "Outstanding Amount"
+     branchCcy:
+        type: "string"
+        description: "Branch Currency"
+     maturityDate:
+        type: "string"
+        description: "Maturity Date"
+        
+  FinMaturityResponse:
+    description: "Response providing datewise Finance Maturity information"
+    type: "object"
+    properties:
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      branchCcy:
+        type: "string"
+        description: "Branch Currency"
+      finMaturityList:
+        type: "array"
+        description: "Finance Maturity List"
+        items:
+          $ref: "#/definitions/FinMaturityDetails"
+        
+  FinMaturityDetails:
+    description: "Finance Maturity information"
+    type: "object"
+    properties:
+      busDate:
+        type: "string"
+        description: "Bus Date"
+      maturityAmt:
+        type: "number"
+        description: "Maturity Amount"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      endDate:
+        type: "string"
+        description: "End Date"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      programName:
+        type: "string"
+        description: "Program Name"
+      borrowerId:
+        type: "string"
+        description: "Borrower Id"
+        
+  TransactionStatusList:
+    description: "Provides List of in progress txns for each product in each status"
+    type: "array"
+    items:
+      $ref: "#/definitions/TransactionStatusDetails"
+      
+  TransactionStatusDetails:
+    description: "Provides details of each txn status along with the product details"
+    type: "object"
+    properties:
+      txnStatus:
+        type: "string"
+        description: "Transaction Status"
+      txnStatusCode:
+        type: "string"  
+        description: "Transaction Status Code"
+      productDetailsList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductDetails"
+          
+  ProductDetails:
+    description: "Product details along with product code and number of txn in given status"
+    type: "object"
+    properties:
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      txnCnt:
+        type: "number"
+        description: "Txn Cnt"
+        
+  LimitDetails:
+    description: "Limit details DTO"
+    type: object
+    properties:
+     lineId:
+      type: "string"
+      description: "LineId"
+     anchorId:
+      type: "string"
+      description: "Anchor Id"
+     anchorName:
+      type: "string"
+      description: "Anchor Name"
+     productCode:
+      type: "string"
+      description: "Product Code"
+     productName:
+      type: "string"
+      description: "Product Name"
+     programCode:
+      type: "string"
+      description: "Program Code"
+     programName:
+      type: "string"
+      description: "Program Name"
+     spokeId:
+      type: "string"
+      description: "Spoke Id"
+     spokeName:
+      type: "string"
+      description: "Spoke Name"
+     sanctionedLimitAmt:
+      type: number
+      description: "Sanctioned Limit Amount"
+     availableLimitAmt:
+      type: number
+      description: "Available Limit Amount"
+     utilizedLimit:
+      type: number
+      description: "Utilized Limit"
+     blockedLimit:
+      type: number
+      description: "Blocked Limit"
+     effectiveFrom:
+      type: "string"
+      description: "Effective From"
+     expiresOn:
+      type: "string" 
+      description: "Expires On"
+     currency:
+      type: "string"
+      description: "Currency"
+                                    
+  AdhocLimitDetails:
+    description: "Limit details DTO"
+    type: object
+    properties:
+     lineId:
+      type: "string"
+      description: "Line Id"
+     anchorId:
+      type: "string"
+      description: "Anchor Id"
+     anchorName:
+      type: "string"
+      description: "Anchor Name"
+     productCode:
+      type: "string"
+      description: "Product Code"
+     productName:
+      type: "string"
+      description: "Product Name"
+     programCode:
+      type: "string"
+      description: "Program Code"
+     programName:
+      type: "string"
+      description: "Program Name"
+     spokeId:
+      type: "string"
+      description: "Spoke Id"
+     spokeName:
+      type: "string"
+      description: "Spoke Name"
+     sanctionedAdhocLimitAmt:
+      type: number
+      description: "Sanctioned Adhoc Limit Amount"
+     adhocAvailableLimitAmt:
+      type: number
+      description: "Adhoc Available Limit Amount"
+     adhocUtilizedLimit:
+      type: number
+      description: "Adhoc Utilized Limit"
+     adhocBlockedLimit:
+      type: number
+      description: "Adhoc Blocked Limit"
+     adhocLimitEffectDate:
+      type: "string"    
+      description: "Adhoc Limit Effect Date"
+     adhocLimitExpiryDate:
+      type: "string" 
+      description: "Adhoc Limit Expiry Date"
+     currency:
+      type: "string"
+      description: "Currency"
+      
+              
+  LimitDetailsResponse:
+    description: " List of expired limit records on the basis of limit type"
+    type: object
+    properties:
+     limitDetails:
+      type: "array"
+      items:
+       $ref: "#/definitions/LimitDetails"
+     AdhocLimitDetails:
+      type: "array"
+      items:
+       $ref: "#/definitions/AdhocLimitDetails"
+               
+  LimitExpiry:
+    description: "Gives Count of expired limits for each limit type"
+    type: object
+    properties:
+     limitType:
+      type: "string"
+      description: "Limit Type"
+     count:
+      type: number
+      description: "Count"
+   
+  LimitExpiryResponse:
+    description: " count of expired limit records on the basis of limit type"
+    type: object
+    properties:
+     limitExpiry:
+      type: "array"
+      items:
+       $ref: "#/definitions/LimitExpiry"    
+
+  ProductLimitExpHandlDto:
+    description: "DTO for ScfTmProdLimitExpHandl"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      limitDecnMasterId:
+        type: "string"
+        description: "Limit Decn Master Id"
+      subLevelApplicable:
+        type: "string"
+        description: "Sub Level Applicable"
+      expiredLimitExceptionHandling:
+        type: "string"
+        description: "Expired Limit Exception Handling"
+      breachLimitExceptionHandling:
+        type: "string"
+        description: "Breach Limit Exception Handling"
+      expiredAndBreachLimitExceptionHandling:
+        type: "string"
+        description: "Expired and Breach Limit Exception Handling"
+
+  ProductLimitDecnDto:
+    description: "DTO for ScfTmProdLimitDecn"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      productMasterId:
+        type: "string"
+        description: "Product Master Id"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+      rootLimitEntityType:
+        type: "string"
+        description: "Root Limit Entity Type"
+      limitType:
+        type: "string"
+        description: "Limit Type"
+      subLevelsApplicable:
+        type: "string"
+        description: "Sub Levels Applicable"
+      recourse:
+        type: "string"
+        description: "Recourse"
+      limitEvent:
+        type: "string"
+        description: "Limit Event"
+      productLimitExpHandlList:
+        type: "array"
+        description: "Product Limit Exp Handl List"
+        items:
+          $ref: "#/definitions/ProductLimitExpHandlDto"
+
+  ProductMaintDto:
+    description: "DTO for ScfTmProductMaster"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      productType:
+        type: "string"
+        description: "Product Type"
+      productCategory:
+        type: "string"
+        description: "Product Category"
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      debtor:
+        type: "string"
+        description: "Debtor"
+      effectiveFrom:
+        type: "string"
+        description: "Effective From"
+      expiresOn:
+        type: "string"
+        description: "Expires On"
+      autoFinanceApplicable:
+        type: "string"
+        description: "Auto Finance Applicable"
+      autoSettlementApplicable:
+        type: "string"
+        description: "Auto Settlement Applicable"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      preferredSettlementMode:
+        type: "string"
+        description: "Preferred Settlement Mode"
+      minFinancePercentage:
+        type: "string"
+        description: "Minimum Finance Percentage"
+      maxFinancePercentage:
+        type: "string"
+        description: "Maximum Finance Percentage"
+      minTenorAllowed:
+        type: "string"
+        description: "Minimum Tenor Allowed"
+      maxTenorAllowed:
+        type: "string"
+        description: "Maximum Tenor Allowed"
+      withRecourse:
+        type: "string"
+        description: "With Recourse"
+      creditLimitUtilization:
+        type: "string"
+        description: "Credit Limit Utilization"
+      stalePeriod:
+        type: "string"
+        description: "Stale Period"
+      minWaitingPeriod:
+        type: "string"
+        description: "Minimum Waiting Period"
+      prePaymentAllowed:
+        type: "string"
+        description: "Pre Payment Allowed"
+      partRepaymentAllowed:
+        type: "string"
+        description: "Part Repayment Allowed"
+      maturityDateCalculation:
+        type: "string"
+        description: "Maturity Date Calculation"
+      multipleDisbursementAllowed:
+        type: "string"
+        description: "Multiple Disbursement Allowed"
+      holidayTreatment:
+        type: "string"
+        description: "Holiday Treatment"
+      appropriationSeqOnDueDate:
+        type: "string"
+        description: "Appropriation Sequence On Due Date"
+      appropriationSeqBefDueDate:
+        type: "string"
+        description: "Appropriation Sequence Before Due Date"
+      appropriationSeqAftDueDate:
+        type: "string"
+        description: "Appropriation Sequence After Due Date"
+      npaAppropriationSeq:
+        type: "string"
+        description: "NPA Appropriation Sequence"
+      autoDebitApplicable:
+        type: "string"
+        description: "Auto Debit Applicable"
+      debitPartyOnDueDate:
+        type: "string"
+        description: "Debit Party On Due Date"
+      debitPartyAfterDueDate:
+        type: "string"
+        description: "Debit Party After Due Date"
+      debitAcctTypeOnDueDate:
+        type: "string"
+        description: "Debit Account Type On Due Date"
+      debitAcctTypeAfterDueDate:
+        type: "string"
+        description: "Debit Account Type After Due Date"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Date Stamp"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      reconciliationTowards:
+        type: "string"
+        description: "Reconciliation Towards"
+      graceDays:
+        type: "string"
+        description: "Grace Days"
+      marginHandling:
+       type: "string"
+       description: "Margin Handling"
+      marginPaymentMode:
+       type: "string"
+       description: "Margin Payment Mode"
+      interestRefundHandling:
+       type: "string"
+       description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+       type: "string"
+       description: "Interest Refund Payment Mode"
+      isCreditLimitApplicable:
+       type: "string"
+       description: "Is Credit Limit Applicable"
+      isAccountingApplicable:
+       type: "string"
+       description: "Is Accounting Applicable"
+      isAssignmentApplicable:
+       type: "string"
+       description: "Is Assignment Applicable"
+      isAutoAssignment:
+       type: "string"
+       description: "Is Auto Assignment"
+      isAcceptanceApplicable:
+       type: "string"
+       description: "Is Acceptance Applicable"
+      isAutoAcceptance:
+       type: "string"
+       description: "Is Auto Acceptance"
+      isDisbursementAuthRequired:
+       type: "string"
+       description: "Is Disbursement Auth Required"
+      isDisbursementAutoProcessing:
+       type: "string"
+       description: "Is Disbursement Auto Processing"
+      isSettlementAuthRequired:
+       type: "string"
+       description: "Is Settlement Auth Required"
+      isSettlementAutoProcessing:
+       type: "string"
+       description: "Is Settlement Auto Processing"
+      autoAcceptanceDays:
+       type: "string"
+       description: "Auto Acceptance Days"
+      holidayTreatmentForFdd:
+       type: "string"
+       description: "Holiday Treatment for Fdd"
+      productLimitDecnList:
+        type: "array"
+        description: "Product Limit Decn List"
+        items:
+          $ref: "#/definitions/ProductLimitDecnDto"
+
+  ProgramSpokeCodeMasterDto:
+    description: "DTO for ScfTmProgramSpokeCodeMaster"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      spokeMasterId:
+        type: "string"
+        description: "Spoke Master Id"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      spokeExternalCode:
+        type: "string"
+        description: "Spoke External Code"
+      spokeDivisionCode:
+        type: "string"
+        description: "Spoke Division Code"
+      spokeDivisionName:
+        type: "string"
+        description: "Spoke Division Name"
+      anchorDivisionCode:
+        type: "string"
+        description: "Anchor Division Code"
+      anchorDivisionName:
+        type: "string"
+        description: "Anchor Division Name"
+
+  ProgramSpokeMasterDto:
+    description: "DTO for ScfTmProgramSpokeMaster"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      programMasterId:
+        type: "string"
+        description: "Program Master Id"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      autoFinanceApplicable:
+        type: "string"
+        description: "Auto Finance Applicable"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      autoSettlementApplicable:
+        type: "string"
+        description: "Auto Settlement Applicable"
+      preferredSettlementMode:
+        type: "string"
+        description: "Preferred Settlement Mode"
+      minFinancePercentage:
+        type: "string"
+        description: "Minimum Finance Percentage"
+      maxFinancePercentage:
+        type: "string"
+        description: "Maximum Finance Percentage"
+      minTenorAllowed:
+        type: "string"
+        description: "Minimum Tenor Allowed"
+      maxTenorAllowed:
+        type: "string"
+        description: "Maximum Tenor Allowed"
+      withRecourse:
+        type: "string"
+        description: "With Recourse"
+      disbursementCcy:
+        type: "string"
+        description: "Disbursement Currency"
+      reconciliationTowards:
+        type: "string"
+        description: "Reconciliation Towards"
+      graceDays:
+        type: "string"
+        description: "Grace Days"
+      interestBearingParty:
+        type: "string"
+        description: "Interest Bearing Party"
+      importFactorId:
+        type: "string"
+        description: "Import Factor Id"
+      importFactorName:
+        type: "string"
+        description: "Import Factor Name"
+      insuranceCoId:
+        type: "string"
+        description: "Insurance Co Id"
+      insuranceCoName:
+        type: "string"
+        description: "Insurance Co Name"
+      marginHandling:
+        type: "string"
+        description: "Margin Handling"
+      marginPaymentMode:
+        type: "string"
+        description: "Margin Payment Mode"
+      interestRefundHandling:
+        type: "string"
+        description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+        type: "string"
+        description: "Interest Refund Payment Mode"
+      autoDebitApplicable:
+        type: "string"
+        description: "Auto Debit Applicable"
+      authorizationRequired:
+        type: "string"
+        description: "Authorization Required"
+      isDisbursementAuthRequired:
+        type: "string"
+        description: "Is Disbursement Auth Required"
+      isSettlementAuthRequired:
+        type: "string"
+        description: "Is Settlement Auth Required"
+      isDisbursementAutoProcessing:
+        type: "string"
+        description: "Is Disbursement Auto Processing"
+      isSettlementAutoProcessing:
+        type: "string"
+        description: "Is Settlement Auto Processing"
+      programSpokeCodeMasterList:
+        type: "array"
+        description: "Program Spoke Code Master List"
+        items:
+          $ref: "#/definitions/ProgramSpokeCodeMasterDto"
+
+  ProgramMaintDto:
+    description: "DTO for ScfTmProgramMaster"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      effectiveFrom:
+        type: "string"
+        description: "Effective From"
+      expiresOn:
+        type: "string"
+        description: "Expires On"
+      autoAcceptanceApplicable:
+        type: "string"
+        description: "Auto Acceptance Applicable"
+      autoAcceptanceDays:
+        type: "string"
+        description: "Auto Acceptance Days"
+      autoFinanceApplicable:
+        type: "string"
+        description: "Auto Finance Applicable"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      autoSettlementApplicable:
+        type: "string"
+        description: "Auto Settlement Applicable"
+      preferredSettlementMode:
+        type: "string"
+        description: "Preferred Settlement Mode"
+      minFinancePercentage:
+        type: "string"
+        description: "Minimum Finance Percentage"
+      maxFinancePercentage:
+        type: "string"
+        description: "Maximum Finance Percentage"
+      minTenorAllowed:
+        type: "string"
+        description: "Minimum Tenor Allowed"
+      maxTenorAllowed:
+        type: "string"
+        description: "Maximum Tenor Allowed"
+      withRecourse:
+        type: "string"
+        description: "With Recourse"
+      disbursementCcy:
+        type: "string"
+        description: "Disbursement Currency"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Date Stamp"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      reconciliationTowards:
+        type: "string"
+        description: "Reconciliation Towards"
+      graceDays:
+        type: "string"
+        description: "Grace Days"
+      interestBearingParty:
+        type: "string"
+        description: "Interest Bearing Party"
+      relationshipCode:
+        type: "string"
+        description: "Relationship Code"
+      twoFactorApp:
+        type: "string"
+        description: "Two Factor App"
+      insuranceApp:
+        type: "string"
+        description: "Insurance App"
+      marginHandling:
+       type: "string"
+       description: "Margin Handling"
+      marginPaymentMode:
+       type: "string"
+       description: "Margin Payment Mode"
+      interestRefundHandling:
+       type: "string"
+       description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+       type: "string"
+       description: "Interest Refund Payment Mode"
+      autoDebitApplicable:
+        type: "string"
+        description: "Auto Debit Applicable"
+      authorizationRequired:
+        type: "string"
+        description: "Authorization Required"
+      isDisbursementAuthRequired:
+        type: "string"
+        description: "Is Disbursement Auth Required"
+      isSettlementAuthRequired:
+        type: "string"
+        description: "Is Settlement Auth Required"
+      isDisbursementAutoProcessing:
+        type: "string"
+        description: "Is Disbursement Auto Processing"
+      isSettlementAutoProcessing:
+        type: "string"
+        description: "Is Settlement Auto Processing"
+      programSpokeMasterList:
+        type: "array"
+        description: "Program Spoke Master List"
+        items:
+          $ref: "#/definitions/ProgramSpokeMasterDto"
+
+  LimitsMaintDto:
+    description: "DTO for ScfLimitsMaint"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productName:
+        type: "string"
+        description: "Product Name"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      limitType:
+        type: "string"
+        description: "Limit Type"
+      limitEntityId:
+        type: "string"
+        description: "Limit Entity Id"
+      limitEntityName:
+        type: "string"
+        description: "Limit Entity Name"
+      lineId:
+        type: "string"
+        description: "Line Id"
+      effectiveFrom:
+        type: "string"
+        description: "Effective From"
+      expiresOn:
+        type: "string"
+        description: "Expires On"
+      limitAmount:
+        type: "number"
+        description: "Limit Amount"
+      availableLimit:
+        type: "number"
+        description: "Available Limit"
+      utilizedLimit:
+        type: "number"
+        description: "Utilized Limit"
+      adhocLimitAmount:
+        type: "number"
+        description: "Adhoc Limit Amount"
+      adhocLimitEffectiveDate:
+        type: "string"
+        description: "Adhoc Limit Effective Date"
+      adhocLimitExpiryDate:
+        type: "string"
+        description: "Adhoc Limit Expiry Date"
+      currency:
+        type: "string"
+        description: "Currency"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Date Stamp"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      blockedLimit:
+        type: "number"
+        description: "Blocked Limit"
+      adhocLimitAvailableAmt:
+        type: "number"
+        description: "Adhoc Limit Available Amount"
+      adhocLimitUtilizedAmt:
+        type: "number"
+        description: "Adhoc Limit Utilized Amount"
+      adhocLimitBlockedAmt:
+        type: "number"
+        description: "Adhoc Limit Blocked Amount"
+      interchangeabilityAllowed:
+        type: "string"
+        description: "Interchangeability Allowed"
+      isFactoringApp:
+        type: "string"
+        description: "Is Factoring App"
+      factorId:
+        type: "string"
+        description: "Factor Id"
+      factorName:
+        type: "string"
+        description: "Factor Name"
+      externalLineId:
+        type: "string"
+        description: "External Line Id"
+        
+  FinanceMaintDto:
+    description: "DTO for ScfFinTxnTm"
+    type: object
+    properties:
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      branchName:
+        type: "string"
+        description: "Branch Name"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      buyerId:
+        type: "string"
+        description: "Buyer Id"
+      buyerName:
+        type: "string"
+        description: "Buyer Name"
+      supplierId:
+        type: "string"
+        description: "Supplier Id"
+      supplierName:
+        type: "string"
+        description: "Supplier Name"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      debtorId:
+        type: "string"
+        description: "Debtor Id"
+      debtorName:
+        type: "string"
+        description: "Debtor Name"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      maturityDate:
+        type: "string"
+        description: "Maturity Date"
+      tenor:
+        type: "number"
+        description: "Tenor"
+      graceDays:
+        type: "number"
+        description: "Grace Days"
+      pastDueDate:
+        type: "string"
+        description: "Past Due Date"
+      totalInstrumentAmtCcy:
+        type: "string"
+        description: "Total Instrument Amount Currency"
+      totalInstrumentAmt:
+        type: "number"
+        description: "Total Instrument Amount"
+      financeAmtCcy:
+        type: "string"
+        description: "Finance Amount Currency"
+      financePct:
+        type: "number"
+        description: "Finance Pct"
+      financeAmt:
+        type: "number"
+        description: "Finance Amount"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      lastProcessingDate:
+        type: "string"
+        description: "Last Processing Date"
+      financeStatus:
+        type: "string"
+        description: "Finance Status"
+      clRefNo:
+        type: "string"
+        description: "Cl Reference Number"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      authId:
+        type: "string"
+        description: "Authorization Id"
+      authDtStamp:
+        type: "string"
+        description: "Authorization Date Stamp"
+      lastOperationCode:
+        type: "string"
+        description: "Last Operation Code"
+      financeReferenceNo:
+        type: "string"
+        description: "Finance Reference Number"
+      disbRequestId:
+        type: "string"
+        description: "Disbursement Request Id"
+      lastValueDate:
+        type: "string"
+        description: "Last Value Date"
+      principalOsAmount:
+        type: "number"
+        description: "Principal Os Amount"
+      interestOsAmount:
+        type: "number"
+        description: "Interest Os Amount"
+      totalOsAmount:
+        type: "number"
+        description: "Total Os Amount"
+      overdueIntOsAmount:
+        type: "number"
+        description: "Overdue Int Os Amount"
+      penIntOsAmount:
+        type: "number"
+        description: "Pen Int Os Amount"
+      totalRepaidAmount:
+        type: "number"
+        description: "Total Repaid Amount"
+      totPmtTowardsPrncplOs:
+        type: "number"
+        description: "Total Payment Towards Principle Os"
+      totPmtTowardsIntOs:
+        type: "number"
+        description: "Total Payment Towards Int Os"
+      totPmtTowardsOverdueIntOs:
+        type: "number"
+        description: "Total Payment Towards Overdue Int Os"
+      totPmtTowardsPenIntOs:
+        type: "number"
+        description: "Total Payment Towards Pen Int Os"
+      lastSeqNo:
+        type: "number"
+        description: "Last Sequence Number"
+      buyerDivCode:
+        type: "string"
+        description: "Buyer Division Code"
+      supplierDivCode:
+        type: "string"
+        description: "Supplier Division Code"
+      buyerDivName:
+        type: "string"
+        description: "Buyer Division Name"
+      supplierDivName:
+        type: "string"
+        description: "Supplier Division Name"
+      buyerAddress:
+        type: "string"
+        description: "Buyer Address"
+      supplierAddress:
+        type: "string"
+        description: "SupplierAddress"
+      branchLocalCcy:
+        type: "string"
+        description: "Branch Local Currency"
+      eventDate:
+        type: "string"
+        description: "Event Date"
+      eventType:
+        type: "string"
+        description: "Event Type"
+      userId:
+        type: "string"
+        description: "User Id"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      intCalcBasisAmt:
+        type: number
+        description: "Interest calculation Basis Amount"
+      odIntCalcBasisAmt:
+        type: number
+        description: "Overdue int calculation Basis Amount"
+      penIntCalcBasisAmt:
+        type: number   
+        description: "Penalty int calculation Basis Amount"         
+        
+  ScfIntCompCalcModelList:  
+    description: "Interest calculation Model List"
+    type: "object"
+    properties:
+      scfIntCompCalcModelList:
+        type: "array"
+        description: "Interest calculation Model List"
+        items:
+          $ref: "#/definitions/ScfIntCompCalcModel" 
+  ScfIntCompCalcModel:  
+    description: "Interest calculation Model"
+    type: "object"
+    properties:             
+      id:
+        type: "string"
+        description: "Id"
+      financeRefNo:
+        type: "string"
+        description: "Finance Reference Number"
+      clRefNo:
+        type: "string"
+        description: "Contract Reference Number"
+      componentType:
+        type: "string"
+        description: "Component Type"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      endDate:
+        type: "string"
+        description: "End Date"       
+      rateType:
+        type: "string"
+        description: "Rate Type"
+      currency:
+        type: "string"
+        description: "Currency"
+      noOfDays:
+        type: "number"
+        description: "No Of Days"
+      basisAmt:
+        type: "number"
+        description: "Basis Amount"
+      calculatedAmt:
+        type: "number"
+        description: "Calculated Amount"
+      dailyAverageAmt:    
+        type: "number"
+        description: "Daily Average Amount"  
+      calculationDate:
+        type: "string"
+        description: "Calculation Date"                   
+        
+  FinanceWorktDto:
+    description: "DTO for ScfFinTxnTw"
+    type: object
+    properties:
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      branchName:
+        type: "string"
+        description: "Branch Name"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      buyerId:
+        type: "string"
+        description: "Buyer Id"
+      buyerName:
+        type: "string"
+        description: "Buyer Name"
+      supplierId:
+        type: "string"
+        description: "Supplier Id"
+      supplierName:
+        type: "string"
+        description: "Supplier Name"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      debtorId:
+        type: "string"
+        description: "Debtor Id"
+      debtorName:
+        type: "string"
+        description: "Debtor Name"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      maturityDate:
+        type: "string"
+        description: "Maturity Date"
+      tenor:
+        type: "number"
+        description: "Tenor"
+      graceDays:
+        type: "number"
+        description: "Grace Days"
+      pastDueDate:
+        type: "string"
+        description: "Past Due Date"
+      totalInstrumentAmtCcy:
+        type: "string"
+        description: "Total Instrument Amount Currency"
+      totalInstrumentAmt:
+        type: "number"
+        description: "Total Instrument Amount"
+      financeAmtCcy:
+        type: "string"
+        description: "Finance Amount Currency"
+      financePct:
+        type: "number"
+        description: "Finance Pct"
+      financeAmt:
+        type: "number"
+        description: "Finance Amount"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      processingDate:
+        type: "string"
+        description: "Processing Date"
+      financeStatus:
+        type: "string"
+        description: "Finance Status"
+      clRefNo:
+        type: "string"
+        description: "Cl Reference Number"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      authId:
+        type: "string"
+        description: "Authorization Id"
+      authDtStamp:
+        type: "string"
+        description: "Authorization Date Stamp"
+      operationCode:
+        type: "string"
+        description: "Operation Code"
+      financeReferenceNo:
+        type: "string"
+        description: "Finance Reference Number"
+      requestId:
+        type: "string"
+        description: "Request Id"
+      settlementReferenceNo:
+        type: "string"
+        description: "Settlement Reference Number"
+      settlementMethod:
+        type: "string"
+        description: "Settlement Method"
+      settlementCcy:
+        type: "string"
+        description: "Settlement Currency"
+      totalSettlementAmount:
+        type: "number"
+        description: "Total Settlement Amount"
+      creditReceived:
+        type: "string"
+        description: "Credit Received"
+      creditAccount:
+        type: "string"
+        description: "Credit Account"
+      paymentParty:
+        type: "string"
+        description: "Payment Party"
+      accountType:
+        type: "string"
+        description: "Account Type"
+      settlementAmountAllocated:
+        type: "number"
+        description: "Settlement Amount Allocated"
+      balanceAmtToAllocated:
+        type: "number"
+        description: "Balance Amount To Allocated"
+      settlementAmountAllocation:
+        type: "string"
+        description: "Settlement Amount Allocation"
+      manualAllocation:
+        type: "string"
+        description: "Manual Allocation"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      principalOsAmount:
+        type: "number"
+        description: "Principal Os Amount"
+      interestOsAmount:
+        type: "number"
+        description: "Interest Os Amount"
+      totalOsAmount:
+        type: "number"
+        description: "Total Os Amount"
+      overdueIntOsAmount:
+        type: "number"
+        description: "Overdue Int Os Amount"
+      penIntOsAmount:
+        type: "number"
+        description: "Pen Int Os Amount"
+      totalOsAmountSettlementCcy:
+        type: "number"
+        description: "Total Os Amount Settlement Currency"
+      valueDtdIntOsAmount:
+        type: "number"
+        description: "Value Dated Int Os Amount"
+      valueDtdOverdueIntOsAmount:
+        type: "number"
+        description: "Value Dated Overdue Int Os Amount"
+      valueDtdPenIntOsAmount:
+        type: "number"
+        description: "Value Dated Pen Int Os Amount"
+      paymentAmount:
+        type: "number"
+        description: "Payment Amount"
+      appropriationSequence:
+        type: "string"
+        description: "Appropriation Sequence"
+      appropriatedPaymentAmount:
+        type: "number"
+        description: "Appropriated Payment Amount"
+      pmtTowardsPrncplOs:
+        type: "number"
+        description: "Payment Towards Principle Os"
+      pmtTowardsIntOs:
+        type: "number"
+        description: "Payment Towards Int Os"
+      pmtTowardsOverdueIntOs:
+        type: "number"
+        description: "Payment Towards Overdue Int Os"
+      pmtTowardsPenIntOs:
+        type: "number"
+        description: "Payment Towards Pen Int Os"
+      settlementProcessingDate:
+        type: "string"
+        description: "Settlement Processing Date"
+      seqNo:
+        type: "number"
+        description: "Sequence Number"
+      buyerDivCode:
+        type: "string"
+        description: "Buyer Division Code"
+      supplierDivCode:
+        type: "string"
+        description: "Supplier Division Code"
+      buyerDivName:
+        type: "string"
+        description: "Buyer Division Name"
+      supplierDivName:
+        type: "string"
+        description: "Supplier Division Name"
+      buyerAddress:
+        type: "string"
+        description: "Buyer Address"
+      supplierAddress:
+        type: "string"
+        description: "Supplier Address"
+      branchLocalCcy:
+        type: "string"
+        description: "Branch Local Currency"
+      eventDate:
+        type: "string"
+        description: "Event Date"
+      eventType:
+        type: "string"
+        description: "Event Type"
+      minTenorAllowed:
+        type: "number"
+        description: "Minimum Tenor Allowed"
+      maxTenorAllowed:
+        type: "number"
+        description: "Maximum Tenor Allowed"
+      minFinancePercentage:
+        type: "number"
+        description: "Maximum Tenor Allowed"
+      maxFinancePercentage:
+        type: "number"
+        description: "Maximum Finance Percentage"
+      productCategory:
+        type: "string"
+        description: "Product Category"
+      productType:
+        type: "string"
+        description: "ProductType"
+      holidayTreatment:
+        type: "string"
+        description: "Holiday Treatment"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      refund:
+        type: "number"
+        description: "Refund"
+      settlementExchangeRate:
+        type: "number"
+        description: "Settlement Exchange Rate"
+      settleFinExcRate:
+        type: "number"
+        description: "Settlement Finance Exchange Rate"
+      stageId:
+        type: "string"
+        description: "Stage Id"
+      partPaymentAllowed:
+        type: "string"
+        description: "Part Payment Allowed"
+      staleStatus:
+        type: "string"
+        description: "Stale Status"
+      intCalcBasisAmt:
+        type: number
+        description: "Interest calculation Basis Amount"
+      odIntCalcBasisAmt:
+        type: number
+        description: "Overdue int calculation Basis Amount"
+      penIntCalcBasisAmt:
+        type: number   
+        description: "Penalty int calculation Basis Amount"         
+        
+  ScfApplicationParamModelCollection:
+    description: "Collection of ScfApplicationParamModelKeyCollection."
+    type: "object"
+    properties:
+      ScfApplicationParamModelKeyCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfApplicationParamModelKeyCollection"
+          
+  ScfApplicationParamModelKeyCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      key:
+        description: "key of the Param"
+        type: "string"
+      ScfApplicationParamKeyModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfApplicationParamKeyModel"
+          
+  ScfApplicationParamKeyModel:
+    description: "Scf Application Param model"
+    type: "object"
+    properties:
+      code:
+        description: "Code for the Param.This is a unique constraint"
+        type: "string"
+      description:
+        description: "Configured value for the disbursement mode which will be used in rest of application."
+        type: "string"
+  ScfTmLimitsModel:
+    type: object
+    allOf:
+    - $ref: './eventServiceDef.yaml#/definitions/GenericDto'
+    - type: object
+    properties:
+      id:
+       type: string
+       description: ""
+      action:
+       type: string
+       description: ""
+      autoAuth:
+       type: string
+       description: ""
+      modificationStatus:
+       type: string
+       description: ""   
+      datasegmentCode:
+       type: string
+       description: ''
+      checkerRemarks:
+       type: string
+       description: '' 
+      makerRemarks:
+       type: string
+       description: ''
+      entityDesc:
+       type: string
+       description: ""
+      entityId:
+       type: string
+       description: ""
+      entityType:
+       type: string
+       description: ""
+      limitId:
+       type: string
+       description: ""
+      limitType:
+       type: string
+       description: ""
+      nodeIdentifier:
+       type: string
+       description: ""
+      structureDescription:
+       type: string
+       description: ""
+      structureId:
+       type: string
+       description: ""
+      LimitsNodeDTO:
+       type: array
+       items:
+        $ref: '#/definitions/LimitsNodeDTO'
+  LimitsNodeDTO:
+    description: "Limits Node DTO"
+    type: "object"
+    properties:
+     adhocBlockedLimitAmt:
+      type: number
+      description: "Adhoc Blocked Limit Amount"
+     adhocLimitEffectDate:
+      type: string
+      description: "Adhoc Limit Effect Date"
+     adhocLimitExpiryDate:
+      type: string
+      description: "Adhoc Limit Expiry Date"
+     adhocSanctionedLimitAmt:
+      type: number
+      description: "Adhoc Sanctioned Limit Amount"
+     availableAdhocLimitAmt:
+      type: number
+      description: "Available Adhoc Limit Amount"
+     availableLimitAmt:
+      type: number
+      description: "Available Limit Amount"
+     blockedLimitAmt:
+      type: number
+      description: "Blocked Limit Amount"
+     depth:
+      type: number
+      description: "Depth"
+     effectiveFrom:
+      type: string
+      description: "Effective From"
+     entityDesc:
+      type: string
+      description: "Entity Description"
+     entityId:
+      type: string
+      description: "Entity Id"
+     entityType:
+      type: string
+      description: "Entity Type"
+     exchangeRate:
+      type: number
+      description: "Exchange Rate"
+     expiresOn:
+      type: string
+      description: "Expires On"
+     externalLineId:
+      type: string
+      description: "External Line Id"
+     id:
+      type: string
+      description: "Id"
+     interchangeabilityAllowed:
+      type: string
+      description: "InterchangeabilityAllowed"
+     isPolicyAdded:
+      type: string
+      description: "Is Policy Added"
+     isRootEntity:
+      type: string
+      description: "Is Root Entity"
+     isStructureLinked:
+      type: string
+      description: "Is Structure Linked"
+     limitsId:
+      type: string
+      description: "Limits Id"
+     limitCurrency:
+      type: string
+      description: "Limit Currency"
+     limitType:
+      type: string
+      description: "Limit Type"
+     lineId:
+      type: string
+      description: "Line Id"
+     nodeIdentifier:
+      type: string
+      description: "Node Identifier"
+     parentCcy:
+      type: string
+      description: "Parent Currency"
+     parentNodeIdentifier:
+      type: string
+      description: "Parent Node Identifier"
+     parentSanctionedAdhocLimit:
+      type: number
+      description: "Parent Sanctioned Adhoc Limit"
+     parentSanctionedAmt:
+      type: number
+      description: "Parent Sanctioned Amount"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     sanctionedLimitAmt:
+      type: number
+      description: "Sanctioned Limit Amount"
+     structureDescription:
+      type: string
+      description: "Structure Description"
+     structureHierarchy:
+      type: string
+      description: "Structure Hierarchy"
+     structureId:
+      type: string
+      description: "Structure Id"
+     totalAvailableLimitAmt:
+      type: number
+      description: "Total Available Limit Amount"
+     totalBlockedLimitAmt:
+      type: number
+      description: "Total Blocked Limit Amount"
+     totalSanctionedLimitAmt:
+      type: number
+      description: "Total Sanctioned Limit Amount"
+     totalUtilizedLimitAmt:
+      type: number
+      description: "Total Utilized Limit Amount"
+     utilizedAdhocLimitAmt:
+      type: number
+      description: "Utilized Adhoc Limit Amount"
+     utilizedLimitAmt:
+      type: number
+      description: "Utilized Limit Amount"
+     modNo:
+        type: number
+        description: "Mod Number"
+     LimitsInsPoliciesDTO:
+       type: "array"
+       items:
+         $ref: "#/definitions/LimitsInsPoliciesDTO"
+     LimitsLinkedStructDTO:
+       type: "array"
+       items:
+         $ref: "#/definitions/LimitsLinkedStructDTO"
+  ScfTmLimitNode:
+    description: "Limits Node DTO"
+    type: "object"
+    properties:
+     adhocBlockedLimitAmt:
+      type: number
+      description: "Adhoc Blocked Limit Amount"
+     adhocLimitEffectDate:
+      type: string
+      description: "Adhoc Limit Effect Date"
+     adhocLimitExpiryDate:
+      type: string
+      description: "Adhoc Limit Expiry Date"
+     adhocSanctionedLimitAmt:
+      type: number
+      description: "Adhoc Sanctioned Limit Amount"
+     availableAdhocLimitAmt:
+      type: number
+      description: "Available Adhoc Limit Amount"
+     availableLimitAmt:
+      type: number
+      description: "Available Limit Amount"
+     blockedLimitAmt:
+      type: number
+      description: "Blocked Limit Amount"
+     depth:
+      type: number
+      description: "Depth"
+     effectiveFrom:
+      type: string
+      description: "Effective From"
+     entityDesc:
+      type: string
+      description: "Entity Description"
+     entityId:
+      type: string
+      description: "Entity Id"
+     entityType:
+      type: string
+      description: "Entity Type"
+     exchangeRate:
+      type: number
+      description: "Exchange Rate"
+     expiresOn:
+      type: string
+      description: "Expires On"
+     externalLineId:
+      type: string
+      description: "External Line Id"
+     id:
+      type: string
+      description: "Id"
+     interchangeabilityAllowed:
+      type: string
+      description: "InterchangeabilityAllowed"
+     isPolicyAdded:
+      type: string
+      description: "Is Policy Added"
+     isRootEntity:
+      type: string
+      description: "Is Root Entity"
+     isStructureLinked:
+      type: string
+      description: "Is Structure Linked"
+     limitsId:
+      type: string
+      description: "Limits Id"
+     limitCurrency:
+      type: string
+      description: "Limit Currency"
+     limitType:
+      type: string
+      description: "Limit Type"
+     lineId:
+      type: string
+      description: "Line Id"
+     nodeIdentifier:
+      type: string
+      description: "Node Identifier"
+     parentCcy:
+      type: string
+      description: "Parent Currency"
+     parentNodeIdentifier:
+      type: string
+      description: "Parent Node Identifier"
+     parentSanctionedAdhocLimit:
+      type: number
+      description: "Parent Sanctioned Adhoc Limit"
+     parentSanctionedAmt:
+      type: number
+      description: "Parent Sanctioned Amount"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     sanctionedLimitAmt:
+      type: number
+      description: "Sanctioned Limit Amount"
+     structureDescription:
+      type: string
+      description: "Structure Description"
+     structureHierarchy:
+      type: string
+      description: "Structure Hierarchy"
+     structureId:
+      type: string
+      description: "Structure Id"
+     totalAvailableLimitAmt:
+      type: number
+      description: "Total Available Limit Amount"
+     totalBlockedLimitAmt:
+      type: number
+      description: "Total Blocked Limit Amount"
+     totalSanctionedLimitAmt:
+      type: number
+      description: "Total Sanctioned Limit Amount"
+     totalUtilizedLimitAmt:
+      type: number
+      description: "Total Utilized Limit Amount"
+     utilizedAdhocLimitAmt:
+      type: number
+      description: "Utilized Adhoc Limit Amount"
+     utilizedLimitAmt:
+      type: number
+      description: "Utilized Limit Amount"
+     modNo:
+        type: number
+        description: "Mod Number"
+     LimitsInsPoliciesNodeDTO:
+       type: "array"
+       items:
+         $ref: "#/definitions/LimitsInsPoliciesNode"
+     LimitsLinkedNodeDTO:
+       type: "array"
+       items:
+         $ref: "#/definitions/LimitsLinkedStructNode"
+
+  LimitsInsPoliciesDTO:
+    description: "Limits Insurance Policies DTO"
+    type: "object"
+    properties:
+     id:
+      type: string
+      description: "Id"
+     limitsMasterId:
+      type: string
+      description: "Limits Master Id"
+     limitsMasterLineId:
+      type: string
+      description: "Limits Master Line Id"
+     limitsNodeId:
+      type: string
+      description: "Limits Node Id"
+     policyAllocationAmount:
+      type: number
+      description: "Policy Allocation Amount"
+     policyCcy:
+      type: string
+      description: "Policy Currency"
+     policyNo:
+      type: string
+      description: "Policy No"
+
+  LimitsLinkedStructDTO:
+    description: "Limits Linked Structure DTO"
+    type: "object"
+    properties:
+     id:
+      type: string
+      description: "Id"
+     limitsMasterId:
+      type: string
+      description: "Limits Master Id"
+     limitsMasterLineId:
+      type: string
+      description: "Limits Master Line Id"
+     limitsNodeId:
+      type: string
+      description: "Limits Node Id"
+     linkedStructureLineId:
+      type: string
+      description: "Linked Structure Line Id"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     rootEntityType:
+      type: string
+      description: "Root Entity Type"
+
+  LimitsInsPoliciesNode:
+    description: "Limits Insurance Policies DTO"
+    type: "object"
+    properties:
+     id:
+      type: string
+      description: "Id"
+     limitsMasterId:
+      type: string
+      description: "Limits Master Id"
+     limitsMasterLineId:
+      type: string
+      description: "Limits Master Line Id"
+     limitsNodeId:
+      type: string
+      description: "Limits Node Id"
+     policyAllocationAmount:
+      type: number
+      description: "Policy Allocation Amount"
+     policyCcy:
+      type: string
+      description: "Policy Currency"
+     policyNo:
+      type: string
+      description: "Policy No"
+
+  LimitsLinkedStructNode:
+    description: "Limits Linked Structure DTO"
+    type: "object"
+    properties:
+     id:
+      type: string
+      description: "Id"
+     limitsMasterId:
+      type: string
+      description: "Limits Master Id"
+     limitsMasterLineId:
+      type: string
+      description: "Limits Master Line Id"
+     limitsNodeId:
+      type: string
+      description: "Limits Node Id"
+     linkedStructureLineId:
+      type: string
+      description: "Linked Structure Line Id"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     rootEntityType:
+      type: string
+      description: "Root Entity Type"
+
+  LimitsInsPoliciesNode:
+    description: "Limits Insurance Policies DTO"
+    type: "object"
+    properties:
+     id:
+      type: string
+      description: "Id"
+     limitsMasterId:
+      type: string
+      description: "Limits Master Id"
+     limitsMasterLineId:
+      type: string
+      description: "Limits Master Line Id"
+     limitsNodeId:
+      type: string
+      description: "Limits Node Id"
+     policyAllocationAmount:
+      type: number
+      description: "Policy Allocation Amount"
+     policyCcy:
+      type: string
+      description: "Policy Currency"
+     policyNo:
+      type: string
+      description: "Policy No"
+
+  LimitsLinkedStructNode:
+    description: "Limits Linked Structure DTO"
+    type: "object"
+    properties:
+     id:
+      type: string
+      description: "Id"
+     limitsMasterId:
+      type: string
+      description: "Limits Master Id"
+     limitsMasterLineId:
+      type: string
+      description: "Limits Master Line Id"
+     limitsNodeId:
+      type: string
+      description: "Limits Node Id"
+     linkedStructureLineId:
+      type: string
+      description: "Linked Structure Line Id"
+     pctAllocation:
+      type: number
+      description: "Pct Allocation"
+     rootEntityType:
+      type: string
+      description: "Root Entity Type"
+  LimitsLineIdsDTO:
+    description: "Limits Linked Structure DTO"
+    type: "object"
+    properties:
+     lineIds:
+      type: array
+      items:
+       type: string
+        
+  FinanceResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/FinanceTransactionModel"
+      errors:
+        type: "object"
+      paging:
+        type: "object"
+        
+  FinanceTransactionModel:
+    description: "Finance Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      financeRefNo:
+        type: "string"
+        description: "Finance Reference Number"
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      requestId:
+        type: "string"
+        description: "Request Id"
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      operationCode:
+        type: "string"
+        description: "Operation Code"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      buyerId:
+        type: "string"
+        description: "Buyer Id"
+      buyerName:
+        type: "string"
+        description: "Buyer Name"
+      buyerDivCode:
+        type: string
+        description: "Buyer Division Code"
+      buyerDivName:
+        type: string
+        description: "Buyer Division Name"
+      supplierId:
+        type: "string"
+        description: "Supplier Id"
+      supplierName:
+        type: "string"
+        description: "Supplier Name"
+      supplierDivCode:
+        type: string
+        description: "Supplier Division Code"
+      supplierDivName:
+        type: string
+        description: "Supplier Division Name"
+      debtor:
+        type: "string"
+        description: "Debtor"
+      debtorName:
+        type: "string"
+        description: "Debtor Name"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      tenor:
+        type: "integer"
+        format: "int64"
+        description: "Tenor"
+      maturityDate:
+        type: "string"
+        description: "Maturity Date"
+      totalInstrumentAmtCcy:
+        type: "string"
+        description: "Total Instrument Amount Currency"
+      totalInstrumentAmt:
+        type: "number"
+        description: "Total Instrument Amount"
+      financePCT:
+        type: "number"
+        description: "Finance PCT"
+      financeAmtCcy:
+        type: "string"
+        description: "Finance Amount Currency"
+      financeAmt:
+        type: "number"
+        description: "Finance Amount"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      processingDate:
+        type: "string"
+        description: "Processing Date"
+      settlementProcessingDate:
+        type: "string"
+        description: "Settlement Processing Date"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      authId:
+        type: "string"
+        description: "Authorization Id"
+      authDateStamp:
+        type: "string"
+        description: "Authorization Date Stamp"
+      financeStatus:
+        type: "string"
+        description: "Finance Status"
+      clRefNo:
+        type: "string"
+        description: "Cl Reference Number"
+      settlementRefNo:
+        type: "string"
+        description: "Settlement Reference Number"
+      settlementMethod:
+        type: "string"
+        description: "Settlement Method"
+      totalSettlementAmt:
+        type: "number"
+        description: "Total Settlement Amount"
+      creditReceived:
+        type: "string"
+        description: "Credit Received"
+      creditAccount:
+        type: "string"
+        description: "Credit Account"
+      paymentParty:
+        type: "string"
+        description: "Payment Party"
+      accountType:
+        type: "string"
+        description: "Account Type"
+      settlementAmtAllocated:
+        type: "number"
+        description: "Settlement Amount Allocated"
+      balanceAmtToBeAllocated:
+        type: "number"
+        description: "Balance Amount To Be Allocated"
+      settlementAmtAllocation:
+        type: "string"
+        description: "Settlement Amount Allocation"
+      manualAllocation:
+        type: "string"
+        description: "Manual Allocation"
+      pastDueDate:
+        type: "string"
+        description: "Past Due Date"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      principalOSAmount:
+        type: "number"
+        description: "Principal OS Amount"
+      interestOSAmount:
+        type: "number"
+        description: "Interest OS Amount"
+      totalOSAmount:
+        type: "number"
+        description: "Total OS Amount"
+      valueDtdIntOSAmt:
+        type: "number"
+        description: "Value Dated Interest OS Amount"
+      overdueIntOSAmt:
+        type: "number"
+        description: "Overdue Interest OS Amount"
+      valueDtdOverdueIntOSAmt:
+        type: "number"
+        description: "Value Dated Overdue Interest OS Amount"
+      paymentAmt:
+        type: "number"
+        description: "Payment Amount"
+      appropPaymentAmt:
+        type: "number"
+        description: "Appropriate Payment Amount"
+      appropriationSequence:
+        type: "string"
+        description: "Appropriation Sequence"
+      pmtToPrncplOS:
+        type: "number"
+        description: "Payment To Principle OS"
+      pmtToIntOS:
+        type: "number"
+        description: "Payment To Interest OS"
+      pmtToOverdueIntOS:
+        type: "number"
+        description: "Payment To Overdue Interest OS"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      productCategory:
+        type: "string"
+        description: "Product Category"
+      maxTenorAllowed:
+        type: "number"
+        description: "Maximum Tenor Allowed"
+      minTenorAllowed:
+        type: "number"
+        description: "Minimum Tenor Allowed"
+      minFinPCT:
+        type: "number"
+        description: "Minimum Finance PCT"
+      maxFinPCT:
+        type: "number"
+        description: "Maximum Finance PCT"
+      holidayTreatment:
+        type: "string"
+        description: "Holiday Treatment"
+      productType:
+        type: "string"
+        description: "Product Type"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      settlementCcy:
+        type: "string"
+        description: "Settlement Currency"
+      totalOSAmountSettlementCcy:
+        type: "number"
+        description: "Total OS Amount Settlement Currency"
+      refund:
+        type: "number"
+        description: "Refund"
+      settlementExchangeRate:
+        type: "number"
+        description: "Settlement Exchange Rate"
+      totalOSPostAllocation:
+        type: "number"
+        description: "Total OS Post Allocation"
+      settleFinExcRate:
+        type: "number"
+        description: "Settlement Finance Exchange Rate"
+      stageId:
+        type: "string"
+        description: "Stage Id"
+      errorCode:
+       type: "string"
+       description: "Error Code"
+      errorDescription:
+       type: "string"
+       description: "Error Description"
+      graceDays:
+        type: "number"
+        description: "Grace Days"
+      partRepaymentAllowed:
+        type: "string"
+        description: "Part Repayment Allowed"
+      staleStatus:
+        type: "string"
+        description: "Stale Status"
+      minFinanciableAmt:
+        type: "number"
+        description: "Minimum Financiable Amount"
+      maxFinanciableAmt:
+        type: "number"
+        description: "Maximum Financiable Amount"
+      minReFinPCT:
+        type: "number"
+        description: "Minimum ReFin PCT"
+      maxReFinPCT:
+        type: "number"
+        description: "Maximum ReFin PCT"
+      penIntOSAmt:
+        type: "number"
+        description: "Pen Interest OS Amount"
+      pmtToPenOnIntOS:
+        type: "number"
+        description: "Payment To Pen On Interest OS"
+      valueDtdPenIntOSAmt:
+        type: "number"
+        description: "Value Dated Pen Interest OS Amount"
+      interestAmortized:
+        type: "number"
+        description: "Interest Amortized"
+      withRecourse:
+        type: "string"
+        description: "With Recourse"
+      transactionFlow:
+        type: "string"
+        description: "Transaction Flow"
+      totalMarginAmount:
+        type: "number"
+        description: "Total Margin Amount"
+      interestType:
+        type: "string"
+        description: "Interest Type"
+      interestRefundAmt:
+        type: "number"
+        description: "Interest Refund Amount"
+      interestRefundHandling:
+        type: "string"
+        description: "Interest Refund Handling"
+      interestRefundPmtMode:
+        type: "string"
+        description: "Interest Refund Payment Mode"
+      interestBearingPartyRole:
+        type: "string"
+        description: "Interest Bearing Party Role"
+      isFromRecon:
+        type: "string"
+        description: "Is From Recon"
+      interestPaidUpfront:
+        type: "number"
+        description: "Interest Paid Upfront"
+      delinquencyStatus:
+        type: "string"  
+        description: "Delinquency Status"
+      intCalcBasisAmt:
+        type: number
+        description: "Interest calculation Basis Amount"
+      odIntCalcBasisAmt:
+        type: number
+        description: "Overdue int calculation Basis Amount"
+      penIntCalcBasisAmt:
+        type: number   
+        description: "Penalty int calculation Basis Amount"                 
+        
+  PartyTransactionModel:
+    description: "Party Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      financeRefNo:
+        type: "string"
+        description: "Finance Reference Number"
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      srNo:
+        type: "integer"
+        format: "int64"
+        description: "Serial Number"
+      partyCode:
+        type: "string"
+        description: "Party Code"
+      partyId:
+        type: "string"
+        description: "Party Id"
+      partyName:
+        type: "string"
+        description: "Party Name"
+      partyAddress:
+        type: "string"
+        description: "Party Address"
+      divisionCode:
+        type: "string"
+        description: "Division Code"
+      divisionName:
+        type: "string"
+        description: "Division Name"
+      isMandatory:
+        type: "string"
+        description: "Is Mandatory"
+  InterestTransactionCollection:
+    description: "Collection of Interest Transaction Models."
+    type: "object"
+    properties:
+      InterestTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InterestTransactionModel"
+          
+  InterestTransactionModel:
+    description: "Interest Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      financeRefNo:
+        type: "string"
+        description: "Finance Reference Number"
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      interestType:
+        type: "string"
+        description: "Interest Type"
+      interestRateType:
+        type: "string"
+        description: "Interest Rate Type"
+      interestRate:
+        type: "number"
+        description: "Interest Rate"
+      spread:
+        type: "number"
+        description: "Spread"
+      interestRateTotal:
+        type: "number"
+        description: "Interest Rate Total"
+      interestCollFreq:
+        type: "string"
+        description: "Interest Collection Frequency"
+      interestAmtCcy:
+        type: "string"
+        description: "Interest Amount Currency"
+      interestAmount:
+        type: "number"
+        description: "Interest Amount"
+      componetName:
+        type: "string"
+        description: "Component Name"
+      interestComp:
+        type: "string"
+        description: "InterestComponent"
+      fixedRateType:
+        type: "string"
+        description: "Fixed Rate Type"
+      rateCode:
+        type: "string"
+        description: "Rate Code"
+      resetTenor:
+        type: "number"
+        description: "Reset Tenor"
+      rateFixingDays:
+        type: "number"
+        description: "Rate Fixing Days"
+      rateCodeUsage:
+        type: "string"
+        description: "Rate Code Usage"
+      rateRevisionFreq:
+        type: "string"
+        description: "Rate Revision Frequency"
+      rateBasis:
+        type: "string"
+        description: "Rate Basis"
+      rateCalcType:
+        type: "string"
+        description: "Rate Calculate Type"
+      tierBasedSpread:
+        type: "string"
+        description: "Tier Based Spread"
+      tierType:
+        type: "string"
+        description: "Tier Type"
+      frequency:
+        type: "string"
+        description: "Frequency"
+      noOfUnits:
+        type: "number"
+        description: "Number Of Units"
+      scheduleType:
+        type: "string"
+        description: "Schedule Type"
+      referenceDate:
+        type: "string"
+        description: "Reference Date"
+      monthEnd:
+        type: "string"
+        description: "Month End"
+      interestAmtTier:
+        type: "array"
+        items:
+          $ref: "#/definitions/PrefIntAmtTiersModel"
+      interestTenorTier:
+        type: "array"
+        items:
+          $ref: "#/definitions/PrefIntTenorTiersModel"
+      interestMixedTier:
+        type: "array"
+        items:
+          $ref: "#/definitions/PrefIntMixedTiersModel"
+          
+  PrefIntAmtTiersModel:
+    description: "Amount Tier Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      intTxnId:
+        type: "string"
+        description: "Int Transaction Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "number"
+        description: "Spread"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      tierSeq:
+        type: "number"
+        description: "Tier Sequence"
+      toAmt:
+        type: "number"
+        description: "To Amount"
+      fromAmt:
+        type: "number"
+        description: "From Amount"
+        
+  PrefIntMixedTiersModel:
+    description: "Tenor Tier Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      intTxnId:
+        type: "string"
+        description: "Int Transaction Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "number"
+        description: "Spread"
+      tenorTierSeq:
+        type: "number"
+        description: "Tenor Tier Sequence"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      toAmt:
+        type: "number"
+        description: "To Amount"
+      toTenor:
+        type: "number"
+        description: "To Tenor"
+      amtTierSeq:
+        type: "number"
+        description: "Amount Tier Sequence"
+      fromAmt:
+        type: "number"
+        description: "From Amount"
+      fromTenor:
+        type: "number"
+        description: "From Tenor"
+        
+  PrefIntTenorTiersModel:
+    description: "Tenor Tier Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      intTxnId:
+        type: "string"
+        description: "Int Transaction Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "number"
+        description: "Spread"
+      tierSeq:
+        type: "number"
+        description: "Tier Sequence"
+      toTenor:
+        type: "number"
+        description: "To Tenor"
+      fromTenor:
+        type: "number"
+        description: "From Tenor" 
+           
+  LimitsFactorTransactionCollection:
+    description: "Collection of Limits Transaction Models."
+    type: "object"
+    properties:
+      LimitsTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/LimitsFactorTransactionModel"
+      paging:
+        type: "object"
+        
+  LimitsFactorTransactionModel:
+    description: "Limits Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      financeRefNo:
+        type: "string" 
+        description: "Finance Reference Number"
+      limitEvent:
+        type: string 
+        description: "Limit Event"
+      txnEvent:
+        type: string  
+        description: "Transaction event"       
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      limitsAction:
+        type: "string"
+        description: "Limits Action"
+      limitType:
+        type: "string"
+        description: "Limit Type"
+      limitTypeDesc:
+        type: "string"
+        description: "Limit Type Description"
+      entityType:
+        type: "string"
+        description: "Entity Type"
+      entityId:
+        type: "string"
+        description: "Entity Id"
+      entityDesc:
+        type: "string"
+        description: "Entity Description"
+      structureId:
+        type: "string"
+        description: "Structure Id"
+      structureDesc:
+        type: "string"
+        description: "Structure Description"
+      lineId:
+        type: "string"
+        description: "Line ID"
+      nodeIdentifier:
+        type: "string"
+        description: "Node Identifier"
+      limitCcy:
+        type: "string"
+        description: "Limit Currency"
+      sanctionedLimitAmt:
+        type: "number"
+        description: "Sanctioned Limit Amount"
+      availableLimitAmt:
+        type: "number"
+        description: "Available Limit Amount"
+      totalBlockedAmt:
+        type: "number"
+        description: "Total Blocked Amount"
+      totalUtilizedAmount:
+        type: "number"
+        description: "Total Utilized Amount"
+      adhocSanctionedLmtAmt:
+        type: "number"
+        description: "Adhoc Sanctioned Limit Amount"
+      adhocAvailableLmtAmt:
+        type: "number"
+        description: "Adhoc Available Limit Amount"
+      adhocTotalBlockedAmt:
+        type: "number"
+        description: "Adhoc Total Blocked Amount"
+      adhocTotalUtilizedAmt:
+        type: "number"
+        description: "Adhoc Total Utilized Amount"
+      txnCcy:
+        type: "string"
+        description: "Transaction Currency"
+      txnAmt:
+        type: "number"
+        description: "Transaction Amount"
+      txnAmtLimitCcy:
+        type: "number"
+        description: "Transaction Amount Limit Currency"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      txnAmtLimitCcyMain:
+        type: "number"
+        description: "Transaction Amount Limit Currency Main"
+      txnAmtLimitCcyAdhoc:
+        type: "number"
+        description: "Transaction Amount Limit Currency Adhoc"
+      netTxnAmt:
+        type: "number"
+        description: "Net Transaction Amount"
+      netUtilLmtMainLmtCcy:
+        type: "number"
+        description: "Net Util Limit Main Limit Currency"
+      netUtilLmtAdhocLmtCcy:
+        type: "number"
+        description: "Net Util Limit Adhoc Limit Currency"
+      parentStructureId:
+        type: "string"
+        description: "Parent Structure Id"
+      parentNodeLineId:
+        type: "string"
+        description: "Parent Node Line Id"
+      externalLineId:
+        type: "string"
+        description: "External Line Id"
+      status:
+        type: "string"
+        description: "Status"
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDesc:
+        type: "string"
+        description: "Error Description"
+      limitsUtilizationMandatory:
+        type: "string"
+        description: "Limits Utilization Mandatory"
+      rootEntity:
+        type: "string"
+        description: "Root Entity"
+      rootEntityName:
+        type: "string"
+        description: "Root Entity Name"
+      depth:
+        type: "number"
+        description: "Depth"
+      rootEntityFlag:
+        type: "string"
+        description: "Root Entity Flag"
+      expiresOn:
+        type: "string"
+        description: "Expires On"
+        format: date
+      effectiveFrom:
+        type: "string"
+        format: date
+        description: "Effective From"
+      txnDate:
+        type: string
+        description: "Transaction Date"          
+      expiredLimitExceptionHandling:
+        type: string
+        description: "Expired Limit Exception Handling"
+      breachLimitExceptionHandling:
+        type: string
+        description: "Breach Limit Exception Handling"
+      expiredAndBreachLimitExceptionHandling:
+        type: string
+        description: "Expired And Breach Limit Exception Handling"
+      breachType:
+        type: string
+        description: "Breach Type"
+      processingOutcome:
+        type: string
+        description: "Processing Outcome"
+        
+  PartyResponseModel:
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/PartyTransactionModel"   
+      errors:
+        type: "object"
+      paging:
+        type: "object" 
+        
+  InterestResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/InterestTransactionCollection" 
+      errors:
+        type: "object"
+      paging:
+        type: "object" 
+        
+  LimitFactorResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/LimitsFactorTransactionCollection" 
+      errors:
+        type: "object"
+      paging:
+        type: "object"
+        
+  ChargeEnquiryDetailCollection:
+    type: object
+    properties:
+      chargeDetails:
+        type: array
+        items:
+          $ref: '#/definitions/ChargeEnquiryDetailsModel'
+      paging:
+        type: "object" 
+ 
+  ChargeEnquiryDetailsModel:
+    type: object
+    properties:
+      id:
+        type: string
+        description: "Id"
+      applicationCode:
+        type: string
+        description: "Application Code"
+      branchCode:
+        type: string
+        description: "Branch Code"
+      calcErrorCode:
+        type: string
+        description: "Calculate Error Code"
+      event:
+        type: string
+        description: "Event"
+      party:
+        type: string
+        description: "Party"
+      partyId:
+        type: string
+        description: "Party Id"
+      partyRole:
+        type: string
+        description: "Party Role"
+      product:
+        type: string
+        description: "Product"
+      chargeCode:
+        type: string
+        description: "Charge Code"
+      chargeCodeDesc:
+        type: string
+        description: "Charge Code Description"
+      chargeGroup:
+        type: string
+        description: "Charge Group"
+      chargeType:
+        type: string
+        description: "Charge Type"
+      instrumentType:
+        type: string
+        description: "Instrument Type"
+      chargeAccount:
+        type: string
+        description: "Charge Account"
+      collectionType:
+        type: string
+        description: "Collection Type"
+      txnRefNo:
+        type: string
+        description: "Transaction Reference Number"
+      postingDate:
+        type: string
+        description: "Posting Date"
+      currency:
+        type: string
+        description: "Currency"
+      chargeAmt:
+        type: number
+        description: "Charge Amount"
+      chgCalcDate:
+        type: string
+        description: "Charge Calculate Date"
+      calcStartDate:
+        type: string
+        description: "Calculate Start Date"
+      calcEndDate:
+        type: string
+        description: "Calculate End Date"
+      calcType:
+        type: string
+        description: "Calculate Type"
+      calcFreq:
+        type: string
+        description: "Calculate Frequency"
+      parentChgCode:
+        type: string
+        description: "Parent Charge Code"
+      parentChgCodeDesc:
+        type: string
+        description: "Parent Charge Code Description"
+      baseAmount:
+        type: number
+        description: "Base Amount"
+      baseAmountCcy:
+        type: string
+        description: "Base Amount Currency"
+      baseCount:
+        type: number
+        description: "Base Count"
+      priceTemplateId:
+        type: string
+        description: "Price Template Id"
+      modNo:
+        type: number
+        description: "Mod Number"
+      calcRefPeriod:
+        type: string
+        description: "Calculate Reference Period"
+      calcUnits:
+        type: number
+        description: "Calculate Units"
+      chargeCategory:
+        type: string
+        description: "Charge Category"
+      chargeCriteria:
+        type: string
+        description: "Charge Criteria"
+      chargeCriteriaValue:
+        type: number
+        description: "Charge Criteria Value"
+      chgCriteriaCcy:
+        type: string
+        description: "Charge Criteria Currency"
+      chgCriteriaCount:
+        type: string
+        description: "Charge Criteria Count"
+      chgInTxnCcy:
+        type: string
+        description: "Charge In Transaction Currency"
+      chgSharing:
+        type: string
+        description: "Charge Sharing"
+      chgSharingPct:
+        type: number
+        description: "Charge Sharing Pct"
+      collectionFreq:
+        type: string
+        description: "Collection Frequency"
+      collectionRefPeriod:
+        type: string
+        description: "Collection Reference Period"
+      collectionUnits:
+        type: number
+        description: "Collection Units"
+      exchangeRate:
+        type: number
+        description: "Exchange Rate"
+      fixedAmt:
+        type: number
+        description: "Fixed Amount"
+      fixedPct:
+        type: number
+        description: "Fixed Pct"
+      flatCharge:
+        type: string
+        description: "Flat Charge"
+      maxAmt:
+        type: number
+        description: "Maximum Amount"
+      maxPct:
+        type: number
+        description: "Maximum Pct"
+      minAmt:
+        type: number
+        description: "Minimum Amount"
+      minPct:
+        type: number
+        description: "Minimum Pct"
+      minmaxCriteria:
+        type: string
+        description: "Minimum Maximum Criteria"
+      prcCategory:
+        type: string
+        description: "Price Category"
+      prcCcy:
+        type: string
+        description: "Price Currency"
+      priceMethodDesc:
+        type: string
+        description: "Price Method Description"
+      referenceEndDate:
+        type: string
+        description: "Reference End Date"
+      referenceStartDate:
+        type: string
+        description: "Reference Start Date"
+      txnCcy:
+        type: string
+        description: "Transaction Currency"
+      allowOverride:
+        type: string
+        description: "Allow Override"
+      allowPrcModify:
+        type: string
+        description: "Allow Price Modify"
+      allowWaive:
+        type: string
+        description: "Allow Waive"
+      autoWaive:
+        type: string
+        description: "Auto Waive"
+      postingErrorCode:
+        type: string
+        description: "Posting Error Code"
+      referenceStartDateValue:
+        type: string
+        description: "Reference Start Date Value"
+      referenceEndDateValue:
+        type: string
+        description: "Reference End Date Value"
+      partyName:
+        type: string
+        description: "Party Name"
+      debitAccountNo:
+        type: string
+        description: "Debit Account Number"
+      creditAccountNo:
+        type: string
+        description: "Credit Account Number"
+      firstChgCalcDate:
+        type: string
+        description: "First Charge Calculate Date"
+      nextChgCalcDate:
+        type: string
+        description: "Next Charge Calculate Date"
+      firstChgCollDate:
+        type: string
+        description: "First Charge Collection Date"
+      nextChgCollDate:
+        type: string
+        description: "Next Charge Collection Date"
+        
+  AccountingTransactionCollection:
+    description: "Collection of Accounting Transaction Models."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountingTransactionModel"
+      paging:
+        $ref: "#/definitions/PagingDto" 
+        
+  AccountingTransactionModel:
+    description: "Accounting Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      refNo:
+        type: "string"    
+        description: "Reference Number"  
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      accountingEntryCode:
+        type: "string"
+        description: "Accounting Entry Code"
+      drCrIndicator:
+        type: "string"
+        description: "Debit Credit Indicator"
+      amountCcy:
+        type: "string"
+        description: "Amount Currency"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+      amount:
+        type: "number"
+        description: "Amount"
+      amountType:
+        type: "string"
+        description: "Amount Type"
+      accountCcy:
+        type: "string"
+        description: "Account Currency"
+      amountAccCcy:
+        type: "number"
+        description: "Amount Account Currency"
+      accountNo:
+        type: "string"
+        description: "Account Number"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      status:
+        type: "string"
+        description: "Status"
+      accRoleCode:
+        type: "string"
+        description: "Account Role Code"
+      accPartyType:
+        type: "string"
+        description: "Account Party Type"
+      accPartyId:
+        type: "string"
+        description: "Account Party Id"
+      accSettMethod:
+        type: "string"
+        description: "Account Settlement Method"
+      accEntrySeq:
+        type: "integer"
+        format: "int64"
+        description: "Account Entry Sequence"
+      accRoleDesc:
+        type: "string"
+        description: "Account Role Description"
+      accEntryDesc:
+        type: "string"
+        description: "Account Entry Description"
+      accType:
+        type: "string"
+        description: "Account Type"
+      eventSrNo:
+        type: "number"
+        description: "Event Serial Number"
+      ecaRefNo:
+        type: "string"
+        description: "Eca Reference Number"
+      externalAccount:
+        type: "string"
+        description: "External Account"
+      paymentMode:
+        type: "string"
+        description: "Payment Mode"
+      externalAccountCcy:
+        type: "string"
+        description: "External Account Currency"
+      externalBankId:
+        type: "string"
+        description: "External Bank Id"
+      externalBankName:
+        type: "string"
+        description: "External Bank Name"
+      externalBranchCode:
+        type: "string"
+        description: "External Branch Code"
+      externalBranchName:
+        type: "string"
+        description: "External Branch Name"
+      externalBranchRoutingCode:
+        type: "integer"
+        format: "int64"
+        description: "External Branch Routing Code"
+      stage:
+        type: "string"
+        description: "Stage"
+      additionalField1:
+        type: "string"
+        description: "Additional Field1"
+      additionalField2:
+        type: "string"
+        description: "Additional Field2"
+      additionalField3:
+        type: "string"
+        description: "Additional Field3"
+      additionalField4:
+        type: "string"
+        description: "Additional Field4"
+      additionalField5:
+        type: "string"
+        description: "Additional Field5"
+      additionalField6:
+        type: "string"
+        description: "Additional Field6"
+      additionalField7:
+        type: "string"
+        description: "Additional Field7"
+      additionalField8:
+        type: "string"
+        description: "Additional Field8"
+      additionalField9:
+        type: "string"
+        description: "Additional Field9"
+      additionalField10:
+        type: "string"
+        description: "Additional Field10"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      processingDate:
+        type: "string"
+        description: "Processing date"
+      txnBranchCode:
+        type: "string"
+        description: "Transaction Branch Code"
+      productCode:
+        type: "string"
+        description: "Product code"
+      accClass:
+        type: "string"
+        description: "Account Class"
+      vaContraAccNo:
+        type: "string"
+        description: "VA Contra Account Number"
+      creditIntAcntList:
+        type: array
+        items:
+          type: "string"
+      debitIntAcntList:
+        type: array
+        items:
+          type: "string"
+      actualPostingAmt:
+        type: number
+        description: "Actual Posting Amount"
+      postingRefNo:
+        type: string
+        description: "Posting Reference No"
+      postingStatus:
+        type: string
+        description: "Posting Status"
+      ecaStatus:
+        type: string
+        description: "ECA Status"
+      postingErrorCode:
+        type: string
+        description: "Posting Error Code"
+      ecaErrorCode:
+        type: string
+        description: "ECA Error Code"
+      blkRefNo:
+        type: string
+        description: "Block Reference No"
+      makerId:
+        type: string
+        description: "Maker Id"
+      makerDateStamp:
+        type: string
+        description: "Maker Date Stamp"
+      checkerId:
+        type: string
+        description: "Checker Id"
+      checkerDateStamp:
+        type: string
+        description: "Checker Date Stamp"
+          
+  PagingDto:
+    type: object
+    properties:
+     totalResults:
+      type: integer
+  InvoiceCollection:
+    description: "Collection of Invoices."
+    type: "object"
+    properties:
+      invoiceList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvoiceModel"
+      paging:
+        type: "object" 
+  InvoiceModel:
+    description: "Invoice model"
+    type: "object"
+    properties:
+      srcAppCd:
+        type: "string"
+        description: "Source Application Code"
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      invoiceId:
+        description: "Id of the Invoice"
+        type: "string"
+      acceptanceAmount:
+        type: number
+        description: "Acceptance Amount"
+      amount:
+        type: number
+        description: "Amount"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      buyerDivCode:
+        type: string
+        description: "Buyer Division Code"
+      buyerDivName:
+        type: string
+        description: "Buyer Division Name"
+      currency:
+        type: string
+        description: "Currency"
+      isDisputed:
+        type: string
+        description: "Is Disputed"
+      discrepancyCode:
+        type: string
+        description: "Discrepancy Code"
+      disputeResolveRemarks:
+        type: string
+        description: "Dispute Resolve Remarks"
+      fileName:
+        type: string
+        description: "File Name"
+      fileRef:
+        type: string
+        description: "File Reference"
+      filler1:
+        type: string
+        description: "Filler 1"
+      filler2:
+        type: string
+        description: "Filler 2"
+      filler3:
+        type: string
+        description: "Filler 3"
+      filler4:
+        type: string
+        description: "Filler 4"
+      filler5:
+        type: string
+        description: "Filler 5"
+      filler6:
+        type: string
+        description: "Filler 6"
+      filler7:
+        type: string
+        description: "Filler 7"
+      filler8:
+        type: string
+        description: "Filler 8"
+      filler9:
+        type: string
+        description: "Filler 9"
+      filler10:
+        type: string
+        description: "Filler 10"
+      indicator:
+        type: string
+        description: "Indicator"
+      invoiceDate:
+        type: string
+        description: "Invoice Date"
+      invoiceDueDate:
+        type: string
+        description: "Invoice Due Date"
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      invoiceProcessStatus:
+        type: string
+        description: "Invoice Process Status"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      invoiceStatus:
+        type: string
+        description: "Invoice Status"
+      invAcceptanceDate:
+        type: string
+        description: "Invoice Acceptance Date"
+      maxFinancePercentage:
+         type: number
+         description: "Maximum Finance Percentage"
+      paidAmount:
+        type: number
+        description: "Paid Amount"
+      paymentStatus:
+        type: string
+        description: "Payment Status"
+      poNumber:
+        type: string
+        description: "Po Number"
+      programCode:
+        type: string
+        description: "Program Code"
+      reasonCode:
+        type: string
+        description: "Reason Code"
+      remarks:
+        type: string
+        description: "Remarks"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      supplierDivCode:
+        type: string
+        description: "Supplier Division Code"
+      supplierDivName:
+        type: string
+        description: "Supplier Division Name"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      totalInvoiceAmount:
+        type: number
+        description: "Total Invoice Amount"
+      financeableAmount:
+        type: number
+        description: "Financeable Amount"
+      relationCode:
+        type: string
+        description: "Relation Code"
+      transactionRefNo:
+        type: string
+        description: "Transaction Reference Number"
+      supplierCode:
+        type: string
+        description: "Supplier Code"
+      buyerCode:
+        type: string
+        description: "Buyer Code"
+      shipmentRefNo:
+        type: string
+        description: "Shipment Reference Number"
+      repayAccountNo:
+        type: string
+        description: "Repay Account Number"
+      bank:
+        type: string
+        description: "Bank"
+      branch:
+        type: string
+        description: "Branch"
+      routingCode:
+        type: number
+        description: "Routing Code"
+      isAutoAuth:
+       type: string
+       description: "Is Auto Authorized"
+      fundingReqAmt: 
+        type: number
+        description: "Funding Required Amount"
+      tcmId:
+        type: string
+        description: "Tcm Id"
+      makerId:
+        type: string
+        description: "Maker Id"
+      makerDtStamp:
+        type: string 
+        description: "Maker Date Stamp"
+      processingBranchCode:
+        type: string
+        description: "Processing Branch Code"
+      action:
+        type: string
+        description: "Action"
+      processingDate:
+        type: string
+        description: "Processing Date"
+      paymentDate:
+        type: string
+        description: "Payment Date"
+      disputedAmount:
+        type: number  
+        description: "Disputed Amount" 
+      linkedDocs:
+        type: string
+        description: "Linked Docs"    
+      isFinanced:
+        type: string
+        description: "Is Financed"
+      stageId:
+        type: string 
+        description: "Stage Id"
+      isAccepted:
+        type: string
+        description: "Is Accepted"
+      isDisputeResolvedWriteOff:
+        type: string
+        description: "Is Dispute Resolved Write Off"
+      isAssigned:
+        type: string
+        description: "Is Assigned"
+      isApproved:
+        type: string 
+        description: "Is Approved"
+      assignmentParty:
+        type: string
+        description: "Assignment Party"
+      isOverdue :
+        type: string
+        description: "Is Overdue"
+      oldAcceptanceAmount:
+        type: number
+        description: "Old Acceptance Amount"
+      oldFinanceAmount:
+        type: number
+        description: "Old Finance Amount"
+      adjustmentReason:
+        type: string
+        description: "Adjustment Reason"
+      linkInvoiceNumber:
+        type: "string"
+        description: "Coma/Pipe seperated invoice numbers"
+      paymentDueDate:
+        type: string
+        description: "Payment Due Date"
+  FinanceTransactionIntgResponseModel:
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/FinanceTransactionIntgModel"   
+      errors:
+        type: "object"
+      paging:
+        type: "object"
+  FinanceTransactionIntgModel:
+    description: "Finance Transaction Intg model"
+    type: "object"
+    properties:
+      id:
+        type: string
+        description: "Id"
+      refNo:
+        type: string
+        description: "refNo"
+      seqNo:
+        type: "integer"
+        format: "int64"
+        description: "Sequence Number"
+      requestId:
+        description: "Request Id"
+        type: string
+      branchCode:
+        type: string
+        description: "Branch Code"
+      amount:
+        type: number
+        description: "Amount"
+      productCode:
+        type: string
+        description: "Product Code"
+      programCode:
+        type: string
+        description: "Program Code"
+      operationCode:
+        type: string
+        description: "Operation Code"
+      programName:
+        type: string
+        description: "Program Name"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      disputeResolveRemarks:
+        type: string
+        description: "Dispute Resolve Remarks"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      debtor:
+        type: string
+        description: "Debtor"
+      startDate:
+        type: string
+        description: "Start Date"
+      tenor:
+        type: number
+        description: "Filler 2"
+      maturityDate:
+        type: string
+        description: "Filler 3"
+      invoiceAmtCcy:
+        type: string
+        description: "Filler 4"
+      invoiceAmount:
+        type: number
+        description: "Filler 5"
+      financePCT:
+        type: number
+        description: "Filler 6"
+      financeAmtCcy:
+        type: string
+        description: "Filler 7"
+      financeAmt:
+        type: number
+        description: "Filler 8"
+      exchangeRate:
+        type: number
+        description: "Filler 9"
+      processingDate:
+        type: string
+        description: "Filler 10"
+      settlementProcessingDate:
+        type: string
+        description: "Indicator"
+      makerId:
+        type: string
+        description: "Invoice Date"
+      makerDateStamp:
+        type: string
+        description: "Invoice Due Date"
+      authId:
+        type: string
+        description: "Invoice Number"
+      authDateStamp:
+        type: string
+        description: "Invoice Process Status"
+      financeStatus:
+        type: string
+        description: "Invoice Reference Number"
+      clRefNo:
+        type: string
+        description: "Invoice Status"
+      settlementRefNo:
+        type: string
+        description: "Invoice Acceptance Date"
+      settlementMethod:
+         type: string
+         description: "Maximum Finance Percentage"
+      totalSettlementAmt:
+        type: number
+        description: "Paid Amount"
+      creditReceived:
+        type: string
+        description: "Payment Status"
+      creditAccount:
+        type: string
+        description: "Po Number"
+      paymentParty:
+        type: string
+        description: "Program Code"
+      accountType:
+        type: string
+        description: "Reason Code"
+      settlementAmtAllocated:
+        type: number
+        description: "Remarks"
+      balanceAmtToBeAllocated:
+        type: number
+        description: "Supplier Id"
+      settlementAmtAllocation:
+        type: string
+        description: "Supplier Name"
+      manualAllocation:
+        type: string
+        description: "Supplier Division Code"
+      pastDueDate:
+        type: string
+        description: "Supplier Division Name"
+      valueDate:
+        type: string
+        description: "Tax Amount"
+      principalOSAmount:
+        type: number
+        description: "Total Invoice Amount"
+      interestOSAmount:
+        type: number
+        description: "Financeable Amount"
+      totalIntOSAmount:
+        type: number
+        description: "Relation Code"
+      totalOSAmount:
+        type: number
+        description: "Transaction Reference Number"
+      valueDtdIntOSAmt:
+        type: number
+        description: "Supplier Code"
+      overdueIntOSAmt:
+        type: number
+        description: "Buyer Code"
+      valueDtdOverdueIntOSAmt:
+        type: number
+        description: "Shipment Reference Number"
+      paymentAmt:
+        type: number
+        description: "Repay Account Number"
+      appropPaymentAmt:
+        type: number
+        description: "Bank"
+      appropriationSequence:
+        type: string
+        description: "Branch"
+      pmtToPrncplOS:
+        type: number
+        description: "Routing Code"
+      pmtToIntOS:
+       type: number
+       description: "Is Auto Authorized"
+      pmtToOverdueIntOS: 
+        type: number
+        description: "Funding Required Amount"
+      updateTimestamp:
+        type: string
+        description: "Tcm Id"
+      businessDate:
+        type: string
+        description: "Maker Id"
+      eventCode:
+        type: string 
+        description: "Maker Date Stamp"
+      penIntOSAmt:
+        type: number
+        description: "Processing Branch Code"
+      pmtToPenOnIntOS:
+        type: number
+        description: "Action"
+      valueDtdPenIntOSAmt:
+        type: number
+        description: "Value Dtd Pen Int OS Amount"
+      interestAmortized:
+        type: number
+        description: "Payment Date"
+      totalMarginAmount:
+        type: number  
+        description: "Disputed Amount" 
+      delinquencyStatus:
+        type: string
+        description: "Linked Docs"
+
+  IntDecisioningDetailsDto:
+    description: "DTO for ScfTmIntDecisioningDetails"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      adhocPricing:
+        type: "string"
+        description: "Adhoc Pricing"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      pricingTemplateDesc:
+        type: "string"
+        description: "Pricing Template Desc"
+      interestComponent:
+        type: "string"
+        description: "Interest Component"
+      interestDecMasterId:
+        type: "string"
+        description: "Interest Dec Master Id"
+      interestCollectionType:
+        type: "string"
+        description: "Interest Collection Type"
+      scheduleType:
+        type: "string"
+        description: "Schedule Type"
+      referenceDate:
+        type: "string"
+        description: "Reference Date"
+
+  IntDecisioningMaintDto:
+    description: "DTO for ScfTmIntDecisioning"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      filterCriteria:
+        type: "string"
+        description: "Filter Criteria"
+      filterAttr1:
+        type: "string"
+        description: "Filter Attr 1"
+      filterAttr2:
+        type: "string"
+        description: "Filter Attr 2"
+      filterAttr3:
+        type: "string"
+        description: "Filter Attr 3"
+      filterAttr4:
+        type: "string"
+        description: "Filter Attr 4"
+      filterAttr5:
+        type: "string"
+        description: "Filter Attr 5"
+      effectiveDate:
+        type: "string"
+        description: "Effective Date"
+      expiryDate:
+        type: "string"
+        description: "Expiry Date"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Dt Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Dt Stamp"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      productDesc:
+        type: "string"
+        description: "Product Desc"
+      intDecisioningDetailsList:
+        type: "array"
+        description: "Interest Decisioning Details List"
+        items:
+          $ref: "#/definitions/IntDecisioningDetailsDto"
+
+  IntDecisioningDetailsWorkDto:
+    description: "DTO for ScfTwIntDecisioningDetails"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod No"
+      id:
+        type: "string"
+        description: "Id"
+      adhocPricing:
+        type: "string"
+        description: "Adhoc Pricing"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      pricingTemplateDesc:
+        type: "string"
+        description: "Pricing Template Desc"
+      interestComponent:
+        type: "string"
+        description: "Interest Component"
+      interestDecMasterId:
+        type: "string"
+        description: "Interest Dec Master Id"
+      interestCollectionType:
+        type: "string"
+        description: "Interest Collection Type"
+      scheduleType:
+        type: "string"
+        description: "Schedule Type"
+      referenceDate:
+        type: "string"
+        description: "Reference Date"
+
+  IntDecisioningWorkDto:
+    description: "DTO for ScfTwIntDecisioning"
+    type: object
+    properties:
+      action:
+        type: "string"
+        description: "Action"
+      keyId:
+        type: "string"
+        description: "Key Id"
+      checkerRemarks:
+        type: "string"
+        description: "Checker Remarks"
+      makerRemarks:
+        type: "string"
+        description: "Maker Remarks"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Dt Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      effectiveDate:
+        type: "string"
+        description: "Effective Date"
+      expiryDate:
+        type: "string"
+        description: "Expiry Date"
+      filterAttr1:
+        type: "string"
+        description: "Filter Attr 1"
+      filterAttr2:
+        type: "string"
+        description: "Filter Attr 2"
+      filterAttr3:
+        type: "string"
+        description: "Filter Attr 3"
+      filterAttr4:
+        type: "string"
+        description: "Filter Attr 4"
+      filterAttr5:
+        type: "string"
+        description: "Filter Attr 5"
+      filterCriteria:
+        type: "string"
+        description: "Filter Criteria"
+      id:
+        type: "string"
+        description: "Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Dt Stamp"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      intDecId:
+        type: "string"
+        description: "Int Dec Id"
+      productDesc:
+        type: "string"
+        description: "Product Desc"
+      intDecisioningDetailsList:
+        type: "array"
+        description: "Interest Decisioning Details List"
+        items:
+          $ref: "#/definitions/IntDecisioningDetailsWorkDto"
+
+  IntAmtTiersDto:
+    description: "DTO for ScfTmPrefIntAmtTiers"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      prefIntPricingId:
+        type: "string"
+        description: "Pref Interest Pricing Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      fromAmt:
+        type: "string"
+        description: "From Amount"
+      toAmt:
+        type: "string"
+        description: "To Amount"
+      spread:
+        type: "string"
+        description: "Spread"
+      tierSeq:
+        type: "string"
+        description: "Tier Sequence"
+
+  IntMixedTiersDto:
+    description: "DTO for ScfTmPrefIntMixedTiers"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      prefIntPricingId:
+        type: "string"
+        description: "Pref Interest Pricing Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      fromAmt:
+        type: "string"
+        description: "From Amount"
+      toAmt:
+        type: "string"
+        description: "To Amount"
+      fromTenor:
+        type: "string"
+        description: "From Tenor"
+      toTenor:
+        type: "string"
+        description: "To Tenor"
+      spread:
+        type: "string"
+        description: "Spread"
+      amtTierSeq:
+        type: "string"
+        description: "Amount Tier Sequence"
+      tenorTierSeq:
+        type: "string"
+        description: "Tenor Tier Sequence"
+
+  IntTenorTiersDto:
+    description: "DTO for ScfTmPrefIntTenorTiers"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      prefIntPricingId:
+        type: "string"
+        description: "Pref Interest Pricing Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      fromTenor:
+        type: "string"
+        description: "From Tenor"
+      toTenor:
+        type: "string"
+        description: "To Tenor"
+      spread:
+        type: "string"
+        description: "Spread"
+      tierSeq:
+        type: "string"
+        description: "Tier Sequence"
+
+  IntPricingMaintDto:
+    description: "DTO for ScfTmPrefIntPricing"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      pricingTemplateDesc:
+        type: "string"
+        description: "PricingTemplateDesc"
+      rateType:
+        type: "string"
+        description: "Rate Type"
+      fixedRateType:
+        type: "string"
+        description: "Fixed Rate Type"
+      rateCode:
+        type: "string"
+        description: "Rate Code"
+      resetTenor:
+        type: "string"
+        description: "Reset Tenor"
+      rateFixingDays:
+        type: "string"
+        description: "Rate Fixing Days"
+      rate:
+        type: "string"
+        description: "Rate"
+      rateCodeUsage:
+        type: "string"
+        description: "Rate Code Usage"
+      rateRevisionFreq:
+        type: "string"
+        description: "Rate Revision Freq"
+      rateBasis:
+        type: "string"
+        description: "Rate Basis"
+      rateCalcType:
+        type: "string"
+        description: "Rate Calc Type"
+      tierBasedSpread:
+        type: "string"
+        description: "Tier Based Spread"
+      tierType:
+        type: "string"
+        description: "Tier Type"
+      spread:
+        type: "string"
+        description: "Spread"
+      frequency:
+        type: "string"
+        description: "Frequency"
+      noOfUnits:
+        type: "string"
+        description: "Number of Units"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Dt Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Dt Stamp"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      intAmtTiersList:
+        type: "array"
+        description: "Interest Amount Tiers List"
+        items:
+          $ref: "#/definitions/IntAmtTiersDto"
+      intMixedTiersList:
+        type: "array"
+        description: "Interest Mixed Tiers List"
+        items:
+          $ref: "#/definitions/IntMixedTiersDto"
+      intTenorTiersList:
+        type: "array"
+        description: "Interest Tenor Tiers List"
+        items:
+          $ref: "#/definitions/IntTenorTiersDto"
+
+  IntAmtTiersWorkDto:
+    description: "DTO for ScfTwPrefIntAmtTiers"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod No"
+      id:
+        type: "string"
+        description: "Id"
+      prefIntPricingId:
+        type: "string"
+        description: "Pref Interest Pricing Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      spread:
+        type: "string"
+        description: "Spread"
+      fromAmt:
+        type: "string"
+        description: "From Amount"
+      toAmt:
+        type: "string"
+        description: "To Amount"
+      tierSeq:
+        type: "string"
+        description: "Tier Sequence"
+
+  IntMixedTiersWorkDto:
+    description: "DTO for ScfTwPrefIntMixedTiers"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod No"
+      id:
+        type: "string"
+        description: "Id"
+      prefIntPricingId:
+        type: "string"
+        description: "Pref Interest Pricing Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      tierCcy:
+        type: "string"
+        description: "Tier Currency"
+      spread:
+        type: "string"
+        description: "Spread"
+      fromAmt:
+        type: "string"
+        description: "From Amount"
+      toAmt:
+        type: "string"
+        description: "To Amount"
+      tenorTierSeq:
+        type: "string"
+        description: "Tenor Tier Sequence"
+      amtTierSeq:
+        type: "string"
+        description: "Amount Tier Sequence"
+      fromTenor:
+        type: "string"
+        description: "From Tenor"
+      toTenor:
+        type: "string"
+        description: "To Tenor"
+
+  IntTenorTiersWorkDto:
+    description: "DTO for ScfTwPrefIntTenorTiers"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod No"
+      id:
+        type: "string"
+        description: "Id"
+      prefIntPricingId:
+        type: "string"
+        description: "Pref Interest Pricing Id"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      spread:
+        type: "string"
+        description: "Spread"
+      tierSeq:
+        type: "string"
+        description: "Tier Sequence"
+      fromTenor:
+        type: "string"
+        description: "From Tenor"
+      toTenor:
+        type: "string"
+        description: "To Tenor"
+
+  IntPricingWorkDto:
+    description: "DTO for ScfTwPrefIntPricing"
+    type: object
+    properties:
+      action:
+        type: "string"
+        description: "Action"
+      keyId:
+        type: "string"
+        description: "Key Id"
+      checkerRemarks:
+        type: "string"
+        description: "Checker Remarks"
+      makerRemarks:
+        type: "string"
+        description: "Maker Remarks"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Dt Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      fixedRateType:
+        type: "string"
+        description: "Fixed Rate Type"
+      frequency:
+        type: "string"
+        description: "Frequency"
+      id:
+        type: "string"
+        description: "Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Dt Stamp"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      pricingTemplateCode:
+        type: "string"
+        description: "Pricing Template Code"
+      pricingTemplateDesc:
+        type: "string"
+        description: "PricingTemplateDesc"
+      rate:
+        type: "string"
+        description: "Rate"
+      rateBasis:
+        type: "string"
+        description: "Rate Basis"
+      rateCalcType:
+        type: "string"
+        description: "Rate Calc Type"
+      rateCode:
+        type: "string"
+        description: "Rate Code"
+      rateCodeUsage:
+        type: "string"
+        description: "Rate Code Usage"
+      rateRevisionFreq:
+        type: "string"
+        description: "Rate Revision Freq"
+      rateType:
+        type: "string"
+        description: "Rate Type"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      tierBasedSpread:
+        type: "string"
+        description: "Tier Based Spread"
+      tierType:
+        type: "string"
+        description: "Tier Type"
+      spread:
+        type: "string"
+        description: "Spread"
+      rateFixingDays:
+        type: "string"
+        description: "Rate Fixing Days"
+      resetTenor:
+        type: "string"
+        description: "Reset Tenor"
+      noOfUnits:
+        type: "string"
+        description: "Number of Units"
+      intAmtTiersList:
+        type: "array"
+        description: "Interest Amount Tiers Work List"
+        items:
+          $ref: "#/definitions/IntAmtTiersWorkDto"
+      intMixedTiersList:
+        type: "array"
+        description: "Interest Mixed Tiers Work List"
+        items:
+          $ref: "#/definitions/IntMixedTiersWorkDto"
+      intTenorTiersList:
+        type: "array"
+        description: "Interest Tenor Tiers Work List"
+        items:
+          $ref: "#/definitions/IntTenorTiersWorkDto"
+
+  InsurancePolicyDetailsDto:
+    description: "DTO for ScfTmInsurancePolicyDetails"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      insurancePolicyNumber:
+        type: "string"
+        description: "Insurance Policy Number"
+      policyEffectiveFrom:
+        type: "string"
+        description: "Policy Effective From"
+      policyExpiresOn:
+        type: "string"
+        description: "Policy Expires On"
+      policyAmt:
+        type: "string"
+        description: "Policy Amount"
+      policyClaimedAmt:
+        type: "string"
+        description: "Policy Claimed Amount"
+      policyAllocatedAmt:
+        type: "string"
+        description: "Policy Allocated Amount"
+      policyAvailableAmt:
+        type: "string"
+        description: "Policy Available Amount"
+      insuranceCompMasterId:
+        type: "string"
+        description: "Insurance Comp Master Id"
+
+  InsuranceMaintDto:
+    description: "DTO for ScfTmInsuranceCompMaster"
+    type: object
+    properties:
+      id:
+        type: "string"
+        description: "Id"
+      modNo:
+        type: "string"
+        description: "Mod No"
+      insuranceCompId:
+        type: "string"
+        description: "Insurance Comp Id"
+      insuranceCompName:
+        type: "string"
+        description: "Insurance Comp Name"
+      shortName:
+        type: "string"
+        description: "Short Name"
+      addressLine1:
+        type: "string"
+        description: "Address Line 1"
+      addressLine2:
+        type: "string"
+        description: "Address Line 2"
+      addressLine3:
+        type: "string"
+        description: "Address Line 3"
+      country:
+        type: "string"
+        description: "Country"
+      countryName:
+        type: "string"
+        description: "Country Name"
+      zipCode:
+        type: "string"
+        description: "Zip Code"
+      email:
+        type: "string"
+        description: "Email"
+      faxNumber:
+        type: "string"
+        description: "Fax Number"
+      contactNumber:
+        type: "string"
+        description: "Contact Number"
+      contactPerson:
+        type: "string"
+        description: "Contact Person"
+      contactPersonNumber:
+        type: "string"
+        description: "Contact Person Number"
+      contactPersonEmail:
+        type: "string"
+        description: "Contact Person Email"
+      insurerLimit:
+        type: "string"
+        description: "Insurer Limit"
+      insurerAllocatedAmt:
+        type: "string"
+        description: "Insurer Allocated Amount"
+      insurerAvailableAmt:
+        type: "string"
+        description: "Insurer Available Amount"
+      policyCcy:
+        type: "string"
+        description: "Policy Currency"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Dt Stamp"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Dt Stamp"
+      insurancePolicyDetailsList:
+        type: "array"
+        description: "Insurance Policy Details List"
+        items:
+          $ref: "#/definitions/InsurancePolicyDetailsDto"
+
+  InsurancePolicyDetailsWorkDto:
+    description: "DTO for ScfTwInsurancePolicyDetails"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod No"
+      id:
+        type: "string"
+        description: "Id"
+      insuranceCompMasterId:
+        type: "string"
+        description: "Insurance Comp Master Id"
+      insurancePolicyNumber:
+        type: "string"
+        description: "Insurance Policy Number"
+      policyEffectiveFrom:
+        type: "string"
+        description: "Policy Effective From"
+      policyExpiresOn:
+        type: "string"
+        description: "Policy Expires On"
+      policyAmt:
+        type: "string"
+        description: "Policy Amount"
+      policyClaimedAmt:
+        type: "string"
+        description: "Policy Claimed Amount"
+      policyAllocatedAmt:
+        type: "string"
+        description: "Policy Allocated Amount"
+      policyAvailableAmt:
+        type: "string"
+        description: "Policy Available Amount"
+
+  InsuranceWorkDto:
+    description: "DTO for ScfTwInsuranceCompMaster"
+    type: object
+    properties:
+      action:
+        type: "string"
+        description: "Action"
+      keyId:
+        type: "string"
+        description: "Key Id"
+      checkerRemarks:
+        type: "string"
+        description: "Checker Remarks"
+      makerRemarks:
+        type: "string"
+        description: "Maker Remarks"
+      addressLine1:
+        type: "string"
+        description: "Address Line 1"
+      addressLine2:
+        type: "string"
+        description: "Address Line 2"
+      addressLine3:
+        type: "string"
+        description: "Address Line 3"
+      contactNumber:
+        type: "string"
+        description: "Contact Number"
+      contactPerson:
+        type: "string"
+        description: "Contact Person"
+      contactPersonEmail:
+        type: "string"
+        description: "Contact Person Email"
+      contactPersonNumber:
+        type: "string"
+        description: "Contact Person Number"
+      country:
+        type: "string"
+        description: "Country"
+      countryName:
+        type: "string"
+        description: "Country Name"
+      email:
+        type: "string"
+        description: "Email"
+      faxNumber:
+        type: "string"
+        description: "Fax Number"
+      id:
+        type: "string"
+        description: "Id"
+      insuranceCompId:
+        type: "string"
+        description: "Insurance Comp Id"
+      insuranceCompName:
+        type: "string"
+        description: "Insurance Comp Name"
+      modNo:
+        type: "string"
+        description: "Mod No"
+      policyCcy:
+        type: "string"
+        description: "Policy Currency"
+      shortName:
+        type: "string"
+        description: "Short Name"
+      zipCode:
+        type: "string"
+        description: "Zip Code"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      makerDtStamp:
+        type: "string"
+        description: "Maker Dt Stamp"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Dt Stamp"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      insurerLimit:
+        type: "string"
+        description: "Insurer Limit"
+      insurerAllocatedAmt:
+        type: "string"
+        description: "Insurer Allocated Amount"
+      insurerAvailableAmt:
+        type: "string"
+        description: "Insurer Available Amount"
+      insurancePolicyDetailsList:
+        type: "array"
+        description: "Insurance Policy Details Work List"
+        items:
+          $ref: "#/definitions/InsurancePolicyDetailsWorkDto"
+
+  ProductLimitExpHandlWorkDto:
+    description: "DTO for ScfTwProdLimitsExpHandl"
+    type: object
+    properties:
+      id: 
+        type: "string"
+        description: "Id"
+      productCode: 
+        type: "string"
+        description: "Product Code"
+      limitDecnMasterId: 
+        type: "string"
+        description: "Limit Decn Master Id"
+      subLevelApplicable: 
+        type: "string"
+        description: "Sub Level Applicable"
+      expiredLimitExceptionHandling: 
+        type: "string"
+        description: "Expired Limit Exception Handling"
+      breachLimitExceptionHandling: 
+        type: "string"
+        description: "Breach Limit Exception Handling"
+      expiredAndBreachLimitExceptionHandling: 
+        type: "string"
+        description: "Expired and Breach Limit Exp Handling"
+      modNo: 
+        type: "string"
+        description: "Mod No"
+
+  ProductLimitDecnWorkDto:
+    description: "DTO for ScfTwProdLimitDecn"
+    type: object
+    properties:
+      modNo:
+        type: "string"
+        description: "Mod No"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+      id:
+        type: "string"
+        description: "Id"
+      limitType:
+        type: "string"
+        description: "Limit Type"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productMasterId:
+        type: "string"
+        description: "Product Master Id"
+      recourse:
+        type: "string"
+        description: "Recourse"
+      rootLimitEntityType:
+        type: "string"
+        description: "Root Limit Entity Type"
+      subLevelsApplicable:
+        type: "string"
+        description: "Sub Levels Applicable"
+      limitEvent:
+        type: "string"
+        description: "Limit Event"
+      productLimitExpHandlList:
+        type: "array"
+        description: "Product Limit Exp Handl Work List"
+        items:
+          $ref: "#/definitions/ProductLimitExpHandlWorkDto"
+
+  ProductWorkDto:
+    description: "DTO for ScfTwProductMaster"
+    type: object
+    properties:
+      action:
+        type: "string"
+        description: "Action"
+      keyId:
+        type: "string"
+        description: "Key Id"
+      checkerRemarks:
+        type: "string"
+        description: "Checker Remarks"
+      makerRemarks:
+        type: "string"
+        description: "Maker Remarks"
+      appropriationSeqAftDueDate:
+        type: "string"
+        description: "Appropriation Seq After Due Date"
+      appropriationSeqBefDueDate:
+        type: "string"
+        description: "Appropriation Bef After Due Date"
+      appropriationSeqOnDueDate:
+        type: "string"
+        description: "Appropriation On After Due Date"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      autoDebitApplicable:
+        type: "string"
+        description: "Auto Debit Applicable"
+      autoFinanceApplicable:
+        type: "string"
+        description: "Auto Finance Applicable"
+      autoSettlementApplicable:
+        type: "string"
+        description: "Auto Settlement Applicable"
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      creditLimitUtilization:
+        type: "string"
+        description: "Credit Limit Utilization"
+      debitAcctTypeAfterDueDate:
+        type: "string"
+        description: "Debit Account Type After Due Date"
+      debitAcctTypeOnDueDate:
+        type: "string"
+        description: "Debit Account Type On Due Date"
+      debitPartyAfterDueDate:
+        type: "string"
+        description: "Debit Party After Due Date"
+      debitPartyOnDueDate:
+        type: "string"
+        description: "Debit Party On Due Date"
+      debtor:
+        type: "string"
+        description: "Debtor"
+      effectiveFrom:
+        type: "string"
+        description: "Effective From"
+      expiresOn:
+        type: "string"
+        description: "Expires On"
+      holidayTreatment:
+        type: "string"
+        description: "Holiday Treatment"
+      id:
+        type: "string"
+        description: "Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      maturityDateCalculation:
+        type: "string"
+        description: "Maturity Date Calculation"
+      maxFinancePercentage:
+        type: "string"
+        description: "Maximum Finance Percentage"
+      maxTenorAllowed:
+        type: "string"
+        description: "Maximum Tenor Allowed"
+      minFinancePercentage:
+        type: "string"
+        description: "Minimum Finance Percentage"
+      minTenorAllowed:
+        type: "string"
+        description: "Minimum Tenor Allowed"
+      minWaitingPeriod:
+        type: "string"
+        description: "Minimum Waiting Period"
+      modNo:
+        type: "string"
+        description: "Mod No"
+      multipleDisbursementAllowed:
+        type: "string"
+        description: "Multiple Disbursement Allowed"
+      npaAppropriationSeq:
+        type: "string"
+        description: "NPA Appropriation Sequence"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      partRepaymentAllowed:
+        type: "string"
+        description: "Part Repayment Allowed"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      preferredSettlementMode:
+        type: "string"
+        description: "Preferred Settlement Mode"
+      prePaymentAllowed:
+        type: "string"
+        description: "Pre Payment Allowed"
+      productCategory:
+        type: "string"
+        description: "Product Category"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      productType:
+        type: "string"
+        description: "Product Type"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      stalePeriod:
+        type: "string"
+        description: "Stale Period"
+      withRecourse:
+        type: "string"
+        description: "With Recourse"
+      reconciliationTowards:
+        type: "string"
+        description: "Reconciliation Towards"
+      graceDays:
+        type: "string"
+        description: "Grace Days"
+      marginHandling:
+       type: "string"
+       description: "Margin Handling"
+      marginPaymentMode:
+       type: "string"
+       description: "Margin Payment Mode"
+      interestRefundHandling:
+       type: "string"
+       description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+       type: "string"
+       description: "Interest Refund Payment Mode"
+      isAccountingApplicable:
+        type: "string"
+        description: "Is Accounting Applicable"
+      isCreditLimitApplicable:
+        type: "string"
+        description: "Is Credit Limit Applicable"
+      isAssignmentApplicable:
+        type: "string"
+        description: "Is Assignment Applicable"
+      isAutoAssignment:
+        type: "string"
+        description: "Is Auto Assignment"
+      isAcceptanceApplicable:
+        type: "string"
+        description: "Is Acceptance Applicable"
+      isAutoAcceptance:
+        type: "string"
+        description: "Is Auto Acceptance"
+      isDisbursementAuthRequired:
+        type: "string"
+        description: "Is Disbursement Auth Required"
+      isDisbursementAutoProcessing:
+        type: "string"
+        description: "Is Disbursement Auto Processing"
+      isSettlementAuthRequired:
+        type: "string"
+        description: "Is Settlement Auth Required"
+      isSettlementAutoProcessing:
+        type: "string"
+        description: "Is Settlement Auto Processing"
+      autoAcceptanceDays:
+        type: "string"
+        description: "Auto Acceptance Days"
+      holidayTreatmentForFdd:
+        type: "string"
+        description: "Holiday Treatment for Fdd"
+      productLimitDecnList:
+        type: "array"
+        description: "Product Limit Decn Work List"
+        items:
+          $ref: "#/definitions/ProductLimitDecnWorkDto"
+        
+  ProgramSpokeCodeMasterWorkDto:
+    description: "DTO for ScfTwProgramSpokeCodeMaster"
+    type: object
+    properties:
+      id: 
+        type: "string"
+        description: "Id"
+      spokeMasterId: 
+        type: "string"
+        description: "Spoke Master Id"
+      programCode: 
+        type: "string"
+        description: "Program Code"
+      spokeId: 
+        type: "string"
+        description: "Spoke Id"
+      spokeName: 
+        type: "string"
+        description: "Spoke Name"
+      spokeExternalCode: 
+        type: "string"
+        description: "Spoke External Code"
+      spokeDivisionCode: 
+        type: "string"
+        description: "Spoke Division Code"
+      spokeDivisionName: 
+        type: "string"
+        description: "Spoke Division Name"
+      anchorDivisionCode: 
+        type: "string"
+        description: "Anchor Division Code"
+      anchorDivisionName: 
+        type: "string"
+        description: "Anchor Division Name"
+      modNo: 
+        type: "string"
+        description: "Mod No"
+
+  ProgramSpokeMasterWorkDto:
+    description: "DTO for ScfTwProgramSpokeMaster"
+    type: object
+    properties:
+      modNo: 
+        type: "string"
+        description: "Mod No"
+      autoFinanceApplicable: 
+        type: "string"
+        description: "Auto Finance Applicable"
+      autoSettlementApplicable: 
+        type: "string"
+        description: "Auto Settlement Applicable"
+      disbursementCcy: 
+        type: "string"
+        description: "Disbursement Ccy"
+      id: 
+        type: "string"
+        description: "Id"
+      maxFinancePercentage: 
+        type: "string"
+        description: "Max Finance Percentage"
+      maxTenorAllowed: 
+        type: "string"
+        description: "Max Tenor Allowed"
+      minFinancePercentage: 
+        type: "string"
+        description: "Min Finance Percentage"
+      minTenorAllowed: 
+        type: "string"
+        description: "Min Tenor Allowed"
+      preferredDisbursementMode: 
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      preferredSettlementMode: 
+        type: "string"
+        description: "Preferred Settlement Mode"
+      programCode: 
+        type: "string"
+        description: "Program Code"
+      programMasterId: 
+        type: "string"
+        description: "Program Master Id"
+      spokeId: 
+        type: "string"
+        description: "Spoke Id"
+      spokeName: 
+        type: "string"
+        description: "Spoke Name"
+      withRecourse: 
+        type: "string"
+        description: "With Recourse"
+      graceDays: 
+        type: "string"
+        description: "Grace Days"
+      interestBearingParty: 
+        type: "string"
+        description: "Interest Bearing Party"
+      importFactorId: 
+        type: "string"
+        description: "Import Factor Id"
+      importFactorName: 
+        type: "string"
+        description: "Import Factor Name"
+      insuranceCoId: 
+        type: "string"
+        description: "Insurance Co Id"
+      insuranceCoName: 
+        type: "string"
+        description: "Insurance Co Name"
+      marginHandling: 
+        type: "string"
+        description: "Margin Handling"
+      marginPaymentMode: 
+        type: "string"
+        description: "Margin Payment Mode"
+      interestRefundHandling: 
+        type: "string"
+        description: "Interest Refund Handling"
+      interestRefundPaymentMode: 
+        type: "string"
+        description: "Interest Refund Payment Mode"
+      autoDebitApplicable: 
+        type: "string"
+        description: "Auto Debit Applicable"
+      authorizationRequired: 
+        type: "string"
+        description: "Authorization Required"
+      isDisbursementAuthRequired: 
+        type: "string"
+        description: "Is Disbursement Auth Required"
+      isSettlementAuthRequired: 
+        type: "string"
+        description: "Is Settlement Auth Required"
+      isDisbursementAutoProcessing: 
+        type: "string"
+        description: "Is Disbursement Auto Processing"
+      isSettlementAutoProcessing: 
+        type: "string"
+        description: "Is Settlement Auto Processing"
+      programSpokeCodeMasterList:
+        type: "array"
+        description: "Program Spoke Code Master Work List"
+        items:
+          $ref: "#/definitions/ProgramSpokeCodeMasterWorkDto"
+
+  ProgramWorkDto:
+    description: "DTO for ScfTwProgramMaster"
+    type: object
+    properties:
+      action:
+        type: "string"
+        description: "Action"
+      keyId:
+        type: "string"
+        description: "Key Id"
+      checkerRemarks:
+        type: "string"
+        description: "Checker Remarks"
+      makerRemarks:
+        type: "string"
+        description: "Maker Remarks"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      authStat:
+        type: "string"
+        description: "Auth Stat"
+      autoAcceptanceApplicable:
+        type: "string"
+        description: "Auto Acceptance Applicable"
+      autoAcceptanceDays:
+        type: "string"
+        description: "Auto Acceptance Days"
+      autoFinanceApplicable:
+        type: "string"
+        description: "Auto Finance Applicable"
+      autoSettlementApplicable:
+        type: "string"
+        description: "Auto Settlement Applicable"
+      checkerDtStamp:
+        type: "string"
+        description: "Checker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      disbursementCcy:
+        type: "string"
+        description: "Disbursement Currency"
+      effectiveFrom:
+        type: "string"
+        description: "Effective From"
+      expiresOn:
+        type: "string"
+        description: "Expires On"
+      id:
+        type: "string"
+        description: "Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      maxFinancePercentage:
+        type: "string"
+        description: "Maximum Finance Percentage"
+      maxTenorAllowed:
+        type: "string"
+        description: "Maximum Tenor Allowed"
+      minFinancePercentage:
+        type: "string"
+        description: "Minimum Finance Percentage"
+      minTenorAllowed:
+        type: "string"
+        description: "Minimum Tenor Allowed"
+      modNo:
+        type: "string"
+        description: "Mod Number"
+      onceAuth:
+        type: "string"
+        description: "Once Auth"
+      preferredDisbursementMode:
+        type: "string"
+        description: "Preferred Disbursement Mode"
+      preferredSettlementMode:
+        type: "string"
+        description: "Preferred Settlement Mode"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      recordStat:
+        type: "string"
+        description: "Record Stat"
+      withRecourse:
+        type: "string"
+        description: "With Recourse"
+      reconciliationTowards:
+        type: "string"
+        description: "Reconciliation Towards"
+      graceDays:
+        type: "string"
+        description: "Grace Days"
+      interestBearingParty:
+        type: "string"
+        description: "Interest Bearing Party"
+      relationshipCode:
+        type: "string"
+        description: "Relationship Code"
+      twoFactorApp:
+        type: "string"
+        description: "Two Factor App"
+      insuranceApp:
+        type: "string"
+        description: "Insurance App"
+      marginHandling:
+       type: "string"
+       description: "Margin Handling"
+      marginPaymentMode:
+       type: "string"
+       description: "Margin Payment Mode"
+      interestRefundHandling:
+       type: "string"
+       description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+       type: "string"
+       description: "Interest Refund Payment Mode"
+      autoDebitApplicable:
+        type: "string"
+        description: "Auto Debit Applicable"
+      authorizationRequired:
+        type: "string"
+        description: "Authorization Required"
+      isDisbursementAuthRequired:
+        type: "string"
+        description: "Is Disbursement Auth Required"
+      isSettlementAuthRequired:
+        type: "string"
+        description: "Is Settlement Auth Required"
+      isDisbursementAutoProcessing:
+        type: "string"
+        description: "Is Disbursement Auto Processing"
+      isSettlementAutoProcessing:
+        type: "string"
+        description: "Is Settlement Auto Processing"
+      programSpokeMasterList:
+        type: "array"
+        description: "Program Spoke Master Work List"
+        items:
+          $ref: "#/definitions/ProgramSpokeMasterWorkDto"
+          
+  BasicFinanceInfoModel:
+    description: "Finance Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      financeRefNo:
+        type: "string"
+      seqNo:
+         type: "integer"
+         format: "int64"
+      requestId:
+        type: "string"
+      branchCode:
+        type: "string"
+      productCode:
+        type: "string"
+      operationCode:
+        type: "string"
+      programCode:
+        type: "string"
+      programName:
+        type: "string"
+      buyerId:
+        type: "string"
+      buyerName:
+        type: "string"
+      buyerDivCode:
+        type: string
+      buyerDivName:
+        type: string
+      supplierId:
+        type: "string"
+      supplierName:
+        type: "string"
+      supplierDivCode:
+        type: string
+      supplierDivName:
+        type: string
+      debtor:
+        type: "string"
+      startDate:
+        type: "string"
+      tenor:
+        type: "number"
+      maturityDate:
+        type: "string"
+      totalInstrumentAmtCcy:
+        type: "string"
+      totalInstrumentAmt:
+        type: "number"
+      financePCT:
+        type: "number"
+      financeAmtCcy:
+        type: "string"
+      financeAmt:
+        type: "number"
+      exchangeRate:
+        type: "number"
+      processingDate:
+        type: "string"
+      makerId:
+        type: "string"
+      makerDateStamp:
+        type: "string"
+      authId:
+        type: "string"
+      authDateStamp:
+        type: "string"
+      financeStatus:
+        type: "string"
+      clRefNo:
+        type: "string"
+      productDescription:
+        type: "string"
+      productCategory:
+        type: "string"
+      maxTenorAllowed:
+        type: "number"
+      minTenorAllowed:
+        type: "number"
+      minFinPCT:
+        type: "number"
+      maxFinPCT:
+        type: "number"
+      holidayTreatment:
+        type: "string"
+      productType:
+        type: "string"
+      preferredDisbursementMode:
+        type: "string"
+      stageId:
+        type: "string"
+      staleStatus:
+        type: "string"
+      graceDays:
+        type: "number"
+      pastDueDate:
+        type: "string"
+      minFinanciableAmt:
+        type: "number"
+      maxFinanciableAmt:
+        type: "number"
+      minReFinPCT:
+        type: "number"
+      maxReFinPCT:
+        type: "number"
+      withRecourse:
+        type: "string"
+      totalMarginAmount:
+        type: "number"
+      interestBearingPartyRole:
+        type: "string"
+
+  InvoiceFinanceModelCollection:
+     description: "Collection of InvoiceFinanceModel."
+     type: "object"
+     properties:
+       invoiceFinanceModelList:
+         type: "array"
+         items:
+           $ref: "#/definitions/InvoiceFinanceModel"
+  InvoiceFinanceModel:
+     description: "Invoice Finance Transaction Model"
+     type: "object"
+     properties:
+       scfInvoiceFinanceId:
+         type: "integer"
+         format: "int64"
+       requestId:
+         type: "string"
+       financeReferenceNo:
+         type: "string"
+       invoiceNumber:
+         type: "string"
+       status:
+         type: "string"
+       invoiceRefNo:
+         type: "string"
+       finTxnStatus:
+         type: "string"
+       principalOSAmt: 
+         type: "number"
+       interestOSAmt: 
+         type: "number" 
+       overdueInterestOSAmt: 
+         type: "number"
+       penaltyInterestOSAmt: 
+         type: "number"
+       pctContriTwdsFin: 
+         type: "number"
+       amtContriTwdsFin: 
+         type: "number"
+       interestAmortized: 
+         type: "number"
+       interestPaidInvCcy:  
+         type: "number"
+       marginAmt:     
+         type: "number"
+       principalPaidInvCcy: 
+         type: "number"
+       overdueInterestPaidInvCcy: 
+         type: "number"  
+       penaltyInterestPaidInvCcy: 
+         type: "number"
+       marginRefNo: 
+         type: "string"
+       interestPaidFinCcy: 
+         type: "number"
+       principalPaidFinCcy:  
+         type: "number"
+       overdueInterestPaidFinCcy: 
+         type: "number"   
+       penaltyInterestPaidFinCcy: 
+         type: "number"
+       invCcy: 
+         type: "string"
+       finCcy:
+         type: "string"
+       appropriationSeq:
+         type: "string"
+       disbursementMarginCalc: 
+         type: "number"
+       interestType: 
+         type: "string"
+       finMaturityDate:
+         type: string
+       financePct:
+         type: "number"
+       txnRefNo:
+         type: string
+       amountToBeFinanced:
+         type: "number"
+       indicator:
+         type: string
+  AutoDebitTxnDetailsDto:
+    type: object
+    properties:
+      id:
+        type: string
+      autoDebitGrpType:
+        type: string
+      txnRefNo:
+        type: string
+      autoDebitPartyRole:
+        type: string
+      autoDebitCounterPartyRole:
+        type: string
+      autoDebitPartyId:
+        type: string
+      autoDebitCounterPartyId:
+        type: string
+      autoDebitPartyName:
+        type: string
+      autoDebitCounterPartyName:
+        type: string
+      autoDebitPartyDivCode:
+        type: string
+      autoDebitCounterPartyDivCode:
+        type: string
+      autoDebitAccType:
+        type: string
+      autoDebitAmtType:
+        type: string
+      autoDebitCcy:
+        type: string
+      autoDebitAmt:
+        type: string
+      groupId:
+        type: string
+      productCode:
+        type: string
+      accountRefNo:
+        type: string
+      executionId:
+        type: string
+      status:
+        type: string
+      allocatedAutoDebitAmt:
+        type: string
+      settlementReqId:
+        type: string
+  AutoDebitTxnDto:
+    type: object
+    properties:
+      batchJobExecId:
+        type: string
+      timestamp:
+        type: string
+      branchCode:
+        type: string
+      userId:
+        type: string
+      businessDate:
+        type: string
+      status:
+        type: string
+      autoDebitTxnDetails:
+       type: array
+       items:
+        $ref: '#/definitions/AutoDebitTxnDetailsDto'
+  AutoDebitTxnCollection:
+    type: "object"
+    description: "Collection of Auto Debit Txns"
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AutoDebitTxnDto'
+  AlertDtoCollection:
+    description: "Collection of Alert Dto."
+    type: "object"
+    properties:
+      scfTmLimitNode:
+        $ref: "#/definitions/ScfTmLimitNode"
+      financeMaintDto:
+        $ref: "#/definitions/FinanceMaintDto"
+      partyTransactionModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PartyTransactionModel"  
+      limitsFactorTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/LimitsFactorTransactionModel"
+      interestTransactionModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InterestTransactionModel"    
+      chargeEnquiryDetailsModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ChargeEnquiryDetailsModel" 
+      accountingTransactionModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountingTransactionModel" 
+      invoiceFinanceModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvoiceFinanceModel"    
+      financeTransactionIntgModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/FinanceTransactionIntgModel"      
+          
+  FlatAlertDto:
+    description: "DTO for FlatAlertObj"
+    type: object
+    properties:
+      branchCode:
+        type: "string"
+        description: "Branch Code"
+      branchName:
+        type: "string"
+        description: "Branch Name"
+      productCode:
+        type: "string"
+        description: "Product Code"
+      productDescription:
+        type: "string"
+        description: "Product Description"
+      programCode:
+        type: "string"
+        description: "Program Code"
+      programName:
+        type: "string"
+        description: "Program Name"
+      buyerId:
+        type: "string"
+        description: "Buyer Id"
+      buyerName:
+        type: "string"
+        description: "Buyer Name"
+      supplierId:
+        type: "string"
+        description: "Supplier Id"
+      supplierName:
+        type: "string"
+        description: "Supplier Name"
+      anchorId:
+        type: "string"
+        description: "Anchor Id"
+      anchorName:
+        type: "string"
+        description: "Anchor Name"
+      debtorId:
+        type: "string"
+        description: "Debtor Id"
+      debtorName:
+        type: "string"
+        description: "Debtor Name"
+      spokeId:
+        type: "string"
+        description: "Spoke Id"
+      spokeName:
+        type: "string"
+        description: "Spoke Name"
+      startDate:
+        type: "string"
+        description: "Start Date"
+      maturityDate:
+        type: "string"
+        description: "Maturity Date"
+      tenor:
+        type: "number"
+        description: "Tenor"
+      graceDays:
+        type: "number"
+        description: "Grace Days"
+      pastDueDate:
+        type: "string"
+        description: "Past Due Date"
+      totalInstrumentAmtCcy:
+        type: "string"
+        description: "Total Instrument Amount Currency"
+      totalInstrumentAmt:
+        type: "number"
+        description: "Total Instrument Amount"
+      financeAmtCcy:
+        type: "string"
+        description: "Finance Amount Currency"
+      financePct:
+        type: "number"
+        description: "Finance Pct"
+      financeAmt:
+        type: "number"
+        description: "Finance Amount"
+      exchangeRate:
+        type: "number"
+        description: "Exchange Rate"
+      lastProcessingDate:
+        type: "string"
+        description: "Last Processing Date"
+      financeStatus:
+        type: "string"
+        description: "Finance Status"
+      clRefNo:
+        type: "string"
+        description: "Cl Reference Number"
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDateStamp:
+        type: "string"
+        description: "Maker Date Stamp"
+      authId:
+        type: "string"
+        description: "Authorization Id"
+      authDtStamp:
+        type: "string"
+        description: "Authorization Date Stamp"
+      lastOperationCode:
+        type: "string"
+        description: "Last Operation Code"
+      financeReferenceNo:
+        type: "string"
+        description: "Finance Reference Number"
+      disbRequestId:
+        type: "string"
+        description: "Disbursement Request Id"
+      lastValueDate:
+        type: "string"
+        description: "Last Value Date"
+      principalOsAmount:
+        type: "number"
+        description: "Principal Os Amount"
+      interestOsAmount:
+        type: "number"
+        description: "Interest Os Amount"
+      totalOsAmount:
+        type: "number"
+        description: "Total Os Amount"
+      overdueIntOsAmount:
+        type: "number"
+        description: "Overdue Int Os Amount"
+      penIntOsAmount:
+        type: "number"
+        description: "Pen Int Os Amount"
+      totalRepaidAmount:
+        type: "number"
+        description: "Total Repaid Amount"
+      totPmtTowardsPrncplOs:
+        type: "number"
+        description: "Total Payment Towards Principle Os"
+      totPmtTowardsIntOs:
+        type: "number"
+        description: "Total Payment Towards Int Os"
+      totPmtTowardsOverdueIntOs:
+        type: "number"
+        description: "Total Payment Towards Overdue Int Os"
+      totPmtTowardsPenIntOs:
+        type: "number"
+        description: "Total Payment Towards Pen Int Os"
+      lastSeqNo:
+        type: "number"
+        description: "Last Sequence Number"
+      buyerDivCode:
+        type: "string"
+        description: "Buyer Division Code"
+      supplierDivCode:
+        type: "string"
+        description: "Supplier Division Code"
+      buyerDivName:
+        type: "string"
+        description: "Buyer Division Name"
+      supplierDivName:
+        type: "string"
+        description: "Supplier Division Name"
+      buyerAddress:
+        type: "string"
+        description: "Buyer Address"
+      supplierAddress:
+        type: "string"
+        description: "SupplierAddress"
+      branchLocalCcy:
+        type: "string"
+        description: "Branch Local Currency"
+      eventDate:
+        type: "string"
+        description: "Event Date"
+      eventType:
+        type: "string"
+        description: "Event Type"
+      userId:
+        type: "string"
+        description: "User Id"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      intCalcBasisAmt:
+        type: number
+        description: "Interest calculation Basis Amount"
+      odIntCalcBasisAmt:
+        type: number
+        description: "Overdue int calculation Basis Amount"
+      penIntCalcBasisAmt:
+        type: number   
+        description: "Penalty int calculation Basis Amount"  
+      accountNo:
+        type: "string"
+        description: "Account Number"                           

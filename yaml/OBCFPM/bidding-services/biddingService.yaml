@@ -1,0 +1,201 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Bidding server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Bidding Service"
+host: "whf00anh:7711"
+basePath: "/bidding-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "BiddingAPI"
+    description: "API for Bidding's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/bidding:
+    post:
+      tags:
+        - "biddingService"
+      summary: "Create a new Bidding."
+      description: "Create a new Bidding."
+      operationId: "createBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "bidding"
+          in: "body"
+          description: "Request Body that contains data required for creating a new bidding"
+          required: true
+          schema:
+            $ref: "./biddingWeb.yaml#/definitions/BiddingModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created bidding"
+          headers:
+            Location:
+              description: "URL of newly created bidding"
+              type: "string"
+          schema:
+              $ref: "./biddingWeb.yaml#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "biddingService"
+      summary: "Retrieves the list of existing bidding."
+      description:  "Retrieves the list of existing bidding."
+      operationId: "getAllBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "bidReferenceNumber"
+          in: "query"
+          required: false
+          description: "Bidding that need to be updated"
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./biddingWeb.yaml#/definitions/BiddingCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/bidding/{id}:
+    get:
+      tags:
+        - "biddingService"
+      summary: "Retrieves the Bidding by ID."
+      description:  "Retrieves the Bidding by ID."
+      operationId: "getBiddingById"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Bidding that need to be updated"
+          required: true
+          type: "string" 
+      responses:
+        200:
+          description: "Returns the Bidding based on given id."
+          schema:
+            $ref: "./biddingWeb.yaml#/definitions/BiddingModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "biddingService"
+      summary: "Update an existing Bidding."
+      description:  "Update an existing Bidding."
+      operationId: "updateBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Bidding that need to be updated"
+          required: true
+          type: "string"
+        - name: "biddingModel"
+          in: "body"
+          description: "Bidding that need to be updated"
+          required: true
+          schema:
+            $ref: "./biddingWeb.yaml#/definitions/BiddingModel"
+      responses:
+        200:
+          description: "Returns updated Bidding"
+          schema:
+            $ref: "./biddingWeb.yaml#/definitions/BiddingModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "biddingService"
+      summary: "Deletes the bidding identified by given ID."
+      description:  "Deletes the bidding identified by given ID."
+      operationId: "deleteBidding"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "id"
+          in: "path"
+          description: "Id of the bidding that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"    

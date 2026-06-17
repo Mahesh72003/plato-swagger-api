@@ -1,0 +1,68 @@
+swagger: '2.0'
+info:
+   description: Audit Maintenance service for oracle banking routing hub.
+   version: 1.0.0
+   title: OBRH Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: AuditEvent
+   description: Operations related to Audit events.
+schemes:
+- https
+paths:
+   /audit/event:
+      post:
+         tags:
+         - AuditEvent
+         summary: Adds a new auditLog.
+         description: Adds a new auditLog. Add additional information here for this endpoint.
+         operationId: createRecord
+         parameters:
+         -  name: auditEventDTO
+            in: body
+            description: Request Body that contains data required for creating a new audit Entry
+            required: true
+            schema:
+               $ref: '#/definitions/AuditEventDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceConsumer
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+definitions:
+   AuditEventDTO:
+      type: object
+      description: DTO containing details of an Audit Event
+      properties:
+         requestId:
+            type: string
+         userId:
+            type: string
+         timestamp:
+            type: string
+            format: date-time
+         type:
+            type: string
+         data:
+            type: object
+            additionalProperties:
+               type: object

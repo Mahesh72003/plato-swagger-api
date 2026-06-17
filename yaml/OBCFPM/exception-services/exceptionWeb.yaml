@@ -1,0 +1,907 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server CamException server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "CamException Service"
+host: "whf00anh:7712"
+basePath: "/cam/camException-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CamExceptionAPI"
+    description: "API for CamException's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/camException:
+    post:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Creates a new CamException."
+      description: "Creates a new CamException."
+      operationId: "createCamExceptionWork"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: true
+        - name: "camException"
+          in: "body"
+          description: "Request Body that contains data required for creating a new camException"
+          required: true
+          schema:
+            $ref: "#/definitions/CamExceptionModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created camException"
+          headers:
+            Location:
+              description: "URL of newly created camException"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Retrieves the list of existing camExceptions."
+      description:  "Retrieves the list of existing camExceptions."
+      operationId: "getAllCamExceptionsWork"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "exceptionId"
+          in: "query"
+          description: "Id of the exception that needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CamExceptionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/camException/{id}:
+    get:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Retrieves the camException by ID."
+      description:  "Retrieves the camException by ID."
+      operationId: "getCamExceptionWorkById"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false 
+      responses:
+        200:
+          description: "Returns the camException based on given id."
+          schema:
+            $ref: "#/definitions/CamExceptionModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Update an existing camException."
+      description:  "Update an existing camException."
+      operationId: "updateCamExceptionWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "CamException that need to be updated"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false     
+        - name: "camException"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing camException"
+          required: true
+          schema:
+            $ref: "#/definitions/CamExceptionModel"
+      responses:
+        200:
+          description: "Returns updated camException"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Deletes the camException identified by given ID."
+      description:  "deletes the camException identified by given ID."
+      operationId: "deleteCamExceptionWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false 
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/camException/exceptionById/{rmId}:          
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "CamExceptionWeb"
+      summary: "Retrieves the list of existing exception."
+      description:  "Retrieves the list of existing exception."
+      operationId: "getCamExceptionByRMID"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false 
+        - name: "rmId"
+          in: "path"
+          type: "string"
+          required: true  
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/camException/final:
+    post:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Creates a new CamException."
+      description: "Creates a new CamException."
+      operationId: "createCamExceptionMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new camException"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created camException"
+          headers:
+            Location:
+              description: "URL of newly created camException"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/draftGeneration/{exceptionId}:
+    post:
+      tags:
+        - "CamExceptionWeb"
+      summary: "For draftGeneration Stage of camException Perfection."
+      description: "For draftGeneration Stage camException Perfection."
+      operationId: "postCamExceptionDraftGenerationStage"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "exceptionId"
+          in: "path"
+          description: "CamException that need to be updated"
+          required: true
+          type: "string"
+        - name: "draftGeneration"
+          in: "body"
+          description: "Request Body that contains data required for posting review Stage"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        200:
+          description: "Returns the stage updation output"
+          headers:
+            Location:
+              description: "URL of newly created camException"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/camException/getLiability:
+    get:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Retrieves liability details by customer Id."
+      description:  "Retrieves liability details by customer Id."
+      operationId: "getLiabilityDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "customerId"
+          in: "query"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "query"
+          type: "string"
+          required: true
+        - name: "currencyCode"
+          in: "query"
+          type: "string"
+          required: true
+        - name: "productCode"
+          in: "query"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Returns the liability Details based on given customer id."
+          schema:
+            $ref: "#/definitions/HandOffTransactionHeader"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/camException/postHandOff:
+    post:
+      tags:
+        - "CamExceptionWeb"
+      summary: "Hand off for Earmark."
+      description: "Hand off for Earmark"
+      operationId: "postHandOff"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "handoffTransactionHeader"
+          in: "body"
+          description: "Request Body that contains data required for earmark"
+          required: true
+          schema:
+            $ref: "#/definitions/HandOffTransactionHeader"
+      responses:
+        200:
+          description: "Returns the Id of the newly created earmark"
+          headers:
+            Location:
+              description: "URL of newly created earmark"
+              type: "string"
+          schema:
+              $ref: "#/definitions/HandOffTransactionHeader"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      submitFlag:
+        type: "boolean"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      serviceName:
+        type: "string"
+      customerId:
+        type: "string"
+      customerName:
+        type: "string"
+      exceptionId:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      source:
+        type: "string"
+      stageUpdateFlag:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      exceptionStatus:
+        type: "string"
+      contractType:
+        type: "string"
+      utilizationCurrency:
+        type: "string"
+      utilizationAmount:
+        type: "number"
+  CamExceptionModel:
+    type: "object"
+    required:
+      - requestFrom
+      - customerId
+      - utilizationCurrency
+      - utilizationAmount
+    properties:
+      id:
+        type: "string"
+      exceptionId:
+        type: "string"
+      applicationNumber:
+        type: "string"
+      applicationBranch:
+        type: "string"
+      applicationDate:
+        type: "string"
+        format: "date-time"
+      customerId:
+        type: "string"
+      customerName:
+        type: "string"
+      customerType:
+        type: "string"
+      customerBranchName:
+        type: "string"
+      requestFrom:
+        type: "string"
+      utilizationLineCode:
+        type: "string"
+      utilizationLineSerial:
+        type: "string"
+      utilizationCurrency:
+        type: "string"
+      utilizationAmount:
+        type: "number"
+      exceptionStatus:
+        type: "string"
+      createdBy:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        type: "string"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+      externalReferenceNumber:
+        type: "string"
+      earmark:
+        $ref: '#/definitions/EarmarkModel'
+      transfer:
+        $ref: '#/definitions/TransferModel'
+      facilityAmendment:
+        $ref: '#/definitions/FacilityAmendmentModel'
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeaderModel'
+  CamExceptionTempModel:
+    type: "object"
+    required:
+      - requestFrom
+      - customerId
+      - utilizationCurrency
+      - utilizationAmount
+    properties:
+      id:
+        type: "string"
+      exceptionId:
+        type: "string"
+      applicationNumber:
+        type: "string"
+      applicationBranch:
+        type: "string"
+      applicationDate:
+        type: "string"
+        format: "date-time"
+      customerId:
+        type: "string"
+      customerName:
+        type: "string"
+      customerType:
+        type: "string"
+      customerBranchName:
+        type: "string"
+      requestFrom:
+        type: "string"
+      utilizationLineCode:
+        type: "string"
+      utilizationLineSerial:
+        type: "string"
+      utilizationCurrency:
+        type: "string"
+      utilizationAmount:
+        type: "number"
+      exceptionStatus:
+        type: "string"
+      createdBy:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        type: "string"
+      updatedDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+      externalReferenceNumber:
+        type: "string"
+      transfer:
+        $ref: '#/definitions/TransferModel'
+      facilityAmendment:
+        $ref: '#/definitions/FacilityAmendmentModel'
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeaderModel'      
+  CamExceptionCollection:
+    description: "Collection of CamException."
+    type: "object"
+    properties:
+      CamExceptionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CamExceptionModel"
+  HandOffTransactionHeader:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      errorCode:
+       type: "string"
+      status:
+       type: "string"
+      remarks:
+       type: "string"
+      moduleCode:
+       type: "string"
+      applicationNumber:
+       type: "string"
+      branchCode:
+       type: "string"
+      user:
+       type: "string"
+      serviceName:
+        type: "string"
+      listexceptionDto:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExceptionDto"
+      linesDto:
+        type: "array"
+        items:
+          $ref: "#/definitions/LinesDto"
+  FCUBSExceptiondto: 
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      listexceptionDto:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExceptionDto"
+  ExceptionDto:
+    type: "object"
+    description: "Response of the newly created resource" 
+    properties:
+      errorMessage:
+       type: "string"
+      errorCode:
+       type: "string"
+  LinesDto:
+    type: "object"
+    description: "Response with line details" 
+    properties:
+      customerId:
+       type: "string"
+      branchCode:
+       type: "string"
+      linkageType:
+       type: "string"
+      linkageReferenceNo:
+       type: "string"
+      description:
+       type: "string"
+      currency:
+       type: "string"
+      availableAmount:
+       type: "number" 
+      utilizedAmount:
+       type: "number"
+      productCode:
+       type: "string"
+      tenor:
+       type: "number"
+      revolvingLine:
+       type: "string"
+      lineStartDate:
+        type: "string"
+        format: "date"
+      mainLine:
+       type: "string"
+      lendableMargin:
+       type: "number"
+  EarmarkModel:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      exceptionId:
+        type: "string"
+      parentId:
+        type: "string"
+      blockRefNo:
+        type: "string"
+      branchCode:
+        type: "string"
+      customerId:
+        type: "string"
+      blockCurrency:
+        type: "string"
+      blockAmount:
+        type: "number"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
+      expiryDate:
+        type: "string"
+        format: "date-time"
+      remarksToCBS:
+        type: "string"
+      liabilityNo:
+        type: "string"
+      lineCode:
+        type: "string"
+      lineSerial:
+        type: "string"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+  TransferModel:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      exceptionId:
+        type: "string"
+      parentId:
+        type: "string"
+      transferRefNo:
+        type: "string"
+      fromFacility:
+        type: "string"
+      toFacility:
+        type: "string"
+      transferCurrency:
+        type: "string"
+      transferAmount:
+        type: "number"
+      effectiveFromDate:
+        type: "string"
+        format: "date-time"
+      effectiveToDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+  FacilityAmendmentModel:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      exceptionId:
+        type: "string"
+      parentId:
+        type: "string"
+      lineCode:
+        type: "string"
+      lineSerial:
+        type: "string"
+      limitCurrency:
+        type: "string"
+      limitAmount:
+        type: "number"
+      limitExpiryDate:
+        type: "string"
+        format: "date-time"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+  ApplicationDetailsModel:
+        type: "object"
+        properties:
+          recordId:
+            type: "string"
+          applicationNumber:
+            type: "string"
+          applicationDate:
+            type: "string"
+            format: "date-time"
+          applicationCategory:
+            type: "string"
+          applicationPriority:
+            type: "string"
+          applicationStatus:
+            type: "string"
+          createdBy:
+            type: "string"
+          creationDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updationDate:
+            type: "string"
+            format: "date-time"
+          applicationRemarks:
+            type: "string"
+          collateralId:
+            type: "string"
+          transactionHeader:
+            $ref: '#/definitions/TransactionHeaderModel'
+  ExceptionDashboardModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required: 
+          - facilityId
+        properties:
+          exceptionId:
+            type: "string"
+          rmId:
+            type: "string"
+          applicationBranch:
+            type: "string"
+          applicationNumber:
+            type: "string"
+          customerId:
+            type: "string"
+          customerName:
+            type: "string"
+          requestFrom:
+            type: "string" 
+          utilizationLineCode:
+            type: "string"
+          utilizationLineSerial:
+            type: "string" 
+          utilizationCurrency:
+            type: "string"
+          exceptionStatus:
+            type: "string"
+          utilizationAmount:
+            type: "number"
+          recordStat:
+            type: "string"    
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          updatedBy:
+            type: "string"  
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          transactionHeader:
+            $ref: '#/definitions/TransactionHeaderModel'
+  ExceptionDashboardModelCollection:
+    description: "Collection of Collateral Liquidation."
+    type: "object"
+    properties:
+      ExceptionDashboardModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExceptionDashboardModel"

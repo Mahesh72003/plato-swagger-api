@@ -1,0 +1,1147 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : businessprocess_webapi.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+  description: "You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Business Process Service"
+  
+host: "whf00bfw:9000"
+basePath: "/business-process-service"
+tags:
+  - name: "BusinessProcessAPI"
+    description: "API for business Process Operations"  
+schemes:
+- "http"
+
+paths:
+
+  
+  /businessprocess:
+    post:
+      tags:
+        - "businessprocess"
+      summary: "Adds a new businessprocess Definition."
+      description: "Adds a new businessprocess Definition. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "business Process"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Process Definition"
+          required: true
+          schema:
+            $ref: "#/definitions/ProcessModel"
+      responses:
+        201:
+         description: "Returns the Id of the newly created  Process Definition"
+         headers:
+          Location:
+           description: "URL of newly created  Process Definition"
+           type: "string"
+         schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Get all valid Process Definition."
+      description:  "Get all valid Process Definition. This endpoints will be used to Get all valid business Process maintanence records."
+      operationId: "getAll"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: businessProcessCode
+        in: query
+        description: Business Process Code need to be set to fetch getall record
+        required: false
+        type: string
+      - name: processCode
+        in: query
+        description: Process Code need to be set to fetch getall record
+        required: false
+        type: string
+      - name: lifeCycleCode
+        in: query
+        description: Life Cycle Code need to be set to fetch getall record
+        required: false
+        type: string
+      - name: businessProductCode
+        in: query
+        description: Business Product Code need to be set to fetch getall record
+        required: false
+        type: string
+      - in: query
+        name: authStatus
+        required: false
+        type: string
+      - in: query
+        name: recordStatus
+        required: false
+        type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          schema:
+           type: object
+           $ref: "#/definitions/ProcessCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessprocess/{id}:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrieves the businessprocess Definition  by id."
+      description:  "Retrieves the businessprocess  by id. Add additional information here for the this endpoint."
+      operationId: "getById"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the Process Definition that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "query"
+          description: "version of the Process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Process Definition based on given id."
+          schema:
+            $ref: "#/definitions/ClmoProcessWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "businessprocess"
+      summary: "Update an existing Process Definition."
+      description:  "Update an existing Process Definition. Add additional information here for the this endpoint."
+      operationId: "modifyRecord"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the Process Definition that need to be updated"
+          required: true
+          type: "string"      
+        - name: "processModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing Process Definition"
+          required: true
+          schema:
+            $ref: "#/definitions/ProcessModel"
+      responses:
+        200:
+          description: "Returns updated Process Definition"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+    delete:
+      tags:
+        - "businessprocess"
+      summary: "Deletes the process definition identified by given ID."
+      description:  "Deletes the process definition identified by given ID. Add additional information here for the this endpoint."
+      operationId: "delete"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the process definition Maintenance"
+          required: true
+          type: "string"
+        - name: "business Process"
+          in: "body"
+          description: Request body contain Modification no of process definition Maintenance which need to be deleted"
+          required: true
+          schema:
+           $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+                   
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../processs/xxx/approve
+
+  /businessprocess/{id}/approve:
+    patch:
+      tags:
+        - "businessprocess"
+      summary: "Authorize the businessprocess by given ID."
+      description:  "Authorize the businessprocess identified by given ID."
+      operationId: "authorize"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the business Process Maintenance"
+          required: true
+          type: "string"
+        - name: "business Process"
+          in: "body"
+          description: Request body contain business Process and Modification no of business Process Maintenance which need to be authorized"
+          required: true
+          schema:
+           $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /businessprocess/{id}/unauthorized:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrives the process Definition unauthorized records by given ID."
+      description:  "Retrives the process Definition unauthorized records identified by given ID."
+      operationId: "authQuery"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the process Definition based on given id."
+          schema:
+             $ref: "#/definitions/ProcessCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../processs/xxx/history
+
+
+  /businessprocess/{businessProcessCode}/documents:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrieves the documents associated with the specified Process Definition"
+      description:  "Retrieves the s associated with the specified Process Definition"
+      operationId: "getDocumentsBybusinessprocesscode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessProcessCode"
+          in: "path"
+          description: "businessProcessCode of the Process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Process Definition document list based on given id."
+          schema:
+            $ref: "#/definitions/DocumentCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessprocess/{businessProcessCode}/advices:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrieves the advices associated with the specified Process Definition"
+      description:  "Retrieves the advices associated with the specified Process Definition"
+      operationId: "getAdvicesBybusinessprocesscode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessProcessCode"
+          in: "path"
+          description: "businessProcessCode of the Process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Process Definition advices list based on given id."
+          schema:
+            $ref: "#/definitions/AdviceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessprocess/{businessProcessCode}/clauses:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrieves the clauses associated with the specified process Definition"
+      description:  "Retrieves the clauses associated with the specified process Definition"
+      operationId: "getClauseBybusinessprocesscode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessProcessCode"
+          in: "path"
+          description: "businessProcessCode of the process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the process Definition clause list based on given id."
+          schema:
+            $ref: "#/definitions/ClauseCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessprocess/{businessProcessCode}/checklists:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrieves the checklists associated with the specified process Definition"
+      description:  "Retrieves the checklists associated with the specified process Definition"
+      operationId: "getChecklistBybusinessprocesscode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the process Definition check list based on given id."
+          schema:
+            $ref: "#/definitions/CheckListCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessprocess/{businessProcessCode}/loanlimit:
+    get:
+      tags:
+        - "businessprocess"
+      summary: "Retrieves the advices associated with the specified Process Definition"
+      description:  "Retrieves the advices associated with the specified Process Definition"
+      operationId: "getLoanLimitBybusinessprocesscode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessProcessCode"
+          in: "path"
+          description: "businessProcessCode of the Process Definition that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Process Definition advices list based on given id."
+          schema:
+            $ref: "#/definitions/LoanLimitCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"     
+  /businessprocess/{id}/{action}:
+    patch:
+      tags:
+        - "businessprocess"
+      summary: "Close/reopen the business process by given ID."
+      description:  "Close/reopen the business process identified by given ID."
+      operationId: "performCloseAndReopen"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "action"
+          in: "path"
+          description: "action of the business process Maintenance"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          description: "Id of the business process Maintenance"
+          required: true
+          type: "string"
+        - name: "businessprocess"
+          in: "body"
+          description: Request body contain business process and Modification no of business process Maintanence which need to be deleted"
+          required: true
+          schema:
+           $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+             
+
+definitions:
+ GenericDto:
+   allOf:
+   - type: object
+     discriminator: resource_type
+
+ ProcessModel:
+    description: "Process model"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      required:
+      - processCode
+      - processDesc
+      - businessProductCode
+      - businessProcessCode
+      - lifeCycleCode
+      properties:
+        processCode:
+          description: "processCode"
+          type: "string"
+          minLength: 0
+          maxLength: 6
+        businessProcessCode:
+          description: "businessProcessCode"
+          type: "string"
+          minLength: 0
+          maxLength: 16
+        businessProcessDescription:
+          description: "businessProcessDescription"
+          type: "string"
+          minLength: 0
+          maxLength: 60
+        businessProductCode:
+          description: "businessProductCode"
+          type: "string"
+          minLength: 0
+          maxLength: 16
+        lifeCycleCode:
+          description: "lifeCycleCode"
+          type: "string"
+        lifeCycleDesc:
+          description: "lifeCycleDesc"
+          type: "string"
+        processDesc:
+          description: "processDesc"
+          type: "string"
+          minLength: 0
+          maxLength: 60
+        processName:
+          description: "processName"
+          type: "string"
+        multiLevelApproval:
+          description: "multiLevelApproval"
+          type: "string"
+        manualTasks:
+          description: "manual tasks"
+          type: "array"
+          items: 
+            $ref: "#/definitions/BusinessProcessStageModel"
+        systemTasks:
+          description: "system tasks"
+          type: "array"
+          items:
+            $ref: "#/definitions/BusinessProcessStageModel"   
+        loanLimitApproval:
+          description: "Loan Limit Approval list"
+          type: "array"
+          items:
+            $ref: "#/definitions/LoanLimitLevelModel"
+ ClassCodeModel:
+    description: "Class Code model"
+    type: "object"
+    required:
+    - processCode
+    - processDesc
+    properties:
+      id:
+        description: "id"
+        type: string
+      classId:
+        description: "classId"
+        type: string
+      classCode:
+        description: "classCode"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      classDesc:
+        description: "classDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+      className:
+        description: "className"
+        type: "string"
+      businessProductList:
+        description: "business Product List"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProductModel"
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      sequence:
+        description: "sequence"
+        type: "integer"
+        format: "int64"
+      editFlag:
+        description: "mandatory"
+        type: boolean
+        default: false
+      domain:                           
+        description: "Domain Name"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      businessProcessStageId:
+        description: "businessProcessStageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      datasegment:
+        description: "datasegment"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProcessStageDsModel"
+ BusinessProcessStageModel:
+    description: "BusinessProcessStageModel model"
+    type: "object"
+    required:
+    - stageCode
+    - stageName
+    properties:
+      id:
+        description: "Id of the BusinessProcessStageModel"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      processId:
+        description: "processId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      stageCode:
+        description: "stageCode"
+        type: "string"
+      stageId:
+        description: "stageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      seqOrder:
+        description: "sequence"
+        type: "integer"
+      stageName:
+        description: "stageName"
+        type: "string"
+      taskFlag:
+        description: "taskFlag"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      sourceStage:
+        description: "sourceStage"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      datasegment:
+        description: "datasegment"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProcessStageDsModel"
+      classCode:
+        description: "class Code"
+        type: "array"
+        items:
+          $ref: "#/definitions/ClassCodeModel"  
+      documentList:
+        description: "document list"
+        type: "array"
+        items:
+          $ref: "#/definitions/DocumentModel"
+      clausesList:
+        description: "clauses list"
+        type: "array"
+        items:
+          $ref: "#/definitions/ClauseModel"
+      advicesList:
+        description: "advices list"
+        type: "array"
+        items:
+          $ref: "#/definitions/AdviceModel"
+      checkList:
+        description: "check list"
+        type: "array"
+        items:
+          $ref: "#/definitions/CheckListModel"
+ DocumentModel:
+    description: "Document model"
+    type: "object"
+    required:
+    - businessProductList
+    - documentTypeName
+    properties:
+      id:
+        description: "id of the document"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      documentTypeDesc:
+        description: "documentTypeDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      documentTypeName:
+        description: "documentTypeName"
+        type: "string" 
+      documentTypeCategory:
+        description: "documentTypeCategory"
+        type: "string"
+      businessProductList:
+        description: "business Product List"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProductModel"
+      originalRequired:
+        description: "originalRequired"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      versioning: 
+        description: "versioning"
+        type: "string"
+        maxLength: 1
+      uploadType:
+        description: "uploadType"
+        type: "string"
+      businessProcessStageId:
+        description: "businessProcessStageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+ AdviceModel:
+    description: "Advice model"
+    type: "object"
+    required:
+    - businessProductList
+    - adviceTypeName
+    properties:
+      id:
+        description: "id of the advice"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      adviceTypeDesc:
+        description: "adviceTypeDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      adviceTypeName:
+        description: "adviceTypeName"
+        type: "string"
+      adviceGenType:
+        description: "adviceGenType"
+        type: "string"
+        minLength: 0
+        maxLength: 12 
+      businessProductList:
+        description: "business Product List"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProductModel"
+      advicePartyRoleList:
+        description: "party Role List"
+        type: "array"
+        items:
+          $ref: "#/definitions/AdvicePartyRoleModel"
+      businessProcessStageId:
+        description: "businessProcessStageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+ CheckListModel:
+    description: "CheckList model"
+    type: "object"
+    required:
+    - businessProductList
+    properties:
+      id:
+        description: "id of the checklist"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      checkListData:
+        description: "checkListData"
+        type: "string"
+        minLength: 0
+        maxLength: 255
+      businessProductList:
+        description: "business Product List"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProductModel"
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      sequenceNo:
+        description: "sequenceNo"
+        type: "string" 
+        minLength: 0
+        maxLength: 20
+      businessProcessStageId:
+        description: "businessProcessStageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+ BusinessProductModel:
+    description: "Business Product Model "
+    type: "object"
+    required:
+    - businessProductCode
+    properties:
+      id:
+        description: "id of the Business Product"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      parentId:
+        description: "id of the Parent"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      businessProductCode:
+        description: "businessProductCode"
+        type: "string"
+        minLength: 0
+        maxLength: 16
+ AdvicePartyRoleModel:
+   description: "Party Role Model "
+   type: "object"
+   required:
+     - partyRoleCode
+   properties:
+     id:
+       description: "id of the Party Role"
+       type: "string"
+       minLength: 0
+       maxLength: 36
+     parentId:
+       description: "id of the Parent"
+       type: "string"
+       minLength: 0
+       maxLength: 36
+     partyRoleCode:
+       description: "partyRoleCode"
+       type: "string"
+       minLength: 0
+       maxLength: 16
+ ClauseModel:
+    description: "Clause model"
+    type: "object"
+    required:
+    - businessProductList
+    - clauseCode
+    - clauseName
+    properties:
+      id:
+        description: "id of the clause"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      clauseCode:
+        description: "clauseCode"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      clauseName:
+        description: "clauseName"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      clauseDesc:
+        description: "clauseDesc"
+        type: "string" 
+      businessProductList:
+        description: "business Product List"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProductModel"
+      businessProcessStageId:
+        description: "businessProcessStageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+ LoanLimitLevelModel:
+    description: "Loan Limit model"
+    type: "object"
+    properties:
+      id:
+        description: "id of the loan limt"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      processId:
+        description: "processId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      limitCurrency:
+        description: "currency"
+        type: "string"
+      approvalAmountLimit1:
+        description: "approvalAmountLimit1"
+        type: number
+      approvalAmountLimit2:
+        description: "approvalAmountLimit1"
+        type: number
+    
+ BusinessProcessStageDsModel:
+    description: "data segment model"
+    type: "object"
+    required:
+    - businessProductList
+    properties:
+      id:
+        description: "id of the datasegment"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      businessProductList:
+        description: "business Product List"
+        type: "array"
+        items:
+          $ref: "#/definitions/BusinessProductModel"
+      mandatory:
+        description: "mandatory"
+        type: boolean
+        default: false
+      dataSegmentCode:
+        description: "data segment code name"
+        type: "string"
+      dataSegmentName:
+        description: "dataSegmentName"
+        type: "string"
+      sequence:
+        description: "sequence"
+        type: "integer"
+        format: "int64"
+      editFlag:
+        description: "mandatory"
+        type: boolean
+        default: false
+      domain:                           
+        description: "Domain Name"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      businessProcessStageId:
+        description: "businessProcessStageId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+
+ ProcessCollection: 
+  description: "Collection of Process Code."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ProcessModel"
+   paging:
+    $ref: "#/definitions/PagingDto"    
+
+ DocumentCollection: 
+  description: "Collection of Documents."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/DocumentModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CheckListCollection:
+  description: "Collection of checklists."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CheckListModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ AdviceCollection:
+  description: "Collection of advices."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/AdviceModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ ClauseCollection:
+  description: "Collection of clauses."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ClauseModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ LoanLimitCollection:
+  description: "Collection of loan limit."
+  type: "object"
+  properties:
+   data:
+    type: "object"
+    items: 
+     $ref: "#/definitions/LoanLimitLevelModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ClmoProcessWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/ProcessModel"
+

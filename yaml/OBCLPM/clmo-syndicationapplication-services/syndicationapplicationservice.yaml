@@ -1,0 +1,899 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Syndication Application Service API
+host: 10.184.157.121:9000
+basePath: /syndicationapplication-services
+tags:
+- name: syndicationapplication
+  description: API for syndicationapplication Operations
+schemes:
+- http
+paths:
+  /service/api/v1/syndicationapplications/{applicationNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationApplicationAggregateChannel
+      summary: Gets the Syndication Origination/Restructuring Application deatils of the given application Number.
+      description: Gets the Syndication Origination/Restructuring Application deatils of the given application Number.
+      operationId: getSyndicationApplicationServiceByApplicationNumber
+      parameters:
+      - name: applicationNumber
+        in: path
+        description: application number of the required Syndication origination/restructuring Application.
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Syndication Origination/Restructuring Application details of the given  application number.
+          schema:
+            $ref: '../../commondefinitions.yaml#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/syndicationapplications/getSyndicationApplicationsByCustomerNumber/{customerNumber}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationApplicationAggregateChannel
+      summary: Lists all the syndication origination/restructuring applications for the given customer number.
+      description: Lists all the syndication origination/restructuring applications for the given customer number.
+      operationId: getSyndicationApplicationsByCustomerNumber
+      parameters:
+      - name: customerNumber
+        in: path
+        description: Customer number for which all the syndication origination/restructuring application data needs to be listed
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the details of all the syndication origination/restructuring applications of the customer number
+          schema:
+            $ref: '../../commondefinitions.yaml#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/syndicationapplications/drawdownnotice:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationDrawdownNoticeChannel
+      summary: Resolve Drawdown Notice and add syndication drawdown entry details.
+      description: Resolve Drawdown Notice and add syndication drawdown entry details.
+      operationId: addSyndicationDrawdownEntryDetails
+      parameters:
+      - name: SyndicationDrawdownNotice
+        in: body
+        description: Request Body that contains data required for creating a new SyndicationDrawdownEntryDetails
+        required: true
+        schema:
+          $ref: '#/definitions/SyndicationDrawdownNoticeModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created SyndicationDrawdownEntryDetails
+          headers:
+            Location:
+              description: URL of newly created SyndicationDrawdownEntryDetails
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationDrawdownNoticeChannel
+      summary: Retrieve list of Drawdown Notices.
+      description: Retrieve list of Drawdown Notices.
+      operationId: getAllDrawdownNotices
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: false
+        type: string
+      - name: drawdownInitiated
+        in: query
+        description: drawdownInitiated flag that to fetch the data.
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Returns the List of Drawdown Notices.
+          schema:
+            $ref: '../../commondefinitions.yaml#/definitions/ResponseCollectionModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/syndicationapplications/drawdownnotice/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationDrawdownNoticeChannel
+      summary: Retrieve Drawdown Notice by ID.
+      description: Retrieve Drawdown Notice by ID.
+      operationId: getDrawdownNoticeById
+      parameters:
+      - name: id
+        in: path
+        description: Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the PreferredBanks based on given ID.
+          schema:
+            $ref: '#/definitions/SyndicationDrawdownNoticeModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationDrawdownNoticeChannel
+      summary: Update an existing SyndicationDrawdownNotice.
+      description: Update an existing SyndicationDrawdownNotice.
+      operationId: updateDrawdownNotice
+      parameters:
+      - name: id
+        in: path
+        description: id of the DrawdownNotice that need to be updated
+        required: true
+        type: string
+      - name: drawdownNotice
+        in: body
+        description: Request Body that contains data required for updating an existing DrawdownNotice
+        required: true
+        schema:
+          $ref: '#/definitions/SyndicationDrawdownNoticeModel'
+      responses:
+        200:
+          description: Returns updated PreferredBanks
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - SyndicationDrawdownNoticeChannel
+      summary: Deletes the DrawdownNotice identified by given ID.
+      description: Deletes the DrawdownNotice identified by given ID.
+      operationId: deleteDrawdownNotice
+      parameters:
+      - name: id
+        in: path
+        description: Id of the DrawdownNotice that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /service/api/v1/syndicationapplications/nlpapplication:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPApplicationChannel
+      summary: create nlp application entry details.
+      description: create nlp application entry details.
+      operationId: addNLPApplication
+      parameters:
+      - name: nlpApplicationDetailsModel
+        in: body
+        description: Request Body that contains data required for creating a new NLPApplicationDetails
+        required: true
+        schema:
+          $ref: '#/definitions/NLPApplicationDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created NLP application
+          headers:
+            Location:
+              description: URL of newly created NLP application
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPApplicationChannel
+      summary: enriches nlp application  details.
+      description: enriches nlp application  details.
+      operationId: enrichNLPApplication
+      parameters:
+      - name: nlpApplicationDetailsModel
+        in: body
+        description: Request Body that contains data required for creating a new NLPApplicationDetails
+        required: true
+        schema:
+          $ref: '#/definitions/NLPApplicationDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created NLP application
+          headers:
+            Location:
+              description: URL of newly created NLP application
+              type: string
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /service/api/v1/syndicationapplications/updatetransactionlogs:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPApplicationChannel
+      summary: updatetransactionlogs
+      description: updatetransactionlogs
+      operationId: updatetransactionlogs
+      parameters:
+      - name: nlpApplicationDetailsModel
+        in: body
+        description: Request Body that contains data required annotateTags
+        required: true
+        schema:
+          $ref: '#/definitions/NLPApplicationDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created NLP application
+          headers:
+            Location:
+              description: URL of newly created NLP application
+              type: string
+          type: string
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/api/v1/syndicationapplications/application:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - NLPApplicationChannel
+      summary: initiate application.
+      description: initiate application.
+      operationId: initiateApplication
+      parameters:
+      - name: nlpApplicationDetailsModel
+        in: body
+        description: Request Body that contains data required for creating a new application
+        required: true
+        schema:
+          $ref: '#/definitions/NLPApplicationDetailsModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created NLP application
+          headers:
+            Location:
+              description: URL of newly created NLP application
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                      
+definitions:
+  SyndicationDrawdownNoticeModel:
+    description: SyndicationDrawdownNotice model
+    type: object    
+    properties:
+      id:
+        description: Id of the BasicApplicationDetails
+        type: string
+        format: int64
+      agentName:
+        description: Agent Name
+        type: string
+      participantName:
+        description: Participant Name
+        type: string
+      agreementDate:
+        description: Agreement Date
+        type: string
+      facilityAmountCurrency:
+        description: Facility Amount Currency
+        type: string
+      facilityAmount:
+        description: Facility Amount
+        type: string
+      partyRole:
+        description: Party Role
+        type: string
+      partyName:
+        description: Party Name
+        type: string
+      trancheName:
+        description: Tranche Name
+        type: string
+      trancheType:
+        description: Tranche Type
+        type: string
+      startDate:
+        description: Start Date
+        type: string
+      maturityDate:
+        description: Maturity Date
+        type: string
+      loanTenor:
+        description: Loan Tenor
+        type: string
+      loanAmountCurrency:
+        description: Loan Amount Currency
+        type: string
+      globalLoanAmountCurrecny:
+        description: Global Loan Amount Currency
+        type: string
+      loanAmount:
+        description: Loan Amount
+        type: string
+      globalLoanAmount:
+        description: Global Loan Amount
+        type: string
+      customerNumber:
+        description: Customer Number
+        type: string
+      facilityRefNo:
+        description: Facility Reference Number
+        type: string
+      trancheRefNo:
+        description: Tranche Reference Number
+        type: string
+      drawdownInitiated:
+        description: Drawdown Initiated
+        type: boolean
+      applicationNumber:
+        description: Application Number
+        type: string
+      documentId:
+        description: Document Id
+        type: string
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string
+      createdBy:
+        description: Created By
+        type: string
+      createdTimeStamp:
+        description: Created Time Stamp
+        type: string
+  SyndicationDrawdownEntryDetailsModel:
+    description: SyndicationDrawdownEntryDetailsModel model
+    type: object
+    required:
+    - businessProductCode
+    - applicationBranch
+    - customerType
+    - applicationDate
+    - customerNumber
+    properties:
+      id:
+        description: Id of the SyndicationDrawdownEntryDetails
+        type: string
+        format: int64
+      applicationNumber:
+        description: Application Number of the SyndicationDrawdownEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 20
+      businessProductCode:
+        description: ApplicationCategory Name of the SyndicationDrawdownEntryDetails
+        type: string
+        maxLength: 36
+      lifeCycleCode:
+        description: LifeCycleCode
+        type: string
+        maxLength: 20
+      applicationChannel:
+        description: ApplicationChannel of the SyndicationDrawdownEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 22
+      applicationDate:
+        description: ApplicationDate code of the SyndicationDrawdownEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 11
+      subCategory:
+        description: SubCategory  of the SyndicationDrawdownEntryDetails
+        type: string
+      remarks:
+        description: Remarks of the SyndicationDrawdownEntryDetails
+        type: string
+      applicationInitiationDate:
+        description: applicationInitiationDate code of the SyndicationDrawdownEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 10
+      applicationBranch:
+        description: applicationBranch  of the BasicApplicationDetails
+        type: string
+      customerType:
+        description: CustomerType  of the SyndicationDrawdownEntryDetails
+        type: string
+      customerNumber:
+        description: customerNumber  of the SyndicationDrawdownEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 22
+      customerName:
+        description: customerName  of the SyndicationDrawdownEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      preMandateReference:
+        description: PreMandate application Number
+        type: string
+        maxLength: 20
+      dealOriginationReference:
+        description: deal Origination application Number
+        type: string
+        maxLength: 20
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string
+      priority:
+        description: priority  of the SyndicationDrawdownEntryDetails
+        type: string
+      name:
+        description: Name  of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      loanPurpose:
+        description: LoanPurpose  of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      applicationSubmittedBy:
+        description: ApplicationSubmittedBy code of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 15
+      email:
+        description: Email code of the BasicApplicationDetails
+        type: string
+        maxLength: 50
+      transactionHeader:
+        $ref: '../../commondefinitions.yaml#/definitions/TransactionHeader'
+      facilities: 
+        description: Facility Details
+        type: array
+        items: 
+         $ref: '../../commondefinitions.yaml#/definitions/FacilitiesModel' 
+      loanDetails: 
+        description: Loan Details 
+        $ref: '../../commondefinitions.yaml#/definitions/LoanDetailsModel'
+  FacilitiesModel:
+    description: Facilities Model
+    type: object
+    properties:
+     facilityRefNo: 
+      description: Facility Reference No
+      type: string
+      maxLength: 16
+     facilityName:
+      description: Facility Name
+      type: string
+      maxLength: 35
+     facilityCurrency:
+      description: Facility Currency
+      type: string
+      maxLength: 4
+     facilityAmount:
+      description: Facility Amount
+      type: number
+      minimum: 0
+     availableAmount:
+      description: Available Amount
+      type: number
+      minimum: 0
+     tranches: 
+      description: Facility Tranches Details
+      type: array
+      items: 
+       $ref: '#/definitions/FacilityTranchesModel'
+  FacilityTranchesModel:
+    description: Facility Tranches Model
+    type: object
+    properties:
+     trancheRefNo: 
+      description: Tranche Reference No
+      type: string
+      maxLength: 16
+     trancheName:
+      description: Tranche Name
+      type: string
+      maxLength: 35
+     trancheCurrency:
+      description: Tranche Currency
+      type: string
+      maxLength: 4
+     trancheAmount:
+      description: Tranche Amount
+      type: number
+      minimum: 0
+     availableAmount:
+      description: Available Amount
+      type: number
+      minimum: 0    
+  SyndicationDrawdownEntryDetailsCollection:
+    description: Collection of SyndicationDrawdownEntryDetails.
+    type: object
+    properties:
+      BasicApplicationDetailsList:
+        type: array
+        items:
+          $ref: '../../commondefinitions.yaml#/definitions/SyndicationDrawdownEntryDetailsModel'
+  PaymentAdviceEntryDetailsModel:
+    description: PaymentAdviceEntryDetailsModel model
+    type: object
+    required:
+    - businessProductCode
+    - applicationBranch
+    - customerType
+    - applicationDate
+    - customerNumber
+    properties:
+      id:
+        description: Id of the PaymentAdviceEntryDetails
+        type: string
+        format: int64
+      applicationNumber:
+        description: Application Number of the PaymentAdviceEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 20
+      businessProductCode:
+        description: ApplicationCategory Name of the PaymentAdviceEntryDetails
+        type: string
+        maxLength: 36
+      lifeCycleCode:
+        description: LifeCycleCode
+        type: string
+        maxLength: 20
+      applicationChannel:
+        description: ApplicationChannel of the PaymentAdviceEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 22
+      applicationDate:
+        description: ApplicationDate code of the PaymentAdviceEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 11
+      subCategory:
+        description: SubCategory  of the PaymentAdviceEntryDetails
+        type: string
+      remarks:
+        description: Remarks of the PaymentAdviceEntryDetails
+        type: string
+      applicationInitiationDate:
+        description: applicationInitiationDate code of the PaymentAdviceEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 10
+      applicationBranch:
+        description: applicationBranch  of the BasicApplicationDetails
+        type: string
+      customerType:
+        description: CustomerType  of the PaymentAdviceEntryDetails
+        type: string
+      customerNumber:
+        description: customerNumber  of the PaymentAdviceEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 22
+      customerName:
+        description: customerName  of the PaymentAdviceEntryDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      preMandateReference:
+        description: PreMandate application Number
+        type: string
+        maxLength: 20
+      dealOriginationReference:
+        description: deal Origination application Number
+        type: string
+        maxLength: 20
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string
+      priority:
+        description: priority  of the PaymentAdviceEntryDetails
+        type: string
+      name:
+        description: Name  of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      loanPurpose:
+        description: LoanPurpose  of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 35
+      applicationSubmittedBy:
+        description: ApplicationSubmittedBy code of the BasicApplicationDetails
+        type: string
+        minLength: 0
+        maxLength: 15
+      email:
+        description: Email code of the BasicApplicationDetails
+        type: string
+        maxLength: 50
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeader'
+      incomingPayment: 
+        description: Incoming payment Details 
+        $ref: '#/definitions/IncomingPaymentsModel' 
+  IncomingPaymentsModel:
+    description: Incoming payments Model
+    type: object
+    properties:
+     borrowerName: 
+      description: Borrower Name
+      type: string
+     borrowerNumber:
+      description: Borrower Number
+      type: string
+     applicationNumber:
+      description: Application Number
+      type: string
+     amount:
+      description: Amount
+      type: number
+     currency:
+      description: Currency
+      type: string
+     valueDate:
+      description: Value Date
+      type: string
+     transactionRefNo:
+      description: Transaction Reference Number
+      type: string
+     matchingStatus:
+      description: Matching Status
+      type: string
+     contractRefNumber:
+      description: contract Reference Number
+      type: string
+     paymentApplicationNumber:
+      description: Payment Application Number
+      type: string
+     processRefNumber:
+        description: processRefNumber
+        type: string
+     incomingPaymentsDocs:
+        type: array
+        items:
+          $ref: '#/definitions/IncomingPaymentsDocsModel'
+  IncomingPaymentsDocsModel:
+    description: Incoming Payments Docs Model
+    type: object
+    properties:
+     documentLinkageId: 
+      description: document Linkage Id
+      type: string
+     documentName:
+      description: Document Name
+      type: string
+     documentType:
+      description: Document Type
+      type: string
+  PaymentAdviceEntryDetailsCollection:
+    description: Collection of SyndicationDrawdownEntryDetails.
+    type: object
+    properties:
+      BasicApplicationDetailsList:
+        type: array
+        items:
+          $ref: '#/definitions/PaymentAdviceEntryDetailsModel'
+  NLPApplicationDetailsModel:
+    description: NLPApplicationDetails model
+    type: object
+    properties:
+      id:
+        description: Id 
+        type: string
+        format: int64
+      docId:
+        type: string
+      text:
+        type: string
+      docType:
+        type: string
+      keyvals:
+        type: array
+        items: 
+          $ref: '#/definitions/MltbNerKeyValObjDTO'
+      applicationNumber:
+        description: Application Number 
+        type: string
+      processRefNumber:
+        description: process refeernce Number 
+        type: string
+      businessProductCode:
+        description: businessProductCode 
+        type: string
+      lifeCycleCode:
+        description: LifeCycleCode
+        type: string
+      applicationChannel:
+        description: ApplicationChannel
+        type: string
+      applicationDate:
+        description: ApplicationDate 
+        type: string
+      remarks:
+        description: Remarks 
+        type: string
+      applicationInitiationDate:
+        description: applicationInitiationDate 
+        type: string
+      applicationBranch:
+        description: applicationBranch  
+        type: string
+      priority:
+        description: priority  
+        $ref: '../../commondefinitions.yaml#/definitions/TaskPriority'
+      transactionHeader:
+        $ref: '../../commondefinitions.yaml#/definitions/TransactionHeader'
+      facilities:
+        description: Facility Details
+        type: array
+        items:
+          $ref: '#/definitions/FacilitiesModel'
+      updatedBy:
+        description: Updated By
+        type: string             
+  MltbNerKeyValObjDTO:
+    description: tagdetails 
+    type: object
+    properties:
+      tagDispSeq:
+        type: number
+      displayLabel:
+        type: string
+      tagName:
+        type: string
+      annotateTag:
+        type: string
+      value:
+        type: string
+      start_index:
+        type: number
+      end_index:
+        type: number
+      tagDfltVal:
+        type: string    

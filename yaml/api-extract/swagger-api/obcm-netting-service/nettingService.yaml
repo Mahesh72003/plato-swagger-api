@@ -1,0 +1,374 @@
+swagger: "2.0"
+info:
+  description: "Provides APIs to perform operations on Netting Transactions"
+  version: "1.0.0"
+  title: "Netting Transaction Service APIs"
+host: "10.184.157.121:9000"
+basePath: "/obcm-netting-service"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+- name: "NettingTransactionService"
+  description: "APIs for Netting Transaction Operations"
+  
+paths:
+  /service/v1/getNettingTxn:
+    get:
+      tags:
+        - "NettingTransactionService"  
+      summary: "Retrieves the list of Netting Transactions." 
+      description: "Retrieves the list of Netting Transactions."
+      operationId: "getNettingTxn"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Source Application Id"
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Source User id"
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Branch Code"
+      - name: "nettingTxnNo"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Back Office Reference No of Netting Txn"
+      - name: "corporateId"
+        in: "query"
+        type: "string"
+        required: true
+        description: "Logged in CIF Id of Source System"
+      - name: "nettingCcy"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Currency of Netting Transaction"
+      - name: "associatedPartyId"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Associated Party Id/Counterparty Id linked to Netted Transaction"
+      - name: "agreementCode"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Agreement Id Associated with Netting Transaction"
+      - name: "creationDateFrom"
+        in: "query"
+        type: "string"        
+        required: false
+        description: "Creation Date Range of Netting Transaction in yyyy-MM-dd format"
+      - name: "creationDateTo"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Creation Date Range of Netting Transaction in yyyy-MM-dd format"
+      - name: "acceptRejectDateFrom"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Acceptance/rejection Date Range of Netting Transaction in yyyy-MM-dd format"
+      - name: "acceptRejectDateTo"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Acceptance/rejection Date Range of Netting Transaction in yyyy-MM-dd format"
+      - name: "settlementDateFrom"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Settlement Date Range of Netting Transaction in yyyy-MM-dd format"
+      - name: "settlementDateTo"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Settlement Date Range of Netting Transaction in yyyy-MM-dd format"
+      - name: "nettingTxnAmtFrom"
+        in: "query"
+        type: "number"
+        required: false
+        description: "Netting Transaction Amount from"
+      - name: "nettingTxnAmtTo"
+        in: "query"
+        type: "number"
+        required: false
+        description: "Netting Transaction Amount to"
+      - name: "nettingTxnStatus"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Transaction Status of Netting Transaction"  
+      - name: "isNetReceivablePayable"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Transaction Status of Netting Transaction" 
+      - name: "offset"
+        in: "query"
+        description: "Offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: "limit"
+        in: "query"
+        description: "Limit is maximum no of records to be fetched"
+        required: false
+        type: integer  
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/NettingTransactionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/nettingTxnStatus:
+    put:
+      tags:
+        - "NettingTransactionService"  
+      summary: "Update Netting Transactions Status" 
+      description: "Update Netting Transactions Status"
+      operationId: "updateNettingTxnStatus"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Source Application Id"
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "User Id"
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Branch Code"
+      - name: "nettingTxnStatusModel"
+        in: "body"
+        required: true
+        description: "Netting Transaction Status"
+        schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/NettingTransactionStatusRequestModel"
+      responses:
+        200:
+          description: "Netting Transaction Status Updated Successfully"
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/NettingTransactionStatusCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+                       
+  /service/v1/nettingAcceptanceTxn:
+    get:
+      tags:
+        - "NettingTransactionService"  
+      summary: "Retrieves the list of Netting Transactions for acceptance Job." 
+      description: "Retrieves the list of Netting Transactions for acceptance Job."
+      operationId: "getNettingAcceptanceTxn"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Source Application Id"
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "User Id"
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Branch Code"
+      - name: "branchDate" 
+        in: "query" 
+        description: "Branch Date"
+        type: "string" 
+      - name: "jobName" 
+        in: "query" 
+        description: "Name of the Job Triggered"
+        type: "string"  
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/EODResponseDetails"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+          
+  /service/v1/getNettingTxnInvoices:
+    get:
+      tags:
+        - "NettingTransactionService"  
+      summary: "Retrieves the List Of Invoices for Netting Transactions." 
+      description: "Retrieves the List Of Invoices for Netting Transactions."
+      operationId: "getNettingTxnInvoices"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Source Application Id"
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Source user Id"
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Branch Code"
+      - name: "nettingTxnNo"
+        in: "query"
+        type: "string"
+        required: true
+        description: "Back Office Reference No of Netting Txn"  
+      - name: "nettingStatus"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Invoice Transaction Status"
+      - name: "identifier"
+        in: "query"
+        type: "string"
+        required: false
+        description: "Invoice Transaction Identifier"           
+      - name: "offset"
+        in: "query"
+        description: "Offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: "limit"
+        in: "query"
+        description: "Limit is maximum no of records to be fetched"
+        required: false
+        type: integer  
+      responses:
+        200:
+          description: "Successfully performs the operation"
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/InvoicesTransactionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+          
+  /service/v1/settlementStatusUpdate:
+    post:
+      tags:
+        - "NettingTransactionService"
+      summary: "Change status to settled and update is netting flag "
+      description: "Change status to settled and update is netting flag "
+      operationId: "settlementStatusUpdate"
+      parameters:
+        - name: "conductorWorkflowModel"
+          in: "body"
+          description: "Request Body that contains data required for updating netting status."
+          required: true
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/ConductorWorkflowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns data of settlement status."
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/ConductorWorkflowModel"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/v1/updateNettingTxn:
+    post:
+      tags:
+        - "NettingTransactionService"
+      summary: "Change status to settled and update is netting flag "
+      description: "Change status to settled and update is netting flag "
+      operationId: "updateNettingTxn"
+      parameters:
+        - name: "nettingTransactionModel"
+          in: "body"
+          description: "Request Body that contains data required for updating netting txn."
+          required: true
+          schema:
+            $ref: "./nettingServiceDef.yaml#/definitions/NettingTransactionModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns data of netting txn updated."
+          schema:
+            $ref: "#/definitions/boolean"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"                                                  

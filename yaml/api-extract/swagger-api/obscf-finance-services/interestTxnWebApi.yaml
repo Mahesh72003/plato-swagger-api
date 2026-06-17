@@ -1,0 +1,428 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server ManualFinance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Interest Transaction Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-finance-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "interestTxnWeb"
+    description: "API for Interest Transaction Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/interestTransaction:
+    post:
+      tags:
+        - "interestTxnWeb"
+      summary: "Adds a new interest Transaction."
+      description: "Adds a new interest Transaction. Add additional information here for this endpoint."
+      operationId: "createInterestTransaction"
+      parameters:
+        - name: "interestTransactionCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new interest Transaction"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/InterestTransactionCollection"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully created a new interest Transaction"
+          headers:
+            Location:
+              description: "URL of newly created interest Transaction"
+              type: "string"
+          schema:
+              $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "interestTxnWeb"
+      summary: "Retrieves the list of existing interest Transactions."
+      description:  "Retrieves the list of existing interest Transactions. Add additional information here for the this endpoint."
+      operationId: "getAllInterestTransaction"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/interestTransaction/loanInterest:
+    post:
+      tags:
+       - "interestTxnWeb"
+      summary: Get the loan interest from OBCL
+      description: Get the loan interest from OBCL
+      operationId: getInterestLoan
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: Application id        
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+        description: user id
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+        description: Branch Code     
+      - name: jsonObject
+        in: body
+        description: Request Body that contains data required for getting interest of  loan through a OBSCF services
+        required: true
+        schema:
+         type: "string"
+      responses:
+        201:
+          description: "Successfully fetch the interest details"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"        
+  /web/v1/interestTransaction/{financeRefNo}:
+    get:
+      tags:
+        - "interestTxnWeb"
+      summary: "Retrieves the interest Transaction by ID."
+      description:  "Retrieves the interest Transaction by ID. Add additional information here for the this endpoint."
+      operationId: "getInterestTransactionByRefNo"
+      parameters:
+        - name: "financeRefNo"
+          in: "path"
+          description: "ReferenceNumber for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "authorizationStatus"
+          in: "query"
+          required: false
+          description: "Authorization Status"
+          type: "string"
+      responses:
+        200:
+          description: "Returns the interest Transaction based on given ReferenceNumber."
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/interestTransaction/{id}:
+    put:
+      tags:
+        - "interestTxnWeb"
+      summary: "Update an existing interest Transaction."
+      description:  "Update an existing interest Transaction. Add additional information here for the this endpoint."
+      operationId: "updateInterestTransaction"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the interest Transaction that need to be updated"
+          required: true
+          type: "string" 
+        - name: "interestTransactionCollection"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing interest Transaction"
+          required: true
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/InterestTransactionCollection"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns updated interest Transaction"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "interestTxnWeb"
+      summary: "Deletes the interest Transaction identified by given ID"
+      description:  "Deletes the interest Transaction identified by given ID"
+      operationId: "deleteInterestTransaction"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the interest Transaction that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /web/v1/interestTransactionMain/{financeRefNo}:
+    get:
+      tags:
+        - "interestTxnWeb"
+      summary: "Retrieves the list of existing interest Transaction from Main."
+      description:  "Retrieves the list of existing interest Transaction. Add additional information here for the this endpoint."
+      operationId: "getInterestTransactionMain"
+      parameters:
+        - name: "financeRefNo"
+          in: "path"
+          description: "financeRefNo of the details that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./financeTxnWebDef.yaml#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"

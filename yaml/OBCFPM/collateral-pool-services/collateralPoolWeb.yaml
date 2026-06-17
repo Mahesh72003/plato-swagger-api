@@ -1,0 +1,1357 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Valuation server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Collateral Pool Service"
+host: "whf00bdm:7801"
+basePath: "/collateralpool-services"
+tags:
+  - name: "CollateralPoolAPI"
+    description: "API for Collateral Pool's Operations"
+schemes:
+- "http"
+ 
+paths:
+  /web/v1/update/pool/handOffStatus/{applicationNumber}/{partyId}/{poolCode}:
+    get:
+      tags:
+        - "poolWeb"
+      summary: "Retrieves the latest list of existing pools."
+      description:  "Retrieves the latest list of existing pools."
+      operationId: "updatePoolHandOffStatus"
+      parameters:
+        - name: "applicationNumber"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "partyId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "poolCode"
+          in: "path"
+          required: true
+          type: "string"  
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false   
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"               
+  /web/v1/poolWithPoolDetails:
+    post:
+      tags:
+        - "poolWeb"
+      summary: "Adds a new Pool."
+      description: "Adds a new Pool."
+      operationId: "addPoolAndPoolDetails"
+      parameters:
+        - name: "poolMainModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new pool"
+          required: true
+          schema:
+            $ref: "#/definitions/PoolMainModel"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Returns the Id of the newly created pool"
+          headers:
+            Location:
+              description: "URL of newly created pool"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/poolWithPoolDetails/byPoolCode/{applicationNumber}/{partyId}/{poolCode}:
+    get:
+      tags:
+        - "poolWeb"
+      summary: "Retrieves the latest list of existing pools."
+      description:  "Retrieves the latest list of existing pools."
+      operationId: "getPoolDetailsByPoolCode"
+      parameters:
+        - name: "applicationNumber"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "partyId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "poolCode"
+          in: "path"
+          required: true
+          type: "string"  
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false   
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"           
+  /web/v1/poolWithPoolDetails/delete/{id}:
+    delete:
+      tags:
+        - "poolWeb"
+      summary: "Adds a new Pool."
+      description: "Adds a new Pool."
+      operationId: "deletePoolAndPoolDetails"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Request Body that contains data required for creating a new pool"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Returns the Id of the newly created pool"
+          headers:
+            Location:
+              description: "URL of newly created pool"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/poolDetails/delete/{id}:
+    delete:
+      tags:
+        - "poolWeb"
+      summary: "Delete a Pool detail."
+      description: "Delete a Pool detail."
+      operationId: "deletePoolDetails"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Request Body that contains data required for creating a new pool"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Returns the Id of the newly created pool"
+          headers:
+            Location:
+              description: "URL of newly created pool"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/poolWithPoolDetails/{id}:
+    put:
+      tags:
+        - "poolWeb"
+      summary: "Update an existing pool."
+      description:  "Update an existing pool."
+      operationId: "updatePoolAndPoolDetails1"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the industry opinion that need to be updated"
+          required: true
+          type: "string"      
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns updated pool"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/poolWithPoolDetails/update/{id}:
+    put:
+      tags:
+        - "poolWeb"
+      summary: "Update an existing pool."
+      description:  "Update an existing pool."
+      operationId: "updatePoolAndPoolDetails"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the industry opinion that need to be updated"
+          required: true
+          type: "string"      
+        - name: "poolMainModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing pool"
+          required: true
+          schema:
+            $ref: "#/definitions/PoolMainModel"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns updated pool"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+ 
+  /web/v1/validationBasic/{applicationNumber}:
+    post:
+      tags:
+        - "poolWeb"
+      summary: "Retrieves the latest Pool record for the given appNumber."
+      description:  "Retrieves the latest pool record for the given appnumber given in the path"
+      operationId: "validationbasic"
+      parameters:
+        - name: "applicationNumber"
+          in: "path"
+          description: "appNum based on App no"
+          required: true
+          type: "string"
+        - name: "stageValidationConfigModel"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/StageValidationConfigModel"  
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false   
+      responses:
+        200:
+          description: "Returns the Response Model with the latest Facility Details for the given Collateral Id"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"            
+  /web/v1/poolWithPoolDetails/byAppNo/{applicationNumber}/{partyId}:
+    get:
+      tags:
+        - "poolWeb"
+      summary: "Retrieves the latest list of existing pools."
+      description:  "Retrieves the latest list of existing pools."
+      operationId: "getPoolWithPoolDetailsAppNoAndPartyId"
+      parameters:
+        - name: "applicationNumber"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "partyId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "poolCode"
+          in: "query"
+          description: "Filter by provided pool code"
+          required: false
+          type: "string"
+        - name: "poolCcy"
+          in: "query"
+          description: "Filter by provided pool currency"
+          required: false
+          type: "string"
+        - name: "fromPoolAmount"
+          in: "query"
+          description: "Filter by provided pool amount as from range"
+          required: false
+          type: "string"
+        - name: "toPoolAmount"
+          in: "query"
+          description: "Filter by provided pool amount as to range"
+          required: false
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false   
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"  
+  /web/v1/poolWithPoolDetails/application/latest/{applicationNumber}:
+    get:
+      tags:
+        - "poolWeb"
+      summary: "Retrieves the latest list of existing pools."
+      description:  "Retrieves the latest list of existing pools."
+      operationId: "getPoolWithPoolDetailsByApplicationNumber"
+      parameters:
+        - name: "applicationNumber"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false   
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"          
+ 
+  /web/v1/pool/submit:
+    post:
+      tags:
+        - "poolWeb"
+      summary: "Adds a new Pool."
+      description: "Adds a new Pool."
+      operationId: "submitPool"
+      parameters:
+        - name: "TransactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new pool"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Returns the Id of the newly created pool"
+          headers:
+            Location:
+              description: "URL of newly created pool"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/poolDetails/{partyId}/{poolCode}/{applicationNumber}:
+    get:
+      tags:
+        - "poolDetailsWeb"
+      summary: "Retrieves the list of existing pools."
+      description:  "Retrieves the list of existing pools."
+      operationId: "getAllPoolDetailsByPartyId"
+      parameters:
+        - name: "partyId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "poolCode"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "applicationNumber"
+          in: "path"
+          required: true
+          type: "string"  
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /web/v1/poolDetails/latest/{partyId}/{poolCode}/{applicationNumber}:
+    get:
+      tags:
+        - "poolDetailsWeb"
+      summary: "Retrieves the latest list of existing pools."
+      description:  "Retrieves the latest list of existing pools."
+      operationId: "getLatestPoolDetailsByPartyId"
+      parameters:
+        - name: "partyId"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "poolCode"
+          in: "path"
+          required: true
+          type: "string" 
+        - name: "applicationNumber"
+          in: "path"
+          required: true
+          type: "string"           
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true 
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false   
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false  
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /web/v1/poolDetails/migrateToReports/{applicationNumber}:
+    post:
+      tags:
+        - "poolWeb"
+      summary: "Migrate records to report table."
+      description:  "Migrate records to report table."
+      operationId: "migrateToReports"
+      parameters:
+        - name: "applicationNumber"
+          in: "path"
+          description: "Application number of the collateral pool that need to be migrated"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns updated Party Credit rating"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/savePool/closure:
+    post:
+      tags:
+        - "poolWeb"
+      summary: "Retrieves the existing Party Demographics for the given partyId."
+      description:  "Retrieves the existing Party Demographics for the given partyId."
+      operationId: "insertClosureDetailsForCollateralPool"
+      parameters:
+        - name: "liabilityClosureCollection"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/LiabilityClosureCollection"            
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"                                       
+definitions:
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"
+  RepresentationModel:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  InlineResponse201:
+    type: "object"
+    description: "Id of the newly created resource"
+    properties:
+      id:
+       type: "string"
+  PoolMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          partyId:
+            type: "string"
+          applicationNumber:
+            type: "string"           
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          poolModels:
+            type: "array"
+            items:
+              $ref: "#/definitions/PoolModel"
+  PoolModel:
+    type: "object"
+    required:
+      - partyId
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      poolCode:
+        type: "string"
+      poolDescription:
+        type: "string"
+      poolCcy:
+        type: "string"
+      poolAmount:
+        type: "number" 
+      requestType:
+            type: "string"    
+  PoolCollection:
+    description: "Collection of Pools."
+    type: "object"
+    properties:
+      poolModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PoolMasterModel"    
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      isFromCAM:
+        type: "boolean"
+      externalCheckReq:
+        type: "boolean"
+      fieldInvestigationReq:
+        type: "boolean"
+      externalValuationReq:
+        type: "boolean"
+      internalValuationReq:
+        type: "boolean"
+      legalOpinionReq:
+        type: "boolean"
+      riskEvaluationReq:
+        type: "boolean"
+      externalCheckAgencySelected:
+        type: "boolean"
+      externalValAgencySelected:
+        type: "boolean"
+      legalFirmSelected:
+        type: "boolean"
+      isCollatCreateSelected:
+        type: "boolean"
+      collateralValue:
+        type: "number"
+      oldCollateralValue:
+        type: "number"
+      isFromCollateralEvaluation:
+        type: "boolean"
+      isFromCollateralReview:
+        type: "boolean"
+      isSubmissionAndAwaitingReq:
+        type: "boolean"
+      serviceName:
+        type: "string"
+      ownerEstimatedValue:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      customerId:
+        type: "string"
+      collateralType:
+        type: "string"
+      collateralCode:
+        type: "string"
+      collateralCurrency:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      submitFlag:
+        type: "boolean"
+      source:
+        type: "string"
+      isKYCRequired:
+        type: "boolean"
+      isCreditRatingRequired:
+        type: "boolean"
+      stageUpdateFlag:
+        type: "boolean"
+      collateralSubmissionReq:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      documentSafeKeepingReq:
+        type: "boolean"
+      updateCategory:
+        type: "string"
+  PoolDetailsModel:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      poolCode:
+        type: "string"  
+      collateralCode:
+        type: "string"
+      collateralCcy:
+        type: "string"
+      collateralAmount:
+        type: "number"
+      poolCntrbtnType:
+        type: "string"
+      poolCntrbtnPct:
+        type: "number"
+      poolCntrbtnAmt:
+        type: "number"     
+  PoolMainModel:
+    type: "object"
+    required:
+      - partyId
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      partyId:
+        type: "string"  
+      applicationNumber:
+        type: "string" 
+      versionNo:
+        type: "integer"
+        format: "int64"
+      recordStat:
+        type: "string"
+      createdBy:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        type: "string"
+      updatedDate:
+        type: "string"
+        format: "date-time"     
+      poolCode:
+        type: "string"
+      poolDescription:
+        type: "string"
+      handOffStatus:
+        type: "boolean"   
+      poolCcy:
+        type: "string"
+      poolAmount:
+        type: "number" 
+      poolUtil:
+        type: "number" 
+      availableAmount:
+        type: "number" 
+      blockAmount:
+        type: "number" 
+      lastRevalXRate:
+        type: "number" 
+      lastRevaluationDate:
+        type: "string"
+        format: "date-time" 
+      requestType:
+        type: "string"    
+      poolDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/PoolDetailsModel" 
+      additionalAttributes:
+        $ref: '#/definitions/ExtensibleInputDTO'           
+  PoolMainModelCollection:
+    description: "Collection of Pools."
+    type: "object"
+    properties:
+      poolModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/PoolMainModel"        
+  StageValidationConfigModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        properties:
+          recordId:
+            type: "string"
+          processName:
+            type: "string"
+          processRefNo:
+            type: "string" 
+          entityRefNo:
+            type: "string"   
+          stageName:
+            type: "string"
+          serviceURL:
+            type: "string"
+          appId:
+            type: "string"     
+          segmentName:
+            type: "string"         
+          language:
+            type: "string"
+  ErrorHandlerModel:
+    description: "Error Handler model"
+    type: "object"
+    properties:
+      errorCode:
+        type: "string"
+      language:
+        type: "string"
+      message:
+        type: "string"
+      type:
+        type: "string"    
+  ExtensibleInputDTO:  
+    properties: 
+      id: 
+        type: string
+      uiKey: 
+        type: string
+      dataReferenceKey: 
+        type: string
+      fieldMetaDataVersion: 
+        type: string
+      fieldData: 
+        type: string
+      applicationId: 
+        type: string
+    required: 
+      - uiKey
+      - dataReferenceKey
+    type: object
+    xml: 
+      name: ExtensibleInputDTO        
+  ExtensibleResponseModel:
+    properties: 
+      ExtensibleDTO: 
+        items: 
+          $ref: "#/definitions/ExtensibleDTO"
+        type: array
+    type: object
+    xml: 
+      name: ExtensibleResponseModel 
+  ErrorHandlerModel:
+    description: "Error Handler model"
+    type: "object"
+    properties:
+      errorCode:
+        type: "string"
+      language:
+        type: "string"
+      message:
+        type: "string"
+      type:
+        type: "string"      
+  ExtensibleDTO:  
+    properties: 
+      id: 
+        type: string
+      uiKey: 
+        type: string
+      dataReferenceKey: 
+        type: string
+      fieldMetaDataVersion: 
+        type: string
+      fieldData: 
+        items: 
+          $ref: "#/definitions/ExtensibleFieldModel"
+        type: array
+      applicationId: 
+        type: string
+#    required: 
+#      - id
+    type: object
+    xml: 
+      name: ExtensibleDTO   
+  ExtensibleFieldModel: 
+    properties: 
+      id: 
+        type: string
+      label: 
+        type: string
+      type: 
+        type: string
+      value: 
+        type: string
+#    required: 
+#      - id
+    type: object
+    xml: 
+      name: ExtensibleFieldModel     
+      
+  LiabilityClosureCollection:
+    type: "object"
+    properties:
+      closureCollection:
+         type: "array"
+         items:  { $ref: '#/definitions/LiabilityClosureModel'  }
+  LiabilityClosureModel:
+    type: "object"
+    properties:
+      partyId:
+        type: "string"
+      childPartyIds:
+        type: "array"
+        items:
+          type: "string"
+      applicationNumber:
+         type: "string" 
+  CmcCurrencyUtilityDtoWrapper:
+    description: "CmcCurrency Utility Dto Wrapper"
+    type: "object"
+    properties:
+      data:
+        $ref: "#/definitions/CurrencyUtilityDto"              
+  CurrencyUtilityDto:
+    type: object
+    properties:
+      amount:
+        type: number
+        minLength: 0
+        maxLength: 50
+      rate:
+        type: number
+        minLength: 0
+        maxLength: 3                                                                                    

@@ -1,0 +1,1359 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : RtlTnxMonitor.yaml
+#  **
+#  ** Module     : RealTimeLiquidityStructure
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Ketki, Samarth
+#
+#  Bug Number         :  3220490
+#  Changed By         :  Anamika
+#  Change Description :  Added a new field blkAmount to LrtTmRtlTxnLogDTO
+#  Change On          :  04-Dec-2020
+#  Search String      :  blkAmount
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server realtimeliquiditytransaction server." 
+ version: "1.0.0"
+ title: "realtimeliquiditytransaction Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/v1"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "RtlTxnMonitor"
+   description: "Real Time Liquidity"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../structure
+
+ /RtlTransaction/initiateRtlTxn:
+  post:
+   tags:
+    - "initiateRTLTxn"
+   summary: "Initiate RTL Txn."
+   description: "Initiate RTL Txn"
+   operationId: "initiateRTLTxn"
+   parameters:
+    - name: "lrtTmRtlTxnMasterDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for initiating a new real time liquidity txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/LrtTmRtlTxnMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of initiating real time txn" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+ /RtlTransaction/postRtl:
+  post:
+   tags:
+    - "postRtl"
+   summary: "Post RTL Txn."
+   description: "Post RTL Txn"
+   operationId: "postRtl"
+   parameters:
+    - name: "lrtTmRtlTxnMasterDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for post a real time liquidity txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/LrtTmRtlTxnMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of posting real time txn" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /RtlTransaction/undoRtl:
+  post:
+   tags:
+    - "undoRtl"
+   summary: "Undo RTL Txn."
+   description: "Undo RTL Txn"
+   operationId: "undoRtl"
+   parameters:
+    - name: "lrtTmRtlTxnMasterDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for undo a real time liquidity txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/LrtTmRtlTxnMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL of undo real time txn" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+     
+ /RtlTransaction/modifyRtlTxn:
+  patch:
+   tags:
+    - "rtlmodify"
+   summary: "modify all valid rtl transaction."
+   description:  "modify all valid realtimeliquiditytransaction."
+   operationId: "modifyRtlTxn"
+   parameters:
+    - name: "lrtTmRtlTxnMasterDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for initiating a new real time liquidity txn" 
+      required: true
+      schema:
+       $ref: "#/definitions/LrtTmRtlTxnMasterDTO"
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"    
+ 
+ /RtlTransaction/fetch:
+  get:
+   tags:
+    - "rtlmonitor"
+   summary: "Get all valid rtl transaction."
+   description:  "Get all valid realtimeliquiditytransaction."
+   operationId: "getRtlTxn"
+   parameters:
+      - name: rtlStructureId
+        in: query
+        required: false
+        type: string
+      - name: txnDateFrom
+        in: query
+        required: false
+        type: string
+      - name: txnDateTo
+        in: query
+        required: false
+        type: string
+      - name: customerId
+        in: query
+        required: false
+        type: string
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LrtTmRtlTxnMasterDTOCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+ /RtlTransaction/fetchSublimitLog:
+   get:
+     tags:
+       - "rtlsublimitmonitor"
+     summary: "Get all valid rtl sublimit transactions."
+     description:  "Get all valid realtimeliquiditytransaction involving sublimits."
+     operationId: "getRtlSublimitTxnLogs"
+     parameters:
+       - name: rtlStructureMasterId
+         in: query
+         required: false
+         type: string
+       - name: rtlStructureId
+         in: query
+         required: false
+         type: string
+       - name: txnDateFrom
+         in: query
+         required: false
+         type: string
+       - name: txnDateTo
+         in: query
+         required: false
+         type: string
+       - name: customerId
+         in: query
+         required: false
+         type: string
+       - name: accountNumber
+         in: query
+         required: false
+         type: string
+     responses:
+       201:
+         description: "Returns message of success or failure"
+         headers:
+           Location:
+             description: ""
+             type: "string"
+         schema:
+           $ref: "#/definitions/LrtTmRtlSublimitLogsDTOCollection"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+
+ /RtlTransaction/fetchSublimitDetails:
+   get:
+     tags:
+       - "rtlsublimitmonitor"
+     summary: "Get sublimit details on a structure."
+     description:  "Get sublimit details on a structure."
+     operationId: "getRtlSublimitDetails"
+     parameters:
+       - name: rtlStructureId
+         in: query
+         required: false
+         type: string
+       - name: customerId
+         in: query
+         required: false
+         type: string
+       - name: accountNumber
+         in: query
+         required: false
+         type: string
+     responses:
+       201:
+         description: "Returns message of success or failure"
+         headers:
+           Location:
+             description: ""
+             type: "string"
+         schema:
+           $ref: "#/definitions/LrtTmRtlSublimitDTOCollection"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       405:
+         description: "Invalid input"
+       500:
+         description: "Internal error"
+definitions:
+ LrtTmRtlTxnMasterDTO:
+  type: object
+  properties:  
+   id:
+    type: string
+    description: ""
+   rtlTxnId:
+    type: string
+    description: ""
+   customerId:
+    type: string
+    description: ""
+   headerAccNo:
+    type: string
+    description: ""
+   headerAccCcy:
+    type: string
+    description: ""
+   headerAccBrn:
+    type: string
+    description: ""
+   rtlStructureId:
+    type: string
+    description: ""
+   rtlStructureMasterId:
+    type: string
+    description: ""
+   txnAmt:
+    type: number
+    description: ""
+   txnCcy:
+    type: string
+    description: ""
+   processedAmt:
+    type: number
+    description: ""
+   blockAmt:
+    type: number
+    description: ""
+   postAmt:
+    type: number
+    description: ""
+   totalAmt:
+    type: number
+    description: "" 
+   processedCcy:
+    type: string
+    description: ""
+   txnDate:
+    type: string
+    #format: date
+    description: ""
+   txnDateFrom:
+    type: string
+    #format: date
+    description: ""
+   txnDateTo:
+    type: string
+    #format: date
+    description: ""  
+   txnInitTime:
+    type: string
+    description: ""
+   txnClosureTime:
+    type: string
+    description: ""
+   status:
+    type: string
+    description: ""
+   statusMessage:
+    type: string
+    description: ""
+   errorReference:
+    type: string
+    description: ""
+   ddaRefId:
+    type: string
+    description: ""
+   ddaTxnId:
+    type: string
+    description: ""
+   isPartialAllowed:
+    type: string
+    description: ""
+   toIBan: 
+    type: string
+    description: ""
+   toAccountDescription:
+    type: string
+    description: "" 
+   toCountryCode:
+    type: string
+    description: "" 
+   LrtTmRtlTxnLogDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LrtTmRtlTxnLogDTO' 
+   LrtTmRtlTxnGroupDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LrtTmRtlTxnGroupDTO'
+ LrtTmRtlTxnGroupDTO:
+   type: object
+   properties:
+     groupDescription:
+      type: string
+      description: ""
+     groupName:
+      type: string
+      description: ""
+     groupPriority:
+      type: number
+      description: ""
+     id:
+      type: string
+      description: ""  
+     blockAmt:
+      type: number
+      description: ""
+     postAmt:
+      type: number
+      description: ""
+     totalAmt:
+      type: number
+      description: "" 
+ LrtTmRtlTxnLogDTO:
+  type: object
+  properties:
+     rtlTxnId:
+      type: string
+      description: ""
+     groupDescription:
+      type: string
+      description: ""
+     groupId:
+      type: string
+      description: "" 
+     accountCurrency:
+      type: string
+      description: ""
+     accountNumber:
+      type: string
+      description: ""
+     accountDescription:
+      type: string
+      description: "" 
+     branchCode:
+      type: string
+      description: ""
+     branchName:
+      type: string
+      description: ""
+     handoffType:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     externalSystem:
+      type: string
+      description: ""
+     ddaBlockRefId:
+      type: string
+      description: ""
+     txnAmount:
+      type: number
+      description: ""
+     txnAmountInAccCcy:
+      type: number
+      description: ""
+     txnCcy:
+      type: string
+      description: ""
+     accPriority:
+      type: integer
+      description: ""
+     exchangeRate:
+      type: string
+      description: ""
+     status:
+      type: string
+      description: ""
+     statusMessage:
+      type: string
+      description: "" 
+     rtlStructureMasterId:
+      type: string
+      description: ""
+     blkAmount:
+      type: number
+      description: "" 
+ LrtTmSublimitDTO:
+  type: object
+  properties:
+    id:
+     type: string
+     description: ""
+    rtlSublimitTxnId:
+      type: string
+      description: ""
+    accountNumber:
+      type: string
+      description: ""
+    rtlStructureMasterId:
+      type: string
+      description: ""
+    availableSublimit:
+      type: number
+      description: ""
+    lastUpdatedDate:
+      type: string
+      description: ""
+    subLimitAmount:
+      type: number
+      description: ""
+    subLimitEndDate:
+      type: string
+      description: ""
+    subLimitCcy:
+      type: string
+      description: ""
+    subLimitFrequency:
+      type: string
+      description: ""
+    subLimitStartDate:
+      type: string
+      description: ""
+    status:
+      type: string
+      description: ""
+    txnAmount:
+      type: number
+      description: ""
+    sublimitUtilized:
+      type: number
+      description: ""
+    txnDate:
+      type: string
+      description: ""
+ LrtTmRtlTxnMasterDTOCollection:
+  description: "Collection of RTL txn."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LrtTmRtlTxnMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmcCurrencyUtilityDtoWrapper:
+  description: "CmcCurrency Utility Dto Wrapper"
+  type: "object"
+  properties:
+   messages:
+     $ref: "#/definitions/ResponseDto"
+   data:
+     $ref: "#/definitions/CurrencyUtilityDto"
+ CurrencyUtilityDto:
+  type: object
+  properties:
+    amount:
+     type: number
+     minLength: 0
+     maxLength: 50
+    rate:
+     type: number
+     minLength: 0
+     maxLength: 3   
+ CmcTmCurrencyRateMasterCollection: 
+  description: "Collection of currencyrate."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCurrencyRateMasterDto"
+   paging:
+     $ref: "#/definitions/PagingDto"
+ 
+ CmcTmCurrencyRateMasterDto:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      branchCode:
+       type: string
+       minLength: 0
+       maxLength: 3
+       pattern: ^[A-Z0-9]*$
+      currency1:
+       type: string
+       minLength: 0
+       maxLength: 3
+      currency2:
+       type: string
+       minLength: 0
+       maxLength: 3
+      CmcTmCurrencyRateDto:
+       type: array
+       items:
+        $ref: '#/definitions/CmcTmCurrencyRateDto'
+     required:
+      - branchCode
+      - currency1
+      - currency2
+ CmcTmCurrencyRateDto:
+   type: object
+   properties:
+     id:
+      type: string
+     currencyRateMasterId:
+      type: string
+     branchCode:
+      type: string
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z0-9]*$
+     currency1:
+      type: string
+      minLength: 0
+      maxLength: 3
+     currency2:
+      type: string
+      minLength: 0
+      maxLength: 3
+     rateType:
+      type: string
+      minLength: 0
+      maxLength: 8
+     midRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     buySpread:
+      type: number
+     saleSpread:
+      type: number
+     buyRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     saleRate:
+      type: number
+     unauthMidRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     unauthBuySpread:
+      type: number
+     unauthSaleSpread:
+      type: number
+     unauthBuyRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     unauthSaleRate:
+      type: number
+      minLength: 0
+      maxLength: 24
+     intAuthStat:
+      type: string
+      minLength: 0
+      maxLength: 1
+     rateDate:
+      type: string
+     rateSerial:
+      type: number
+      minLength: 0
+      maxLength: 4
+     unauthRateDate:
+      type: string
+     unauthRateSerial:
+      type: number
+      minLength: 0
+      maxLength: 4
+   required:
+    - rateType     
+ LmmTmBrnDateDTO:  
+    type: object
+    properties:
+     branchId:
+      type: string
+      description: ""
+     today:
+      type: string
+     
+      description: ""
+ LmmTmBrnDateCollection:
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LmmTmBrnDateDTO"
+       
+ ErrOvdLogDTO:
+    type: object
+    properties:
+     errCode:
+      type: string
+      description: ""
+     errDesc:
+      type: string
+      description: ""
+       
+ EcaDetailLogDTO:
+    type: object
+    properties:
+     txnStat:
+      type: string
+      description: ""
+     errOvdLog:
+      type: "array"
+      items: 
+       $ref: "#/definitions/ErrOvdLogDTO"
+       
+ EcaDetailDTO:
+    type: object
+    properties:
+     outstandingBlkAmount:
+      type: string
+      description: ""
+     ecaDetailLog:
+      type: "array"
+      items: 
+       $ref: "#/definitions/EcaDetailLogDTO"
+       
+ ErrorDTO: 
+    type: object
+    properties:
+     ecode:
+      type: string
+      description: ""
+     edesc:
+      type: string
+      description: ""
+       
+ ErrorRespDTO:
+    type: object
+    properties:
+     error:
+      type: "array"
+      items: 
+       $ref: "#/definitions/ErrorDTO"
+ 
+ ObrhBlockResponseDTO:
+    type: object
+    properties:
+     ecaRefNo:
+      type: string
+      description: ""
+     ecaDetail:
+      type: "array"
+      items: 
+       $ref: "#/definitions/EcaDetailDTO"
+     errorResp:
+      type: "array"
+      items: 
+       $ref: "#/definitions/ErrorRespDTO"
+       
+ ObrhResponseDTO:
+    type: object
+    properties:
+     data:
+      $ref: "#/definitions/ObrhBlockResponseDTO"
+     messages: 
+      $ref: "#/definitions/ResponseDto"
+      
+ ObrhPostResponseStatusDTO:
+    type: object
+    properties:
+     msgStat:
+      type: string
+      description: ""
+      
+ ObrhCloseEcablkResponseStatusDTO:
+    type: object
+    properties:
+     msgStat:
+      type: string
+      description: ""
+      
+ ObrhPostResponseDTO:
+    type: object
+    properties:
+     data:
+      $ref: "#/definitions/ObrhPostResponseStatusDTO"
+     messages: 
+      $ref: "#/definitions/ResponseDto"
+      
+ ObrhCloseEcablkResponseDTO:
+    type: object
+    properties:
+     data:
+      $ref: "#/definitions/ObrhCloseEcablkResponseStatusDTO"
+     messages: 
+      $ref: "#/definitions/ResponseDto"  
+       
+ ObrhBlockRequestDTO:
+    type: object
+    properties:
+     userId:
+      type: string
+      description: ""
+     branch:
+      type: string
+      description: ""
+     createExtRefNo:
+      type: string
+      description: ""
+     custAcNo:
+      type: string
+      description: ""
+     custAcCcy:
+      type: string
+      description: ""
+     reqBlkAmt:
+      type: string
+      description: ""
+      
+ ObrhPostRequesAccounttDTO:
+    type: object
+    properties:
+     trnRefNo:
+      type: string
+      description: ""
+     drcrInd:
+      type: string
+      description: ""
+     rtlRefNo:
+      type: string
+      description: ""
+     ecaRefNo:
+      type: string
+      description: ""
+     evntSrNo:
+      type: string
+      description: ""
+     valueDt:
+      type: string
+      description: ""
+     accCy:
+      type: string
+      description: ""
+     grpRefNo:
+      type: string
+      description: ""
+     acBranch:
+      type: string
+      description: ""
+     acNo:
+      type: string
+      description: ""
+     lcyAmt:
+      type: string
+      description: ""
+     fcyAmt:
+      type: string
+      description: ""
+     exchRate:
+      type: string
+      description: ""
+     userRefNo:
+      type: string
+      description: ""
+     trnCode:
+      type: string
+      description: ""
+      
+ ObrhPostRequestDTO:
+    type: object
+    properties:
+     userId:
+      type: string
+      description: ""
+     branch:
+      type: string
+      description: ""
+     grpRefNo:
+      type: string
+      description: ""
+     evntSrNo:
+      type: string
+      description: ""
+     uniqueExtRefNo:
+      type: string
+      description: ""
+     trnRefNo:
+      type: string
+      description: ""
+     accDetails:
+      type: array
+      items:
+       $ref: '#/definitions/ObrhPostRequesAccounttDTO' 
+      
+ ObrhCreateRtlResponseRequestDTO:
+    type: object
+    properties:
+     userId:
+      type: string
+      description: ""
+     branch:
+      type: string
+      description: ""
+     msgStat:
+      type: string
+      description: ""
+     ddaTxnRef:
+      type: string
+      description: ""
+     rtlReferenceNo:
+      type: string
+      description: ""
+     txnAmnt:
+      type: string
+      description: ""
+     txnCcy:
+      type: string
+      description: ""
+     rtlStatus:
+      type: string
+      description: ""
+     rtlStatusMessage:
+      type: string
+      description: ""
+      
+ ObrhCloseEcablkRequestDTO:
+    type: object
+    properties:
+     userId:
+      type: string
+      description: ""
+     branch:
+      type: string
+      description: ""
+     undoExtRefNo:
+      type: string
+      description: ""
+     ecaRefNo:
+      type: string
+      description: ""
+     custAcNo:
+      type: string
+      description: ""
+     custAcBrch:
+      type: string
+      description: ""
+      
+ ObrhResponseMessagesDTO:
+    type: object
+    properties:
+     keyId:
+      type: string
+      description: ""
+     branch:
+      type: string
+      description: ""
+     createExtRefNo:
+      type: string
+      description: ""
+     custAcNo:
+      type: string
+      description: ""
+     custAcCcy:
+      type: string
+      description: ""
+     reqBlkAmt:
+      type: string
+      description: ""
+         
+ LmmTmBranchParametersDTO:
+    type: object
+    properties:
+     bankCode:
+      type: string
+      description: ""
+     bicCode:
+      type: string
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+     branchCurrency:
+      type: string
+      description: ""
+     branchName:
+      type: string
+      description: ""
+     cityId:
+      type: string
+      description: ""
+     countryId:
+      type: string
+      description: ""
+     crossBorderHybridPool:
+      type: string
+      description: ""
+     crossBorderHybridSweep:
+      type: string
+      description: ""
+     crossBorderPool:
+      type: string
+      description: ""
+     crossBorderSweep:
+      type: string
+      description: ""
+     crossCcyHybridPool:
+      type: string
+      description: ""
+     crossCcyHybridSweep:
+      type: string
+      description: ""
+     crossCcyPool:
+      type: string
+      description: ""
+     crossCcySweep:
+      type: string
+      description: ""
+     domesticHybridPool:
+      type: string
+      description: ""
+     domesticHybridSweep:
+      type: string
+      description: ""
+     domesticPool:
+      type: string
+      description: ""
+     domesticSweep:
+      type: string
+      description: ""
+     externalSystemId:
+      type: string
+      description: ""
+     fax:
+      type: string
+      description: ""
+     hybrid:
+      type: string
+      description: ""
+     isBalanceOnline:
+      type: string
+      description: ""
+     latitude:
+      type: number
+      description: ""
+     line1:
+      type: string
+      description: ""
+     line2:
+      type: string
+      description: ""
+     line3:
+      type: string
+      description: ""
+     line4:
+      type: string
+      description: ""
+     longitude:
+      type: number
+      description: ""
+     phoneNumber:
+      type: string
+      description: ""
+     pool:
+      type: string
+      description: ""
+     region:
+      type: string
+      description: ""
+     sourceSystem:
+      type: string
+      description: ""
+     sourceSystemBranchCode:
+      type: string
+      description: ""
+     stateId:
+      type: string
+      description: ""
+     sweep:
+      type: string
+      description: ""
+     timeZone:
+      type: string
+      description: ""
+     branchDate:
+      type: string
+      description: ""
+     localClearingCode:
+      type: string
+      description: ""
+     zip:
+      type: string
+      description: ""
+     hostCode:
+      type: string
+      description: ""
+     LmmTmBranchAddnParametersDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmBranchAddnParametersDTO'
+     LmmTmBranchExternalSystemDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmBranchExternalSystemDTO'
+ LmmTmBranchAddnParametersDTO:
+   type: object
+   properties:
+     branchParametersId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+ LmmTmBranchExternalSystemDTO:
+   type: object
+   properties:
+     branchParametersId:
+      type: string
+      description: ""
+     externalSystemId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     messageType:
+      type: string
+      description: ""
+     methodName:
+      type: string
+      description: ""
+     networkType:
+      type: string
+      description: ""
+     serviceType:
+      type: string
+      description: ""
+ LmmTmBranchParametersWrapperDTO:
+   type: object
+   properties:
+    data:
+     $ref: "#/definitions/LmmTmBranchParametersDTO"
+ LmmTmBrnExternalSysDetailsDTO:
+   type: object
+   properties:
+     branchCode:
+      type: string
+      description: ""
+     externalSystemId:
+      type: string
+      description: ""
+     methodName:
+      type: string
+      description: ""
+ LmmTmBrnExternalSysDetailsCollection: 
+   description: "Collection of branch and external system details."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/LmmTmBrnExternalSysDetailsDTO"
+ LmmTmBranchParametersCollection: 
+   description: "Collection of branchparameters."
+   type: "object"
+   properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/LmmTmBranchParametersDTO"
+ LrtTmRtlSublimitLogsDTOCollection:
+   description: "Collection of RTL details involving sublimit history logs"
+   type: "object"
+   properties:
+     LrtTmSublimitDTO:
+       type: array
+       items:
+         $ref: '#/definitions/LrtTmSublimitDTO'
+     paging:
+       $ref: "#/definitions/PagingDto"
+ LrtTmRtlSublimitDTOCollection:
+   description: "Collection of RTL sublimit details for a structure and account"
+   type: "object"
+   properties:
+     rtlStructureMasterId:
+       type: string
+       description: ""
+     rtlStructureId:
+       type: string
+       description: ""
+     headerAccNo:
+       type: string
+       description: ""
+     headerAccDesc:
+       type: string
+       description: ""
+     headerAccCcy:
+       type: string
+       description: ""
+     branchCode:
+       type: string
+       description: ""
+     branchName:
+       type: string
+       description: ""
+     groupName:
+       type: string
+       description: ""
+     accountNumber:
+       type: string
+       description: ""
+     sublimitAmount:
+       type: number
+       description: ""
+     currency:
+       type: string
+       description: ""
+     availableLimit:
+       type: number
+       description: ""
+     sublimitUtilized:
+       type: number
+       description: ""
+     sublimitFrequency:
+       type: string
+       description: ""
+     limitRestorationDate:
+       type: string
+       description: ""
+ ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+ ResponseResourceSupport:
+    type: object      
+ AcentriesDTO:
+  type: object
+  properties:
+   drcrInd:
+    type: string
+    description: ""
+   trnRefNo:
+    type: string
+    description: ""
+   event:
+    type: string
+    description: ""
+   exchRate:
+    type: number
+    description: ""
+   eventSrNo:
+    type: number
+    description: ""
+   valueDt:
+    type: string
+    description: ""
+   module:
+    type: string
+    description: ""
+   amtTag:
+    type: string
+    description: ""
+   acccy:
+    type: string
+    description: ""
+   fcyAmt:
+    type: number
+    description: ""
+   acBranch:
+    type: string
+    description: ""
+   acNo:
+    type: string
+    description: ""
+   lcyAmt:
+    type: number
+    description: ""
+   trnCode:
+    type: string
+    description: ""
+   forcePost:
+    type: string
+    description: ""
+   relatedCustomer:
+    type: string
+    description: ""
+   relatedAccount:
+    type: string
+    description: ""
+   relatedRefNo:
+    type: string
+    description: ""
+ AccountHandOffDTO:
+  type: object
+  properties:
+   source:
+    type: string
+    description: ''
+   messageId:
+    type: string
+    description: ''
+   userId:
+    type: string
+    description: ''
+   branch:
+    type: string
+    description: ''
+   uniqueRefNo:
+    type: string
+    description: ''
+   txnReFno:
+    type: string
+    description: ''
+   acentries:
+    type: array
+    items:
+     $ref: '#/definitions/AcentriesDTO'

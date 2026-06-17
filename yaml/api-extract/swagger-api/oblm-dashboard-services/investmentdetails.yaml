@@ -1,0 +1,202 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+- "application/json"
+- "application/xml"
+produces:
+- "application/json"
+- "application/xml"
+tags:
+- name: "InvestmentDetailsAPI"
+  description: "API for Investment details Operations"
+
+schemes:
+- "https"
+
+paths:
+  /investmentdetails:
+    post:
+      tags:
+      - "InvestmentDetailsAPI"
+      summary: "Adds a new Investment Details."
+      description: "Adds a new Investment Details. Add additional information here for this endpoint."
+      operationId: "save"
+      parameters:
+      - name: "investmentdetails"
+        in: "body"
+        description: "Request Body that contains data required for creating a new investmentdetails"
+        required: true
+        schema:
+          $ref: "#/definitions/LmdRdInvestmentDetailsDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created Interest Details"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+      - "InvestmentDetailsAPI"
+      summary: "Retrieves the list of total investment details."
+      description:  "Retrieves the list of total investment details. Add additional information here for the this endpoint."
+      operationId: "getData"
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: customerId
+        in: query
+        description: fetch record according to customerId
+        required: false
+        type: string
+      - name: structureId
+        in: query
+        description: fetch record according to structureId
+        required: false
+        type: string
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdRdInvestmentDetailsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+  LmdRdInvestmentDetailsDTO:
+    description: "InvestmentDetails DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        structureId:
+          description: "structure id in Investment details"
+          type: string
+        valueDate:
+          description: "value date in Investment details"
+          type: string
+        accountNumber:
+          description: "account number in Investment details"
+          type: string
+        parentAccountNumber:
+          description: "Parent account number in Investment details"
+          type: string
+        availableBalance:
+          description: "Available Balance in Investment details"
+          type: number
+        currencyCode:
+          description: "Currency code in Investment details"
+          type: string
+        customerId:
+          description: "Customer Id for Investment details"
+          type: string
+        instrumentType:
+          description: "Instrument Type for Investment details"
+          type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdRdInvestmentDetailsCollection:
+    description: Collection of Investment details
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmdRdInvestmentDetailsDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmdRdInvestmentDetailsWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmdRdInvestmentDetailsDTO'      
+ 

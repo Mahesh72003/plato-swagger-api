@@ -1,0 +1,386 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server autoRecon server." 
+ version: "1.0.0"
+ title: "Reconciliation Rule Web Definitions"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+                                                                                                     
+schemes:
+- "https"
+
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+          
+definitions:
+  ScfReconRuleCollection:
+   description: "Collection of reconruledefinition."
+   type: "object"
+   properties:
+    ScfPaymentRuleList:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ScfPaymentRuleList"
+      
+  ScfPaymentRuleList: 
+   description: "List of reconruledefinition."
+   type: "object"
+   properties:
+    paymentRefNumber:
+     type: string
+    reconRules:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ReconRuleDetailsDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  PagingDto:
+   type: object
+   properties:
+    totalResults:
+     type: integer
+  ReconRuleDetailsDTO:
+   type: object
+   properties:
+    reconCategory:
+     type: string
+     description: "Recon Category"  
+    ruleId:
+     type: string
+     description: "Rule Id"
+    ruleDescription:
+     type: string
+     description: "Rule Description"
+    priority:
+     type: number
+     description: "Priority"
+    executeGeneric:
+     type: string
+     description: "Execute Generic"
+    reconType:
+     type: string
+     description: "Recon Type"
+    genericCriteria:
+     type: string
+     description: "Generic Criteria"
+    baseEntity:
+     type: string
+     description: "Base Entity"
+    baseOnAttr:
+     type: string
+     description: "Base on attribute"
+    allocationBasis:
+     type: string
+     description: "Allocation Basis"
+    groupsAndConditions:
+     type: array
+     items:
+      $ref: '#/definitions/RuleElementDTO'
+    reconRuleAllocationDTO:
+     type: array
+     items:
+      $ref: '#/definitions/ReconRuleAllocationDTO'
+  ReconRuleAllocationDTO:
+   type: object
+   properties:
+    action:
+     type: string
+     description: "Action"
+    allocationParameter:
+     type: string
+     description: "Allocation Parameter"
+    id:
+     type: string
+     description: "Id"
+    percentage:
+     type: number
+     description: "Percentage"
+    reconRuleDefinitionId:
+     type: string
+     description: "Recon Rule Definition Id"
+  RuleElementDTO:
+   type: object
+   properties:
+    id:
+     type: string
+     description: "Unique identifier for a group or condition"
+    isGroup:
+     type: boolean
+     description: "Boolean value to identify whether this child is a group or condition"
+    connectingOperator:
+     type: string
+     description: "Logical Operator applied between all groups, this is the connecting operator"
+    level:
+     type: number
+     description: "This helps to identify the nesting level."
+    matchingCriteria:
+     type: string
+     description: "Matching Criteria"
+    reconEntityLHS:
+     type: string
+     description: "Should be null or not present if isGroup is true"
+    reconEntityAttribLHS:
+     type: string
+     description: "Will be provided if Single entity is LHS entity or if single entity is N. Attribute which user wants to use for recon"
+    reconEntityRHS:
+     type: string
+     description: "Should be null or not present if isGroup is true"
+    reconEntityAttribRHS:
+     type: string
+     description: "Will be provided if Single entity is RHS entity or if single entity is N. Attribute which user wants to use for recon"
+    patternTypeLHS:
+     $ref: "./ReconciliationDef.yaml#/definitions/PatternTypeDTO"
+    patternTypeRHS:
+     $ref: "./ReconciliationDef.yaml#/definitions/PatternTypeDTO"
+    groupsAndConditions:
+     type: "array"
+     items:
+      $ref: "#/definitions/ReconRuleDetailsDTO"   
+  PaymentRuleMap:
+    type: object
+    additionalProperties:
+      type: string
+  PaymentRefNoCollection:
+    description: "PaymentRefNos."
+    type: "object"
+    properties:
+      applicationCode:
+        type: string
+      compareFlag:
+        type: boolean
+      paymentRefNoList:
+        type: "array"
+        items:
+         type: string
+  PaymentRefNoList:
+    description: "PaymentRefNos."
+    type: "object"
+    properties:
+      paymentRefNos:
+        type: "array"
+        items:
+         type: string
+          
+  ReconCategoriesResponseDto:
+    type: object
+    properties:
+      categories:
+        type: array
+        items:
+          $ref: "#/definitions/ReconCategoryDto"
+   
+  ReconCategoryDto:
+    type: object
+    properties:
+      categoryName:
+        type: string
+        description: "Category Name"
+      categoryDesc:
+        type: string
+        description: "Category Description"
+      allocationRequired:
+        type: string
+        description: "Allocation Required"
+      entities:
+        type: array
+        items:
+          $ref: "#/definitions/ReconEntityDto"
+   
+  ReconEntityDto:
+    type: object
+    properties:
+      entityName:
+        type: string
+        description: "Entity Name"
+      entityDesc:
+        type: string
+        description: "Entity Description"
+      entityType:
+        type: string
+        description: "Entity Type"
+         
+  ReconEntityAttributesResponseDto:
+    type: object
+    properties:
+      category:
+        type: string
+        description: "Category"
+      exactAttributes:
+        $ref: "#/definitions/ExactAttributesDto"
+      genericAttributes:
+        $ref: "#/definitions/GenericAttributesDto"
+          
+  ExactAttributesDto:
+    type: object
+    properties:
+      lhsEntityAttrs:
+        $ref: "#/definitions/EntityAttributesDto"
+      rhsEntityAttrs:
+        $ref: "#/definitions/EntityAttributesDto"
+          
+  EntityAttributesDto:
+    type: object
+    properties:
+      entityName:
+        type: string
+        description: "Entity Name"
+      attributes:
+        type: array
+        items:
+          $ref: "#/definitions/AttributesDto"
+ 
+  AttributesDto:
+    type: object
+    properties:
+      attributeName:
+        type: string
+        description: "Attribute Name"
+      attributeDesc:
+        type: string
+        description: "Attribute Description"
+      allocationApplicable:
+        type: string
+        description: "Allocation Applicable"
+      businessAttribute:
+        type: string
+        description: "Business Attribute"
+      reconAttrMethod:
+        type: string
+        description: "Recon Attribute Method"
+      reconAttrName:
+        type: string
+        description: "Recon Attribute Name"
+      attributeType:
+        type: string
+        description: "Attribute Type"
+      attributeTableName:
+        type: string
+        description: "Attribute Table Name"
+       
+  GenericAttributesDto:
+    type: object
+    properties:
+      baseEntity:
+        type: string
+        description: "Base Entity"
+      criterias:
+        type: array
+        items:
+          $ref: "#/definitions/CriteriaAttributesDto"
+          
+  CriteriaAttributesDto:
+    type: object
+    properties:
+      criteriaName:
+        type: string
+        description: "Criteria Name"
+      attributes:
+        type: array
+        items:
+          $ref: "#/definitions/AttributesDto"
+          
+  AllocationResponseDto:
+    type: object
+    properties:
+      sourceReferenceNo:
+        type: string
+        description: "Source Reference Number"
+      drCrInd:
+        type: string
+        description: "Debit Credit Indicator"
+      txnAccount:
+        type: string
+        description: "Transaction Account"
+      txnAccountBrn:
+        type: string
+        description: "Transaction Account Brn"
+      txnCcy:
+        type: string
+        description: "Transaction Currency"
+      txnAmount:
+        type: string
+        description: "Transaction Amount"
+        
+  AllocationRequestDto:
+    description: "Allocation request Dto"
+    type: "object"
+    properties:
+      paymentRefNo:
+        type: string
+        description: "Payment reference number"
+      allocationStatus:
+        type: string
+        description: "Allocation Status"
+      allocationAmt:
+        type: number
+        description: "Allocation Amount"
+      reconAction:
+        type: string
+        description: "Recon Action"        
+      reconTxnRefNo:
+        type: string
+        description: "Recon Txn Reference No" 
+  ConductorWorkflowModel:
+    description: "ConductorWorkflowModel"
+    type: "object"
+    properties:
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDesc:
+        type: "string"
+        description: "Error Desc"
+      transactionReferenceNo:
+        type: "string"
+        description: "Transaction Referenec No"
+
+  AllocationRequestCollection:
+    description: "Collection of AllocationRequest DTO"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/AllocationRequestDto"
+    

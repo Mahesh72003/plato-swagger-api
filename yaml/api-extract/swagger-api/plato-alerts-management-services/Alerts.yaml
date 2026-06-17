@@ -1,0 +1,244 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : plato-alerts-services
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server plato-alerts-services server." 
+ version: "1.0.0"
+ title: "plato-alerts-services Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "plato-alerts-services"
+   description: "plato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-servicesplato-alerts-services"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../plato-alerts-services
+
+ /plato-alerts-services:
+  get:
+   tags:
+    - "plato-alerts-services"
+   summary: "Get all valid plato-alerts-services."
+   description:  "Get all valid plato-alerts-services. This endpoints will be used to Get all valid plato-alerts-services maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: userId
+     in: query
+     description: User ID
+     required: false
+     type: string
+   - name: userType
+     in: query
+     description: User Type
+     required: false
+     type: string          
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/PlatoAlertsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  post:
+   tags:
+    - "plato-alerts-services"
+   summary: "Posts a alert into the plato-alerts-services."
+   description:  "Posts a alert into the plato-alerts-services."
+   operationId: "createAlert"
+   parameters:
+     - name: "plato-alerts-services" 
+       in: "body" 
+       description: "Request Body that contains data required for creating a new Alert" 
+       required: true
+       schema:
+         $ref: "#/definitions/PlatoAlertsDTO"      
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ PlatoAlertsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     alertName:
+      type: string
+      description: ""         
+     alertShortMessage:
+      type: string
+      description: ""      
+     alertMessage:
+      type: string
+      description: ""    
+     sendEmail:
+      type: string
+      description: ""
+     functionalIdentifier:
+      type: string
+      description: ""
+     alertStatus:
+      type: string
+      description: ""
+     uiComponentName:
+      type: string
+      description: ""      
+     users:
+      type: "array"
+      items:
+       $ref: "#/definitions/UserDTO"
+       
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+     
+ PlatoAlertsCollection: 
+  description: "Collection of alertgenerator."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/PlatoAlertsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+    
+ UserDTO:
+  type: "object"
+  properties:
+   userId:
+    type: string
+   emailId:
+    type: string
+    
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string

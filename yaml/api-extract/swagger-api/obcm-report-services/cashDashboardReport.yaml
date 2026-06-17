@@ -1,0 +1,1048 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "ReportCollections"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ReportCollections"
+    description: "API for Report related Operations"
+
+paths:
+  /web/v1/cashTrendTxn:
+    get:
+      tags:
+        - "ReportCashCollections"
+      summary: "Retrieves the Instrument based on the given parameters"
+      description: "Retrieves the monthly list of Cash Collection and Withdrawal"
+      operationId: "getCashData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "App ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "fromDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: Start Date of period
+        - name: "toDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: End Date of period
+        - name: "cashTxnType"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Cash Transaction Type"                 
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ReportDataCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/topCorporatesData:
+    get:
+      tags:
+        - "ReportCashCollections"
+      summary: "Retrieves the Collection based on the given parameters"
+      description: "Retrieves the monthly list of Top 5 Corpoate Cash Collection"
+      operationId: "getTopCorporatesData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "App ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "fromDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: Start Date of period
+        - name: "toDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: End Date of period
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/TopCorporatesCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /web/v1/topCorporatesCashWithdrawalData:
+    get:
+      tags:
+        - "ReportCashCollections"
+      summary: "Retrieves the Collection based on the given parameters"
+      description: "Retrieves the monthly list of Top 5 Corpoate Withdrawal Data"
+      operationId: "getTopCorporatesCashWithdrawalData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "App ID"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code"
+        - name: "fromDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: Start Date of period
+        - name: "toDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: End Date of period
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/TopCorporatesCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"                       
+definitions:
+  ReportDataCollection:
+    description: "Collection of Report Data"
+    type: "object"
+    properties:
+      branchCcy:
+        type: "string"
+      fromDate:
+        type: "string"
+      toDate:
+        type: "string"
+      corporateId:
+        type: "string"
+      frequency:
+        type: "string"
+      collectionType:
+        type: "string"  
+      cashCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ReportDataModel"
+      cashWithdrawal:
+        type: "array"
+        items:
+          $ref: "#/definitions/ReportDataModel"
+      chequeCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ChequeDataModel"    
+      error:      
+        $ref: "#/definitions/ReportErrorDTO"        
+  ReportDataModel:
+    description: "Collection of Report Data"
+    type: "object"
+    properties:
+      monthYear:
+        description: "Month Year"
+        type: "string"
+      amount:
+        description: "Amount"
+        type: "number"
+      type:
+        description: "recipient type for cw"
+        type: "string"  
+  TopCorporatesCollection:
+    description: "Collection of Top Corporates Report Data"
+    type: "object"
+    properties:
+      branchCcy:
+        type: "string"
+      fromDate:
+        type: "string"
+      toDate:
+        type: "string"
+      cashCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/TopCorporatesModel"
+      cashWithdrawal:
+        type: "array"
+        items:
+          $ref: "#/definitions/TopCorporatesModel"
+  TopCorporatesModel:
+    description: "Collection of Top Corporates Report Data"
+    type: "object"
+    properties:
+      corporate:
+        description: "Month Year"
+        type: "string" 
+      amount:
+        description: "Amount"
+        type: "number"  
+  ReportErrorDTO:
+    type: "object"
+    description: "Report Error Model"
+    properties:
+      errorCode:
+        type: "string"
+        description: "Error Code"
+      errorDescription:
+        type: "string"
+        description: "Error Description"    
+  ObcmReportRequestDto:
+    description: "Request object for getting obcm report data"
+    type: "object"
+    properties:
+      fromDate:
+        description: "Start Date of period"
+        type: "string"
+      toDate:
+        description: "End Date of period"
+        type: "string"
+      corporateId:  
+        description: "Corporate Id"
+        type: "string"
+      collectionType:
+        description: "collection Type as CD or CW"
+        type: "string"  
+      frequency:
+        description: "frequency as M or D"
+        type: "string" 
+      appId:
+        description: "Application ID for SMS"
+        type: "string"
+      userId:
+        description: "User id for SMS"
+        type: "string"
+      branchCode:
+        description: "Branch Code"
+        type: "string"
+  ChequeDataModel:
+    description: "Model for cheque data"
+    type: "object"
+    properties:
+      monthYear:
+        description: "Month Year"
+        type: "string"
+      amount:
+        description: "Amount"
+        type: "number"
+      status:
+        description: "Instrument status for cheque"
+        type: "string"
+  ObcmCashSlipTxnTMDto:
+    description: "Collection of Deposit Slip Dto."
+    type: "object"
+    properties:
+      ObcmInstCollTxnTmData:
+        $ref: "#/definitions/CollectionTxnDto"
+        description: "Collection Transaction Model"
+      ObcmCashSlipTxnTmData:
+        description: "Cash Slip Transaction"
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipTxnModel"      
+  AlertDtoCollection:
+    description: "Collection of Alert Dto."
+    type: "object"
+    properties:
+      collectionTxnDto:
+        $ref: "#/definitions/CollectionTxnDto"
+        description: "Collection Transaction Model"
+      cashSlipTxn:
+        description: "Cash Slip Transaction"
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipTxnModel"
+      obcmWithdrawalEntryMainDto:
+        description: "Withdrawal Entry Main Dto"
+        $ref: "#/definitions/ObcmWithdrawalEntryMainDto"      
+  CollectionTxnDto:
+    description: "InstrumentCollections model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the batch"
+        type: "string"
+      branchCode:
+        description: "Branch Code"
+        type: "string"
+      referenceNum:
+        description: "Reference Number"
+        type: "string"
+      seqNo:
+        description: "Sequence Number"
+        type: "integer"
+        format: "int64"
+      makerId:
+        description: "Maker Id"
+        type: string
+      makerDateStamp:
+        description: "Maker Date Stamp"
+        type: string    
+      depositChannel:
+        description: "Deposit Channel"
+        type: "string"
+      financialPosting:
+        description: "Financial Posting"
+        type: "string"
+      courierCode:
+        description: "Courier Code"
+        type: "string" 
+      courierDesc:
+        description: "Courier Description"
+        type: "string"        
+      consignmentNo:
+        description: "Consignment Number"
+        type: "string"
+      consignmentDate:
+        description: "Consignment Date"
+        type: string
+      processingDate:
+        description: "Processing Date"
+        type: string
+      depositLocationCode:
+        description: "Deposit Location Code"
+        type: "string"
+      depositLocationDesc:
+        description: "Deposit Location Description"
+        type: "string"
+      ackReceiptNo:
+        description: "Acknowledgement Receipt Number"
+        type: "string"
+      bagWeight:
+        description: "Bag Weight"
+        type: "number"
+      initiatorRefNo:
+        description: "Initiator Reference Number"
+        type: "string"
+      totalBatchAmtCcy:
+        description: "Total Batch Amount Currency"
+        type: "string"
+      totalBatchAmt:
+        description: "Total Batch Amount"
+        type: "number"
+      totalDepositSlips:
+        description: "Total Deposit Slips"
+        type: "integer"
+        format: "int64"
+      stage:
+        description: "Stage"
+        type: "string"
+      txnStatus:
+        description: "Transaction Status"
+        type: "string"
+      resourceId:
+        description: "Resource Id"
+        type: "string"
+      depositorName:
+        description: "Depositor Name"
+        type: "string"
+      idProofType:
+        description: "ID Proof Type"
+        type: "string"
+      idProofDetail:
+        description: "ID Proof Detail"
+        type: "string"
+      contactNumber:
+        description: "Contact Number"
+        type: "string"
+      screenFlag:
+        description: "Screen Flag Identifier"
+        type: string
+      autoAuth:
+        description: "Auto Authorization"
+        type: string
+      authId:
+        description: "Authorization Id"
+        type: string
+      authDtStamp:
+        description: "Authorization Date"
+        type: string
+      userId:
+        description: "User Id"
+        type: string  
+  CashSlipTxnModel:
+    description: "Cash Slip model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Deposit Slip"
+        type: "string"
+      seqNo:
+        description: "Sequence No of the Deposit Slip"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference No of the Deposit Slip"
+        type: "string"
+      depositSlipRefNo:
+        description: "Deposit Slip Ref No of the slip"
+        type: "string"
+      depositSlipNo:
+        description: "No of the Deposit Slip"
+        type: "string"
+      corporateId:
+        description: "Corporate Id of the Deposit Slip"
+        type: "string"
+      corporateName:
+        description: "Corporate Name of the Deposit Slip"
+        type: "string"        
+      creditAccountNo:
+        description: "Credit Account No of the Deposit Slip"
+        type: "string"
+      depositSlipDate:
+        type: string
+        description: "Deposit Slip Date"
+      depositSlipDateString:
+        description: "DepositSlip Date String"
+        type: string  
+      depositSlipAmt:
+        description: "Deposit Slip Amount"
+        type: number
+      depositSlipAmtCcy:
+        description: "Deposit Slip Currency Amount"
+        type: string
+      depositSlipCount:
+        description: "Count of Deposit Slips"
+        type: "integer"
+        format: "int64"
+      depositSlipValue:
+        description: "Value of Deposit Slip"
+        type: "number"
+      divisionCode:
+        description: "Division Code of Deposit Slip"
+        type: "string"
+      divisionDesc:
+        description: "Division Description of Deposit Slip"
+        type: "string"
+      pickupLocationCode:
+        description: "Pickup Location Code of Deposit Slip"
+        type: "string"
+      pickupLocationDesc:
+        description: "Pickup Location Description of Deposit Slip"
+        type: "string"
+      pickupPointCode:
+        description: "Pickup Point Code of Deposit Slip"
+        type: "string"
+      pickupPointDesc:
+        description: "Pickup Point Description of Deposit Slip"
+        type: "string"
+      pickupDate:
+        description: "Pickup Date"
+        type: string
+      pickupDateString:
+        description: "Pickup Date String"
+        type: string  
+      totalDenominationCount:
+        description: "Total Denomination Count of Deposit Slip"
+        type: "integer"
+        format: "int64"
+      exchangeRate:
+        description: "Exchange Rate"
+        type: number      
+      amountACCY:
+        description: "Currency Amount"
+        type: number
+      creditACCY:
+        description: "Credit Currency Amount"
+        type: string    
+      externalReferenceNum:
+        description: "External Reference No of the Deposit Slip"
+        type: "string"
+      creditStatus:
+        description: "Credit Status"
+        type: "string"
+      creditDate:
+        type: string
+        description: "Credit Date"
+      requestDate:
+       type: string
+       description: "Request Date"
+      stage:
+        description: "Stage"
+        type: "string"          
+      noOfMiscFields:
+        description: "No of Miscellaneous Fields"
+        type: "integer"
+        format: "int64"
+      misc1:
+        description: "1st Miscellaneous Field"
+        type: "string" 
+      misc2:
+        description: "2nd Miscellaneous Field"
+        type: "string" 
+      misc3:
+        description: "3rd Miscellaneous Field"
+        type: "string" 
+      misc4:
+        description: "4th Miscellaneous Field"
+        type: "string" 
+      misc5:
+        description: "5th Miscellaneous Field"
+        type: "string" 
+      misc6:
+        description: "6th Miscellaneous Field"
+        type: "string" 
+      misc7:
+        description: "7th Miscellaneous Field"
+        type: "string" 
+      misc8:
+        description: "8th Miscellaneous Field"
+        type: "string" 
+      misc9:
+        description: "9th Miscellaneous Field"
+        type: "string" 
+      misc10:
+        description: "10th Miscellaneous Field"
+        type: "string" 
+      misc11:
+        description: "11th Miscellaneous Field"
+        type: "string" 
+      misc12:
+        description: "12th Miscellaneous Field"
+        type: "string" 
+      misc13:
+        description: "13th Miscellaneous Field"
+        type: "string" 
+      misc14:
+        description: "14th Miscellaneous Field"
+        type: "string" 
+      misc15:
+        description: "15th Miscellaneous Field"
+        type: "string" 
+      misc16:
+        description: "16th Miscellaneous Field"
+        type: "string" 
+      misc17:
+        description: "17th Miscellaneous Field"
+        type: "string" 
+      misc18:
+        description: "18th Miscellaneous Field"
+        type: "string" 
+      misc19:
+        description: "19th Miscellaneous Field"
+        type: "string" 
+      misc20:
+        description: "20th Miscellaneous Field"
+        type: "string" 
+      misc21:
+        description: "21st Miscellaneous Field"
+        type: "string" 
+      misc22:
+        description: "22nd Miscellaneous Field"
+        type: "string" 
+      misc23:
+        description: "23rd Miscellaneous Field"
+        type: "string" 
+      misc24:
+        description: "24th Miscellaneous Field"
+        type: "string" 
+      misc25:
+        description: "25th Miscellaneous Field"
+        type: "string" 
+      misc26:
+        description: "26th Miscellaneous Field"
+        type: "string" 
+      misc27:
+        description: "27th Miscellaneous Field"
+        type: "string" 
+      misc28:
+        description: "28th Miscellaneous Field"
+        type: "string" 
+      misc29:
+        description: "29th Miscellaneous Field"
+        type: "string" 
+      misc30:
+        description: "30th Miscellaneous Field"
+        type: "string"
+      pickupRequestDate:
+        description: "Pickup Request Date"
+        type: string
+        format: date
+      channel:
+        description: "Channel"
+        type: "string"     
+      channelDepositBranch:
+        description: "Branch where the cash is required to be deposited"
+        type: string      
+      cashSlipAdFields:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipAdditionalInfoModel"
+        description: "Cash Slip Additional Information Model"
+      denominationDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/DenominationModel"
+        description: "Denomination Model"
+  CashSlipAdditionalInfoModel:
+    description: "DataSlips additional Field"
+    type: "object"
+    properties:
+       id:
+        description: "Id of the Deposit Slip"
+        type: "string"
+       seqNo:
+        description: "Sequence No of the Deposit Slip"
+        type: "integer"
+        format: "int64"
+       referenceNum:
+        description: "Reference No of the Deposit Slip"
+        type: "string"
+       depositSlipRefNo:
+        description: "Deposit Slip Ref No"
+        type: "string"
+       depositSlipNo:
+        description: "No of the Deposit Slip"
+        type: "string"
+       adfRowNo:
+        description: "Row No of this Additional Field"
+        type: "integer"
+        format: "int64"
+       udf1:
+        description: "1st User Defined Field"
+        type: "string" 
+       udf2:
+        description: "2nd User Defined Field"
+        type: "string" 
+       udf3:
+        description: "3rd User Defined Field"
+        type: "string" 
+       udf4:
+        description: "4th User Defined Field"
+        type: "string" 
+       udf5:
+        description: "5th User Defined Field"
+        type: "string" 
+       udf6:
+        description: "6th User Defined Field"
+        type: "string" 
+       udf7:
+        description: "7th User Defined Field"
+        type: "string" 
+       udf8:
+        description: "8th User Defined Field"
+        type: "string" 
+       udf9:
+        description: "9th User Defined Field"
+        type: "string" 
+       udf10:
+        description: "10th User Defined Field"
+        type: "string" 
+       udf11:
+        description: "11th User Defined Field"
+        type: "string" 
+       udf12:
+        description: "12th User Defined Field"
+        type: "string" 
+       udf13:
+        description: "13th User Defined Field"
+        type: "string" 
+       udf14:
+        description: "14th User Defined Field"
+        type: "string" 
+       udf15:
+        description: "15th User Defined Field"
+        type: "string" 
+       udf16:
+        description: "16th User Defined Field"
+        type: "string" 
+       udf17:
+        description: "17th User Defined Field"
+        type: "string" 
+       udf18:
+        description: "18th User Defined Field"
+        type: "string" 
+       udf19:
+        description: "19th User Defined Field"
+        type: "string" 
+       udf20:
+        description: "20th User Defined Field"
+        type: "string" 
+       udf21:
+        description: "21st User Defined Field"
+        type: "string" 
+       udf22:
+        description: "22nd User Defined Field"
+        type: "string" 
+       udf23:
+        description: "23rd User Defined Field"
+        type: "string" 
+       udf24:
+        description: "24th User Defined Field"
+        type: "string" 
+       udf25:
+        description: "25th User Defined Field"
+        type: "string" 
+       udf26:
+        description: "26th User Defined Field"
+        type: "string" 
+       udf27:
+        description: "27th User Defined Field"
+        type: "string" 
+       udf28:
+        description: "28th User Defined Field"
+        type: "string" 
+       udf29:
+        description: "29th User Defined Field"
+        type: "string" 
+       udf30:
+        description: "30th User Defined Field"
+        type: "string"
+  DenominationModel:
+    description: "Denomination model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Denomination"
+        type: "string"
+      seqNo:
+        description: "Sequence No of the Denomination"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference No of the Denomination"
+        type: "string"
+      depositSlipRefNo:
+        description: "Deposit Slip Ref No of the Denomination"
+        type: "string"
+      depositSlipNo:
+        description: "No of the Deposit Slip"
+        type: "string"
+      denominationRefNo:
+        description: "Reference No of the Denomination"
+        type: "string"
+      denominationType:
+        description: "Type of the Denomination"
+        type: "string"      
+      denominationValue:
+        description: "Value of the Denomination"
+        type: "number"
+      denominationCount:
+        description: "Count of the Denomination"
+        type: "number"
+      denominationAmount:
+        description: "Amount of the Denomination"
+        type: "number"
+      denominationStatus:
+        description: "Status of the Denomination"
+        type: "string"
+      denominationCcy:
+        description: "Currency of the Denomination"
+        type: "string"    
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        format: date
+        description: "Maker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        format: date
+        description: "Checker Date Stamp"   
+  ObcmWithdrawalEntryMainDto:
+    description: "Cash Withdrawal entry Dto"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the batch"
+        type: "string"
+      extReferenceNo:
+        description: "External Reference No"
+        type: "string"
+      makerId:
+        description: "Maker Id"
+        type: "string"
+      makerDtStamp:
+        description: "Maker Date Stamp"
+        type: "string"
+      checkerId:
+        description: "Checker Id"
+        type: string
+      checkerDtStamp:
+        description: "Checker Date Stamp"
+        type: string    
+      checkerRemarks:
+        description: "Checker Remarks"
+        type: "string"
+      makerRemarks:
+        description: "Maker Remarks"
+        type: "string"
+      authStat:
+        description: "Authorization Status"
+        type: "string" 
+      branchCode:
+        description: "Branch Code"
+        type: "string"
+      corporateId:
+        description: "Corporate Id"
+        type: "string"
+      corporateName:
+        description: "Corporate Name"
+        type: "string"
+      debitAccountNo:
+        description: "Debit Account No"
+        type: "string"
+      chequeDate:
+        description: "Cheque Date"
+        type: "string"
+      chequeNo:
+        description: "Cheque No"
+        type: string
+      slipNo:
+        description: "Slip No"
+        type: string    
+      corporateRefNo:
+        description: "Corporate Reference No"
+        type: "string"
+      denominationCount:
+        description: "Denomination Count"
+        type: "string"
+      amount:
+        description: "Amount"
+        type: "string" 
+      recipientName:
+        description: "Recipient Name"
+        type: "string"
+      idProofType:
+        description: "Id Proof Type"
+        type: "string"
+      idProofDetail:
+        description: "Id Proof Detail"
+        type: "string"
+      contactNo:
+        description: "Contact No"
+        type: "string"
+      courierCode:
+        description: "Courier Code"
+        type: "string"
+      consignmentNo:
+        description: "Consignment No"
+        type: string
+      consignmentDate:
+        description: "Consignment Date"
+        type: string    
+      noOfMiscFields:
+        description: "No Of Miscellaneous Fields"
+        type: "string"
+      misc1:
+        description: "Miscellaneous Field 1"
+        type: "string"
+      misc2:
+        description: "Miscellaneous Field 2"
+        type: "string"
+      misc3:
+        description: "Miscellaneous Field 3"
+        type: "string"
+      misc4:
+        description: "Miscellaneous Field 4"
+        type: "string"
+      misc5:
+        description: "Miscellaneous Field 5"
+        type: "string"
+      misc6:
+        description: "Miscellaneous Field 6"
+        type: "string"
+      misc7:
+        description: "Miscellaneous Field 7"
+        type: "string"
+      misc8:
+        description: "Miscellaneous Field 8"
+        type: "string"
+      misc9:
+        description: "Miscellaneous Field 9"
+        type: "string"
+      misc10:
+        description: "Miscellaneous Field 10"
+        type: "string"
+      misc11:
+        description: "Miscellaneous Field 11"
+        type: "string"
+      misc12:
+        description: "Miscellaneous Field 12"
+        type: "string"
+      misc13:
+        description: "Miscellaneous Field 13"
+        type: "string"
+      misc14:
+        description: "Miscellaneous Field 14"
+        type: "string"
+      misc15:
+        description: "Miscellaneous Field 15"
+        type: "string"
+      misc16:
+        description: "Miscellaneous Field 16"
+        type: "string"
+      misc17:
+        description: "Miscellaneous Field 17"
+        type: "string"
+      misc18:
+        description: "Miscellaneous Field 18"
+        type: "string"
+      misc19:
+        description: "Miscellaneous Field 19"
+        type: "string"
+      misc20:
+        description: "Miscellaneous Field 20"
+        type: "string"
+      misc21:
+        description: "Miscellaneous Field 21"
+        type: "string"
+      misc22:
+        description: "Miscellaneous Field 22"
+        type: "string"
+      misc23:
+        description: "Miscellaneous Field 23"
+        type: "string"
+      misc24:
+        description: "Miscellaneous Field 24"
+        type: "string"
+      misc25:
+        description: "Miscellaneous Field 25"
+        type: "string"
+      misc26:
+        description: "Miscellaneous Field 26"
+        type: "string"
+      misc27:
+        description: "Miscellaneous Field 27"
+        type: "string"
+      misc28:
+        description: "Miscellaneous Field 28"
+        type: "string"
+      misc29:
+        description: "Miscellaneous Field 29"
+        type: "string"
+      misc30:
+        description: "Miscellaneous Field 30"
+        type: "string"
+      modNo:
+        description: "Mod No"
+        type: "string"
+      onceAuth:
+        description: "Once Auth"
+        type: "string"
+      recordStat:
+        description: "Record Status"
+        type: "string"
+      transactionRefNo:
+        description: "Transaction Reference Number"
+        type: "string"
+      currency:
+        description: "Currency"
+        type: string
+      exchangeRate:
+        description: "Exchange Rate"
+        type: "string"
+      amtAccCcy:
+        description: "Amtount Account Ccy"
+        type: "string"
+      deliveryPointCode:
+        description: "Delivery Point Code"
+        type: "string"
+      deliveryPointDesc:
+        description: "Delivery Point Desc"
+        type: "string"
+      recipientType:
+        description: "Recipient Type"
+        type: string
+      stage:
+        description: "Stage"
+        type: "string"
+      debitStatus:
+        description: "Debit Status"
+        type: "string"
+      externalChannel:
+        description: "External Channel"
+        type: "string"
+      lienNumber:
+        description: "Lien Number"
+        type: "string"
+      lienAmount:
+        description: "Lien Amount"
+        type: string
+      processingDate:
+        description: "Processing Date"
+        type: "string"
+      requestedDate:
+        description: "Requested Date"
+        type: "string"
+      lienDate:
+        description: "Lien Date"
+        type: "string"
+      debitDate:
+        description: "debitDate"
+        type: "string"
+      withdrawalSlipDate:
+        description: "Withdrawal Slip Date"
+        type: string
+      debitACCY:
+        description: "Debit Account CCY"
+        type: "string"
+      vaFlagYN:
+        description: "va Flag YN"
+        type: "string"
+      userId:
+        description: "User Id"
+        type: string  
+      denominationDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/DenominationModel"
+        description: "Denomination Model"       

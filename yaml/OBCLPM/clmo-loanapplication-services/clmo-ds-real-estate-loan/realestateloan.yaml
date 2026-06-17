@@ -1,0 +1,433 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : realestateloan.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/realestate:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RealEstate
+      summary: Adds a new RealEstate.
+      description: Adds a new RealEstate. Add additional information here for this endpoint.
+      operationId: addRealEstate
+      parameters:
+      - name: RealEstate
+        in: body
+        description: Request Body that contains data required for creating a new RealEstate
+        required: true
+        schema:
+          $ref: '#/definitions/RealEstateModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created RealEstate
+          headers:
+            Location:
+              description: URL of newly created RealEstate
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RealEstate
+      summary: Retrieves the list of  RealEstate.
+      description: Retrieves the list of  RealEstate. Add additional information here for the this endpoint.
+      operationId: getAllRealEstate
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/realestate/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RealEstate
+      summary: Get a  RealEstate.
+      description: Update a  RealEstate. Add additional information here for the this endpoint.
+      operationId: getRealEstateById
+      parameters:
+      - name: id
+        in: path
+        description: id of the RealEstate that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns updated RealEstate
+          schema:
+            $ref: '#/definitions/RealEstateModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RealEstate
+      summary: Update an  RealEstate.
+      description: Update an  RealEstate. Add additional information here for the this endpoint.
+      operationId: updateRealEstate
+      parameters:
+      - name: id
+        in: path
+        description: id of the RealEstate that need to be updated
+        required: true
+        type: string
+      - name: RealEstate
+        in: body
+        description: Request Body that contains data required for updating an  RealEstate
+        required: true
+        schema:
+          $ref: '#/definitions/RealEstateModel'
+      responses:
+        200:
+          description: Returns updated RealEstate
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - RealEstate
+      summary: Deletes the A RealEstateidentified by given ID.
+      description: Deletes the RealEstate identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteRealEstate
+      parameters:
+      - name: id
+        in: path
+        description: Id of the RealEstate that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  RealEstateModel:
+   description: RealEstate model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+      realEstateDetail:
+        description: RealEstateDetail of the Project
+        type: array
+        items:
+          $ref: '#/definitions/RealEstateDetailModel'        
+  RealEstateCollection:
+    description: Collection of RealEstate.
+    type: object
+    properties:
+      RealEstateList:
+        type: array
+        items:
+          $ref: '#/definitions/RealEstateModel'
+  RealEstateDetailModel:
+    description: RealEstateDetail model
+    type: object
+    required:
+    - propertyType
+    - propertyStatus
+    - addressline1
+    - country
+    - totalAreaofProperty
+    - zipcode
+    - unit
+    - marketValue
+    - ownershipStatus
+    - eligibleValue
+    - specialZone
+    properties:
+      id:
+        description: Id of the  RealEstateDetail
+        type: string
+        maxLength: 36
+      addressline1:
+        description: addressline1 of the  RealEstateDetail
+        type: string
+        maxLength: 36
+      addressline2:
+        description: addressline2 of the  RealEstateDetail
+        type: string
+        maxLength: 36
+      addressline3:
+        description: addressline3 of the  RealEstateDetail
+        type: string
+        maxLength: 36
+      addressline4:
+        description: addressline4 of the  RealEstateDetail
+        type: string
+        maxLength: 36                        
+      city:
+        description: city of the RealEstateDetail
+        type: string
+        maxLength: 20
+      classificationOfBuilder:
+        description: classificationOfBuilder of the RealEstateDetail
+        type: string
+        maxLength: 20
+      constructionStatus:
+        description: constructionStatus of the RealEstateDetail
+        type: string
+        maxLength: 20
+      country:
+        description: country of the RealEstateDetail
+        type: string
+        maxLength: 3
+      expectedCompletionDate:
+        description: expectedCompletionDate of the RealEstateDetail
+        type: string 
+      leaseeffectiveDate:
+        description: leaseeffectiveDate of the RealEstateDetail
+        type: string
+      leaseexpiryDate:
+        description: leaseexpiryDate of the RealEstateDetail
+        type: string
+      completionDate:
+        description: completionDate of the RealEstateDetail
+        type: string        
+      lessor:
+        description: lessor of the RealEstateDetail
+        type: string
+        maxLength: 105
+      lienonpRoperty:
+        description: lienonpRoperty of the RealEstateDetail
+        type: string
+        maxLength: 20
+      eligibleValue:
+        description: eligibleValue of the RealEstateDetail
+        type: integer
+        format: int64
+      eligibleValueCurrency:
+        description: eligibleValueCurrency of the RealEstateDetail
+        type: string                 
+      marketValue:
+        description: marketValue of the RealEstateDetail
+        type: integer
+        format: int64
+      marketValueCurrency:
+        description: marketValueCurrency of the RealEstateDetail
+        type: string       
+      nameOfBuilder:
+        description: nameOfBuilder of the RealEstateDetail
+        type: string
+        maxLength: 105
+      propertyType:
+        description: propertyType of the RealEstateDetail
+        type: string
+        maxLength: 20
+      purchaseDate:
+        description: purchaseDate of the RealEstateDetail
+        type: string
+      realEstateId:
+        description: realEstateId of the RealEstateDetail
+        type: string
+        maxLength: 36
+      registrationNumber:
+        description: registrationNumber of the RealEstateDetail
+        type: string
+        maxLength: 105
+      state:
+        description: state of the RealEstateDetail
+        type: string
+        maxLength: 20
+      totalAreaofProperty:
+        description: totalAreaofProperty of the RealEstateDetail
+        type: string
+        maxLength: 10
+      unit:
+        description: unit of the RealEstateDetail
+        type: string
+        maxLength: 20
+      zipcode:
+        description: zipcode of the RealEstateDetail
+        type: string
+        maxLength: 8
+      totalAreaofProperty:
+        description: totalAreaofProperty of the RealEstateDetail
+        type: string
+        maxLength: 10
+      existingCharges:
+        description: ExistingCharges  of the RealEstateDetail
+        $ref: '../../commondefinitions.yaml#/definitions/ExistingCharges'
+      ownershipStatus:
+        description: OwnershipStatus  of the RealEstateDetail
+        $ref: '../../commondefinitions.yaml#/definitions/OwnershipStatus'
+      propertyStatus:
+        description: PropertyStatus  of the RealEstateDetail
+        $ref: '../../commondefinitions.yaml#/definitions/PropertyStatus'
+      specialZone:
+        description: SpecialZone  of the RealEstateDetail
+        $ref: '../../commondefinitions.yaml#/definitions/SpecialZone'
+      realEstateCharge:
+        description: realEstateCharge of the RealEstateDetail
+        type: array
+        items:
+          $ref: '#/definitions/RealEstateChargeModel'
+      realEstateDocument:
+        description: realEstateDocument of the RealEstateDetail
+        type: array
+        items:
+          $ref: '../clmo-ds-utility/documentLinkage.yaml#/definitions/DocumentLinkageModel'
+      realEstateZone:
+        description: realEstateZone of the RealEstateDetail
+        type: array
+        items:
+          $ref: '#/definitions/RealEstateZoneModel'
+  RealEstateChargeModel:
+    description: RealEstateCharge model
+    type: object
+    required:
+    - chargeType
+    - description
+    properties:
+      id:
+        description: Id
+        type: string
+        maxLength: 36
+      chargeType:
+        description: Id
+        type: string
+        maxLength: 36                                                                                                                                                                           
+      description:
+        description: Id
+        type: string
+        maxLength: 1000
+      realEstateDetailsId:
+        description: Id
+        type: string
+        maxLength: 36
+  RealEstateZoneModel:
+    description: RealEstateZoneModel model
+    type: object
+    required:
+    - chargeType
+    - description
+    properties:
+      id:
+        description: Id
+        type: string
+        maxLength: 36
+      description:
+        description: description
+        type: string
+        maxLength: 1000                                                                                                                                                                           
+      zoneType:
+        description: zoneType
+        type: string
+        maxLength: 36
+      realEstateDetailsId:
+        description: Id
+        type: string
+        maxLength: 36
+  GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type  

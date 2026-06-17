@@ -1,0 +1,894 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server interest Optimization server."
+  version: "1.0.0"
+  title: "Interest Optimization Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "Interest Optimization"
+    description: "Interest Optimization method works by applying preferential pricing across a group of accounts on the basis of pre-determined criteria that are typically based on a net aggregate balance threshold.
+
+For example, a company with multiple credit balances distributed across its various operating centers may find that individually these balances only qualify for the lowest interest-rate tier payable on credit balances. By contrast, under an interest-Optimization arrangement, the total of these balances is used to enhance the qualifying tier of the individual balances"
+
+schemes:
+  - "http"
+  - "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supported http methods POST and GET
+  #
+  # path example ../interest-optimization
+
+  /interest-optimization:
+    post:
+      tags:
+        - "interest-optimization"
+      summary: "Adds a new interest optimization."
+      description: "Adds a new interest optimization. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      parameters:
+        - name: "interestOptimization"
+          in: "body"
+          description: "Request Body that contains data required for creating a new interest optimization"
+          required: true
+          schema:
+            $ref: "#/definitions/LmxTmIOStructureMasterDTO"
+      responses:
+        201:
+          description: "Returns message of success or failure "
+          headers:
+            Location:
+              description: "URL of newly created interest optimization"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "interest-optimization"
+      summary: "Get all valid interest optimization."
+      description: "Get all valid interest optimization. This endpoints will be used to Get all valid interest optimization maintenance records."
+      operationId: "getAll"
+      parameters:
+        - name: includecloseandunauth
+          in: query
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: false
+          type: boolean
+        - name: structureId
+          in: query
+          description: structureId of IO Structure
+          required: false
+          type: string
+        - name: structureDescription
+          in: query
+          description: structureDescription of IO Structure
+          required: false
+          type: string
+        - name: customerId
+          in: query
+          description: customerId in IO Structure
+          required: false
+          type: string
+        - name: thresholdCurrency
+          in: query
+          description: thresholdCurrency in IO Sttructure
+          required: false
+          type: string
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/LmxTmIOStructureMasterCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+  #
+  #  supported http methods PUT, DELETE and GET
+  #
+  # path examples----
+  #   PUT       .../interest-optimization/xxx
+  #   DELETE    .../interest-optimization/xxx
+  #   GET       .../interest-optimization/xxx
+  #   GET       .../interest-optimization/xxx?version=latest
+  #   GET       .../interest-optimization/xxx?version=1
+
+  /interest-optimization/{id}:
+    put:
+      tags:
+        - "interest-optimization"
+      summary: "Update an existing interest optimization."
+      description: "Update an existing interest optimization."
+      operationId: "modifyRecord"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "key of the interest optimization Maintenance"
+          required: true
+          type: "string"
+        - name: "interestOptimization"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing interest optimization"
+          required: true
+          schema:
+            $ref: "#/definitions/LmxTmIOStructureMasterDTO"
+      responses:
+        200:
+          description: "Returns updated interest optimization"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "interest-optimization"
+      summary: "Retrieves the interest optimization by ID."
+      description: "Retrieves the interest optimization by ID."
+      operationId: "getById"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "query"
+          description: "Id of the user that needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Returns the interest optimization based on given id."
+          schema:
+            $ref: "#/definitions/LmxTmIOStructureWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      tags:
+        - "interest-optimization"
+      summary: "Deletes the interest optimization identified by given ID."
+      description: "Deletes the interest optimization identified by given ID. Add additional information here for the this endpoint."
+      operationId: "delete"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the interest optimization maintenance"
+          required: true
+          type: "string"
+        - name: "interestOptimization"
+          in: "body"
+          description: Request body contain interestoptimization and Modification no of interestoptimization maintenance which need to be deleted"
+          required: true
+          schema:
+            $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to Authorize existing record.
+  #
+  #  supported http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../interest-optimization/xxx/approve
+
+  /interest-optimization/{id}/approve:
+    patch:
+      tags:
+        - "interest-optimization"
+      summary: "Authorize the interest optimization by given ID."
+      description: "Authorize the interest optimization identified by given ID."
+      operationId: "authorize"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the interest optimization maintenance"
+          required: true
+          type: "string"
+        - name: "interestOptimization"
+          in: "body"
+          description: Request body contain interestoptimization and Modification no of interestoptimization maintenance which need to be deleted"
+          required: true
+          schema:
+            $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to close existing record
+  #
+  #  supported http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../interest-optimization/xxx/close
+  /interest-optimization/{id}/close:
+    patch:
+      tags:
+        - "interest-optimization"
+      summary: "Close the interest optimization by given ID."
+      description: "Close the interest optimization identified by given ID."
+      operationId: "closeRecord"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the interest optimization maintenance"
+          required: true
+          type: "string"
+        - name: "interestOptimization"
+          in: "body"
+          description: Request body contain interestoptimization and Modification no of interestoptimization maintenance which need to be closed"
+          required: true
+          schema:
+            $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to reopen existing record
+  #
+  #  supported http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../interest-optimization/xxx/reopen
+
+  /interest-optimization/{id}/reopen:
+    patch:
+      tags:
+        - "interest-optimization"
+      summary: "reopen the interest optimization by given ID."
+      description: "reopen the interest optimization identified by given ID."
+      operationId: "reopenRecord"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the interest optimization maintenance"
+          required: true
+          type: "string"
+        - name: "interestOptimization"
+          in: "body"
+          description: Request body contain interestoptimization and Modification no of interestoptimization maintenance which need to be reopen"
+          required: true
+          schema:
+            $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to get all unauthorized records
+  #
+  #  supported http methods GET
+  #
+  # path examples----
+  #   GET       .../interest-optimization/xxx/unauthorized
+
+  /interest-optimization/{id}/unauthorized:
+    get:
+      tags:
+        - "interest-optimization"
+      summary: "Retrieves the interest optimization by given ID."
+      description: "Retrieves the interest optimization identified by given ID."
+      operationId: "authQuery"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the interest optimization based on given id."
+          schema:
+            $ref: "#/definitions/LmxTmIOStructureMasterCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to  history record for remitter id
+  #
+  #  supported http methods GETS
+  #
+  # path examples----
+  #   GET       .../interest-optimization/xxx/history
+
+  /interest-optimization/{id}/history:
+    get:
+      tags:
+        - "interest-optimization"
+      summary: "Retrieves the interest optimization by given ID."
+      description: "Retrieves the interest optimization by ID."
+      operationId: "getHistory"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the interest optimization based on given id."
+          schema:
+            $ref: "#/definitions/LmxTmIOStructureMasterCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /interest-optimization/getIOStructureId:
+    get:
+      tags:
+        - "interest-optimization"
+      summary: Retrieves the IO structure ID.
+      description: Retrieves the IO structureID.
+      operationId: getIOStructureId
+      responses:
+        200:
+          description: Returns the IO structure id.
+          schema:
+            $ref: '#/definitions/LmxTmIOStructureWrapperDTO'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  LmxTmIOStructureMasterDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          branchCode:
+            type: string
+            description: ""
+          customerId:
+            type: string
+            description: ""
+          effectiveDate:
+            type: string
+            format: date
+            description: ""
+          endDate:
+            type: string
+            format: date
+            description: ""
+          interestMethod:
+            type: string
+            description: ""
+          #       isCaEnhAllowed:
+          #         type: string
+          #         description: ""
+          #       isCaPartAllowed:
+          #         type: string
+          #         description: ""
+          #       isLnPartAllowed:
+          #         type: string
+          #         description: ""
+          #       isSbEnhAllowed:
+          #         type: string
+          #         description: ""
+          #       isSbPartAllowed:
+          #         type: string
+          #         description: ""
+          #       isTdPartAllowed:
+          #         type: string
+          #         description: ""
+          isTemp:
+            type: string
+            description: ""
+          logCode:
+            type: string
+            description: ""
+          nominatedAccBranch:
+            type: string
+            description: ""
+          nominatedAccCcy:
+            type: string
+            description: ""
+          nominatedAccNo:
+            type: string
+            description: ""
+          sourceSystem:
+            type: string
+            description: ""
+          pauseStartDate:
+            type: string
+            format: date
+            description: ""
+          pauseEndDate:
+            type: string
+            format: date
+            description: ""
+          structureDescription:
+            type: string
+            description: ""
+          structureId:
+            type: string
+            description: ""
+          thresholdAmount:
+            type: number
+            description: ""
+          thresholdCurrency:
+            type: string
+            description: ""
+          versionNo:
+            type: number
+            description: ""
+          ioRateType:
+            type: string
+            description: ""
+          LmxTmIOStructureDetailDTO:
+            type: array
+            items:
+              $ref: '#/definitions/LmxTmIOStructureDetailDTO'
+          LmxTmIOCurrencyRateDTO:
+            type: array
+            items:
+              $ref: '#/definitions/LmxTmIOCurrencyRateDTO'
+          LmxTmIOCurrencyThresholdDTO:
+            type: array
+            items:
+              $ref: '#/definitions/LmxTmIOCurrencyThresholdDTO'
+        required:
+          - structureId
+          - structureDescription
+          - customerId
+          - effectiveDate
+          - thresholdCurrency
+          - thresholdAmount
+          - LmxTmIOStructureDetailDTO
+          - LmxTmIOCurrencyRateDTO
+          - LmxTmIOCurrencyThresholdDTO
+  LmxTmIOStructureDetailDTO:
+    type: object
+    properties:
+      accountNumber:
+        type: string
+        description: ""
+      branchCode:
+        type: string
+        description: ""
+      currency:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+    required:
+      - accountNumber
+      - branchCode
+      - currency
+  LmxTmIOCurrencyRateDTO:
+    type: object
+    properties:
+      currency:
+        type: string
+        description: ""
+      enhancementRate:
+        type: number
+        description: ""
+      fromAmount:
+        type: number
+        description: ""
+      id:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      rateType:
+        type: string
+        description: ""
+      toAmount:
+        type: number
+        description: ""
+    required:
+      - currency
+      - enhancementRate
+      - fromAmount
+      - toAmount
+      - rateType
+  LmxTmIOCurrencyThresholdDTO:
+    type: object
+    properties:
+      amount:
+        type: number
+        description: ""
+      currency:
+        type: string
+        description: ""
+      enhancementRate:
+        type: number
+        description: ""
+      id:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+    required:
+      - amount
+      - currency
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  LmxTmIOStructureMasterCollection:
+    description: "Collection of ie structure."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/LmxTmIOStructureMasterDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  LmxTmIOStructureWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmxTmIOStructureMasterDTO"
+  IcEntry:
+    type: object
+    allOf:
+      - type: object
+        properties:
+          account:
+            type: string
+            description: ''
+          branch:
+            type: string
+            description: ''
+          currency:
+            type: string
+            description: ''
+        required:
+          - account
+          - branch
+          - currency
+  CmcCurrencyUtilityDtoWrapper:
+    description: "CmcCurrency Utility Dto Wrapper"
+    type: "object"
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/CurrencyUtilityDto"
+  CurrencyUtilityDto:
+    type: object
+    properties:
+      amount:
+        type: number
+        minLength: 0
+        maxLength: 50
+      rate:
+        type: number
+        minLength: 0
+        maxLength: 3
+  LmmTmApplicationParametersDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          applicationId:
+            type: string
+            description: ""
+          applicationInstanceId:
+            type: string
+            description: ""
+          applicationInstanceName:
+            type: string
+            description: ""
+          applicationReleaseVersion:
+            type: string
+            description: ""
+          applicationDate:
+            type: string
+            format: date
+            description: ""
+          hostCountryCode:
+            type: string
+            description: ""
+          hostCountryName:
+            type: string
+            description: ""
+          timeZone:
+            type: string
+            description: ""
+          isMbccAllowed:
+            type: string
+            description: ""
+          isBvtAllowed:
+            type: string
+            description: ""
+          sweep:
+            type: string
+            description: ""
+          pool:
+            type: string
+            description: ""
+          hybrid:
+            type: string
+            description: ""
+          domesticSweep:
+            type: string
+            description: ""
+          domesticPool:
+            type: string
+            description: ""
+          domesticHybridSweep:
+            type: string
+            description: ""
+          domesticHybridPool:
+            type: string
+            description: ""
+          crossBorderSweep:
+            type: string
+            description: ""
+          crossBorderPool:
+            type: string
+            description: ""
+          crossBorderHybridSweep:
+            type: string
+            description: ""
+          crossBorderHybridPool:
+            type: string
+            description: ""
+          crossCcySweep:
+            type: string
+            description: ""
+          crossCcyPool:
+            type: string
+            description: ""
+          crossCcyHybridSweep:
+            type: string
+            description: ""
+          crossCcyHybridPool:
+            type: string
+            description: ""
+          allowMultipleStructure:
+            type: string
+            description: ""
+          skipOnAccountPairFail:
+            type: string
+            description: ""
+          skipOnStructureFail:
+            type: string
+            description: ""
+          useMultiCcyAccNumber:
+            type: string
+            description: ""
+          skipAccountPair:
+            type: string
+            description: ""
+          sweepBasis:
+            type: string
+            description: ""
+          txnFailRetryCount:
+            type: integer
+            description: ""
+          allowNettingForReverseSweep:
+            type: string
+            description: ""
+          allowNettingForReallocation:
+            type: string
+            description: ""
+          ioRateType:
+            type: string
+            description: ""
+        required:
+          - id
+          - applicationInstanceId
+          - applicationReleaseVersion
+  LmmTmApplicationParametersCollection:
+    description: "Collection of application parameters."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/LmmTmApplicationParametersDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"

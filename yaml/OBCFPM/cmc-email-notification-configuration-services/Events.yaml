@@ -1,0 +1,717 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : email.notification
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server events server." 
+ version: "1.0.0"
+ title: "events Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "events"
+   description: "cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification.cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../events
+
+ /events:
+  post:
+   tags:
+    - "events"
+   summary: "Adds a new events."
+   description: "Adds a new events. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "events" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new events" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEventsDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created events" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "events"
+   summary: "Get all valid events."
+   description:  "Get all valid events. This endpoints will be used to Get all valid events maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: eventCode
+     in: query
+     required: false
+     type: string
+   - name: eventName
+     in: query
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmEventsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../events/xxx
+#   DELETE    .../events/xxx
+#   GET       .../events/xxx
+#   GET       .../events/xxx?version=latestrecord
+#   GET       .../events/xxx?version=1
+
+ /events/{id}:
+  put:
+   tags:
+    - "events"
+   summary: "Update an existing events."
+   description:  "Update an existing events."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the events Maintenance"
+      required: true
+      type: "string"
+    - name: "events"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing events"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEventsDTO"
+   responses:
+    200:
+     description: "Returns updated events"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "events"
+   summary: "Retrieves the events by ID."
+   description:  "Retrieves the events by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the events based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmEventsWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "events"
+   summary: "Deletes the events identified by given ID."
+   description:  "Deletes the events identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the events maintenance"
+      required: true
+      type: "string"
+    - name: "events"
+      in: "body"
+      description: Request body contain events and Modification no of events maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../events/xxx/approve
+
+ /events/{id}/approve:
+  patch:
+   tags:
+    - "events"
+   summary: "Authorize the events by given ID."
+   description:  "Authorize the events identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the events maintenance"
+      required: true
+      type: "string"
+    - name: "events"
+      in: "body"
+      description: Request body contain events and Modification no of events maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../events/xxx/close
+ /events/{id}/close:
+  patch:
+   tags:
+    - "events"
+   summary: "Close the events by given ID."
+   description:  "Close the events identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the events maintenance"
+      required: true
+      type: "string"
+    - name: "events"
+      in: "body"
+      description: Request body contain events and Modification no of events maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../events/xxx/reopen
+
+ /events/{id}/reopen:
+  patch:
+   tags:
+    - "events"
+   summary: "reopen the events by given ID."
+   description:  "reopen the events identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the events maintenance"
+      required: true
+      type: "string"
+    - name: "events"
+      in: "body"
+      description: Request body contain events and Modification no of events maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../events/xxx/unauthorized
+
+ /events/{id}/unauthorized:
+  get:
+   tags:
+    - "events"
+   summary: "Retrives the events by given ID."
+   description:  "Retrives the events identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the events based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmEventsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../events/xxx/history
+
+ /events/{id}/history:
+  get:
+   tags:
+    - "events"
+   summary: "Retrives the events by given ID."
+   description:  "Retrives the events by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the events based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmEventsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /events/eventCode/{eventCode}:
+  get:
+   tags:
+    - "events"
+   summary: "Retrives the events by given eventCode."
+   description:  "Retrives the events by given eventCode"
+   operationId: "getEventDetailsByEventCode"
+   parameters:
+    - name: "eventCode"
+      in: "path"
+      description: "eventCode of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the events based on given eventCode."
+     schema:
+       $ref: "#/definitions/CmcTmEventsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /events/eventCompleteDetails/{eventCode}:
+  get:
+   tags:
+    - "events"
+   summary: "Retrives the events by given eventCode."
+   description:  "Retrives the events by given eventCode"
+   operationId: "getEventDetailsForEmailByEventCode"
+   parameters:
+    - name: "eventCode"
+      in: "path"
+      description: "eventCode of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the events based on given eventCode."
+     schema:
+       $ref: "#/definitions/CmcTmEventsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /events/id/{id}:
+  get:
+   tags:
+    - "events"
+   summary: "Retrives the events by given eventCode."
+   description:  "Retrives the events by given eventCode"
+   operationId: "getEventDetailsById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "eventCode of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the events based on given eventCode."
+     schema:
+       $ref: "#/definitions/CmcTmEventsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CmcTmEventsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     createdBy:
+      type: string
+      description: ""
+     createdDate:
+      type: string
+      format: date
+      description: ""
+     eventCode:
+      type: string
+      description: ""
+     eventName:
+      type: string
+      description: ""
+     updatedBy:
+      type: string
+      description: ""
+     updatedDate:
+      type: string
+      format: date
+      description: ""
+     templateCodes:
+      type: array
+      items:
+       type: string
+     CmcTmEventApiMappingDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmEventApiMappingDTO'
+ CmcTmEventApiMappingDTO:
+  type: object
+  properties:
+     apiUrl:
+      type: string
+      description: ""
+     responseSetKey:
+      type: string
+      description: ""
+     recordType:
+      type: string
+      description: ""
+     createdBy:
+      type: string
+      description: ""
+     createdDate:
+      type: string
+      format: date
+      description: ""
+     id:
+      type: string
+      description: ""
+     parentId:
+      type: string
+      description: ""
+     updatedBy:
+      type: string
+      description: ""
+     updatedDate:
+      type: string
+      format: date
+      description: ""
+     CmcTmEventApiParamsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmEventApiParamsDTO'
+ CmcTmEventApiParamsDTO:
+  type: object
+  properties:
+     createdBy:
+      type: string
+      description: ""
+     createdDate:
+      type: string
+      format: date
+      description: ""
+     keyName:
+      type: string
+      description: ""
+     keyType:
+      type: string
+      description: ""
+     keyValue:
+      type: string
+      description: ""
+     recordType:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     parentId:
+      type: string
+      description: ""
+     updatedBy:
+      type: string
+      description: ""
+     updatedDate:
+      type: string
+      format: date
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmcTmEventsCollection: 
+  description: "Collection of events."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmEventsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmcTmEventCompleteDetails: 
+  description: "complete details of events."
+  type: "object"
+  properties:
+   eventsDto:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmEventsDTO"
+   emailConfigurationsDto:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmEmailConfigurationsDTO"
+   emailTemplateDto:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmEmailTemplateDTO"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CmcTmEventsWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmEventsDTO"
+

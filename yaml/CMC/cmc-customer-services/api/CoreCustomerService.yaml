@@ -1,0 +1,288 @@
+#  This source is part of the Oracle Banking Software Product.
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East),
+#  Mumbai - 400 063, India.
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  **
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+  description: "This is a sample server corecustomers server."
+  version: "1.0.0"
+  title: "corecustomers Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "corecustomersservice"
+    description: "This is the service to  maintain the record for  external customers.It has the option to create different type and different category for the customers, also it takes the source system and source system customer number as input and maps the source system customer number to a unique customer."
+
+schemes:
+  - "https"
+
+paths:
+
+  # path to create a new record and fetch all valid records or by intent
+  #
+  #  supprorted http methods POST and GET
+  #
+  # path example ../corecustomersservice
+
+  /service/corecustomers:
+    post:
+      tags:
+        - "corecustomersservice"
+      summary: "Adds a new corecustomers."
+      description: "Adds a new corecustomers. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      parameters:
+        - name: "corecustomers"
+          in: "body"
+          description: "Request Body that contains data required for creating a new corecustomers"
+          required: true
+          schema:
+            $ref: "./CoreCustomer.yaml#/definitions/CoreCustomerDTO"
+        - name: sourceCode
+          in: header
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: true
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created corecustomers"
+              type: "string"
+          schema:
+            $ref: "#/definitions/CoreCustomerServiceResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "corecustomersservice"
+      summary: "Retrieves the corecustomers by providing array of customerNos."
+      description:  "Retrieves the corecustomers by providing array of customerNos."
+      operationId: "getAll"
+      parameters:
+        - name: sourceCode
+          in: header
+          description: "Source from which request is initiated"
+          required: true
+          type: string
+        - name: "customerNos"
+          in: query
+          description: "array of accountNos with minimum 1 and maximum 1000"
+          required: true
+          type: array
+          items:
+           type: string
+          minItems: 1
+          maxItems: 100
+      responses:
+        200:
+          description: "Returns the corecustomers based on given customerNos."
+          schema:
+            $ref: "#/definitions/CoreCustomerServiceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/corecustomers/{customerNo}:
+    put:
+      tags:
+        - "corecustomersservice"
+      summary: "Update an existing corecustomers."
+      description:  "Update an existing corecustomers."
+      operationId: "modifyRecord"
+      parameters:
+        - name: "customerNo"
+          in: "path"
+          description: "key of the corecustomers Maintenance"
+          required: true
+          type: "string"
+        - name: sourceCode
+          in: header
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: true
+          type: string
+        - name: "corecustomers"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing corecustomers"
+          required: true
+          schema:
+            $ref: "./CoreCustomer.yaml#/definitions/CoreCustomerDTO"
+      responses:
+        200:
+          description: "Returns updated corecustomers"
+          schema:
+            $ref: "#/definitions/CoreCustomerServiceResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/corecustomers/{customerNo}/close:
+    patch:
+      tags:
+        - "corecustomersservice"
+      summary: "Close the corecustomers by given ID."
+      description:  "Close the corecustomers identified by given ID."
+      operationId: "closeRecord"
+      parameters:
+        - name: "customerNo"
+          in: "path"
+          description: "Key of the corecustomers maintenance"
+          required: true
+          type: "string"
+        - name: sourceCode
+          in: header
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: true
+          type: string
+        - name: "corecustomers"
+          in: "body"
+          description: Request body contain corecustomers and Modification no of corecustomers maintenance which need to be closed"
+          required: true
+          schema:
+            $ref: "#/definitions/CloseDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/CoreCustomerServiceResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to reopen existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../corecustomers/xxx/reopen
+
+  /service/corecustomers/{customerNo}/reopen:
+    patch:
+      tags:
+        - "corecustomersservice"
+      summary: "reopen the corecustomers by given ID."
+      description:  "reopen the corecustomers identified by given ID."
+      operationId: "reopenRecord"
+      parameters:
+        - name: "customerNo"
+          in: "path"
+          description: "Key of the corecustomers maintenance"
+          required: true
+          type: "string"
+        - name: sourceCode
+          in: header
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: true
+          type: string
+        - name: "corecustomers"
+          in: "body"
+          description: Request body contain corecustomers and Modification no of corecustomers maintenance which need to be reopen"
+          required: true
+          schema:
+            $ref: "#/definitions/ReOpenDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/CoreCustomerServiceResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+  CoreCustomerServiceResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "./CoreCustomer.yaml#/definitions/ResponseDto"
+      data:
+        $ref: "./CoreCustomer.yaml#/definitions/CoreCustomerDTO"
+  NKValuesDto:
+    type: object
+    properties:
+      id:
+        type: string
+      modNo:
+        type: integer
+      wrapper:
+        $ref: "./CoreCustomer.yaml#/definitions/ResponseDto"
+  CloseDto:
+    type: object
+    properties:
+      remarks:
+        type: string
+  ReOpenDto:
+    type: object
+    properties:
+      remarks:
+        type: string
+  CoreCustomerServiceCollection: 
+    description: "Collection of corecustomer."
+    type: object
+    properties:
+      data:
+        type: array
+        items: 
+          $ref: "./CoreCustomer.yaml#/definitions/CoreCustomerDTO"        

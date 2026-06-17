@@ -1,0 +1,1417 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server loan server." 
+ version: "1.0.0"
+ title: "loan Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "loan"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../loan
+
+ /loan:
+  post:
+   tags:
+    - "loan"
+   summary: "Adds a new loan."
+   description: "Adds a new loan. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "loan" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new loan" 
+      required: true
+      schema:
+       $ref: "#/definitions/IclTbLoanDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created loan" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "loan"
+   summary: "Get all valid loan."
+   description:  "Get all valid loan. This endpoints will be used to Get all valid loan maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: loanReference
+     in: query
+     description: loan reference
+     required: false
+     type: string
+   - name: borrowingCustomerId
+     in: query
+     description: borrower customer ID
+     required: false
+     type: string
+   - name: lendingCustomerId
+     in: query
+     description: lender customer ID
+     required: false
+     type: string
+   - name: customerId1
+     in: query
+     description: customer 1 Id
+     required: false
+     type: string
+   - name: customerId2
+     in: query
+     description: customer 2 ID
+     required: false
+     type: string
+   - name: creditDisbursementAccount
+     in: query
+     description: credit disbursement account
+     required: false
+     type: string
+   - name: debitDisbursementAccount
+     in: query
+     description: dedit disbursement account
+     required: false
+     type: string
+   - name: debitDisbursementCurrency
+     in: query
+     description: debit disbursement currency
+     required: false
+     type: string
+   - name: debitDisbursementAmount
+     in: query
+     description: debit amount
+     required: false
+     type: number
+   - name: debitDisbursementAmountFrom
+     in: query
+     description: debit amount from
+     required: false
+     type: number
+   - name: debitDisbursementAmountTo
+     in: query
+     description: debit amount to
+     required: false
+     type: number
+   - name: iclReference
+     in: query
+     description: icl reference
+     required: false
+     type: string
+   - name: disbursementDateFrom
+     in: query
+     description: loan date from
+     required: false
+     type: string
+   - name: disbursementDateTo
+     in: query
+     description: loan date to
+     required: false
+     type: string
+   - name: loanIcProductCode
+     in: query
+     description: loan IC product
+     required: false
+     type: string
+   - name: loanMaturityDate
+     in: query
+     description: loan maturity date
+     required: false
+     type: string
+   - name: loanStatus
+     in: query
+     description: loan status
+     required: false
+     type: string
+   - name: loanType
+     in: query
+     description: loan type
+     required: false
+     type: string
+   - name: parentCustomerId
+     in: query
+     description: parent customer Id
+     required: false
+     type: string
+   - name: settlementReference
+     in: query
+     description: settlement reference
+     required: false
+     type: string
+   - name: sweepId
+     in: query
+     description: sweep id
+     required: false
+     type: string     
+   - name: sweepLogId
+     in: query
+     description: sweep logid
+     required: false
+     type: string      
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/IclTbLoanCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/{id}:
+  get:
+   tags:
+    - "loan"
+   summary: "Retrieves the loan by ID."
+   description:  "Retrieves the loan by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the loan based on given id."
+     schema:
+      $ref: "#/definitions/IclTbLoanWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  put:
+   tags:
+    - "loan"
+   summary: "Update an existing loan."
+   description:  "Update an existing loan."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the loan Maintenance"
+      required: true
+      type: "string"
+    - name: "loan"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing loan"
+      required: true
+      schema:
+       $ref: "#/definitions/IclTbLoanDTO"
+   responses:
+    200:
+     description: "Returns updated loan"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/{sweepLogId}/updateLoanStatus/{loanStatus}:
+  patch:
+   tags:
+    - "loan"
+   summary: "Update existing loan status."
+   description:  "Update existing loan status."
+   operationId: "updateLoanStatus"
+   parameters:
+    - name: "sweepLogId"
+      in: "path"
+      description: "sweep log ID of the under which loan has created"
+      required: true
+      type: "string"
+    - name: "loanStatus"
+      in: "path"
+      description: "loanStatus"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns updated loan"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/{sweepLogId}/reject:
+  patch:
+   tags:
+    - "loan"
+   summary: "Reject an existing loan."
+   description:  "Reject an existing loan."
+   operationId: "rejectLoan"
+   parameters:
+    - name: "sweepLogId"
+      in: "path"
+      description: "sweep log ID of the loan Maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns updated loan"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/{sweepLogId}/recordRepayment:
+  patch:
+   tags:
+    - "loan"
+   summary: "Record payment on an existing loan.."
+   description:  "Record payment on an existing loan."
+   operationId: "recordRepayment"
+   parameters:
+    - name: "sweepLogId"
+      in: "path"
+      description: "sweep log ID of the loan Maintenance"
+      required: true
+      type: "string"
+    - name: "iclRepayLoanDTO" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new loan" 
+      required: true
+      schema:
+       $ref: "#/definitions/IclRepayLoanDTO"
+   responses:
+    200:
+     description: "Returns updated loan"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created loan" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/{id}/initiateSettlement:
+  post:
+   tags:
+    - "loan"
+   summary: "initiate loan settlement."
+   description: "This API initiate reverse sweep and interest payment"
+   operationId: "initiateSettlement"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "sweep log ID of the loan Maintenance"
+      required: true
+      type: "string"
+    - name: "loan" 
+      in: "body" 
+      description: "Request Body that contains required data for initiating a  a loan settlement" 
+      required: true
+      schema:
+       $ref: "#/definitions/IclTbLoanDTO"
+   responses:
+    200:
+     description: "Returns updated loan"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created loan" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/{id}/updateSweepLogID/{sweepLogId}:
+  patch:
+   tags:
+    - "loan"
+   summary: "Update sweep log id."
+   description: "This API initiate reverse sweep and interest payment"
+   operationId: "updateSweepLogID"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "ID of the loan Maintenance"
+      required: true
+      type: "string"
+    - name: "sweepLogId"
+      in: "path"
+      description: "sweep log ID of the loan Maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns updated loan"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created loan" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /loan/pending/{lendingCustId}/{borrowingCustId}:
+  get:
+   tags:
+    - "loan"
+   summary: "Get pending loans for given customers"
+   description:  "Get pending loans for given customers"
+   operationId: "getPendingLoans"
+   parameters:
+    - name: "lendingCustId"
+      in: "path"
+      description: "lending customer ID"
+      required: true
+      type: "string"
+    - name: "borrowingCustId"
+      in: "path"
+      description: "borrowing customer ID"
+      required: true
+      type: "string"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/IclTbLoanListDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+ IclTbLoanDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     autoSettleOnMaturity:
+      type: string
+      description: ""
+     bookingMode:
+      type: string
+      description: ""
+     borrowingCustomerId:
+      type: string
+      description: ""
+     borrowingCustomerName:
+      type: string
+      description: ""
+     creditDisbursementAccount:
+      type: string
+      description: ""
+     creditDisbursementAccountDesc:
+      type: string
+      description: ""
+     creditDisbursementAmount:
+      type: number
+      description: ""
+     creditDisbursementCurrency:
+      type: string
+      description: ""
+     debitDisbursementAccount:
+      type: string
+      description: ""
+     debitDisbursementAmount:
+      type: number
+      description: ""
+     debitDisbursementCurrency:
+      type: string
+      description: ""
+     debitDisbursementDesc:
+      type: string
+      description: ""
+     exchangeLoanRate:
+      type: number
+      description: ""
+     iclBookingReport:
+      type: string
+      description: ""
+     iclReference:
+      type: string
+      description: ""
+     iclSettlementReport:
+      type: string
+      description: ""
+     interestAccrualFrequency:
+      type: string
+      description: ""
+     interestAccrued:
+      type: number
+      description: ""
+     interestLiquidationFrequency:
+      type: string
+      description: ""
+#     interestOs:
+#      type: number
+#      description: ""
+     interestPaid:
+      type: number
+      description: ""
+     isReportingRequired:
+      type: string
+      description: ""
+     lendingCustomerId:
+      type: string
+      description: ""
+     lendingCustomerName:
+      type: string
+      description: ""
+     liquidateInterest:
+      type: string
+      description: ""
+     loanDate:
+      type: string
+      description: ""
+     loanIcProductCode:
+      type: string
+      description: ""
+     loanInterestRate:
+      type: number
+      description: ""
+     loanMaturityDate:
+      type: string
+      description: ""
+     loanOs:
+      type: number
+      description: ""
+     loanReference:
+      type: string
+      description: ""
+     loanStatus:
+      type: string
+      description: ""
+     loanType:
+      type: string
+      description: ""
+     parentCustomerId:
+      type: string
+      description: ""
+     parentCustomerName:
+      type: string
+      description: ""
+     settlementDate:
+      type: string
+      description: ""
+     settlementReference:
+      type: string
+      description: ""
+     structureId:
+      type: string
+      description: ""
+     structureDesc:
+      type: string
+      description: ""
+     structureMasterId:
+      type: string
+      description: ""
+     structureMasterVersionNo:
+      type: integer
+      description: ""
+     sweepId:
+      type: string
+      description: ""
+     sweepLogId:
+      type: string
+      description: ""
+     reverseSweepId:
+      type: string
+      description: ""
+     reverseSweepLogId:
+      type: string
+      description: ""
+     lastReverseSweepId:
+      type: string
+      description: ""
+     lastReverseSweepLogId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""      
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ IclTbLoanCollection: 
+  description: "Collection of loan."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/IclTbLoanDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ IclTbLoanWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/IclTbLoanDTO"
+ IclRepayLoanDTO:
+  type: object
+  properties:
+   principalPaidLC:
+    type: number
+    description: 'Principal paid in Lender currency'
+   interestPaidLC:
+    type: number
+    description: 'Interest paid in Lender currency'
+   principalPaidBC:
+    type: number
+    description: 'Principal paid in Borrower currency'
+   interestPaidBC:
+    type: number
+    description: 'Interest paid in Borrower currency'
+   lenderCurrency:
+    type: string
+    description: ''
+   borrowerCurrency:
+    type: string
+    description: ''
+   paymentDate:
+    type: string
+    description: ''
+   lenderAccountNumber:
+    type: string
+    description: 'Loan lender'
+   borrowerAccountNumber:
+    type: string
+    description: 'Loan borrower'
+   days:
+    type: number
+    description: ""
+   endDate:
+    type: string
+    description: ""
+   interestMethod:
+    type: string
+    description: ""
+   rate:
+    type: number
+    description: ""
+   startDate:
+    type: string
+    description: ""
+   checkForSettlement:
+    type: string
+    description: ""
+   repaymentSource:
+     type: string
+     description: ""
+   reverseSweepId:
+     type: string
+     description: ""
+   reverseSweepLogId:
+     type: string
+     description: ""
+   transactionReference:
+     type: string
+     description: ""
+
+ IclTbLoanListDTO:
+  type: object
+  properties:
+   data:
+    type: array
+    items:
+     $ref: '#/definitions/IclTbLoanDTO'
+
+ LmsReverseSweepStructuresDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     customerId:
+      type: string
+      description: ''
+     mode:
+      type: string
+      description: ''
+     overRidePending:
+      type: string
+      description: ''
+     branchCode:
+      type: string
+      description: ''
+     jobschedulerId:
+      type: string
+      description: ''
+     allowMBCCAccPair:
+      type: string
+      description: ''
+     simulate:
+      type: string
+      description: ''
+     adhocId:
+      type: string
+      description: ''
+     remarks:
+      type: string
+      description: ''  
+     allStructure:
+      type: string
+      description: ''
+     structureList:
+      type: array
+      items:
+       $ref: '#/definitions/ReverseSweepStructureListDTO'  
+     branchMap:
+      $ref: "#/definitions/BranchMap" 
+ ReverseSweepStructureListDTO:
+  type: object
+  properties:
+   structureId:
+    type: string
+   versionNo:
+    type: integer
+   accountList:
+    type: array
+    items:
+     $ref: '#/definitions/LmsReverseSweepAccountDTO'
+ LmsReverseSweepAccountDTO:
+  type: object
+  properties:
+   id:
+    type: string
+    description: ''
+   structureMasterId:
+    type: string
+    description: ''
+   accountNumber:
+    type: string
+    description: ''
+   branchCode:
+    type: string
+    description: ''
+   batchDataId:
+    type: string
+    description: ''
+   accountCurrency:
+    type: string
+    description: ''         
+   instructionId:
+    type: string
+    description: ''
+   frequencyId:
+    type: string
+    description: ''      
+   fromDate:
+    description: "starting Date"
+    type: string
+   toDate:
+    description: "ending Date"
+    type: string
+   extTransactionNo:
+    description: "Sweep Log ID"
+    type: string 
+ BranchMap:
+  additionalProperties:
+   $ref: "#/definitions/LmmTmBranchParametersDTO"
+ LmmTmBranchParametersDTO:
+  type: object
+  properties:
+   bankCode:
+    type: string
+    description: ''
+   bicCode:
+    type: string
+    description: ''
+   branchCode:
+    type: string
+    description: ''
+    
+ LmmTmStructureWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: '#/definitions/LmmTmStructureDTO'
+ LmmTmStructureDTO:
+  type: object
+  properties:
+   structureId:
+    type: string
+    description: ''
+   structureDescription:
+    type: string
+    description: ''
+   customerId:
+    type: string
+    description: ''
+   customerName:
+    type: string
+    description: ''
+   numberOfAccountsLinked:
+    type: integer
+    description: ''
+   structureType:
+    type: string
+    description: ''
+   struturePriority:
+    type: integer
+    description: ''
+    minimum: 1
+    maximum: 99
+   effectiveDate:
+    type: string
+    description: ''
+   endDate:
+    type: string
+    description: ''
+   headerAccountNumber:
+    type: string
+    description: ''
+   headerBranchCode:
+    type: string
+    description: ''
+   headerCurrency:
+    type: string
+    description: ''
+   multiBankFlag:
+    type: string
+    description: ''
+   crossBorderFlag:
+    type: string
+    description: ''
+   crossCurrencyFlag:
+    type: string
+    description: ''
+   balanceType:
+    type: string
+    description: ''
+   structureFrequency:
+    type: string
+    description: ''
+   currencyRateType:
+    type: string
+    description: ''
+   allowSweepOnCurrencyHol:
+    type: string
+    description: ''
+   interestMethod:
+    type: string
+    description: ''
+   ratePickUp:
+    type: string
+    description: ''
+   nextRunDate:
+    type: string
+    #          format: date
+    description: ''
+   eodExecution:
+    type: string
+    description: ''
+   reverseFrequency:
+    type: string
+    description: ''
+   instructionType:
+    type: string
+    description: ''
+   reallocationMethod:
+    type: string
+    description: ''
+   holidayTreatment:
+    type: string
+    description: ''
+   maxBackwardDays:
+    type: integer
+    description: ''
+   backwardTreatment:
+    type: string
+    description: ''
+   centralAccountNumber:
+    type: string
+    description: ''
+   centralAccountBranch:
+    type: string
+    description: ''
+   centralAccountCurrency:
+    type: string
+    description: ''
+   nextRunDateReverse:
+    type: string
+    #          format: date
+    description: ''
+   prevRunDateReverse:
+    type: string
+    #          format: date
+    description: ''
+   structureStatus:
+    type: string
+    description: ''
+   investmentSweep:
+    type: string
+    description: ''
+   considerPostSweepBalance:
+    type: string
+    description: ''
+   fxRatePickup:
+    type: string
+    description: ''
+   limitTrackingFlag:
+    type: string
+    description: ''
+   sourceSystem:
+    type: string
+    description: ''
+   systemAccountNumber:
+    type: string
+    description: ''
+   systemAccountBranch:
+    type: string
+    description: ''
+   systemAccountCurrency:
+    type: string
+    description: ''
+   pauseStartDate:
+    type: string
+    description: ''
+   pauseEndDate:
+    type: string
+    description: ''
+   trackIcl:
+    type: string
+    description: ''
+   LmmTmStructureDetailsDTO:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmStructureDetailsDTO'
+   LmmTmStructureAccountsDTO:
+    type: array
+    items:
+     $ref: '#/definitions/LmmTmStructureAccountsDTO'
+ LmmTmStructureDetailsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureMasterId:
+        type: string
+        description: ''
+      accountNumber:
+        type: string
+        description: ''
+      branchCode:
+        type: string
+        description: ''
+      accountCurrency:
+        type: string
+        description: ''
+      isExternal:
+        type: string
+        description: ''
+      acyAvailableBal:
+        type: number
+        description: ''
+      bankCode:
+        type: string
+        description: ''
+      countryId:
+        type: string
+        description: ''
+      cityId:
+        type: string
+        description: ''
+      isNotional:
+        type: string
+        description: ''
+      accCategory:
+        type: string
+        description: ''
+      parentAccountNumber:
+        type: string
+        description: ''
+      parentAccountBranch:
+        type: string
+        description: ''
+      parentAccountCurrency:
+        type: string
+        description: ''
+      bookingAccountNumber:
+        type: string
+        description: ''
+      bookingAccountBranch:
+        type: string
+        description: ''
+      bookingAccountCurrency:
+        type: string
+        description: ''
+      rateType:
+        type: string
+        description: ''
+      accountType:
+        type: string
+        description: ''
+      sweepPriority:
+        type: integer
+        description: ''
+      isTwoWay:
+        type: string
+        description: ''
+      reverseSweepFrequency:
+        type: string
+        description: ''
+      twowaySweepPriority:
+        type: integer
+        description: ''
+      onlineBalanceFetch:
+        type: string
+        description: ''
+      partialReverseSweep:
+        type: string
+        description: ''
+      isHold:
+        type: string
+        description: ''
+      eodExecution:
+        type: string
+        description: ''
+      ratePickUp:
+        type: string
+        description: ''
+      reallocationRequired:
+        type: string
+        description: ''
+      reallocationMethod:
+        type: string
+        description: ''
+      allowReverseSweep:
+        type: string
+        description: ''
+      isNominatedAccount:
+        type: string
+        description: ''
+      accountLevel:
+        type: integer
+        description: ''
+      centralAccountNumber:
+        type: string
+        description: ''
+      centralAccountBranch:
+        type: string
+        description: ''
+      centralAccountCurrency:
+        type: string
+        description: ''
+      percentageShare:
+        type: integer
+        description: ''
+      percentageChildShare:
+        type: integer
+        description: ''
+      partialTransferAllowed:
+        type: string
+        description: ''
+      LmmTmStructureInstructionDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureInstructionDTO'
+      LmmTmStructurePaymentDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructurePaymentDTO'
+      LmmTmStructureAccPriorityDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureAccPriorityDTO'
+      LmmTmStructureIclDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureIclDTO'
+ LmmTmStructureAccountsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureMasterId:
+        type: string
+        description: ''
+      accountNumber:
+        type: string
+        description: ''
+      accountBranch:
+        type: string
+        description: ''
+      accountCurrency:
+        type: string
+        description: ''
+      isExternal:
+        type: string
+        description: ''
+      isNotional:
+        type: string
+        description: ''
+      accCategory:
+        type: string
+        description: ''
+      accountType:
+        type: string
+        description: ''
+      acyAvailableBal:
+        type: number
+        description: ''
+      bankCode:
+        type: string
+        description: ''
+      countryId:
+        type: string
+        description: ''
+      cityId:
+        type: string
+        description: ''
+      region:
+        type: string
+        description: ''
+      isSelected:
+        type: string
+        description: ''
+ LmmTmStructureAccPriorityDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureId:
+        type: string
+        description: ''
+      accountNumber:
+        type: string
+        description: ''
+      structureDetailsId:
+        type: string
+        description: ''
+      structureMasterId:
+        type: string
+        description: ''
+      structurePriority:
+        type: integer
+        description: ''
+      versionNo:
+        type: integer
+        description: ''
+ LmmTmStructureIclDTO:
+    type: object
+    properties:
+      iclBookingReport:
+        type: string
+        description: ""
+      iclReference:
+        type: string
+        description: ""
+      iclSettlementReport:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      loanType:
+        type: string
+        description: ""
+      structureDetailsId:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      trackIcl:
+        type: string
+        description: ""
+ LmmTmStructureInstructionDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureDetailsId:
+        type: string
+        description: ''
+      instructionId:
+        type: string
+        description: ''
+      instrDesc:
+        type: string
+        description: ''
+      instructionPriority:
+        type: integer
+        description: ''
+      LmmTmStructureInstructionFrequencyDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureInstructionFrequencyDTO'
+      LmmTmStructureInstructionDetDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructureInstructionDetDTO'
+ LmmTmStructureInstructionFrequencyDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureInstructionId:
+        type: string
+        description: ''
+      frequencyId:
+        type: string
+        description: ''
+      freqDesc:
+        type: string
+        description: ''
+ LmmTmStructureInstructionDetDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureInstructionId:
+        type: string
+        description: ''
+      paramName:
+        type: string
+        description: ''
+      paramValue:
+        type: string
+        description: ''
+ LmmTmStructurePaymentDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structureDetailsId:
+        type: string
+        description: ''
+      sweepDirection:
+        type: string
+        description: ''
+      interfaceMasterId:
+        type: string
+        description: ''
+      LmmTmStructurePaymentDetailDTO:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmStructurePaymentDetailDTO'
+ LmmTmStructurePaymentDetailDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ''
+      structurePaymentId:
+        type: string
+        description: ''
+      paramName:
+        type: string
+        description: ''
+      paramValue:
+        type: string
+        description: ''

@@ -1,0 +1,248 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server CamException server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "CamException Service"
+host: "whf00anh:7712"
+basePath: "/cam/camException-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CamExceptionAPI"
+    description: "API for CamException's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/camException/:
+    post:
+      tags:
+        - "camExceptionService"
+      summary: "Service Api for CamException."
+      description: "Service Api for CamException."
+      operationId: "createCamExceptionService"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "camException"
+          in: "body"
+          description: "Request Body that contains data required for posting camException"
+          required: true
+          schema:
+            $ref: "#/definitions/CamExceptionServiceModel"
+      responses:
+        200:
+          description: "Returns the stage updation output"
+          headers:
+            Location:
+              description: "URL of newly created camException"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "camExceptionService"
+      summary: "Retrieves the list of existing camExceptions."
+      description:  "Retrieves the list of existing camExceptions."
+      operationId: "getAllCamExceptionsService"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "exceptionId"
+          in: "query"
+          description: " CamException Id of the user that needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CamExceptionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/camException/{exceptionId}:          
+    put:
+      tags:
+        - "camExceptionService"
+      summary: "Update an existing camException."
+      description:  "Update an existing camException."
+      operationId: "updateCamExceptionService"
+      parameters:
+        - name: "exceptionId"
+          in: "path"
+          description: "CamException that need to be updated"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false     
+        - name: "camException"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing camException"
+          required: true
+          schema:
+            $ref: "#/definitions/CamExceptionServiceModel"
+      responses:
+        200:
+          description: "Returns updated camException"
+          schema:
+            $ref: "#/definitions/CamExceptionServiceModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "camExceptionService"
+      summary: "Retrieves CamException by ID."
+      description:  "Retrieves CamException by ID."
+      operationId: "getCamExceptionServiceById"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "exceptionId"
+          in: "path"
+          description: "exceptionId of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the camException review based on given id."
+          schema:
+            $ref: "#/definitions/CamExceptionServiceModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+    delete:
+      tags:
+        - "camExceptionService"
+      summary: "Deletes the camException identified by given ID."
+      description:  "deletes the camException identified by given ID."
+      operationId: "deleteCamExceptionService"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false 
+        - name: "exceptionId"
+          in: "path"
+          description: "exceptionId of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"
+  CamExceptionServiceModel:
+    type: "object"
+    required:
+      - applicationNumber
+      - requestFrom
+      - customerId
+      - utilizationCurrency
+      - utilizationAmount
+      - externalReferenceNumber
+    properties:
+      exceptionId:
+        type: "string"
+      applicationNumber:
+        type: "string"
+      customerId:
+        type: "string"
+      customerName:
+        type: "string"
+      customerType:
+        type: "string"
+      customerBranchName:
+        type: "string"
+      requestFrom:
+        type: "string"
+      utilizationCurrency:
+        type: "string"
+      utilizationAmount:
+        type: "number"
+      exceptionStatus:
+        type: "string"
+      externalReferenceNumber:
+        type: "string"
+  CamExceptionCollection:
+    description: "Collection of CamException."
+    type: "object"
+    properties:
+      CamExceptionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CamExceptionServiceModel"

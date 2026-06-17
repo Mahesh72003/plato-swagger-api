@@ -1,0 +1,431 @@
+swagger: '2.0'
+info:
+  description: This is a sample server Manual Recon Service.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Manual Reconciliation Service
+host: api-plato.us.oracle.com:8080
+basePath: /obscfcm-manual-recon-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: manualReconService
+  description: APIs for reconcilation
+schemes:
+- https
+paths:
+
+  /web/v1/initiateInvPayManRecon:
+    post:
+      tags:
+      - manualReconService
+      summary: create new reconcilation data
+      description: create new reconcilation data by passing all the required details.
+      operationId: createReconExecTxn
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './manualReconDef.yaml#/definitions/ReconTxnDto'
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/initiateInvPayManDerecon:
+    post:
+      tags:
+      - manualReconService
+      summary: create new de reconcilation data
+      description: dereconciliation data by passing all the required details.
+      operationId: createDereconExecTxn
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './manualReconDef.yaml#/definitions/ReconTxnDto'
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  
+  /web/v1/reconRef:
+    get:
+      tags:
+      - manualReconService
+      summary: search reconcilation reference numbers.
+      description: search matching reconcilation reference number by passing a string.
+      operationId: getReconRefNo
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnRefNo
+        in: query
+        type: string
+        description: Request parameter
+        required: false
+      - name: reconCategory
+        in: query
+        type: string
+        description: Request parameter
+        required: true
+      - name: reconType
+        in: query
+        type: string
+        description: Request parameter
+        required: false
+      - name: "limit"
+        in: "query"
+        required: false
+        description: "limit to be fetched"
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        required: false
+        description: "offset of the limit"
+        type: "integer"
+      responses:
+        201:
+          description: Search performed successfully
+          schema:
+            $ref: './manualReconDef.yaml#/definitions/ReconRefDetailListDto'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/authorize:
+    post:
+       tags:
+       - manualReconService
+       summary: authorize the data to put it in master table.
+       description: authorize the data to put in master table by reconcilation reference number.
+       operationId: authorizeRecon
+       parameters:
+         - name: "workFlowModel" 
+           in: "body"  
+           description: "Request Body that contains data required for initiating a new txn"  
+           required: true  
+           schema: 
+             $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"  
+         - name: "appId"
+           in: "header"
+           type: "string"
+           required: true
+         - name: "userId"
+           in: "header"
+           type: "string"
+           required: true
+           description: "user id for SMS"
+         - name: "contentType"
+           in: "header"
+           type: "string"
+           required: false
+         - name: "branchCode"
+           in: "header"
+           type: "string"
+           required: true
+       responses:
+         200:
+           description: "Successful performs the operation"
+           schema:
+             $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"
+         400:
+           description: Malformed syntax.
+         401:
+           description: Request does not have sufficient credentials.
+         403:
+           description: Request is not authorized.
+         405:
+           description: Invalid input
+         500:
+           description: Internal error             
+  /web/v1/purgeTransaction:
+    post:
+       tags:
+       - manualReconService
+       summary: purge the transaction .
+       description:  purge the transaction data from working table to archve by reconcilation reference number.
+       operationId: archiveTransactionData
+       parameters:
+       -  name: appId
+          in: header
+          type: string
+          required: true
+          description: Application id
+       -  name: userId
+          in: header
+          type: string
+          required: true
+          description: User id
+       -  name: branchCode
+          in: header
+          type: string
+          required: true
+          description: Branch Code
+       -  name: "workFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for initiating a new txn"
+          required: true
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"
+       responses:
+          200:
+            description: "Successful performs the operation"
+            schema:
+              $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"
+          400:
+             description: Malformed syntax.
+          401:
+             description: Request does not have sufficient credentials.
+          403:
+             description: Request is not authorized.
+          405:
+             description: Invalid input
+          500:
+             description: Internal error
+  /web/v1/reconData:
+    get:
+      tags:
+      - manualReconService
+      summary: search reconcilation reference numbers.
+      description: search matching reconcilation reference number by passing a string.
+      operationId: getManualReconData
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnRefNo
+        in: query
+        type: string
+        description: Request parameter
+        required: false
+      responses:
+        201:
+          description: Search performed successfully
+          schema:
+            $ref: './manualReconDef.yaml#/definitions/ReconDataCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+  /web/v1/stageUpdate:
+    post:
+      tags:
+        - manualReconService
+      summary: "Updates human task in conductor server"
+      description: "Updates human task in conductor server"
+      operationId: "updateStage"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Recon"
+          required: true
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created Recon details"
+          headers:
+            Location:
+              description: "URL of newly created Recon details"
+              type: "string"
+          schema:
+              type: "object"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+
+  /web/v1/getTopRecords:
+    post:
+      tags:
+      - manualReconService
+      summary: Get top matching records based on the criteria remarks.
+      description: Get top matching records based on the criteria remarks.
+      operationId: getTopRecord
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: numberOfRecords
+        in: query
+        type: number
+        description: number of top records to be sorted
+        required: false
+      - name: sortingCriteria
+        in: query
+        type: string
+        description: Criteria basis which the sorting List will be sorted
+        required: false
+      - name: matchingAttributes
+        in: query
+        type: string
+        description: Comma separated attributes basis which the sorting criteria is matched
+        required: false
+      - name: sortingRequestCollection
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './manualReconDef.yaml#/definitions/SortingRequestCollection'
+      responses:
+        200:
+          description: Successfully received invoicesPayments details
+          schema:
+            $ref: './manualReconDef.yaml#/definitions/SortedResponse'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error     

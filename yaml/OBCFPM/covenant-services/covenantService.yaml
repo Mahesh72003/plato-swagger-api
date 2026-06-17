@@ -1,0 +1,476 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Covenant server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Covenant Service"
+host: "whf00anh:7791"
+basePath: "/covenant-services"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CovenantAPI"
+    description: "API for Covenant's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/instance:
+    post:
+      tags:
+        - "covenantService"
+      summary: "Adds a new covenant instance."
+      description: "Adds a new covenant instance."
+      operationId: "addInstanceMain"
+      parameters:
+        - name: "cvntInstanceMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new legal opinion"
+          required: true
+          schema:
+            $ref: "./covenantWeb.yaml#/definitions/CvntInstanceMasterModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "externalSystem"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "externalSystemReferenceNo"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "creates covenant instance"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/v1/instance/update:
+    put:
+      tags:
+      - "covenantService"
+      summary: "Update an existing covenant instance."
+      description:  "Update an existing covenant instance."
+      operationId: "updateInstanceMain"
+      parameters:
+      - name: "cvntInstanceMasterModel"
+        in: "body"
+        description: "Request Body that contains data required for updating an existing covenant instance"
+        required: true
+        schema:
+          $ref: "./covenantWeb.yaml#/definitions/CvntInstanceMasterModel"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "externalSystem"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "externalSystemReferenceNo"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "authToken"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "tenantId"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "contentType"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "branchDate"
+        in: "header"
+        type: "string"
+        format: "date-time"
+        required: false
+      responses:
+        200:
+          description: "Returns updated covenant Instance"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/v1/instance/{instanceId}:
+    get:
+      tags:
+        - "covenantService"
+      summary: "Retrieves the list of existing covenant instances."
+      description:  "Retrieves the list of existing covenant instances."
+      operationId: "getAllInstancesMain"
+      parameters:
+        - name: "instanceId"
+          in: "path"
+          required: true
+          type: "string"        
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "externalSystem"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "externalSystemReferenceNo"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false          
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /service/v1/linkage:
+    post:
+      tags:
+        - "covenantService"
+      summary: "Adds a new covenant linkage."
+      description: "Adds a new covenant linkage."
+      operationId: "addLinkageMain"
+      parameters:
+        - name: "covenantLinkageCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new legal opinion"
+          required: true
+          schema:
+            $ref: "./covenantWeb.yaml#/definitions/CvntLinkageModelCollection"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "externalSystem"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "externalSystemReferenceNo"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "creates covenant linkage and return with update covenant linkage"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/v1/linkage/update:
+    put:
+      produces:
+      - "application/json"
+      - "application/xml"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      tags:
+      - "covenantService"
+      summary: "Update an existing Covenant Linkage."
+      description:  "Update an existing Covenant Linkage."
+      operationId: "updateCvntLinkage"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "authToken"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "tenantId"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "contentType"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "branchDate"
+        in: "header"
+        type: "string"
+        format: "date-time"
+        required: false
+      - name: "cvntLinkageModel"
+        in: "body"
+        description: "Request Body that contains data required for updating an existing Covenant Linkage"
+        required: true
+        schema:
+          $ref: "#/definitions/CvntLinkageModelCollection"
+      responses:
+        200:
+          description: "updates covenant linkage and return updated covenant linkage"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /service/v1/cvntlinkage/{applicationNumber}:
+    get:
+      tags:
+      - "covenantService"
+      summary: "Retrieves the list of existing covenant linkages."
+      description:  "Retrieves the list of existing covenant linkages based on application number."
+      operationId: "getAllLinkagesByPartyIdAndAppNumber"
+      parameters:
+      - name: "applicationNumber"
+        in: "path"
+        required: true
+        type: "string"
+        description: "Application number for the record to be fetched"
+      - name: "partyId"
+        in: "query"
+        required: false
+        type: "string"
+        description: "Party Id  for the record to be fetched"
+      - name: "isSummaryData"
+        in: "query"
+        required: false
+        default: "N"
+        type: "string"
+        description: "Is Summary data flag should be Y to get consolidated covenant linkage else N"
+      - name: "reqType"
+        in: "query"
+        required: false
+        description: "Request Types for the record to be fetched in comma separated format"
+        type: "string"
+      - name: "cvntType"
+        in: "query"
+        required: false
+        description: "Covenant Types for the record to be fetched in comma separated format"
+        type: "string"
+      - name: "frequency"
+        in: "query"
+        required: false
+        description: "Frequencies for the record to be fetched in comma separated format"
+        type: "string"
+      - name: "fromDueDate"
+        in: "query"
+        required: false
+        description: "From date range for the record to be fetched"
+        type: "string"
+      - name: "toDueDate"
+        in: "query"
+        required: false
+        description: "To date range for the record to be fetched in comma separated format"
+        type: "string"
+      - name: "linkageType"
+        in: "query"
+        required: false
+        description: "Linkage types for the record to be fetched in comma separated format"
+        type: "string"
+      - name: "linkageEntityId"
+        in: "query"
+        required: false
+        description: "Linkage entity ids for the record to be fetched in comma separated format"
+        type: "string"
+      - name: "offset"
+        in: "query"
+        description: "Facility Details based on toFacilityAmount"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Facility Details based on toFacilityAmount"
+        required: false
+        type: "integer"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "authToken"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "tenantId"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "contentType"
+        in: "header"
+        type: "string"
+        required: false
+      - name: "branchDate"
+        in: "header"
+        type: "string"
+        format: "date-time"
+        required: false
+      - name: "linkageSubTypeId"
+        in: "query"
+        description: "linkageSubTypeId of the user that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CvntLinkageModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"

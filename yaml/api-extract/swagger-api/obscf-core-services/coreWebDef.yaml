@@ -1,0 +1,739 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides definitions to perform operations on product and program" 
+ version: "1.0.0"
+ title: "Core web definitions"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscf-core-services"
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+
+definitions:
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ScfTmNonCustomerMasterCollection: 
+  description: "Collection of noncustomer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ScfTmNonCustomerMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ ScfTmNonCustomerMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     category:
+      type: string
+      description: "Category"
+     cif:
+      type: string
+      description: "Cif"
+     countryCode:
+      type: string
+      description: "Country Code"
+     email:
+      type: string
+      description: "Email"
+     faxNumber:
+      type: string
+      description: "Fax Number"
+     giin:
+      type: string
+      description: "Giin"
+     industry:
+      type: string
+      description: "Industry"
+     mobileNumber:
+      type: string
+      description: "Mobile Number"
+     name:
+      type: string
+      description: "Name"
+     nonCustomerId:
+      type: string
+      description: "Non Customer Id"
+     phoneNumber:
+      type: string
+      description: "Phone Number"
+     prefferedCommMode:
+      type: string
+      description: "Preffered Comm Mode"
+     registrationNumber:
+      type: string
+      description: "Registration Number"
+     shortName:
+      type: string
+      description: "Short Name"
+     taxRefNo1:
+      type: string
+      description: "Tax Reference Number 1"
+     taxRefNo2:
+      type: string
+      description: "Tax Reference Number 2"
+     fatca:
+      type: string
+      description: "Fatca"
+     ScfTmNcAddressMasterDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmNcAddressMasterDTO'
+     ScfTmNcRequestMasterDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmNcRequestMasterDTO'
+ ScfTmNcAddressMasterDTO:
+  type: object
+  properties:
+     addressLine1:
+      type: string
+      description: "Address Line 1"
+     addressLine2:
+      type: string
+      description: "Address Line 2"
+     addressLine3:
+      type: string
+      description: "Address Line 3"
+     addressLine4:
+      type: string
+      description: "Address Line 4"
+     addressType:
+      type: string
+      description: "Address Type"
+     country:
+      type: string
+      description: "Country"
+     id:
+      type: string
+      description: "Id"
+     nonCustMasterId:
+      type: string
+      description: "Non Customer Master Id"
+     pin:
+      type: string
+      description: "Pin"
+     street:
+      type: string
+      description: "Street"
+     nonCustomerId:
+      type: string
+      description: "Non Customer Id"
+ ScfTmNcRequestMasterDTO:
+  type: object
+  properties:
+     anchorId:
+      type: string
+      description: "Anchor Id"
+     anchorName:
+      type: string
+      description: "Anchor Name"
+     id:
+      type: string
+      description: "Id"
+     nonCustomerCode:
+      type: string
+      description: "Non Customer Code"
+     nonCustMasterId:
+      type: string
+      description: "Non Customer Master Id"
+     status:
+      type: string
+      description: "Status"
+     nonCustomerId:
+      type: string
+      description: "Non Customer Id"
+  required:
+   - anchorId
+ ScfTransOutputResponse:
+  description: "Output response from transaction API"
+  type: "object"
+  properties:
+    queryList:
+      type: "array"
+      items:
+        $ref: "#/definitions/ScfFilterQueryModel"
+          
+ ScfFilterQueryModel:
+  description: "Query and attribute list model"
+  type: "object"
+  properties:
+    queryId:
+      description: "Query Id"
+      type: number
+    query:
+      description: "Filter Query"
+      type: "string"
+    ScfTransCriteriaQueryAttributeModel:
+      type: "array"
+      items:
+        $ref: "#/definitions/ScfTransCriteriaQueryAttributeModel"
+             
+ ScfTransCriteriaQueryAttributeModel:
+  description: "Query for each type of given category"
+  type: "object"
+  properties:
+    paramIndex:
+      description: "Input parameter index in the query"
+      type: "integer"
+    paramName:
+      description: "Input parameter name in the query"
+      type: "string"
+    columnName:
+      description: "Corresponding column of the input parameter index in the query"
+      type: "string"
+       
+ CoreBranchCollection: 
+    description: "Collection of corebranch."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items: 
+          $ref: "#/definitions/CoreBranchDTO"
+ CoreBranchDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     sourceBranchCode:
+      type: string
+      description: "Branch code of the source system"
+      minLength: 0
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     weekHol2:
+      type: string
+      description: "Weekly holiday of the branch."
+      pattern: '[1-7]'
+     weekHol1:
+      type: string
+      description: "Weekly holiday of the branch."
+      pattern: '[1-7]'
+     autoAuth:
+      type: string
+      description: "To facilitate auto authorization."
+     walkinCustomer:
+      type: string
+      description: "Customer number of the walk-in customer."
+     branchLcy:
+      type: string
+      description: "Local currency of the branch"
+     branchAddr3:
+      type: string
+      description: "Third line of the branch address"
+      minLength: 0
+      maxLength: 105
+     branchAddr2:
+      type: string
+      description: "Second line of the branch address"
+      minLength: 0
+      maxLength: 105
+     branchAddr1:
+      type: string
+      description: "First line of the branch address"
+      minLength: 0
+      maxLength: 105
+     branchName:
+      type: string
+      description: "Name of the branch."
+      minLength: 1
+      maxLength: 105
+      pattern: '[a-zA-Z0-9\s]+'
+     countryCode:
+      type: string
+      description: "Country code of the branch."
+     hostCode:
+      type: string
+      description: "Host code to which the branch belongs to."
+     branchCode:
+      type: string
+      description: "Branch code of the branch to be configured."
+      minLength: 3
+      maxLength: 3
+      pattern: '[a-zA-Z0-9]+'
+     CoreBranchPrefDTO:
+       $ref: '#/definitions/CoreBranchPrefDTO'
+     CoreSwiftAddressDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CoreSwiftAddressDTO'
+    required:
+     - sourceBranchCode
+     - branchLcy
+     - branchName
+     - hostCode
+     - branchCode
+ CoreBranchPrefDTO:
+  type: object
+  properties:
+     reportDsn:
+      type: string
+      description: "Report DSN details"
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     dsnName:
+      type: string
+      description: "DSN name"
+     hostName:
+      type: string
+      description: "Host name to which the branch belongs to."
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     branchCode:
+      type: string
+      description: "Branch code of the branch to be configured."
+     id:
+      type: string
+      description: "Primary Key"
+     coreBranchId:
+      type: string
+      description: "Master Table Reference."
+ CoreSwiftAddressDTO:
+  type: object
+  properties:
+   defaultBic:
+    type: string
+    description: "Checkbox to decide If default BIC is used or not"
+    pattern: '[Y,N]'
+   swiftAddress:
+    type: string
+    description: "Swift Address"
+   branchCode:
+    type: string
+    description: "Branch Code"
+   coreBranchId:
+    type: string
+    description: "Master Table Reference"
+   id:
+    type: string
+    description: "Primary Key"
+  required:
+   - swiftAddress
+ CmcTmCountryCollection: 
+  description: "Collection of country."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCountryDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ CmcTmCountryDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     countryCode:
+      type: string
+      description: "Country Code"
+      minLength: 0
+      maxLength: 3
+      pattern: ^[A-Z0-9]*$
+     description:
+      type: string
+      description: "Description"
+      minLength: 0
+      maxLength: 105
+     altCountryCode:
+      type: string
+      description: "Alt Country Code"
+      minLength: 2
+      maxLength: 10
+      pattern: ^[A-Z]*$
+     regionCode:
+      type: string
+      description: "Region Code"
+      minLength: 0
+      maxLength: 3
+     blacklisted:
+      type: string
+      description: "Black Listed"
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     overallLimit:
+      type: number
+      description: "Over Limit"
+      minLength: 0
+      maxLength: 24
+     limitCcy:
+      type: string
+      description: "Limit Currency"
+      minLength: 0
+      maxLength: 3
+     ibanCheckReqd:
+      type: string
+      description: "Iban Check"
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     intraEuropean:
+      type: string
+      description: "Intra European"
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     clrCodeBic:
+      type: string
+      description: "Clr Code Bic"
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     clearingNetwork:
+      type: string
+      description: "Clearing Network"
+      minLength: 0
+      maxLength: 1
+     isoNumCountryCode:
+      type: string
+      description: "Iso Number Country Code"
+      minLength: 0
+      maxLength: 3
+     genMt205:
+      type: string
+      description: "Gen Mt 205"
+      minLength: 0
+      maxLength: 1
+      pattern: ^(?:Y|N)$
+     isdCode:
+      type: number
+      description: "ISD Code"
+      minLength: 0
+      maxLength: 10
+     euCountry:
+      type: string
+      description: "EU Country"
+      minLength: 0
+      maxLength: 1
+    required:
+     - countryCode
+     - description
+     - ibanCheckReqd
+
+ AssociatedPartiesResponseList:
+  description: "Response of Associated Parties Respose"
+  type: object
+  properties:
+     partyId:
+      type: string
+      description: "Party Id"
+     counterparties:
+      type: object
+      description: "Counterparties"
+      properties:
+       buyer:
+         type: array
+         description: "Contains all associated buyer Counterparty details of party Id"
+         items:
+          $ref: "#/definitions/AssociatedParties"
+       seller:
+        type: array
+        description: "Contains all associated seller Counterparty details of party Id"
+        items:
+         $ref: "#/definitions/AssociatedParties"
+     corporates:
+      type: object
+      properties:
+       buyer:
+         type: array
+         description: "Contains all associated corporate details of Buyer party Id"
+         items:
+          $ref: "#/definitions/AssociatedParties"
+       seller:
+        type: array
+        description: "Contains all associated corporate details of Seller party Id"
+        items:
+         $ref: "#/definitions/AssociatedParties"
+ AssociatedParties:
+  description: "Response of Associated Parties Response"
+  type: object
+  properties:
+     associatedPartyId:
+      type: string
+      description: "Associated Counter/Corporate Id"
+     associatedPartyName:
+      type: string
+      description: "Name of associated Counter/Corporate Id"
+     authStatus:
+      type: string
+      description: "Contains A/U"
+     status:
+      type: string
+      description: "Active/Inactive"
+     cifStatus:
+      type: string
+      description: "Conatins Y/N"
+     existingCounterparty:
+      type: string
+      description: "Contains Y/N"
+     relationshipCode:
+      type: string
+      description: "Relationship Code in BO"
+     relationshipDesc:
+      type: string
+      description: "Relationship Desc in BO"
+     autoAcceptanceFlag:
+      type: string
+      description: "Auto Acceptance Flag"
+     autoAcceptanceDays:
+      type: string
+      description: "Auto Acceptance Days"
+     divisionDetails:
+      type: array
+      description: "Division Details for each record of counterparties"
+      items:
+       $ref: "#/definitions/DivisionDetails"
+ DivisionDetails:
+  type: object
+  properties:
+     associatedPartyCode:
+      type: string
+      description: "CounterParty Code"
+     associatedPartyDivisionCode:
+      type: string
+      description: "Counter Party Division Code"
+     corporateDivisionCode:
+      type: string
+      description: "Corporate Divisio Code"
+ ObcmTmRelationshipMasterCollection: 
+  description: "Collection of relationship."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ObcmTmRelationshipMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ ObcmTmRelationshipMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     autoAcceptance:
+      type: string
+      description: "Auto Acceptance"
+     corporateId:
+      type: string
+      description: "Corporate Id"
+     corporateName:
+      type: string
+      description: "Corporate Name"
+     effFromDate:
+      type: string
+      description: "Effective from Date"
+     relationshipCode:
+      type: string
+      description: "Relationship Code"
+     relationshipName:
+      type: string
+      description: "Relationship Name"
+     expiresOn:
+      type: string
+      description: "Expires On"
+     product:
+      type: string
+      description: "Product"
+     noOfDays:
+      type: integer
+      description: "Number of Days"
+     maxDate:
+      type: string
+      description: "Maximum date"
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference Number"
+     ObcmTmRelationshipDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObcmTmRelationshipDetailsDTO'
+ ObcmTmRelationshipDetailsDTO:
+  type: object
+  properties:
+     autoAcceptance:
+      type: string
+      description: "Auto Acceptance"
+     counterpartyid:
+      type: string
+      description: "Counterparty Id"
+     counterpartyname:
+      type: string
+      description: "Counterparty Name"
+     id:
+      type: string
+      description: "Id"
+     partyType:
+      type: string
+      description: "Party Type"
+     relationsMasterId:
+      type: string
+      description: "Relations Master Id"
+     expiresOn:
+      type: string
+      description: "Expires on"
+     noOfDays:
+      type: integer
+      description: "Number of Days"
+     status:
+      type: string
+      description: "Status"
+     externalCodes:
+      type: array
+      description: "External Codes"
+      items:
+       $ref: '#/definitions/ObcmTmRelationshipDetailsExternalCodeDTO'
+     nonCust:
+      $ref: '#/definitions/ScfTmNonCustomerMasterDTO'
+ ObcmTmRelationshipDetailsExternalCodeDTO:
+  type: object
+  properties:
+     externalCode:
+      type: string
+      description: "External Code"
+     divisionCode:
+      type: string
+      description: "Division Code"
+     corporateDivisionCode:
+      type: string
+      description: "Corporate Division Code"
+     id:
+      type: string
+      description: "Id"
+     relationshipDetailId:
+      type: string
+      description: "Relationship Detail Id"
+ RelationCheckModel:
+  type: object
+  properties:
+     isError:
+      type: string
+     responseCode:
+      type: string
+     orphanSpokes:
+      type: array
+      items:
+       type: string
+ OrchestratorDTO:
+   type: "object"
+   properties:
+    resourceId:
+     type: string
+     description: "Resource Id"
+    modNos:
+     type: array
+    items:
+     type: integer
+    remarks:
+     type: string
+     description: "Remarks"

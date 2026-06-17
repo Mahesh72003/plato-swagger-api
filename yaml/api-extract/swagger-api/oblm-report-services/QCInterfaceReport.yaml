@@ -1,0 +1,270 @@
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+#  * ******************************************************************************
+#  *  * This source is part of the Oracle Banking Software Product.
+#  *  * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+#  *  *
+#  *  * No part of this work may be reproduced, stored in a retrieval system, adopted
+#  *  * or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  *  * graphic, optic recording or otherwise, translated in any language or computer
+#  *  * language, without the prior written permission of Oracle and/or its affiliates.
+#  *  *
+#  *  * Oracle Financial Services Software Limited.
+#  *  * Oracle Park, Off Western Express Highway,
+#  *  * Goregaon (East),
+#  *  * Mumbai - 400 063, India.
+#  *  *****************************************************************************
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  Raviteja
+#
+#  Bug Number         :  
+#  Changed By         : Ketki 
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a QC interface Report" 
+ version: "1.0.0"
+ title: "QC interface report Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "QC interface report"
+   description: "QC interface report creation and retrieving"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../qcinterfacereport
+
+ /qcinterfacereport/generateReport:     
+  post:
+   tags:
+    - "qcinterfacereport"
+   summary: "Get all valid qcinterfacereport."
+   description:  "Get all valid qcinterfacereport. This endpoints will be used to Get all valid qcinterfacereport maintenance records."
+   operationId: "generateQCInterfaceReport"
+   parameters:
+     - name: QCInterfaceReportInputDTO
+       in: "body"
+       description: "Request Body that contains data required for creating a new oblm-report-services" 
+       required: true
+       schema:
+         $ref: "#/definitions/QCInterfaceReportInputDTO"  
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/QCInterfaceReportDTOCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /qcinterfacereport/save:
+  post:
+   tags:
+    - "qcinterfacereport"
+   summary: "Adds a new qcinterfacereport."
+   description: "Adds a new qcinterfacereport. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "qcinterfacereport" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new qcinterfacereport" 
+      required: true
+      schema:
+       $ref: "#/definitions/QCInterfaceDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created qcinterfacereport" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+
+definitions:
+ QCInterfaceDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     dateAndTime:
+      type: string
+      #format: date
+      description: ""
+     interfaceAction:
+      type: string
+      description: ""
+     direction:
+      type: string
+      description: ""
+     interfaceType:
+      type: string
+      description: "" 
+     status:
+      type: string
+      description: ""
+     structureId:
+      type: string
+      description: ""
+     exception:
+      type: string
+      description: ""
+     rootCauseOfException:
+      type: string
+      description: ""
+     customerId:
+      type: string
+      description: ""
+     
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ QCInterfaceReportInputDTO:
+  type: "object"
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     customerId:
+      type: string
+     interfaceType:
+      type: string
+     fromDate:
+      type: string
+      format: date
+     toDate:
+      description: To Date of Exceptions
+      type: string
+      format: date
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ QCInterfaceReportDTOCollection: 
+  description: "Collection of QCInterface Report."
+  type: "object"
+  properties:
+   data:
+    $ref: "#/definitions/ReportResponse"
+   messages:
+    $ref: "#/definitions/ResponseDto"
+ QCInterfaceDTOCollection: 
+  description: "Collection of entries."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/QCInterfaceDTO"
+   messages:
+    $ref: "#/definitions/ResponseDto"  
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ QCInterfaceWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/QCInterfaceDTO"

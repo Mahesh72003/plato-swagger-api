@@ -1,0 +1,657 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cam
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server financialdoctemplate server." 
+ version: "1.0.0"
+ title: "financialdoctemplate Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "financialdoctemplate"
+   description: "A micro service that will maintain financial document template details in a separate table. This service will also provide APIs for GET, PUT, DELETE, GET by id, Authorize the given record, Reopen and Close APIs for the maintenance records."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../financialdoctemplate
+
+ /financialdoctemplate:
+  post:
+   tags:
+    - "financialdoctemplate"
+   summary: "Adds a new financialdoctemplate."
+   description: "Adds a new financialdoctemplate. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "financialdoctemplate" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new financialdoctemplate" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmFnclDocTmpMstrDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created financialdoctemplate" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "financialdoctemplate"
+   summary: "Get all valid financialdoctemplate."
+   description:  "Get all valid financialdoctemplate. This endpoints will be used to Get all valid financialdoctemplate maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmFnclDocTmpMstrCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to Get all valid financialdoctemplate based on the path params
+ 
+ /financialdoctemplate/{sector}/{industry}/{subindustry}/{balancesheetfrom}/{balancesheetto}/{finyear}: 
+  get:
+   tags:
+    - "financialdoctemplate"
+   summary: "Get all valid financialdoctemplate for the respective sector, industry, subindustry, balancesheetsize, and financial year."
+   description:  "Get all valid financialdoctemplate. This endpoints will be used to Get all valid financialdoctemplate maintenance records based on conditions."
+   operationId: "getByCondition"
+   parameters:
+   - name: "sector"
+     in: "path"
+     description: "sector of the user that needs to be fetched"
+     required: true
+     type: "string"
+   - name: "industry"
+     in: "path"
+     description: "industry of the user that needs to be fetched"
+     required: true
+     type: "string"
+   - name: "subindustry"
+     in: "path"
+     description: "subindustry of the user that needs to be fetched"
+     required: true
+     type: "string"
+   - name: "balancesheetfrom"
+     in: "path"
+     description: "balancesheet from of the user that needs to be fetched"
+     required: true
+     type: "number"
+   - name: "balancesheetto"
+     in: "path"
+     description: "balancesheet to of the user that needs to be fetched"
+     required: true
+     type: "number"
+   - name: "finyear"
+     in: "path"
+     description: "finyear of the user that needs to be fetched"
+     required: true
+     type: "string"
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmFnclDocTmpMstrWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../financialdoctemplate/xxx
+#   DELETE    .../financialdoctemplate/xxx
+#   GET       .../financialdoctemplate/xxx
+#   GET       .../financialdoctemplate/xxx?version=latestrecord
+#   GET       .../financialdoctemplate/xxx?version=1
+
+ /financialdoctemplate/{id}:
+  put:
+   tags:
+    - "financialdoctemplate"
+   summary: "Update an existing financialdoctemplate."
+   description:  "Update an existing financialdoctemplate."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the financialdoctemplate Maintenance"
+      required: true
+      type: "string"
+    - name: "financialdoctemplate"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing financialdoctemplate"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmFnclDocTmpMstrDTO"
+   responses:
+    200:
+     description: "Returns updated financialdoctemplate"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "financialdoctemplate"
+   summary: "Retrieves the financialdoctemplate by ID."
+   description:  "Retrieves the financialdoctemplate by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financialdoctemplate based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmFnclDocTmpMstrWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "financialdoctemplate"
+   summary: "Deletes the financialdoctemplate identified by given ID."
+   description:  "Deletes the financialdoctemplate identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialdoctemplate maintenance"
+      required: true
+      type: "string"
+    - name: "financialdoctemplate"
+      in: "body"
+      description: Request body contain financialdoctemplate and Modification no of financialdoctemplate maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financialdoctemplate/xxx/approve
+
+ /financialdoctemplate/{id}/approve:
+  patch:
+   tags:
+    - "financialdoctemplate"
+   summary: "Authorize the financialdoctemplate by given ID."
+   description:  "Authorize the financialdoctemplate identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialdoctemplate maintenance"
+      required: true
+      type: "string"
+    - name: "financialdoctemplate"
+      in: "body"
+      description: Request body contain financialdoctemplate and Modification no of financialdoctemplate maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financialdoctemplate/xxx/close
+ /financialdoctemplate/{id}/close:
+  patch:
+   tags:
+    - "financialdoctemplate"
+   summary: "Close the financialdoctemplate by given ID."
+   description:  "Close the financialdoctemplate identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialdoctemplate maintenance"
+      required: true
+      type: "string"
+    - name: "financialdoctemplate"
+      in: "body"
+      description: Request body contain financialdoctemplate and Modification no of financialdoctemplate maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financialdoctemplate/xxx/reopen
+
+ /financialdoctemplate/{id}/reopen:
+  patch:
+   tags:
+    - "financialdoctemplate"
+   summary: "reopen the financialdoctemplate by given ID."
+   description:  "reopen the financialdoctemplate identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialdoctemplate maintenance"
+      required: true
+      type: "string"
+    - name: "financialdoctemplate"
+      in: "body"
+      description: Request body contain financialdoctemplate and Modification no of financialdoctemplate maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../financialdoctemplate/xxx/unauthorized
+
+ /financialdoctemplate/{id}/unauthorized:
+  get:
+   tags:
+    - "financialdoctemplate"
+   summary: "Retrives the financialdoctemplate by given ID."
+   description:  "Retrives the financialdoctemplate identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financialdoctemplate based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmFnclDocTmpMstrCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../financialdoctemplate/xxx/history
+
+ /financialdoctemplate/{id}/history:
+  get:
+   tags:
+    - "financialdoctemplate"
+   summary: "Retrives the financialdoctemplate by given ID."
+   description:  "Retrives the financialdoctemplate by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financialdoctemplate based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmFnclDocTmpMstrCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CfpmTmFnclDocTmpMstrDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     balanceSheetSizeFrom:
+      type: "number"
+      description: ""
+     balanceSheetSizeTo:
+      type: "number"
+      description: ""
+     financialYear:
+      type: string
+      description: ""
+     industryCode:
+      type: string
+      description: ""
+     sector:
+      type: string
+      description: ""
+     subIndustryCode:
+      type: string
+      description: ""
+     CfpmTmFnclDocPrimCategoryDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmFnclDocPrimCategoryDTO'
+ CfpmTmFnclDocPrimCategoryDTO:
+  type: object
+  properties:
+     categoryCode:
+      type: string
+      description: ""
+     categoryDescription:
+      type: string
+      description: ""
+     cfpmTmFnclDocTmpMstrId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     CfpmTmFnclDocSecCategoryDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmFnclDocSecCategoryDTO'
+ CfpmTmFnclDocSecCategoryDTO:
+  type: object
+  properties:
+     categoryCode:
+      type: string
+      description: ""
+     categoryDescription:
+      type: string
+      description: ""
+     cfpmTmFnclDocPrimCategoryId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     CfpmTmFnclDocTmpCodeDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmFnclDocTmpCodeDTO'
+ CfpmTmFnclDocTmpCodeDTO:
+  type: object
+  properties:
+     cfpmTmFnclDocSecCategoryId:
+      type: string
+      description: ""
+     financialCode:
+      type: string
+      description: ""
+     financialDesc:
+      type: string
+      description: ""
+     finCategoryCode:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     inputMode:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmFnclDocTmpMstrCollection: 
+  description: "Collection of fncldoctmpmstr."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmFnclDocTmpMstrDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmFnclDocTmpMstrWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmFnclDocTmpMstrDTO"

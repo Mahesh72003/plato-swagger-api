@@ -1,0 +1,771 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : vlc
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server chargerule server." 
+ version: "1.0.0"
+ title: "chargerule Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargerule"
+   description: "rule definition.modification, authorize, close and other processingrule definition.modification, authorize, close and other processingrule definition.modification, authorize, close and other processingrule definition.modification, authorize, close and other processingrule definition.modification, authorize, close and other processing"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../chargerule
+
+ /chargerule:
+  post:
+   tags:
+    - "chargerule"
+   summary: "Adds a new chargerule."
+   description: "Adds a new chargerule. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "chargerule" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new chargerule" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmChgPrcTmpltDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created chargerule" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargerule"
+   summary: "Get all valid chargerule."
+   description:  "Get all valid chargerule. This endpoints will be used to Get all valid chargerule maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: recordStat
+     in: query
+     description: "Records Status Of Rules To Be Fetched"
+     required: false
+     type: string
+   - name: authStat
+     in: query
+     description: "Authorization status of the records to be fetched"
+     required: false
+     type: string          
+   - in: query
+     name: chgPrcDesc
+     required: false
+     type: string
+   - in: query
+     name: chgPrcTemplateId
+     required: false
+     type: string
+   - in: query
+     name: prcCategory
+     required: false
+     type: string
+   - in: query
+     name: prcCcy
+     required: false
+     type: string
+   - in: query
+     name: applicationCode
+     required: true
+     type: string     
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmChgPrcTmpltCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../chargerule/xxx
+#   DELETE    .../chargerule/xxx
+#   GET       .../chargerule/xxx
+#   GET       .../chargerule/xxx?version=latestrecord
+#   GET       .../chargerule/xxx?version=1
+
+ /chargerule/{id}:
+  put:
+   tags:
+    - "chargerule"
+   summary: "Update an existing chargerule."
+   description:  "Update an existing chargerule."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the chargerule Maintenance"
+      required: true
+      type: "string"
+    - name: "chargerule"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing chargerule"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmChgPrcTmpltDTO"
+   responses:
+    200:
+     description: "Returns updated chargerule"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargerule"
+   summary: "Retrieves the chargerule by ID."
+   description:  "Retrieves the chargerule by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargerule based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmChgPrcTmpltWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "chargerule"
+   summary: "Deletes the chargerule identified by given ID."
+   description:  "Deletes the chargerule identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargerule maintenance"
+      required: true
+      type: "string"
+    - name: "chargerule"
+      in: "body"
+      description: Request body contain chargerule and Modification no of chargerule maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargerule/xxx/approve
+
+ /chargerule/{id}/approve:
+  patch:
+   tags:
+    - "chargerule"
+   summary: "Authorize the chargerule by given ID."
+   description:  "Authorize the chargerule identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargerule maintenance"
+      required: true
+      type: "string"
+    - name: "chargerule"
+      in: "body"
+      description: "Request body contain charge pricing template. and Modification no of charge pricing template. maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargerule/xxx/close
+ /chargerule/{id}/close:
+  patch:
+   tags:
+    - "chargerule"
+   summary: "Close the chargerule by given ID."
+   description:  "Close the chargerule identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargerule maintenance"
+      required: true
+      type: "string"
+    - name: "chargerule"
+      in: "body"
+      description: Request body contain chargerule and Modification no of chargerule maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmChgPrcTmpltDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargerule/xxx/reopen
+
+ /chargerule/{id}/reopen:
+  patch:
+   tags:
+    - "chargerule"
+   summary: "reopen the chargerule by given ID."
+   description:  "reopen the chargerule identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargerule maintenance"
+      required: true
+      type: "string"
+    - name: "chargerule"
+      in: "body"
+      description: Request body contain chargerule and Modification no of chargerule maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/OrchestratorDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../chargerule/xxx/unauthorized
+
+ /chargerule/{id}/unauthorized:
+  get:
+   tags:
+    - "chargerule"
+   summary: "Retrives the chargerule by given ID."
+   description:  "Retrives the chargerule identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargerule based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmChgPrcTmpltCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../chargerule/xxx/history
+
+ /chargerule/{id}/history:
+  get:
+   tags:
+    - "chargerule"
+   summary: "Retrives the chargerule by given ID."
+   description:  "Retrives the chargerule by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargerule based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmChgPrcTmpltCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ ChgPrcTmplAggregateModel:
+    description: ChgPrcTmplAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: "Key Id"
+        type: string
+       cmcTmChgPrcTmplt:
+        $ref: '#/definitions/CmcTmChgPrcTmpltDTO'
+       extendedDatasegments:
+        description: "Data for the extended datasegment operation"
+        type: array
+        items:
+          type: object
+          
+ BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type
+                               
+ ChgPrcTmplAggregateModelCollection:
+    description: "Collection of  Charge Price Template Aggregate Model"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChgPrcTmplAggregateModel'
+          
+ ChgPrcTmplWebModel:
+    description: ChgPrcTmplWebModel
+    type: object
+    properties:
+      resourceId:
+        description: "Resource Id"
+        type: string
+      resourceName:
+        description: "Resource Name"
+        type: string
+      operationType:
+        description: "Operation Type"
+        type: string
+      makerId:
+        description: "Maker Id"
+        type: string
+      makerDateStamp:
+        description: "Maker Datestamp"
+        type: string
+        format: date-time
+      checkerId:
+        description: "Checker Id"
+        type: string
+      checkerDateStamp:
+        description: "Checker Datestamp"
+        type: string
+        format: date-time
+      modNo:
+        description: "Mod No"
+        type: integer
+      recordStatus:
+        description: "Record Status Flag"
+        type: string
+      authStatus:
+        description: "Auth Status Flag"
+        type: string
+      onceAuth:
+        description: "Once Auth Flag"
+        type: string
+      doerRemarks:
+        description: "Doer Remarks"
+        type: string
+      approverRemarks:
+        description: "Approver Remarks"
+        type: string        
+      cmcTmChgPrcTmplt:
+        $ref: '#/definitions/CmcTmChgPrcTmpltDTO'
+      extendedDatasegments:
+        description: "Data for the extended datasegment operation"
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType 
+                
+ ChgPrcTmplWebModelCollection:
+    description: "Collection of Price Rule"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChgPrcTmplWebModel'
+ CmcTmChgPrcTmpltDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     id:
+      type: string
+      description: "ID"
+     action:
+      type: string
+      description: "Action"
+     autoAuth:
+      type: string
+      description: "Auto Authorization"
+     modificationStatus:
+      type: string
+      description: "Modification Status"
+     datasegmentCode:
+      type: string
+      description: "Datasegment Code"
+     checkerRemarks:
+      type: string
+      description: "Checker Remarks"
+     makerRemarks:
+      type: string
+      description: "Maker Remarks"
+     applicationCode:
+      type: string
+      description: "Application Code"
+     chgInTxnCcy:
+      type: string
+      description: "Charge in Transaction Currency Flag"
+     chgPrcDesc:
+      type: string
+      description: "Price Method Description"
+     chgPrcTemplateId:
+      type: string
+      description: "Price Rule Id"
+     fixedAmt:
+      type: number
+      description: "Fixed Amount"
+     fixedPct:
+      type: number
+      description: "Fixed Percentage"
+     flatChg:
+      type: string
+      description: "Flat Charge Flag"
+     maxChgAmount:
+      type: number
+      description: "Maximum Charge Amount"
+     maxChgPct:
+      type: number
+      description: "Maximum Charge Percentage"
+     minChgAmount:
+      type: number
+      description: "Minimum Charge Amount"
+     minChgPct:
+      type: number
+      description: "Minimum Charge Percentage"
+     minMaxValidationCriteria:
+      type: string
+      description: "Min-Max CHarge Criteria"
+     prcCategory:
+      type: string
+      description: "Price Category"
+     prcCategoryDesc:
+      type: string
+      description: "Price Category Description"
+     prcCcy:
+      type: string
+      description: "Price Rule Currency"
+     prcMethod:
+      type: string
+      description: "Price Method"
+     prcMethodDesc:
+      type: string
+      description: "Price Method Description"
+     annumBasis:
+      type: string
+      description: "Annum Basis"
+     rateCode:
+      type: string
+      description: "Rate Code"
+     rateType:
+      type: string
+      description: "Rate Type"
+     isSlidingScale:
+      type: string
+      description: "Sliding Scale Flag"
+     category:
+      type: string
+      description: "Category"
+     CmcTmChgPrcTiersDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CmcTmChgPrcTiersDTO'
+       
+ CmcTmChgPrcTiersDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "ID"
+     amount:
+      type: number
+      description: "Amount"
+     chgPrcTemplateId:
+      type: string
+      description: "Charge Price Template ID"
+     fromSlab:
+      type: number
+      description: "Slab start limit"
+     pct:
+      type: number
+      description: "Slab Percentage"
+     prcMasterId:
+      type: string
+      description: "Price rule master id"
+     toSlab:
+      type: number
+      description: "Slab end limit"
+     unit:
+      type: number
+      description: "Slab units"
+     isSlidingScale:
+      type: string
+      description: "Sliding Scale Flag"
+     upperThreshold:
+      type: number
+      description: "Upper threshold"
+     lowerThreshold:
+      type: number
+      description: "Lower threshold"  
+
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmcTmChgPrcTmpltCollection: 
+  description: "Collection of chgprctmplt."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmChgPrcTmpltDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CmcTmChgPrcTmpltWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmChgPrcTmpltDTO"
+

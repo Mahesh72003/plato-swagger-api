@@ -1,0 +1,2491 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Manual Reconciliation Service Definitions"
+
+paths:
+  /:
+    get:
+      responses:
+        201:
+          description: ""
+
+definitions:
+  ManualAllocCollection:
+    description: "Collection of Allocation Transaction detail."
+    type: "object"
+    properties:
+      errCode:
+        type: string
+        description: "Error Code"
+      errDesc:
+        type: string  
+        description: "Error Description"  
+      manualAllocList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ManualAllocModel"
+        description: "Allocation Detail list"
+  ManualAllocModel:
+    description: search result for manual alloc
+    type: object
+    properties:
+      reconTxnRefNo:
+        type: string
+        description: "Recon Transaction reference Number"
+      drCrIndicator:
+        type: string
+        description: "Debit Credit indicator of payment"
+      paymentRefNo:
+        type: string
+        description: "Internal Payment Reference number"
+      extPaymentRefNo:
+        type: string
+        description: "External Payment Reference Number"
+      paymentCcy:
+        type: string
+        description: "Payment Currency"
+      paymentAmount:
+        type: number
+        description: "Actual Payment Amount"
+      isAuth:
+        type: string
+        description: "flag for auto-authorization of transaction"
+      allocAccount:
+        type: string
+        description: "Allocation Account Number"
+      allocAmount:
+        type: number
+        description: "Amount to be allocated in the transaction"
+      allocDate:
+        type: string
+        description: "date on which allocation happens"
+      allocStatus:
+        type: string
+        description: "Allocation transaction status"
+      allocType:
+        type: string
+        description: "Allocation type account/Attribute based"        
+  ManualAllocSearchModel:
+    description: search parameters for manual alloc
+    type: object
+    properties:
+      reconCategory:
+        type: string
+        description: "Recon Category"
+      reconType:
+        type: string
+        description: "Recon type Auto/manual"
+      reconTxnRefNo:
+        type: string
+        description: "Transaction reference number"
+      isAuth:
+        type: string
+        description: "flag for auth-authorization"
+      corporateId:
+        type: string
+        description: "Corporate Id"
+      counterpartyId:
+        type: string
+        description: "Counterparty Id"
+      paymentRefNo:
+        type: string
+        description: "Internal Payment Ref No"
+      extPaymentRefNo:
+        type: string
+        description: "External Payment Ref No"
+      drCrIndicator:
+        type: string
+        description: "Debit credit indicator"
+      paymentPartyId:
+        type: string
+        description: "Payment Party Id"
+      beneId:
+        type: string
+        description: "Beneficiary id"
+      allocDateFrom:
+        type: string
+        description: "Allocation date from"
+      allocDateTo:
+        type: string
+        description: "Allocation date to"
+      allocAccount:
+        type: string
+        description: "Account Number"
+      allocStatus:
+        type: string
+        description: "Allocation Status"
+  DeReconTxnDto:
+    description: each recon txn deatail
+    type: object
+    properties:
+      id:
+        type: number
+      reconTxnRefNo:
+        type: string
+        description: "Transaction Ref No"
+      reconCategory:
+        type: string
+        description: "Recon category baesd on LHS & RHS"
+      reconAction:
+        type: string
+        description: "Action Recon/Derecon"
+      isAutoAuth:
+        type: string
+        description: "auto-auth flag"
+      reconType:
+        type: string
+        description: "Recon category Auto/manual"
+      deReconPmtTxnDtoList:
+        type: array
+        items:
+          $ref: "#/definitions/DeReconPmtDto"
+        description: "reconcilation detail list with RHS as Payment"
+      deReconCnTxnDtoList:
+        type: array
+        items:
+          $ref: "#/definitions/DeReconCnDto"
+          description: "reconcilation detail list with RHS as Credit Note"
+  DeReconPmtDto:
+    description: lhs and payment detail
+    type: object
+    properties:
+      id:
+        type: number
+      reconTxnRefNo:
+        type: string
+        description: "Transaction Ref No"
+      extLhsRefNo:
+        type: string
+        description: "External LHS Ref No"
+      intLhsRefNo:
+        type: string
+        description: "Internal LHS No"
+      lhsCcy:
+        type: string
+        description: "currency of LHS entity"
+      amtMatched:
+        type: number
+        description: "Amount to be dereconciled"
+      corporateId:
+        type: string 
+        description: "Corporate Id"
+      paymentRefNo:
+        type: string
+        description: "Internal Payment ref no"
+      paymentCcy:
+        type: string
+        description: "Payment Currency"
+      reconciledPmtAmt:
+        type: number
+        description: "Reconciled Amount in Payment Currency"
+      extPmtRefNo:
+        type: string
+        description: "External Payment ref no"
+  DeReconCnDto:
+    description: lhs and payment detail
+    type: object
+    properties:
+      id:
+        type: number
+      reconTxnRefNo:
+        type: string
+        description: "Transaction Ref No"
+      extLhsRefNo:
+        type: string
+        description: "External LHS Ref No"
+      intLhsRefNo:
+        type: string
+        description: "Internal LHS No"
+      lhsCcy:
+        type: string
+        description: "currency of LHS entity"
+      amtMatched:
+        type: number
+        description: "Amount to be dereconciled"
+      corporateId:
+        type: string
+        description: "Corporate Id" 
+      cnRefNo:
+        type: string
+        description: "internal Credit Note Ref No"
+      cnCcy:
+        type: string
+        description: ""
+      reconciledCnAmt:
+        type: number
+      externalCnRefNo:
+        type: string
+  ReconServiceTxnCollection:
+    description: "Collection recon transactions"
+    type: "object"
+    properties:
+      reconCategory:
+        type: string
+      autoAuth:
+        type: string
+      corporateId:
+        type: string
+      reconTxnRefNo:
+        type: string
+      reconTxnCollection:
+       type: "array"
+       items: 
+        $ref: "#/definitions/ReconServiceTxnDto"
+      paging:
+       $ref: "./manualReconDef.yaml#/definitions/PagingDto"
+  ReconServiceTxnDto:
+    description: each recon txn deatail
+    type: object
+    properties:
+      extSysRefNo:
+        type: string 
+      reconPmtTxnList:
+        type: array
+        items:
+          $ref: "#/definitions/ReconServicePmtDto"
+      reconCnTxnList:
+        type: array
+        items:
+          $ref: "#/definitions/ReconServiceCnDto"
+  ReconServicePmtDto:
+    description: each recon txn deatail
+    type: object
+    properties:
+      paymentRefNo:
+        type: string
+      externalPmtRefNo:
+        type: string
+      drCrIndicator:
+        type: string
+      lhsRefNumber:
+        type: string
+      lhsExtRefNo:
+        type: string
+      paymentCcy:
+        type: string
+      lhsCcy:
+        type: string
+      matchedPmtAmount:
+        type: number
+      matchedLhsAmount:
+        type: number
+      exchangeRate:
+        type: number
+      allocationList:
+        type: array
+        items:
+          $ref: "#/definitions/AllocationDto"
+      lhsSeqNo:
+        type: "integer"
+        format: "int64"
+      paySeqNo:
+        type: "integer"
+        format: "int64"
+  ReconServiceCnDto:
+    description: each recon txn deatail
+    type: object
+    properties:
+      cnRefNo:
+        type: string
+      externalCnRefNo:
+        type: string
+      lhsRefNumber:
+        type: string
+      lhsExtRefNo:
+        type: string
+      cnCcy:
+        type: string
+      lhsCcy:
+        type: string
+      matchedCnAmount:
+        type: number
+      matchedLhsAmount:
+        type: number
+      exchangeRate:
+        type: number
+      lhsSeqNo:
+        type: "integer"
+        format: "int64"
+      cnSeqNo:
+        type: "integer"
+        format: "int64"
+  AllocationDto:
+    description: each allocation deatail
+    type: object
+    properties:
+      allocationAccount:
+        type: string
+      allocationAmount:
+        type: number       
+  ResponseServiceDto:
+    description: each recon txn deatail
+    type: object
+    properties:
+      reconTxnRefNo:
+        type: string
+      txnStatus:
+        type: string
+      reconTxnList:
+       type: array
+       items:
+        $ref: "#/definitions/ResponseServiceCode"
+      errorCodes:
+       type: array
+       items:
+        $ref: "#/definitions/ErrorResponseServiceCode"
+      
+      
+  ResponseServiceCode:
+    type: object
+    properties:
+     extSysRefNumber:
+       type: string
+     status:
+       type: string
+     allocationTxnList:
+       type: array
+       items:
+        $ref: "#/definitions/AllocationResponse"
+     errorCodes:
+       type: array
+       items:
+        $ref: "#/definitions/ErrorResponseServiceCode"
+  AllocationResponse:
+    type: object
+    properties:
+     intAllocRefNumber:
+       type: string
+     allocAccount:
+       type: string
+     allocStatus:
+       type: string
+     errorCodes:
+       type: array
+       items:
+        $ref: "#/definitions/ErrorResponseServiceCode"
+  ErrorResponseServiceCode:
+    type: object
+    properties:
+     errorCode:
+       type: string
+     errorDesc:
+       type: string
+ 
+  CoreCustomerCollection: 
+    description: "Collection of corecustomer."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/CoreCustomerDTO"
+     paging:
+      $ref: "./manualReconDef.yaml#/definitions/PagingDto"
+     
+  CoreCustomerDTO:
+    type: object
+#   allOf:
+#   - $ref: '#/definitions/GenericDto'
+#   - type: object
+    properties:
+     country:
+      type: string
+      description: "Country code of the customer?s address"
+      pattern: '([a-zA-Z0-9]+)?'
+     language:
+      type: string
+      description: "Customer's preferred language of communication"
+     nationality:
+      type: string
+      description: "Nationality of the customer"
+     deceased:
+      type: string
+      description: "Identifies that customer is deceased"
+     frozen:
+      type: string
+      description: "Identifies that the customer's account is frozen"
+      pattern: '[Y,N]'
+     whereaboutsUnknown:
+      type: string
+      description: "Identifies that the customer's whareabouts not known"
+      pattern: '[Y,N]'
+     rmId:
+      type: string
+      description: "Relational Manager's Id"
+      minLength: 0
+      maxLength: 12
+      pattern: '([a-zA-Z0-9]+)?'
+     sanctionsChecksRequired:
+      type: string
+      description: "Indicates that the sanction check should be done or not"
+      pattern: '[Y,N]'
+     walkinCustomer:
+      type: string
+      description: "Walkin Customer"
+     sourceSystem:
+      type: string
+      description: "Name of the source system"
+     sourceSystemCustNo:
+      type: string
+      description: "Customer identification details as per the source system."
+      minLength: 1
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     customerNo:
+      type: string
+      description: "Customer Number of the external customer"
+      minLength: 1
+      maxLength: 20
+      pattern: '[a-zA-Z0-9]+'
+     hostCode:
+      type: string
+      description: "Displays the host code that is linked to the transaction branch of the customer"
+     customerType:
+      type: string
+      description: "Customer type can be Individual,Corporate or Bank"
+      pattern: '[I,C,B]'
+     customerCategory:
+      type: string
+      description: "Category to which the customer belongs to"
+     customerName1:
+      type: string
+      description: "Name of the external customer"
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     shortName:
+      type: string
+      description: "Short name of the custome"
+      minLength: 0
+      maxLength: 20
+      pattern: '([a-zA-Z0-9\s]+)?'
+     addressLine1:
+      type: string
+      description: "First line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine2:
+      type: string
+      description: "Second line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine3:
+      type: string
+      description: "Third line of the customer?s address"
+      minLength: 0
+      maxLength: 35
+     addressLine4:
+      type: string
+      description: "Fourth line of the customer?s address"
+      minLength: 0
+      maxLength: 35          
+     pincode:
+      type: string
+      description: "Pincode of the customer?s address"
+      minLength: 0
+      maxLength: 15
+      pattern: '([a-zA-Z0-9]+)?'
+    required:
+     - sourceSystem
+     - sourceSystemCustNo
+     - customerNo
+     - customerType
+     - customerName1
+  ScfTmNonCustomerMasterCollection: 
+    description: "Collection of noncustomer."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/ScfTmNonCustomerMasterDTO"
+     paging:
+      $ref: "./manualReconDef.yaml#/definitions/PagingDto"
+      
+  PagingDto:
+   type: object
+   properties:
+    totalResults:
+     type: integer
+     
+  ScfTmProductMasterCollection: 
+   description: "Collection of product."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ScfTmProductMasterDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+     
+  ScfTmProductMasterDTO:
+   type: object
+   allOf:
+   - type: object
+     properties:
+      appropriationSeqAftDueDate:
+       type: string
+       description: "Appropriation Sequence After Due Date"
+      appropriationSeqBefDueDate:
+       type: string
+       description: "Appropriation Sequence Before Due Date"
+      appropriationSeqOnDueDate:
+       type: string
+       description: "Appropriation Sequence On Due Date"
+      autoDebitApplicable:
+       type: string
+       description: "Auto Debit Applicable"
+      autoFinanceApplicable:
+       type: string
+       description: "Auto Finance Applicable"
+      autoSettlementApplicable:
+       type: string
+       description: "Auto Settlement Applicable"
+      branchCode:
+       type: string
+       description: "Branch Code"
+      creditLimitUtilization:
+       type: string
+       description: "Credit Limit Utilization"
+      debitAcctTypeAfterDueDate:
+       type: string
+       description: "Debit Account Type After Due Date"
+      debitAcctTypeOnDueDate:
+       type: string
+       description: "Debit Account Type On Due Date"
+      debitPartyAfterDueDate:
+       type: string
+       description: "Debit Party Type After Due Date"
+      debitPartyOnDueDate:
+       type: string
+       description: "Debit Party Type On Due Date"
+      debtor:
+       type: string
+       description: "Debtor"
+      effectiveFrom:
+       type: string
+       format: date
+       description: "Effective From"
+      expiresOn:
+       type: string
+       format: date
+       description: "Expires On"
+      holidayTreatment:
+       type: string
+       description: "Holiday Treatment"
+      maturityDateCalculation:
+       type: string
+       description: "Maturity Date Calculation"
+      maxFinancePercentage:
+       type: number
+       description: "Maximum Finance Percentage"
+      maxTenorAllowed:
+       type: number
+       description: "Maximum Tenor Allowed"
+      minFinancePercentage:
+       type: number
+       description: "Minimum Finance Percentage"
+      minTenorAllowed:
+       type: number
+       description: "Minimum Tenor Allowed"
+      minWaitingPeriod:
+       type: number
+       description: "Minimum Waiting Period"
+      multipleDisbursementAllowed:
+       type: string
+       description: "Multiple Disbursement Allowed"
+      npaAppropriationSeq:
+       type: string
+       description: "Npa Appropriation Sequence"
+      partRepaymentAllowed:
+       type: string
+       description: "Part Repayment Allowed"
+      preferredDisbursementMode:
+       type: string
+       description: "Preferred Disbursement Mode"
+      preferredSettlementMode:
+       type: string
+       description: "Preferred Settlement Mode"
+      prePaymentAllowed:
+       type: string
+       description: "Pre Payment Allowed"
+      productCategory:
+       type: string
+       description: "Product Category"
+      productCode:
+       type: string
+       description: "Product Code"
+      productDescription:
+       type: string
+       description: "Product Description"
+      productType:
+       type: string
+       description: "Product Type"
+      stalePeriod:
+       type: number
+       description: "Stale Period"
+      withRecourse:
+       type: string
+       description: "With Recourse"
+      graceDays:
+        type: number
+        description: "Grace Days"
+      interestRefundHandling:
+        type: string
+        description: "Interest Refund Handling"
+      interestRefundPaymentMode:
+        type: string
+        description: "Interest Refund Payment Mode"
+      marginHandling:
+        type: string
+        description: "Margin Handling"
+      marginPaymentMode:
+        type: string
+        description: "Margin Payment Mode"
+      isAccountingApplicable:
+       type: string
+       description: "Is Accounting Applicable"
+      ScfTmProdLimitDecnDTO:
+        type: array
+        items:
+         $ref: "#/definitions/ScfTmProdLimitDecnDTO"
+         
+  ScfTmProdLimitDecnDTO:
+   type: object
+   properties:
+     eventCode:
+      type: string
+      description: "Event Code"
+     id:
+      type: string
+      description: "Id"
+     limitType:
+      type: string
+      description: "Limit Type"
+     productCode:
+      type: string
+      description: "Product Code"
+     productMasterId:
+      type: string
+      description: "Product Master Id"
+     recourse:
+      type: string
+      description: "Recourse"
+     rootLimitEntityType:
+      type: string
+      description: "Root Limit Entity Type"
+     subLevelsApplicable:
+      type: string
+      description: "Sub Levels Applicable"
+     limitEvent:
+      type: string
+      description: "Limit Event"
+     ScfTmProdLimitExpHandlDTO:
+      type: array
+      items:
+       $ref: "#/definitions/ScfTmProdLimitExpHandlDTO"
+  ScfTmProdLimitExpHandlDTO:
+   type: object
+   required:
+     - productCode
+   properties:
+     id:
+      type: string
+      description: "Id"
+     limitDecnMasterId:
+      type: string
+      description: "Limit Decision Master Id"
+     productCode:
+      type: string
+      description: "Product Code"
+     subLevelApplicable:
+      type: string
+      description: "Sub Level Applicable"
+     expiredLimitExceptionHandling:
+      type: string
+      description: "Expired Limit Exception Handling"
+     breachLimitExceptionHandling:
+      type: string
+      description: "Breach Limit Exception Handling"
+     expiredAndBreachLimitExceptionHandling:
+      type: string
+      description: "Expired And Breach Limit Exception Handling"  
+  AllocationModel:
+    type: "object"
+    properties:
+      pmtToPrncplOS:
+        type: "number"     
+      pmtToIntOS:
+        type: "number" 
+      pmtToOverdueIntOS:
+        type: "number"
+      principalOSAmount:
+        type: "number"
+      overdueIntOSAmt:
+        type: "number"
+      interestOSAmt:
+        type: "number"
+      paymentAmt:
+        type: "number"
+      penIntOSAmt:
+        type: "number"
+      pmtToPenOnIntOS:
+        type: "number"        
+  InvoiceFinanceModelCollection:
+    description: "Collection of InvoiceFinanceModel."
+    type: "object"
+    properties:
+      invoiceFinanceModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvoiceFinanceModel"  
+          
+  InvoiceFinanceModel:
+    description: "Invoice Finance Transaction Model"
+    type: "object"
+    properties:
+      scfInvoiceFinanceId:
+        type: "integer"
+        format: "int64"
+      requestId:
+        type: "string"
+      financeReferenceNo:
+        type: "string"
+      invoiceNumber:
+        type: "string"
+      status:
+        type: "string"
+      invoiceRefNo:
+        type: "string"
+      finTxnStatus:
+        type: "string"
+      principalOSAmt: 
+        type: "number"
+      interestOSAmt: 
+        type: "number" 
+      overdueInterestOSAmt: 
+        type: "number"
+      penaltyInterestOSAmt: 
+        type: "number"
+      pctContriTwdsFin: 
+        type: "number"
+      amtContriTwdsFin: 
+        type: "number"
+      interestAmortized: 
+        type: "number"
+      interestPaidInvCcy:  
+        type: "number"
+      marginAmt:     
+        type: "number"
+      principalPaidInvCcy: 
+        type: "number"
+      overdueInterestPaidInvCcy: 
+        type: "number"  
+      penaltyInterestPaidInvCcy: 
+        type: "number"
+      marginRefNo: 
+        type: "string"
+      finMaturityDate:
+        type: "string"
+      interestPaidFinCcy: 
+        type: "number"
+      principalPaidFinCcy:  
+        type: "number"
+      overdueInterestPaidFinCcy: 
+        type: "number"   
+      penaltyInterestPaidFinCcy: 
+        type: "number"
+      invCcy: 
+        type: "string"
+      totalPaidAmt: 
+        type: "number"
+      productCode: 
+        type: "string" 
+      programCode: 
+        type: "string" 
+      buyerId: 
+        type: "string"   
+      buyerName: 
+        type: "string" 
+      supplierId: 
+        type: "string"    
+      supplierName: 
+        type: "string"                                    
+      finCcy:
+        type: "string"
+      appropriationSeq:
+        type: "string"
+      disbursementMarginCalc: 
+        type: "number"
+      interestType: 
+        type: "string"  
+      appropriatedPaidAmt: 
+        type: "number"
+      invoiceDueDate:  
+        type: "string"                       
+  InvoiceFinanceDetails:
+    description: "Invoice details for Finance Model"
+    type: "object"
+    properties:
+      invoiceNumber:
+        type: "string"
+      invoiceRefNo:
+        type: "string"  
+        
+        
+  InvoiceCollection:
+    description: "Collection of Invoices."
+    type: "object"
+    properties:
+      invoiceList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Invoice"
+  Invoice:
+    description: "Invoice model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      invoiceId:
+        description: "Id of the Invoice "
+        type: "string"
+      acceptanceAmount:
+        type: number
+        description: "Acceptance Amount"
+      amount:
+        type: number
+        description: "Amount"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      buyerDivCode:
+        type: string
+        description: "Buyer Division Code"
+      buyerDivName:
+        type: string
+        description: "Buyer Division Name"
+      currency:
+        type: string
+        description: "Currency"
+      isDisputed:
+        type: string
+        description: "Is Disputed"
+      discrepancyCode:
+        type: string
+        description: "Discrepancy Code"
+      disputeResolveRemarks:
+        type: string
+        description: "Dispute Resolve Remarks"
+      fileName:
+        type: string
+        description: "File Name"
+      fileRef:
+        type: string
+        description: "File Reference"
+      filler1:
+        type: string
+        description: "Filler1"
+      filler2:
+        type: string
+        description: "Filler2"
+      filler3:
+        type: string
+        description: "Filler3"
+      filler4:
+        type: string
+        description: "Filler4"
+      financeAmount:
+        type: number
+        description: "Finance Amount"
+      financePercentage:
+        type: number
+        description: "Finance Percentage"
+      indicator:
+        type: string
+        description: "Indicator"
+      invoiceDate:
+        type: string
+        description: "Invoice Date"
+      invoiceDueDate:
+        type: string
+        description: "Invoice Due Date"
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      invoiceProcessStatus:
+        type: string
+        description: "Invoice Process Status"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      invoiceStatus:
+        type: string
+        description: "Invoice Status"
+      invAcceptanceDate:
+        type: string
+        description: "Invoice Acceptance Date"
+      maxFinancePercentage:
+        type: number
+        description: "Maximum Finance Percentage"
+      paidAmount:
+        type: number
+        description: "Paid Amount"
+      paymentStatus:
+        type: string
+        description: "Payment status"
+      preAccepted:
+        type: string
+      poNumber:
+        type: string
+        description: "Po Number"
+      programCode:
+        type: string
+        description: "Program Code"
+      programName:
+        type: string
+      reasonCode:
+        type: string
+        description: "Reason code"
+      remarks:
+        type: string
+        description: "Remarks"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      supplierDivCode:
+        type: string
+        description: "Supplier Division Code"
+      supplierDivName:
+        type: string
+        description: "Supplier Division Name"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      totalInvoiceAmount:
+        type: number
+        description: "Total Invoice Amount"
+      paymentTerms:
+        type: string
+      shipmentDate:
+        type: string
+      outstandingAmount:
+        type: number
+      discountAllowed:
+        type: string
+      discountPercentage:
+        type: number
+      discountAmount:
+        type: number
+      taxPercentage:
+        type: number
+      purchaseOrderDate:
+        type: string
+      staleStatus:
+        type: string
+      divisionCode:
+        type: string
+      shipmentAddress:
+        type: string
+      shipmentCountry:
+        type: string
+      shipmentNo:
+        type: string
+      reasonForExport:
+        type: string
+      termsOfSale:
+        type: string
+      countryOfOrigin:
+        type: string
+      miscCharge1:
+        type: number
+      miscCharge1Amount:
+        type: number
+      miscCharge1Desc:
+        type: string
+      miscCharge2:
+        type: number
+      miscCharge2Amount:
+        type: number
+      miscCharge2Desc:
+        type: string
+      netInvoiceAmount:
+        type: number
+      financeableAmount:
+        type: number
+      finTxnStatus:
+        type: string
+      transactionRefNo:
+        type: string
+      relationCode:
+        type: string
+        description: "Relation Code"
+      supplierCode:
+        type: string
+      buyerCode:
+        type: string
+      shipmentRefNo:
+        type: string
+      repayAccountNo:
+        type: number
+      bank:
+        type: string
+      branch:
+        type: string
+      routingCode:
+        type: number
+      isAutoAuth:
+       type: string
+      reasonErrorCode:
+        type: string
+      finEligibilityAmt:
+        type: number
+      reconTxnStatus:
+        type: string
+      reasonForShipment:
+        type: string
+      virtualAcFlag:
+        type: string
+      fundingReqAmt:
+        type: number
+      raisedBy:
+        type: string 
+      isFinanced:
+        type: string           
+      paymentDueDate:
+        type: string  
+  FinanceTransactionCollection:
+    description: "Collection of Finance Transaction Models."
+    type: "object"
+    properties:
+      financeTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/FinanceTransactionModel"   
+          
+  ScfTmProgramMasterCollection: 
+   description: "Collection of program."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ScfTmProgramMasterDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+     
+  ScfTmProgramMasterDTO:
+    type: object
+    allOf:
+    - type: object
+      properties:
+       anchorId:
+        type: string
+        description: "Anchor Id"
+       anchorName:
+        type: string
+        description: "Anchor Name"
+       authorizationRequired:
+        type: string
+        description: "Authorization Required"
+       autoAcceptanceApplicable:
+        type: string
+        description: "Auto Acceptance Applicable"
+       autoAcceptanceDays:
+        type: number
+        description: "Auto Acceptance Days"
+       autoFinanceApplicable:
+        type: string
+        description: "Auto Finance Applicable"
+       autoSettlementApplicable:
+        type: string
+        description: "Auto Settlement Applicable"
+       disbursementCcy:
+        type: string
+        description: "Disbursement Currency"
+       effectiveFrom:
+        type: string
+        format: date
+        description: "Effective From"
+       expiresOn:
+        type: string
+        format: date
+        description: "Expires On"
+       maxFinancePercentage:
+        type: number
+        description: "Maximum Finance Percentage"
+       maxTenorAllowed:
+        type: number
+        description: "Maximum Tenor Allowed"
+       minFinancePercentage:
+        type: number
+        description: "Minimum Finance Percentage"
+       minTenorAllowed:
+        type: number
+        description: "Minimum Tenor Allowed"
+       preferredDisbursementMode:
+        type: string
+        description: "Preferred Disbursement Mode"
+       preferredSettlementMode:
+        type: string
+        description: "Preferred Settlement Mode"
+       productCode:
+        type: string
+        description: "Product Code"
+       productDescription:
+        type: string
+        description: "Product Description"
+       programCode:
+        type: string
+        description: "Program Code"
+       programName:
+        type: string
+        description: "Program Name"
+       withRecourse:
+        type: string
+        description: "With Recourse"
+       graceDays:
+        type: number
+       interestBearingParty:
+        type: string
+        description: "Interest Bearing Party"
+       relationshipCode:
+        type: string
+        description: "Relationship Code"
+       twoFactorApp:
+        type: string
+        description: "Two Factor App"
+       insuranceApp:
+        type: string
+        description: "Insurance App"
+       interestRefundHandling:
+        type: string
+        description: "Interest Refund Handling"
+       interestRefundPaymentMode:
+        type: string
+        description: "Interest Refund Payment Mode"
+       marginHandling:
+        type: string
+        description: "Margin Handling"
+       marginPaymentMode:
+        type: string
+        description: "Margin Payment Mode"
+       ScfTmProgramSpokeMasterDTO:
+        type: array
+        items:
+          $ref: "#/definitions/ScfTmProgramSpokeMasterDTO" 
+  ScfTmProgramSpokeMasterDTO:
+    type: object
+    properties:
+     authorizationRequired:
+      type: string
+      description: "Authorization Required"
+     autoFinanceApplicable:
+      type: string
+      description: "Auto Finance Applicable"
+     autoSettlementApplicable:
+      type: string
+      description: "Auto Settlement Applicable"
+     disbursementCcy:
+      type: string
+      description: "Disbursement Currency"
+     id:
+      type: string
+      description: "Id"
+     maxFinancePercentage:
+      type: number
+      description: "Maximum Finance Percentage"
+     maxTenorAllowed:
+      type: number
+      description: "Maximum Tenor Allowed"
+     minFinancePercentage:
+      type: number
+      description: "Minimum Finance Percentage"
+     minTenorAllowed:
+      type: number
+      description: "Minimum Tenor Allowed"
+     preferredDisbursementMode:
+      type: string
+      description: "Preferred Disbursement Mode"
+     preferredSettlementMode:
+      type: string
+      description: "Preferred Settlement Mode"
+     programCode:
+      type: string
+      description: "Program Code"
+     programMasterId:
+      type: string
+      description: "Program Master Id"
+     spokeId:
+      type: string
+      description: "Spoke Id"
+     spokeName:
+      type: string
+      description: "Spoke Name"
+     withRecourse:
+      type: string
+      description: "With Recourse"
+     graceDays:
+      type: number
+     interestBearingParty:
+      type: string
+      description: "Interest Bearing Party"
+     importFactorId:
+      type: string
+      description: "Import Factor Id"
+     importFactorName:
+      type: string
+      description: "Import Factor Name"
+     insuranceCoId:
+      type: string
+      description: "Insurance Co Id"
+     insuranceCoName:
+      type: string
+      description: "Insurance Co Name"
+     interestRefundHandling:
+      type: string
+      description: "Interest Refund Handling"
+     interestRefundPaymentMode:
+      type: string
+      description: "Interest Refund Payment Mode"
+     marginHandling:
+      type: string
+      description: "Margin Handling"
+     marginPaymentMode:
+      type: string
+      description: "Margin Payment Mode"
+     ScfTmProgramSpokeCodeMasterDTO:
+      type: array
+      items:
+       $ref: "#/definitions/ScfTmProgramSpokeCodeMasterDTO"
+       
+  ScfTmProgramSpokeCodeMasterDTO:
+    type: object
+    required:
+       - programCode
+       - spokeId
+    properties:
+       id:
+        type: string
+        description: "Id"
+       spokeMasterId:
+        type: string
+        description: "Spoke Master Id"
+       programCode:
+        type: string
+        description: "Program Code"
+       spokeId:
+        type: string
+        description: "Spoke Id"
+       spokeName:
+        type: string
+        description: "Spoke Name"
+       spokeExternalCode:
+        type: string
+        description: "Spoke External Code"
+       spokeDivisionCode:
+        type: string
+        description: "Spoke Division Code"
+       spokeDivisionName:
+        type: string
+        description: "Spoke Division Name"
+       anchorDivisionCode:
+        type: string
+        description: "Anchor Division Code"
+       anchorDivisionName:
+        type: string
+        description: "Anchor Division Name"                                    
+  FinanceTransactionModel:
+    description: "Finance Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      financeRefNo:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      requestId:
+        type: "string"
+      branchCode:
+        type: "string"
+      productCode:
+        type: "string"
+      operationCode:
+        type: "string"
+      programCode:
+        type: "string"
+      programName:
+        type: "string"
+      buyerId:
+        type: "string"
+      buyerName:
+        type: "string"
+      buyerDivCode:
+        type: string
+      buyerDivName:
+        type: string
+      supplierId:
+        type: "string"
+      supplierName:
+        type: "string"
+      supplierDivCode:
+        type: string
+      supplierDivName:
+        type: string
+      debtor:
+        type: "string"
+      debtorName:
+        type: "string"
+      startDate:
+        type: "string"
+      tenor:
+        type: "integer"
+        format: "int64"
+      maturityDate:
+        type: "string"
+      invoiceAmtCcy:
+        type: "string"
+      invoiceAmount:
+        type: "number"
+      financePCT:
+        type: "number"
+      financeAmtCcy:
+        type: "string"
+      financeAmt:
+        type: "number"
+      exchangeRate:
+        type: "number"
+      processingDate:
+        type: "string"
+      settlementProcessingDate:
+        type: "string"
+      makerId:
+        type: "string"
+      makerDateStamp:
+        type: "string"
+      authId:
+        type: "string"
+      authDateStamp:
+        type: "string"
+      financeStatus:
+        type: "string"
+      clRefNo:
+        type: "string"
+      settlementRefNo:
+        type: "string"
+      settlementMethod:
+        type: "string"
+      totalSettlementAmt:
+        type: "number"
+      creditReceived:
+        type: "string"
+      creditAccount:
+        type: "string"
+      paymentParty:
+        type: "string"
+      accountType:
+        type: "string"
+      settlementAmtAllocated:
+        type: "number"
+      balanceAmtToBeAllocated:
+        type: "number"
+      settlementAmtAllocation:
+        type: "string"
+      manualAllocation:
+        type: "string"
+      pastDueDate:
+        type: "string"
+      valueDate:
+        type: "string"
+      principalOSAmount:
+        type: "number"
+      interestOSAmount:
+        type: "number"
+      totalOSAmount:
+        type: "number"
+      valueDtdIntOSAmt:
+        type: "number"
+      overdueIntOSAmt:
+        type: "number"
+      valueDtdOverdueIntOSAmt:
+        type: "number"
+      paymentAmt:
+        type: "number"
+      appropPaymentAmt:
+        type: "number"
+      appropriationSequence:
+        type: "string"
+      pmtToPrncplOS:
+        type: "number"
+      pmtToIntOS:
+        type: "number"
+      pmtToOverdueIntOS:
+        type: "number"
+      productDescription:
+        type: "string"
+      productCategory:
+        type: "string"
+      maxTenorAllowed:
+        type: "number"
+      minTenorAllowed:
+        type: "number"
+      minFinPCT:
+        type: "number"
+      maxFinPCT:
+        type: "number"
+      holidayTreatment:
+        type: "string"
+      productType:
+        type: "string"
+      preferredDisbursementMode:
+        type: "string"
+      settlementCcy:
+        type: "string"
+      totalOSAmountSettlementCcy:
+        type: "number"
+      refund:
+        type: "number"
+      settlementExchangeRate:
+        type: "number"
+      totalOSPostAllocation:
+        type: "number"
+      settleFinExcRate:
+        type: "number"
+      stageId:
+        type: "string"
+      errorCode:
+       type: "string"
+      errorDescription:
+       type: "string"
+      graceDays:
+        type: "number"
+      partRepaymentAllowed:
+        type: "string"
+      staleStatus:
+        type: "string"
+      minFinanciableAmt:
+        type: "number"
+      maxFinanciableAmt:
+        type: "number"
+      minReFinPCT:
+        type: "number"
+      maxReFinPCT:
+        type: "number"
+      penIntOSAmt:
+        type: "number"
+      pmtToPenOnIntOS:
+        type: "number"
+      valueDtdPenIntOSAmt:
+        type: "number"
+      interestAmortized:
+        type: "number"
+      withRecourse:
+        type: "string"
+      transactionFlow:
+        type: "string"
+      totalMarginAmount:
+        type: "number"
+      interestType:
+        type: "string"
+      interestRefundAmt:
+        type: "number"
+      interestRefundHandling:
+        type: "string"
+      interestRefundPmtMode:
+        type: "string"
+      interestBearingPartyRole:
+        type: "string"
+      isFromRecon:
+        type: "string"         
+       
+  ScfTmNonCustomerMasterDTO:
+    type: object
+#   allOf:
+#   - $ref: '#/definitions/GenericDto'
+#   - type: object
+    properties:
+     category:
+      type: string
+      description: "Category"
+     cif:
+      type: string
+      description: "Cif"
+     countryCode:
+      type: string
+      description: "Country Code"
+     email:
+      type: string
+      description: "Email"
+     faxNumber:
+      type: string
+      description: "Fax Number"
+     giin:
+      type: string
+      description: "Giin"
+     industry:
+      type: string
+      description: "Industry"
+     mobileNumber:
+      type: string
+      description: "Mobile Number"
+     name:
+      type: string
+      description: "Name"
+     nonCustomerId:
+      type: string
+      description: "Non Customer Id"
+     phoneNumber:
+      type: string
+      description: "Phone Number"
+     prefferedCommMode:
+      type: string
+      description: "Preffered Comm Mode"
+     registrationNumber:
+      type: string
+      description: "Registration Number"
+     shortName:
+      type: string
+      description: "Short Name"
+     taxRefNo1:
+      type: string
+      description: "Tax Reference Number1"
+     taxRefNo2:
+      type: string
+      description: "Tax Reference Number2"
+     fatca:
+      type: string
+      description: "Fatca"
+     ScfTmNcAddressMasterDTO:
+      type: array
+      items:
+       $ref: "#/definitions/ScfTmNcAddressMasterDTO"
+     ScfTmNcRequestMasterDTO:
+      type: array
+      items:
+       $ref: "#/definitions/ScfTmNcRequestMasterDTO"
+        
+  ScfTmNcAddressMasterDTO:
+    type: object
+    properties:
+       addressLine1:
+        type: string
+        description: "Address Line1"
+       addressLine2:
+        type: string
+        description: "Address Line2"
+       addressLine3:
+        type: string
+        description: "Address Line3"
+       addressLine4:
+        type: string
+        description: "Address Line4"
+       addressType:
+        type: string
+        description: "Address Type"
+       country:
+        type: string
+        description: "Country"
+       id:
+        type: string
+        description: "Id"
+       nonCustMasterId:
+        type: string
+        description: "Non Customer Master Id"
+       pin:
+        type: string
+        description: "Pin"
+       street:
+        type: string
+        description: "Street"
+       nonCustomerId:
+        type: string
+        description: "Non Customer Id"
+        
+  ScfTmNcRequestMasterDTO:
+    type: object
+    properties:
+       anchorId:
+        type: string
+        description: "Anchor Id"
+       anchorName:
+        type: string
+        description: "Anchor Name"
+       id:
+        type: string
+        description: "Id"
+       nonCustomerCode:
+        type: string
+        description: "Non Customer Code"
+       nonCustMasterId:
+        type: string
+        description: "Non Customer Master Code"
+       status:
+        type: string
+        description: "Status"
+       nonCustomerId:
+        type: string
+        description: "Non Customer Id"
+    required:
+     - anchorId   
+  InvPmtSearchModel:
+    description: Manual Recon deatail
+    type: object
+    properties:
+      corporateId:
+        type: string 
+      counterParty:
+        type: string 
+      supplierId:
+        type: string 
+      buyerId:
+        type: string      
+      reconCategory:
+        type: string
+      reconType:
+        type: string
+      extSysRefNo:
+        type: string
+      reconDateFrom:
+        type: string
+      reconDateTo:
+        type: string
+      pmtAcNo:
+        type: string 
+      lhsAcNo:
+        type: string 
+      pmtRefNo:
+        type: string 
+      extPmtRefNo:
+        type: string      
+      reconTxnRefNo:
+        type: string
+      extLhsRefNo:
+        type: string
+      intLhsRefNo:
+        type: string
+      pmtPartyId:
+        type: string
+      beneId:
+        type: string
+      drCrIndicator:
+        type: string
+      isAuth:
+        type: string  
+      allocationAccount:
+        type: string
+      cashflowType:
+        type: string
+      customerRefNo:
+        type: string
+      cnRefNo:
+        type: string
+      cnExternalId:
+        type: string
+  InvPayManReconCollection:
+    description: "Collection of Invoices and Payments."
+    type: "object"
+    properties:
+      errCode:
+        type: string
+      errDesc:
+        type: string    
+      invPayList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvPayManReconModel"
+      expDrCrList:
+        type: "array"
+        items:
+          $ref: "#/definitions/expDrCrManReconModel"
+      invCnList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvCnManReconModel"
+      paging:
+        type: object
+  InvCnManReconModel:
+    description: invoice and credit note detail
+    type: object
+    properties:
+      seqNo:
+        type: number
+      reconType:
+        type: string          
+      cnNumber:
+        type: string
+      cnDate:
+        type: string	
+      cnExpiryDate:
+        type: string
+      cnRelationCode:
+        type: string  	
+      cnBuyerCode: 
+        type: string
+      cnBuyerId:
+        type: string
+      cnSupplierCode:
+        type: string
+      cnSupplierId:
+        type: string
+      cnBuyerDivCode:
+        type: string 	
+      cnSupplierDivCode:
+        type: string 	
+      cnSupplierName:
+        type: string 
+      cnBuyerName:
+        type: string 
+      cnCurrency:
+        type: string 	
+      cnBaseAmount:
+        type: number
+      netCnAmount:
+        type: number
+      cnProgramCode:
+        type: string 
+      cnReconStatus:
+        type: string      	
+      procBranchCode:
+        type: string 
+      procBranchDate:
+        type: string 
+      cnInternalId:
+        type: string 
+      remarks:
+        type: string 
+      intInvRefNo:
+        type: string	
+      invBuyerId:
+        type: string
+      invBuyerName:
+        type: string
+      invCcy:
+        type: string	
+      invDate:
+        type: string	
+      invDueDate:
+        type: string
+      invFinanced:
+        type: string
+      invOsAmt:
+        type: number
+      invProgramCode:
+        type: string
+      invRelationCode:
+        type: string
+      invSupplierId:
+        type: string
+      extInvRefNo:
+        type: string
+      invSupplierName:
+        type: string
+      invVirtualAccNo:
+        type: string
+      netInvAmt:
+        type: number
+      varianceAmount:
+        type: number
+      accountNumber:
+        type: string
+      accountOwner:
+        type: string
+      amtMatched:
+        type: number
+      corporateId:
+        type: string
+      deReconFlag:
+        type: string
+      exchRate:
+        type: number
+      importFactorId:
+        type: string 
+      importFactorName:
+        type: string
+      insuranceCoId:
+        type: string
+      insuranceCoName:
+        type: string 
+      extSysRefNo:
+        type: string
+      isInvAccVa:
+        type: string
+      isCnAccVa:
+        type: string 
+      linkedDeReconTxnRef:
+        type: string 
+      reconciledCnAmt:
+        type: number
+      reconDate:
+        type: string   
+      reconStatus:
+        type: string  
+      reconTxnRefNo:
+        type: string 
+      remitterAccNo:
+        type: string
+      invSeqNo:
+        type: integer
+        format: int64	
+      cnSeqNo:
+        type: integer
+        format: int64
+      paymentParty:
+        type: string																							 	 		 	 							 	     
+      invBaseAmt:
+        type: number
+      paymentDueDate:
+        type: string
+      txnStatus:
+        type: string
+      indicator:
+        type: string
+  InvPayManReconModel:
+    description: Manual Recon deatail
+    type: object
+    properties:
+      reconTxnRefNo:
+        type: string
+      drCrIndicator:
+        type: string
+      intInvRefNo:
+        type: string
+      paymentRefNo:
+        type: string
+      extPmtRefNo:
+        type: string
+      extInvRefNo:
+        type: string
+      paymentCcy:
+        type: string
+      paymentAmtMatched:
+        type: number
+      invoiceCcy:
+        type: string
+      invoiceAmtMatched:
+        type: number
+      extSysRefNo:
+        type: string
+      reconType:
+        type: string
+      reconDate:
+        type: string
+      buyerId:
+        type: string
+      buyerName:
+        type: string
+      supplierId:
+        type: string
+      supplierName:
+        type: string
+      invAmount:
+        type: number
+      outStandInvAmount:
+        type: number
+      matchSeqNo:
+        type: string
+      invRelCode:
+        type: string
+      invDate:
+        type: string
+      invDueDate:
+        type: string
+      invFinanced:
+        type: string
+      pmtPartyId:
+        type: string
+      pmtPartyName:
+        type: string
+      pmtDate:
+        type: string
+      pmtMode:
+        type: string
+      pmtAmount:
+        type: number
+      beneCode:
+        type: string
+      beneName:
+        type: string
+      exchRate:
+        type: number
+      beneId:
+        type: string
+      pmtAcNo:
+        type: string 
+      lhsAcNo:
+        type: string
+      txnStatus:
+        type: string
+      reconStatus:
+        type: string
+      pmtCounterpartyId:
+        type: string
+      remmiterAccNo: 
+        type: string
+      remarks:
+        type: string
+      pmtProgramCode:
+        type: string
+      pmtRealtionshipCode:
+        type: string
+      invProgramCode:
+        type: string
+      accOwner: 
+        type: string
+      isInvAccVa: 
+        type: string
+      isPmtAccVa: 
+        type: string
+      partyPmtCode: 
+        type: string
+      counterpartyCode:
+        type: string
+      allocationRequired:
+        type: string
+      indicator:
+        type: string
+      allocationList:
+        type: array
+        items:
+          $ref: "#/definitions/AllocationDto"
+  expDrCrManReconModel:
+    description: Manual Recon deatail
+    type: object
+    properties:
+      reconTxnRefNo:
+        type: string
+      drCrIndicator:
+        type: string
+      expDrCrRefNo:
+        type: string
+      paymentRefNo:
+        type: string
+      extPmtRefNo:
+        type: string
+      extDrCrRefNo:
+        type: string
+      paymentCcy:
+        type: string
+      paymentAmtMatched:
+        type: number
+      expDrCrCcy:
+        type: string
+      expDrCrAmtMatched:
+        type: number
+      extSysRefNo:
+        type: string
+      reconType:
+        type: string
+      reconDate:
+        type: string
+      expDrCrAmount:
+        type: number      
+      matchSeqNo:
+        type: string      
+      expDrCrDate:
+        type: string
+      expDrCrRevDate:
+        type: string
+      pmtPartyId:
+        type: string
+      pmtPartyName:
+        type: string
+      pmtDate:
+        type: string
+      pmtMode:
+        type: string
+      pmtAmount:
+        type: number
+      beneCode:
+        type: string
+      beneName:
+        type: string
+      exchRate:
+        type: number
+      pmtAcNo:
+        type: string 
+      lhsAcNo:
+        type: string
+      txnStatus:
+        type: string
+      expDrCrCode:
+        type: string
+      expDrCrDesc:
+        type: string
+      expDrCrBankAcNo:
+        type: string
+      expDrCrNarr:
+        type: string
+      extAcNo:
+        type: string
+      corpId:
+        type: string
+      counterPartyId:
+        type: string
+      reconStatus:
+        type: string
+      udfTxt1:
+        type: string
+      udfTxt2:
+        type: string
+      udfTxt3:
+        type: string
+      udfTxt4:
+        type: string
+      udfTxt5:
+        type: string
+      udfTxt6:
+        type: string
+      udfTxt7:
+        type: string
+      udfTxt8:
+        type: string
+      udfTxt9:
+        type: string
+      udfTxt10:
+        type: string
+      cashflowType:
+        type: string
+      actualDate:
+        type: string
+      channel:
+        type: string
+      applicationName: 
+        type: string	  
+      counterpartyName:
+        type: string
+      pmtCounterpartyId:
+        type: string
+      remitterAccNo:
+        type: string
+      accOwner:
+        type: string
+      isPmtAccVA:
+        type: string 
+      pmtCounterpartyName:
+        type: string
+      allocationRequired:
+       type: string	  
+      customerRefNo:
+       type: string 
+      remarks:
+        type: string
+      beneficiaryId:
+        type: string
+      payCounterpartyCode:
+        type: string
+      partyPaymentCode:
+        type: string
+      pmtRelationshipCode:
+        type: string
+      pmtProgramCode:
+        type: string
+      allocationList:
+        type: array
+        items:
+          $ref: "#/definitions/AllocationDto"
+  ObcmsCashflowTransactionResponse:
+    description: "Cashflow Txn Response model"
+    type: "object"
+    properties:
+      cashflowResponse:
+        description: "Collection of request attributes."
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmsCashflowTransactionRespDTO" 
+          
+  ObcmsCashflowTransactionRespDTO:
+     description: "Scf Filter Parameters model"
+     properties:  
+       externalReferenceNo:
+        type: "string"
+        description: "External Reference Number"   
+       cashflowIndicator:
+        type: "string"
+        description: "Cashflow Indicator"
+       corporateId:
+        type: "string"
+        description: "Corporate Id"
+       code:
+        type: "string"
+        description: "Code"
+       description:
+        type: "string"
+        description: "Description"
+       bankAccountNumber:
+        type: "string"
+        description: "Bank Account Number"
+       amount:
+        type: "string"
+        description: "Amount"
+       ccy:
+        type: "string"
+        description: "Currency"
+       expectedDate:
+        type: "string"
+        description: "Expected Date"
+       actualDate:
+        type: "string"
+        description: "Actual Date"
+       revisedExpectedDate:
+        type: "string"
+        description: "Revised Expected Date"
+       channel:
+        type: "string"
+        description: "Channel"
+       applicationName:
+        type: "string"
+        description: "Application Name"
+       partyName:
+        type: string
+        description: "Party Name"
+       partyId:
+        type: string
+        description: "Party Id"
+       virtualAcctNo:
+        type: string
+        description: "Virtual Account Number"
+       actualCashflowAmt:
+        type: string
+        description: "Actual Cashflow Amount"
+       narration:
+        type: string
+        description: "Narration"
+       status:
+        type: string
+        description: "Status"             
+       udfTxt1:
+        type: string
+        description: "Udf Text1"
+       udfTxt2:
+        type: string
+        description: "Udf Text2"
+       udfTxt3:
+        type: string
+        description: "Udf Text3"
+       udfTxt4:
+        type: string
+        description: "Udf Text4"
+       udfTxt5:
+        type: string
+        description: "Udf Text5"
+       udfTxt6:
+        type: string
+        description: "Udf Text6"
+       udfTxt7:
+        type: string
+        description: "Udf Text7"
+       udfTxt8:
+        type: string
+        description: "Udf Text8"
+       udfTxt9:
+        type: string
+        description: "Udf Text9"
+       udfTxt10:
+        type: string
+        description: "Udf Text10"                                                                
+       errorDesc:
+        type: string
+        description: "Error Description"
+       errorStatus:
+        type: string
+        description: "Error status"
+       transaction Id:
+        description: "Transaction Id"
+        type: "string"
+       authStatus:
+        type: string
+        description: "Authorization Status"
+       responseCode:
+        type: string
+        description: "response Code"
+       modNo:
+        type: integer
+        description: "Mod No"
+       reconStatus:
+        type: string
+        description: "recon status" 
+       errors:
+        type: "array"
+        items:
+          $ref: "#/definitions/Error"
+  Error:
+    type: "object"
+    properties:
+      ecode:
+        type: "string"
+      etype:
+        type: "string"
+      edesc:
+        type: "string"   
+  ObInvoiceMarginCalcDTO:
+    type: object
+    required:
+      - marginRefNo
+      - intInvoiceRefNo
+      - intPaymentRefNo
+      - invoiceRefNo
+      - paymentRefNo
+      - marginAmount
+      - marginCcy
+      - buyerId
+      - supplierId
+      - buyerName
+      - supplierName
+      - productCode
+      - programCode
+      - marginCalculationDate
+    properties:
+      id:
+        type: string
+        description: "Id"
+      bankCode:
+        type: string
+        description: "Bank code"
+      bankName:
+        type: string
+        description: "Bank name"
+      branchCode:
+        type: string
+        description: "Branch code"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      intInvoiceRefNo:
+        type: string
+        description: "Interest Invoice Reference Number"
+      intPaymentRefNo:
+        type: string
+        description: "Interest Payment Reference Number"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      marginAmount:
+        type: number
+        description: "Margin Amount"
+      marginCalculationDate:
+        type: string
+        format: date
+        description: "Margin Calculation Date"
+      marginCalculationStatus:
+        type: string
+        description: "Margin Calculation Status"
+      marginCcy:
+        type: string
+        description: "Margin Currency"
+      marginHandling:
+        type: string
+        description: "Margin Handling"
+      marginPaymentMode:
+        type: string
+        description: "Margin Payment Mode"
+      marginProcessingDate:
+        type: string
+        format: date
+        description: "Margin Processing Date"
+      marginProcessingStatus:
+        type: string
+        description: "Margin Processing Status"
+      marginRefNo:
+        type: string
+        description: "Marin reference number"
+      paymentRefNo:
+        type: string
+        description: "Payment reference number"
+      paymentValueDate:
+        type: string
+        format: date
+        description: "Payment Value Date"
+      paymentValueMode:
+        type: string
+        description: "Payment Value Mode"
+      productCode:
+        type: string
+        description: "Product Code"
+      programCode:
+        type: string
+        description: "Program Code"
+      routingCode:
+        type: string
+        description: "Routing Code"
+      supplierAcNo:
+        type: string
+        description: "Supplier Account Number"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      supplierName:
+        type: string
+        description: "Supplier Name"    
+  GenericUpdateModel:
+    description: "Generic Update Model"
+    type: "object"
+    properties:
+      queryString:
+        type: "string"
+      queryParamsList:
+        type: "array"
+        items: 
+          type: "string"     
+  GenerateMarginRefNoModel:  
+    description: "Margin reference number generation model." 
+    type: "object"
+    properties: 
+      referenceNumber:
+        type: string
+        description: "" 
+  VirtualAccountDetailsResponse: 
+    description: "Collection of accentrycode."
+    type: "object"
+    properties:
+      data:
+       type: "array"
+       items: 
+        $ref: "#/definitions/VirtualAccountDetails"
+      paging:
+       $ref: "#/definitions/PagingDto"
+  VirtualAccountDetails:
+    description: "Virtual Account Details"
+    type: "object"
+    properties:
+       realCustomerNo:
+         type: "string"
+       virtualAccountNo:
+         type: "string"
+       virtualAccountName:
+         type: "string"
+       branchCode:
+         type: "string"
+       virtualEntityId:
+         type: "string"
+       virtualEntityName:
+         type: "string"
+       virtualAccCcy:
+         type: "string"
+       virtualAccProduct:
+         type: "string"
+       ibanAccNo:
+         type: "string"
+       realAccountNo:
+         type: "string"
+       fixedAmtFromPool:
+         type: "number"
+       fixedAmount:
+         type: "number"
+       creditTxnsAllowed:
+         type: "string"
+       debitTxnsAllowed:
+         type: "string"
+       realAccountCcy:
+         type: "string"
+       realAccountBrn:
+         type: "string"
+       status:
+         type: "string"
+  ManualAllocServiceCollection:
+     description: "Collection manual allocation transactions"
+     type: "object"
+     properties:
+       reconCategory:
+         type: string
+       autoAuth:
+         type: string
+       corporateId:
+         type: string
+       action:
+         type: string
+       reconTxnRefNo:
+         type: string
+       reconTxnCollection:
+        type: "array"
+        items: 
+         $ref: "#/definitions/ManualAllocServiceDto"
+  ManualAllocServiceDto:
+    description: each manual allocation detail
+    type: object
+    properties:
+      extSysRefNo:
+        type: string 
+      counterpartyId:
+        type: string
+      manualAllocList:
+        type: array
+        items:
+          $ref: "#/definitions/ManualAllocationDto"
+  ManualAllocationDto:
+    description: each manual allocation deatail
+    type: object
+    properties:
+      paymentRefNo:
+        type: string 
+      extPaymentRefNo:
+        type: string
+      drCrIndicator:
+        type: string
+      paymentCcy:
+        type: string
+      paymentAmount:
+        type: string
+      allocationList:
+        type: array
+        items:
+          $ref: "#/definitions/AllocationDto"
+  ProductProgramDTO: 
+    type: object
+    properties:
+      productDTO:
+        $ref: "#/definitions/ScfTmProductMasterDTO"
+      programDTO: 
+        $ref: "#/definitions/ScfTmProgramMasterDTO"
+  ProductProgramDTOCollection: 
+    description: "Collection of product and program DTO."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/ProductProgramDTO"
+  ScfApplicationParamKeyModel:
+    description: "Scf Application Param model"
+    type: "object"
+    properties:
+      code:
+        description: "Code for the Param.This is a unique constraint"
+        type: "string"
+      description:
+        description: "Configured value for the disbursement mode which will be used in rest of application."
+        type: "string"
+  ScfApplicationParamModelKeyCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      key:
+        description: "key of the Param"
+        type: "string"
+      ScfApplicationParamKeyModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfApplicationParamKeyModel"
+  ScfApplicationParamModelCollection:
+    description: "Collection of ScfApplicationParamModelKeyCollection."
+    type: "object"
+    properties:
+      ScfApplicationParamModelKeyCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfApplicationParamModelKeyCollection"                                             

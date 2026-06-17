@@ -1,0 +1,462 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Customer Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Comment"
+    description: "API for Comment's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/comment:
+    post:
+      tags:
+        - "Comment"
+      summary: "Adds a new comment."
+      description: "Adds a new comment."
+      operationId: "createComment"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+        - name: "commentMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new comment"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentCollection"
+      responses:
+        201:
+          description: "Successfully created a new comment"
+          headers:
+            Location:
+              description: "URL of newly created comment"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "Comment"
+      summary: "Retrieves the list of existing comment."
+      description:  "Retrieves the list of existing comment."
+      operationId: "getAllComment"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+        - name: "entityRefNo"
+          in: "query"
+          description: "Collateral Id for which data needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CommentCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/comment/{id}:
+    get:
+      tags:
+        - "Comment"
+      summary: "Retrieves the Comment by ID."
+      description:  "Retrieves the Comment by ID. Add additional information here for the this endpoint."
+      operationId: "getCommentById"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Comment based on given id."
+          schema:
+            $ref: "#/definitions/CommentModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "Comment"
+      summary: "Update an existing Comment."
+      description:  "Update an existing Comment. Add additional information here for the this endpoint."
+      operationId: "updateComment"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+        - name: "id"
+          in: "path"
+          description: "id of the Comment that need to be updated"
+          required: true
+          type: "string"      
+        - name: "Comment"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing Comment"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentCollection"
+      responses:
+        200:
+          description: "Returns updated Comment"
+          schema:
+            $ref: "#/definitions/CommentCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "Comment"
+      summary: "Deletes the Comment identified by given ID."
+      description: " Deletes the Comment identified by given ID. Add additional information here for the this endpoint."
+      operationId: "deleteComment"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /web/v1/comment/final:          
+    post:
+      tags:
+        - "Comment"
+      summary: "Submit the Comment identified by given ID."
+      description:  "deletes the Comment identified by given ID."
+      operationId: "submitComment"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "commentSubmitModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new property"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentSubmitModel"  
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "Comment"
+      summary: "Retrieves the list of existing Seniority."
+      description:  "Retrieves the list of existing Seniority."
+      operationId: "getAllCommentMain"
+      parameters:
+        - name: "entityRefNo"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/CommentCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"             
+definitions:
+  CommentModel:
+    description: "Comment model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Comment"
+        type: "string"
+      applicationNO:
+        description: "Application Number of the Comment"
+        type: "string"
+      entityRefType:
+        description: "Entity Ref Type of the Comment"
+        type: "string" 
+      entityRefNo:
+        description: "Entity Ref No of the Comment"
+        type: "string"   
+      parentId:
+        description: "Parent Id of the Comment"
+        type: "string"
+      recordStat:
+        description: "Record Status of the Comment"
+        type: "string"  
+      stage:
+        description: "Satge of the Comment"
+        type: "string"
+      sourceType:
+        description: "Source Type of the Comment"
+        type: "string"
+      subject:
+        description: "Subject of the Comment"
+        type: "string"
+      isInternalToBank:
+        description: "Is Internal To Bank of the Comment"
+        type: "boolean"
+      email:
+        description: "Email of the Comment"
+        type: "string"        
+      initiatorEmail:
+        description: "Email Initiator of the Comment"
+        type: "string"
+      textObject:
+        description: "Body of the Comment"
+        type: "string"
+      versionNo:
+        description: "Version Number of the Comment"
+        type: "integer"
+        format: "int64"    
+      initiatorName:
+        description: "Initiator Name of the Comment"
+        type: "string"
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+       type: "string"      
+  CommentMasterModel:
+    description: "Comment model"
+    type: "object"
+    properties:
+      commentList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CommentModel"
+      entityRefType:
+        description: "Id of the Comment"
+        type: "string" 
+      entityRefNo:
+        description: "Id of the Comment"
+        type: "string"    
+      id:
+        description: "First name of the Comment"
+        type: "string"
+      createdBy:
+        description: "Last name of the Comment"
+        type: "string"
+      recorStat:
+        description: "First name of the Comment"
+        type: "string"   
+      createdDate:
+        description: "Age of the Comment"
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        description: "Sex of the Comment"
+        type: "string"
+      updatedDate:
+        description: "Phone of the Comment"
+        type: "string"
+        format: "date-time"
+      versionNo:
+        description: "Email of the Comment"
+        type: "integer"
+        format: "int64"
+      transactionHeader:
+        $ref: '#/definitions/TransactionHeaderModel'          
+  CommentCollection:
+    description: "Collection of Comments."
+    type: "object"
+    properties:
+      commentList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CommentModel"
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      isFromCAM:
+        type: "boolean"
+      externalCheckReq:
+        type: "boolean"
+      fieldInvestigationReq:
+        type: "boolean"
+      externalValuationReq:
+        type: "boolean"
+      internalValuationReq:
+        type: "boolean"
+      legalOpinionReq:
+        type: "boolean"
+      riskEvaluationReq:
+        type: "boolean"
+      externalCheckAgencySelected:
+        type: "boolean"
+      externalValAgencySelected:
+        type: "boolean"
+      legalFirmSelected:
+        type: "boolean"
+      isCollatCreateSelected:
+        type: "boolean"
+      collateralValue:
+        type: "number"
+      oldCollateralValue:
+        type: "number"
+      isFromCollateralEvaluation:
+        type: "boolean"
+      isFromCollateralReview:
+        type: "boolean"
+      isSubmissionAndAwaitingReq:
+        type: "boolean"
+      serviceName:
+        type: "string"
+      ownerEstimatedValue:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      customerId:
+        type: "string"
+      collateralType:
+        type: "string"
+      collateralCode:
+        type: "string"
+      collateralCurrency:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      submitFlag:
+        type: "boolean"
+      source:
+        type: "string"
+      isKYCRequired:
+        type: "boolean"
+      isCreditRatingRequired:
+        type: "boolean"
+      stageUpdateFlag:
+        type: "boolean"
+      collateralSubmissionReq:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      documentSafeKeepingReq:
+        type: "boolean"
+      updateCategory:
+        type: "string"
+  CommentSubmitModel:
+    type: "object"
+    properties:
+      entityRefNo:
+        type: "string"                  

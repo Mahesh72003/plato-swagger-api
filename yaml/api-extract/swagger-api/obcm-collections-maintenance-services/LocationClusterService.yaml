@@ -1,0 +1,189 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : LocationClusterService.yaml
+#  **
+#  ** Module     : OBCM
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This service is list of Inquiry APIs for Location cluster"
+ version: "1.0.0"
+ title: "Location Cluster Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "locationClusterService"
+   description: "This service is list of Inquiry APIs for Location cluster"
+
+
+paths:
+
+# path to fetch all valid records or by intent
+#
+#  supprorted http methods GET
+#
+# path example ../locationCluster
+
+ /service/v1/locationCluster:
+  get:
+   tags:
+    - "locationClusterService"
+   summary: "Get all valid location clusters."
+   description:  "Get all valid location clusters. This endpoints will be used to Get all valid location cluster maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+     description: "Application Id"
+   - name: includecloseandunauth
+     in: query
+     description: "Includecloseandunauth need to be set to fetch summary record, defult value is false"
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: "offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - name: locationClusterCode
+     in: query
+     required: false
+     type: string
+     description: "Location Cluster Code"
+   - name: locationClusterDescription
+     in: query
+     required: false
+     type: string
+     description: "Location Cluster Description"
+   - name: authStat
+     in: query
+     description: "authStatus need to be set to fetch summary record"
+     required: false
+     type: string
+   - name: recordStat
+     in: query
+     description: "RecordStatus need to be set to fetch summary record"
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "URL of newly created location cluster"
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmTmLocationClusterMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to fetch valid records by id or by intent( includes version no)
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../location/xxx?version=latestrecord
+#   GET       .../location/xxx?version=1
+
+ /service/v1/locationCluster/{locationClusterCode}:
+  get:
+   tags:
+    - "locationClusterService"
+   summary: "Retrieves the locationCluster by locationClusterCode."
+   description:  "Retrieves the locationCluster by locationClusterCode."
+   operationId: "getByLocationClusterCode"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "Application Id"
+    - name: "locationClusterCode"
+      in: "path"
+      description: "Location Cluster Code"
+      required: true
+      type: "string"
+    - name: "recordStat"
+      in: "query"
+      description: "Records status of the records to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the location cluster based on given location cluster code."
+     schema:
+      $ref: "#/definitions/CmTmLocationClusterMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"

@@ -1,0 +1,223 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: "2.0"
+info:
+  description: "This is a sample  server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Dashboard Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ScheduledSweepsAPI"
+    description: "API for Scheduled Sweeps Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /scheduledsweeps:
+    post:
+      tags:
+        - "ScheduledSweepsAPI"
+      summary: "Adds a new Scheduled Sweeps."
+      description: "Adds a new Scheduled Sweeps. Add additional information here for this endpoint."
+      operationId: "save"
+      parameters:
+        - name: "scheduledsweeps"
+          in: "body"
+          description: "Request Body that contains data required for creating a new scheduledsweeps"
+          required: true
+          schema:
+            $ref: "#/definitions/LmdTbScheduledSweepsDTO"
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          headers:
+            Location:
+              description: "URL of newly created Scheduled Sweeps" 
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "ScheduledSweepsAPI"
+      summary: "Retrieves the list of existing ScheduledSweeps."
+      description:  "Retrieves the list of existing ScheduledSweeps. Add additional information here for the this endpoint."
+      operationId: "getData"
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: customerId
+        in: query
+        description: fetch record according to customerId
+        required: false
+        type: string
+      - name: structureId
+        in: query
+        description: fetch record according to structureId
+        required: false
+        type: string
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/LmdTbScheduledSweepsCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+  LmdTbScheduledSweepsDTO:
+    description: "ScheduledSweeps DTO"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       accountNumber:
+        description: "accountNumber in Scheduled Sweeps"
+        type: string
+       branchCode:
+        description: "branchCode in Scheduled Sweeps"
+        type: string
+       currencyCode:
+        description: "currencyCode in Scheduled Sweeps"
+        type: string
+       customerId:
+        description: "customerId in Scheduled Sweeps"
+        type: string
+       instructionDesription:
+        description: "instructionDesription in Scheduled Sweeps"
+        type: string
+       instructionId:
+        description: "instructionId in Scheduled Sweeps"
+        type: string
+       parentAccountNumber:
+        description: "parentAccountNumber in Scheduled Sweeps"
+        type: string
+       parentBranchCode:
+        description: "parentBranchCode in Scheduled Sweeps"
+        type: string
+       parentCurrencyCode:
+        description: "parentCurrencyCode in Scheduled Sweeps"
+        type: string
+       productCode:
+        description: "productCode in Scheduled Sweeps"
+        type: string
+       productDescription:
+        description: "productDescription in Scheduled Sweeps"
+        type: string
+       structureDescription:
+        description: "structureDescription in Scheduled Sweeps"
+        type: string
+       structureId:
+        description: "structureId in Scheduled Sweeps"
+        type: string
+       nextRunDate:
+        description: "nextRunDate in Scheduled Sweeps"
+        type: string
+#        format: date
+      required:
+       - id 
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string     
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmdTbScheduledSweepsCollection:
+    description: Collection of ScheduledSweeps
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmdTbScheduledSweepsDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object   
+  LmdTbScheduledSweepsWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmdTbScheduledSweepsDTO'      
+ 

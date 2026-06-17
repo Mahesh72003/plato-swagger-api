@@ -1,0 +1,217 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform operations on supplier commodity." 
+ version: "1.0.0"
+ title: "Supplier Commodity Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: /obscfcm-core-services
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "supplierCommodityCodeService"
+   description: "APIs for commodity operations. User will be able to create and fetch the commodity code for a given supplier."
+
+paths:
+ /service/v1/scommodity:
+  post:
+   tags:
+    - "supplierCommodityCodeService"
+   summary: "Adds a new supplierCommodityCode."
+   description: "Adds a new supplier Commodity Code."
+   operationId: "createRecord"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "scommoditycode" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new scommoditycode" 
+      required: true
+      schema:
+       $ref: "#/definitions/CreateComServiceCollection"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created supplierCommodityCode" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/CreateComCode"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "supplierCommodityCodeService"
+   summary: "Get all valid supplierCommodityCode."
+   description:  "Get all valid supplierCommodityCode. This endpoints will be used to Get all valid supplierCommodityCode maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "userId"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "branchCode"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     type: "string"
+     required: true
+   - in: query
+     name: supplierId
+     required: true
+     type: string
+   - in: query
+     name: commodityCode
+     required: false
+     type: string
+   - in: query
+     name: commodityName
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     schema:
+       $ref: "#/definitions/ObscfcmTmSupplierCommodityCodeSerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ CreateComCode:
+   type: object
+   properties:
+    supplierId:
+     type: string
+     description: "Supplier id"
+    commodityCodeResponseDTO:
+     type: array
+     description: "com code"
+     items:
+      $ref: "#/definitions/commodityCodeResponseDTOColl"
+    id:
+     type: string
+     description: "Id"
+    authStatus:
+     type: string
+     description: "Authorization Status"
+    responseCode:
+     type: string
+     description: "Response Code"
+    modNo:
+     type: string
+     description: "Mod Number"
+    errorList:
+     type: array
+     description: "Error List"
+     items:
+      $ref: "#/definitions/ErrorsDto"
+ commodityCodeResponseDTOColl:
+   type: object
+   properties:
+    commodityCode:
+     type: string
+     description: "Commodity Code"
+    commodityName:
+     type: string
+     description: "Commodity Name"
+ CreateComServiceCollection: 
+     type: object
+     properties:
+      authRequire:
+       type: string
+       description: "Auth Status Y/N"
+      action:
+       type: string
+       description: "Action"
+      obscfcmTmSupplierCommodityMasterDTO:
+        $ref: 'obscfcmtmsuppliercommoditymaster.yaml#/definitions/ObscfcmTmSupplierCommodityMasterDTO'
+ ErrorsDto:
+   type: object
+   properties:
+    errorCode:
+     type: string
+     description: "Error Code"
+    errorDesc:
+     type: string
+     description: "Error Description"
+ ObscfcmTmSupplierCommodityCodeSerCollection:
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items:
+      $ref: 'obscfcmtmsuppliercommoditymaster.yaml#/definitions/ObscfcmTmSupplierCommodityMasterDTO'
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type

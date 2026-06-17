@@ -1,0 +1,150 @@
+swagger: '2.0'
+info:
+  description: This is a sample server Manual Recon Service.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Finance Reconciliation Service
+host: api-plato.us.oracle.com:8080
+basePath: /obscfcm-manual-recon-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: financeReconService
+  description: APIs for Finance Recon
+schemes:
+- https
+paths:
+  /web/v1/initiateFinPayRecon:
+    post:
+      tags:
+      - financeReconService
+      summary: create new reconcilation data
+      description: create new reconcilation data by passing all the required details.
+      operationId: createFinPayRecon
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './manualReconDef.yaml#/definitions/ReconTxnDto'
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/initiateFinanceSettlement:
+    post:
+       tags:
+       - financeReconService
+       summary: initiate finance settltment after authorization.
+       description: initiate finance settltment after authorization.
+       operationId: invoicepaySettlement
+       parameters:
+         - name: "workFlowModel" 
+           in: "body"  
+           description: "Request Body that contains data required for initiating a new txn"  
+           required: true  
+           schema: 
+             $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"  
+         - name: "appId"
+           in: "header"
+           type: "string"
+           required: true
+         - name: "userId"
+           in: "header"
+           type: "string"
+           required: true
+           description: "user id for SMS"
+         - name: "contentType"
+           in: "header"
+           type: "string"
+           required: false
+         - name: "branchCode"
+           in: "header"
+           type: "string"
+           required: true
+       responses:
+         200:
+           description: "Successful performs the operation"
+           schema:
+             $ref: "./manualReconDef.yaml#/definitions/ConductorWorkFlowModel"
+         400:
+           description: Malformed syntax.
+         401:
+           description: Request does not have sufficient credentials.
+         403:
+           description: Request is not authorized.
+         405:
+           description: Invalid input
+         500:
+           description: Internal error 
+  /web/v1/getReconFinanceDetails:
+    get:
+      tags:
+        - financeReconService
+      summary: "Get Finance Details."
+      description: "Finance details for Payment Inquiry."
+      operationId: "getReconFinanceDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "paymentRefNo"
+          in: "query"
+          type: "string"
+          description: "paymentRefNo" 
+          required: true
+      responses:
+        201: 
+          description: "Returns message of success or failure " 
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/ReconFinanceModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"                     

@@ -1,0 +1,154 @@
+swagger: '2.0'
+info:
+   description: This is a sample server cbs server.
+   version: 1.0.0
+   title: CBS Service
+host: api-plato.us.oracle.com:8080
+basePath: /cmc-obcbs-services
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: cbs
+   description: creditbureau
+schemes:
+- https
+paths:
+   /cbs/creditbureau:
+      post:
+         tags:
+         - cbs
+         summary: Adds a new cbs.
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../cbs
+         description: Adds a new cbs. Add additional information here for this endpoint.
+         operationId: fetchCreditBureauReport
+         parameters:
+          - name: appId
+            in: header
+            type: string
+            description: ""
+            required: true
+          - name: userId
+            in: header
+            type: string
+            description: ""
+            required: true
+          - name: branchCode
+            in: header
+            type: string
+            description: ""
+            required: true            
+          - name: Request Body
+            in: body
+            description: Request Body that contains data required for creating a new cbs
+            required: true
+            schema:
+               $ref: '#/definitions/CreditBureauRequestDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created cbs
+                     type: string
+               schema:
+                  properties:
+                      bureauName:
+                          $ref: '#/definitions/ResponseMap' 
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+definitions:
+   CreditBureauRequestDTO:
+      type: object
+      properties:
+          context:
+                  $ref: '#/definitions/RequestContext'
+          datadictionary:
+           type: object
+           additionalProperties:
+              $ref: '#/definitions/applicantDetails'
+          factdictionary:
+           type: object
+           additionalProperties:
+              $ref: '#/definitions/applicantFactDetails'
+          applicantDictionary:
+           type: object
+           additionalProperties:
+              $ref: '#/definitions/applicantId'     
+   RequestContext:
+      type: object
+      properties:
+         productProcessor:
+            type: string
+            description: ''
+         postingDate:
+            type: string
+            description: ''
+         requestMode:
+            type: string
+            description: ''
+         externalRefNo:
+            type: string
+            description: ''
+         returnOriginalResponse:
+            type: boolean
+            description: ''
+         returnHTMLResponse:
+            type: boolean
+            description: ''
+         skipCriteria:
+            type: boolean
+            description: ''   
+   applicantDetails:
+    type: string
+   applicantFactDetails:
+    type: string
+   applicantId:
+    type: string    
+   CreditBureauResponseDTO:
+      type: object
+      properties:
+        reportDate:
+             type: string
+             description: ''
+        reportId:
+             type: string
+             description: ''
+        productType:
+             type: string
+             description: ''
+        bureauName:
+             type: string
+             description: ''
+        datadictionary:
+           type: object
+           additionalProperties:
+              $ref: '#/definitions/applicantDetails'
+        factdictionary:
+           type: object
+           additionalProperties:
+              $ref: '#/definitions/applicantFactDetails'  
+   ResponseMap:
+      type: object
+      properties:
+        fullBureauResponse:
+             type: object
+             description: ''             
+        jsonCon:
+              $ref: '#/definitions/CreditBureauResponseDTO'
+        htmlCon:
+             type: string
+             description: ''

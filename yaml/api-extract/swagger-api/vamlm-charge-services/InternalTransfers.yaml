@@ -1,0 +1,648 @@
+#  This source is part of the Oracle Banking Virtual Account Management Software Product. 
+#  Copyright  2018 , 2021 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obvam
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server intbks server." 
+ version: "1.0.0"
+ title: "intbks Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "intbks"
+   description: "This is the Service For Internal Transfer that enables Balance transfer between 2 virtual accounts that belong to a real Account."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../intbks
+
+ /intbks:
+  post:
+   tags:
+    - "intbks"
+   summary: "Adds a new intbks."
+   description: "Adds a new intbks. Add additional information here for this endpoint."
+   operationId: "create"
+   parameters:
+    - name: "intbks" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new intbks" 
+      required: true
+      schema:
+       $ref: "#/definitions/VanTbInternalTransfersDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created intbks" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "intbks"
+   summary: "Get all valid intbks."
+   description:  "Get all valid intbks. This endpoints will be used to Get all valid intbks maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: bookingRefNo
+     required: false
+     type: string
+   - in: query
+     name: transactionStatus
+     required: false
+     type: string
+   - in: query
+     name: txnVirtualAccountNo
+     required: false
+     type: string
+   - in: query
+     name: offsetVirtualAccountNo
+     required: false
+     type: string
+   - in: query
+     name: authStatus
+     required: false
+     type: string
+   - in: query
+     name: realCustomerNo
+     required: false
+     type: string
+   - in: query
+     name: realAccountNo
+     required: false
+     type: string
+   - in: query
+     name: txnVirtualAccountCcy
+     required: false
+     type: string
+   - in: query
+     name: bookingDate
+     required: false
+     type: string
+   - in: query
+     name: valueDate
+     required: false
+     type: string
+   - in: query
+     name: originalRefNo
+     required: false
+     type: string
+   - in: query
+     name: sourceRefNo
+     required: false
+     type: string
+     
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VanTbInternalTransfersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../intbks/xxx
+#   DELETE    .../intbks/xxx
+#   GET       .../intbks/xxx
+#   GET       .../intbks/xxx?version=latestrecord
+#   GET       .../intbks/xxx?version=1
+
+ /intbks/{id}:
+  
+  get:
+   tags:
+    - "intbks"
+   summary: "Retrieves the intbks by ID."
+   description:  "Retrieves the intbks by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the intbks based on given id."
+     schema:
+      $ref: "#/definitions/VanTbInternalTransfersWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "intbks"
+   summary: "Deletes the intbks identified by given ID."
+   description:  "Deletes the intbks identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the intbks maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../intbks/xxx/approve
+ /intbks/{id}/reverse:
+  patch:
+   tags:
+    - "intbks"
+   summary: "Reverse the txn by given ID."
+   description:  "Reverse the transaction identified by given ID."
+   operationId: "reverse"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the txn Maintenece"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /intbks/{id}/approve:
+  patch:
+   tags:
+    - "intbks"
+   summary: "Authorize the intbks by given ID."
+   description:  "Authorize the intbks identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the intbks maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ 
+ /intbks/unauthorizedcount:
+  get:
+   tags:
+    - "intbks"
+   summary: "Retrieves the intbks by ID."
+   description:  "Retrieves the intbks by ID."
+   operationId: "getUnauthorizedCount"
+   responses:
+    200:
+     description: "Returns the intbks based on given id."
+     schema:
+      type: integer
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  
+
+
+ /intbks/vacountpercustomer:
+  post:
+   tags:
+    - "intbks"
+   summary: "Retrieves active VA count for the input real customer"
+   description: "Retrieves active VA count for the input real customer"
+   operationId: "getVACountperCustomer"
+   parameters:
+    - name: realCustomerNoList
+      in: body
+      description:  Real customer number for which virtual accounts applicable for closure needs to be fetched
+      required: true
+      schema:
+         $ref: "#/definitions/RealCustomerNoDatePairList"
+           
+   responses:
+     200:
+      description: "Returns authorized Account maintenance records."
+      schema:
+         $ref: "#/definitions/CustomerVirtualAccountCollection"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     500:
+       description: "Internal error"
+
+ /intbks/checkvapercustomer:
+  post:
+   tags:
+    - "intbks"
+   summary: "Check active VA count for the input real customer"
+   description: "Check active VA count for the input real customer"
+   operationId: "checkVAperCustomer"
+   parameters:
+    - name: realCustomerNoDateVaPairList
+      in: body
+      description:  Real customer number for which virtual accounts  needs to be fetched
+      required: true
+      schema:
+         $ref: "#/definitions/RealCustomerNoDateVaPairDto"
+           
+   responses:
+     200:
+      description: "Returns the check value"
+      schema:
+       type: boolean
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     500:
+       description: "Internal error"
+  
+
+definitions:
+
+ RealCustomerNoDateVaPairDto:
+    type: object
+    properties:
+      realCustomerNo:
+        type: string
+      startDate:
+        type: string
+        pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        description: "Start Date "
+      endDate:
+        type: string
+        pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        description: "End Date"
+      virtualAccount:
+        type: string
+
+
+
+ RealCustomerNoDatePairList:
+    type: object
+    properties:
+      realCustomerNoDatePair:
+       type: array
+       items:
+        $ref: "#/definitions/RealCustomerNoDatePairDto"
+   
+
+ RealCustomerNoDatePairDto:
+    type: object
+    properties:
+      realCustomerNo:
+        type: string
+      startDate:
+        type: string
+        pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        description: "Start Date "
+      endDate:
+        type: string
+        pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+        description: "End Date"
+
+
+ CustomerVirtualAccountCollection: 
+    type: object
+    properties:
+      customerVirtualAccountCountDTO:
+       type: array
+       items:
+        $ref: "#/definitions/CustomerVirtualAccountCountDTO"
+
+ CustomerVirtualAccountCountDTO:
+    type: "object"
+    properties:
+      realCustomerNo:
+        type: "string"
+        description: "Real Customer Number"
+      count:
+        type: "integer"
+        description: "Count of virtual account for the real customer number"
+ 
+
+ VanTbInternalTransfersDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/ResourceSupport'
+  - type: object
+    properties:
+     keyId:
+      type: string
+     bookingRefNo:
+      type: string
+      description: "Booking Reference Number.Auto-generated.Need not be input"
+     bookingDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Date of Booking"
+     valueDate:
+      type: string
+      pattern: "[0-9]{4}[-][0-9]{2}[-][0-9]{2}"
+      description: "Value Date"
+     txnBranch:
+      type: string
+      description: "Real Account Branch"
+     sourceCode:
+      type: string
+      description: "Source Code"
+     sourceRefNo:
+      type: string
+      description: "Source Reference Number"
+     realCustomerNo:
+      type: string
+      description: "Real Customer Number"
+     realAccountNo:
+      type: string
+      description: "Real Account Number"
+     realAccountBrn:
+      type: string
+      description: "Real Account Branch"
+     realAccountCcy:
+      type: string
+      description: "Real Account Currency"      
+     exchRate:
+      type: number
+      description: "Exchange Rate"
+     remarks:
+      type: string
+      description: "Customer narrative information received from External System or User can also enter remarks"
+      minLength: 0
+      maxLength: 4000
+     transactionStatus:
+      type: string
+      description: "Transaction Status"
+     authStatus:
+      type: string
+      description: "Auth Status"
+     drCr:
+      type: string
+      maxLength: 1
+      pattern: '[D,C]'
+      description: "Debit Credit Indicator"
+     txnVirtualAccountNo:
+      type: string
+      description: "Transaction Virtual Account Number"
+     offsetVirtualAccountNo:
+      type: string
+      description: "Offset Virtual Account Number"
+     txnVirtualAccountCcy:
+      type: string
+      description: "Transaction Virtual Account Currency"
+     offsetVirtualAccountCcy:
+      type: string
+      description: "Offset Virtual Account Currency"
+     txnAmount:
+      type: number
+      description: "Transaction Amount"
+     offsetAmount:
+      type: number
+      description: "Offset Amount"
+     txnTrnCode:
+      type: string
+      description: "Transaction Code"
+     offsetTrnCode:
+      type: string
+      description: "Offset Transaction Code"
+     originalRefNo:
+      type: string
+      description: "Original Reference Number"
+     checkerDtStamp:
+      type: string
+      format: date
+      description: "DateStamp of Authorization"
+     makerDtStamp:
+      type: string
+      format: date
+      description: "DateStamp of Making of the Transaction"
+     checkerId:
+      type: string
+      description: "User id of Authorizer"
+     makerId:
+      type: string
+      description: "User id of Maker"
+    required:
+     - offsetVirtualAccountNo
+     - offsetVirtualAccountCcy
+     - txnVirtualAccountNo
+     - txnVirtualAccountCcy
+     - drCr
+     - realAccountNo
+     - realAccountBrn
+     - txnBranch
+     - txnAmount
+     - txnTrnCode
+     - offsetTrnCode
+     - realCustomerNo
+     - valueDate
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ ResourceSupport:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VanTbInternalTransfersCollection: 
+  description: "Collection of internaltransfers."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VanTbInternalTransfersDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ VanTbInternalTransfersWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VanTbInternalTransfersDTO"

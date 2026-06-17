@@ -1,0 +1,598 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : email.notification
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server emailconfiguration server." 
+ version: "1.0.0"
+ title: "emailconfiguration Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "emailconfiguration"
+   description: "cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification.cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../emailconfiguration
+
+ /emailconfiguration:
+  post:
+   tags:
+    - "emailconfiguration"
+   summary: "Adds a new emailconfiguration."
+   description: "Adds a new emailconfiguration. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "emailconfiguration" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new emailconfiguration" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEmailConfigurationsDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created emailconfiguration" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "emailconfiguration"
+   summary: "Get all valid emailconfiguration."
+   description:  "Get all valid emailconfiguration. This endpoints will be used to Get all valid emailconfiguration maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmEmailConfigurationsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../emailconfiguration/xxx
+#   DELETE    .../emailconfiguration/xxx
+#   GET       .../emailconfiguration/xxx
+#   GET       .../emailconfiguration/xxx?version=latestrecord
+#   GET       .../emailconfiguration/xxx?version=1
+
+ /emailconfiguration/{id}:
+  put:
+   tags:
+    - "emailconfiguration"
+   summary: "Update an existing emailconfiguration."
+   description:  "Update an existing emailconfiguration."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the emailconfiguration Maintenance"
+      required: true
+      type: "string"
+    - name: "emailconfiguration"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing emailconfiguration"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEmailConfigurationsDTO"
+   responses:
+    200:
+     description: "Returns updated emailconfiguration"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "emailconfiguration"
+   summary: "Retrieves the emailconfiguration by ID."
+   description:  "Retrieves the emailconfiguration by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the emailconfiguration based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmEmailConfigurationsWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "emailconfiguration"
+   summary: "Deletes the emailconfiguration identified by given ID."
+   description:  "Deletes the emailconfiguration identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the emailconfiguration maintenance"
+      required: true
+      type: "string"
+    - name: "emailconfiguration"
+      in: "body"
+      description: Request body contain emailconfiguration and Modification no of emailconfiguration maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../emailconfiguration/xxx/approve
+
+ /emailconfiguration/{id}/approve:
+  patch:
+   tags:
+    - "emailconfiguration"
+   summary: "Authorize the emailconfiguration by given ID."
+   description:  "Authorize the emailconfiguration identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the emailconfiguration maintenance"
+      required: true
+      type: "string"
+    - name: "emailconfiguration"
+      in: "body"
+      description: Request body contain emailconfiguration and Modification no of emailconfiguration maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../emailconfiguration/xxx/close
+ /emailconfiguration/{id}/close:
+  patch:
+   tags:
+    - "emailconfiguration"
+   summary: "Close the emailconfiguration by given ID."
+   description:  "Close the emailconfiguration identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the emailconfiguration maintenance"
+      required: true
+      type: "string"
+    - name: "emailconfiguration"
+      in: "body"
+      description: Request body contain emailconfiguration and Modification no of emailconfiguration maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../emailconfiguration/xxx/reopen
+
+ /emailconfiguration/{id}/reopen:
+  patch:
+   tags:
+    - "emailconfiguration"
+   summary: "reopen the emailconfiguration by given ID."
+   description:  "reopen the emailconfiguration identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the emailconfiguration maintenance"
+      required: true
+      type: "string"
+    - name: "emailconfiguration"
+      in: "body"
+      description: Request body contain emailconfiguration and Modification no of emailconfiguration maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../emailconfiguration/xxx/unauthorized
+
+ /emailconfiguration/{id}/unauthorized:
+  get:
+   tags:
+    - "emailconfiguration"
+   summary: "Retrives the emailconfiguration by given ID."
+   description:  "Retrives the emailconfiguration identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the emailconfiguration based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmEmailConfigurationsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../emailconfiguration/xxx/history
+
+ /emailconfiguration/{id}/history:
+  get:
+   tags:
+    - "emailconfiguration"
+   summary: "Retrives the emailconfiguration by given ID."
+   description:  "Retrives the emailconfiguration by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the emailconfiguration based on given id."
+     schema:
+       $ref: "#/definitions/CmcTmEmailConfigurationsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ /emailconfiguration/active:     
+  get:
+   tags:
+    - "emailconfiguration"
+   summary: "Get all valid emailconfiguration."
+   description:  "Get all valid emailconfiguration. This endpoints will be used to Get all valid emailconfiguration maintenance records."
+   operationId: "getActiveEmailConfigurationDetails"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmcTmEmailConfigurationsWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ CmcTmEmailConfigurationsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     createdBy:
+      type: string
+      description: ""
+     createdDate:
+      type: string
+      format: date
+      description: ""
+     defaultReplyEmail:
+      type: string
+      description: ""
+     defautReplyUsername:
+      type: string
+      description: ""
+     emailAccessProtocol:
+      type: string
+      description: ""
+     incomingEmailId:
+      type: string
+      description: ""
+     incomingEmailPassword:
+      type: string
+      description: ""
+     incomingEmailPort:
+      type: string
+      description: ""
+     incomingEmailServer:
+      type: string
+      description: ""
+     incomingEmailUsername:
+      type: string
+      description: ""
+     outgoingEmailId:
+      type: string
+      description: ""
+     outgoingEmailPassword:
+      type: string
+      description: ""
+     outgoingEmailPort:
+      type: string
+      description: ""
+     outgoingEmailServer:
+      type: string
+      description: ""
+     outgoingEmailServerSecurity:
+      type: string
+      description: ""
+     outgoingEmailUsername:
+      type: string
+      description: ""
+     updatedBy:
+      type: string
+      description: ""
+     updatedDate:
+      type: string
+      format: date
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmcTmEmailConfigurationsCollection: 
+  description: "Collection of emailconfigurations."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmEmailConfigurationsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CmcTmEmailConfigurationsWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmEmailConfigurationsDTO"

@@ -1,0 +1,740 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cam
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server collateralcategory server." 
+ version: "1.0.0"
+ title: "collateralcategory Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "collateralcategory"
+   description: "Service to fetch the Collateral Category information from Maintenance.This service will pull the Collateral categories information from the maintenance table, as part of August Patchset release for CFPM."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#
+# path example ../collateralcategory
+
+ /collateralcategory:
+  post:
+   tags:
+    - "collateralcategory"
+   summary: "Adds a new collateralcategory."
+   description: "Adds a new collateralcategory. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "collateralcategory" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new collateralcategory" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created collateralcategory" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "collateralcategory"
+   summary: "Get all valid collateralcategory."
+   description:  "Get all valid collateralcategory. This endpoints will be used to Get all valid collateralcategory maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../collateralcategory/xxx
+#   DELETE    .../collateralcategory/xxx
+#   GET       .../collateralcategory/xxx
+#   GET       .../collateralcategory/xxx?version=latestrecord
+#   GET       .../collateralcategory/xxx?version=1
+
+ /collateralcategory/{id}:
+  put:
+   tags:
+    - "collateralcategory"
+   summary: "Update an existing collateralcategory."
+   description:  "Update an existing collateralcategory."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the collateralcategory Maintenance"
+      required: true
+      type: "string"
+    - name: "collateralcategory"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing collateralcategory"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryDTO"
+   responses:
+    200:
+     description: "Returns updated collateralcategory"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "collateralcategory"
+   summary: "Retrieves the collateralcategory by ID."
+   description:  "Retrieves the collateralcategory by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the collateralcategory based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmCollateralCategoryWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "collateralcategory"
+   summary: "Deletes the collateralcategory identified by given ID."
+   description:  "Deletes the collateralcategory identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the collateralcategory maintenance"
+      required: true
+      type: "string"
+    - name: "collateralcategory"
+      in: "body"
+      description: Request body contain collateralcategory and Modification no of collateralcategory maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../collateralcategory/xxx/approve
+
+ /collateralcategory/{id}/approve:
+  patch:
+   tags:
+    - "collateralcategory"
+   summary: "Authorize the collateralcategory by given ID."
+   description:  "Authorize the collateralcategory identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the collateralcategory maintenance"
+      required: true
+      type: "string"
+    - name: "collateralcategory"
+      in: "body"
+      description: Request body contain collateralcategory and Modification no of collateralcategory maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../collateralcategory/xxx/close
+ /collateralcategory/{id}/close:
+  patch:
+   tags:
+    - "collateralcategory"
+   summary: "Close the collateralcategory by given ID."
+   description:  "Close the collateralcategory identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the collateralcategory maintenance"
+      required: true
+      type: "string"
+    - name: "collateralcategory"
+      in: "body"
+      description: Request body contain collateralcategory and Modification no of collateralcategory maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../collateralcategory/xxx/reopen
+
+ /collateralcategory/{id}/reopen:
+  patch:
+   tags:
+    - "collateralcategory"
+   summary: "reopen the collateralcategory by given ID."
+   description:  "reopen the collateralcategory identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the collateralcategory maintenance"
+      required: true
+      type: "string"
+    - name: "collateralcategory"
+      in: "body"
+      description: Request body contain collateralcategory and Modification no of collateralcategory maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../collateralcategory/xxx/unauthorized
+
+ /collateralcategory/{id}/unauthorized:
+  get:
+   tags:
+    - "collateralcategory"
+   summary: "Retrives the collateralcategory by given ID."
+   description:  "Retrives the collateralcategory identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the collateralcategory based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../collateralcategory/xxx/history
+
+ /collateralcategory/{id}/history:
+  get:
+   tags:
+    - "collateralcategory"
+   summary: "Retrives the collateralcategory by given ID."
+   description:  "Retrives the collateralcategory by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the collateralcategory based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /collateralcategory/categoryCode/{collateralCategoryCode}:
+  get:
+   tags:
+    - "collateralcategory"
+   summary: "Retrives the collateralcategory by given collateralCategoryCode."
+   description:  "Retrives the collateralcategory by collateralCategoryCode."
+   operationId: "getCollateralCategoryMaintenanceByCategoryCode"
+   parameters:
+    - name: "collateralCategoryCode"
+      in: "path"
+      description: "collateralCategoryCode of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the collateralcategory based on given collateralCategoryCode."
+     schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /collateralcategory/collateralType/{collateralType}:
+  get:
+   tags:
+    - "collateralcategory"
+   summary: "Retrives the collateralcategory by given collateralType."
+   description:  "Retrives the collateralcategory by collateralType."
+   operationId: "getCollateralCategoryMaintenanceByCollateralType"
+   parameters:
+    - name: "collateralType"
+      in: "path"
+      description: "collateralType of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the collateralcategory based on given collateralType."
+     schema:
+       $ref: "#/definitions/CfpmTmCollateralCategoryCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CfpmTmCollateralCategoryDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     assetType:
+      type: string
+      description: ""
+     categoryCode:
+      type: string
+      description: ""
+     categoryDescription:
+      type: string
+      description: ""
+     chargeRegnReqd:
+      type: string
+      description: ""
+     chargeRenwFrqncy:
+      type: string
+      description: ""
+     collateralType:
+      type: string
+      description: ""
+     collExposureType:
+      type: string
+      description: ""
+     draftgenRequired:
+      type: string
+      description: ""
+     extCheckRequired:
+      type: string
+      description: ""
+     fieldInvestigationReqd:
+      type: string
+      description: ""
+     insuranceRequired:
+      type: string
+      description: ""
+     legalOpinionReqd:
+      type: string
+      description: ""
+     rateOfDepreciation:
+      type: number
+      description: ""
+     registrationRequired:
+      type: string
+      description: ""
+     remarks:
+      type: string
+      description: ""
+     revaluationFrequency:
+      type: string
+      description: ""
+     revaluationMethod:
+      type: string
+      description: ""
+     revaluationType:
+      type: string
+      description: ""
+     riskEvalReqd:
+      type: string
+      description: ""
+     covenatsReqd:
+      type: string
+      description: ""
+     documentsReqd:
+      type: string
+      description: ""
+     safekeepingRequired:
+      type: string
+      description: ""
+     valuationRequired:
+      type: string
+      description: ""
+     externalPricingreq:
+      type: string
+      description: ""
+     bankHaircut:
+      type: number
+      description: ""
+     categoryHaircut:
+      type: number
+      description: ""
+     componentsList:
+      type: array
+      items:
+        $ref: "#/definitions/ComponentsListDto"
+     cfpmTmDocumentDefault:
+      type: array
+      items:
+       $ref: "#/definitions/CfpmTmDocumentDefaultDto"
+     cfpmTmCovenantDefault:
+      type: array
+      items:
+       $ref: "#/definitions/CfpmTmCovenantDefaultDto"
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmCollateralCategoryCollection: 
+  description: "Collection of collateralcategory."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmCollateralCategoryDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmCollateralCategoryWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmCollateralCategoryDTO"
+ ComponentsListDto:
+  type: object
+  properties:
+   label:
+    type: string
+   componentName:
+    type: string
+   isAParallelComponent:
+    type: string
+ CfpmTmDocumentDefaultDto:
+  type: object
+  properties:
+     parentId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     documentCode:
+      type: string
+      description: ""
+     documentType:
+      type: string
+      description: ""
+     isMandatory:
+      type: boolean
+      description: ""
+ CfpmTmCovenantDefaultDto:
+  type: object
+  properties:
+     parentId:
+      type: string
+      description: ""
+     covenantDescription:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     covenantCode:
+      type: string
+      description: ""
+     covenantClassificationType:
+      type: string
+      description: ""
+     covenantLinkageType:
+      type: string
+      description: ""
+     covenantFormula:
+      type: string
+      description: ""
+     covenantName:
+      type: string
+      description: ""
+     covenantTargetCondition:
+      type: string
+      description: ""
+     covenantTargetFromValue:
+      type: string
+      description: ""
+     covenantTargetToValue:
+      type: string
+      description: ""
+     covenantType:
+      type: string
+      description: ""
+     covenantTargetType:
+      type: string
+      description: ""
+     noticeDays:
+      type: number
+      description: "" 
+     trackingFrequency:
+      type: string
+      description: ""
+     trackingCustomDays:
+      type: number
+      description: "" 
+     deferredDays:
+      type: integer
+      description: ""
+     covenantSubType:
+      type: string
+      description: ""

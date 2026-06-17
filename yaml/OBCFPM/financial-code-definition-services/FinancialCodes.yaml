@@ -1,0 +1,700 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cam
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server financialcodes server." 
+ version: "1.0.0"
+ title: "financialcodes Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "financialcodes"
+   description: "A micro service that will maintain financial code details in a separate table. This service will also provide APIs for GET, PUT, DELETE, GET by id, Authorize the given record, Reopen and Close APIs for the maintenance records."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../financialcodes
+
+ /financialcodes:
+  post:
+   tags:
+    - "financialcodes"
+   summary: "Adds a new financialcodes."
+   description: "Adds a new financialcodes. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "financialcodes" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new financialcodes" 
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmFinancialCodesDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created financialcodes" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "financialcodes"
+   summary: "Get all valid financialcodes."
+   description:  "Get all valid financialcodes. This endpoints will be used to Get all valid financialcodes maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: financialCode
+     required: false
+     type: string
+   - in: query
+     name: finCategoryCode
+     required: false
+     type: string
+   - in: query
+     name: inputMode
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmFinancialCodesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../financialcodes/xxx
+#   DELETE    .../financialcodes/xxx
+#   GET       .../financialcodes/xxx
+#   GET       .../financialcodes/xxx?version=latestrecord
+#   GET       .../financialcodes/xxx?version=1
+
+ /financialcodes/{id}:
+  put:
+   tags:
+    - "financialcodes"
+   summary: "Update an existing financialcodes."
+   description:  "Update an existing financialcodes."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the financialcodes Maintenance"
+      required: true
+      type: "string"
+    - name: "financialcodes"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing financialcodes"
+      required: true
+      schema:
+       $ref: "#/definitions/CfpmTmFinancialCodesDTO"
+   responses:
+    200:
+     description: "Returns updated financialcodes"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "financialcodes"
+   summary: "Retrieves the financialcodes by ID."
+   description:  "Retrieves the financialcodes by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financialcodes based on given id."
+     schema:
+      $ref: "#/definitions/CfpmTmFinancialCodesWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "financialcodes"
+   summary: "Deletes the financialcodes identified by given ID."
+   description:  "Deletes the financialcodes identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialcodes maintenance"
+      required: true
+      type: "string"
+    - name: "financialcodes"
+      in: "body"
+      description: Request body contain financialcodes and Modification no of financialcodes maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financialcodes/xxx/approve
+
+ /financialcodes/{id}/approve:
+  patch:
+   tags:
+    - "financialcodes"
+   summary: "Authorize the financialcodes by given ID."
+   description:  "Authorize the financialcodes identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialcodes maintenance"
+      required: true
+      type: "string"
+    - name: "financialcodes"
+      in: "body"
+      description: Request body contain financialcodes and Modification no of financialcodes maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financialcodes/xxx/close
+ /financialcodes/{id}/close:
+  patch:
+   tags:
+    - "financialcodes"
+   summary: "Close the financialcodes by given ID."
+   description:  "Close the financialcodes identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialcodes maintenance"
+      required: true
+      type: "string"
+    - name: "financialcodes"
+      in: "body"
+      description: Request body contain financialcodes and Modification no of financialcodes maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../financialcodes/xxx/reopen
+
+ /financialcodes/{id}/reopen:
+  patch:
+   tags:
+    - "financialcodes"
+   summary: "reopen the financialcodes by given ID."
+   description:  "reopen the financialcodes identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the financialcodes maintenance"
+      required: true
+      type: "string"
+    - name: "financialcodes"
+      in: "body"
+      description: Request body contain financialcodes and Modification no of financialcodes maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../financialcodes/xxx/unauthorized
+
+ /financialcodes/{id}/unauthorized:
+  get:
+   tags:
+    - "financialcodes"
+   summary: "Retrives the financialcodes by given ID."
+   description:  "Retrives the financialcodes identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financialcodes based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmFinancialCodesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../financialcodes/xxx/history
+
+ /financialcodes/{id}/history:
+  get:
+   tags:
+    - "financialcodes"
+   summary: "Retrives the financialcodes by given ID."
+   description:  "Retrives the financialcodes by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the financialcodes based on given id."
+     schema:
+       $ref: "#/definitions/CfpmTmFinancialCodesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ 
+ /financialcodes/collection:
+  post:
+   tags:
+    - "financialcodes"
+   summary: "Adds a new financialcodes."
+   description: "Adds a new financialcodes. Add additional information here for this endpoint."
+   operationId: "getRequestTypeByFinCodes"
+   parameters:
+    - name: "financialcodes" 
+      in: "body" 
+      description: "Request Body that contains data required for getting financial codes" 
+      required: false
+      schema:
+       $ref: "#/definitions/CfpmFinancialCodesCollection"
+    - name: "isFinCodefrmMntncreq"
+      in: "query"
+      description: "flag to check whether to reieve the financial code from Maintenance service"
+      default: "N"
+      type: "string"   
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created financialcodes" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/CfpmTmFinancialCodesCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ 
+ /financialcodes/doctypescategory/{ids}:
+  get:
+   tags:
+    - "financialcodes"
+   summary: "Retrives the financialcodes by given Document Category Type."
+   description:  "Retrives the financialcodes by given Document Category Type."
+   operationId: "getFincaialCodesByDocType"
+   parameters:
+    - name: "ids"
+      in: "path"
+      description: "Id of Document Category Type to be fetched"
+      required: true
+      type: array        
+   responses:
+    200:
+     description: "Returns the financialcodes based on given Document Category Type."
+     schema:
+       $ref: "#/definitions/ResponseModel"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error" 
+
+definitions:
+ CfpmTmFinancialCodesDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     financialCode:
+      type: string
+      description: ""
+     financialDesc:
+      type: string
+      description: ""
+     finCategoryCode:
+      type: string
+      description: ""
+     formula:
+      type: string
+      description: ""
+     inputMode:
+      type: string
+      description: ""
+     CfpmTmFinRatioRangeDetDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CfpmTmFinRatioRangeDetDTO'
+     valueType:
+      type: string
+     docCategoryType:
+      type: string
+  
+ CfpmTmFinRatioRangeDetDTO:
+  type: object
+  properties:
+     cfpmTmFinancialCodesId:
+      type: string
+      description: ""
+     financialCode:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     ratioRangeMaxValue:
+      type: number
+      description: ""
+     ratioRangeMinValue:
+      type: number
+      description: ""
+     score:
+      type: number
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CfpmTmFinancialCodesCollection: 
+  description: "Collection of financialcodes."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CfpmTmFinancialCodesDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CfpmTmFinancialCodesWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CfpmTmFinancialCodesDTO"
+ CfpmFinancialCodesCollection:
+  type: object
+  properties:
+   functionalCodesLst:
+    type: array
+    items:
+     type: string
+ TypesMasterModelCollection:
+  description: "Collection of Facility Details Model"
+  properties:
+   typesMasterModelList:
+     type: "array"
+     items:
+      $ref: "#/definitions/TypesMasterModel"
+ TypesMasterModel:
+  allOf:
+   - $ref: '#/definitions/RepresentationModel'
+   - type: "object"
+     description: "Types Master Model"
+     properties:
+      recordId:
+       type: "string"
+      keyId:
+       type: "string"
+      versionNo:
+       type: "integer"
+       format: "int64"
+      recordStat:
+       type: "string"
+      createdBy:
+       type: "string"
+      createdDate:
+       type: "string"
+       format: "date-time"
+      updatedBy:
+       type: "string"
+      updatedDate:
+       type: "string"
+       format: "date-time"
+      keyValuePairList:
+       type: "array"
+       items: { $ref: '#/definitions/TypesModel' }
+ TypesModel:
+    type: "object"
+    properties:
+      id:
+        type: string
+      key:
+        type: string
+        description: ""
+      value:
+        type: string
+        description: ""
+      parentId:
+        type: string
+        description: ""
+ RepresentationModel:
+    allOf:
+      - type: object
+        discriminator: resource_type
+        

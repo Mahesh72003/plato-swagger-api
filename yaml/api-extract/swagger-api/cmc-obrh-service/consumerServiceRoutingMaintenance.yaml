@@ -1,0 +1,353 @@
+swagger: '2.0'
+info:
+   description: Maintenance service for oracle banking integration hub.
+   version: 1.0.0
+   title: OBIH Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: ServiceRouting
+   description: This service will be used for registering the serviceConsumerService with service and route information in
+      order to integrate the 3rd party serviceConsumerServices with OBDX. Collectively all services will be called as Integration
+      Hub
+schemes:
+- https
+paths:
+   /serviceconsumer/{id}/service/{serviceId}/routing:
+      post:
+         tags:
+         - ServiceRouting
+         summary: Adds a new serviceConsumerService.
+         description: Adds a new serviceConsumerService. Add additional information here for this endpoint.
+         operationId: createRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceConsumerService
+            in: body
+            description: Request Body that contains data required for creating a new serviceConsumerService
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceRoutingDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceConsumerService
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceRouting
+         summary: Get all valid serviceConsumerService.
+         description: Get all valid serviceConsumerService. This endpoints will be used to Get all valid serviceConsumerService
+            maintenance records.
+         operationId: getAll
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: offset
+            in: query
+            description: offset is starting no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: limit
+            in: query
+            description: limit is maximum no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: filterBy
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterValue
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterExactMatch
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: boolean
+         responses:
+            201:
+               description: Returns message of succes or failure
+               headers:
+                  Location:
+                     description: ''
+                     type: string
+               schema:
+                  $ref: '#/definitions/ServiceRoutingCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/service/{serviceId}/routing/{routingId}:
+      put:
+         tags:
+         - ServiceRouting
+         summary: Update an existing serviceConsumerService.
+         description: Update an existing serviceConsumerService.
+         operationId: modifyRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: routingId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceConsumerService
+            in: body
+            description: Request Body that contains data required for updating an existing serviceConsumerService
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceRoutingDTO'
+         responses:
+            200:
+               description: Returns updated serviceConsumerService
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceRouting
+         summary: Retrieves the serviceConsumerService by ID.
+         description: Retrieves the serviceConsumerService by ID.
+         operationId: getById
+         parameters:
+         -  name: id
+            in: path
+            description: Id of the user that needs to be fetched
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: routingId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns the serviceConsumerService based on given id.
+               schema:
+                  $ref: '#/definitions/ServiceRoutingWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+      delete:
+         tags:
+         - ServiceRouting
+         summary: Deletes the serviceConsumerService identified by given ID.
+         description: Deletes the serviceConsumerService identified by given ID. Add additional information here for the this
+            endpoint.
+         operationId: deleteRecord
+         parameters:
+         -  name: id
+            in: path
+            description: Key of the serviceConsumerService maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: routingId
+            in: path
+            description: key of the serviceConsumerService Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Successful operation.
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+definitions:
+   ServiceRoutingDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            consumerAppServiceId:
+               type: string
+               description: ''
+               maxLength: 36
+            name:
+               type: string
+               description: ''
+               maxLength: 255
+            siblingEvaluationorder:
+               type: integer
+               description: ''
+               maxLength: 6
+            ruleExpression:
+               type: string
+               description: ''
+               maxLength: 1000
+            state:
+               type: string
+               description: ''
+               maxLength: 15
+            autoShutdown:
+               type: string
+               description: ''
+               maxLength: 1
+            ServiceRoutingChainLinkCollection:
+               type: array
+               items:
+                  $ref: '#/definitions/ServiceRoutingChainLinkDTO'
+            isFactoryShipped:
+               type: string
+               description: ''
+               maxLength: 1
+         required:
+         - consumerAppServiceId     
+         - name  
+         - siblingEvaluationorder 
+         - state       
+         - autoShutdown     
+   ServiceRoutingChainLinkDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            serviceRoutingId:
+               type: string
+               description: ''
+               maxLength: 36
+            siblingOrder:
+               type: integer
+               description: ''
+               maxLength: 6
+            headers:
+               type: string
+            serviceProviderImplId:
+               type: string
+               description: ''
+               maxLength: 36
+            transformationId:
+               type: string
+               description: ''
+               maxLength: 36
+            ServiceProviderImpl:
+               $ref: '#/definitions/ServiceProviderImplDTO'
+            ServiceTransformation:
+               $ref: '#/definitions/ServiceTransformationDTO'
+         required:      
+         - serviceProviderImplId       
+         - transformationId       
+   ServiceRoutingCollection:
+      description: Collection of serviceConsumerService.
+      type: object
+      properties:
+         data:
+            type: array
+            items:
+               $ref: '#/definitions/ServiceRoutingDTO'
+         paging:
+            $ref: '#/definitions/PagingDto'
+         messages:
+            $ref: '#/definitions/ResponseDto'            
+   ServiceRoutingWrapperDTO:
+      type: object
+      properties:
+         data:
+            $ref: '#/definitions/ServiceRoutingDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'            
+   GenericDto:
+      allOf:
+      -  type: object
+         discriminator: resource_type

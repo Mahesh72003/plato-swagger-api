@@ -1,0 +1,1501 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Cash Collection Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CashSlip"
+    description: "APIs CashSlip related Operation"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/cashslip:
+    post:
+      tags:
+        - "CashSlip"
+      summary: "Adds a new depositSlip"
+      description: "Adds a new DepositSlip with all instruments. Add additional information here for this endpoint."
+      operationId: "addCashSlip"
+      parameters:
+        - name: "DepositSlip"
+          in: "body"
+          description: "Request Body that contains data required for creating a new DepositSlip"
+          required: true
+          schema:
+            $ref: "#/definitions/CashSlipModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Successfully created the loan details"
+          schema:
+             $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the CashSlip by referenceNum."
+      description:  "Retrieves the DepositSlip by referenceNum. Add additional information here for the this endpoint."
+      operationId: "getAllCashSlips"
+      parameters:
+        - name: "referenceNum"
+          in: "query"
+          description: "Ref of the batch that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "depositSlipRefNo"
+          in: "query"
+          description: "Ref of the depositSLip that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "depositSlipNo"
+          in: "query"
+          description: "User defined DepositSlip no that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "Limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "Offset of the limit"
+          type: "integer"
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip by referenceNum."
+      description:  "Retrieves the DepositSlip by referenceNum. Add additional information here for the this endpoint."
+      operationId: "deleteCashSlips"
+      parameters:
+        - name: "referenceNum"
+          in: "query"
+          description: "Ref of the batch that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "depositSlipRefNo"
+          in: "query"
+          description: "Ref of the depositSLip that needs to be deleted"
+          required: false
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/cashslip/stageUpdate:
+    post:
+      tags:
+        - "CashSlip"
+      summary: "Updates human task in conductor server"
+      description: "Updates human task in conductor server"
+      operationId: "updateStage"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "CashDepositEntryTransactionModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Denomination"
+          required: true
+          schema:
+            $ref: "#/definitions/CashDepositEntryTransactionModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created Denomination details"
+          headers:
+            Location:
+              description: "URL of newly created Denomination details"
+              type: "string"
+          schema:
+              type: "object"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"   
+  /web/v1/cashslip/authorize:
+    post:
+      tags:
+        - "CashSlip"
+      summary: "Update an existing Denomination."
+      description:  "Update an existing Denomination Add additional information here for the this endpoint."
+      operationId: "authorizeTransaction"
+      parameters:
+        - name: "conductorWorkFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for authorizing a instrument"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false      
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+          
+  /web/v1/cashslip/reject:
+    post:
+      tags:
+        - "CashSlip"
+      summary: "Reject Denomination management transaction"
+      description: "Reject Denomination management transaction"
+      operationId: "rejectTransaction"
+      parameters:
+        - name: "rejectRequestModel"
+          in: "body"
+          description: "Request Body that contains data required for purging the transaction"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "app id for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"        
+  /web/v1/cashDepositInquiry:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip ."
+      description:  "Retrieves the DepositSlip. Add additional information here for the this endpoint."
+      operationId: "cashDepositInquiry"
+      parameters:
+        - name: "referenceNum"
+          in: "query"
+          description: "Ref of the batch that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "depositSlipRefNo"
+          in: "query"
+          description: "Ref of the depositSLip that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "depositSlipNo"
+          in: "query"
+          description: "User defined DepositSlip no that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "depositBranch"
+          in: "query"
+          description: "Ref of the depositBranch that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "corporate"
+          in: "query"
+          description: "Ref of the corporate that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "accountNumber"
+          in: "query"
+          description: "Ref of the accountNumber that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "extRefNumber"
+          in: "query"
+          description: "Ref of the extRefNumber that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "depositLocation"
+          in: "query"
+          description: "Ref of the depositLocation that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "divisionCode"
+          in: "query"
+          description: "Ref of the divisionCode that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "depositChannel"
+          in: "query"
+          description: "Ref of the depositChannel that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "courier"
+          in: "query"
+          description: "Ref of the courier that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "processingStatus"
+          in: "query"
+          description: "Ref of the processingStatus that needs to be fetched"
+          required: false
+          type: "array"
+        - name: "creditStatus"
+          in: "query"
+          description: "Ref of the creaditStatus that needs to be fetched"
+          required: false
+          type: "array"
+        - name: "amtRefBasis"
+          in: "query"
+          description: "Ref of the amtRefBasis that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "currency"
+          in: "query"
+          description: "Ref of the currency that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "amountFrom"
+          in: "query"
+          description: "Ref of the amountFrom that needs to be fetched"
+          required: false
+          type: "number"
+        - name: "amountTo"
+          in: "query"
+          description: "Ref of the amountTo that needs to be fetched"
+          required: false
+          type: "number"
+        - name: "dateRefBasis"
+          in: "query"
+          description: "Ref of the dateRefBasis that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "dateFrom"
+          in: "query"
+          description: "Ref of the dateFrom that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "dateTo"
+          in: "query"
+          description: "Ref of the dateTo that needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/CashDepositInquiryResponseWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/cashslip/{depositSlipRefNo}:
+    put:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip by referenceNum."
+      description:  "Retrieves the DepositSlip by referenceNum. Add additional information here for the this endpoint."
+      operationId: "updateCashSlip"
+      parameters:
+        - name: "DepositSlip"
+          in: "body"
+          description: "Request Body that contains data required for updating a DepositSlip"
+          required: true
+          schema:
+            $ref: "#/definitions/CashSlipModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "depositSlipRefNo"
+          in: "query"
+          description: "Ref of the depositSLip that needs to be deleted"
+          required: false
+          type: "string"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"  
+  /web/v1/cashslip/transaction/{referenceNum}:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip by referenceNum."
+      description:  "Retrieves the DepositSlip by referenceNum. Add additional information here for the this endpoint."
+      operationId: "getCashSlipByRefNo"
+      parameters:
+        - name: "referenceNum"
+          in: "path"
+          description: "Ref of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/cashslip/getDepositSummary:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip by depositSlipNo."
+      description:  "Retrieves the DepositSlip by depositSlipNo. Add additional information here for the this endpoint."
+      operationId: "getDepositSummary"
+      parameters:
+        - name: "depositSlipNo"
+          in: "path"
+          description: "Ref of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "referenceNum"
+          in: "path"
+          description: "Ref of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/cashslip/validation/{referenceNum}:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves validation details"
+      description:  "Retrieves validation details. Add additional information here for the this endpoint."
+      operationId: "getNoAndAmountOfAllSlip"
+      parameters:
+        - name: "referenceNum"
+          in: "path"
+          description: "Ref of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/cashslip/validation/{depositSlipNo}/{corporateId}:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves validation details"
+      description:  "Retrieves validation details. Add additional information here for the this endpoint."
+      operationId: "getCountForNoandIdAllSlip"
+      parameters:
+        - name: "depositSlipNo"
+          in: "path"
+          description: "depositSlipNo of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "corporateId"
+          in: "path"
+          description: "corporateId of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"   
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"              
+  /web/v1/cashslip/details/{referenceNum}/{depositSlipRefNo}:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip by referenceNum."
+      description:  "Retrieves the DepositSlip by referenceNum. Add additional information here for the this endpoint."
+      operationId: "getCashSlipAllDetails"
+      parameters:
+        - name: "referenceNum"
+          in: "path"
+          description: "Ref of the batch that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "depositSlipRefNo"
+          in: "path"
+          description: "Ref of the depositSLip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /web/v1/cashslip/getAllCashSlipsbyExtRefNo:
+    get:
+      tags:
+        - "CashSlip"
+      summary: "Retrieves the DepositSlip by ExternalreferenceNum, Channel and Corporate"
+      description:  "Retrieves All DepositSlip by ExternalreferenceNum, Channel and Corporate. Add additional information here for the this endpoint."
+      operationId: "getAllCashSlipsbyExtRefNo"
+      parameters:
+        - name: "externalReferenceNum"
+          in: "query"
+          description: "ExternalReferenceNum of the batch that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "channel"
+          in: "query"
+          description: "Channel that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "corporate"
+          in: "query"
+          description: "Corporate that needs to be fetched"
+          required: false
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "AppId for SMS"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "TenantId for SMS"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "BranchCode for SMS"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "authToken for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "ContentType for SMS"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "exactMatch"
+          in: "query"
+          description: "ExactMatch for the records"
+          required: false
+          type: "boolean"  
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"            
+definitions:
+  CashDepositInquiryResponseWrapper:
+    description: "CashDeposit response model"
+    type: "object"
+    properties:
+      status:
+        description: "Status for CashDeposit"
+        type: string
+      cashDepositInquiryList:
+        type: array
+        items:
+          $ref: "#/definitions/CashDepositInquiryDTO"
+      errorCodes:
+        type: array
+        items:
+          $ref: "#/definitions/ErrorModel"
+      paging:
+          $ref: "#/definitions/PagingDto"
+  CashDepositInquiryDTO:
+    description: "CashDeposit Inquiry DTO model"
+    type: object
+    properties:
+     processingDate:
+        description: "processingDate"
+        type: string
+     depositSlipNo:
+        description: "depositSlipNo"
+        type: string
+     referenceNumber:
+        description: "referenceNumber"
+        type: string
+     corporateId:
+        description: "corporateId"
+        type: string
+     depositSlipAmt:
+        description: "depositSlipAmt"
+        type: number
+     accountNumber:
+        description: "accountNumber"
+        type: string
+     courier:
+        description: "courier"
+        type: string
+     depositLocation:
+        description: "depositLocation"
+        type: string
+     depositBranch:
+        description: "depositBranch"
+        type: string
+     pickupLocationCode:
+        description: "pickupLocationCode"
+        type: string
+     pickupPointCode:
+        description: "pickupPointCode"
+        type: string
+     divisionCode:
+        description: "divisionCode"
+        type: string
+     depositSlipDate:
+        description: "depositSlipDate"
+        type: string
+     exchangeRate:
+        description: "exchangeRate"
+        type: number
+     amountAccy:
+        description: "amountAccy"
+        type: number
+     totalDenCount:
+        description: "totalDenCount"
+        type: number
+     processingStatus:
+        description: "processingStatus"
+        type: string
+     creditStatus:
+        description: "creditStatus"
+        type: string
+     extRefNum:
+        description: "extRefNum"
+        type: string
+     requestDate:
+        description: "requestDate"
+        type: string
+     creditDate:
+        description: "creditDate"
+        type: string
+     ccy:
+        description: "ccy"
+        type: string
+  ErrorModel:
+    description: "Error model"
+    type: "object"
+    properties:
+      ErrorCode:
+        description: "Error Code"
+        type: string
+      ErrorDescrtiption:
+        description: "Error Description"
+        type: string
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer      
+  CashSlipModel:
+    description: "CashSlip model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the DepositSlip"
+        type: "string"
+      seqNo:
+        description: "Seq No of the DepositSlip"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference Num of the DepositSlip"
+        type: "string"
+      depositSlipRefNo:
+        description: "deposit Slip Ref No of the slip"
+        type: "string"
+      depositSlipNo:
+        description: "no of the DepositSlipNo"
+        type: "string"
+      corporateId:
+        description: "Corporate Id of the DepositSlip"
+        type: "string"
+      corporateName:
+        description: "Corporate Name of the DepositSlip"
+        type: "string"        
+      creditAccountNo:
+        description: "creditAccountNo of the DepositSlip"
+        type: "string"
+      depositSlipDate:
+        type: string
+        format: date
+        description: "Deposit Slip Date"
+      depositSlipDateString:
+        description: "DepositSlip Date String"
+        type: string  
+      depositSlipAmt:
+        description: "Deposit Slip Amount"
+        type: number
+      depositSlipAmtCcy:
+        description: "Deposit Slip Amount Currency"
+        type: string
+      depositSlipCount:
+        description: "Deposit Slip Count"
+        type: "integer"
+        format: "int64"
+      depositSlipValue:
+        description: "Deposit Slip Value"
+        type: "number"
+      divisionCode:
+        description: "Division Code of Deposit Slip"
+        type: "string"
+      divisionDesc:
+        description: "Division Description of Deposit Slip"
+        type: "string"
+      pickupLocationCode:
+        description: "Pickup Location Code of Deposit Slip"
+        type: "string"
+      pickupLocationDesc:
+        description: "Pickup Location Description of Deposit Slip"
+        type: "string"
+      pickupPointCode:
+        description: "Pickup Point Code of Deposit Slip"
+        type: "string"
+      pickupPointDesc:
+        description: "Pickup Point Description of Deposit Slip"
+        type: "string"
+      pickupDate:
+        description: "Pickup Date"
+        type: string
+        format: date
+      pickupDateString:
+        description: "Pickup Date String"
+        type: string  
+      totalDenominationCount:
+        description: "Total Denomination Count of Deposit Slip"
+        type: "integer"
+        format: "int64"
+      exchangeRate:
+        description: "Exchange Rate"
+        type: number      
+      amountACCY:
+        description: "Currency Amount"
+        type: number
+      creditACCY:
+        description: "Credit Currency Amount"
+        type: string    
+      externalReferenceNum:
+        description: "External Reference Num of the DepositSlip"
+        type: "string"
+      creditStatus:
+        description: "Credit Status"
+        type: "string"
+      creditDate:
+        description: "Credit Date"
+        type: string
+        format: date
+      requestDate:
+        description: "Request Date"
+        type: string
+        format: date
+      stage:
+        description: "Stage"
+        type: "string"          
+      noOfMiscFields:
+        description: "No of Miscellaneous Fields"
+        type: "integer"
+        format: "int64"
+      misc1:
+        description: "1st Miscellaneous Field"
+        type: "string" 
+      misc2:
+        description: "2nd Miscellaneous Field"
+        type: "string" 
+      misc3:
+        description: "3rd Miscellaneous Field"
+        type: "string" 
+      misc4:
+        description: "4th Miscellaneous Field"
+        type: "string" 
+      misc5:
+        description: "5th Miscellaneous Field"
+        type: "string" 
+      misc6:
+        description: "6th Miscellaneous Field"
+        type: "string" 
+      misc7:
+        description: "7th Miscellaneous Field"
+        type: "string" 
+      misc8:
+        description: "8th Miscellaneous Field"
+        type: "string" 
+      misc9:
+        description: "9th Miscellaneous Field"
+        type: "string" 
+      misc10:
+        description: "10th Miscellaneous Field"
+        type: "string" 
+      misc11:
+        description: "11th Miscellaneous Field"
+        type: "string" 
+      misc12:
+        description: "12th Miscellaneous Field"
+        type: "string" 
+      misc13:
+        description: "13th Miscellaneous Field"
+        type: "string" 
+      misc14:
+        description: "14th Miscellaneous Field"
+        type: "string" 
+      misc15:
+        description: "15th Miscellaneous Field"
+        type: "string" 
+      misc16:
+        description: "16th Miscellaneous Field"
+        type: "string" 
+      misc17:
+        description: "17th Miscellaneous Field"
+        type: "string" 
+      misc18:
+        description: "18th Miscellaneous Field"
+        type: "string" 
+      misc19:
+        description: "19th Miscellaneous Field"
+        type: "string" 
+      misc20:
+        description: "20th Miscellaneous Field"
+        type: "string" 
+      misc21:
+        description: "21st Miscellaneous Field"
+        type: "string" 
+      misc22:
+        description: "22nd Miscellaneous Field"
+        type: "string" 
+      misc23:
+        description: "23rd Miscellaneous Field"
+        type: "string" 
+      misc24:
+        description: "24th Miscellaneous Field"
+        type: "string" 
+      misc25:
+        description: "25th Miscellaneous Field"
+        type: "string" 
+      misc26:
+        description: "26th Miscellaneous Field"
+        type: "string" 
+      misc27:
+        description: "27th Miscellaneous Field"
+        type: "string" 
+      misc28:
+        description: "28th Miscellaneous Field"
+        type: "string" 
+      misc29:
+        description: "29th Miscellaneous Field"
+        type: "string" 
+      misc30:
+        description: "30th Miscellaneous Field"
+        type: "string"
+      linkedRefNum:
+        description: "Linked Reference Number"
+        type: "string"
+      pickupRequestDate:
+        description: "Pickup Request Date"
+        type: string
+        format: date
+      channel:
+        description: "Channel"
+        type: "string"     
+      channelDepositBranch:  
+        description: "Channel Deposit Branch"
+        type: "string" 
+      cashSlipAdFields:
+        $ref: "#/definitions/CashSlipAdditionalInfoCollection"
+      accountingDetails:
+        $ref: "#/definitions/AccountingTransactionCollection"
+      denominationDetails:
+        $ref: "#/definitions/DenominationCollection"
+      vaFlagYN:
+        type: string
+        description: "Virtual Account flag as Y or N"          
+      
+  CashSlipAdditionalInfoModel:
+    description: "DataSlips additional Field"
+    type: "object"
+    properties:
+       id:
+        description: "Id of the DepositSlip"
+        type: "string"
+       seqNo:
+        description: "Seq No of the DepositSlip"
+        type: "integer"
+        format: "int64"
+       referenceNum:
+        description: "Reference Num of the DepositSlip"
+        type: "string"
+       depositSlipRefNo:
+        description: "deposit Slip Ref No of the slip"
+        type: "string"
+       depositSlipNo:
+        description: "no of the DepositSlipNo"
+        type: "string"
+       adfRowNo:
+        description: "Row No of this Additional Field"
+        type: "integer"
+        format: "int64"
+       udf1:
+        description: "1st User Defined Field"
+        type: "string" 
+       udf2:
+        description: "2nd User Defined Field"
+        type: "string" 
+       udf3:
+        description: "3rd User Defined Field"
+        type: "string" 
+       udf4:
+        description: "4th User Defined Field"
+        type: "string" 
+       udf5:
+        description: "5th User Defined Field"
+        type: "string" 
+       udf6:
+        description: "6th User Defined Field"
+        type: "string" 
+       udf7:
+        description: "7th User Defined Field"
+        type: "string" 
+       udf8:
+        description: "8th User Defined Field"
+        type: "string" 
+       udf9:
+        description: "9th User Defined Field"
+        type: "string" 
+       udf10:
+        description: "10th User Defined Field"
+        type: "string" 
+       udf11:
+        description: "11th User Defined Field"
+        type: "string" 
+       udf12:
+        description: "12th User Defined Field"
+        type: "string" 
+       udf13:
+        description: "13th User Defined Field"
+        type: "string" 
+       udf14:
+        description: "14th User Defined Field"
+        type: "string" 
+       udf15:
+        description: "15th User Defined Field"
+        type: "string" 
+       udf16:
+        description: "16th User Defined Field"
+        type: "string" 
+       udf17:
+        description: "17th User Defined Field"
+        type: "string" 
+       udf18:
+        description: "18th User Defined Field"
+        type: "string" 
+       udf19:
+        description: "19th User Defined Field"
+        type: "string" 
+       udf20:
+        description: "20th User Defined Field"
+        type: "string" 
+       udf21:
+        description: "21st User Defined Field"
+        type: "string" 
+       udf22:
+        description: "22nd User Defined Field"
+        type: "string" 
+       udf23:
+        description: "23rd User Defined Field"
+        type: "string" 
+       udf24:
+        description: "24th User Defined Field"
+        type: "string" 
+       udf25:
+        description: "25th User Defined Field"
+        type: "string" 
+       udf26:
+        description: "26th User Defined Field"
+        type: "string" 
+       udf27:
+        description: "27th User Defined Field"
+        type: "string" 
+       udf28:
+        description: "28th User Defined Field"
+        type: "string" 
+       udf29:
+        description: "29th User Defined Field"
+        type: "string" 
+       udf30:
+        description: "30th User Defined Field"
+        type: "string" 
+  CashSlipCollection:
+    description: "Collection of CashSlips"
+    type: "object"
+    properties:
+      CashSlipList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipModel"
+    
+  CashSlipAdditionalInfoCollection:
+    description: "Collection of CashSlips"
+    type: "object"
+    properties:
+     CashSlipAdditionalInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipAdditionalInfoModel"
+  CashDepositEntryTransactionModel:
+    description: "CashDepositEntryTransactionModel for updating conductor stage"
+    type: "object"
+    properties:
+     workflowInstanceId:
+       type: string
+     taskInstanceId:
+       type: string
+     action:
+       type: string
+     CashSlipModelDetails:
+       $ref: "#/definitions/CashSlipModel"
+     financeRefNo:
+       type: string    
+       
+  DenominationCollection:
+    description: "Collection of Denomination"
+    type: "object"
+    properties:
+     DenominationList:
+        type: "array"
+        items:
+          $ref: "#/definitions/DenominationModel"    
+
+  DenominationModel:
+    description: "Denomination model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Denomination"
+        type: "string"
+      seqNo:
+        description: "Seq No of the Denomination"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference Num of the batch"
+        type: "string"
+      depositSlipRefNo:
+        description: "deposit Slip Ref No of the Denomination"
+        type: "string"
+      depositSlipNo:
+        description: "no of the DepositSlipNo"
+        type: "string"
+      denominationRefNo:
+        description: "Denomination Ref No of the Denomination"
+        type: "string"
+      denominationType:
+        description: "Type of the Denomination"
+        type: "string"      
+      denominationValue:
+        description: "Value of the Denomination"
+        type: "number"
+      denominationCount:
+        description: "Count of the Denomination"
+        type: "number"
+      denominationAmount:
+        description: "Amount of the Denomination"
+        type: "number"
+      denominationStatus:
+        description: "Status of the Denomination"
+        type: "string"
+      denominationCcy:
+        description: "Currency of the Denomination"
+        type: "string"    
+      makerId:
+        type: "string"
+        description: "makerId"
+      makerDtStamp:
+        type: "string"
+        format: date
+        description: "makerDtStamp"
+      checkerId:
+        type: "string"
+        description: "checkerId"
+      checkerDtStamp:
+        type: "string"
+        format: date
+        description: "checkerDtStamp"                        

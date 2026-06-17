@@ -1,0 +1,866 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : businessproduct_webapi.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: "2.0"
+info:
+  description: "You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Business Products Service"
+host: "whf00bfw:9000"
+basePath: "/business-product-service"
+tags:
+  - name: "BusinessProductAPI"
+    description: "API for Business product Operations"  
+schemes:
+- "http"
+
+paths:
+  /businessproducts/summary:
+    get:
+      tags:
+        - "BusinessProduct"
+      summary: "Get all valid applications categories with only id and name values."
+      description:  " Get all valid applications categories with only id and name values..This endpoints will be used to Get all valid Business product maintanence records."
+      operationId: "getBusinessproduct"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          schema:
+           type: object
+           $ref: "#/definitions/BusinessProductSummaryCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  
+  /businessproducts:
+    post:
+      tags:
+        - "BusinessProduct"
+      summary: "Adds a new Business product."
+      description: "Adds a new Business product. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "Business product"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Business product"
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessProductModel"
+      responses:
+        201:
+         description: "Returns the Id of the newly created Business product"
+         headers:
+          Location:
+           description: "URL of newly created Business product"
+           type: "string"
+         schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "BusinessProduct"
+      summary: "Get all valid application categories."
+      description:  "Get all valid application categories. This endpoints will be used to Get all valid Business product maintanence records."
+      operationId: "getAll"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: businessProductCode
+        in: query
+        description: businessProductName need to be set to fetch getall record
+        required: false
+        type: string
+      - name: productCode
+        in: query
+        description: productCode need to be set to fetch getall record
+        required: false
+        type: string
+      - in: query
+        name: authStatus
+        required: false
+        type: string
+      - in: query
+        name: recordStatus
+        required: false
+        type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers: 
+           Location:
+            description: ""
+            type: "string"
+          schema:
+           type: object
+           $ref: "#/definitions/BusinessProductCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessproducts/{id}:
+    get:
+      tags:
+        - "BusinessProduct"
+      summary: "Retrieves the Business product by id."
+      description:  "Retrieves the Business product by id. Add additional information here for the this endpoint."
+      operationId: "getById"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the Business product that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "query"
+          description: "version of the Business product that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Business product based on given id."
+          schema:
+            $ref: "#/definitions/BusinessProductWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "BusinessProduct"
+      summary: "Update an existing Business product."
+      description:  "Update an existing Business product. Add additional information here for the this endpoint."
+      operationId: "modifyRecord"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the Business product that need to be updated"
+          required: true
+          type: "string"      
+        - name: "Business product"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing Business product"
+          required: true
+          schema:
+            $ref: "#/definitions/BusinessProductModel"
+      responses:
+        200:
+          description: "Returns updated Business product"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+    delete:
+      tags:
+        - "BusinessProduct"
+      summary: "Deletes the BusinessProduct identified by given ID."
+      description:  "Deletes the Business product identified by given ID. Add additional information here for the this endpoint."
+      operationId: "delete"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the Business product Maintenance"
+          required: true
+          type: "string"
+        - name: "Business product"
+          in: "body"
+          description: Request body contain Modification no of Business product Maintenance which need to be deleted"
+          required: true
+          schema:
+           $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+                   
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../processs/xxx/approve
+
+  /businessproducts/{id}/approve:
+    patch:
+      tags:
+        - "BusinessProduct"
+      summary: "Authorize the BusinessProduct by given ID."
+      description:  "Authorize the BusinessProduct identified by given ID."
+      operationId: "authorize"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the BusinessProduct Maintenance"
+          required: true
+          type: "string"
+        - name: "Business product"
+          in: "body"
+          description: Request body contain Business product and Modification no of BusinessProduct Maintenance which need to be authorized"
+          required: true
+          schema:
+           $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+# path to close existing record and reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../processs/xxx/close
+#   PATCH       .../processs/xxx/reopen
+  /businessproducts/{businessproductcode}/products:
+    get:
+      tags:
+        - "BusinessProduct"
+      summary: "Retrieves the products associated with the specified Business product"
+      description:  "Retrieves the products associated with the specified Business product"
+      operationId: "getProductsByBusinessProductCode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessproductcode"
+          in: "path"
+          description: "Code of the Business product that needs to be fetched"
+          required: true
+          type: "string"       
+      responses:
+        200:
+          description: "Returns the Business product product list based on given id."
+          schema:
+            $ref: "#/definitions/ProductCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /businessproducts/{businessproductcode}/holidaypreferences:
+    get:
+      tags:
+        - "BusinessProduct"
+      summary: "Retrieves the holiday preferences associated with the specified Business product"
+      description:  "Retrieves the holiday preferences associated with the specified Business product"
+      operationId: "getHolidayPrefByBusinessProductCode"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "businessproductcode"
+          in: "path"
+          description: "Code of the Business product that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Business product holiday preferences list based on given id."
+          schema:
+            $ref: "#/definitions/HolidayCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /businessproducts/{id}/{action}:
+    patch:
+      tags:
+        - "BusinessProduct"
+      summary: "Close/reopen the Business product by given ID."
+      description:  "Close/reopen the Business product identified by given ID."
+      operationId: "performCloseAndReopen"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "action"
+          in: "path"
+          description: "action of the Business product Maintenance"
+          required: true
+          type: "string"
+        - name: "id"
+          in: "path"
+          description: "Id of the Business product Maintenance"
+          required: true
+          type: "string"
+        - name: "businessProduct"
+          in: "body"
+          description: Request body contain Business product and Modification no of Business product Maintanence which need to be deleted"
+          required: true
+          schema:
+           $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+           $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../processs/xxx/unauthorized
+
+  /businessproducts/{id}/unauthorized:
+    get:
+      tags:
+        - "BusinessProduct"
+      summary: "Retrives the Business product unauthorized records by given ID."
+      description:  "Retrives the Business product unauthorized records identified by given ID."
+      operationId: "authQuery"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the Business product that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Business product based on given id."
+          schema:
+             $ref: "#/definitions/BusinessProductCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../processs/xxx/history
+
+  /businessproducts/{id}/history:
+    get:
+     tags:
+      - "BusinessProduct"
+     summary: "Retrives the BusinessProduct by given ID."
+     description:  "Retrives the BusinessProduct by ID."
+     operationId: "getHistory"
+     produces:
+     - "application/json"
+     - "application/xml"
+     parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the Business product that needs to be fetched"
+        required: true
+        type: "string"
+     responses:
+      200:
+       description: "Returns the BusinessProduct based on given id."
+       schema:
+         $ref: "#/definitions/BusinessProductCollection"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"       
+definitions:
+ GenericDto:
+   allOf:
+   - type: object
+     discriminator: resource_type
+ BusinessProductModel:
+    description: "BusinessProductModel model"
+    type: "object"
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      required:
+      - businessProductCode
+      - businessProductDescription
+      properties:
+       businessProductCode:
+        description: "business Product Code"
+        type: "string"
+        minLength: 0
+        maxLength: 16
+       businessProductDescription:
+        description: "business Product Description"
+        type: "string"
+        minLength: 0
+        maxLength: 60
+       productPreferences:
+        description: "Product model"
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductModel"
+       agencyPreferences:
+        description: "Agency model"
+        type: "array"
+        items:
+          $ref: "#/definitions/AgencyModel"
+       holidayTreatmentPreferences:
+        description: "Holiday Treatment model"
+        type: "array"
+        items:
+          $ref: "#/definitions/HolidayTreatmentModel"
+ ProductModel :  
+    description: "Product model"
+    type: "object"
+    required:
+    - productCode
+    - productDesc
+    properties:
+      id:
+        description: "id"
+        type: string
+      productCode:
+        description: "productCode"
+        type: "string"
+        minLength: 0
+        maxLength: 6
+      productDesc:
+        description: "productDesc"
+        type: "string"
+        minLength: 0
+        maxLength: 60 
+      productId:
+        description: "productId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      businessProductId:
+        description: "businessProductId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      defaultValue:
+        description: "defaultValue"
+        type: "string"
+        minLength: 0
+        maxLength: 1 
+ HolidayTreatmentModel :  
+    description: "holiday treatment model"
+    type: "object"
+    properties:
+      id:
+        description: "id"
+        type: string
+      holidayTreatmentPreferenceType:
+        description: "holidayTreatmentPreferenceType"
+        type: "string"
+        minLength: 0
+        maxLength: 20
+      holidayCheck:
+        description: "holidayCheck"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      scheduleMovement:
+        description: "scheduleMovement"
+        type: string
+        minLength: 0
+        maxLength: 1
+      holidayCurrencyCode:
+        description: "holidayCurrency"
+        type: "string"
+      holidayCurrencyId:
+        description: "holidayCurrencyId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+      ignoreHoliday:
+        description: "ignoreHoliday"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      moveAcrossMonth:
+        description: "moveAcrossMonth"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      cascadeSchedule:
+        description: "cascadeSchedule"
+        type: "string"
+        minLength: 0
+        maxLength: 1
+      moveForwardBackward:
+        description: moveForwardBackward of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      includeBranchHoliday:
+        description: includeBranchHoliday of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      useFacilityCurrency:
+        description: useFacilityCurrency of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      useContractCurrency:
+        description: useContractCurrency of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      useTrancheCurrency:
+        description: useTrancheCurrency of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      useLocalCurrency:
+        description: useLocalCurrency of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      moveRevisionSchedules:
+        description: moveRevisionSchedules of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      movePaymentSchedules:
+        description: movePaymentSchedules of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1
+      moveCommitmentReductionSchedules:
+        description: moveCommitmentReductionSchedules of the HolidayPreferences
+        type: string
+        minLength: 0        
+        maxLength: 1         
+      businessProductId:
+        description: "businessProductId"
+        type: "string"
+        minLength: 0
+        maxLength: 36         
+ AgencyModel :  
+    description: "agency model"
+    type: "object"
+    required:
+    - agencyCode
+    - agencyDesc
+    properties:
+      id:
+        description: "id"
+        type: string
+      agencyCode:
+        description: "agencyCode"
+        type: "string"
+        minLength: 0
+        maxLength: 6
+      agencyDesc:
+        description: "agencyDesc"
+        type: "string" 
+        minLength: 0
+        maxLength: 60 
+      agencyId:
+        description: "agencyId"
+        type: "string"
+        minLength: 0
+        maxLength: 36
+      verificationType:
+        description: "verificationType"
+        type: "string"
+        minLength: 0
+        maxLength: 20 
+      businessProductId:
+        description: "businessProductId"
+        type: "string"
+        minLength: 0
+        maxLength: 36 
+ 
+ BusinessProductSummaryModel:
+    description: "BusinessProductSummaryModel model"
+    type: "object"
+    required:
+    - businessProductCode
+    - businessProductDescription
+    properties:
+      businessProductCode:
+       description: "business Product Code"
+       type: "string"
+       minLength: 0
+       maxLength: 16
+      businessProductDescription:
+       description: "business Product Description"
+       type: "string"
+       minLength: 0
+       maxLength: 60
+ 
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ BusinessProductCollection: 
+  description: "Collection of businessProductCode."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/BusinessProductModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ BusinessProductSummaryCollection:
+  description: "Collection of businessProductCode summary."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/BusinessProductSummaryModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ HolidayCollection: 
+  description: "Collection of holiday preferences."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/HolidayTreatmentModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ ProductCollection: 
+  description: "Collection of Products."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ProductModel"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ 
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ BusinessProductWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/BusinessProductModel"
+        

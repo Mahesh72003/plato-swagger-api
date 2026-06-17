@@ -1,0 +1,1791 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: '2.0'
+info:
+  description: This is a sample server Pool Reallocation server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: PoolReallocation
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: PoolReallocationAPI
+  description: API for Pool Reallocation Operations
+schemes:
+- https
+paths:
+  /poolRealloc:
+    get:
+      tags:
+      - poolRealloc
+      summary: Get all valid poolRealloc data.
+      description: Get all valid poolRealloc data. This endpoints will be used to Get all valid poolRealloc maintenance records.
+      operationId: fetchReallocationLog
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: bookDateFrom
+        in: query
+        required: false
+        type: string
+      - name: bookDateTo
+        in: query
+        required: false
+        type: string
+      - name: valueDateFrom
+        in: query
+        required: false
+        type: string
+      - name: valueDateTo
+        in: query
+        required: false
+        type: string
+      - name: customerId
+        in: query
+        required: false
+        type: string
+      - name: structureId
+        in: query
+        required: false
+        type: string
+      - name: filterBy
+        in: query
+        required: false
+        type: string
+      - name: reallocationId
+        in: query
+        required: false
+        type: string
+      - name: executionId
+        in: query
+        required: false
+        type: string
+      - name: interfaceMasterId
+        in: query
+        description: 
+        required: false
+        type: string
+      - name: onlyLinkedCustomers
+        in: query
+        description: onlyLinkedCustomers need to be set to fetch sweep log based on only Linked Customers
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmpTbPoolReallocLogCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /poolRealloc/execute:
+    post:
+      tags:
+      - poolRealloc
+      summary: Invoking Reallocation Batch for Structure
+      description: Invoking Reallocation Batch for Structure. Add additional information here for this  endpoint.
+      operationId: invokeRealloc
+      parameters:
+      - name: reallocStructureDTO
+        in: body
+        description: structure list for Reallocation
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmPoolStructureCollection'
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /poolRealloc/simulate:
+    post:
+      tags:
+      - poolRealloc
+      summary: Invoking Reallocation Batch for Structure
+      description: Invoking Reallocation Batch for Structure. Add additional information here for this  endpoint.
+      operationId: simulateRealloc
+      parameters:
+      - name: reallocStructureDTO
+        in: body
+        description: structure list for Reallocation
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmPoolStructureCollection'
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/PoolSimulateReportDTOCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /poolRealloc/execute/async:
+    post:
+      tags:
+      - poolRealloc
+      summary: Invoking Reallocation Batch for Structure
+      description: Invoking Reallocation Batch for Structure. Add additional information here for this  endpoint.
+      operationId: invokeReallocAsync
+      parameters:
+      - name: reallocStructureCollection
+        in: body
+        description: Request Body that contains data required for running a reallocation batch
+        required: true
+        schema:
+          $ref: '#/definitions/LmmTmPoolStructureCollection'
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: URL of newly created sweepmaster data
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /poolRealloc/withholdingtax:
+    post:
+      tags:
+      - poolRealloc
+      summary: Invoking Withholding Tax for Structure
+      description: Invoking Withholding Tax for Structure. Add additional information here for this  endpoint.
+      operationId: withHoldingTax
+      parameters:
+      - name: structureId
+        in: body
+        description: Request Body that contains data required for withholdingtax execution
+        required: false
+        schema:
+          $ref: '#/definitions/String'
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/ICTBLmChildSumIntDTOCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /poolRealloc/withholdingtax/{headerBranchCode}/{interestMethod}/{structureType}:
+    post:
+      tags:
+      - poolRealloc
+      summary: Invoking Withholding Tax for Structure
+      description: Invoking Withholding Tax for Structure. Add additional information here for this  endpoint.
+      operationId: withHoldingTax
+      parameters:
+      - name: headerBranchCode
+        in: path
+        description: Header Branch Code of the structure for which the wht needs to be calculated
+        required: true
+        type: "string"
+      - name: interestMethod
+        in: path
+        description: Interest method of the structure
+        required: true
+        type: "string"
+      - name: structureType
+        in: path
+        description: Structure type Pool/Hybrid.
+        required: true
+        type: "string"
+      responses:
+        201:
+          description: Returns message of success or failure
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error          
+  /poolRealloc/icEntries:
+    get:
+      tags:
+      - reallocIcEntries
+      summary: Fetch Ic History Entries
+      description: Fetch Ic History Entries.
+      operationId: fetchIcEntries
+      parameters:
+      - name: "branchCode"
+        in: "query"
+        description: "branch for fetching entries"
+        required: true
+        type: "string"   
+      responses:
+        200:
+          description: Returns Ic Entries
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/IcEntry'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /poolRealloc/processICL:
+    post:
+      tags:
+      - processICL
+      summary: Process ICL loan interest liquidation
+      description: Process ICL loan interest liquidation
+      operationId: processICL
+      parameters:
+      - name: "branchCode"
+        in: "query"
+        description: "branch for fetching entries"
+        required: true
+        type: "string"   
+      responses:
+        200:
+          description: Returns batch status
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error           
+  /poolRealloc/icEntriesForAccrHandOff:
+    get:
+      tags:
+      - reallocIcEntries
+      summary: Fetch Ic History Entries For Accrual HandOff
+      description: Fetch Ic History Entries For Accrual HandOff
+      operationId: fetchIcEntriesForAccrualHandOff
+      parameters:
+      - name: "branchCode"
+        in: "query"
+        description: "branch for fetching entries"
+        required: true
+        type: "string"   
+      responses:
+        200:
+          description: Returns Ic Entries
+          schema:
+            type: array
+            items:
+             $ref: '#/definitions/IcEntry'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error   
+  /poolRealloc/modifyReallocLog:
+    post:
+      tags:
+      - poolRealloc
+      summary: Update an existing reallocation log data.
+      description: Update an existing reallocation log data.
+      operationId: modifyReallocLog
+      parameters:
+      - name: reallocationLog
+        in: body
+        description: Request Body that contains data required for updating an existing reallocation log
+        required: true
+        schema:
+          $ref: '#/definitions/LmpTbPoolReallocLogDTO'
+      responses:
+        200:
+          description: Returns updated reallocation log
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /poolRealloc/pendingreallocations:
+    get:
+      tags:
+      - poolRealloc
+      summary: Get all pending reallocation logs.
+      description: Get all pending reallocation logs. This endpoints will be used to Get all reallocation sweep records.
+      operationId: getPendingReallocLogs
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ''
+              type: string
+          schema:
+            $ref: '#/definitions/LmpTbPoolReallocLogCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  IcEntry:
+    type: object
+    allOf:
+    - type: object
+      properties:
+        account:
+          type: string
+          description: ''
+        branch:
+          type: string
+          description: ''
+        currency:
+          type: string
+          description: ''
+        entDt:
+          type: string
+          format: date
+          description: ''
+        accruedAmt:
+          type: number
+          description: ''
+        drcr:
+          type: string
+          description: ''
+        cur_run_accr:
+          type: string
+          description: ''
+        liqn:
+          type: string
+          description: ''
+        accr:
+          type: string
+          description: ''  
+      required:
+      - account
+      - branch
+      - currency         
+  LmpTbPoolReallocLogDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        executionId:
+          type: string
+          description: ''
+        reallocationDetailMasterId:
+          type: string
+          description: ''
+        structureId:
+          type: string
+          description: ''
+        structureMasterId:
+          type: string
+          description: ''
+        fromAccountNumber:
+          type: string
+          description: ''          
+        fromBranchCode:
+          type: string
+          description: ''
+        fromCurrencyCode:
+          type: string
+          description: ''
+        fromAccountBalance:
+          type: number
+          description: ''
+        toAccountNumber:
+          type: string
+          description: ''
+        toBranchCode:
+          type: string
+          description: ''
+        toCurrencyCode:
+          type: string
+          description: ''
+        toAccountBalance:
+          type: number
+          description: ''
+        amount:
+          type: number
+          description: ''
+        logTime:
+          type: string
+          description: ''
+        status:
+          type: string
+          description: ''
+        statusMessage:
+          type: string
+          description: ''        
+        extTransactionNo:
+          type: string
+          description: ''
+        valueDate:
+          type: string
+          description: ''
+        fromAmount:
+          type: number
+          description: ''
+        fxRate:
+          type: number
+          description: ''
+        toAmount:
+          type: number
+          description: ''
+        sweepId:
+          type: string
+          description: ''
+        instructionId:
+          type: string
+          description: ''          
+        paramName:
+          type: string
+          description: ''
+        customerId:
+          type: string
+          description: ''
+        isTwoway:
+          type: string
+          description: ''
+        fromAccPostBal:
+          type: number
+          description: ''
+        toAccPostBal:
+          type: number
+          description: ''          
+        fromBicCode:
+          type: string
+          description: ''
+        toBicCode:
+          type: string
+          description: ''          
+        balanceTimestamp:
+          type: string
+          description: ''
+        fromCountryCode:
+          type: string
+          description: ''          
+        toCountryCode:
+          type: string
+          description: ''
+        isSimulate:
+          type: string
+          description: ''
+        fromAccnoDesc:
+          type: string
+          description: ''
+        toAccnoDesc:
+          type: string
+          description: ''
+        sweepMode:
+          type: string
+          description: ''
+        sweepProduct:
+          type: string
+          description: ''
+        fromExtAccno:
+          type: string
+          description: ''
+        fromIBanForAccno:
+          type: string
+          description: ''
+        fromExtBranchRef:
+          type: string
+          description: ''
+        fromAccBranchAdddr1:
+          type: string
+          description: ''
+        fromAccBranchAdddr2:
+          type: string
+          description: ''
+        fromAccBranchAdddr3:
+          type: string
+          description: ''
+        fromAccBranchAdddr4:
+          type: string
+          description: ''
+        fromAccBranchAdddr5:
+          type: string
+          description: ''
+        fromAccIsExternal:
+         type: boolean
+         description: ''
+        toExtAccno:
+          type: string
+          description: ''
+        toIBanForAccno:
+          type: string
+          description: ''
+        toExtBranchRef:
+          type: string
+          description: ''
+        toAccBranchAdddr1:
+          type: string
+          description: ''
+        toAccBranchAdddr2:
+          type: string
+          description: ''
+        toAccBranchAdddr3:
+          type: string
+          description: ''
+        toAccBranchAdddr4:
+          type: string
+          description: ''
+        toAccBranchAdddr5:
+          type: string
+          description: ''
+        toAccIsExternal:
+         type: boolean
+         description: ''
+        versionNo:
+          type: number
+          description: ''
+        customerExtRef:
+          type: string
+          description: ''
+        customerName:
+          type: string
+          description: ''
+        headerBranch:
+          type: string
+          description: ''
+        headerBranchExtRef:
+          type: string
+          description: ''
+        balanceTimeStamp:
+          type: string
+          format: date
+          description: ''
+        childExtAcc:
+          type: boolean
+          description: ''
+        interfaceMasterId:
+          type: string
+          description: ''          
+        sweepLogID:
+          type: string
+          description: ''
+        fromHostCode:
+          type: string
+          description: ''
+        toHostCode:
+          type: string
+          description: ''
+        headerHostCode:
+          type: string
+          description: ''
+        user:
+          type: string
+          description: ''
+        exMode:
+          type: string
+          description: ''
+        retryCount:
+         type: integer
+         description: ''
+        extSysRefId:
+         type: string
+         description: ''
+        newStatus:
+         type: string
+         description: ''
+        authStatus:
+         type: string
+         description: ''
+        makerId:
+         type: string
+         description: ''
+        makerRemark:
+         type: string
+         description: ''
+        checkerId:
+         type: string
+         description: ''
+        checkerRemark:
+         type: string
+         description: ''
+        makerDtStamp:
+         type: string
+         description: ''
+        checkerDtStamp:
+         type: string
+         description: ''
+        pmtInitiated: 
+         type: string
+         description: ''
+        pmtAckTime: 
+         type: string
+         description: ''
+        pmtMessage: 
+         type: string
+         description: ''
+        errorCode: 
+         type: string
+         description: ''
+        errorReference: 
+         type: string
+         description: ''
+        fromAccIsVirtual:
+         type: boolean
+         description: ''
+        toAccIsVirtual:
+         type: boolean
+         description: ''
+        systemAccountList:
+         type: "array"
+         items:
+           $ref: "#/definitions/LmsTbSystemAccountDTO"
+  LmpTbReallocationDetailDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+#        reallocDetailId:
+#          type: string
+#          description: ''
+        executionId:
+          type: string
+          description: ''
+        structureId:
+          type: string
+          description: ''
+        versionNo:
+          type: integer
+          description: ''
+        fromAcc:
+          type: string
+          description: ''
+        fromAccBranch:
+          type: string
+          description: ''
+        fromAccCcy:
+          type: string
+          description: ''
+        toAcc:
+          type: string
+          description: ''
+        toAccBranch:
+          type: string
+          description: ''
+        toAccCcy:
+          type: string
+          description: ''
+        executionTime:
+          type: string
+          description: ''
+        status:
+          type: string
+          description: ''
+        statusMsg:
+          type: string
+          description: ''
+        valueDate:
+          type: string
+          description: ''
+        errorRef:
+          type: string
+          description: ''
+        customerId:
+          type: string
+          description: ''
+        bvtId:
+          type: integer
+          description: ''
+        liqCcy:
+          type: string
+          description: ''
+        liqAmnt:
+          type: number
+          description: ''
+        isSim:
+          type: string
+          description: ''
+        isExisting:
+          type: string
+          description: ''
+        strMasterId:
+          type: string
+          description: ''
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmpTbPoolReallocLogCollection:
+    description: Collection of sweeplog.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmpTbPoolReallocLogDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmsTbContributionDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        executionId:
+          type: string
+          description: ''
+        structureId:
+          type: string
+          description: ''
+        toAccountNumber:
+          type: string
+          description: ''
+        toAccountBranch:
+          type: string
+          description: ''
+        toAccountCurrency:
+          type: string
+          description: ''
+        fromAccountNumber:
+          type: string
+          description: ''
+        fromAccountBranch:
+          type: string
+          description: ''
+        fromAccountCurrency:
+          type: string
+          description: ''
+        contributionAmount:
+          type: number
+          description: ''
+        fromCurrencyAmount:
+          type: number
+          description: ''
+        valueDate:
+          type: string
+#          format: date
+          description: ''
+        fxrate:
+          type: number
+          description: ''
+        status:
+          type: string
+          description: ''
+  LmsTbContributionCollection:
+    description: Collection of Contribution.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmsTbContributionDTO'
+  CmcTmSystemDatesCollection:
+    description: "Collection of systemdates."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CmcTmSystemDatesDto"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  CmcTmSystemDatesDto:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          branchCode:
+            type: string
+            minLength: 0
+            maxLength: 3
+          today:
+            type: string
+          prevWorkingDay:
+            type: string
+          nextWorkingDay:
+            type: string
+        required:
+          - branchCode                        
+  LmsTbStructureDetailsDTO:
+    type: object
+    properties:
+      parentAccNo:
+        type: string
+        description: ''
+      parentBranch:
+        type: string
+        description: ''
+      parentCcy:
+        type: string
+        description: ''
+      childAccNo:
+        type: string
+        description: ''
+      childBranch:
+        type: string
+        description: ''
+      childCcy:
+        type: string
+        description: ''
+      valueDate:
+        type: string
+        description: ''
+      dailyAccrDate:
+        type: string
+        description: ''        
+      dailyContriAmnt:
+        type: number
+        description: ''
+  LmsTbStructureDetailsCollection:
+    description: Collection of Contribution.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmsTbStructureDetailsDTO'
+  CmcTmCoreVirtualAccountResponseDTO:
+   type: object
+   allOf:
+   - type: object
+     properties:
+      accountClass:
+       type: string
+       description: "Account class of the external virtual account"
+      acOpenDate:
+       type: string
+       description: "The date on which virtual account is being opened"
+      acStatFrozen:
+       type: string
+       description: "Indicates that the virtual account status is frozen"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      acStatNoCr:
+       type: string
+       description: "Indicates that the virtual account does not have any credit facility"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      acStatNoDr:
+       type: string
+       description: "Indicates that the virtual account does not have any debit facility"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      address1:
+       type: string
+       description: "First line of the address"
+       minLength: 0
+       maxLength: 105
+      address2:
+       type: string
+       description: "Second line of the address"
+       minLength: 0
+       maxLength: 105
+      address3:
+       type: string
+       description: "Third line of the address"
+       minLength: 0
+       maxLength: 105
+      address4:
+       type: string
+       description: "Fourth line of the address"
+       minLength: 0
+       maxLength: 105
+      countryCode:
+       type: string
+       description: "Country Code"
+       minLength: 0
+       maxLength: 4
+      customerNo:
+       type: string
+       description: "Customer number to which the virtual account number is being linked"
+       minLength: 0
+       maxLength: 20
+      ecaCheckReq:
+       type: string
+       description: "Indicates that ECA check is required for the external virtual account"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      hostCode:
+       type: string
+       description: "The host code that is linked to the logged in user of the branch"
+      isForgotten:
+       type: string
+       description: "Indicates that the customer is forgotten"
+       minLength: 0
+       maxLength: 1
+       pattern: '[Y,N]'
+      sourceSystem:
+       type: string
+       description: "Name of the source system"
+      sourceSystemAccBrn:
+       type: string
+       description: "Branch to which the account belongs to"
+      sourceSystemAccNo:
+       type: string
+       description: "Virtual account number as in the source system"
+      virtualAccountNo:
+       type: string
+       description: "External virtual account number"
+       minLength: 1
+       maxLength: 35
+       pattern: '[a-zA-Z0-9]+'
+      virtualAcCcy:
+       type: string
+       description: "Currency in which the virtual account is being created"
+       minLength: 1
+       maxLength: 3
+      virtualAcName:
+       type: string
+       description: "Name of the virtual account holder"
+       minLength: 0
+       maxLength: 105
+       pattern: '[a-zA-Z0-9\s]+'
+      virtualIban:
+       type: string
+       description: "Virtual IBAN as in the source system"
+       minLength: 0
+       maxLength: 35
+       pattern: '[a-zA-Z0-9]+' 
+      makerId:
+       type: string
+       description: "Maker ID of Virtual Account"
+      makerDateStamp:
+       type: string
+       description: "Date and Time when Virtual Account is created or modified or closed or  reopened"
+      checkerId:
+       type: string
+       description: "Checker ID of Virtual Account"
+      checkerDateStamp:
+       type: string
+       description: "Date and Time when some action on Virtual Account is authorized"
+      modNo:
+       type: integer
+       description: "Version number of Virtual Account"
+      recordStatus: 
+       type: string
+       description: "Record Status of Virtual Account"
+      authStatus:
+       type: string
+       description: "Authorization Status of Virtual Account"
+      onceAuth:
+       type: string
+       description: "Flag that indicated if Virtual Account is authorized once or not"
+      doerRemarks:
+       type: string
+       description: "Remarks made by Maker"
+      approverRemarks:
+       type: string 
+       description: "Remarks made by Approver"  
+  CmcTmCoreVirtualAccountServiceCollection: 
+   description: "Collection of corevirtualaccount."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmCoreVirtualAccountResponseDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  CmcTmCoreVirtualAccountResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+  CmcTmCoreVirtualAccountResponseWrapperDTO:
+   type: object
+   properties:
+    messages:
+     $ref: "#/definitions/CmcTmCoreVirtualAccountResDto"
+    data:
+     $ref: "#/definitions/CmcTmCoreVirtualAccountResponseDTO" 
+  CmcTmCoreVirtualAccountWrapperServiceDTO:
+   type: object
+   properties:
+    data:
+     $ref: "#/definitions/CmcTmCoreVirtualAccountResponseDTO"    
+  CmcTmCoreVirtualAccountResDto:
+   type: object
+   properties:
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/CmcTmCoreVirtualAccountResponseCode"
+  CmcTmCurrencyDefinitionDto:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      currencyCode:
+       type: string
+       description: "currencyCode"
+       minLength: 0
+       maxLength: 3
+       pattern: ^[A-Z]*$
+      currencyName:
+       type: string
+       description: "currencyName"
+       minLength: 0
+       maxLength: 105
+       pattern: ^[A-Za-z ]*$
+      country:
+       type: string
+       description: "country"
+       minLength: 0
+       maxLength: 3
+       pattern: ^[A-Z]*$
+      currencyDecimals:
+       type: number
+       description: "currencyDecimals"
+       minLength: 0
+       maxLength: 1
+      currencyRoundRule:
+       type: string
+       description: "Currency Round Rule"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:T|U|D|R)$"
+      currencyRoundUnit:
+       type: number
+       description: "Currency Round Unit"
+      currencyFormatMask:
+       type: string
+       description: "currencyFormatMask"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:I|N)$"
+      currencySpotDays:
+       type: number
+       description: "currencySpotDays"
+       minLength: 0
+       maxLength: 3
+      currencyIntMethod:
+       type: number
+       description: "Currency Interest Method"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:0|1|2|3|4|5|6|7|8|9)$"
+      positionGl:
+       type: string
+       description: "positionGl"
+       minLength: 0
+       maxLength: 9
+      positionEqvgl:
+       type: string
+       description: "Position Equivalent GL"
+       minLength: 0
+       maxLength: 9
+      currencyEurType:
+       type: string
+       description: "Currency Euro type"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:E|I|O|C)$"
+      currencyTolLimit:
+       type: number
+       description: "Currency Total Limits"
+      settlementMsgDays:
+       type: number
+       description: "Settlement Days"
+       minLength: 0
+       maxLength: 3
+      indexFlag:
+       type: string
+       description: "Index Flag"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      indexBaseCurrency:
+       type: string
+       description: "Index Base Currency"
+       minLength: 0
+       maxLength: 3
+      cutOffHr:
+       type: number
+       description: "Cut off Hours"
+       minLength: 0
+       maxLength: 2
+      cutOffMin:
+       type: number
+       description: "Cut off Minutes"
+       minLength: 0
+       maxLength: 2
+      altCurrencyCode:
+       type: string
+       description: "altCurrencyCode"
+       minLength: 0
+       maxLength: 10
+       pattern: ^[A-Z0-9]*$
+      eurConversionReqd:
+       type: string
+       description: "Euro Conversion Required"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      cutOffDays:
+       type: number
+       description: "cutOffDays"
+       minLength: 0
+       maxLength: 2
+      crAutoExRateLmt:
+       type: number
+       description: "Credit Auto Exchange Rate Limit"
+       minLength: 0
+       maxLength: 3
+      drAutoExRateLmt:
+       type: number
+       description: "Debit Auto Exchange Rate Limit"
+      currencyType:
+       type: string
+       description: "currencyType"
+       minLength: 0
+       maxLength: 3
+      gen103p:
+       type: string
+       description: "Generate 103+"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      clsCurrency:
+       type: string
+       description: "CLS Currency"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      fxNettingDays:
+       type: number
+       description: "Foreign Exchange Netting Days"
+       minLength: 0
+       maxLength: 3
+      isoNumCurrencyCode:
+       type: string
+       description: "isoNumCurrencyCode"
+       minLength: 0
+       maxLength: 3
+       pattern: ^[0-9]*$
+      genCustCov:
+       type: string
+       description: "genCustCov"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      validate50f:
+       type: string
+       description: "validate50f"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      maintenanceCountry:
+       type: string
+       description: "maintenanceCountry"
+       minLength: 0
+       maxLength: 3
+      commodityCode:
+       type: string
+       description: "commodityCode"
+       minLength: 0
+       maxLength: 1
+       pattern: "^(?:Y|N)$"
+      CmcTmCurrencyCountryMapDto:
+       type: array
+       items:
+        $ref: '#/definitions/CmcTmCurrencyCountryMapDto'
+     required:
+     - currencyCode
+     - maintenanceCountry    
+  CmcTmCurrencyDefinitionCollection: 
+   description: "Collection of currencydefinition."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmCurrencyDefinitionDto"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  CmcTmCurrencyCountryMapDto:
+   type: object
+   properties:
+      maintenanceCountry:
+       type: string
+       description: "maintenanceCountry"
+       minLength: 0
+       maxLength: 3
+      id:
+       type: string
+       description: "id"
+      countryCode:
+       type: string
+       description: "countryCode"
+       minLength: 0
+       maxLength: 3
+      countryDesc:
+       type: string
+       description: "countryDesc"
+       minLength: 0
+       maxLength: 105
+      currencyCode:
+       type: string
+       description: "currencyCode"
+       minLength: 0
+       maxLength: 3
+      currencyDefinitionId:
+       type: string
+       description: "currencyDefinitionId"
+   required:
+    - countryCode       
+  CoreAccountDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          address4:
+            type: string
+            description: "Fourth line of the customer?s address"
+            minLength: 0
+            maxLength: 105
+          address3:
+            type: string
+            description: "Third line of the customer?s address"
+            minLength: 0
+            maxLength: 105
+          address2:
+            type: string
+            description: "Second line of the customer?s address"
+            minLength: 0
+            maxLength: 105
+          address1:
+            type: string
+            description: "First line of the customer?s address"
+            minLength: 0
+            maxLength: 105
+  CoreAccountCollection: 
+   description: "Collection of coreaccount."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CoreAccountDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  RMCustomerDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+      customerName:
+        type: string
+  RMCustomerCollection:
+    type: object
+    properties:
+      allCustomers:
+        type: boolean
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/RMCustomerDTO'
+ 
+  LmsTbSystemAccountDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountGroupCode:
+          type: string
+          description: ""
+        accountNumber:
+          type: string
+          description: ""
+        accountDescription:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        creationDate:
+          type: string
+          description: ""
+        creditDisbursementAccount:
+          type: string
+          description: ""
+        currency:
+          type: string
+          description: ""
+        customerId:
+          type: string
+          description: ""
+        debitDisbursementAccount:
+          type: string
+          description: ""
+        id:
+          type: string
+          description: ""
+        interestOs:
+          type: number
+          description: ""
+        interestPaid:
+          type: number
+          description: ""
+        isTwoWay:
+          type: string
+          description: ""
+        principalOs:
+          type: number
+          description: ""
+        principalPaid:
+          type: number
+          description: ""
+        lastReallocationDate:
+          type: string
+          description: ""
+        lastReverseSweepDate:
+          type: string
+          description: ""
+        noOfDaysAccrued:
+          type: number
+          description: ""
+        status:
+          type: string
+          description: ""
+        sweepId:
+          type: string
+          description: ""
+        sweepLogId:
+          type: string
+          description: ""
+        trackAsIcl:
+          type: string
+          description: ""
+        reallocatedAmount:
+          type: number
+          description: ""
+ 
+  LmsTbSystemAccountCollection: 
+    description: Collection of system accounts.
+    type: object
+    properties:
+      data:
+        type: array
+        items: 
+          $ref: "#/definitions/LmsTbSystemAccountDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+ 
+  LmpTbReallocSysAccLinkDTO:
+    description: Link table for system account and reallocation details
+    type: object
+    properties:
+      id:
+        type: string
+        description : ""
+      reallocationLogId:
+        type: string
+        description: ""
+      systemAccountNumber:
+        type: string
+        description: ""
+      status:
+        type: string
+        description: ""
+      sweepId:
+        type: string
+        description: ""
+      sweepLogId:
+        type: string
+        description: ""
+      cmcBranchDate:
+        type: string
+        description: ""
+      reallocatedAmount:
+        type: number
+        description: ""
+ 
+  LmsRepaymentDTO:
+    type: object
+    properties:
+      currency:
+        type: string
+        description: ""
+      principalPaid:
+        type: number
+        description: ""
+      interestPaid:
+        type: number
+        description: ""
+      repaymentDate:
+        type: string
+        description: ""
+      transactionReference:
+        type: string
+        description: ""
+  ICTBLmChildSumIntDTO:
+   type: object
+   properties:
+      id:
+        type: string
+        description: ""  
+      headerAcc:
+        type: string
+        description: ""
+      valueDate:
+        type: string
+        description: ""
+      frmNo:
+        type: number
+        description: ""
+      drcr:
+        type: string
+        description: ""
+      childSum:
+        type: number
+        description: ""
+  ICTBLmChildSumIntDTOCollection:
+    description: Collection of ICTBLmChildSumInt.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ICTBLmChildSumIntDTO'     
+  IclTbLoanDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""    
+      autoSettleOnMaturity:
+        type: string
+        description: ""
+      bookingMode:
+        type: string
+        description: ""
+      borrowingCustomerId:
+        type: string
+        description: ""
+      borrowingCustomerName:
+        type: string
+        description: ""
+      creditDisbursementAccount:
+        type: string
+        description: ""
+      creditDisbursementAccountDesc:
+        type: string
+        description: ""
+      creditDisbursementAmount:
+        type: number
+        description: ""
+      creditDisbursementCurrency:
+        type: string
+        description: ""
+      debitDisbursementAccount:
+        type: string
+        description: ""
+      debitDisbursementAmount:
+        type: number
+        description: ""
+      debitDisbursementCurrency:
+        type: string
+        description: ""
+      debitDisbursementDesc:
+        type: string
+        description: ""
+      exchangeLoanRate:
+        type: number
+        description: ""
+      iclBookingReport:
+        type: string
+        description: ""
+      iclReference:
+        type: string
+        description: ""
+      iclSettlementReport:
+        type: string
+        description: ""
+      interestAccrualFrequency:
+        type: string
+        description: ""
+      interestAccrued:
+        type: number
+        description: ""
+      interestLiquidationFrequency:
+        type: string
+        description: ""
+      interestOs:
+        type: number
+        description: ""
+      lendingCustomerId:
+        type: string
+        description: ""
+      lendingCustomerName:
+        type: string
+        description: ""
+      liquidateInterest:
+        type: string
+        description: ""
+      loanDate:
+        type: string
+        description: ""
+      loanIcProductCode:
+        type: string
+        description: ""
+      loanInterestRate:
+        type: number
+        description: ""
+      loanMaturityDate:
+        type: string
+        description: ""
+      loanOs:
+        type: number
+        description: ""
+      loanReference:
+        type: string
+        description: ""
+      loanStatus:
+        type: string
+        description: ""
+      loanType:
+        type: string
+        description: ""
+      parentCustomerId:
+        type: string
+        description: ""
+      parentCustomerName:
+        type: string
+        description: ""
+      settlementDate:
+        type: string
+        description: ""
+      settlementReference:
+        type: string
+        description: ""
+      structureId:
+        type: string
+        description: ""
+      structureDesc:
+        type: string
+        description: ""
+      structureMasterId:
+        type: string
+        description: ""
+      structureMasterVersionNo:
+        type: integer
+        description: ""
+      sweepId:
+        type: string
+        description: ""
+      sweepLogId:
+        type: string
+        description: ""
+      IclTbLoanTransactionDTO:
+        type: array
+        items:
+          $ref: '#/definitions/IclTbLoanTransactionDTO'
+  IclTbLoanListDTO:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/IclTbLoanDTO'
+  IclTbLoanTransactionListDTO:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/IclTbLoanTransactionDTO'          
+  IclTbLoanTransactionDTO:
+    type: object
+    properties:
+      basicAmount:
+        type: number
+        description: ""
+      currency:
+        type: string
+        description: ""
+      days:
+        type: number
+        description: ""
+      endDate:
+        type: string
+        description: ""
+      id:
+        type: string
+        description: ""
+      interestMethod:
+        type: string
+        description: ""
+      interestPaid:
+        type: number
+        description: ""
+      loanId:
+        type: string
+        description: ""
+      principalPaid:
+        type: number
+        description: ""
+      rate:
+        type: number
+        description: ""
+      startDate:
+        type: string
+        description: ""
+      valueDate:
+        type: string
+        description: ""
+      transactionType:
+        type: string
+        description: ""  

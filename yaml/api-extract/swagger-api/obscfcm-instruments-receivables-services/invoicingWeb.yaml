@@ -1,0 +1,1833 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Invoicing server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Invoicing Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "InvoicingWeb"
+    description: "API for Invoice File's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/getMarginDetails:
+    get:
+      tags:
+        - "InvoicingWeb"
+      summary: "Get Margin Data"
+      description: "Get Margin Data"
+      operationId: "getMarginDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "marginRefNo"
+          in: "query"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Margin Details DTO"
+          schema:
+            $ref: "./CommonDef.yaml#/definitions/MarginDetailsDto"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /web/v1/invoiceFileSearch:  
+    get:
+      tags:
+        - "InvoicingWeb"
+      summary: "Retrieves the list of existing Invoice Files."
+      description:  "Retrieves the list of existing Invoice Files. Add additional information here for the this endpoint."
+      operationId: "getInvoiceFiles"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "fileRef"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fileType"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "uploadDateFrom"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "uploadDateTo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "status"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "channel"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fileName"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InvoiceFileCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/invoiceSearch:
+    get:
+      tags:
+        - "InvoicingWeb"
+      summary: "Retrieves the list of existing Invoices."
+      description:  "Retrieves the list of existing Invoices."
+      operationId: "getInvoices"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: forInquiry
+        in: query
+        description: for inquiry or not
+        required: false
+        type: boolean
+      - name: "invoiceNumber"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "programCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "buyerName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "supplierName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "buyerDivCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "supplierDivCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceDateFrom"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceDateTo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceDueDateFrom"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceDueDateTo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceProcessStatus"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "paymentStatus"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fileRef"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fileName"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "preAccepted"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceRefNo"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "accepted"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "isFileEnquiry"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "isDisputed"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "isFinanciable"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceInquiryStatus"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "relationCode"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "linkedProgram"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "buyerId"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "supplierId"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "dateRefBasis"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "fromDate"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "toDate"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "ccy"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "invoiceAmtFrom"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "invoiceAmtTo"
+        in: "query"
+        required: false
+        type: "number"
+      - name: "indicator"
+        in: "query"
+        required: false
+        type: "string"   
+      - name: "discountRuleId"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "amountRefBasis"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "financeStatus"
+        in: "query"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InvoiceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/invoiceLinkedFinancesSearch:
+    get:
+      tags:
+        - "InvoicingWeb"
+      summary: "Retrieves the list invoice linked finances."
+      description:  "Retrieves the list invoice linked finances."
+      operationId: "getInvoiceLinkedFinances"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+        - name: "invoiceRefNo"
+          in: "query"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InvoiceLinkedFinancesCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/invoice:
+    patch:
+      tags:
+        - "InvoicingWeb"
+      summary: "Update existing Invoices."
+      description:  "Update existing Invoices. Add additional information here for the this endpoint."
+      operationId: "updateInvoices"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "invoices"
+          in: "body"
+          description: "Request Body that contains invoiceList required for updating an existing Invoices"
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceCollection"
+      responses:
+        200:
+          description: "Success"
+          schema:
+              $ref: "#/definitions/InvoiceManagementDTO"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/InvoiceManagementDTO"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Create new Invoice from UI."
+      description: "Create new Invoice from UI. "
+      operationId: "createInvoice"
+      parameters:
+        - name: "invoice"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Id of the newly created invoice"
+          schema:
+              $ref: "#/definitions/InvoiceModel"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/invoiceBatch:
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Batches the selected Invoice files."
+      description: "Batches the selected Invoice files. "
+      operationId: "batchInvoiceFiles"
+      parameters:
+        - name: "invoiceFiles"
+          in: "body"
+          description: "Request Body that contains data required for creating new Finance."
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceBatchingCollection"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Id of the newly created bidding"
+          schema:
+              type: "object"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/invoiceBatch/basicInfo/{financeRefNo}:
+    get:
+      tags:
+        - "InvoicingWeb"
+      summary: "Retrieves the Basic Info of Finance Transaction."
+      description:  "Retrieves the Basic Info of Finance Transaction."
+      operationId: "getBasicInfo"
+      parameters:
+        - name: "financeRefNo"
+          in: "path"
+          description: "ReferenceNumber for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/BasicFinanceInfoModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/invoiceBatch/invoices/{financeRefNo}:
+    get:
+      tags:
+        - "InvoicingWeb"
+      summary: "Retrieves the Basic Info of Finance Transaction."
+      description:  "Retrieves the Basic Info of Finance Transaction."
+      operationId: "getInvoicesInfo"
+      parameters:
+        - name: "financeRefNo"
+          in: "path"
+          description: "ReferenceNumber for which data needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InvoiceCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/invoiceFinance/statusUpdate:
+    put:
+      tags:
+        - "InvoicingWeb"
+      summary: "Updates status of Batches"
+      description: "Updates status of Batches"
+      operationId: "statusUpdate"
+      parameters:
+        - name: "transactionHeader"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/FinanceTransactionDtoWrapper"
+        - name: appId
+          in: header
+          type: string
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Id of the newly created bidding"
+          schema:
+              type: "object"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/invoiceFinance/purgeTransaction:
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Rollback finance transaction from invoice"
+      description: "Rollback finance transaction from invoice"
+      operationId: "rollbackFinTransaction"
+      parameters:
+        - name: "transactionHeader"
+          in: "body"
+          description: "Request Body that contains data required for purging the transaction"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Id of the newly created bidding"
+          schema:
+              type: "object"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/linkPrograms:
+    patch:
+      tags:
+        - "InvoicingWeb"
+      summary: "Update existing Invoices."
+      description:  "Update existing Invoices. Add additional information here for the this endpoint."
+      operationId: "linkPrograms"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "invoices"
+          in: "body"
+          description: "Request Body that contains invoiceList required for updating an existing Invoices"
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceCollection"
+      responses:
+        200:
+          description: "Success"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/authorizeInvoices:
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Adds a main Invoices after validation."
+      description: "Adds a main Invoices after validation "
+      operationId: "authorizeInvoices"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "transactionRefNoCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionRefNoCollection"
+      responses:
+        201:
+          description: "Returns the Id of the newly created bidding"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Bad Request"
+          schema:
+              $ref: "#/definitions/ResponseDtoWrapper"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    
+  /web/v1/instrumentTransaction/marginStageUpdate:
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Updates human task in conductor server"
+      description: "Updates human task in conductor server"
+      operationId: "updateMarginStage"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Finance Transaction"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created FinanceTransaction details"
+          headers:
+            Location:
+              description: "URL of newly created FinanceTransaction details"
+              type: "string"
+          schema:
+              type: "object"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+                
+  /web/v1/instrumentTransaction/stageUpdate:
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Updates human task in conductor server"
+      description: "Updates human task in conductor server"
+      operationId: "updateStage"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Finance Transaction"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created FinanceTransaction details"
+          headers:
+            Location:
+              description: "URL of newly created FinanceTransaction details"
+              type: "string"
+          schema:
+              type: "object"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /web/v1/getInvoicesByTxn:
+    get:
+        tags:
+          - "InvoicingWeb"
+        summary: "Get Invoices by Transaction Ref No"
+        description: "Get Invoices by Transaction Ref No"
+        operationId: "getInvoiceByTxn"
+        parameters:
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: false
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+          - name: "transactionRefNo"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "extTransactionRefNo"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "invoiceNumber"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "invoiceRefNo"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "indicator"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "version"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "stage"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "offset"
+            in: "query"
+            required: false
+            type: "integer"
+          - name: "limit"
+            in: "query"
+            required: false
+            type: "integer"
+        responses:
+          200:
+            description: "Successful performs the operation"
+            schema:
+              $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/InvoiceCollectionDto"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"
+            
+  /web/v1/getNewInvoicesBasedOnUser:
+    get:
+        tags:
+          - "InvoicingWeb"
+        summary: "Get Invoices by Transaction Ref No"
+        description: "Get Invoices by Transaction Ref No"
+        operationId: "getNewInvoicesBasedOnUser"
+        parameters:
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "tenantId"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+            description: "user id for SMS"
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "authToken"
+            in: "header"
+            type: "string"
+            required: false
+            description: "branch code for SMS"
+          - name: "contentType"
+            in: "header"
+            type: "string"
+            required: false
+          - name: "branchDate"
+            in: "header"
+            type: "string"
+            format: "date-time"
+            required: false
+          - name: "transactionRefNo"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "invoiceNumber"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "indicator"
+            in: "query"
+            required: false
+            type: "string"
+          - name: "offset"
+            in: "query"
+            required: false
+            type: "integer"
+          - name: "limit"
+            in: "query"
+            required: false
+            type: "integer"
+        responses:
+          200:
+            description: "Successful performs the operation"
+            schema:
+              $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/InvoiceCollectionDto"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          500:
+            description: "Internal error"
+            
+            
+  /web/v1/createInvoice:
+    post:
+      tags:
+        - "InvoicingWeb"
+      summary: "Create new Invoice from UI."
+      description: "Create new Invoice from UI. "
+      operationId: "createInProgressInvoice"
+      parameters:
+        - name: "invoice"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Id of the newly created invoice"
+          schema:
+              $ref: "#/definitions/InvoiceModel"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/createInvoice/{id}/{seqNo}:
+    put:
+      tags:
+        - "InvoicingWeb"
+      summary: "Updates an Invoice in Progress"
+      description: "Updates an Invoice in Progress"
+      operationId: "updateInProgressInvoice"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "id"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "seqNo"
+          in: "path"
+          type: "string"
+          required: true
+        - name: "invoiceProgressUpdateModel"
+          in: "body"
+          description: "Request Body for updating an existing Invoice"
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceProgressUpdateModel"
+      responses:
+        201:
+          description: "Success"
+          schema:
+              $ref: "#/definitions/InvoiceModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/initiateTransaction:
+    post:
+         tags:
+           - "InvoicingWeb"
+         summary: "Initiate task orchestration"
+         description: "Initiation of task is happen by this endpoint"
+         operationId: "initiateTransaction"
+         parameters:
+           - name: "appId"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "tenantId"
+             in: "header"
+             type: "string"
+             required: false
+           - name: "userId"
+             in: "header"
+             type: "string"
+             required: true
+             description: "user id for SMS"
+           - name: "branchCode"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "authToken"
+             in: "header"
+             type: "string"
+             required: false
+             description: "branch code for SMS"
+           - name: "contentType"
+             in: "header"
+             type: "string"
+             required: false
+           - name: "branchDate"
+             in: "header"
+             type: "string"
+             format: "date-time"
+             required: false
+           - name: "transactionControllerModel"
+             in: "body"
+             description: "Request Body that contains data required for creating a new Finance Transaction"
+             required: true
+             schema:
+               $ref: "#/definitions/TransactionControllerRequestModel"
+         responses:
+          201: 
+           description: "Returns message of success or failure "
+           headers:
+            Location:
+             description: "URL of newly created orchestrator" 
+             type: "string"
+           schema:
+             $ref: "#/definitions/ScreenClassInitiationDTO"
+          400:
+           description: "Malformed syntax."
+          401:
+           description: "Request does not have sufficient credentials."
+          403:
+           description: "Request is not authorized."
+          405:
+           description: "Invalid input"
+          500:
+           description: "Internal error"
+  /web/v1/historicalStatus:
+    get:
+        tags:
+          - "InvoicingWeb"
+        summary: "Retrieves the list of historical status."
+        description: "Retrieves the list of historical status."
+        operationId: "getHistoricalStatus"
+        parameters:
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "invoiceNumber"
+            in: "query"
+            required: true
+            type: "string"
+        responses:
+         200:
+          description: "Success"
+          schema:
+             $ref: "#/definitions/HistoricalStatusCollection"
+         400:
+          description: "Malformed syntax."
+         401:
+          description: "Request does not have sufficient credentials."
+         403:
+          description: "Request is not authorized."
+         405:
+          description: "Invalid input"
+         500:
+          description: "Internal error"
+  /web/v1/inheritCommodities:
+    post:
+        tags:
+          - "InvoicingWeb"
+        summary: "Retrieves the inherited of commodities."
+        description: "Retrieves the list of commodities ."
+        operationId: "getInheritCommodities"
+        parameters:
+          - name: "appId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "userId"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "branchCode"
+            in: "header"
+            type: "string"
+            required: true
+          - name: "invoiceNumbers"
+            in: body
+            description: Request Body
+            required: true
+            schema:
+               $ref: "#/definitions/InvoiceNumbers"
+        responses:
+         200:
+          description: "Success"
+          schema:
+             $ref: "#/definitions/InvoiceCommodityCollection"
+         400:
+          description: "Malformed syntax."
+         401:
+          description: "Request does not have sufficient credentials."
+         403:
+          description: "Request is not authorized."
+         405:
+          description: "Invalid input"
+         500:
+          description: "Internal error"
+definitions:
+  HistoricalStatusModel:
+    description: "Historical status Model"
+    type: "object"
+    properties:
+      invoiceStatus:
+        type: string
+        description: "Invoice Status"
+      remarks:
+        type: string
+        description: "Remarks"
+      discrepancyCode:
+        type: string
+        description: "Discrepancy Code"
+      dateOfAction:
+        type: string
+        description: "Date when the respective action described in the historical status field has occurred"
+  HistoricalStatusCollection:
+    description: "Collection of Historical statuses."
+    type: "object"
+    properties:
+      HistStatusList:
+       type: "array"
+       items:
+          $ref: "#/definitions/HistoricalStatusModel"
+
+  InvoiceFileModel:
+    description: "Invoice File model"
+    type: "object"
+    properties:
+      invoiceFileId:
+        description: "Id of the Invoice File"
+        type: "integer"
+        format: "int64"
+      channel:
+        type: string
+        description: "Channel"
+      fileName:
+        type: string
+        description: "File Name"
+      fileRef:
+        type: string
+        description: "File Reference"
+      fileType:
+        type: string
+        description: "File Type"
+      status:
+        type: string
+        description: "Status"
+      totalRecords:
+        type: number
+        description: "Total Records"
+      totalSuccessRecords:
+        type: number
+        description: "Total Success Records"
+      uploadDate:
+        type: string
+        description: "Upload Date"
+      uploadedFiles:
+        type: array
+        items:
+          $ref: "#/definitions/UploadedFile"
+      reasonCode:
+        type: string
+  UploadedFile:
+    description: "File Need to be uploaded."
+    type: "object"
+    properties:
+      fileName: 
+        type: string
+      fileContent: 
+        type: string
+  InvoiceFileCollection:
+    description: "Collection of Invoice Files."
+    type: "object"
+    properties:
+      InvoiceFileList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvoiceFileModel"
+  InvoiceModel:
+    description: "Invoice model"
+    type: "object"
+    properties:
+      srcAppCd:
+        type: "string"
+        description: "Source Application Code"
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      invoiceId:
+        description: "Id of the Invoice "
+        type: "string"
+      acceptanceAmount:
+        type: number
+        description: "Acceptance Amount"
+      amount:
+        type: number
+        description: "Amount"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      buyerDivCode:
+        type: string
+        description: "Buyer Division Code"
+      buyerDivName:
+        type: string
+        description: "Buyer Division Name"
+      currency:
+        type: string
+        description: "Currency"
+      isDisputed:
+        type: string
+        description: "Is Disputed"
+      discrepancyCode:
+        type: string
+        description: "Discrepancy Code"
+      disputeResolveRemarks:
+        type: string
+        description: "Dispute Resolve Remarks"
+      fileName:
+        type: string
+        description: "File Name"
+      fileRef:
+        type: string
+        description: "File Reference"
+      filler1:
+        type: string
+        description: "Filler 1"
+      filler2:
+        type: string
+        description: "Filler 2"
+      filler3:
+        type: string
+        description: "Filler 3"
+      filler4:
+        type: string
+        description: "Filler 4"
+      filler5:
+        type: string
+        description: "Filler 5"
+      filler6:
+        type: string
+        description: "Filler 6"
+      filler7:
+        type: string
+        description: "Filler 7"
+      filler8:
+        type: string
+        description: "Filler 8"
+      filler9:
+        type: string
+        description: "Filler 9"
+      filler10:
+        type: string
+        description: "Filler 10"
+      indicator:
+        type: string
+        description: "Indicator"
+      invoiceDate:
+        type: string
+        description: "Invoice Date"
+      invoiceDueDate:
+        type: string
+        description: "Invoice Due Date"
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      invoiceProcessStatus:
+        type: string
+        description: "Invoice Process Status"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      invoiceStatus:
+        type: string
+        description: "Invoice Status"
+      invAcceptanceDate:
+        type: string
+        description: "Invoice Acceptance Date"
+      maxFinancePercentage:
+         type: number
+         description: "Maximum Finance Percentage"
+      paidAmount:
+        type: number
+        description: "Paid Amount"
+      paymentStatus:
+        type: string
+        description: "Payment Status"
+      poNumber:
+        type: string
+        description: "Po Number"
+      programCode:
+        type: string
+        description: "Program Code"
+      reasonCode:
+        type: string
+        description: "Reason Code"
+      remarks:
+        type: string
+        description: "Remarks"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      supplierDivCode:
+        type: string
+        description: "Supplier Division Code"
+      supplierDivName:
+        type: string
+        description: "Supplier Division Name"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      totalInvoiceAmount:
+        type: number
+        description: "Total Invoice Amount"
+      financeableAmount:
+        type: number
+      relationCode:
+        type: string
+        description: "Relation Code"
+      transactionRefNo:
+        type: string
+      supplierCode:
+        type: string
+      buyerCode:
+        type: string
+      shipmentRefNo:
+        type: string
+      repayAccountNo:
+        type: string
+      bank:
+        type: string
+      branch:
+        type: string
+      routingCode:
+        type: number
+      isAutoAuth:
+       type: string
+      fundingReqAmt: 
+        type: number
+      tcmId:
+        type: string
+      makerId:
+        type: string
+      makerDtStamp:
+        type: string 
+      processingBranchCode:
+        type: string
+      action:
+        type: string
+      processingDate:
+        type: string
+      paymentDate:
+        type: string
+      disputedAmount:
+        type: number   
+      linkedDocs:
+        type: string    
+      isFinanced:
+        type: string
+      stageId:
+        type: string 
+      isAccepted:
+        type: string
+      isDisputeResolvedWriteOff:
+        type: string
+      isAssigned:
+        type: string
+      isApproved:
+        type: string 
+      assignmentParty:
+        type: string
+      bunchIdentifier:
+        type: string
+      isOverdue :
+        type: string
+      oldAcceptanceAmount:
+        type: number
+      oldFinanceAmount:
+        type: number
+      adjustmentReason:
+        type: string
+      linkInvoiceNumber:
+        type: "string"
+        description: "Coma/Pipe seperated invoice numbers"
+      paymentDueDate:
+        type: string
+        description: "Payment Due Date"
+      invoiceCommodityGridList:
+        type: array
+        items:
+          $ref: '#/definitions/InvoiceCommodityGridModel'
+      seqNo:
+        type: integer
+        format: int64
+      feedSerialNo:
+        type: "integer"
+        format: "int32"
+      expiresOn:
+        type: string
+      fundingReqDate:
+        type: string
+      newFundingReqDate:
+        type: string
+      oldExpiryDate:
+        type: string
+      invoiceValueDate:
+        type: string
+        description: "Invoice Value Date"
+      discount1Days:
+        type: integer
+        description: "Discount 1 Days"
+      discount2Days:
+        type: integer
+        description: "Discount 2 Days"
+      discount1Perc:
+        type: number
+        description: "Discount 1 Perc" 
+      discount2Perc:
+        type: number
+        description: "Discount 2 Perc"
+      paymentCondition:
+        type: integer
+        description: "Payment Condition"  
+      exportFactorId:
+        type: string
+        description: "Export Factor Id"           
+  InvoiceCommodityGridModel:
+    type: object
+    properties:
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      commodityCode:
+        type: string
+        description: "Commodity Code"
+      costPerUnit:
+        type: number
+        description: "Cost Per Unit"
+      invoiceCommodityGridId:
+        description: "Id of the Invoice Commodity Grid"
+        type: "string"
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      invoiceMasterId:
+        type: string
+        description: "Invoice Master Id"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      netCost:
+        type: number
+        description: "Net Cost"
+      quantity:
+        type: number
+        description: "Quantity"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      totalCost:
+        type: number
+        description: "Total Cost"
+      transactionRefNo:
+        type: string           
+  InvoiceCollection:
+    description: "Collection of Invoices."
+    type: "object"
+    properties:
+      invoiceList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InvoiceModel"
+      paging:
+        type: "object" 
+  InvoiceSearchModel:
+    description: "Invoice Search Model Class."
+    type: "object"
+    properties:
+      invoiceNumber:
+        type: string
+      programCode:
+        type: string
+      buyerName: 
+        type: string
+      supplierName:
+        type: string
+      invoiceDateFrom:
+        type: "string"
+      invoiceDateTo:
+        type: "string"
+      invoiceDueDateFrom:
+        type: "string"
+      invoiceDueDateTo:
+        type: "string"
+      fundingReqDateFrom:
+        type : "string"
+      fundingReqDateTo:
+        type: "string"    
+      invoiceProcessStatus:
+        type: string
+      fileName:
+        type: string
+      fileRef:
+        type: string
+      invoiceRefNo:
+        type: string
+      isFileEnquiry:
+        type: string
+      buyerDivCode:
+        type: string
+        description: "Buyer Division Code"
+      supplierDivCode:
+        type: string
+        description: "Supplier Division Code"
+      isDisputed:
+        type: string
+        description: "Is Disputed"
+      isFinanciable:
+        type: string
+        description: "Is Financiable"
+      relationCode:
+        type: string
+        description: "Relation Code"
+      dateRefBasis:
+        type: string
+        description: "Date Reference Basis"
+      fromDate:
+        type: string
+        description: "From Date"
+      toDate:
+        type: string
+        description: "To Date"
+      indicator:
+        type: string
+        description: "Indicator"
+      discountRuleId:
+        type: string
+        description: "discountRuleId" 
+      forDynamicInvFilter:
+        type: boolean
+      programName:
+        type: string
+      invoiceStatus:
+        type: string
+      discountStatus:
+        type: string
+      paymentStatus:
+        type: string
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  CmcTmLocalHolidayMasterCollection: 
+   description: "Collection of localholiday."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmcTmLocalHolidayMasterDto"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  CmcTmLocalHolidayMasterDto:
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      branchCode:
+       type: string
+       minLength: 0
+       maxLength: 3
+      year:
+       type: number
+       minLength: 0
+       maxLength: 4
+      weeklyHolidays:
+       type: string
+       minLength: 0
+       maxLength: 7
+      unexpHol:
+       type: string
+       minLength: 0
+       maxLength: 1
+      CmcTmLocalHolidayDto:
+       type: array
+       items:
+        $ref: '#/definitions/CmcTmLocalHolidayDto'
+     required:
+      - branchCode
+      - year
+  CmcTmLocalHolidayDto:
+   type: object
+   properties:
+      id:
+       type: string
+      branchCode:
+       type: string
+       minLength: 0
+       maxLength: 3
+      year:
+       type: number
+       minLength: 0
+       maxLength: 4
+      month:
+       type: number
+       minLength: 0
+       maxLength: 2
+      holidayList:
+       type: string
+       minLength: 0
+       maxLength: 31
+      localHolidayMasterId:
+       type: string
+   required:
+    - month
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/ResponseCode"
+    requestId:
+     type: string
+  ResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+    args:
+     type: array
+     items:
+      type: object
+    arg:
+     type: string

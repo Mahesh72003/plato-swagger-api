@@ -1,0 +1,1185 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Payment Terms Aggregate Web
+host: 10.184.157.121:9000
+basePath: /obscfcm-core-services
+tags:
+- name: PaymenttermsAggregateWeb
+  description: API for payment terms operations
+  
+schemes:
+- http
+paths:
+  /web/v1/paymentterms:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Adds a new datasegment details.
+      description: Adds a new datasegment details.
+      operationId: createResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: paymenttermsWebModel
+        in: body
+        description: Request Body that contains data required for creating a new datasegment
+        required: true
+        schema:
+         $ref: '#/definitions/PaymenttermsWebModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created datasegment
+          headers:
+            Location:
+              description: URL of newly created datasegment
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - PaymenttermsAggregateWeb
+     summary: "Get all valid master datasegment details"
+     description:  "Get all valid master datasegment. This endpoints will be used to Get all valid master datasegment maintenance records."
+     operationId: "getSummary"
+     parameters:
+     - name: userId
+       in: header
+       description: userId
+       required: true
+       type: string
+     - name: branchCode
+       in: header
+       description: branchCode
+       required: true
+       type: string
+     - name: appId
+       in: header
+       type: string
+       required: true
+     - name: includecloseandunauth
+       in: query
+       description: includecloseandunauth need to be set to fetch summary record, defult value is false
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: offset is starting no of records to be fetched
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: limit is maximum no of records to be fetched
+       required: false
+       type: integer
+     - name: filterAttr1
+       in: query
+       description: Program Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr3
+       in: query
+       description: Relationship Code for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr2
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr4
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr5
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr6
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr7
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr8
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr9
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: filterAttr10
+       in: query
+       description: Spoke Id for Payment Terms
+       required: false
+       type: "string"
+     - name: frequencyOfPayments
+       in: query
+       description: Frequency of Payments can be M for Monthly, W for Weekly, C for Custom
+       required: false
+       type: "string" 
+     - name: authStat
+       in: query
+       description: auth status of the records to be fetched
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: records status of the records to be fetched
+       required: false
+       type: string       
+     responses:
+      200:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         $ref: '#/definitions/ObscfcmPaymentTermsTmCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /web/v1/paymentterms/{resourceId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Retrieves the datasegment deatils by resourceId.
+      description: Retrieves the datasegment deatils by resourceId.
+      operationId: getByResourceId
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id of the datasegment that needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: datasegmentCode of the datasegment
+        type: string
+      - name: version
+        in: query
+        description: version of the datasegment
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: "provides only latest lates auth records if true"
+        required: false
+        default: false
+        type: boolean
+      - name: applicationCode
+        in: query
+        description: applicationCode
+        required: false
+        type: string          
+      responses:
+        200:
+          description: Returns the datasegment based on given resourceId.
+          schema:
+            $ref: '#/definitions/PaymenttermsWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Update an existing datasegment.
+      description: Update an existing datasegment.
+      operationId: updateResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be updated
+        required: true
+        type: string
+      - name: paymenttermsWebModel
+        in: body
+        description: Request Body that contains data required for updating an existing datasegment
+        required: true
+        schema:
+          $ref: '#/definitions/PaymenttermsWebModel'
+      responses:
+        202:
+          description: Returns updated datasegment Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/paymentterms/{resourceId}/delete:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Delete the resource based on the resourceId and version.
+      description: Deleting the resource.
+      operationId: deleteResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be deleted
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be deleted
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/paymentterms/{resourceId}/isValid:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Validates the resource by Resource Id.
+      description: Validates the resource by Resource Id.
+      operationId: validateResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true     
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be validated
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: version for which validation is required
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/paymentterms/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Submit for the Resource.
+      description: Validates datasegments and submits the resource.
+      operationId: submitResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be submited
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/paymentterms/{resourceId}/unauthorized:
+    get:
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: "Retrives the unauthorized resource by given resource id"
+      description:  "Retrives the unauthorized resource identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ObscfcmPaymentTermsTmCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/paymentterms/{resourceId}/authorize:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Authorize the resource.
+      description: Authorize the resource and moves the latest data from all worktables to main tables.
+      operationId: authorizeResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true      
+      - name: resourceId
+        in: path
+        description: Resource id of the resource
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be authorized
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/paymentterms/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: removes the advisory lock on the resource.
+      description: removes the advisory lock on the resource.
+      operationId: removeResourceLock
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true   
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /web/v1/paymentterms/{resourceId}/actions:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: provides action for Resource Id.
+      description: provides action for Resource Id.
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true   
+      - name: resourceId
+        in: path
+        description: Resource Id for which actions needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            type: "string"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/paymentterms/{resourceId}/history:
+    get:
+      tags:
+      - PaymenttermsAggregateWeb  
+      summary: "Retrives the history by given Resource Id"
+      description:  "Retrives the history by given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Successful operation.
+          schema:          
+            $ref: '#/definitions/ObscfcmPaymentTermsTmCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /web/v1/paymentterms/{resourceId}/close:
+    patch:
+      tags:
+      - PaymenttermsAggregateWeb  
+      summary: "Closes the resource by given Resource Id"
+      description:  "Closes the resource by given Resource Id"
+      operationId: "closeResource"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be closed
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be closed
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /web/v1/paymentterms/{resourceId}/reopen:
+    patch:
+      tags:
+      - PaymenttermsAggregateWeb    
+      summary: "reopen the resource by given Resource Id"
+      description:  "reopen the resource by given Resource Id"
+      operationId: "reopenResource"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be reopned 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be reopened
+        required: true
+        schema:
+         $ref: "#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/paymentterms/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - PaymenttermsAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceAggregate
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: keyId
+        in: path
+        description: keyId for which the data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/PaymenttermsWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                        
+definitions:
+ PaymenttermsAggregateModel:
+    description: PaymenttermsAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       obscfcmPaymentTermsTm:
+        $ref: '#/definitions/ObscfcmPaymentTermsTmModel'
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+ BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type                         
+ PaymenttermsAggregateModelCollection:
+    description: Collection of  PaymenttermsAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PaymenttermsAggregateModel'
+ PaymenttermsWebModel:
+    description: PaymenttermsWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      makerId:
+        description: maker id
+        type: string
+      makerDateStamp:
+        description: make date stamp
+        type: string
+        format: date-time
+      checkerId:
+        description: check id
+        type: string
+      checkerDateStamp:
+        description: checker date stamp
+        type: string
+        format: date-time
+      modNo:
+        description: mod no
+        type: integer
+      recordStatus:
+        description: record status flag
+        type: string
+      authStatus:
+        description: auth status flag
+        type: string
+      onceAuth:
+        description: once auth flag
+        type: string
+      doerRemarks:
+        description: doer remarks
+        type: string
+      approverRemarks:
+        description: approver  remarks
+        type: string        
+      obscfcmPaymentTermsTm:
+        $ref: '#/definitions/ObscfcmPaymentTermsTmModel'
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType         
+ PaymenttermsWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/PaymenttermsWebModel'
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object  
+ OrchestratorDTO:
+  type: object
+ ObscfcmPaymentTermsTmCollection: 
+  description: "Collection of obscfcmpaymenttermstm."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ObscfcmPaymentTermsTmModel"
+   paging:
+    $ref: "#/definitions/PagingDto" 
+ ObscfcmPaymentTermsTmModel:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     id:
+      type: string
+      description: "id of payment terms"
+     action:
+      type: string
+      description: "action to be performed"
+     autoAuth:
+      type: string
+      description: "autho auth status"
+     modificationStatus:
+      type: string
+      description: "modification Status"   
+     datasegmentCode:
+      type: string
+      description: 'Datasegment code'
+     checkerRemarks:
+      type: string
+      description: 'Checker Remarks' 
+     makerRemarks:
+      type: string
+      description: 'Maker Remarks'                            
+     applicationCode:
+      type: string
+      description: "ApplicationCode for Payment Terms"
+     filterAttr1: 
+      description: "FilterAttr1 for Payment Terms"
+      type: string
+     filterAttr1Name:
+      type: string
+      description: "FilterAttr1 Name for Payment Terms"
+     filterAttr1Label:
+      type: string
+      description: "Filter Attribute 1 Label"
+     filterAttr1ColumnName:
+      type: string
+      description: "Filter Attribute 1 Column Name"
+     filterAttr1Type:
+      type: string
+      description: "Filter Attribute 1 Type"
+     filterAttr1EndpointValue:
+      type: string
+      description: "Filter Attribute 1 Endpoint Key"
+     filterAttr1ReqParams:
+      type: string
+      description: "Filter Attribute 1 ReqParams"
+     filterAttr1LovConfig:
+      type: "array"
+      description: "Filter Attribute 1 LOV Config Data"
+      items:
+       $ref: '#/definitions/Map'
+     filterAttr2: 
+      description: "filterAttr2 for Payment Terms"
+      type: string
+     filterAttr2Name:
+      type: string
+      description: "FilterAttr2 Name for Payment Terms" 
+     filterAttr3: 
+      description: "filterAttr2 for Payment Terms"
+      type: string
+     filterAttr3Name:
+      type: string
+      description: "FilterAttr3 Name for Payment Terms" 
+     filterAttr4: 
+      description: "filterAttr3 for Payment Terms"
+      type: string
+     filterAttr4Name:
+      type: string
+      description: "FilterAttr4 Name for Payment Terms" 
+     filterAttr5: 
+      description: "filterAttr4 for Payment Terms"
+      type: string
+     filterAttr5Name:
+      type: string
+      description: "FilterAttr5 Name for Payment Terms" 
+     filterAttr6: 
+      description: "FilterAttr6 for Payment Terms"
+      type: string
+     filterAttr6Name:
+      type: string
+      description: "FilterAttr6 Name for Payment Terms" 
+     filterAttr7: 
+      description: "FilterAttr7 for Payment Terms"
+      type: string
+     filterAttr7Name:
+      type: string
+      description: "FilterAttr7 Name for Payment Terms" 
+     filterAttr8: 
+      description: "FilterAttr8 for Payment Terms"
+      type: string
+     filterAttr8Name:
+      type: string
+      description: "FilterAttr8 Name for Payment Terms" 
+     filterAttr9: 
+      description: "FilterAttr9 for Payment Terms"
+      type: string
+     filterAttr9Name:
+      type: string
+      description: "FilterAttr9 Name for Payment Terms" 
+     filterAttr10: 
+      description: "FilterAttr10 for Payment Terms"
+      type: string
+     filterAttr10Name:
+      type: string
+      description: "FilterAttr10 Name for Payment Terms"
+     filterCriteria:
+      type: string
+      description: "Filter Criteria for Payment Terms"
+     daysOfTheMonth:
+      type: string
+      description: "DaysOfTheMonth for Payment Terms"
+     daysOfTheWeek:
+      type: string
+      description: "DaysOfTheWeek for Payment Terms"
+     frequencyOfPayments:
+      type: string
+      description: "FrequencyOfPayments for Payment Terms"
+     holidayTreatment:
+      type: string
+      description: "HolidayTreatment for Payment Terms"
+     minimumCreditPeriod:
+      type: number
+      description: "MinimumCreditPeriod for Payment Terms"
+     paymentDateCalculationBasis:
+      type: string
+      description: "PaymentDateCalculationBasis for payment Terms"
+     ObscfcmPaymentCustomTermsTmModel:
+      type: array
+      items:
+       $ref: '#/definitions/ObscfcmPaymentCustomTermsTmModel'
+ ObscfcmPaymentCustomTermsTmModel:
+  type: object
+  properties:
+     id:
+      type: string
+      description: "Id"
+     fromDay:
+      type: string
+      description: "From Date for Customer payment Terms"
+     toDay:
+      type: string
+      description: "To Date for Custom Payment Terms"
+     paymentDay:
+      type: string
+      description: "Payment Day for Custom Payment Terms"
+     paymentTermsId:
+      type: string
+      description: "PaymentTerms Id for Custom Payment Terms"
+ ScfFilterParamModelKeyCollection:
+  description: "Collection of list of Parameters."
+  type: "object"
+  properties:
+     category:
+      description: "category of the param"
+      type: "string"
+     ScfFilterParamModelCollection:
+      type: "array"
+      items:
+       $ref: "#/definitions/ScfFilterParamModelCollection"
+ ScfFilterParamModelCollection:
+  description: "Collection of Scf filter parameters"
+  type: "object"
+  properties:
+     type:
+      description: "Filter criteria"
+      type: "string"
+     hierarchy:
+      description: "hierarchy of the criteria"
+      type: "string"
+     ScfFilterParamModel:
+      type: "array"
+      items:
+       $ref: "#/definitions/ScfFilterParamModel" 
+ ScfFilterParamModel:
+  description: "Scf Filter Parameters model"
+  type: "object"
+  properties:
+     parameter:
+      description: "Name of the parameter"
+      type: "string"
+     label:
+      description: "Label of the parameter for given language"
+      type: "string"
+     columnName:
+      description: "Name of the mapped column for given parameter"
+      type: "string"
+     fieldType:
+      description: "Field Type"
+      type: "string"
+     endpointValue:
+      description: "Endpoint Value"
+      type: "string"
+     reqParams:
+      description: "Request Parameters"
+      type: "string"
+     lovConfig:
+      description: "LOV Config Data"
+      type: "array"
+      items:
+       $ref: '#/definitions/Map'

@@ -1,0 +1,208 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : email.notification
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server emailconfiguration server." 
+ version: "1.0.0"
+ title: "emailconfiguration Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "emailconfiguration"
+   description: "cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification.cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../emailconfiguration
+
+ /sendEmail:
+  post:
+   tags:
+    - "emailconfiguration"
+   summary: "Adds a new emailconfiguration."
+   description: "send email by templateCode and eventCode"
+   operationId: "sendEmail"
+   parameters:
+    - name: "emailconfiguration" 
+      in: "body" 
+      description: "Request Body that contains data required for sending email" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEmailNotificationDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created emailconfiguration" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/SendEmailResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+ CmcTmEmailNotificationDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     eventCode:
+      type: string
+      description: ""
+     templateCode:
+      type: string
+      description: ""
+     userId:
+      type: string
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+     documentId:
+      type: string
+      description: ""
+     toEmailIds:
+      type: string
+      description: ""
+     ccEmailIds:
+      type: string
+      description: ""
+     applicationNumber:
+      type: string
+      description: ""
+     params:
+      type: array
+      items: 
+       $ref: "#/definitions/param"
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ SendEmailResponseDtoWrapper:
+  type: object
+  properties:
+     responseCode:
+      type: string
+      description: ""
+     responseStatus:
+      type: string
+      description: ""
+
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ param:
+  type: object
+  properties:
+     name:
+      type: string
+      description: ""
+     value:
+      type: string
+      description: ""
+     type:
+      type: string
+      description: ""
+      

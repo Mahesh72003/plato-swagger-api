@@ -1,0 +1,1486 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Instrument Collection Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Accounting"
+    description: "APIs DepositSlip related Operation"
+    
+schemes:
+- "https"
+
+paths:
+#  /web/v1/accounting/create:
+#    post:
+#      tags:
+#        - "Accounting"
+#      summary: "Retrieves the Product "
+#      description:  "Save AccountingData"
+#      operationId: "saveAccountTransaction"
+#      parameters:
+#        - name: "accountingTransactionModel"
+#          in: "body"
+#          description: "Request Body that contains data required for creating a new DepositSlip"
+#          required: true
+#          schema:
+#            $ref: "#/definitions/AccountingTransactionCollection"      
+#        - name: "appId"
+#          in: "header"
+#          type: "string"
+#          required: true
+#        - name: "tenantId"
+#          in: "header"
+#          type: "string"
+#          required: false
+#        - name: "userId"
+#          in: "header"
+#          type: "string"
+#          required: true
+#          description: "user id for SMS"
+#        - name: "branchCode"
+#          in: "header"
+#          type: "string"
+#          required: true
+#        - name: "authToken"
+#          in: "header"
+#          type: "string"
+#          required: false
+#          description: "branch code for SMS"
+#        - name: "contentType"
+#          in: "header"
+#          type: "string"
+#          required: false
+#        - name: "branchDate"
+#          in: "header"
+#          type: "string"
+#          format: "date-time"
+#          required: false
+#      responses:
+#        200:
+#          description: "Returns the DepositSlip based on given id."
+#          schema:
+#            $ref: "#/definitions/ResponseDtoWrapper"
+#        400:
+#          description: "Malformed syntax."
+#        401:
+#          description: "Request does not have sufficient credentials."
+#        403:
+#          description: "Request is not authorized."
+#        500:
+#          description: "Internal error"
+          
+          
+  /web/v1/accounting:     
+      post:
+        tags:
+        - "Accounting"
+        summary: "Get all accounting entries with their details based on filter(query param) criterias."
+        description: "Get all accounting entries."
+        operationId: "getAllAccountingDetails"
+        produces:
+          - "application/json"
+          - "application/xml"
+        parameters:
+        - name: "branchCode"
+          in: "header"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          description: "appId"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer     
+        - name: "rquestDto" 
+          in: "body" 
+          description: "Request Body that contains data required for creating a new accentrycode" 
+          required: true
+          schema:
+              $ref: "#/definitions/GenericObscfCmAccountDTO"
+        responses:
+          201:
+            description: "Returns message of success or failure"
+            schema:
+              $ref: "#/definitions/AccountingTransactionCollection"
+          400:
+            description: "Malformed syntax."
+          401:
+            description: "Request does not have sufficient credentials."
+          403:
+            description: "Request is not authorized."
+          405:
+            description: "Invalid input"
+          500:
+            description: "Internal error"
+            
+  /web/v1/poolingAccountNumber:     
+    get:
+      tags:
+      - "Accounting"
+      summary: "Get all accounting entries with their details based on filter(query param) criterias."
+      description: "Get all accounting entries."
+      operationId: "getAllAccountingNumbers"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "appId"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: productCode
+        in: query
+        description: product code of the account
+        required: false
+        type: string
+      - name: accountNumber
+        in: query
+        description: accountNumber of the record
+        required: false
+        type: string
+      - name: eventCode
+        in: query
+        description: event code of the account
+        required: false
+        type: string
+      - name: poolingAcntType
+        in: query
+        description: pooling account type  of the account can be E/C/V
+        required: true
+        type: string
+      - name: poolingLevelType
+        in: query
+        description: pooling account type  of the account can be batch or deposit
+        required: false
+        type: string
+      - name: corporateDivisionCode
+        in: query
+        description: division code of the account
+        required: false
+        type: string
+      - name: corporateId
+        in: query
+        description: corporateId of the account
+        required: false
+        type: string
+      - name: applicationName
+        in: query
+        description: application Name from where the call in coming 
+        required: true
+        type: string 
+      - name: refNo
+        in: query
+        description: refno of the record
+        required: false
+        type: string
+      - name: chargeCode
+        in: query
+        description: chargeCode of the record
+        required: false
+        type: string
+      - name: chargeType
+        in: query
+        description: chargeType of the record
+        required: false
+        type: string
+      - name: location
+        in: query
+        description: location of the record
+        required: false
+        type: string
+      - name: counterPartyId
+        in: query
+        description: counterPartyId of the record
+        required: false
+        type: string
+      - name: partyId
+        in: query
+        description: partyId of the record
+        required: false
+        type: string
+      - name: recordStat
+        in: query
+        description: recordStat of the record
+        required: false
+        type: string
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/PoolingAccountCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /web/v1/accountNumber:
+    get:
+      tags:
+      - "Accounting"
+      summary: "Get all accounts based on filter criterias."
+      description: "Get all accounts."
+      operationId: "getAllAccountNumbers"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "appId"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: applicationName
+        in: query
+        description: application Name from where the call is coming 
+        required: true
+        type: string
+      - name: productCode
+        in: query
+        description: product code of the account
+        required: false
+        type: string
+      - name: eventCode
+        in: query
+        description: event code of the account
+        required: false
+        type: string
+      - name: accountType
+        in: query
+        description: account type  of the account can be External (E) / Real (C) / Virtual (V)
+        required: true
+        type: string
+      - name: accountNumber
+        in: query
+        description: accountNumber of the record
+        required: false
+        type: string      
+      - name: corporateId
+        in: query
+        description: corporateId of the account
+        required: true
+        type: string    
+      - name: divisionCode
+        in: query
+        description: division code of the account
+        required: false
+        type: string
+      - name: locationCode
+        in: query
+        description: location code of the record
+        required: false
+        type: string
+      - name: category
+        in: query
+        description: category of the record
+        required: false
+        type: string
+      - name: recordStat
+        in: query
+        description: recordStatus of the record
+        required: false
+        type: string
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: "callFromLov"
+        in: "query"
+        required: false
+        description: "Lov Filter"
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      responses:
+        201:
+          description: "Returns message of success or failure"
+          schema:
+            $ref: "#/definitions/PoolingAccountCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /web/v1/accounting/generate:
+    post:
+      tags:
+        - "Accounting"
+      summary: "Generate Accounting for Instruments."
+      description:  "Generate accounting for instruments in accounting work table ."
+      operationId: "generateAccounting"
+      parameters:
+        - name: "conductorWorkFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for generating accounting"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false      
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /web/v1/accounting/post:
+    post:
+      tags:
+        - "Accounting"
+      summary: "Post Accounting for Instruments."
+      description:  "Post accounting for instruments for fcubs accounting."
+      operationId: "postAccounting"
+      parameters:
+        - name: "conductorWorkFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for post accounting"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false      
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+                                        
+  /web/v1/accounting/generatecash:
+    post:
+      tags:
+        - "Accounting"
+      summary: "Generate Accounting for Cash."
+      description:  "Generate accounting for cash in accounting work table ."
+      operationId: "generateAccountingCash"
+      parameters:
+        - name: "conductorWorkFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for generating accounting"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "appId"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "tenantId"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branchCode for sms"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "authToken for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "req contentType"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+          description: "branchDate"      
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+  /web/v1/accounting/postcash:
+    post:
+      tags:
+        - "Accounting"
+      summary: "Post Accounting for cash."
+      description:  "Post accounting for cash for fcubs accounting."
+      operationId: "postAccountingCash"
+      parameters:
+        - name: "conductorWorkFlowModel"
+          in: "body"
+          description: "Request Body that contains data required for post accounting"
+          required: true
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "appId for service"
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "tenantId"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branchCode for sms"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "authToken for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "req contentType"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+          description: "branchDate"      
+      responses:
+        200:
+          description: "Returns updated customer"
+          schema:
+            $ref: "#/definitions/ConductorWorkFlowModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+                       
+definitions:
+  AccountingTransactionModel:
+    description: "Accounting Transaction Model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      refNo:
+        type: "string"
+      poolingLevelType:
+        type: "string"
+      instDepRefNo:
+        type: "string"      
+      seqNo:
+        type: "integer"
+        format: "int64"
+      accountingEntryCode:
+        type: "string"
+      drCrIndicator:
+        type: "string"
+      amountCcy:
+        type: "string"
+      amount:
+        type: "number"
+      amountType:
+        type: "string"
+      accountCcy:
+        type: "string"
+      amountAccCcy:
+        type: "number"
+      accountNo:
+        type: "string"
+      exchangeRate:
+        type: "number"
+      status:
+        type: "string"
+      errorCode:
+        type: "string"
+      errorDesc:
+        type: "string"
+      accRoleCode:
+        type: "string"
+      accPartyType:
+        type: "string"
+      accPartyId:
+        type: "string"
+      accSettMethod:
+        type: "string"
+      accEntrySeq:
+        type: "integer"
+        format: "int64"
+      accRoleDesc:
+        type: "string"
+      accEntryDesc:
+        type: "string"
+      accType:
+        type: "string"
+      eventSrNo:
+        type: "number"
+      ecaRefNo:
+        type: "string"
+      externalAccount:
+        type: "string"
+      paymentMode:
+        type: "string"
+      externalAccountCcy:
+        type: "string"
+      externalBankId:
+        type: "string"
+      externalBankName:
+        type: "string"
+      externalBranchCode:
+        type: "string"
+      externalBranchName:
+        type: "string"
+      externalBranchRoutingCode:
+        type: "integer"
+        format: "int64"
+      eventCode:
+        type: "string"
+        description: "Event Code"
+      productCode:
+        type: "string"
+        description: "Product code"
+      txnBranchCode:
+        type: "string"
+        description: "Transaction Branch Code"
+      applicationCode:
+        type: "string"
+        description: "Application Code"
+      processingDate:
+        type: "string"
+        description: "Processing date"
+      valueDate:
+        type: "string"
+        description: "Value Date"
+      accClass:
+        type: "string"
+        description: "Account Class"        
+              
+  AccountingTransactionCollection:
+    description: "Collection of Accounting Transaction Models."
+    type: "object"
+    properties:
+      accountingTransactionList:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountingTransactionModel"
+          
+  AccountingTransactionServiceCollection:
+    description: "Collection of Accounting Transaction Service Models."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/AccountingTransactionModel"          
+          
+  GenericObscfCmAccountDTO:
+    type: object
+    properties:
+      refNo:
+       type: string
+      instDepRefNo:
+       type: string
+      applicationName:
+       type: string
+      recordStat:
+       type: "string"
+      otherDetails:
+       type: object
+       additionalProperties:
+        type: string
+        
+  AccountingCollection: 
+    description: "Collection of AccountingModel"
+    type: object
+    properties:
+      accountingModelList:
+        type: array
+        items:
+          $ref: "#/definitions/AccountingModel"
+      paging:
+        $ref: "#/definitions/PagingDto"
+        
+  AccountingModel:
+    type: object
+    properties:
+      accEntryCode:
+       type: string
+      creditAmountType:
+       type: string
+      debitAmountType:
+       type: string
+      creditAccRoleCode:
+       type: string
+      debitAccRoleCode:
+       type: string
+      debitAccRoleDescription:
+       type: string
+      creditAccRoleDescription:
+       type: string
+      sequence:
+       type: number
+      accEntryDescription:
+       type: string
+      creditAmount:
+       type: number
+      creditAmtCcy:
+       type: string
+      debitAmount:
+       type: number
+      debitAmtCcy:
+       type: string
+      creditPartyId:
+       type: string
+      creditPartyName:
+       type: string
+      debitPartyId:
+       type: string
+      debitPartyName:
+       type: string
+      creditAccountNumber:
+       type: string
+      creditAccountCurrency:
+       type: string
+      debitAccountNumber:
+       type: string
+      debitAccountCurrency:
+       type: string
+      debitAmountInAccCcy:
+       type: number
+      creditAmountInAccCcy:
+       type: number
+      creditSettlementMethod:
+       type: string
+      debitSettlementMethod:
+       type: string
+      creditDivisionCode:
+       type: string
+      debitDivisionCode:
+       type: string
+      creditExchangeRate:
+       type: "number"
+      debitExchangeRate:
+       type: "number"
+      creditAccType:
+       type: "string"
+      debitAccType:
+       type: "string"
+      eventSrNo:
+        type: "number"
+      creditExtAcntList:
+        type: array
+        items:
+          $ref: "#/definitions/ScfTmExtAccMapMasterModelDTO"
+      debitExtAcntList:
+        type: array
+        items:
+          $ref: "#/definitions/ScfTmExtAccMapMasterModelDTO"
+      accEntryAttributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Attribute"
+      creditInternalAttributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Attribute"
+      debitInternalAttributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Attribute"
+      creditExternalAttributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Attribute"
+      debitExternalAttributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/Attribute"          
+          
+  ScfTmExtAccMapMasterModelDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        accountNumber:
+          type: string
+          description: ""     
+        bankName:
+          type: string
+          description: ""
+        branchCode:
+          type: string
+          description: ""
+        branchName:
+          type: string
+          description: ""
+        defaultAccount:
+          type: string
+          description: ""
+        eventCode:
+          type: string
+          description: ""     
+        ifscCode:
+          type: string
+          description: ""
+        partyId:
+          type: string
+          description: ""    
+        productCode:
+          type: string
+          description: ""
+        filterAttr1:
+          type: string
+          description: "" 
+        filterAttr2:
+          type: string
+          description: ""
+        filterAttr3:
+          type: string
+          description: ""
+        filterAttr4:
+          type: string
+          description: ""
+        filterAttr5:
+          type: string
+          description: ""
+        accountCcy:
+          type: string
+          description: ""
+        paymentMode:
+          type: string
+          description: ""
+        bankId:
+          type: string
+          description: ""
+          
+  Attribute:
+    description: "Represents each attribute of the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeName:
+        description: "Name of the attribute representing DB column name"
+        type: "string"
+      attributeValue:
+        description: "Value of the corresponding column in DB"
+        type: "string"          
+          
+  PoolingAccountCollection: 
+      description: "Collection of PoolingAccountResponse"
+      type: "object"
+      properties:
+       data:
+        type: "array"
+        items: 
+         $ref: "#/definitions/PoolingAccountResponse"
+       paging:
+        $ref: "#/definitions/PagingDto"
+        
+  PoolingAccountResponse:
+      description: "Details of account no and currency"
+      type: object
+      properties:
+       accountNumber:
+         description: "category of the param"
+         type: "string"
+       accountCcy:
+         description: "category of the param"
+         type: "string"
+
+  ScfTmIntAccMapMasterCollection:
+    description: "Collection of intaccmap."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/ScfTmIntAccMapMasterDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"
+     status:
+      type: string
+      description: "status"
+
+  ScfTmIntAccMapMasterDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       accInTxnCcy:
+        type: string
+        description: ""
+       accRoleCode:
+        type: string
+        description: ""
+       accType:
+        type: string
+        description: ""
+       branchCode:
+        type: string
+        description: ""
+       filterAttr1:
+        type: string
+        description: ""
+       filterAttr1Name:
+        type: string
+        description: ""
+       filterAttr2:
+        type: string
+        description: ""
+       filterAttr2Name:
+        type: string
+        description: ""
+       filterAttr3:
+        type: string
+        description: ""
+       filterAttr3Name:
+        type: string
+        description: ""
+       filterAttr4:
+        type: string
+        description: ""
+       filterAttr4Name:
+        type: string
+        description: ""
+       filterAttr5:
+        type: string
+        description: ""
+       filterAttr5Name:
+        type: string
+        description: ""
+       filterCriteria:
+        type: string
+        description: ""
+       productCode:
+        type: string
+        description: ""
+       settlementMethod:
+        type: string
+        description: ""
+       txnControllerRefNo:
+        type: string
+        description: ""       
+       applicationCode:
+        type: string
+        description: ""
+       id:
+        type: string
+        description: "id"
+       modNo:
+        type: integer
+        description: "modNo"
+       makerId:
+        type: string
+        description: "makerId"
+       makerdtStamp:
+        type: string
+        description: "makerdtStamp"
+       checkerId:
+        type: string
+        description: "checkerId"
+       checkerdtStamp:
+        type: string
+        description: "checkerdtStamp"
+       onceAuth:
+        type: string
+        description: "onceAuth"
+       recordStat:
+        type: string
+        description: "recordStat"
+       authStat:
+        type: string
+        description: "authStat"
+       ScfTmIntAccMapDetailsDTO:
+        type: array
+        items:
+         $ref: '#/definitions/ScfTmIntAccMapDetailsDTO'
+
+  ScfTmIntAccMapDetailsDTO:
+    type: object
+    properties:
+       accountCcy:
+        type: string
+        description: ""
+       accountName:
+        type: string
+        description: ""
+       accountNo:
+        type: string
+        description: ""
+       defaultAccount:
+        type: string
+        description: ""
+       id:
+        type: string
+        description: ""
+       intMasterId:
+        type: string
+        description: ""
+          
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+        
+  GenericPoolingAccountDTO:
+    type: object
+    required:
+      - applicationType
+    properties:
+      refNo:
+        description: "Transaction reference number"
+        type: "string"
+      applicationName:
+        description: "Application Name"
+        type: "string"
+      accTxnColl:
+        $ref: "#/definitions/AccountingTransactionCollection"
+      ecaBlockAmountDetailsColl:
+        $ref: "#/definitions/EcaBlockAmountDetailsCollection"                                      
+      isFcubsSuccess:
+        description: "Fcubs post accounting status"
+        type: boolean
+
+  EcaBlockAmountDetailsCollection:
+    description: "Eca blocked amount response collection"
+    type: "object"
+    properties:
+      status:
+        description: "Eca block status"
+        type: "string"
+      ecaAccAmtDetails:
+        description: "Eca account amount details"
+        type: "array"
+        items:
+          $ref: "#/definitions/EcaBlockAmountDetails"
+      ecaErrorDetails:
+        description: "Eca error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/EcaErrorDetails"
+          
+  EcaBlockAmountDetails:
+    description: "Eca blocked amount response collection"
+    type: "object"
+    properties:
+      refNo:
+        description: "Transaction reference number"
+        type: "string"
+      accountNo:
+        description: "Account number"
+        type: "string"
+      requestedBlkAmount:
+        description: "Requested blocked amount"
+        type: "number"
+      approvedBlkAmount:
+        description: "Approved blocked amount"
+        type: "number"
+      ecaRefNo:
+        description: "eca reference number"  
+        type: "string"
+      effectiveDate:
+        description: "effective eca date"
+        type: "string"  
+                
+  CurrencyUtilityDto:
+    type: object
+    properties:
+     amount:
+      type: number
+      description: "Amount"
+     rate:
+      type: number
+      description: "Rate"
+        
+  CurrencyRateCalculatorDtoWrapper:
+    type: object
+    properties:
+     data:
+      $ref: "#/definitions/CurrencyUtilityDto"
+      
+  EcaErrorDetails:
+   description: "Eca error code collection"
+   type: "object"
+   properties:
+     errorCode:
+       description: "Error code"
+       type: "string"
+     errorDesc:
+       description: "Error description"
+       type: "string"
+              
+  AccountingCashDTO:
+    description: "AccountingCashDTO"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the DepositSlip"
+        type: "string"
+      seqNo:
+        description: "Seq No of the DepositSlip"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference Num of the DepositSlip"
+        type: "string"
+      depositSlipRefNo:
+        description: "deposit Slip Ref No of the slip"
+        type: "string"
+      depositSlipNo:
+        description: "no of the DepositSlipNo"
+        type: "string"
+      corporateId:
+        description: "Corporate Id of the DepositSlip"
+        type: "string"
+      corporateName:
+        description: "Corporate Name of the DepositSlip"
+        type: "string"        
+      creditAccountNo:
+        description: "creditAccountNo of the DepositSlip"
+        type: "string"
+      depositSlipDate:
+        type: string
+        format: date
+        description: "Deposit Slip Date"
+      depositSlipDateString:
+        description: "DepositSlip Date String"
+        type: string  
+      depositSlipAmt:
+        description: "Deposit Slip Amount"
+        type: number
+      depositSlipAmtCcy:
+        description: "Deposit Slip Amount Currency"
+        type: string
+      depositSlipCount:
+        description: "Deposit Slip Count"
+        type: "integer"
+        format: "int64"
+      depositSlipValue:
+        description: "Deposit Slip Value"
+        type: "number"
+      divisionCode:
+        description: "Division Code of Deposit Slip"
+        type: "string"
+      divisionDesc:
+        description: "Division Description of Deposit Slip"
+        type: "string"
+      pickupLocationCode:
+        description: "Pickup Location Code of Deposit Slip"
+        type: "string"
+      pickupLocationDesc:
+        description: "Pickup Location Description of Deposit Slip"
+        type: "string"
+      pickupPointCode:
+        description: "Pickup Point Code of Deposit Slip"
+        type: "string"
+      pickupPointDesc:
+        description: "Pickup Point Description of Deposit Slip"
+        type: "string"
+      pickupDate:
+        description: "Pickup Date"
+        type: string
+        format: date
+      pickupDateString:
+        description: "Pickup Date String"
+        type: string  
+      totalDenominationCount:
+        description: "Total Denomination Count of Deposit Slip"
+        type: "integer"
+        format: "int64"
+      exchangeRate:
+        description: "Exchange Rate"
+        type: number      
+      amountACCY:
+        description: "Currency Amount"
+        type: number
+      creditACCY:
+        description: "Credit Currency Amount"
+        type: string    
+      externalReferenceNum:
+        description: "External Reference Num of the DepositSlip"
+        type: "string"
+      creditStatus:
+        description: "Credit Status"
+        type: "string"
+      creditDate:
+        description: "Credit Date"
+        type: string
+        format: date
+      requestDate:
+        description: "Request Date"
+        type: string
+        format: date
+      stage:
+        description: "Stage"
+        type: "string"          
+      noOfMiscFields:
+        description: "No of Miscellaneous Fields"
+        type: "integer"
+        format: "int64"
+      misc1:
+        description: "1st Miscellaneous Field"
+        type: "string" 
+      misc2:
+        description: "2nd Miscellaneous Field"
+        type: "string" 
+      misc3:
+        description: "3rd Miscellaneous Field"
+        type: "string" 
+      misc4:
+        description: "4th Miscellaneous Field"
+        type: "string" 
+      misc5:
+        description: "5th Miscellaneous Field"
+        type: "string" 
+      misc6:
+        description: "6th Miscellaneous Field"
+        type: "string" 
+      misc7:
+        description: "7th Miscellaneous Field"
+        type: "string" 
+      misc8:
+        description: "8th Miscellaneous Field"
+        type: "string" 
+      misc9:
+        description: "9th Miscellaneous Field"
+        type: "string" 
+      misc10:
+        description: "10th Miscellaneous Field"
+        type: "string" 
+      misc11:
+        description: "11th Miscellaneous Field"
+        type: "string" 
+      misc12:
+        description: "12th Miscellaneous Field"
+        type: "string" 
+      misc13:
+        description: "13th Miscellaneous Field"
+        type: "string" 
+      misc14:
+        description: "14th Miscellaneous Field"
+        type: "string" 
+      misc15:
+        description: "15th Miscellaneous Field"
+        type: "string" 
+      misc16:
+        description: "16th Miscellaneous Field"
+        type: "string" 
+      misc17:
+        description: "17th Miscellaneous Field"
+        type: "string" 
+      misc18:
+        description: "18th Miscellaneous Field"
+        type: "string" 
+      misc19:
+        description: "19th Miscellaneous Field"
+        type: "string" 
+      misc20:
+        description: "20th Miscellaneous Field"
+        type: "string" 
+      misc21:
+        description: "21st Miscellaneous Field"
+        type: "string" 
+      misc22:
+        description: "22nd Miscellaneous Field"
+        type: "string" 
+      misc23:
+        description: "23rd Miscellaneous Field"
+        type: "string" 
+      misc24:
+        description: "24th Miscellaneous Field"
+        type: "string" 
+      misc25:
+        description: "25th Miscellaneous Field"
+        type: "string" 
+      misc26:
+        description: "26th Miscellaneous Field"
+        type: "string" 
+      misc27:
+        description: "27th Miscellaneous Field"
+        type: "string" 
+      misc28:
+        description: "28th Miscellaneous Field"
+        type: "string" 
+      misc29:
+        description: "29th Miscellaneous Field"
+        type: "string" 
+      misc30:
+        description: "30th Miscellaneous Field"
+        type: "string"
+      linkedRefNum:
+        description: "Linked Reference Number"
+        type: "string"
+      pickupRequestDate:
+        description: "Pickup Request Date"
+        type: string
+        format: date
+      channel:
+        description: "Channel"
+        type: "string"
+      channelDepositBranch:
+        description: "channelDepositBranch"
+        type: "string"    
+      cashAccRefNo:
+        description: "cashAccRefNo"
+        type: "string"    
+      cashSlipAdFields:
+        $ref: "#/definitions/CashSlipAdditionalInfoCollection"
+      accountingDetails:
+        $ref: "#/definitions/AccountingTransactionCollection"
+      denominationDetails:
+        $ref: "#/definitions/DenominationCollection" 
+      BatchModel:
+        $ref: "#/definitions/BatchModel"
+
+  AccountEntryPostingResponse:
+    description: "Accounting entry posting response collection"
+    type: "object"
+    properties:
+      status:
+        description: "Account posting block status"
+        type: "string"
+      postingErrorDetails:
+        description: "Account posting error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/PostingErrorDetails"
+          
+  PostingErrorDetails:
+    description: "Posting error code collection"
+    type: "object"
+    properties:
+      errorCode:
+        description: "Error code"
+        type: "string"
+      errorDesc:
+        description: "Error description"
+        type: "string"    
+  
+  IntaccmapAggregateModelCollection:
+    description: Collection of  IntaccmapAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/IntaccmapAggregateModel'
+                
+  IntaccmapAggregateModel:
+    description: IntaccmapAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       scfcmTmIntAccMapMaster:
+        $ref: '#/definitions/ScfTmIntAccMapMasterDTO'
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+          
+  VamPostingDetailsCollection:
+    description: "VAM Account posting response details"
+    type: "object"
+    properties:
+      status:
+        description: "VAM posting status"
+        type: "string"
+      vamErrorDetails:
+        description: "Eca error details"
+        type: "array"
+        items:
+          $ref: "#/definitions/VamErrorDetails"
+          
+  VamErrorDetails:
+    description: "VAM error code collection"
+    type: "object"
+    properties:
+      errorCode:
+        description: "Error code"
+        type: "string"
+      errorDesc:
+        description: "Error description"
+        type: "string"                    

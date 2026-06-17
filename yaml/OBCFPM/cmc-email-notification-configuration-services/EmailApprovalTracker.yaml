@@ -1,0 +1,252 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : email.notification
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server emailapprovaltracker server." 
+ version: "1.0.0"
+ title: "emailapprovaltracker Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "emailapprovaltracker"
+   description: "cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification.cmc email notification is to provide capability to define a template with dynamic values substitute using APIs and send email notification."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../emailconfiguration
+
+ /emailapprovaltracker:
+  post:
+   tags:
+    - "emailapprovaltracker"
+   summary: "Adds a new emailapprovaltracker."
+   description: "Adds a new emailapprovaltracker. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "emailconfiguration" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new emailconfiguration" 
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEmailApprovalTrackersDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created emailapprovaltracker" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+ /emailapprovaltracker/{id}:
+  put:
+   tags:
+    - "emailapprovaltracker"
+   summary: "Update an existing emailapprovaltracker."
+   description:  "Update an existing emailapprovaltracker."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the emailapprovaltracker Maintenance"
+      required: true
+      type: "string"
+    - name: "emailconfiguration"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing emailapprovaltracker"
+      required: true
+      schema:
+       $ref: "#/definitions/CmcTmEmailApprovalTrackersDTO"
+   responses:
+    200:
+     description: "Returns updated emailconfiguration"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /emailapprovaltracker/emailToken/{emailToken}:
+  get:
+   tags:
+    - "emailapprovaltracker"
+   summary: "Retrieves the emailapprovaltracker by ID."
+   description:  "Retrieves the emailapprovaltracker by ID."
+   operationId: "getById"
+   parameters:
+    - name: "emailToken"
+      in: "path"
+      description: "emailToken of the record that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the emailapprovaltracker based on given id."
+     schema:
+      $ref: "#/definitions/CmcTmEmailApprovalTrackersWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+ CmcTmEmailApprovalTrackersDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     createdBy:
+      type: string
+      description: ""
+     createdDate:
+      type: string
+      format: date
+      description: ""
+     id:
+      type: string
+      description: ""
+     emailToken:
+      type: string
+      description: ""
+     username:
+      type: string
+      description: ""
+     isResponseProcessed:
+      type: string
+      description: ""
+     applicationNumber:
+      type: string
+      description: ""
+     updatedBy:
+      type: string
+      description: ""
+     updatedDate:
+      type: string
+      format: date
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ CmcTmEmailApprovalTrackersCollection: 
+  description: "Collection of email approval tracker."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmEmailApprovalTrackersDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CmcTmEmailApprovalTrackersWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CmcTmEmailApprovalTrackersDTO"

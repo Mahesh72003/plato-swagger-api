@@ -1,0 +1,859 @@
+swagger: '2.0'
+info:
+  description: "Provides APIs for charges maintenance"
+  version: 1.0.0
+  title: "Charges Aggregate Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-charges-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+- name: "ChargesAggregateWeb"
+  description: "Provides web APIs for charges maintenance"
+
+paths:
+  /web/v1/charges:
+    post:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Creates new charge code"
+      description: "Creates new charge code"
+      operationId: createResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: chargesWebModel
+        in: body
+        description: "Request bidy to create new charge code"
+        required: true
+        schema:
+         $ref: '#/definitions/ChargesWebModel'
+      responses:
+        201:
+          description: "Provides id for created charge code"
+          headers:
+            Location:
+              description: "URL of created charge code"
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - ChargesAggregateWeb
+     summary: "Gets all valid charge code details"
+     description:  "Gets all valid charge code details"
+     operationId: "getSummary"
+     parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       description: "Application Id"
+       type: "string"
+       required: true
+     - name: includecloseandunauth
+       in: query
+       description: "Flag need to be set to fetch charge codes including closed & unauthorized rules. Defult value is false"
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: "Starting number of charge codes to be fetched"
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: "Maximum number of charge codes to be fetched"
+       required: false
+       type: integer
+     - name: chargeCode
+       in: query
+       description: "Charge Code"
+       required: false
+       type: "string"
+     - name: chargeCodeDesc
+       in: query
+       description: "Charge Code Description"
+       required: false
+       type: "string"
+     - name: chargeGroup
+       in: query
+       description: "Charge Group"
+       required: false
+       type: "string"
+     - name: chargeCategory
+       in: query
+       description: "Charge Category"
+       required: false
+       type: "string"
+     - name: applicationCode
+       in: query
+       description: "Application Code"
+       required: false
+       type: "string"
+     - name: authStat
+       in: query
+       description: "Authorization status of the records to be fetched"
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: "Records Status Of Charge Codes To Be Fetched"
+       required: false
+       type: string       
+     responses:
+      200:
+       description: "List of all price charge codes"
+       headers: 
+        Location:
+         description: "Location"
+         type: "string"
+       schema:
+         $ref: '#/definitions/ObTmChgMasterCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /web/v1/charges/{resourceId}:
+    get:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Provides charge code for given resource id"
+      description: "Provides charge code for given resource id"
+      operationId: getByResourceId
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "App Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id of required charge code"
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: "Datasegment Code"
+        type: string
+      - name: version
+        in: query
+        description: "Datasegment Version"
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: "Retrieve only latest authorized charge code"
+        required: false
+        default: false
+        type: boolean               
+      responses:
+        200:
+          description: "Charge code for provided resource id"
+          schema:
+            $ref: '#/definitions/ChargesWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Updates existing charge code"
+      description: "Updates existing charge code"
+      operationId: updateResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id of charge code that needs to be updated"
+        required: true
+        type: string
+      - name: chargesWebModel
+        in: body
+        description: "Request body to update required charge code"
+        required: true
+        schema:
+          $ref: '#/definitions/ChargesWebModel'
+      responses:
+        202:
+          description: "Updated charge code details"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/charges/{resourceId}/delete:
+    put:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Deletes the charge code record for given resource id"
+      description: "Deletes the charge code record for given resource id"
+      operationId: deleteResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id of the charge code which needs to be deleted"
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers of charge code which needs to be deleted"
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/charges/{resourceId}/isValid:
+    get:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Validates the charge code with provided resource id"
+      description: "Validates the charge code with provided resource id"
+      operationId: validateResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id that needs to be validated"
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: "Version of charge code for which needs to be validated"
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: "Details of validated charge code"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/charges/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChargesAggregateWeb
+      summary: "Submits the charge code for provided resource id"
+      description: "Submits the charge code for provided resource id"
+      operationId: submitResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be submited"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Details of submitted charge code"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/charges/{resourceId}/unauthorized:
+    get:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Retrives the unauthorized charge code by given resource id"
+      description:  "Retrives the unauthorized charge code identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be fetched"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Details of charge code for given resource id"
+          schema:
+            $ref: '#/definitions/ObTmChgMasterCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/charges/{resourceId}/authorize:
+    put:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Authorize the charge code with given resource id"
+      description: "Authorize the charge code with given resource id"
+      operationId: authorizeResource
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id that needs to be authorized"
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers which need to be authorized"
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Details of authorized charge code"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/charges/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChargesAggregateWeb
+      summary: "Unlocks the charge code with given resource id"
+      description: "Unlocks the charge code with given resource id"
+      operationId: removeResourceLock
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id that needs to be unlocked"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Details of unlocked charge code"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /web/v1/charges/{resourceId}/actions:
+    get:
+      tags:
+      - ChargesAggregateWeb
+      summary: "Provides all applicable actions for charge code of given resource id"
+      description: "Provides all applicable actions for charge code of given resource id"
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: resourceId
+        in: path
+        description: "Resource Id for which actions needs to be fetched"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/charges/{resourceId}/history:
+    get:
+      tags:
+      - ChargesAggregateWeb  
+      summary: "Retrives the history for charge code with given Resource Id"
+      description:  "Retrives the history for charge code with given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource id for which history needs to be fetched"
+        required: true
+        type: string      
+      responses:
+        200:
+          description: "History details of required charge code"
+          schema:          
+            $ref: '#/definitions/ObTmChgMasterCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /web/v1/charges/{resourceId}/close:
+    patch:
+      tags:
+      - ChargesAggregateWeb  
+      summary: "Closes the charge code with given resource id"
+      description:  "Closes the charge code with given resource id"
+      operationId: "closeResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be closed"
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers which need to be closed"
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: "Details of closed charge code"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /web/v1/charges/{resourceId}/reopen:
+    patch:
+      tags:
+      - ChargesAggregateWeb    
+      summary: "Reopens the charge code with given resource id"
+      description:  "Reopens the charge code with given resource id"
+      operationId: "reopenResource"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: resourceId
+        in: path
+        description: "Resource Id that needs to be reopned" 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: "Request body with resource id and resource mod numbers which need to be reopened"
+        required: true
+        schema:
+         $ref: "#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: "Details of reopened charge code"
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/charges/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ChargesAggregateWeb
+      summary: "Get aggregate details of the charge code"
+      description: "Get aggregate details of the charge code"
+      operationId: getResourceAggregate
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        type: "string"
+        required: true
+      - name: keyId
+        in: path
+        description: "Key id for which the data needs to be fetched"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Returns Aggregate data for the charge code identified by key id"
+          schema:
+            $ref: '#/definitions/ChargesWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+                                
+definitions:
+  ChargesAggregateModel:
+    description: "Charges Aggregate Model"
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: "Key Id"
+        type: string
+       obTmChgMaster:
+        $ref: '#/definitions/ObTmChgMasterDTO'      
+       extendedDatasegments:
+        description: "Data for the extended datasegment operation"
+        type: array
+        items:
+          type: object
+          
+  BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type      
+                         
+  ChargesAggregateModelCollection:
+    description: "Collection of Charges Aggregate Model"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChargesAggregateModel'
+          
+  ChargesWebModel:
+    description: "Charges Model"
+    type: object
+    properties:
+      resourceId:
+        description: "Resource Id"
+        type: string
+      resourceName:
+        description: "Resource Name"
+        type: string
+      operationType:
+        description: "Operation Type"
+        type: string
+      makerId:
+        description: "Maker Id"
+        type: string
+      makerDateStamp:
+        description: "Maker Datestamp"
+        type: string
+        format: date-time
+      checkerId:
+        description: "Checker Id"
+        type: string
+      checkerDateStamp:
+        description: "Checker Datestamp"
+        type: string
+        format: date-time
+      modNo:
+        description: "Mod No"
+        type: integer
+      recordStatus:
+        description: "Record Status Flag"
+        type: string
+      authStatus:
+        description: "Auth Status Flag"
+        type: string
+      onceAuth:
+        description: "Once Auth Flag"
+        type: string
+      doerRemarks:
+        description: "Doer Remarks"
+        type: string
+      approverRemarks:
+        description: "Approver Remarks"
+        type: string        
+      obTmChgMaster:
+        $ref: '#/definitions/ObTmChgMasterDTO'      
+      extendedDatasegments:
+        description: "Data for the extended datasegment operation"
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType        
+         
+  ChargesWebModelCollection:
+    description: "Collection of datasegment"
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ChargesWebModel'

@@ -1,0 +1,335 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : handoffservice.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: CLMO Handoff Services API 
+host: 10.184.157.121:9000
+basePath: /clmo-handoff-services
+tags:
+- name: HandoffServices
+  description: API for clmo Handoff Tracking Operations
+schemes:
+- http
+paths:
+  /service/v1/externalHandoff:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExternalHandoffService
+      summary: Adds a new ExternalHandoff.
+      description: Adds a new ExternalHandoff. Add additional information here for this endpoint.
+      operationId: saveExternalHandoffDetails
+      parameters:
+      - name: externalHandoffModel
+        in: body
+        description: Request Body that contains data required for creating a new externalHandoff details
+        required: true
+        schema:
+          $ref: '#/definitions/ExternalHandoffModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created ExternalHandoff
+          headers:
+            Location:
+              description: URL of newly created ExternalHandoff
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /service/v1/externalHandoff/{handoffRefNo}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExternalHandoffService
+      summary: Get the externalHandoffDetail for given handoff ref no.
+      description: get a  ExternalHandoff details by handoff ref no.  
+      operationId: getExternalHandoffDetail
+      parameters:
+      - name: handoffRefNo
+        in: path
+        description: Handoff Reference to be queried
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns updated ExternalHandoff Details
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /service/v1/externalHandoff/{handoffRefNo}/updatestatus:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExternalHandoffService
+      summary: Update an existing ExternalHandoff.
+      description: Update an existing ExternalHandoff.
+      operationId: updateExternalHandoff
+      parameters:
+      - name: handoffRefNo
+        in: path
+        description: handoffRefNo of the External Handoff details that need to be updated
+        required: true
+        type: string
+      - name: ExternalHandoffStatus
+        in: body
+        description: Request Body that contains data required for updating handoff response status
+        required: true
+        schema:
+          $ref: '#/definitions/ExternalHandoffStatusModel'
+      responses:
+        200:
+          description: Returns updated ExternalHandoffDetails
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                    
+  /service/v1/externalHandoff/{handoffRefNo}/handoffstatus:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ExternalHandoffService
+      summary: Get the handoff Status for given handoff ref no.
+      description: get the handoff status for the given handoff reference  
+      operationId: getExternalHandoffStatus
+      parameters:
+      - name: handoffRefNo
+        in: path
+        description: Handoff Reference to be queried
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns handoff Status for the given handoffRef Number
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+definitions:
+  ExternalHandoffServiceModel:
+    description: ExternalHandoffService model
+    type: object
+    required:
+    - applicationNumber
+    - handoffRefNumber
+    properties:
+      applicationNumber:
+        description: Application Number of the Handoff
+        type: string
+      branchCode:
+        description: branchCode from which handoff is done
+        type: string
+      handoffRefNumber:
+        description: Handoff Reference Number
+        type: string
+      handoffExtRefNo:
+        description: Handoff External Ref No
+        type: string
+      handoffExtSystem:
+        description: External System to which handoff is done
+        type: string        
+      processCode:
+        description: Process Code from which handoff is triggered
+        type: string
+      remarks:
+        description: Remarks for the handoff
+        type: string
+      reqBy:
+        description: UserId of the handoff request
+        type: string
+      reqTs:
+        description: Request timestamp
+        type: string
+      resBy:
+        description: UserId for Response
+        type: string
+      resTs:
+        description: Response timestamp
+        type: string
+      handoffStatus:
+        description: Handoff Status
+        type: string
+      handoffType:
+        description: Handoff Type (Collateral/Facility)
+        type: string
+      errorCode:
+        description: Error Code for failed handoff
+        type: string
+      errorDescription:
+        description: Error description
+        type: string
+  ExternalHandoffModel:
+    description: ExternalHandoffService model
+    type: object
+    required:
+    - applicationNumber
+    - handoffRefNumber
+    properties:
+      applicationNumber:
+        description: Application Number of the Handoff
+        type: string
+      branchCode:
+        description: branchCode from which handoff is done
+        type: string
+      handoffRefNumber:
+        description: Handoff Reference Number
+        type: string
+      handoffExtRefNo:
+        description: Handoff External Ref No
+        type: string
+      handoffExtSystem:
+        description: External System to which handoff is done
+        type: string        
+      processCode:
+        description: Process Code from which handoff is triggered
+        type: string
+      remarks:
+        description: Remarks for the handoff
+        type: string
+      reqBy:
+        description: UserId of the handoff request
+        type: string
+      reqTs:
+        description: Request timestamp
+        type: string
+      resBy:
+        description: UserId for Response
+        type: string
+      resTs:
+        description: Response timestamp
+        type: string
+      handoffStatus:
+        description: Handoff Status
+        type: string
+      handoffType:
+        description: Handoff Type (Collateral/Facility)
+        type: string
+      errorCode:
+        description: Error Code for failed handoff
+        type: string
+      errorDescription:
+        description: Error description
+        type: string
+      resCallbackEnabled:
+        description: response callback enabled
+        type: string
+      stageUpdateReqd:
+        description: on response stage update required flag
+        type: string
+      stagecode:
+        description: stagecode for updating
+        type: string
+  ExternalHandoffCollection:
+    description: Collection of External Handoff Details.
+    type: object
+    properties:
+      ExternalHandoffList:
+        type: array
+        items:
+          $ref: '#/definitions/ExternalHandoffServiceModel'
+  ExternalHandoffStatusModel:
+    description: ExternalHandoffService model
+    type: object
+    required:
+    - applicationNumber
+    - handoffRefNumber
+    properties:
+      handoffRefNumber:
+        description: Handoff Reference Number
+        type: string
+      handoffExtRefNo:
+        description: Handoff External Ref No
+        type: string
+      remarks:
+        description: Remarks for the handoff
+        type: string
+      handoffStatus:
+        description: Handoff Status
+        type: string
+      errorCode:
+        description: Error Code for failed handoff
+        type: string
+      errorDescription:
+        description: Error description
+        type: string

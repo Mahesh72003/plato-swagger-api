@@ -1,0 +1,529 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  **
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  **
+#  **
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  **
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :
+#  Changed By         :
+#  Change Description :
+#  Change On          :
+#  Search String      :
+#
+#  -------------------------------------------------------------------------------------------------------
+
+swagger: "2.0"
+info:
+  description: "Provides APIs to perform operations on customer delinquency status."
+  version: "1.0.0"
+  title: "Customer Division Orchestrator APIs"
+host: "api-plato.us.oracle.com:8080 70"
+basePath: /obscfcm-core-services
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+tags:
+  - name: "customerService"
+    description: "APIs for Customer Delinquency Status Operations"
+
+paths:
+  /service/v1/delinquencyStatus/customerStatus:
+    post:
+      tags:
+        - "customerService"
+      summary: "Adds a new delinquency status."
+      description: "Adds a new delinquency status."
+      operationId: "createCustRecord"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "delinquencyCustomerStatusCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new delinquency status"
+          required: true
+          schema:
+            $ref: "#/definitions/ScftmCustomerDelinqStatusCollection"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created divisioncode"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "customerService"
+      summary: "Get all valid customer delinquency status."
+      description: "Get all valid customer delinquency status. This endpoints will be used to Get all valid customer delinquency status."
+      operationId: "getCustDelinqStatus"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - in: query
+          name: customerId
+          required: false
+          type: string
+        - in: query
+          name: delinquencyStatus
+          required: false
+          type: string
+        - in: query
+          name: active
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          schema:
+            $ref: "#/definitions/ScftmCustomerDelinqStatusDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/delinquencyStatus/allCustomerStatus:
+    get:
+      tags:
+        - "customerService"
+      summary: "Get all valid customer delinquency status."
+      description: "Get all valid customer delinquency status. This endpoints will be used to Get all valid customer delinquency status."
+      operationId: "getAllCustDelinqStatus"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          schema:
+            $ref: "#/definitions/ScftmCustomerDelinqStatusCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/delinquencyStatus/customerStatusMaster:
+    get:
+      tags:
+        - "customerService"
+      summary: "Get all valid customer external delinquency status."
+      description: "Get all valid customer  external delinquency status. This endpoints will be used to Get all valid customer delinquency status."
+      operationId: "getAllExternalCustDelinqStatus"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - in: query
+          name: customerId
+          required: false
+          type: string
+        - in: query
+          name: delinquencyStatus
+          required: false
+          type: string
+        - in: query
+          name: active
+          required: false
+          type: string
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          schema:
+            $ref: "#/definitions/ScftmExtCustomerDelinqStatusCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    post:
+      tags:
+        - "customerService"
+      summary: "Adds a new delinquency status."
+      description: "Adds a new delinquency status. Add additional information here for this endpoint."
+      operationId: "createExternalDelinqStatus"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "externalDelinqCustStatusCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new delinquency status"
+          required: true
+          schema:
+            $ref: "#/definitions/ScftmExtCustomerDelinqStatusCollection"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created divisioncode"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/delinquencyStatus/externalCustomerDelinqStatus:
+    post:
+      tags:
+        - "customerService"
+      summary: "Adds a new delinquency status."
+      description: "Adds a new delinquency status. Add additional information here for this endpoint."
+      operationId: "createExtSysCustDelinqStatus"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "externalDelinqCustStatusCollection"
+          in: "body"
+          description: "Request Body that contains data required for creating a new delinquency status"
+          required: true
+          schema:
+            $ref: "#/definitions/ScftmExtSysCustDelinqStatusCollection"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created divisioncode"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  ScftmCustomerDelinqStatusDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: "Customer Id"
+      delinquencyStatus:
+        type: string
+        description: "Delinquency Status"
+      activeStatus:
+        type: string
+        description: "Active Status"
+      statusDate:
+        type: string
+        format: date
+        description: "Status Date"
+      channel:
+        type: string
+        description: "Channel"
+      event:
+        type: string
+        description: "Event"
+      customerName:
+        type: string
+        description: "Customer Name"
+      deliquencyDescription:
+        type: string
+        description: "Deliquency Description"
+      priority:
+        description: "Delinquency Status priority."
+        type: "integer"
+  ScftmCustomerDelinqStatusCollection:
+    type: "object"
+    description: "details of Customer Delinq Status collection"
+    properties:
+      financeResponse:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScftmCustomerDelinqStatusDTO"
+  ScftmCustomerDelinqStatusHisDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: "Id"
+      customerId:
+        type: string
+        description: "Customer Id"
+      delinquencyStatus:
+        type: string
+        description: "Delinquency Status"
+      activeStatus:
+        type: string
+        description: "Active Status"
+      statusDate:
+        type: string
+        format: date
+        description: "Status Date"
+      channel:
+        type: string
+        description: "Channel"
+      inputdate:
+        type: string
+        format: date
+        description: "Input Data"
+      event:
+        type: string
+        description: "Event"
+      customerName:
+        type: string
+        description: "Customer Name"
+      deliquencyDescription:
+        type: string
+        description: "Deliquency Description"
+      priority:
+        description: "Delinquency Status priority."
+        type: "integer"
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  ScftmExtCustomerDelinqStatusDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: "Customer Id"
+      delinquencyStatus:
+        type: string
+        description: "Delinquency Status"
+      activeStatus:
+        type: string
+        description: "Active Status"
+      statusDate:
+        type: string
+        format: date
+        description: "Status Date"
+      channel:
+        type: string
+        description: "Channel"
+      event:
+        type: string
+        description: "Event"
+      customerName:
+        type: string
+        description: "Customer Name"
+      deliquencyDescription:
+        type: string
+        description: "Deliquency Description"
+      priority:
+        description: "Delinquency Status priority."
+        type: "integer"
+  ScftmExtCustomerDelinqStatusCollection:
+    type: "object"
+    description: "details of Customer Delinq Status collection"
+    properties:
+      financeResponse:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScftmExtCustomerDelinqStatusDTO"
+  ScftmExtSysCustDelinqStatusDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: "Customer Id"
+      delinquencyStatus:
+        type: string
+        description: "Delinquency Status"
+      statusDate:
+        type: string
+        format: date
+        description: "Status Date"
+      channel:
+        type: string
+        description: "Channel"
+  ScftmExtSysCustDelinqStatusCollection:
+    type: "object"
+    description: "details of Customer Delinq Status collection"
+    properties:
+      financeResponse:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScftmExtSysCustDelinqStatusDTO"
+  ScfTmDelinquencyStatusCollection:
+    description: Collection of DelinquencyStatusCollection.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/ScfTmDelinquencyStatusModel"
+  ScfTmDelinquencyStatusModel:
+    description: "Delinquency Status model"
+    type: "object"
+    properties:
+      delinquencyStatus:
+        description: "Delinquency Status field.This is a unique constraint"
+        type: "string"
+      statusDescription:
+        description: "Delinquency Status Description."
+        type: "string"
+      priority:
+        description: "Delinquency Status priority."
+        type: "integer"
+      active:
+        description: "Customer active or not."
+        type: "string"
+      system:
+        description: "External system."
+        type: "string"

@@ -1,0 +1,189 @@
+asyncapi: 2.0.0
+info:
+  title: obpy-party-publisher-services
+  version: '7.5.0'
+  description: The OBPY Party Publisher API allows to publish and subscribe the party kafka messages
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+servers:
+  development:
+    url: whf00pim.in.oracle.com:9092
+    description: Development server
+    protocol: kafka
+channels:
+  PartyHandoffToHostStatusGenerated:
+    description: In Retail party onboarding process, host CIF ID is notified to the channels, once after handing off Retail customer to HOST(FCUBS). Topic to be referred is PartyHandoffToHostStatus
+    subscribe:
+      summary: In Retail party onboarding process, host CIF ID is notified to the channels, once after handing off Retail customer to HOST(FCUBS). Topic to be referred is PartyHandoffToHostStatus
+      message:
+        description: Publish the CIF ID generated for Onboarded Customer to Channels
+        $ref: '#/components/messages/PartyHandoffToHostStatusUpdate'
+  PartyKYCStatusUpdateGenerated:
+    description: In Retail party onboarding process, after KYC stage, the party KYC status is notified to the channels.Topic to be referred is PartyKYCStatusUpdate
+    subscribe:
+      summary: In Retail party onboarding process, after KYC stage, the party KYC status is notified to the channels.Topic to be referred is PartyKYCStatusUpdate
+      message:
+        description: Publish Kyc Status for Onboarded Customer to Channels
+        $ref: '#/components/messages/PartyKYCStatusUpdateGenerated'
+  PartyHandoffNotification:
+    description: Once the retail party is created from channels, party module onboarding flow will wait for an TO GO approval from channels for party processing..Topic to be referred is PartyHandoffNotification
+    subscribe:
+      summary: Once the retail party is created from channels, party module onboarding flow will wait for an TO GO approval from channels for party processing..Topic to be referred is PartyHandoffNotification
+      message:
+        description: Publish Handoff Notification for Onboarded Retail Party to Channels
+        $ref: '#/components/messages/PartyHandoffNotification'
+  PartyLimitedKycStatusUpdateGenerated:
+    description: In Retail party onboarding process, after KYC stage, the party KYC status is notified to the channels.Topic to be referred is PartyLimitedKycStatusUpdateGenerated
+    subscribe:
+      summary: In Retail party onboarding process, after KYC stage, the party KYC status is notified to the channels.Topic to be referred is PartyLimitedKycStatusUpdateGenerated
+      message:
+        description: Publish Kyc Status for Onboarded Customer to Channels
+        $ref: '#/components/messages/PartyLimitedKycStatusUpdateGenerated'
+  PartyReKycStatusUpdateGenerated:
+    description: Once the retail party is created from channels, party module onboarding flow will wait for an TO GO approval from channels for party processing..Topic to be referred is PartyReKycStatusUpdateGenerated
+    subscribe:
+      summary: Once the retail party is created from channels, party module onboarding flow will wait for an TO GO approval from channels for party processing..Topic to be referred is PartyReKycStatusUpdateGenerated
+      message:
+        description: Publish Handoff Notification for Onboarded Retail Party to Channels
+        $ref: '#/components/messages/PartyReKycStatusUpdateGenerated'
+
+components:
+  messages:
+    PartyHandoffToHostStatusUpdate:
+      name: Party Handoff To Host Status Update
+      title: Party Handoff Status Update
+      summary: Party Handoff To Host Status Update
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PartyHandoffToHostStatusUpdate"
+    PartyKYCStatusUpdateGenerated:
+      name: Party KYC Status Update
+      title: Party KYC Status Update
+      summary: Party KYC Status Update Generated
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PartyKYCStatusUpdate"
+    PartyHandoffNotification:
+      name: Party Handoff Notification
+      title: Party Handoff Notification
+      summary: Party Handoff Notification
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PartyHandoffNotification"
+    PartyLimitedKycStatusUpdateGenerated:
+      name: Party Limited Kyc Status Update Generated
+      title: Party Limited Kyc Status Update
+      summary: Party Limited Kyc Status Update Generated
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PartyLimitedKycStatusUpdate"
+    PartyReKycStatusUpdateGenerated:
+      name: Party Re Kyc Status Update Generated
+      title: Party Re Kyc Status Update
+      summary: Party Re Kyc Status Update Generated
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/PartyReKycStatusUpdate"
+  schemas:
+    PartyHandoffToHostStatusUpdate:
+      type: object
+      properties:
+        branchCode:
+          type: string
+        userId:
+          type: string
+        applicationNumber:
+          type: string
+        partyId:
+          type: string
+        handoffStatus:
+          type: string
+        externalCustomerId:
+          type: string
+        eventType:
+          type: string
+    PartyKYCStatusUpdate:
+      type: object
+      properties:
+        branchCode:
+          type: string
+        userId:
+          type: string
+        applicationNumber:
+          type: string
+        partyId:
+          type: string
+        kycStatus:
+          type: string
+        kycLastUpdateDate:
+          type: string
+        eventType:
+          type: string
+    PartyHandoffNotification:
+      type: object
+      properties:
+        branchCode:
+          type: string
+        userId:
+          type: string
+        sourceCode:
+          type: string
+        applicationNumber:
+          type: string
+        eventType:
+          type: string
+        domain:
+          type: string
+        partyList:
+          type: "array"
+          items:  { $ref: '#/components/schemas/PartyList'  }
+    PartyList:
+      type: object
+      properties:
+        partyId:
+          type: string
+        partyHandoff:
+          type: string
+    PartyLimitedKycStatusUpdate:
+      type: object
+      properties:
+        branchCode:
+          type: string
+        userId:
+          type: string
+        applicationNumber:
+          type: string
+        partyId:
+          type: string
+        kycStatus:
+          type: string
+        externalCustomerNumber:
+          type: string
+        eventType:
+          type: string
+    PartyReKycStatusUpdate:
+      type: object
+      properties:
+        branchCode:
+          type: string
+        userId:
+          type: string
+        partyId:
+          type: string
+        applicationNumber:
+          type: string
+        eventType:
+          type: string
+        externalCustomerNumber:
+          type: string
+        partyReKycTypeDetails:
+          type: "array"
+          items:  { $ref: '#/components/schemas/PartyReKycTypeDetails'  }
+    PartyReKycTypeDetails:
+      type: object
+      properties:
+        kycType:
+          type: string
+        validTill:
+          type: string

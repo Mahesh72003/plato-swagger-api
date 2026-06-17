@@ -1,0 +1,2798 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Valuation server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Valuation Service"
+host: "whf00anh:7741"
+basePath: "/valuation-services"
+tags:
+  - name: "ValuationAPI"
+    description: "API for Valuation Operations"
+schemes:
+  - "http"
+
+paths:
+  /web/v1/valuation/internal:
+    post:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Creates a new Internal Valuation."
+      description: "Creates a new Internal Valuation."
+      operationId: "createInternalValuationWork"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "internalValuation"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Internal Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/InternalValuationModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created Internal Valuation"
+          headers:
+            Location:
+              description: "URL of newly created Internal Valuation"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Retrieves the list of existing Internal Valuations."
+      description:  "Retrieves the list of existing Internal Valuations."
+      operationId: "getAllInternalValuationsWork"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /web/v1/replication/valuation/internal/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationRplcnWeb"
+      summary: "Retrieves the list of existing Internal Valuations."
+      description:  "Retrieves the list of existing Internal Valuations."
+      operationId: "getAllInternalValuationsRplcn"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/latest/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Retrieves the Internal Valuation by ID."
+      description:  "Retrieves the Internal Valuation by ID."
+      operationId: "getInternalValuationWorkById"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          description: "Id of the user that needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Returns the Internal Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/{id}:
+    put:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Update an existing Internal Valuation."
+      description:  "Update an existing Internal Valuation."
+      operationId: "updateInternalValuationWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Internal Valuation that need to be updated"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "internalValuation"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing Internal Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/InternalValuationModel"
+      responses:
+        200:
+          description: "Returns updated Internal Valuation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    delete:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Deletes the Internal Valuation identified by given ID."
+      description:  "eletes the Internal Valuation identified by given ID."
+      operationId: "deleteInternalValuationWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/finalSubmit:
+    post:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Creates a new Internal Valuation."
+      description: "Creates a new Internal Valuation."
+      operationId: "createInternalValuationMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Internal Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+        - name: "submitInFacility"
+          in: "query"
+          type: "boolean"
+          required: false            
+      responses:
+        201:
+          description: "Returns the Id of the newly created Internal Valuation"
+          headers:
+            Location:
+              description: "URL of newly created Internal Valuation"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/main/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Retrieves the Internal Valuation Main by ID."
+      description:  "Retrieves the Internal Valuation Main by ID."
+      operationId: "getAllInternalValuationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the Internal Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Deletes the Internal Valuation main data identified by given collateralId."
+      description:  "deletes the Internal Valuation identified by given collateralId."
+      operationId: "deleteInternalValuationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "collateralId of the user that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "delete"
+          in: "query"
+          description: "Query param to specify hard delete given by'Y'"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/external:
+    post:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Creates a new External Valuation."
+      description: "Creates a new External Valuation."
+      operationId: "createExternalValuationWork"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "externalValuation"
+          in: "body"
+          description: "Request Body that contains data required for creating a new External Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/ExternalValuationMasterModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created External Valuation"
+          headers:
+            Location:
+              description: "URL of newly created External Valuation"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/external/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Retrieves the list of existing External Valuations."
+      description:  "Retrieves the list of existing External Valuations."
+      operationId: "getAllExternalValuationsWork"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /web/v1/replication/valuation/external/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationRplcnWeb"
+      summary: "Retrieves the list of existing External Valuations."
+      description:  "Retrieves the list of existing External Valuations."
+      operationId: "getAllExternalValuationsRplcn"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/external/latest/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Retrieves the External Valuation by ID."
+      description:  "Retrieves the External Valuation by ID."
+      operationId: "getExternalValuationWorkById"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the External Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/external/{id}:
+    put:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Update an existing External Valuation."
+      description:  "Update an existing External Valuation."
+      operationId: "updateExternalValuationWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "External Valuation that need to be updated"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "externalValuation"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing External Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/ExternalValuationMasterModel"
+      responses:
+        200:
+          description: "Returns updated External Valuation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    delete:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Deletes the External Valuation identified by given ID."
+      description:  "deletes the External Valuation identified by given ID."
+      operationId: "deleteExternalValuationWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/delete/collateral/{collateralId}:
+    delete:
+      tags:
+        - "externalValuationWeb"
+      summary: "Deletes the externalValuation identified by given collateral Id."
+      description:  "Deletes the externalValuation identified by given collateral Id"
+      operationId: "deleteCollateralExternalValuation"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the external valuation that need to be updated"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "hardDeleteFlag"
+          in: "query"
+          type: "boolean"
+          required: false
+        - name: "collateralAssetId"
+          in: "query"
+          type: "string"
+          required: false                    
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"                 
+  /web/v1/valuation/external/finalSubmit:
+    post:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Creates a new External Valuation."
+      description: "Creates a new External Valuation."
+      operationId: "createExternalValuationMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "submitInFacility"
+          in: "query"
+          type: "boolean"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new External Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created External Valuation"
+          headers:
+            Location:
+              description: "URL of newly created External Valuation"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/external/main/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Retrieves the External Valuation Main by ID."
+      description:  "Retrieves the External Valuation Main by ID."
+      operationId: "getAllExternalValuationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the External Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Deletes the External Valuation main data identified by given collateralId."
+      description:  "deletes the External Valuation identified by given collateralId."
+      operationId: "deleteExternalValuationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "collateralId of the user that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "delete"
+          in: "query"
+          description: "Query param to specify hard delete given by'Y'"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "External error"
+  /web/v1/valuation/external/collateral/{collateralId}/collateralAsset/{collateralAssetId}:
+    get:
+      tags:
+        - "externalValuationWeb"
+      summary: "Retrieves the external valuation record or replication record for the given asset of a collateral."
+      description:  "Retrieves the external valuation details work record or replication record for the given asset based on the collateralId and collateralAssetId"
+      operationId: "getExternalValuationByCollateralAssetId"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Identifies a collateral"
+          required: true
+          type: "string"
+        - name: "collateralAssetId"
+          in: "path"
+          description: "Identifies a collateral asset"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "replicationFlag"
+          in: "query"
+          required: false
+          type: "boolean"
+          description: "Determines to fetch work record or replication record"
+        - name: "applicationNumber"
+          in: "query"
+          required: true
+          type: "string"
+          description: "Application Number of the Collateral being initiated"
+        - name: "recordStatus"
+          in: "query"
+          required: false
+          type: "string"
+          description: "Determines the type of records to fetch: either MAIN or REPLICATED"
+      responses:
+        200:
+          description: "Returns the Response Model for the given Collateral asset"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation:
+    post:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Creates a new Final Valuation."
+      description: "Creates a new Final Valuation."
+      operationId: "createFinalValuationWork"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "finalValuation"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Final Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/FinalValuationMasterModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created Final Valuation"
+          headers:
+            Location:
+              description: "URL of newly created Final Valuation"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Retrieves the list of existing Final Valuations."
+      description:  "Retrieves the list of existing Final Valuations."
+      operationId: "getAllFinalValuationsWork"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "limit"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          description: ""
+          required: false
+          type: "integer"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/latest/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Retrieves the Final Valuation by ID."
+      description:  "Retrieves the Final Valuation by ID."
+      operationId: "getFinalValuationWorkById"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          required: false
+          type: "string"
+          description: "Application Number of the Collateral being initiated"
+        - name: "replicationFlag"
+          in: "query"
+          required: false
+          type: "boolean"
+          description: "Determines to fetch work record or replication record"                      
+      responses:
+        200:
+          description: "Returns the Final Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  /web/v1/replication/valuation/latest/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationRplcnWeb"
+      summary: "Retrieves the Final Valuation by ID."
+      description:  "Retrieves the Final Valuation by ID."
+      operationId: "getFinalValuationRplcn"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Returns the Final Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/{id}:
+    put:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Update an existing Final Valuation."
+      description:  "Update an existing Final Valuation."
+      operationId: "updateFinalValuationWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Final Valuation that need to be updated"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "finalValuation"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing Final Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/FinalValuationMasterModel"
+      responses:
+        200:
+          description: "Returns updated Final Valuation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    delete:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Deletes the Final Valuation identified by given ID."
+      description:  "deletes the Final Valuation identified by given ID."
+      operationId: "deleteFinalValuationWork"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/finalSubmit:
+    post:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Creates a new Final Valuation."
+      description: "Creates a new Final Valuation."
+      operationId: "createFinalValuationMain"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "transactionHeaderModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Final Valuation"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Returns the Id of the newly created Final Valuation"
+          headers:
+            Location:
+              description: "URL of newly created Final Valuation"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/main/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Retrieves the Final Valuation Main by ID."
+      description:  "Retrieves the Final Valuation Main by ID."
+      operationId: "getAllFinalValuationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the Final Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "finalValuationWeb"
+      summary: "Deletes the Final Valuation main data identified by given collateralId."
+      description:  "deletes the Final Valuation identified by given collateralId."
+      operationId: "deleteFinalValuationMain"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "collateralId of the user that needs to be deleted"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "delete"
+          in: "query"
+          description: "Query param to specify hard delete given by'Y'"
+          required: false
+          type: "string"
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false          
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Final error"
+  /web/v1/valuation/external/getLatestWorkforFacility/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "externalValuationWeb"
+      summary: "Retrieves the External Valuation work for facility by ID."
+      description:  "Retrieves the External Valuation work for facility by ID."
+      operationId: "getLatestWorkforFacility"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the External Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/moveMainToReplcn/collateral/{collateralId}:
+    head:
+      tags:
+        - "externalValuationWeb"
+      summary: "Moves ExternalValuation from TB to TX."
+      description: "Moves ExternalValuation from TB to TX."
+      operationId: "moveExternalValuationInFacilityFromTBToTX"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "entityReferenceNumber of the details that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/collateral/{collateralId}/collateralAsset/{collateralAssetId}:
+    get:
+      tags:
+        - "internalValuationWeb"
+      summary: "Retrieves the internal valuation record or replication record for the given asset of a collateral."
+      description:  "Retrieves the internal valuation details work record or replication record for the given asset based on the collateralId and collateralAssetId"
+      operationId: "getInternalValuationByCollateralAssetId"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Identifies a collateral"
+          required: true
+          type: "string"
+        - name: "collateralAssetId"
+          in: "path"
+          description: "Identifies a collateral asset"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "replicationFlag"
+          in: "query"
+          required: false
+          type: "boolean"
+          description: "Determines to fetch work record or replication record"
+        - name: "applicationNumber"
+          in: "query"
+          required: true
+          type: "string"
+          description: "Application Number of the Collateral being initiated"
+        - name: "recordStatus"
+          in: "query"
+          required: false
+          type: "string"
+          description: "Determines the type of records to fetch: either MAIN or REPLICATED"
+      responses:
+        200:
+          description: "Returns the Response Model for the given Collateral asset"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/getLatestWorkforFacility/{collateralId}:
+    get:
+      produces:
+        - "application/json"
+        - "application/xml"
+      tags:
+        - "internalValuationWeb"
+      summary: "Retrieves the internal Valuation work for facility by ID."
+      description:  "Retrieves the internal Valuation work for facility by ID."
+      operationId: "getLatestWorkforFacility"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: false
+      responses:
+        200:
+          description: "Returns the External Valuation based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/moveMainToReplcn/collateral/{collateralId}:
+    head:
+      tags:
+        - "internalValuationWeb"
+      summary: "Moves internalValuation from TB to TX."
+      description: "Moves internalValuation from TB to TX."
+      operationId: "moveInternalValuationInFacilityFromTBToTX"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "entityReferenceNumber of the details that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "applicationNumber"
+          in: "query"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/valuation/internal/delete/collateral/{collateralId}:
+    delete:
+      tags:
+        - "internalValuationWeb"
+      summary: "Deletes the internalValuation identified by given collateral Id."
+      description:  "Deletes the internalValuation identified by given collateral Id"
+      operationId: "deleteCollateralInternalValuation"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Id of the external valuation that need to be updated"
+          required: true
+          type: "string"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "hardDeleteFlag"
+          in: "query"
+          type: "boolean"
+          required: false
+        - name: "collateralAssetId"
+          in: "query"
+          type: "string"
+          required: false                    
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"  
+  /web/v1/valuation/publishEvent/collateral/{collateralId}/applicationNumber/{applicationNumber}:
+    head:
+      tags:
+        - "valuationEventWeb"
+      summary: "valuationEvent."
+      description: "valuationEvent."
+      operationId: "publishValuation"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "collateralID of the details that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "applicationNumber"
+          in: "path"
+          description: "applicationNumber of the details that needs to be fetched"
+          required: true
+          type: "string"          
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"                                         
+definitions:
+  RepresentationModel:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  InlineResponse:
+    type: "object"
+    description: "Response of the newly created resource"
+    properties:
+      message:
+        type: "string"
+  TransactionHeaderModel:
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string"
+      taskOutcome:
+        type: "string"
+      currentUser:
+        type: "string"
+      branchCode:
+        type: "string"
+      processName:
+        type: "string"
+      taskId:
+        type: "string"
+      currentStage:
+        type: "string"
+      tab:
+        type: "string"
+      taskPriority:
+        type: "string"
+      instanceId:
+        type: "string"
+      moduleCode:
+        type: "string"
+      isFromCAM:
+        type: "boolean"
+      externalCheckReq:
+        type: "boolean"
+      fieldInvestigationReq:
+        type: "boolean"
+      externalValuationReq:
+        type: "boolean"
+      internalValuationReq:
+        type: "boolean"
+      legalOpinionReq:
+        type: "boolean"
+      riskEvaluationReq:
+        type: "boolean"
+      externalCheckAgencySelected:
+        type: "boolean"
+      externalValAgencySelected:
+        type: "boolean"
+      legalFirmSelected:
+        type: "boolean"
+      isCollatCreateSelected:
+        type: "boolean"
+      collateralValue:
+        type: "number"
+      oldCollateralValue:
+        type: "number"
+      isFromCollateralEvaluation:
+        type: "boolean"
+      isFromCollateralReview:
+        type: "boolean"
+      isSubmissionAndAwaitingReq:
+        type: "boolean"
+      serviceName:
+        type: "string"
+      ownerEstimatedValue:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      customerId:
+        type: "string"
+      collateralType:
+        type: "string"
+      collateralCode:
+        type: "string"
+      collateralCurrency:
+        type: "string"
+      taskCreationDate:
+        type: "string"
+        format: "date-time"
+      submitFlag:
+        type: "boolean"
+      source:
+        type: "string"
+      isKYCRequired:
+        type: "boolean"
+      isCreditRatingRequired:
+        type: "boolean"
+      stageUpdateFlag:
+        type: "boolean"
+      collateralSubmissionReq:
+        type: "boolean"
+      awaitForConfirmation:
+        type: "boolean"
+      documentSafeKeepingReq:
+        type: "boolean"
+      updateCategory:
+        type: "string"
+  FinalValuationMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          finalValuationList:
+            type: "array"
+            items: { $ref: '#/definitions/FinalValuationModel' }
+          applicationNumber:
+            type: "string"
+  FinalValuationModel:
+    description: "Final Valuation model"
+    type: "object"
+    required:
+      - valuationAmount
+      - remarks
+      - effectiveDate
+      - bankHaircut
+      - categoryHaircut
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
+      stage:
+        type: "string"
+      valuationAmount:
+        type: "number"
+        minimum: 0
+      changedAmount:
+        type: "number"
+      remarks:
+        type: "string"
+      bankHaircut:
+        type: "number"
+        minimum: 0
+      categoryHaircut:
+        type: "number"
+        minimum: 0
+      valuationCurrency:
+        type: "string"
+      changedCurrency:
+        type: "string"
+  FinalValuationCollection:
+    description: "Collection of Final Valuations."
+    type: "object"
+    properties:
+      FinalValuationMasterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/FinalValuationMasterModel"
+  InternalValuationModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+          - valuerRemarks
+          - agencyValAmt
+          - agencyValDate
+          - valuationTeam
+          - bankHaircut
+          - categoryHaircut
+          - agencyValCur
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          collateralId:
+            type: "string"
+          agencyValAmt:
+            type: "number"
+            minimum: 0
+          agencyValDate:
+            type: "string"
+            format: "date-time"
+          valuerRemarks:
+            type: "string"
+          creditRemarks:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          createdBy:
+            type: "string"
+          valuationTeam:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          recordStat:
+            type: "string"
+          valuationExpiryDate:
+            type: "string"
+            format: "date-time"
+          bankHaircut:
+            type: "number"
+            minimum: 0
+          categoryHaircut:
+            type: "number"
+            minimum: 0
+          agencyValCur:
+            type: "string"
+          applicationNumber:
+            type: "string"
+          softDeleteFlag:
+            type: "string"
+          deleteStat:
+            type: "string"
+          replicationFlag:
+            type: "boolean"                                    
+  InternalValuationCollection:
+    description: "Collection of Internal Valuations."
+    type: "object"
+    properties:
+      InternalValuationList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InternalValuationModel"
+  ExternalValuationMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          replicationFlag:
+            type: "boolean"
+          externalValuationList:
+            type: "array"
+            items: { $ref: '#/definitions/ExternalValuationModel' }
+          applicationNumber:
+            type: "string"
+  ExternalValuationModel:
+    description: "External Valuation model"
+    type: "object"
+    required:
+      - valuerRemarks
+      - agencyId
+      - agencyValAmt
+      - agencyValDate
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      agencyId:
+        type: "string"
+      agencyName:
+        type: "string"
+      agencyValAmt:
+        type: "number"
+        minimum: 0
+      agencyValDate:
+        type: "string"
+        format: "date-time"
+      valuerRemarks:
+        type: "string"
+      creditRemarks:
+        type: "string"
+      valuationExpiryDate:
+        type: "string"
+        format: "date-time"
+      agencyValCur:
+        type: "string"
+      # PatchSet -Dec delete changes
+      softDeleteFlag:
+        type: "string"
+      deleteStat:
+        type: "string"
+      valuationType:
+        type: "string"
+      valuationFrequency:
+        type: "string"
+  ExternalValuationCollection:
+    description: "Collection of External Valuations."
+    type: "object"
+    properties:
+      ExternalValuationMasterList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExternalValuationMasterModel"
+  CollateralValuationModel:
+    description: "Model for Review and Recommendation updation"
+    type: "object"
+    required:
+      - collateralId
+    properties:
+      collateralId:
+        type: "string"
+      bankHaircut:
+        type: "number"
+      categoryHaircut:
+        type: "number"
+      marketValue:
+        type: "number"
+      bankValue:
+        type: "number"
+      collateralValue:
+        type: "number"
+      marketCurrency:
+        type: "string"
+      bankCurrency:
+        type: "string"
+      valuationDate:
+        type: "string"
+        format: "date-time"
+  ValuationEventModel:
+    description: "Valuation Event model"
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string" 
+      collateralId:
+        type: "string"  
+      appNumber:
+        type: "string" 
+      branchCode:
+        type: "string" 
+      userId:
+        type: "string"  
+      sourceCode:
+        type: "string"
+      eventName:
+        type: "string"        
+      internalValuationDetailsList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InternalValuationModel"   
+      externalValuationDetailsList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExternalValuationMasterModel"
+      finalValuationMasterModel:
+        $ref: "#/definitions/FinalValuationMasterModel"                                                                                
+  EventModelWrapper:
+    description: "Publish Event Wrapper"
+    type: "object"
+    properties:
+      valuationEventModel:
+        $ref: "#/definitions/ValuationEventModel"         

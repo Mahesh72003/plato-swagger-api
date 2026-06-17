@@ -1,0 +1,953 @@
+swagger: "2.0"
+info:
+  description: "This is service related to Cash Deposit Inquiry and duplicate check and Put request from Channel"
+  version: "1.0.0"
+  title: "Cash Deposit Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "CashSlipService"
+    description: "This is service related to Cash Deposit Inquiry and duplicate check and Put request from Channel"
+
+paths:
+  /service/v1/cashDepositInquiry:
+    get:
+      tags:
+        - "CashSlipService"
+      summary: "Retrieves the DepositSlip ."
+      description:  "Retrieves the Deposit Slip. Add additional information here for the this endpoint."
+      operationId: "cashDepositInquiry"
+      parameters:
+        - name: "referenceNum"
+          in: "query"
+          description: "Reference Number"
+          required: false
+          type: "string"
+        - name: "depositSlipRefNo"
+          in: "query"
+          description: "Reference Number of the Deposit Slip"
+          required: false
+          type: "string"
+        - name: "depositSlipNo"
+          in: "query"
+          description: "Deposit Slip No"
+          required: false
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS" 
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Tenant ID for SMS"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Unique Branch Code" 
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file"
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+          description: "Branch Date"
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "Limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "Offset of the limit"
+          type: "integer"
+        - name: "depositBranch"
+          in: "query"
+          description: "Reference of the Deposit Branch"
+          required: false
+          type: "string"
+        - name: "corporate"
+          in: "query"
+          description: "Reference of the Corporate"
+          required: false
+          type: "string"
+        - name: "accountNumber"
+          in: "query"
+          description: "Reference of the Account Number"
+          required: false
+          type: "string"
+        - name: "extRefNumber"
+          in: "query"
+          description: "Reference of the External Reference Number"
+          required: false
+          type: "string"
+        - name: "depositLocation"
+          in: "query"
+          description: "Reference of the Deposit Location"
+          required: false
+          type: "string"
+        - name: "divisionCode"
+          in: "query"
+          description: "Reference of the Division Code"
+          required: false
+          type: "string"
+        - name: "depositChannel"
+          in: "query"
+          description: "Reference of the Deposit Channel"
+          required: false
+          type: "string"
+        - name: "courier"
+          in: "query"
+          description: "Courier information"
+          required: false
+          type: "string"
+        - name: "processingStatus"
+          in: "query"
+          description: "Reference of the Processing Status"
+          required: false
+          type: "array"
+          items:
+              type: "string"
+        - name: "creditStatus"
+          in: "query"
+          description: "Reference of the Credit Status"
+          required: false
+          type: "array"
+          items:
+              type: "string"
+        - name: "amtRefBasis"
+          in: "query"
+          description: "Reference of the Amount"
+          required: false
+          type: "string"
+        - name: "currency"
+          in: "query"
+          description: "Currency"
+          required: false
+          type: "string"
+        - name: "amountFrom"
+          in: "query"
+          description: "Reference of the From Amount"
+          required: false
+          type: "number"
+        - name: "amountTo"
+          in: "query"
+          description: "Reference of the To Amount"
+          required: false
+          type: "number"
+        - name: "dateRefBasis"
+          in: "query"
+          description: "Reference Date"
+          required: false
+          type: "string"
+        - name: "dateFrom"
+          in: "query"
+          description: "Reference of the From Date"
+          required: false
+          type: "string"
+        - name: "dateTo"
+          in: "query"
+          description: "Reference of the To Date"
+          required: false
+          type: "string"
+        - name: "pickupFromDate"
+          in: "query"
+          required: false
+          description: " Pick Up From Date"
+          type: "string"
+        - name: "pickupToDate"
+          in: "query"
+          required: false
+          description: "Pick Up To Date"
+          type: "string" 
+        - name: "pickupLocationCode"
+          in: "query"
+          required: false
+          description: "Pick Up Location Code"
+          type: "string"
+        - name: "pickupPointCode"
+          in: "query"
+          required: false
+          description: "Pick Up Point Code"
+          type: "string"       
+      responses:
+        200:
+          description: "Successfully performs the operation and returns the Cash Slip model based on the given parameters."
+          schema:
+            $ref: "#/definitions/CashSlipInstrColl"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/denominationCollection/update:
+    put:
+      tags:
+        - "CashSlipService"
+      summary: "Update an existing denomination collection."
+      description: "Update an existing denomination collection."
+      operationId: "updateDenominationCollection"
+      parameters:
+        - name: "denominationCollection"
+          in: "body"
+          description: "Request Body that contains data required for updating denomination collections"
+          required: true
+          schema:
+            $ref: "#/definitions/DenominationCollectionsArray"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          description: "Application ID"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          description: "Tenant ID"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User Id for SMS"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Authentication Token for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          description: "Content Type"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          description: "Branch Date"
+          required: false
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          description: "Branch Code"
+          required: true
+         
+      responses:
+        201:
+          description: "Successfully performs the operation and returns the denomination response model of the updated denomination collection"
+          schema:
+             $ref: "#/definitions/DenominationCollectionResponseModelArray" 
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/cashDeposit/duplicateValidation/{depositSlipNo}/{corporateId}:
+    get:
+      tags:
+        - "CashSlipService"
+      summary: "Retrieves validation details"
+      description:  "Retrieves validation details. Add additional information here for the this endpoint."
+      operationId: "duplicateValidation"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          description: "Branch Code"
+          required: true          
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+          description: "TenantId id for SMS"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User id for SMS"
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "ContentType for SMS"
+        - name: "depositSlipNo"
+          in: "path"
+          description: "DepositSlipNo of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "corporateId"
+          in: "path"
+          description: "CorporateId of the DepositSlip that needs to be fetched"
+          required: true
+          type: "string"   
+
+      responses:
+        200:
+          description: "Successfully performs the operation and returns the Cash Slip model based on given parameters."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"           
+definitions:
+  CashSlipInstrColl:
+    description: "Collection of Cash Deposit Inquiry"
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        description: "Status"
+      errors:
+        type: "object"
+        description: "List Of Errors"
+        items:
+          $ref: "#/definitions/Error"
+      cashSlipInstrumentList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashDepositSummaryModel"
+        description: "Cash Deposit Summary Model"
+      paging:
+        $ref: "#/definitions/PagingDto"
+        description: "Paging Data Object"
+  PagingDto:
+    type: "object"
+    description: "Paging Data Object"
+    properties:
+      totalResults:
+        type: "integer"
+        description: "Total No of results"
+  CashDepositSummaryModel:
+    description: "Collection of Cash Deposit and Batch"
+    type: "object"
+    properties:
+      CashSlipModel:
+        $ref: "#/definitions/CashSlipModel"
+        description: "Cash Slip Model"
+      BatchModel:
+        $ref: "#/definitions/BatchModel"
+        description: "Batch Model"
+  Error:
+    type: "object"
+    description: "Error Model"
+    properties:
+      ecode:
+        type: "string"
+        description: "Error Code"
+      etype:
+        type: "string"
+        description: "Error Type"
+      edesc:
+        type: "string"
+        description: "Error Description"
+  DenominationCollectionResponseModel:
+    description: "Denomination Collection Response Model"
+    type: "object"
+    properties:
+      CollectionTxnData:
+        description: "Denomination Collection Transaction Model"
+        type: "object"
+      CashSlipTxnData:
+        description: "Cash Slip Transaction Data"
+        type: "object"  
+      Errors:
+        type: "object"
+        description: "List Of Errors"
+        items:
+          $ref: "#/definitions/Error"
+      ResponseStatus:
+        description: "Status of Response Model"
+        type: "string"
+  DenominationCollectionResponseModelArray:
+    description: "Denomination Collection Response Model"
+    type: "object"
+    properties:
+      denominationCollections:
+        description: "Denomination Collections ResponseModel"
+        type: "array"
+        items:
+          $ref: "#/definitions/DenominationCollectionResponseModel"       
+  DenominationCollections:
+    description: "Denomination Collections model"
+    type: "object"
+    properties:
+      collectionTxn:
+        $ref: "#/definitions/CollectionTxnModel"
+        description: "Collection Transaction Model"
+      cashSlipTxn:
+        description: "Cash Slip Transaction"
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipTxnModel"
+  DenominationCollectionsArray:
+    description: "Denomination Collections Array model"
+    type: "object"
+    properties:
+      denominationCollections:
+        description: "Denomination Collections Transaction"
+        type: "array"
+        items:
+          $ref: "#/definitions/DenominationCollections"          
+  CashSlipTxnModel:
+    description: "Cash Slip model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Deposit Slip"
+        type: "string"
+      seqNo:
+        description: "Sequence No of the Deposit Slip"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference No of the Deposit Slip"
+        type: "string"
+      depositSlipRefNo:
+        description: "Deposit Slip Ref No of the slip"
+        type: "string"
+      depositSlipNo:
+        description: "No of the Deposit Slip"
+        type: "string"
+      corporateId:
+        description: "Corporate Id of the Deposit Slip"
+        type: "string"
+      corporateName:
+        description: "Corporate Name of the Deposit Slip"
+        type: "string"        
+      creditAccountNo:
+        description: "Credit Account No of the Deposit Slip"
+        type: "string"
+      depositSlipDate:
+        type: string
+        description: "Deposit Slip Date"
+      depositSlipDateString:
+        description: "DepositSlip Date String"
+        type: string  
+      depositSlipAmt:
+        description: "Deposit Slip Amount"
+        type: number
+      depositSlipAmtCcy:
+        description: "Deposit Slip Currency Amount"
+        type: string
+      depositSlipCount:
+        description: "Count of Deposit Slips"
+        type: "integer"
+        format: "int64"
+      depositSlipValue:
+        description: "Value of Deposit Slip"
+        type: "number"
+      divisionCode:
+        description: "Division Code of Deposit Slip"
+        type: "string"
+      divisionDesc:
+        description: "Division Description of Deposit Slip"
+        type: "string"
+      pickupLocationCode:
+        description: "Pickup Location Code of Deposit Slip"
+        type: "string"
+      pickupLocationDesc:
+        description: "Pickup Location Description of Deposit Slip"
+        type: "string"
+      pickupPointCode:
+        description: "Pickup Point Code of Deposit Slip"
+        type: "string"
+      pickupPointDesc:
+        description: "Pickup Point Description of Deposit Slip"
+        type: "string"
+      pickupDate:
+        description: "Pickup Date"
+        type: string
+      pickupDateString:
+        description: "Pickup Date String"
+        type: string  
+      totalDenominationCount:
+        description: "Total Denomination Count of Deposit Slip"
+        type: "integer"
+        format: "int64"
+      exchangeRate:
+        description: "Exchange Rate"
+        type: number      
+      amountACCY:
+        description: "Currency Amount"
+        type: number
+      creditACCY:
+        description: "Credit Currency Amount"
+        type: string    
+      externalReferenceNum:
+        description: "External Reference No of the Deposit Slip"
+        type: "string"
+      creditStatus:
+        description: "Credit Status"
+        type: "string"
+      creditDate:
+        type: string
+        description: "Credit Date"
+      requestDate:
+       type: string
+       description: "Request Date"
+      stage:
+        description: "Stage"
+        type: "string"          
+      noOfMiscFields:
+        description: "No of Miscellaneous Fields"
+        type: "integer"
+        format: "int64"
+      misc1:
+        description: "1st Miscellaneous Field"
+        type: "string" 
+      misc2:
+        description: "2nd Miscellaneous Field"
+        type: "string" 
+      misc3:
+        description: "3rd Miscellaneous Field"
+        type: "string" 
+      misc4:
+        description: "4th Miscellaneous Field"
+        type: "string" 
+      misc5:
+        description: "5th Miscellaneous Field"
+        type: "string" 
+      misc6:
+        description: "6th Miscellaneous Field"
+        type: "string" 
+      misc7:
+        description: "7th Miscellaneous Field"
+        type: "string" 
+      misc8:
+        description: "8th Miscellaneous Field"
+        type: "string" 
+      misc9:
+        description: "9th Miscellaneous Field"
+        type: "string" 
+      misc10:
+        description: "10th Miscellaneous Field"
+        type: "string" 
+      misc11:
+        description: "11th Miscellaneous Field"
+        type: "string" 
+      misc12:
+        description: "12th Miscellaneous Field"
+        type: "string" 
+      misc13:
+        description: "13th Miscellaneous Field"
+        type: "string" 
+      misc14:
+        description: "14th Miscellaneous Field"
+        type: "string" 
+      misc15:
+        description: "15th Miscellaneous Field"
+        type: "string" 
+      misc16:
+        description: "16th Miscellaneous Field"
+        type: "string" 
+      misc17:
+        description: "17th Miscellaneous Field"
+        type: "string" 
+      misc18:
+        description: "18th Miscellaneous Field"
+        type: "string" 
+      misc19:
+        description: "19th Miscellaneous Field"
+        type: "string" 
+      misc20:
+        description: "20th Miscellaneous Field"
+        type: "string" 
+      misc21:
+        description: "21st Miscellaneous Field"
+        type: "string" 
+      misc22:
+        description: "22nd Miscellaneous Field"
+        type: "string" 
+      misc23:
+        description: "23rd Miscellaneous Field"
+        type: "string" 
+      misc24:
+        description: "24th Miscellaneous Field"
+        type: "string" 
+      misc25:
+        description: "25th Miscellaneous Field"
+        type: "string" 
+      misc26:
+        description: "26th Miscellaneous Field"
+        type: "string" 
+      misc27:
+        description: "27th Miscellaneous Field"
+        type: "string" 
+      misc28:
+        description: "28th Miscellaneous Field"
+        type: "string" 
+      misc29:
+        description: "29th Miscellaneous Field"
+        type: "string" 
+      misc30:
+        description: "30th Miscellaneous Field"
+        type: "string"
+      pickupRequestDate:
+        description: "Pickup Request Date"
+        type: string
+        format: date
+      channel:
+        description: "Channel"
+        type: "string"     
+      channelDepositBranch:
+        description: "Branch where the cash is required to be deposited"
+        type: string      
+      cashSlipAdFields:
+        $ref: "#/definitions/CashSlipAdditionalInfoCollection"
+        description: "Cash Slip Additional Information Collection"
+      denominationDetails:
+        $ref: "#/definitions/DenominationCollection"
+        description: "Denomination Collection"
+        
+  CollectionTxnModel:
+    description: "InstrumentCollections model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the batch"
+        type: "string"
+      branchCode:
+        description: "Branch Code"
+        type: "string"
+      referenceNum:
+        description: "Reference Number"
+        type: "string"
+      seqNo:
+        description: "Sequence Number"
+        type: "integer"
+        format: "int64"
+      makerId:
+        description: "Maker Id"
+        type: string
+      makerDateStamp:
+        description: "Maker Date Stamp"
+        type: string    
+      depositChannel:
+        description: "Deposit Channel"
+        type: "string"
+      financialPosting:
+        description: "Financial Posting"
+        type: "string"
+      courierCode:
+        description: "Courier Code"
+        type: "string" 
+      courierDesc:
+        description: "Courier Description"
+        type: "string"        
+      consignmentNo:
+        description: "Consignment Number"
+        type: "string"
+      consignmentDate:
+        description: "Consignment Date"
+        type: string
+      processingDate:
+        description: "Processing Date"
+        type: string
+      depositLocationCode:
+        description: "Deposit Location Code"
+        type: "string"
+      depositLocationDesc:
+        description: "Deposit Location Description"
+        type: "string"
+      ackReceiptNo:
+        description: "Acknowledgement Receipt Number"
+        type: "string"
+      bagWeight:
+        description: "Bag Weight"
+        type: "number"
+      initiatorRefNo:
+        description: "Initiator Reference Number"
+        type: "string"
+      totalBatchAmtCcy:
+        description: "Total Batch Amount Currency"
+        type: "string"
+      totalBatchAmt:
+        description: "Total Batch Amount"
+        type: "number"
+      totalDepositSlips:
+        description: "Total Deposit Slips"
+        type: "integer"
+        format: "int64"
+      stage:
+        description: "Stage"
+        type: "string"
+      txnStatus:
+        description: "Transaction Status"
+        type: "string"
+      resourceId:
+        description: "Resource Id"
+        type: "string"
+      depositorName:
+        description: "Depositor Name"
+        type: "string"
+      idProofType:
+        description: "ID Proof Type"
+        type: "string"
+      idProofDetail:
+        description: "ID Proof Detail"
+        type: "string"
+      contactNumber:
+        description: "Contact Number"
+        type: "string"
+      screenFlag:
+        description: "Screen Flag Identifier"
+        type: string
+      autoAuth:
+        description: "Auto Authorization"
+        type: string
+      authId:
+        description: "Authorization Id"
+        type: string
+      authDtStamp:
+        description: "Authorization Date"
+        type: string
+
+  CashSlipAdditionalInfoCollection:
+    description: "Collection of CashSlips"
+    type: "object"
+    properties:
+     CashSlipAdditionalInfoList:
+        type: "array"
+        items:
+          $ref: "#/definitions/CashSlipAdditionalInfoModel"
+        description: "Cash Slip Additional Information Model"
+
+  CashSlipAdditionalInfoModel:
+    description: "DataSlips additional Field"
+    type: "object"
+    properties:
+       id:
+        description: "Id of the Deposit Slip"
+        type: "string"
+       seqNo:
+        description: "Sequence No of the Deposit Slip"
+        type: "integer"
+        format: "int64"
+       referenceNum:
+        description: "Reference No of the Deposit Slip"
+        type: "string"
+       depositSlipRefNo:
+        description: "Deposit Slip Ref No"
+        type: "string"
+       depositSlipNo:
+        description: "No of the Deposit Slip"
+        type: "string"
+       adfRowNo:
+        description: "Row No of this Additional Field"
+        type: "integer"
+        format: "int64"
+       udf1:
+        description: "1st User Defined Field"
+        type: "string" 
+       udf2:
+        description: "2nd User Defined Field"
+        type: "string" 
+       udf3:
+        description: "3rd User Defined Field"
+        type: "string" 
+       udf4:
+        description: "4th User Defined Field"
+        type: "string" 
+       udf5:
+        description: "5th User Defined Field"
+        type: "string" 
+       udf6:
+        description: "6th User Defined Field"
+        type: "string" 
+       udf7:
+        description: "7th User Defined Field"
+        type: "string" 
+       udf8:
+        description: "8th User Defined Field"
+        type: "string" 
+       udf9:
+        description: "9th User Defined Field"
+        type: "string" 
+       udf10:
+        description: "10th User Defined Field"
+        type: "string" 
+       udf11:
+        description: "11th User Defined Field"
+        type: "string" 
+       udf12:
+        description: "12th User Defined Field"
+        type: "string" 
+       udf13:
+        description: "13th User Defined Field"
+        type: "string" 
+       udf14:
+        description: "14th User Defined Field"
+        type: "string" 
+       udf15:
+        description: "15th User Defined Field"
+        type: "string" 
+       udf16:
+        description: "16th User Defined Field"
+        type: "string" 
+       udf17:
+        description: "17th User Defined Field"
+        type: "string" 
+       udf18:
+        description: "18th User Defined Field"
+        type: "string" 
+       udf19:
+        description: "19th User Defined Field"
+        type: "string" 
+       udf20:
+        description: "20th User Defined Field"
+        type: "string" 
+       udf21:
+        description: "21st User Defined Field"
+        type: "string" 
+       udf22:
+        description: "22nd User Defined Field"
+        type: "string" 
+       udf23:
+        description: "23rd User Defined Field"
+        type: "string" 
+       udf24:
+        description: "24th User Defined Field"
+        type: "string" 
+       udf25:
+        description: "25th User Defined Field"
+        type: "string" 
+       udf26:
+        description: "26th User Defined Field"
+        type: "string" 
+       udf27:
+        description: "27th User Defined Field"
+        type: "string" 
+       udf28:
+        description: "28th User Defined Field"
+        type: "string" 
+       udf29:
+        description: "29th User Defined Field"
+        type: "string" 
+       udf30:
+        description: "30th User Defined Field"
+        type: "string"    
+
+  DenominationCollection:
+    description: "Collection of Denominations"
+    type: "object"
+    properties:
+     DenominationList:
+        type: "array"
+        items:
+          $ref: "#/definitions/DenominationModel"
+        description: "Denomination Model"
+
+  DenominationModel:
+    description: "Denomination model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Denomination"
+        type: "string"
+      seqNo:
+        description: "Sequence No of the Denomination"
+        type: "integer"
+        format: "int64"
+      referenceNum:
+        description: "Reference No of the Denomination"
+        type: "string"
+      depositSlipRefNo:
+        description: "Deposit Slip Ref No of the Denomination"
+        type: "string"
+      depositSlipNo:
+        description: "No of the Deposit Slip"
+        type: "string"
+      denominationRefNo:
+        description: "Reference No of the Denomination"
+        type: "string"
+      denominationType:
+        description: "Type of the Denomination"
+        type: "string"      
+      denominationValue:
+        description: "Value of the Denomination"
+        type: "number"
+      denominationCount:
+        description: "Count of the Denomination"
+        type: "number"
+      denominationAmount:
+        description: "Amount of the Denomination"
+        type: "number"
+      denominationStatus:
+        description: "Status of the Denomination"
+        type: "string"
+      denominationCcy:
+        description: "Currency of the Denomination"
+        type: "string"    
+      makerId:
+        type: "string"
+        description: "Maker Id"
+      makerDtStamp:
+        type: "string"
+        format: date
+        description: "Maker Date Stamp"
+      checkerId:
+        type: "string"
+        description: "Checker Id"
+      checkerDtStamp:
+        type: "string"
+        format: date
+        description: "Checker Date Stamp"
+  CashSlipModel:
+    type: object
+    description: "CashSlip Data Model"  
+  BatchModel:
+    type: object
+    description: "Batch Data Model"
+  ResponseModel:
+    description: "Response Model"
+    type: "object"
+    properties:
+      data:
+        type: "object"
+      errors:
+        type: "object"

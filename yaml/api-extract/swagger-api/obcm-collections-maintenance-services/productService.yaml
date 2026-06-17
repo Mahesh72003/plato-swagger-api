@@ -1,0 +1,483 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obscf
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "The APIs list the products that are available / created for Cash and Instrument Deposit"
+ version: "1.0.0"
+ title: "Cash and Instrument Product APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "product"
+   description: "The service lists the products available for Cash Deposit and Instrument Deposit"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../product
+
+ /service/v1/product:
+  get:
+   tags:
+    - "productService"
+   summary: "Get all valid product."
+   description:  "Get all valid product. This endpoints will be used to Get all valid product maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id for SMS"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code for SMS"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id for SMS"
+     type: "string"
+     required: true     
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth needs to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: Offset is starting number of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: Limit is maximum number of records to be fetched
+     required: false
+     type: integer
+   - name: authStat
+     required: false
+     type: string
+     in: query
+     description: "Authentication Status to determine if record is authorized (A) or unauthorized (U)."
+   - name: recordStat
+     required: false
+     type: string
+     in: query
+     description: "Record Status"
+   - name: productCategory
+     required: false
+     type: string
+     in: query
+     description: "Product Category of the record that needs to be fetched"
+   - name: branchCode
+     required: false
+     type: string
+     in: query
+     description: "Branch Code for SMS"
+   - name: productCode
+     required: false
+     type: string
+     in: query
+     description: "Product Code of the record that needs to be fetched"
+   - name: productDescription
+     required: false
+     type: string
+     in: query
+     description: "Product Description of the record that needs to be fetched"
+   - name: productType
+     required: false
+     type: string
+     in: "query"
+     description: "Product Type of the record that needs to be fetched"
+   - name: "networkType"
+     required: false
+     type: "string"
+     in: "query"
+     description: "Network Type of the record that needs to be fetched"
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "URL of newly created productmaster"
+       type: "string"
+     schema:
+       $ref: "#/definitions/CmTmProductMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error" 
+ /service/v1/product/productWithDesc:
+  get:
+   tags:
+    - "productService"
+   summary: "Get all valid product."
+   description:  "Get all valid product. This endpoints will be used to Get all valid product maintenance records."
+   operationId: "getAllDesc"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User Id for SMS"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code for SMS"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "Application Id for SMS"
+     type: "string"
+     required: true
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth needs to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: Offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: Limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: recordStat
+     required: false
+     description: "Record Status"
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "URL of newly created productmaster"
+       type: "string"
+     schema:
+       $ref: "#/definitions/ProductDescCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ /service/v1/product/{productCode}/{branchCode}:
+  get:
+   tags:
+    - "productService"
+   summary: "Retrieves the product by Product Code and Branch Code"
+   description:  "Retrieves the product by Product Code and Branch Code."
+   operationId: "getByCode"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id for SMS"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code for SMS"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id for SMS"
+      type: "string"
+      required: true
+    - in: query
+      name: recordStat
+      required: false
+      description: "Record Status"
+      type: string
+    - name: "productCode"
+      in: "path"
+      description: "Product Code of the record that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "path"
+      description: "Branch Code of the record that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the program based on given id."
+     schema:
+      $ref: "#/definitions/CmTmProductMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /service/v1/productSearch:
+  get:
+   tags:
+    - "productService"
+   summary: "Retrieves the product by Product and Network type."
+   description:  "Retrieves the product by Product and Network type."
+   operationId: "getProductByTypeAndNewtwork"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User Id for SMS"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code for SMS"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      description: "Application Id for SMS"
+      type: "string"
+    - name: "productType"
+      in: "query"
+      description: "Product Type of the record that needs to be fetched"
+      type: "string"
+    - name: "networkType"
+      in: "query"
+      description: "Network Type of the record that needs to be fetched"
+      type: "string"
+    - name: offset
+      in: query
+      description: Offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: Limit is maximum no of records to be fetched
+      required: false
+      type: integer
+   responses:
+    200:
+     description: "Returns the program based on given id."
+     schema:
+      $ref: "#/definitions/CmTmProductMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+  CmTmProductMasterDTO:
+    description: "Contains details of the product."
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          branchCode:
+            type: string
+            description: "Branch Code"
+          clearingDays:
+            type: number
+            description: "Clearing Days"
+          currency:
+            type: string
+            description: "Currency"
+          cutOffTime:
+            type: string
+            description: "Cut-Off Time"
+          effectiveDate:
+            type: string
+            description: "Effective Date"
+          expiryDate:
+            type: string
+            description: "Expiry Date"
+          maxTxnAmt:
+            type: number
+            description: "Maximum Transaction Amount"
+          minTxnAmt:
+            type: number
+            description: "Minimum Transaction Amount"
+          networkType:
+            type: string
+            description: "Network Type"
+          productCategory:
+            type: string
+            description: "Product Category"
+          productCode:
+            type: string
+            description: "Product Code"
+          productDescription:
+            type: string
+            description: "Product Description"
+          productExposureLimit:
+            type: number
+            description: "Product Exposure Limit"
+          productType:
+            type: string
+            description: "Product Type"
+          txnControllerRefNo:
+            type: string
+            description: "Transaction Controller Ref Number"
+  ModListKeyDto:
+    description: "DTO to hold the ModNos and Remarks"
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    description: "DTO to hold the ModNos and Remarks"
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    description: "ResponseDto stores the response status and code."
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    description: "ResponseCode stores the response details."
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    description: "GenericDto  contains the generic transactional data and which extends RepresentationModel of Spring HATEOAS"
+    allOf:
+      - type: object
+        discriminator: resource_type
+  CmTmProductMasterCollection:
+    description: "Collection of product."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CmTmProductMasterDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    description: "Contains the paging data like Total Results and Next/Prev Links"
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    description: "Collection of ResponseDto and ResponseResourceSupport"
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    description: "Response DTO which extends RepresentationModel of Spring HATEOAS"
+    type: object
+  ProductDescDTO:
+    description: "Collection of Product Code and Description"
+    type: object
+    properties:
+      productCode:
+        type: string
+        description: ""
+      productDescription:
+        type: string
+        description: ""
+  ProductDescCollection:
+    description: "Collection of products with Description."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductDescDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  CmTmProductMasterWrapperDTO:
+    description: "Collection of Product Master Information"
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/CmTmProductMasterDTO"

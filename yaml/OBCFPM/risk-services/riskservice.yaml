@@ -1,0 +1,210 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Risk Evaluation server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Risk Service"
+host: "whf00anh:7761"
+basePath: "/Risk"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "RiskEvaluationAPI"
+    description: "API for Risk Evaluation Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/evaluation:
+    post:
+      tags:
+        - "RiskEvaluationService"
+      summary: "Adds a new risk evaluation."
+      description: "Adds a new risk evaluation."
+      operationId: "createRiskEvaluation"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+        - name: "riskevaluation"
+          in: "body"
+          description: "Request Body that contains data required for creating a new risk evaluation"
+          required: true
+          schema:
+            $ref: "#/definitions/RiskEvaluationModel"
+      responses:
+        201:
+          description: "Successfully created a new risk evaluation"
+          headers:
+            Location:
+              description: "URL of newly created risk evaluation"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "RiskEvaluationService"
+      summary: "Retrieves the list of existing risk evaluation."
+      description:  "Retrieves the list of existing risk evaluation."
+      operationId: "getAllRiskEvaluations"
+      parameters:
+        - name: "entityRefNo"
+          in: "query"
+          description: "Entity Reference No for which data needs to be fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/RiskEvaluationCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/evaluation/{collateralId}:
+    get:
+      tags:
+        - "RiskEvaluationService"
+      summary: "Retrieves the risk evaluation by Collateral Id."
+      description:  "Retrieves the risk evaluation by Collateral Id."
+      operationId: "getRiskEvaluationById"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Collateral Id for which data needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the risk evaluation based on given collateral id."
+          schema:
+            $ref: "#/definitions/RiskEvaluationModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    put:
+      tags:
+        - "RiskEvaluationService"
+      summary: "Update an existing risk evaluation."
+      description:  "Update an existing risk evaluation."
+      operationId: "updateRiskEvaluation"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "collateral id of the risk evaluation that need to be updated"
+          required: true
+          type: "string"      
+        - name: "riskEvaluation"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing risk evaluation"
+          required: true
+          schema:
+            $ref: "#/definitions/RiskEvaluationModel"
+      responses:
+        200:
+          description: "Returns updated risk evaluation"
+          schema:
+            $ref: "#/definitions/RiskEvaluationModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"          
+    delete:
+      tags:
+        - "RiskEvaluationService"
+      summary: "Deletes the risk valuation identified by given collateral Id."
+      description:  "Deletes the risk evaluation identified by given collateral Id"
+      operationId: "deleteRiskEvaluation"
+      parameters:
+        - name: "collateralId"
+          in: "path"
+          description: "Collateral Id of the risk valuation that needs to be deleted"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /service/v1/approval:
+    post:
+      tags:
+        - "RiskEvaluationService"
+      summary: "Adds a new risk evaluation."
+      description: "Adds a new risk evaluation."
+      operationId: "createRiskApproval"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: true  
+        - name: "riskApproval"
+          in: "body"
+          description: "Request Body that contains data required for creating a new risk Approval"
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionHeaderModel"
+      responses:
+        201:
+          description: "Successfully created a new risk evaluation"
+          headers:
+            Location:
+              description: "URL of newly created risk evaluation"
+              type: "string"
+          schema:
+              $ref: "#/definitions/InlineResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"            

@@ -1,0 +1,572 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : ProductProcessor.yaml
+#  **
+#  ** Module     : obcbs
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2019-2020 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server ProductProcessor server." 
+ version: "1.0.0"
+ title: "ProductProcessor Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ProductProcessor"
+   description: "ProductProcessor"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../ProductProcessor
+
+ /productprocessors:
+  post:
+   tags:
+    - "ProductProcessor"
+   summary: "Adds a new ProductProcessor."
+   description: "Adds a new ProductProcessor. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "productprocessor" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new ProductProcessor" 
+      required: true
+      schema:
+       $ref: "#/definitions/CbsTmProductProcessorDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created ProductProcessor" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "ProductProcessor"
+   summary: "Get all valid ProductProcessor."
+   description:  "Get all valid ProductProcessor. This endpoints will be used to Get all valid ProductProcessor maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CbsTmProductProcessorCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../ProductProcessor/xxx
+#   DELETE    .../ProductProcessor/xxx
+#   GET       .../ProductProcessor/xxx
+#   GET       .../ProductProcessor/xxx?version=latestrecord
+#   GET       .../ProductProcessor/xxx?version=1
+
+ /productprocessors/{id}:
+  put:
+   tags:
+    - "ProductProcessor"
+   summary: "Update an existing ProductProcessor."
+   description:  "Update an existing ProductProcessor."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the ProductProcessor Maintenance"
+      required: true
+      type: "string"
+    - name: "productprocessor"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing ProductProcessor"
+      required: true
+      schema:
+       $ref: "#/definitions/CbsTmProductProcessorDTO"
+   responses:
+    200:
+     description: "Returns updated ProductProcessor"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "ProductProcessor"
+   summary: "Retrieves the ProductProcessor by ID."
+   description:  "Retrieves the ProductProcessor by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ProductProcessor based on given id."
+     schema:
+      $ref: "#/definitions/CbsTmProductProcessorWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "ProductProcessor"
+   summary: "Deletes the ProductProcessor identified by given ID."
+   description:  "Deletes the ProductProcessor identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ProductProcessor maintenance"
+      required: true
+      type: "string"
+    - name: "productprocessor"
+      in: "body"
+      description: Request body contain ProductProcessor and Modification no of ProductProcessor maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ProductProcessor/xxx/approve
+
+ /productprocessors/{id}/approve:
+  patch:
+   tags:
+    - "ProductProcessor"
+   summary: "Authorize the ProductProcessor by given ID."
+   description:  "Authorize the ProductProcessor identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ProductProcessor maintenance"
+      required: true
+      type: "string"
+    - name: "productprocessor"
+      in: "body"
+      description: Request body contain ProductProcessor and Modification no of ProductProcessor maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ProductProcessor/xxx/close
+ /productprocessors/{id}/close:
+  patch:
+   tags:
+    - "ProductProcessor"
+   summary: "Close the ProductProcessor by given ID."
+   description:  "Close the ProductProcessor identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ProductProcessor maintenance"
+      required: true
+      type: "string"
+    - name: "productprocessor"
+      in: "body"
+      description: Request body contain ProductProcessor and Modification no of ProductProcessor maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../ProductProcessor/xxx/reopen
+
+ /productprocessors/{id}/reopen:
+  patch:
+   tags:
+    - "ProductProcessor"
+   summary: "reopen the ProductProcessor by given ID."
+   description:  "reopen the ProductProcessor identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the ProductProcessor maintenance"
+      required: true
+      type: "string"
+    - name: "productprocessor"
+      in: "body"
+      description: Request body contain ProductProcessor and Modification no of ProductProcessor maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../ProductProcessor/xxx/unauthorized
+
+ /productprocessors/{id}/unauthorized:
+  get:
+   tags:
+    - "ProductProcessor"
+   summary: "Retrives the ProductProcessor by given ID."
+   description:  "Retrives the ProductProcessor identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ProductProcessor based on given id."
+     schema:
+       $ref: "#/definitions/CbsTmProductProcessorCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../ProductProcessor/xxx/history
+
+ /productprocessors/{id}/history:
+  get:
+   tags:
+    - "ProductProcessor"
+   summary: "Retrives the ProductProcessor by given ID."
+   description:  "Retrives the ProductProcessor by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the ProductProcessor based on given id."
+     schema:
+       $ref: "#/definitions/CbsTmProductProcessorCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /productprocessors/{id}/reject:
+  patch:
+   tags:
+    - "ProductProcessor"
+   summary: "Reject the productprocessors by given ID."
+   description:  "Reject the productprocessors identified by given ID."
+   operationId: "reject"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the maintenance"
+      required: true
+      type: "string"
+    - name: "productprocessors"
+      in: "body"
+      description: Request body contain Modification no of maintenance which need to be rejected"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CbsTmProductProcessorDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+  - required: 
+     - pprCode
+     - pprDesc
+     - pprEffectiveDate
+     - pprExpiryDate
+    properties:
+     pprEnabledInd:
+      description: "pprEnabledInd of the ProductProcessor"
+      type: string
+     pprCode:
+      description: "pprCode of the ProductProcessor"
+      type: string
+      minLength: 1
+      maxLength: 30
+      pattern: '[0-9a-zA-Z]+'
+     pprDesc:
+      description: "pprDesc of the ProductProcessor"
+      type: string
+      minLength: 1
+      maxLength: 240
+     pprEffectiveDate:
+      description: "pprEffectiveDate of the ProductProcessor"
+      type: string
+      format: date
+     pprExpiryDate:
+      description: "pprExpiryDate of the ProductProcessor"
+      type: string
+      format: date
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CbsTmProductProcessorCollection: 
+  description: "Collection of ProductProcessor."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CbsTmProductProcessorDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CbsTmProductProcessorWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CbsTmProductProcessorDTO"

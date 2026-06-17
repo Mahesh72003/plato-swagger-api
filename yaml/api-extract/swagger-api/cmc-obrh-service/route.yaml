@@ -1,0 +1,142 @@
+swagger: '2.0'
+info:
+  title: OBRH Service
+  version: 1.0.0
+  description: OBRH Service for Oracle Banking Routing Hub
+host: 'api-plato.us.oracle.com:8080'
+basePath: /api/1.0/
+consumes:
+  - application/json
+  - application/xml
+produces:
+  - application/json
+  - application/xml
+tags:
+  - name: Route
+    description: API for routing
+schemes:
+  - https
+paths:
+  /route/dispatch:
+    post:
+      tags:
+        - Route
+      summary: Dispatch request to a configured application service route.
+      operationId: dispatch
+      parameters:
+        - name: appId
+          in: header
+          type: string
+          required: true
+          description: Application Id
+          default: CMNCORE
+        - name: entityId
+          in: header
+          type: string
+          required: true
+          description: Entity Id
+          default: DEFAULTENTITY
+        - name: userId
+          in: header
+          type: string
+          required: true
+          description: User Id
+        - name: branchCode
+          in: header
+          type: string
+          required: true
+          description: Branch Code
+        - name: SERVICE-CONSUMER
+          in: header
+          type: string
+          required: true
+          description: Consumer Name
+        - name: SERVICE-CONSUMER-SERVICE
+          in: header
+          type: string
+          required: true
+          description: Consumer Service Name
+        - name: isAsync
+          in: query
+          description: This parameter is used to do target system invocation asychronously.
+          type: boolean
+          required: false
+        - name: excludeMessages
+          in: query
+          description: This parameter will remove messages from response.
+          type: boolean
+          required: false
+        - name: payload
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns message of success or failure
+          schema:
+            type: object
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /route/dispatchResponse/{id}:
+    get:
+      tags:
+        - Route
+      summary: Async Dispatch response to a configured application service route.
+      operationId: dispatchResponse
+      parameters:
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Correlation-Id of the request whose response needs to be fetched.
+        - name: appId
+          in: header
+          type: string
+          required: true
+          description: Application Id
+          default: CMNCORE
+        - name: entityId
+          in: header
+          type: string
+          required: true
+          description: Entity Id
+          default: DEFAULTENTITY
+        - name: userId
+          in: header
+          type: string
+          required: true
+          description: User Id
+        - name: branchCode
+          in: header
+          type: string
+          required: true
+          description: Branch Code
+        - name: excludeMessages
+          in: query
+          description: This parameter will remove messages from response.
+          type: boolean
+          required: false
+      responses:
+        '200':
+          description: Returns message of success or failure
+          schema:
+            type: object
+        '400':
+          description: Malformed syntax.
+        '401':
+          description: Request does not have sufficient credentials.
+        '403':
+          description: Request is not authorized.
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error

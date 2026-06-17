@@ -1,0 +1,671 @@
+swagger: "2.0"
+info:
+  description: "policy-exception-tracking-services"
+  version: "1.0.0"
+  title: "policy-exception-publisher-services"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "policyExceptionpublisherWeb"
+    description: "API for policyExceptionpublisherWeb Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/policy/exception/notifications:
+    post:
+      tags:
+        - "PolicyPublisherEvent"
+      summary: "API for creating a new policy exception details."
+      description: "API for creating a new policy exception details."
+      operationId: "policyExceptionPublisher"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "policyExceptionInstanceMasterModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new policy Exception details."
+          required: true
+          schema:
+            $ref: "#/definitions/PolicyExceptionCollection"
+      responses:
+        201:
+          description: "Returns the model of the newly created policy collateral details"
+          headers:
+            Location:
+              description: "URL of newly created policy collateral"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+          
+  /web/v1/collateral/publishEvent:
+    post:
+      tags:
+        - "PolicyPublisherEvent"
+      summary: "risk, legal, valuation Event."
+      description: "risk, legal, valuation Event."
+      operationId: "publishEvent"
+      parameters:
+        - name: "stage"
+          in: "query"
+          description: "states about the publisher of the event"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "publishEventModel"
+          in: "body"
+          description: "Request Body that contains data required for creating a new policy Exception details."
+          required: true
+          schema:
+            $ref: "#/definitions/publishEventModel"
+      responses:
+        201:
+          description: "Returns the model of the newly created policy collateral details"
+          headers:
+            Location:
+              description: "URL of newly created policy collateral"
+              type: "string"
+          schema:
+              $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"           
+definitions:
+   publishEventModel:
+    description: "event Details to be published."
+    type: "object"
+    properties:
+      riskEventModel:
+        $ref: "#/definitions/RiskEventModel"           
+      legalEventModel:
+        $ref: "#/definitions/LegalEventModel"
+      valuationEventModel:
+        $ref: "#/definitions/ValuationEventModel"
+   PolicyExceptionCollection:
+    description: "Details that are deviated during validation."
+    type: "object"
+    properties:
+      policyExceptionResponseList:
+        type: "array"
+        items: { $ref: '#/definitions/PolicyExceptionResponseModel' }            
+   PolicyExceptionResponseModel:
+    description: "Details that are deviated during validation."
+    type: "object"
+    properties:
+      id:
+        description: "id"
+        type: "string"
+      applicationNumber:
+        description: "applicationNumber"
+        type: "string"
+      partyId:
+        description: "partyId"
+        type: "string"
+      dimensionName:  
+        description: "dimensionName"
+        type: "string"
+      actualValue:  
+        description: "actualValue"
+        type: "string"
+      approvalRequired:  
+        description: "approvalRequired"  
+        type: "string"  
+      justification:  
+        description: "justification"  
+        type: "string"      
+      field:
+        description: "field"
+        type: "string"
+      exceptionApplicationNo:
+        description: "exceptionApplicationNo"
+        type: "string"
+      isApprvlInitiated:
+        description: "isApprvlInitiated"
+        type: "string"  
+      stageId:
+        description: "Stage Id"
+        type: "string"  
+      processCode:
+        description: "Process Code"
+        type: "string"
+      createdBy:
+        description: "createdBy"
+        type: "string"
+      createdDate:
+        description: "createdDate"
+        type: "string"
+        format: "date-time"
+      updatedBy:
+        description: "updatedBy"
+        type: "string"
+      updatedDate:
+        description: "updatedDate"
+        type: "string"
+        format: "date-time"
+      versionNo:
+        description: "versionNo"
+        type: "integer"
+        format: "int64"
+      recordStat:
+        description: "recordStat"
+        type: "string"     
+   RiskEventModel:
+    description: "RiskEventModel Event model"
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string" 
+      collateralId:
+        type: "string"  
+      appNumber:
+        type: "string" 
+      branchCode:
+        type: "string" 
+      userId:
+        type: "string"  
+      sourceCode:
+        type: "string"
+      eventName:
+        type: "string"                    
+      riskEvaluationMasterModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/RiskEvaluationModel" 
+   RiskEvaluationModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: object
+        description: "Risk Evaluation model"
+        required:
+          - entityRefNo
+          - finalRecommendation
+        properties:
+          riskTypeList:
+            type: "array"
+            items:
+              $ref: "#/definitions/RiskTypeModel"
+          entityRefNo:
+            type: "string"
+          parentId:
+            type: "string"
+          entityRefType:
+            type: "string"
+          recordId:
+            type: "string"
+          finalRecommendation:
+            type: "string"
+          creditRemarks:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          keyasString:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          recordStat:
+            type: "string"
+          replicationFlag:
+            type: "boolean"
+          applicationNumber:
+            type: "string"
+   RiskTypeModel:
+    description: "Risk Type model"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      risktype:
+        type: "string"
+      comments:
+        type: "string"
+      severity:
+        type: "string"
+      approvalComments:
+        type: "string"
+      versionNo:
+        type: "integer"
+        format: "int64"
+      isApproved:
+        type: "boolean"
+      # PatchSet -Dec delete changes
+      softDeleteFlag:
+        type: "string"
+      deleteStat:
+        type: "string"
+   LegalEventModel:
+    description: "Legal Event model"
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string" 
+      collateralId:
+        type: "string"  
+      appNumber:
+        type: "string" 
+      branchCode:
+        type: "string" 
+      userId:
+        type: "string"  
+      sourceCode:
+        type: "string"
+      eventName:
+        type: "string"        
+      legalMasterModelList:
+        type: "array"
+        items:
+          $ref: "#/definitions/LegalMasterModel" 
+   LegalMasterModel:
+    description: "Legal Opinion Master model"
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - entityRefNo
+          - legalOpinionType
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          entityRefNo:
+            type: "string"
+          entityRefType:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          recordStat:
+            type: "string"
+          legalOpinionType:
+            type: "string"
+          replicationFlag:
+            type: "boolean"
+          applicationNumber:
+            type: "string"
+          legalOpinion:
+            type: "array"
+            items:
+              $ref: "#/definitions/LegalModel"
+   LegalModel:
+    description: "Legal Opinion model"
+    type: "object"
+    required:
+      - legalOpinionType
+    properties:
+      id:
+        type: "string"
+      legalFirmId:
+        type: "string"
+      agencyName:
+        type: "string"
+      legalFirmOpinion:
+        type: "string"
+      internalOpinion:
+        type: "string"
+      internalOpinionDate:
+        type: "string"
+        format: "date-time"
+      initialRecommendation:
+        type: "string"
+      externalOpinionDate:
+        type: "string"
+        format: "date-time"
+      creditRemarks:
+        type: "string"
+      finalRecommendation:
+        type: "string"
+      disclaimer:
+        type: "string"
+      outcome:
+        type: "string"
+      legalOpinionType:
+        type: "string"
+      parentId:
+        type: "string"
+      # PatchSet -Dec delete changes
+      softDeleteFlag:
+        type: "string"
+      deleteStat:
+        type: "string"
+   ValuationEventModel:
+    description: "Valuation Event model"
+    type: "object"
+    properties:
+      processRefNo:
+        type: "string" 
+      collateralId:
+        type: "string"  
+      appNumber:
+        type: "string" 
+      branchCode:
+        type: "string" 
+      userId:
+        type: "string"  
+      sourceCode:
+        type: "string"
+      eventName:
+        type: "string"        
+      internalValuationDetailsList:
+        type: "array"
+        items:
+          $ref: "#/definitions/InternalValuationModel"   
+      externalValuationDetailsList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ExternalValuationMasterModel"
+      finalValuationMasterModel:
+        $ref: "#/definitions/FinalValuationMasterModel"                                                                                
+   InternalValuationModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+          - valuerRemarks
+          - agencyValAmt
+          - agencyValDate
+          - valuationTeam
+          - bankHaircut
+          - categoryHaircut
+          - agencyValCur
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          collateralId:
+            type: "string"
+          agencyValAmt:
+            type: "number"
+            minimum: 0
+          agencyValDate:
+            type: "string"
+            format: "date-time"
+          valuerRemarks:
+            type: "string"
+          creditRemarks:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          createdBy:
+            type: "string"
+          valuationTeam:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          recordStat:
+            type: "string"
+          valuationExpiryDate:
+            type: "string"
+            format: "date-time"
+          bankHaircut:
+            type: "number"
+            minimum: 0
+          categoryHaircut:
+            type: "number"
+            minimum: 0
+          agencyValCur:
+            type: "string"
+          applicationNumber:
+            type: "string"
+          softDeleteFlag:
+            type: "string"
+          deleteStat:
+            type: "string"
+          replicationFlag:
+            type: "boolean"                                    
+   ExternalValuationMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          replicationFlag:
+            type: "boolean"
+          externalValuationList:
+            type: "array"
+            items: { $ref: '#/definitions/ExternalValuationModel' }
+          applicationNumber:
+            type: "string"
+   ExternalValuationModel:
+    description: "External Valuation model"
+    type: "object"
+    required:
+      - valuerRemarks
+      - agencyId
+      - agencyValAmt
+      - agencyValDate
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      agencyId:
+        type: "string"
+      agencyName:
+        type: "string"
+      agencyValAmt:
+        type: "number"
+        minimum: 0
+      agencyValDate:
+        type: "string"
+        format: "date-time"
+      valuerRemarks:
+        type: "string"
+      creditRemarks:
+        type: "string"
+      valuationExpiryDate:
+        type: "string"
+        format: "date-time"
+      agencyValCur:
+        type: "string"
+      # PatchSet -Dec delete changes
+      softDeleteFlag:
+        type: "string"
+      deleteStat:
+        type: "string"
+      valuationType:
+        type: "string"
+      valuationFrequency:
+        type: "string"
+   FinalValuationMasterModel:
+    allOf:
+      - $ref: '#/definitions/RepresentationModel'
+      - type: "object"
+        required:
+          - collateralId
+        properties:
+          recordId:
+            type: "string"
+          parentId:
+            type: "string"
+          collateralId:
+            type: "string"
+          versionNo:
+            type: "integer"
+            format: "int64"
+          recordStat:
+            type: "string"
+          createdBy:
+            type: "string"
+          createdDate:
+            type: "string"
+            format: "date-time"
+          updatedBy:
+            type: "string"
+          updatedDate:
+            type: "string"
+            format: "date-time"
+          finalValuationList:
+            type: "array"
+            items: { $ref: '#/definitions/FinalValuationModel' }
+          applicationNumber:
+            type: "string"
+   FinalValuationModel:
+    description: "Final Valuation model"
+    type: "object"
+    required:
+      - valuationAmount
+      - remarks
+      - effectiveDate
+      - bankHaircut
+      - categoryHaircut
+    properties:
+      id:
+        type: "string"
+      parentId:
+        type: "string"
+      effectiveDate:
+        type: "string"
+        format: "date-time"
+      stage:
+        type: "string"
+      valuationAmount:
+        type: "number"
+        minimum: 0
+      changedAmount:
+        type: "number"
+      remarks:
+        type: "string"
+      bankHaircut:
+        type: "number"
+        minimum: 0
+      categoryHaircut:
+        type: "number"
+        minimum: 0
+      valuationCurrency:
+        type: "string"
+      changedCurrency:
+        type: "string"
+                                                                

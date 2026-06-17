@@ -1,0 +1,832 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server bank server." 
+ version: "1.0.0"
+ title: "bank Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "bank"
+   description: ""
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../bank
+
+ /bank:
+  post:
+   tags:
+    - "bank"
+   summary: "Adds a new bank."
+   description: "Adds a new bank. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "bank" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new bank" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmBankParametersDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created bank" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "bank"
+   summary: "Get all valid bank."
+   description:  "Get all valid bank. This endpoints will be used to Get all valid bank maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query
+     name: bankCode
+     required: false
+     type: string
+   - in: query
+     name: bankDescription
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query                                
+     name: bankType
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmBankParametersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../bank/xxx
+#   DELETE    .../bank/xxx
+#   GET       .../bank/xxx
+#   GET       .../bank/xxx?version=latestrecord
+#   GET       .../bank/xxx?version=1
+
+ /bank/{id}:
+  put:
+   tags:
+    - "bank"
+   summary: "Update an existing bank."
+   description:  "Update an existing bank."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the bank Maintenance"
+      required: true
+      type: "string"
+    - name: "bank"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing bank"
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmBankParametersDTO"
+   responses:
+    200:
+     description: "Returns updated bank"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "bank"
+   summary: "Retrieves the bank by ID."
+   description:  "Retrieves the bank by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the bank based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmBankParametersWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "bank"
+   summary: "Deletes the bank identified by given ID."
+   description:  "Deletes the bank identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the bank maintenance"
+      required: true
+      type: "string"
+    - name: "bank"
+      in: "body"
+      description: Request body contain bank and Modification no of bank maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../bank/xxx/approve
+
+ /bank/{id}/approve:
+  patch:
+   tags:
+    - "bank"
+   summary: "Authorize the bank by given ID."
+   description:  "Authorize the bank identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the bank maintenance"
+      required: true
+      type: "string"
+    - name: "bank"
+      in: "body"
+      description: Request body contain bank and Modification no of bank maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../bank/xxx/close
+ /bank/{id}/close:
+  patch:
+   tags:
+    - "bank"
+   summary: "Close the bank by given ID."
+   description:  "Close the bank identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the bank maintenance"
+      required: true
+      type: "string"
+    - name: "bank"
+      in: "body"
+      description: Request body contain bank and Modification no of bank maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../bank/xxx/reopen
+
+ /bank/{id}/reopen:
+  patch:
+   tags:
+    - "bank"
+   summary: "reopen the bank by given ID."
+   description:  "reopen the bank identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the bank maintenance"
+      required: true
+      type: "string"
+    - name: "bank"
+      in: "body"
+      description: Request body contain bank and Modification no of bank maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../bank/xxx/unauthorized
+
+ /bank/{id}/unauthorized:
+  get:
+   tags:
+    - "bank"
+   summary: "Retrives the bank by given ID."
+   description:  "Retrives the bank identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the bank based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmBankParametersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../bank/xxx/history
+
+ /bank/{id}/history:
+  get:
+   tags:
+    - "bank"
+   summary: "Retrives the bank by given ID."
+   description:  "Retrives the bank by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the bank based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmBankParametersCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /bank/external:
+  get:
+   tags:
+    - branch
+   summary: gets the list of  external banks
+   description:  gets the list of external Banks
+   operationId: getExternalBanks
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query
+     name: bankCode
+     required: false
+     type: string
+   - in: query
+     name: bankDescription
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query                                
+     name: bankType
+     required: false
+     type: string
+   responses:
+    200:
+     description: Successful operation.
+     schema:
+      $ref: '#/definitions/LmmTmBankParametersCollection'
+    400:
+     description: Malformed syntax.
+    401:
+     description: Request does not have sufficient credentials.
+    403:
+     description: Request is not authorized.
+    500:
+     description: Internal error
+ /bank/internal:
+  get:
+   tags:
+    - branch
+   summary: gets the list of  external banks
+   description:  gets the list of external Banks
+   operationId: getInternalBanks
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query
+     name: bankCode
+     required: false
+     type: string
+   - in: query
+     name: bankDescription
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query                                
+     name: bankType
+     required: false
+     type: string
+   responses:
+    200:
+     description: Successful operation.
+     schema:
+      $ref: '#/definitions/LmmTmBankParametersCollection'
+    400:
+     description: Malformed syntax.
+    401:
+     description: Request does not have sufficient credentials.
+    403:
+     description: Request is not authorized.
+    500:
+     description: Internal error
+definitions:
+ LmmTmBankParametersDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     crossBorderSweep:
+      type: string
+      description: ""
+     crossBorderPool:
+      type: string
+      description: ""
+     crossBorderHybridSweep:
+      type: string
+      description: ""
+     crossBorderHybridPool:
+      type: string
+      description: ""
+     crossCcySweep:
+      type: string
+      description: ""
+     crossCcyPool:
+      type: string
+      description: ""
+     crossCcyHybridSweep:
+      type: string
+      description: ""
+     crossCcyHybridPool:
+      type: string
+      description: ""
+     sourceSystem:
+      type: string
+      description: ""
+     sourceSystemBankCode:
+      type: string
+      description: ""
+     bankCode:
+      type: string
+      description: ""
+     bankDescription:
+      type: string
+      description: ""
+     bankShortName:
+      type: string
+      description: ""
+     bankType:
+      type: string
+      description: ""
+     line1:
+      type: string
+      description: ""
+     line2:
+      type: string
+      description: ""
+     line3:
+      type: string
+      description: ""
+     line4:
+      type: string
+      description: ""
+     countryId:
+      type: string
+      description: ""
+     stateId:
+      type: string
+      description: ""
+     cityId:
+      type: string
+      description: ""
+     zip:
+      type: string
+      description: ""
+     phoneNumber:
+      type: string
+      description: ""
+     fax:
+      type: string
+      description: ""
+     isMbccAllowed:
+      type: string
+      description: ""
+     isBvtAllowed:
+      type: string
+      description: ""
+     sweep:
+      type: string
+      description: ""
+     pool:
+      type: string
+      description: ""
+     hybrid:
+      type: string
+      description: ""
+     domesticSweep:
+      type: string
+      description: ""
+     domesticPool:
+      type: string
+      description: ""
+     domesticHybridSweep:
+      type: string
+      description: ""
+     domesticHybridPool:
+      type: string
+      description: ""
+     extAccSweepBasis:
+      type: string
+      description: ""
+     ifAvlBalExtAccNotAvl:
+      type: string
+     chargeCalcPref:
+      type: string
+      description: "Field to fetch whether charge will be calculated internally or by an external system"
+      pattern: '[I,E]'
+     chargeColPref:
+      type: string
+      description: "Field to fetch whether charge posting will be internally or by an external system"
+      pattern: '[I,E]'
+      description: ""
+     chgIncludeClosedVa:
+      type: string
+      description: "Flag to indicate if closed VAs to be considered for charge if VAs were part of transactions in the current period"
+      minLength: 1
+      maxLength: 1
+      pattern: '[Y,N]'
+     LmmTmBankAddnParametersDTO:
+      type: array
+      items:
+       $ref: '#/definitions/LmmTmBankAddnParametersDTO'
+    required:
+     - bankCode
+     - bankType
+ LmmTmBankAddnParametersDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     bankParametersId:
+      type: string
+      description: ""
+     parameterName:
+      type: string
+      description: ""
+     parameterValue:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmBankParametersCollection: 
+  description: "Collection of bankparameters."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmBankParametersDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmBankParametersWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmBankParametersDTO"
+ LmxTbEventLogDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+      evtCode:
+        type: string
+        description: ""
+      evtKey:
+        type: string
+        description: ""
+      evtTopic:
+        type: string
+        description: ""
+      logType:
+        type: string
+        description: ""
+      logDescription:
+        type: string
+        description: ""
+      logTime:
+        type: string
+        description: ""
+      serviceData:
+        type: string
+        description: ""
+      publishedTime:
+        type: string
+        description: ""
+      isPublished:
+        type: string
+        description: ""
+      retryCount:
+        type: integer
+        description: ""

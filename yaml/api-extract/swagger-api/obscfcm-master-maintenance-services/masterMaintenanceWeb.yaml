@@ -1,0 +1,546 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Maintenance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Master Maintenance Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "Maintenance-Web-API"
+    description: "API for master maintenance related operations"
+  - name: "DataSegmentController"
+    description: "API for the data segment related operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/sysParams:
+    get:
+      tags:
+        - "Maintenance-Web-API"
+      summary: "Retrieves Scf System Parameters"
+      description:  "Retrieves the Scf System Parameters."
+      operationId: "getParam"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ScfSystemParamCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/sysParams/{key}:
+    patch:
+      tags:
+        - "Maintenance-Web-API"
+      summary: "Update an existing parameter."
+      description:  "Update an existing parameter."
+      operationId: "updateParam"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "key"
+          in: "path"
+          description: "key of the parameter that need to be updated"
+          required: true
+          type: "string"
+        - name: "ScfSystemParamModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing System Parameter"
+          required: true
+          schema:
+            $ref: "#/definitions/ScfSystemParamModel"
+      responses:
+        200:
+          description: "Returns updated parameter"
+          schema:
+            $ref: "#/definitions/ScfSystemParamModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /web/v1/parties:
+     get:
+      tags:
+        - "Maintenance-Web-API"
+      summary: "Retrieves Scf Master Party Parameters"
+      description:  "Retrieves the Scf Master Party Parameters."
+      operationId: "getParty"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true        
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ScfMasterPartyModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/appParams:
+    get:
+      tags:
+        - "Maintenance-Web-API"
+      summary: "Retrieves Scf Application Parameters"
+      description:  "Retrieves the Scf Application Parameters."
+      operationId: "getAppParam"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ScfApplicationParamModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  
+  /web/v1/screenClassCode:
+    get:
+      tags:
+        - "DataSegmentController"
+      summary: "Provide the data segment information for the given details"
+      description:  "Provide the data segment information for the given details"
+      operationId: "getDataSegDetails"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "appId"
+        type: "string"
+        required: true
+      - name: "productCode"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "productCategory"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "operationCode"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "stage"
+        in: "query"
+        required: true
+        type: "string"
+      - name: "dsIdentifiers"
+        in: "query"
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfCmcScreenClassResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+          
+  /web/v1/cm/appParams:
+    get:
+      tags:
+        - "Maintenance-Web-API"
+      summary: "Retrieves Obcm Application Parameters"
+      description:  "Retrieves the Obcm Application Parameters."
+      operationId: "getCmAppParam"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "userId"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "branchCode"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ObcmApplicationParamModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"  
+  /web/v2/appParams:
+    get:
+      tags:
+        - "Maintenance-Web-API"
+      summary: "Retrieves Scf Application Parameters"
+      description:  "Retrieves the Scf Application Parameters."
+      operationId: "getAppParamV2"
+      parameters:
+      - name: "userId"
+        in: "header"
+        description: "User ID"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        description: "App ID"
+        required: true
+      - name: "key"
+        in: "query"
+        description: "Key of the parameter that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScfApplicationParamResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"  
+  /web/v1/initiateTransaction:
+    post:
+         tags:
+           - "DataSegmentController"
+         summary: "Initiate task orchestration"
+         description: "Initiation of task is happen by this endpoint"
+         operationId: "initiateTransaction"
+         parameters:
+           - name: "appId"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "tenantId"
+             in: "header"
+             type: "string"
+             required: false
+           - name: "userId"
+             in: "header"
+             type: "string"
+             required: true
+             description: "user id for SMS"
+           - name: "branchCode"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "authToken"
+             in: "header"
+             type: "string"
+             required: false
+             description: "branch code for SMS"
+           - name: "contentType"
+             in: "header"
+             type: "string"
+             required: false
+           - name: "branchDate"
+             in: "header"
+             type: "string"
+             format: "date-time"
+             required: false
+           - name: "transactionControllerModel"
+             in: "body"
+             description: "Request Body that contains data required for creating a new Finance Transaction"
+             required: true
+             schema:
+               $ref: "./masterMaintenanceServiceDef.yaml#/definitions/TransactionControllerRequestModel"
+         responses:
+          201: 
+           description: "Returns message of success or failure "
+           headers:
+            Location:
+             description: "URL of newly created orchestrator" 
+             type: "string"
+           schema:
+             $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ScreenClassInitiationDTO"
+          400:
+           description: "Malformed syntax."
+          401:
+           description: "Request does not have sufficient credentials."
+          403:
+           description: "Request is not authorized."
+          405:
+           description: "Invalid input"
+          500:
+           description: "Internal error"   
+  /web/v1/processUiMap:
+    get:
+         tags:
+           - "Maintenance-Web-API"
+         summary: "Retrieves Obscfcm ui and process cod"
+         description: "Retrieves Obscfcm ui and process code"
+         operationId: "getProcessUiMapping"
+         parameters:
+           - name: "appId"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "branchCode"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "userId"
+             in: "header"
+             type: "string"
+             required: true
+           - name: "uiActivityCode"
+             in: "query"
+             type: "string"
+             required: true
+         responses:
+          200:
+           description: "Returns message of success or failure "
+           schema:
+             $ref: "./masterMaintenanceServiceDef.yaml#/definitions/ObscfcmUiProcessMappingModel"
+          400:
+           description: "Malformed syntax."
+          401:
+           description: "Request does not have sufficient credentials."
+          403:
+           description: "Request is not authorized."
+          405:
+           description: "Invalid input"
+          500:
+           description: "Internal error"   
+definitions:         
+  ScfSystemParamModel:
+    description: "Scf System Param model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Parameter"
+        type: "integer"
+        format: "int64"
+      key:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+      value:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+  ScfSystemParamCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      ScfSystemParamModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfSystemParamModel"
+  ScfMasterPartyModel:
+    description: "Scf Master Party model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the Party"
+        type: "integer"
+        format: "int64"
+      partyCode:
+        description: "Code for the Party.This is a unique constraint"
+        type: "string"
+      partyDescription:
+        description: "Configured value for the disbursement mode which will be used in rest of application."
+        type: "string"
+      partyCategory:
+        description: "Will differentiate weather it is customer/bank (C/B)"
+        type: "string"
+  ScfMasterPartyModelCollection:
+    description: "Collection of list of Parties."
+    type: "object"
+    properties:
+      ScfMasterPartyModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfMasterPartyModel"
+  ScfApplicationParamModel:
+    description: "Scf Application Param model"
+    type: "object"
+    properties:
+      key:
+        description: "key of the Param"
+        type: "string"
+      code:
+        description: "Code for the Param.This is a unique constraint"
+        type: "string"
+      description:
+        description: "Configured value for the disbursement mode which will be used in rest of application."
+        type: "string"
+  ScfApplicationParamKeyModel:
+    description: "Scf Application Param model"
+    type: "object"
+    properties:
+      code:
+        description: "Code for the Param.This is a unique constraint"
+        type: "string"
+      description:
+        description: "Configured value for the disbursement mode which will be used in rest of application."
+        type: "string"
+  ScfApplicationParamModelKeyCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      key:
+        description: "key of the Param"
+        type: "string"
+      ScfApplicationParamKeyModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfApplicationParamKeyModel"
+  ScfApplicationParamModelCollection:
+    description: "Collection of ScfApplicationParamModelKeyCollection."
+    type: "object"
+    properties:
+      ScfApplicationParamModelKeyCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfApplicationParamModelKeyCollection"
+  ObcmApplicationParamKeyModel:
+    description: "Obcm Application Param model"
+    type: "object"
+    properties:
+      code:
+        description: "Code for the Param.This is a unique constraint"
+        type: "string"
+      description:
+        description: "Configured value for the disbursement mode which will be used in rest of application."
+        type: "string"            
+  ObcmApplicationParamModelKeyCollection:
+    description: "Collection of list of Parameters."
+    type: "object"
+    properties:
+      key:
+        description: "key of the Param"
+        type: "string"
+      ObcmApplicationParamKeyModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmApplicationParamKeyModel"
+  ObcmApplicationParamModelCollection:
+    description: "Collection of ObcmApplicationParamModelKeyCollection."
+    type: "object"
+    properties:
+      ObcmApplicationParamModelKeyCollection:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObcmApplicationParamModelKeyCollection"          

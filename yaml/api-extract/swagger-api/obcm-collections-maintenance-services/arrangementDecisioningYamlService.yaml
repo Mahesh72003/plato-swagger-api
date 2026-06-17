@@ -1,0 +1,541 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : obcm
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This service is Inquiry API's for Arrangement Decisioning master"
+ version: "1.0.0"
+ title: "Arrangement Decisioning Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "DecisioningMasterService"
+   description: "This service is Inquiry API's for Arrangement Decisioning master"
+
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../DecisioningMasterService
+
+ /service/v1/decisioningmaster:
+  get:
+   tags:
+    - "DecisioningMasterService"
+   summary: "Get all valid decisioningmaster."
+   description:  "Get all valid decisioningmaster. This endpoints will be used to Get all valid decisioningmaster maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: product
+     in: query
+     description: product need to be set to fetch summary record
+     required: false
+     type: string
+   - name: arrangementParty
+     in: query
+     description: arrangementParty need to be set to fetch summary record
+     required: false
+     type: string
+   - name: filterCriteria
+     in: query
+     description: filterCriteria need to be set to fetch summary record
+     required: false
+     type: string
+   - name: authStatus
+     in: query
+     description: authStatus need to be set to fetch summary record
+     required: false
+     type: string
+   - name: recordStatus
+     in: query
+     description: recordStatus need to be set to fetch summary record
+     required: false
+     type: string  
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: "Name of the Location."
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcmTmDecisioningMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../decisioningmaster/xxx
+#   DELETE    .../decisioningmaster/xxx
+#   GET       .../decisioningmaster/xxx
+#   GET       .../decisioningmaster/xxx?version=latestrecord
+#   GET       .../decisioningmaster/xxx?version=1
+
+ /service/v1/decisioningmaster/{id}:
+  get:
+   tags:
+    - "DecisioningMasterService"
+   summary: "Retrieves the decisioningmaster by ID."
+   description:  "Retrieves the decisioningmaster by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Version of the record that needs to be fetched."
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the decisioningmaster based on given id."
+     schema:
+      $ref: "#/definitions/ObcmTmDecisioningMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"     
+ /service/v1/arrangementDecisioning/arrangementDays:
+  post:
+   tags:
+    - "DecisioningMasterService"
+   summary: "Retrieves the Arrangement days by given parameters."
+   description:  "Retrieves the Arrangement days by given parameters."
+   operationId: "getArrangementDays"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "Application Id"
+      required: true
+    - name: "decisioningDays"
+      in: "body"
+      description: "Request Body that contains data required for calculating Arrangement days"
+      schema:
+       $ref: "#/definitions/DecisioningDaysDTO"
+   responses:
+    200:
+     description: "Returns the Arrangement Days based on given parameters."
+     schema:
+       $ref: "#/definitions/DecisioningDaysResponseDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+definitions:
+  DecisioningDaysDTO:
+    description: "Decisioning Days Request model"
+    type: "object"
+    properties:
+      corporateId:
+        type: string
+        description: "Corporate Id for which Arrangement days are required"
+      correspondentBankId:
+        type: string
+        description: "Correspondent Bank Id for which Arrangement days are required"
+      draweebankId:
+        type: string
+        description: "Drawee Bank Id for which Arrangement days are required"
+      locationId:
+        type: string
+        description: "Location Id for which Arrangement days are required"
+      arrangementParty:
+        type: string
+        description: "Arrangement Party for which Arrangement days are required"
+      amount:
+        type: number
+        description: "Amount"
+      ccy:
+        type: string
+        description: "Currency"
+      productCode:
+        type: string
+        description: "Product Code"                  
+  DecisioningDaysResponseDTO:
+    description: "Decisioning Days Response model"
+    type: "object"
+    properties:
+      arrangementDays:
+        description: "Required Arrangement Days"
+        type: number
+      certificateExtensionDays:
+        description: "Required certificateExtensionDays"
+        type: number
+      corporateReleaseDays:
+        description: "Required corporateReleaseDays"
+        type: number
+      lostExtensionDays:
+        description: "Required lostExtensionDays"
+        type: number
+      returnExtensionDays:
+        description: "Required returnExtensionDays"
+        type: number
+      arrangementCode:
+        description: "Required arrangementCode"
+        type: string
+      arrangementDesc:
+        description: "Required arrangementDesc"
+        type: string
+      arrangementRefBasis:
+        description: "Required arrangementRefBasis"
+        type: string
+      cdtReversalDays:
+        description: "Credit Reversal Days"
+        type: number
+      cdtReversalFrom:
+        description: "Credit Rerversal From"
+        type: string
+      partialCdtReversal:
+        description: "Partial Credit Reversal"
+        type: string
+      bankFltAgmt:
+        description: "Bank Float Arrangement Flag"
+        type: string
+      rtnRecoveryFrom:
+        description: "Return Recovery From"
+        type: string
+      partialRtnRecovery:
+        description: "Partial Return Recovery"
+        type: string
+      fcdDbtFrRecovery:
+        description: "Forced Debit For Recovery"
+        type: string 
+      centralizedSchedule:
+        description: "Centralized Forward Schedule"
+        type: string
+      inclusionOfHolidays:
+        description: "Inclusion Of Holidays"
+        type: string
+      agreementRefNo:
+        description: "agreementRefNo"
+        type: string   
+  FilterOutput:
+    description: "Represents the best possible combination for the given category"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        description: "List of attributes."
+        items:
+          $ref: "#/definitions/Attribute"
+  Attribute:
+    description: "Represents each attribute of the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeName:
+        description: "Name of the attribute representing DB column name"
+        type: "string"
+      attributeValue:
+        description: "Value of the corresponding column in DB"
+        type: "string"
+  FilterRecords:
+    description: "Represents the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        description: "List of attributes."
+        items:
+          $ref: "#/definitions/Attribute"
+  FilterInput:
+    description: "Represents the input request of the final filter service call from transaction services"
+    type: "object"
+    properties:
+      category:
+        description: "Represents the category of the filter"
+        type: "string"
+      applicationCode:
+        description: "Represents the applicationcode"
+        type: "string"
+      filterRecords:
+        type: "array"
+        description: "List of Filter records"
+        items:
+          $ref: "#/definitions/FilterRecords"
+  ScfTransOutputResponse:
+    description: "Output response from transaction API"
+    type: "object"
+    properties:
+      queryList:
+        type: "array"
+        description: "List of queries"
+        items:
+          $ref: "#/definitions/FilterQueryModel"
+  FilterQueryModel:
+    description: "Query and attribute list model"
+    type: "object"
+    properties:
+      query:
+        description: "Filter Query"
+        type: "string"
+      ScfTransCriteriaQueryAttributeModel:
+        type: "array"
+        description: "SCF Transfer Criteria Query Attribute Model Object"
+        items:
+          $ref: "#/definitions/TransCriteriaQueryAttributeModel"
+  TransCriteriaQueryAttributeModel:
+    description: "Query for each type of given category"
+    type: "object"
+    properties:
+      paramIndex:
+        description: "input parameter index in the query"
+        type: "integer"
+      paramName:
+        description: "input parameter name in the query"
+        type: "string"
+      columnName:
+        description: "corresponding column of the input parameter index in the query"
+        type: "string"
+      mappedParam:
+        description: "corresponding mapped param index in the query"
+        type: "string"        
+  ObcmTmDecisioningMasterCollection: 
+   type: "object"  
+   description: "Collection of decisioning Master Objects."
+   properties:
+    data:
+     type: "array"
+     description: "Data."
+     items: 
+      $ref: "#/definitions/ObcmTmDecisioningMasterDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  PagingDto:
+   type: object
+   description: "Paging Object"
+   properties:
+    totalResults:
+     type: integer
+     description: "No of Total Results."
+  ObcmTmDecisioningMasterDTO:
+   type: object
+   description: "OBCM TM Decisioning Master DTO"
+   allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      agreementRefNumber:
+       type: string
+       description: "Agreement Reference Number."
+      amountBasedArrangement:
+       type: string
+       description: "Amount Based Arrangement."
+      arrangementParty:
+       type: string
+       description: "Arrangement Party."
+      arrangementPartyName:
+       type: string
+       description: "Arrangement Party Name."
+      centralizedForwardSchedule:
+       type: string
+       description: "Centralized Forward Schedule."
+      corporate:
+       type: string
+       description: "Corporate Name."
+      corporateId:
+       type: string
+       description: "Corporate Id."
+      correspondentBank:
+       type: string
+       description: "Correspondant Bank Name."
+      correspondentBankId:
+       type: string
+       description: "Correspondant Bank Id."
+      draweebankId:
+       type: string
+       description: "Drawee Bank Id."
+      draweeBank:
+       type: string
+       description: "Drawee Bank."
+      effectiveDate:
+       type: string
+       description: "Effective Date."
+      expiryDate:
+       type: string
+       description: "Expiry Date."
+      filterCriteria:
+       type: string
+       description: "Filter Criteria."
+      inclusionOfHolidays:
+       type: string
+       description: "Inclusion Of Holidays."
+      locationId:
+       type: string
+       description: "Location Id."
+      locationName:
+       type: string
+       description: "Location Name."
+      product:
+       type: string
+       description: "Product Name."
+      productId:
+       type: string
+       description: "Product Id."
+      txnControllerRefNo:
+       type: string
+       description: "Transaction Controller Reference No."
+      ObcmTmDecisioningDetailsDTO:
+       type: array
+       description: "Obcm Tm Decisioning Details."
+       items:
+        $ref: '#/definitions/ObcmTmDecisioningDetailsDTO'
+  ObcmTmDecisioningDetailsDTO:
+   type: object
+   description: "OBCM TM Decisioning Details."
+   properties:
+      arrangementCode:
+       type: string
+       description: "Arrangement Code."
+      currency:
+       type: string
+       description: "Currency."
+      arrangementDays:
+       type: number
+       description: "Arrangement Days."
+      arrangementRefBasis:
+       type: string
+       description: "Arrangement Reference Basis."
+      certificateExtensionDays:
+       type: number
+       description: "Certification Extension Days."
+      corporateReleaseDays:
+       type: number
+       description: "Corporate Release Days."
+      decisioningMasterId:
+       type: string
+       description: "Decisioning Master Id."
+      fromAmount:
+       type: number
+       description: "From Amount."
+      toAmount:
+       type: number
+       description: "To Amount."
+      id:
+       type: string
+       description: "Id"
+      linkArrangement:
+       type: string
+       description: "Arrangement Linked (Y/N)."
+      lostExtensionDays:
+       type: number
+       description: "Lost Extension Days."
+      returnExtensionDays:
+       type: number
+       description: "Return Extension Days."
+      creditReversalDays:
+       type: number
+       description: "Credit Reversal Days."
+      creditReversalFrom:
+       type: string
+       description: "Credit Reversal From."
+      partialCreditReversal:
+       type: string
+       description: "Partial Credit Reversal."
+      bankFloatArrangement:
+       type: string
+       description: "Bank Float Arrangement."
+      returnRecoveryFrom:
+       type: string
+       description: "Return Recovery From."
+      partialReturnRecovery:
+       type: string
+       description: "Partial Return Recovery."
+      forcedDebitForRecovery:
+       type: string
+       description: "Forced Debit For Recovery."
+  GenericDto:
+   allOf:
+    - type: object
+    - description: "Generic Response."
+      discriminator: resource_type
+  ObcmTmDecisioningMasterWrapperDTO:
+    type: object
+    description: "Decisioning Master Wrapper DTO Object"
+    properties:
+     data:
+      $ref: "#/definitions/ObcmTmDecisioningMasterDTO"

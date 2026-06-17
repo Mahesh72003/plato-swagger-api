@@ -1,0 +1,585 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server externalSystemLog server." 
+ version: "1.0.0"
+ title: "externalSystemLog Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "externalSystemLog"
+   description: "Transaction Hand Off"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../externalSystemLog
+
+
+ /externalSystemLog/processAckNack:
+  post:
+      tags:
+      - processAckNack
+      summary: Update Txn hand Off Status.
+      description: Update Txn hand Off Status.
+      operationId: processAckNack
+      parameters:
+      - name: LmxExternalSystemReqDto
+        in: body
+        description: Request Body that contains data required for update hand off status
+        required: true
+        schema:
+          $ref: '#/definitions/LmxExternalSystemReqDto'
+      responses:
+        201:
+          description: Returns message of succes or failure
+          headers:
+            Location:
+              description: URL of update external system sweepmaster data
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+          
+
+
+
+ /externalSystemLog:
+  get:
+   tags:
+    - "externalSystemLog"
+   summary: "Get all valid externalSystemLog."
+   description:  "Get all valid externalSystemLog. This endpoints will be used to Get all valid externalSystemLog maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: externalSystemId
+     in: query 
+     required: false
+     type: string
+   - name: externalSystemName
+     in: query 
+     required: false
+     type: string
+   - name: customerId
+     in: query 
+     required: false
+     type: string
+   - name: structureId
+     in: query 
+     required: false
+     type: string
+   - name: fromDate
+     in: query 
+     required: false
+     type: string
+   - name: toDate
+     in: query 
+     required: false
+     type: string
+   - name: isMbcc
+     in: query 
+     required: false
+     type: string
+   - name: originAccountNo
+     in: query 
+     required: false
+     type: string
+   - name: destinationAccountNo
+     in: query 
+     required: false
+     type: string
+   - name: txnLogNo
+     in: query 
+     required: false
+     type: string
+   - name: txnRefNo
+     in: query 
+     required: false
+     type: string     
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmxTbExternalSystemLogCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   GET       .../externalSystemLog/xxx
+#   GET       .../externalSystemLog/xxx?version=latestrecord
+#   GET       .../externalSystemLog/xxx?version=1
+ /externalSystemLog/{id}:
+  get:
+   tags:
+    - "externalSystemLog"
+   summary: "Retrieves the externalSystemLog by ID."
+   description:  "Retrieves the externalSystemLog by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the externalSystemLog based on given id."
+     schema:
+      $ref: "#/definitions/LmxTbExternalSystemLogWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+         
+
+definitions:
+ LmxTbExternalSystemLogDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     customerId:
+      type: string
+      description: ""
+     structureId:
+      type: string
+      description: ""
+     interfaceMasterId:
+      type: string
+      description: ""
+     lmTransRefNo:
+      type: string
+      description: ""
+     lmTransLogNo:
+      type: string
+      description: ""
+     txnLogId:
+      type: string
+      description: ""
+     isMbcc:
+      type: string
+      description: ""
+     lmSource:
+      type: string
+      description: ""
+     extSystem:
+      type: string
+      description: ""
+     msgType:
+      type: string
+      description: ""
+     methodName:
+      type: string
+      description: ""
+     ackTimestamp:
+      type: string
+      description: ""
+     initTimestamp:
+      type: string
+      description: ""
+     interfaceAction:
+      type: string
+      description: ""
+     eventCode:
+      type: string
+      description: ""
+     statCode:
+      type: string
+      description: ""
+     status:
+      type: string
+      description: ""
+     statusMessage:
+      type: string
+      description: ""
+     extSysRefId:
+      type: string
+      description: ""
+     direction:
+      type: string
+      description: ""
+     notificationEvent:
+      type: string
+      description: ""
+     fromAcc:
+      type: string
+      description: ""
+     fromAccDesc:
+      type: string
+      description: ""
+     fromAccCcy:
+      type: string
+      description: ""
+     fromAccBranch:
+      type: string
+      description: ""
+     toAcc:
+      type: string
+      description: ""
+     toAccDesc:
+      type: string
+      description: ""
+     toAccBranch:
+      type: string
+      description: ""
+     toAccCcy:
+      type: string
+      description: ""  
+     sweepConcentration:
+      type: string
+      description: ""
+     newActivationDate:
+      type: string
+      format: date
+      description: ""
+     newInstrDate:
+      type: string
+      format: date
+      description: ""
+     errorCode:
+      type: string
+      description: ""
+     errorDesc:
+      type: string
+      description: ""
+     exceptionMessage:
+      type: string
+      description: ""
+     SweepConcentrationMethod:
+      type: string
+      description: ""
+     LmxTbMessageLogDTO:
+       $ref: '#/definitions/LmxTbMessageLogDTO'
+    required:
+     - direction
+     - extSystem
+     - lmSource
+     - lmTransRefNo
+     - methodName
+ LmxTbMessageLogDTO:
+  type: object
+  properties:
+     extsyslogId:
+      type: string
+      description: ""
+     id:
+      type: string
+      description: ""
+     msgLogdate:
+      type: string
+      format: date
+      description: ""
+     requestMessage:
+      type: string
+      description: ""
+     responseMessage:
+      type: string
+      description: ""
+ QCInterfaceDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     dateAndTime:
+      type: string
+      #format: date
+      description: ""
+     interfaceAction:
+      type: string
+      description: ""
+     direction:
+      type: string
+      description: ""
+     interfaceType:
+      type: string
+      description: "" 
+     status:
+      type: string
+      description: ""
+     structureId:
+      type: string
+      description: ""
+     exception:
+      type: string
+      description: ""
+     rootCauseOfException:
+      type: string
+      description: ""
+     customerId:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmxTbExternalSystemLogCollection: 
+  description: "Collection of externalSystemLog."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmxTbExternalSystemLogDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmxTbExternalSystemLogWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmxTbExternalSystemLogDTO"
+    
+ LmxExternalSystemReqDto:
+  type: object
+  properties:
+     extRefId:
+      type: string
+      description: ""
+     notificationEvent:
+      type: string
+      description: ""
+     newActivationDate:
+      type: string
+      description: ""
+     newInstrDate:
+      type: string
+      description: "" 
+     status:
+      type: string
+      description: ""
+     errorDesc:
+      type: string
+      description: ""
+ LmdTbEventsDTO:
+    description: "Events DTO"
+    type: "object"
+    allOf:
+    - $ref: "#/definitions/GenericDto"
+    - type: object
+      properties:
+       eventDate:
+        description: "Date of Events"
+        type: string
+        format: date
+       eventType:
+        description: "Type of Events"
+        type: string
+       eventCode:
+        description: "Code for Events"
+        type: string 
+       eventSource:
+        description: "Source for Events"
+        type: string
+       eventDescription:
+        description: "Description for Events"
+        type: string
+       customerId:
+        description: "Customer Id in Events"
+        type: string
+       isActive:
+        description: "Is Active in Events"
+        type: string 
+       createdBy:
+        description: "Created by for Events"
+        type: string
+       startDate:
+        description: "Start Date for Events"
+        type: string
+        format: date
+       closeDate:
+        description: "Close Date for Events"
+        type: string
+        format: date
+       transactionId:
+        description: "Transaction Id for Events"
+        type: string 
+       fromAccountNumber:
+        description: "From Account Number for Events"
+        type: string      
+       toAccountNumber:
+        description: "To Account Number for Events"
+        type: string
+       structureId:
+        description: "Structure Id for Events"
+        type: string    
+ LmdTbEventsCollection:
+    description: Collection of Events
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/LmdTbEventsDTO"
+           
+ LmdTbEventsWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/LmdTbEventsDTO"      
+
+ RMCustomerDTO:
+    type: object
+    properties:
+      customerId:
+        type: string
+      customerName:
+        type: string
+ RMCustomerCollection:
+    type: object
+    properties:
+      allCustomers:
+        type: boolean
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/RMCustomerDTO'

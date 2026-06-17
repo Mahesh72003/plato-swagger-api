@@ -1,0 +1,672 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : oblm
+#  ** 
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server customer server." 
+ version: "1.0.0"
+ title: "customer Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "customer"
+   description: " "
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../customer
+
+ /customer:
+  post:
+   tags:
+    - "customer"
+   summary: "Adds a new customer."
+   description: "Adds a new customer. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "customer" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new customer" 
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmCustomerDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created customer" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "customer"
+   summary: "Get all valid customer."
+   description:  "Get all valid customer. This endpoints will be used to Get all valid customer maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: customerId
+     required: false
+     type: string
+   - in: query
+     name: customerName
+     required: false
+     type: string
+   - in: query
+     name: recordStat
+     required: false
+     type: string
+   - in: query
+     name: authStat
+     required: false
+     type: string
+   - in: query   
+     name: sourceSystem
+     required: false
+     type: string
+   - in: query   
+     name: isProspect
+     required: false
+     type: string
+   - in: query   
+     name: includeAllCustomer
+     required: false
+     type: boolean          
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../customer/xxx
+#   DELETE    .../customer/xxx
+#   GET       .../customer/xxx
+#   GET       .../customer/xxx?version=latestrecord
+#   GET       .../customer/xxx?version=1
+
+ /customer/{id}:
+  put:
+   tags:
+    - "customer"
+   summary: "Update an existing customer."
+   description:  "Update an existing customer."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the customer Maintenance"
+      required: true
+      type: "string"
+    - name: "customer"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing customer"
+      required: true
+      schema:
+       $ref: "#/definitions/LmmTmCustomerDTO"
+   responses:
+    200:
+     description: "Returns updated customer"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "customer"
+   summary: "Retrieves the customer by ID."
+   description:  "Retrieves the customer by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: false
+      type: "string"
+   responses:
+    200:
+     description: "Returns the customer based on given id."
+     schema:
+      $ref: "#/definitions/LmmTmCustomerWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "customer"
+   summary: "Deletes the customer identified by given ID."
+   description:  "Deletes the customer identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the customer maintenance"
+      required: true
+      type: "string"
+    - name: "customer"
+      in: "body"
+      description: Request body contain customer and Modification no of customer maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../customer/xxx/approve
+
+ /customer/{id}/approve:
+  patch:
+   tags:
+    - "customer"
+   summary: "Authorize the customer by given ID."
+   description:  "Authorize the customer identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the customer maintenance"
+      required: true
+      type: "string"
+    - name: "customer"
+      in: "body"
+      description: Request body contain customer and Modification no of customer maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../customer/xxx/close
+ /customer/{id}/close:
+  patch:
+   tags:
+    - "customer"
+   summary: "Close the customer by given ID."
+   description:  "Close the customer identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the customer maintenance"
+      required: true
+      type: "string"
+    - name: "customer"
+      in: "body"
+      description: Request body contain customer and Modification no of customer maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../customer/xxx/reopen
+
+ /customer/{id}/reopen:
+  patch:
+   tags:
+    - "customer"
+   summary: "reopen the customer by given ID."
+   description:  "reopen the customer identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the customer maintenance"
+      required: true
+      type: "string"
+    - name: "customer"
+      in: "body"
+      description: Request body contain customer and Modification no of customer maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../customer/xxx/unauthorized
+
+ /customer/{id}/unauthorized:
+  get:
+   tags:
+    - "customer"
+   summary: "Retrives the customer by given ID."
+   description:  "Retrives the customer identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the customer based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../customer/xxx/history
+
+ /customer/{id}/history:
+  get:
+   tags:
+    - "customer"
+   summary: "Retrives the customer by given ID."
+   description:  "Retrives the customer by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the customer based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+# path to  get all child record of parent customer
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../customer/xxx/getAllCustomers
+
+ /customer/getAllCustomers:
+  get:
+   tags:
+    - "customer"
+   summary: "Retrives the customers by given parent customerID."
+   description:  "Retrives the customer by parent customerID."
+   operationId: "getAllCustomers"
+   parameters:
+    - name: "parentCustomerId"
+      in: "query"
+      description: "Id of the customer that needs to be fetched"
+      required: false
+      type: "string"
+    - name: "customerId"
+      in: "query"
+      description: "Id of the customer that needs to be fetched"
+      required: false
+      type: "string"      
+   responses:
+    200:
+     description: "Returns the customer based on given id."
+     schema:
+       $ref: "#/definitions/LmmTmCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /customer/getSimCustomers:     
+  get:
+   tags:
+    - "customer"
+   summary: "Get all RM Customers and Prospect Customers for given user."
+   description:  "Get all RM Customers and Prospect Customers for given user"
+   operationId: "getSimCustomers"
+   parameters:
+   - name: userId
+     in: header
+     description: UserId of the user that needs to be fetched
+     type: string
+   - name: customerId
+     in: query
+     description: CustomerId
+     required: false
+     type: string   
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/LmmTmCustomerCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+definitions:
+ LmmTmCustomerDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     customerId:
+      type: string
+      description: ""
+     customerName:
+      type: string
+      description: ""
+     parentCustomerId:
+      type: string
+      description: ""
+     addressLine1:
+      type: string
+      description: ""
+     addressLine2:
+      type: string
+      description: ""
+     addressLine3:
+      type: string
+      description: ""
+     addressLine4:
+      type: string
+      description: ""
+     bankCode:
+      type: string
+      description: ""
+     branchCode:
+      type: string
+      description: ""
+     sourceSystem:
+      type: string
+      description: ""
+     sourceSystemCustNo:
+      type: string
+      description: ""
+     closedStat:
+      type: string
+      description: ""
+     closedDtStamp:
+      type: string
+      format: date
+      description: ""
+     isForgotten:
+      type: string
+      description: ""
+     isProspect:
+      type: string
+      description: ""
+     chargePricingScheme:
+      type: string
+      description: "The pricing scheme to be mapped to the customer being on boarded"
+     chargeAccountNo:
+      type: string
+      description: "The charge funding account from where the charges needs to be collected"
+     chargeBranchCode:
+      type: string
+      description: "The Branch code to be used for charge posting"
+    required:
+     - customerId
+     - customerName
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ LmmTmCustomerCollection: 
+  description: "Collection of customer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/LmmTmCustomerDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ LmmTmCustomerWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/LmmTmCustomerDTO"

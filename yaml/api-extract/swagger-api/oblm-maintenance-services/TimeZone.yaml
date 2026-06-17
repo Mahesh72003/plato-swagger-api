@@ -1,0 +1,205 @@
+# /*******************************************************************************
+# * This source is part of the Oracle Banking Software Product.
+# * Copyright (c) 2018,2021, Oracle and/or its affiliates. All rights reserved.
+# *
+# * No part of this work may be reproduced, stored in a retrieval system, adopted or tr
+# *
+# * Oracle Financial Services Software Limited.
+# * Oracle Park, Off Western Express Highway,
+# * Goregaon (East),
+# * Mumbai - 400 063, India.
+# ******************************************************************************/
+swagger: '2.0'
+info:
+  description: This is a sample server timezone server.
+  version: 1.0.0
+  title: World TimeZones Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: timezones
+  description: ''
+schemes:
+- https
+paths:
+  /timezones:
+    get:
+      tags:
+      - timezones
+      summary: Get all valid world timezones.
+      description: Get all valid world timezones. This endpoints will be used to Get all valid world timezones maintenance records.
+      operationId: getAll
+      parameters:
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - name: countryCode
+        in: query
+        description: country of the timezone that needs to be fetched
+        required: false
+        type: string
+      - name: timezone
+        in: query
+        description: timezone
+        required: false
+        type: string
+      responses:
+        201:
+          description: Returns message of success or failure
+          headers:
+            Location:
+              description: ""
+              type: string
+          schema:
+            $ref: '#/definitions/LmmTmTimeZonesCollection'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /timezones/{countryCode}:
+    get:
+     tags:
+      - timezones
+     summary: Retrieves the timezones by Country Code.
+     description:  Retrieves the timezones by Country Code
+     operationId: getByCountryCode
+     parameters:
+      - name: "countryCode"
+        in: "path"
+        description: "timezones of the country that needs to be fetched"
+        required: true
+        type: "string"
+     responses:
+      200:
+       description: "Returns the timezones based on given country."
+       schema:
+        $ref: "#/definitions/LmmTmTimeZonesCollection"
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      500:
+       description: "Internal error"          
+definitions:
+  LmmTmTimeZoneDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+        timeZone:
+          type: string
+          description: ""
+        timeZoneDescription:
+          type: string
+          description: ""
+        utcOffset:
+          type: string
+          description: ""
+        dayLightSaving:
+          type: number
+          description: ""
+        countryIsoCode:
+          type: string
+          description: ""
+        countryIso2:
+          type: string
+          description: ""
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: '#/definitions/ResponseCode'
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+    - type: object
+      discriminator: resource_type
+  LmmTmTimeZonesCollection:
+    description: Collection of TimeZones.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LmmTmTimeZoneDTO'
+      paging:
+        $ref: '#/definitions/PagingDto'
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: '#/definitions/ResponseDto'
+      data:
+        $ref: '#/definitions/ResponseResourceSupport'
+  ResponseResourceSupport:
+    type: object
+  LmmTmTimeZonesWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/LmmTmTimeZoneDTO'

@@ -1,0 +1,254 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "InstrumentCollections"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "InstrumentCollections"
+    description: "API for Instrument related Operations"
+
+paths:
+  
+  /web/v1/instrumentData:
+    get:
+      tags:
+        - "InstrumentCollections"
+      summary: "Retrieves the Instrument based on the given parameters"
+      description:  "Retrieves the list of existing Instrument with additional information "
+      operationId: "getInstrumentData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "fromDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: Start Date of period
+        - name: "toDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: End Date of period
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InstrumentDataCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+   
+  /web/v1/agingInstrument:
+    get:
+      tags:
+        - "InstrumentCollections"
+      summary: "Retrieves the Instrument based on the given parameters"
+      description:  "Retrieves the list of existing Instrument with additional information "
+      operationId: "getInstrumentAging"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        200:
+          description: "Successful received all instrument aging time period"
+          schema:
+            $ref: "#/definitions/AgingInstrumentResponseDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+          
+  /web/v1/productInstrumentValueData:
+    get:
+      tags:
+        - "InstrumentCollections"
+      summary: "Retrieves the product wise Instrument data value based on the given parameters"
+      description:  "Retrieves the list of existing product wise Instrument with additional information "
+      operationId: "getProductInstrumentValueData"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "fromDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: Start Date of period
+        - name: "toDate"
+          in: "query"
+          type: "string"
+          required: false
+          description: End Date of period
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/InstrumentValueDataCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+    
+  InstrumentDataModel:
+    description: "Collection of Instruments Data"
+    type: "object"
+    properties:
+      realizedStatusValue:
+        description: "realizedStatus Value"
+        type: "number" 
+      holdStatusValue:
+        description: "HoldStatus Value"
+        type: "number"
+      returnedStatusValue:
+        description: "returnedStatus Value"
+        type: "number"
+      lodgedStatusValue:
+        description: "lodgedStatus Value"
+        type: "number"
+      realizedStatusCount:
+        description: "realized status count"
+        type: "integer"
+      holdStatusCount:
+        description: "hold status count"
+        type: "integer"
+      returnedStatusCount:
+        description: "returnedStatus count"
+        type: "integer"
+      lodgedStatusCount:
+        description: "lodgedStatus count"
+        type: "integer"
+        
+  AgingInstrumentDetails:
+    description: Aging of invoices for each time slabs
+    type: object
+    properties:
+      slab:
+        $ref: "#/definitions/InstrumentAgingSlab"
+      totalAmount:
+        type: "number"
+      totalCount:
+        type: "integer"
+                                         
+  InstrumentDataCollection:
+    description: "Collection of Instruments Data"
+    type: "object"
+    properties:
+      branchCcy:
+        type: string
+      instrumentData:
+        $ref: "#/definitions/InstrumentDataModel"
+        
+  AgingInstrumentResponseDto:
+    description: Response DTO for Aging Instrument Dashboard
+    type: object
+    properties:
+      agingInstrument:
+        type: array
+        items:
+          $ref: "#/definitions/AgingInstrumentDetails" 
+      currency:
+        type: "string"
+  InstrumentValueDataCollection:
+    description: "Collection of Instrument Data"
+    type: "object"
+    properties:
+      branchCcy:
+        description: "Branch Currency"
+        type: "string"
+      fromDate:
+        description: "From Date"
+        type: "string"
+      toDate:
+        description: "To Date"
+        type: "string"
+      instrumentValueData:
+        type: "array"
+        items:
+          $ref: "#/definitions/InstrumentValueDataModel"
+  InstrumentValueDataModel:
+    description: "Collection of InstrumentValueDataModel"
+    type: "object"
+    properties:
+      monthYear:
+        description: "Month Year"
+        type: "string"
+      productData:
+        type: "array"
+        items:
+          $ref: "#/definitions/ProductDataModel"
+      totalAmount:
+        description: "Total Amount"
+        type: "number"
+      totalCount:
+        description: "Total Count"
+        type: "number"  
+  ProductDataModel:
+    description: "Collection of ProductDataModel"
+    type: "object"
+    properties:
+      productName:
+        description: "Product Name"
+        type: "string"
+      amount:
+        description: "Amount"
+        type: "number"
+      count:
+        description: "Count"
+        type: "number" 
+                               
+      

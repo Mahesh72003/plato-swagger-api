@@ -1,0 +1,284 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Invoicing server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Invoice Management Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "InvoiceManagementWeb"
+    description: "API for Invoice File's Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/invoicemanagement:  
+    get:
+      tags:
+        - "InvoiceManagementWeb"
+      summary: "Retrieves the list of existing Invoice Files."
+      description:  "Retrieves the list of existing Invoice Files. Add additional information here for the this endpoint."
+      operationId: "getInvoices"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "action"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "fileName"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "internalInvoiceNumber"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "externalInvoiceNumber"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "buyer"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "supplier"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "relationShip"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "program"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "searchDateBy"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "fromDate"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "toDate"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "currency"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "status"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "offset"
+        in: "query"
+        type: "integer"
+        required: false
+      - name: "limit"
+        in: "query"
+        type: "integer"
+        required: false 
+      - name: "indicator"
+        in: "query"
+        type: "string" 
+      - name: "searchByAmount"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "fromAmount"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "toAmount"
+        in: "query"
+        type: "string"
+      - name: "discountRuleId"
+        in: "query"
+        type: "string"
+        required: false  
+      - name: "forDynamicReg"
+        in: "query"
+        type: boolean
+        required: false 
+      - name: "forDynamicInvFilter"
+        in: "query"
+        type: boolean
+        required: false  
+      - name: "programName"
+        in: "query"
+        type: "string"
+        required: false 
+      - name: "invoiceStatus"
+        in: "query"
+        type: "string"
+        required: false      
+      - name: "discountStatus"
+        in: "query"
+        type: "string"
+        required: false 
+      - name: "paymentStatus"
+        in: "query"
+        type: "string"
+        required: false   
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/InvoiceCollectionDto"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    post:
+      tags:
+        - "InvoiceManagementWeb"
+      summary: "Post Invoice Management from UI."
+      description: "Post Invoice Management from UI."
+      operationId: "postInvManagement"
+      parameters:
+        - name: "invoice"
+          in: "body"
+          description: "Request Body that contains data required for creating a new Invoice."
+          required: true
+          schema:
+            $ref: "#/definitions/InvoiceManagementPostModel"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+      responses:
+        201:
+          description: "Returns the Id of the newly created invoice"
+          schema:
+              $ref: "#/definitions/InvoiceManagementDTO"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+#  /web/v1/authorizeInvoices:
+#    post:
+#      tags:
+#        - "InvoiceManagementWeb"
+#      summary: "Adds a main Invoices after validation."
+#      description: "Adds a main Invoices after validation "
+#      operationId: "authorizeInvoices"
+#      parameters:
+#        - name: "appId"
+#          in: "header"
+#          type: "string"
+#          required: true
+#        - name: "userId"
+#          in: "header"
+#          type: "string"
+#          required: true
+#        - name: "branchCode"
+#          in: "header"
+#          type: "string"
+#          required: true
+#        - name: "transactionRefNoCollection"
+#          in: "body"
+#          description: "Request Body that contains data required for creating a new Invoice."
+#          required: true
+#          schema:
+#            $ref: "#/definitions/TransactionRefNoCollection"
+#      responses:
+#        201:
+#          description: "Returns the Id of the newly created bidding"
+#          schema:
+#              $ref: "#/definitions/ResponseDtoWrapper"
+#        400:
+#          description: "Bad Request"
+#          schema:
+#              $ref: "#/definitions/ResponseDtoWrapper"
+#        401:
+#          description: "Request does not have sufficient credentials."
+#        403:
+#          description: "Request is not authorized."
+#        405:
+#          description: "Invalid input"
+#        500:
+#          description: "Internal error"
+          
+definitions:
+  InvoiceManagementPostModel:
+    description: "Invoice Post model"
+    type: "object"
+    properties:
+      action:
+        type: string
+        description: "Action for which invoices are getting saved"
+      processingDate:
+        type: string
+        description: "Processing Date"
+      branchCode:
+        type: string
+        description: "Branch Code"
+      srcAppCd:
+        type: string
+        description: "Reference Number of Calling System"
+      srcAppRefNo:
+        type: string
+        description: "Reference Number of Calling System"
+      makerId:
+        type: string
+        description: "Maker Id from Portal"
+      checkerId:
+        type: string
+        description: "Checker Id from Portal"
+      invoices:
+        type: array
+        items:
+          $ref: "#/definitions/InvoiceModel"
+  InvoiceManagementDTO:
+    description: "InvoiceManagementDTO"
+    properties:
+      errorList:
+        type: object
+        additionalProperties:
+          type: object
+      refList:
+        type: object
+        additionalProperties:
+          type: object
+      responseDtoWrapper:
+        $ref: "#/definitions/ResponseDtoWrapper"

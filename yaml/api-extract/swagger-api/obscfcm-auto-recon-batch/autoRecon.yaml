@@ -1,0 +1,619 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Maintenance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Auto Recon Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "AutoRecon"
+    description: "API for Auto Recon Service Operations"
+    
+schemes:
+- "https"
+
+paths:
+  /service/reconDecId:
+    post:
+      tags:
+        - "AutoRecon"
+      summary: "Service to Start Auto Recon Job."
+      description:  "Service to Start Auto Recon Job."
+      operationId: "getReconDecIds"
+      parameters:
+        - name: "userId"
+          in: "header"
+          description: "userId"
+          required: true
+          type: "string"
+        - name: "branchCode"
+          in: "header"
+          description: "branchCode"
+          required: true
+          type: "string"
+        - name: "appId"
+          in: "header"
+          description: "Application Id"
+          type: "string"
+          required: true
+        - name: paymentRefNoList
+          in: body
+          description: Request Body
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentRefNoCollection'
+      responses:
+        201: 
+          description: "Returns message of succes or failure " 
+          schema:
+            $ref: "#/definitions/PaymentRuleMap"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+definitions:
+  PaymentRefNoCollection:
+    description: "PaymentRefNos."
+    type: "object"
+    properties:
+      applicationCode:
+        type: string
+        description: "Application Code"
+      compareFlag:
+        type: boolean
+        description: "Compare Flag"
+      paymentRefNoList:
+        type: "array"
+        items:
+         type: string
+  PaymentRuleMap:
+    type: object
+    additionalProperties:
+      type: string
+
+  PaymentCollectionDto:
+    description: "ScfPaymentDTO Collection"
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfPaymentDTO" 
+      paging:
+        $ref: './autoReconService.yaml#/definitions/PagingDto'
+        
+  ScfInvPayReconCollection:
+    description: "ScfInvPayReconDTO Collection"
+    type: "object"
+    properties:
+      scfInvPayReconList:
+        type: array
+        items:
+          $ref: '#/definitions/ScfInvPayReconDTO'
+      responseDtoWrapper:
+          $ref: "#/definitions/ResponseDtoWrapper" 
+          
+  ResponseDtoWrapper:
+   type: object
+   properties:
+    messages:
+     $ref: "#/definitions/ResponseDto"
+    data:
+     $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+   type: object    
+   
+  ResponseDto:
+   type: object
+   properties:
+    id:
+     type: string
+    status:
+     type: string
+    codes:
+     type: array
+     items:
+      $ref: "#/definitions/ResponseCode"
+    requestId:
+     type: string
+  ResponseCode:
+   type: object
+   properties:
+    Code:
+     type: string
+    Desc:
+     type: string
+    Type:
+     type: string
+    Language:
+     type: string
+    args:
+     type: array
+     items:
+      type: object
+    arg:
+     type: string                
+        
+  ScfInvPayReconDTO:
+    description: "Response Model"
+    type: "object"
+    properties:
+      invoices:
+        type: "array"
+        items: 
+          $ref: "#/definitions/InvoiceModel"
+      payments:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfPaymentDTO"
+      reconTxnRefNo:
+        type: string
+      financeRefNo:
+        type: string
+      isAccountingApplicable:
+        type: string
+      isLimitsApplicable:
+        type: string    
+        
+  InvoiceModel:
+    description: "Invoice model"
+    type: "object"
+    properties:
+      srcAppCd:
+        type: "string"
+        description: "Source Application Code"
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      invoiceId:
+        description: "Id of the Invoice "
+        type: string
+      acceptanceAmount:
+        type: number
+        description: "Acceptance Amount"
+      amount:
+        type: number
+        description: "Amount"
+      buyerId:
+        type: string
+        description: "Buyer Id"
+      buyerName:
+        type: string
+        description: "Buyer Name"
+      buyerDivCode:
+        type: string
+        description: "Buyer Division Code"
+      buyerDivName:
+        type: string
+        description: "Buyer Division Name"
+      currency:
+        type: string
+        description: "Currency"
+      isDisputed:
+        type: string
+        description: "Is Disputed"
+      discrepancyCode:
+        type: string
+        description: "Discrepancy Code"
+      disputeResolveRemarks:
+        type: string
+        description: "Dispute Resolve Remarks"
+      fileName:
+        type: string
+        description: "File Name"
+      fileRef:
+        type: string
+        description: "File Reference"
+      filler1:
+        type: string
+        description: "Filler1"
+      filler2:
+        type: string
+        description: "Filler2"
+      filler3:
+        type: string
+        description: "Filler3"
+      filler4:
+        type: string
+        description: "Filler4"
+      filler5:
+        type: string
+        description: "Filler5"
+      filler6:
+        type: string
+        description: "Filler6"
+      filler7:
+        type: string
+        description: "Filler7"
+      filler8:
+        type: string
+        description: "Filler8"
+      filler9:
+        type: string
+        description: "Filler9"
+      filler10:
+        type: string
+        description: "Filler10"
+      financeAmount:
+        type: number
+        description: "Finance Amount"
+      financePercentage:
+        type: number
+        description: "Finance Percentage"
+      indicator:
+        type: string
+        description: "Indicator"
+      invoiceDate:
+        type: string
+        description: "Invoice Date"
+      invoiceDueDate:
+        type: string
+        description: "Invoice Due Date"
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      invoiceProcessStatus:
+        type: string
+        description: "Invoice Process Status"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      invoiceStatus:
+        type: string
+        description: "Invoice Status"
+      invAcceptanceDate:
+        type: string
+        description: "Invoice Acceptance Date"
+      maxFinancePercentage:
+        type: number
+        description: "Maximum Finance Percentage"
+      paidAmount:
+        type: number
+        description: "Paid Amount"
+      paymentStatus:
+        type: string
+        description: "Payment Status"
+      preAccepted:
+        type: string
+      poNumber:
+        type: string
+        description: "Po Number"
+      programCode:
+        type: string
+        description: "Program Code"
+      programName:
+        type: string
+      reasonCode:
+        type: string
+        description: "Reason Code"
+      remarks:
+        type: string
+        description: "Remarks"
+      supplierId:
+        type: string
+        description: "Supplier Id"
+      supplierName:
+        type: string
+        description: "Supplier Name"
+      supplierDivCode:
+        type: string
+        description: "Supplier Division Code"
+      supplierDivName:
+        type: string
+        description: "Supplier Division Name"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      totalInvoiceAmount:
+        type: number
+        description: "Total Invoice Amount"
+      paymentTerms:
+        type: string
+      shipmentDate:
+        type: string
+      outstandingAmount:
+        type: number
+      discountAllowed:
+        type: string
+      discountPercentage:
+        type: number
+      discountAmount:
+        type: number
+      taxPercentage:
+        type: number
+      purchaseOrderDate:
+        type: string
+      staleStatus:
+        type: string
+      divisionCode:
+        type: string
+      shipmentAddress:
+        type: string
+      shipmentCountry:
+        type: string
+      shipmentNo:
+        type: string
+      reasonForExport:
+        type: string
+      termsOfSale:
+        type: string
+      countryOfOrigin:
+        type: string
+      miscCharge1:
+        type: number
+      miscCharge1Amount:
+        type: number
+      miscCharge1Desc:
+        type: string
+      miscCharge2:
+        type: number
+      miscCharge2Amount:
+        type: number
+      miscCharge2Desc:
+        type: string
+      netInvoiceAmount:
+        type: number
+      financeableAmount:
+        type: number
+      finTxnStatus:
+        type: string
+      transactionRefNo:
+        type: string
+      relationCode:
+        type: string
+        description: "Relation Code"
+      supplierCode:
+        type: string
+      buyerCode:
+        type: string
+      shipmentRefNo:
+        type: string
+      repayAccountNo:
+        type: string
+      bank:
+        type: string
+      branch:
+        type: string
+      routingCode:
+        type: number
+      isAutoAuth:
+       type: string
+      reasonErrorCode:
+        type: string
+      isApproved:
+        type: string 
+      invoiceCommodityGridList:
+        type: array
+        items:
+          $ref: '#/definitions/InvoiceCommodityGridModel'
+      finEligibilityAmt:
+        type: number
+      reconTxnStatus:
+        type: string
+      reasonForShipment:
+        type: string
+      virtualAcFlag:
+        type: string
+      fundingReqAmt:
+        type: number
+      raisedBy:
+        type: string
+      processingBranchCode:
+        type: string
+      action:
+        type: string
+      processingDate:
+        type: string
+      paymentDate:
+        type: string
+      disputedAmount:
+        type: number   
+      linkedDocs:
+        type: string    
+      isFinanced:
+        type: string                    
+      tcmId:
+        type: string
+      makerId:
+        type: string
+      makerDtStamp:
+        type: string
+      stageId:
+        type: string
+      isAccepted:
+        type: string
+      isDisputeResolvedWriteOff:
+        type: string
+      isAssigned:
+        type: string
+      assignmentParty:
+        type: string
+      isOverdue :
+        type: string 
+      oldAcceptanceAmount:
+        type: number
+      oldFinanceAmount:
+        type: number
+      amountToBeFinanced:
+        type: number
+      oldInvoiceDueDate:
+        type: string
+      oldDisputeAmount:
+        type: number
+      sourceTxnId:
+        type: string
+      adjustmentReason:
+        type: string
+      linkInvoiceNumber:
+        type: "string"
+        description: "Coma/Pipe seperated invoice numbers"
+      paymentDueDate:
+        type: string
+        description: "Payment Due Date"
+      isPUA:
+        type: string
+      isIndirectPayment:
+        type: string
+      paymentParty:
+        type: string
+      importFactorId:
+        type: string
+      importFactorName:
+        type: string
+      insuranceCoId:
+        type: string
+      insuranceCoName:
+        type: string
+      paymentMode:
+        type: string
+      reconPmtAmount:
+        type: number
+      reconPmtAmountCcy:
+        type: string
+      varianceAmount:
+        type: number
+      linkedInvoiceList:
+        type: array
+        items:
+          $ref: '#/definitions/LinkedInvoiceModel'
+      invoiceOffer:
+        $ref: '#/definitions/InvoiceOfferDTO'
+      feedSerialNo:
+        type: "integer"
+        format: "int32"
+      expiresOn:
+        type: string
+      fundingReqDate:
+        type: string
+      newFundingReqDate:
+        type: string
+      oldExpiryDate:
+        type: string
+  InvoiceCommodityGridModel:
+    type: object
+    properties:
+      id:
+        type: "string"
+      seqNo:
+        type: "integer"
+        format: "int64"
+      commodityCode:
+        type: string
+        description: "Commodity Code"
+      quantity:
+        type: number
+        description: "Quantity"
+      commodityName:
+        type: string
+      commodityDesc:
+        type: string
+      costPerUnit:
+        type: number
+        description: "Cost Per unit"
+      totalCost:
+        type: number
+        description: "Total Cost"
+      taxAmount:
+        type: number
+        description: "Tax Amount"
+      netCost:
+        type: number
+        description: "Net Cost"
+      invoiceCommodityGridId:
+        description: "Id of the Invoice Commodity Grid"
+        type: string
+        readOnly: true
+      invoiceNumber:
+        type: string
+        description: "Invoice Number"
+      invoiceMasterId:
+        type: string
+        description: "Invoice Master Id"
+      invoiceRefNo:
+        type: string
+        description: "Invoice Reference Number"
+      descriptionOfGoods:
+        type: string
+      totalWeight:
+        type: number
+      unitWeight:
+        type: number
+      ccy:
+        type: string
+      discountPercentage:
+        type: number
+      discountAmount:
+        type: number
+      taxPercentage:
+        type: number
+      unit:
+        type: string
+      transactionRefNo:
+        type: string
+      isInherited:
+        type: string
+  LinkedInvoiceModel:
+   type: "object"
+   properties:
+     invoiceNumber:
+       type: string
+     invoiceRefNo:
+       type: string
+     invoiceAmount:
+       type: number
+     miscCharge1Amount:
+       type: number
+     miscCharge2Amount:
+       type: number
+     invoiceDate:
+       type: string
+     invoiceDueDate:
+       type: string
+     invoiceStatus:
+       type: string
+     paymentStatus:
+       type: string
+     currency:
+       type: string
+  InvoiceOfferDTO:
+   type: object
+   properties:
+     id:
+      type: string
+      description: "Id"
+     seqNo:
+      type: "integer"
+      format: "int64"
+     earlyPaymentDate:
+      type: string
+      description: "Early Payment Date"
+     discountPercentage:
+      type: number
+      description: "Discount Percentage"
+     discountAmount:
+      type: number
+      description: "Discount Amount"
+     notionalEarlyPayAmt:
+      type: number
+      description: "Notional Early Pay Amount"
+     chgPriceTemplateId:
+      type: string
+      description: "charge Price Template Id"
+     currency:
+      type: string
+      description: "Currency" 
+                              

@@ -1,0 +1,848 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : VLC
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server chargeprefdecision server." 
+ version: "1.0.0"
+ title: "chargeprefdecision Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "chargeprefdecision"
+   description: "Charge Preferential Pricing is to configure preferential pricing for specific customers. The Charge Code and Charge Pricing Rule created can be mapped to an Event and Pricing Scheme. The calculation and collection frequencies for the charge will also be defined."
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../chargeprefdecision
+
+ /chargeprefdecision:
+  post:
+   tags:
+    - "chargeprefdecision"
+   summary: "Adds a new chargeprefdecision."
+   description: "Adds a new chargeprefdecision. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "chargeprefdecision" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new chargeprefdecision" 
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargPrefDecMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created chargeprefdecision" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargeprefdecision"
+   summary: "Get all valid chargeprefdecision."
+   description:  "Get all valid chargeprefdecision. This endpoints will be used to Get all valid chargeprefdecision maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: applicationCode
+     in: query
+     description: Application for which the data is processed -VAMCHG/LMCHG
+     type: string     
+     required: true
+   - name: realCustomerNo
+     in: query
+     description: Real customer number
+     type: string     
+     required: false            
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - in: query
+     name: loggedinBrn
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/VlcTmChargPrefDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../chargeprefdecision/xxx
+#   DELETE    .../chargeprefdecision/xxx
+#   GET       .../chargeprefdecision/xxx
+#   GET       .../chargeprefdecision/xxx?version=latestrecord
+#   GET       .../chargeprefdecision/xxx?version=1
+
+ /chargeprefdecision/{id}:
+  put:
+   tags:
+    - "chargeprefdecision"
+   summary: "Update an existing chargeprefdecision."
+   description:  "Update an existing chargeprefdecision."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the chargeprefdecision Maintenance"
+      required: true
+      type: "string"
+    - name: "chargeprefdecision"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing chargeprefdecision"
+      required: true
+      schema:
+       $ref: "#/definitions/VlcTmChargPrefDecMasterDTO"
+   responses:
+    200:
+     description: "Returns updated chargeprefdecision"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "chargeprefdecision"
+   summary: "Retrieves the chargeprefdecision by ID."
+   description:  "Retrieves the chargeprefdecision by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargeprefdecision based on given id."
+     schema:
+      $ref: "#/definitions/VlcTmChargPrefDecMasterWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "chargeprefdecision"
+   summary: "Deletes the chargeprefdecision identified by given ID."
+   description:  "Deletes the chargeprefdecision identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargeprefdecision maintenance"
+      required: true
+      type: "string"
+    - name: "chargeprefdecision"
+      in: "body"
+      description: Request body contain chargeprefdecision and Modification no of chargeprefdecision maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargeprefdecision/xxx/approve
+
+ /chargeprefdecision/{id}/approve:
+  patch:
+   tags:
+    - "chargeprefdecision"
+   summary: "Authorize the chargeprefdecision by given ID."
+   description:  "Authorize the chargeprefdecision identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargeprefdecision maintenance"
+      required: true
+      type: "string"
+    - name: "chargeprefdecision"
+      in: "body"
+      description: Request body contain chargeprefdecision and Modification no of chargeprefdecision maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../chargeprefdecision/xxx/close
+ /chargeprefdecision/{id}/close:
+  patch:
+   tags:
+    - "chargeprefdecision"
+   summary: "Close the chargeprefdecision by given ID."
+   description:  "Close the chargeprefdecision identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the chargeprefdecision maintenance"
+      required: true
+      type: "string"
+    - name: "chargeprefdecision"
+      in: "body"
+      description: Request body contain chargeprefdecision and Modification no of chargeprefdecision maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../chargeprefdecision/xxx/unauthorized
+
+ /chargeprefdecision/{id}/unauthorized:
+  get:
+   tags:
+    - "chargeprefdecision"
+   summary: "Retrives the chargeprefdecision by given ID."
+   description:  "Retrives the chargeprefdecision identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargeprefdecision based on given id."
+     schema:
+       $ref: "#/definitions/VlcTmChargPrefDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../chargeprefdecision/xxx/history
+
+ /chargeprefdecision/{id}/history:
+  get:
+   tags:
+    - "chargeprefdecision"
+   summary: "Retrives the chargeprefdecision by given ID."
+   description:  "Retrives the chargeprefdecision by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the chargeprefdecision based on given id."
+     schema:
+       $ref: "#/definitions/VlcTmChargPrefDecMasterCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /chargeprefdecision/customers:
+  get:
+   tags:
+    - "customlovservices"
+   summary: "Get all valid customer whose facility is not maintained."
+   description:  "Get all valid accfcltys. This endpoints will be used to Get all valid accfcltys maintenance records."
+   operationId: "getCustomers"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: realCustomerNo
+     in: query
+     description: realCustomerNo
+     required: false
+     type: string
+   - in: query
+     name: applicationCode
+     required: true
+     type: string
+   responses:
+    200:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CustPricingMapCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"  
+     
+definitions:
+ VlcTmChargPrefDecMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     realCustomerNo:
+      type: string
+      description: ""
+     chargeType:
+      type: string
+      description: ""      
+     applicationCode:
+      type: string
+      description: "Appication for which this data is used. Possible values VAMCHG/LMCHG"       
+     loggedInBranch:
+      type: string
+      description: "Current logged in branch"    
+     VlcTmChargPrefDecDetailDTO:
+      type: array
+      items:
+       $ref: '#/definitions/VlcTmChargPrefDecDetailDTO'
+    required:
+     - chargeType
+     - realCustomerNo
+     - VlcTmChargPrefDecDetailDTO
+     - applicationCode       
+ VlcTmChargPrefDecDetailDTO:
+  type: object
+  properties:
+     chgCode:
+      type: string
+      description: ""
+      minLength: 3
+      maxLength: 20
+     chgCriteria:
+      type: string
+      description: ""
+     chgPrcTemplateId:
+      type: string
+      description: ""
+     chgPrefDecMasterId:
+      type: string
+      description: ""
+     effectiveDate:
+      type: string
+      format: date
+      description: ""
+     expiryDate:
+      type: string
+      format: date
+      description: ""
+     id:
+      type: string
+      description: ""
+     parentChgCode:
+      type: string
+      description: ""
+  required:
+   - chgCode
+   - chgCriteria
+   - chgPrcTemplateId
+   - effectiveDate      
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ VlcTmChargPrefDecMasterCollection: 
+  description: "Collection of chargprefdec."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/VlcTmChargPrefDecMasterDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ VlcTmChargPrefDecMasterWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/VlcTmChargPrefDecMasterDTO"
+ CmcTmCoreCustomerDto:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     pincode:
+      type: string
+      minLength: 0
+      maxLength: 15
+      pattern: '([a-zA-Z0-9]+)?'
+     addressLine4:
+      type: string
+      minLength: 0
+      maxLength: 35
+     addressLine3:
+      type: string
+      minLength: 0
+      maxLength: 35
+     addressLine2:
+      type: string
+      minLength: 0
+      maxLength: 35
+     addressLine1:
+      type: string
+      minLength: 0
+      maxLength: 35
+     shortName:
+      type: string
+      minLength: 0
+      maxLength: 20
+      pattern: '([a-zA-Z0-9\s]+)?'
+     customerName1:
+      type: string
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     customerCategory:
+      type: string
+     customerType:
+      type: string
+      pattern: '[I,C,B]'
+     hostCode:
+      type: string
+     customerNo:
+      type: string
+     sourceSystemCustNo:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     sourceSystem:
+      type: string
+     walkinCustomer:
+      type: string
+     sanctionsChecksRequired:
+      type: string
+      pattern: '[Y,N]'
+     rmId:
+      type: string
+      minLength: 0
+      maxLength: 12
+      pattern: '([a-zA-Z0-9]+)?'
+     whereaboutsUnknown:
+      type: string
+      pattern: '[Y,N]'
+     frozen:
+      type: string
+      pattern: '[Y,N]'
+     deceased:
+      type: string
+     nationality:
+      type: string
+     language:
+      type: string
+     country:
+      type: string
+    required:
+     - customerType
+     - customerNo
+     - sourceSystemCustNo
+     - sourceSystem
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CmcTmCoreCustomerCollection: 
+  description: "Collection of corecustomer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CmcTmCoreCustomerDto"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ CustPricingMapCollection: 
+  description: "Collection of customer."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CustPricingMapDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer    
+ CustPricingMapDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     pincode:
+      type: string
+      minLength: 0
+      maxLength: 15
+      pattern: '([a-zA-Z0-9]+)?'
+     customerName:
+      type: string
+      minLength: 0
+      maxLength: 35
+      pattern: '([a-zA-Z0-9\s]+)?'
+     realCustomerNo:
+      type: string
+      minLength: 1
+      maxLength: 35
+      pattern: '[a-zA-Z0-9]+'
+     pricingScheme:
+      type: string
+     applicationCode:
+      type: string
+     custChargeAcc:
+      type: string
+      description: "Customer charge account"
+      maxLength: 35
+     custChargeAccBrn:
+      type: string
+      description: "Customer charge account branch"
+      maxLength: 3        
+     custChargeAccCcy:
+      type: string
+      description: "Customer charge account Currency"
+      minLength: 3
+      maxLength: 3
+     custChargePostBranch:
+      type: string
+      description: "Customer charge posting branch"
+      maxLength: 3      
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type    

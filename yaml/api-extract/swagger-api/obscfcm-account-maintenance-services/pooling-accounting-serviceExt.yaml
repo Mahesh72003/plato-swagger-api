@@ -1,0 +1,201 @@
+swagger: "2.0"
+info:
+ description: "Provides APIs to perform Pooling Operations on Accounting" 
+ version: "1.0.0"
+ title: "Pooling Accounting Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-account-maintenance-services"
+consumes:
+ - "application/json"
+ - "application/xml"
+produces:
+ - "application/json"
+ - "application/xml"
+tags:
+ - name: "PoolingAccounting"
+   description: "API for OBCM Pooling Accounting Operations"
+
+paths:
+  /service/v1/poolingAccounting:     
+    post:
+      tags:
+      - "PoolingAccounting"
+      summary: "A generic accounting api to generate accounting and authorize them for obcm pooling tasks."
+      description: "Process accounting entries and authorize for pooling tasks"
+      operationId: "processPoolingAccounting"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: offset
+        in: query
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: "limit is maximum no of records to be fetched"
+        required: false
+        type: integer     
+      - name: "rquestDto" 
+        in: "body" 
+        description: "Request Body that contains data required for creating a new accentrycode" 
+        required: true
+        schema:
+            $ref: "./obscfcm-accounting-def.yaml#/definitions/GenericObscfCmAccountDTO"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+           $ref: "#/definitions/GenericPoolingAccountDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+          
+  /service/v1/accountNumber:     
+    post:
+      tags:
+      - "PoolingAccounting"
+      summary: "AccountNumber."
+      description: "Get AccountNumber"
+      operationId: "getAccountNumber"
+      produces:
+        - "application/json"
+        - "application/xml"
+      parameters:
+      - name: "branchCode"
+        in: "header"
+        required: true
+        description: "Branch Code"
+        type: "string"
+      - name: "appId"
+        in: "header"
+        description: "Application Id"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: offset
+        in: query
+        description: "offset is starting no of records to be fetched"
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: "limit is maximum no of records to be fetched"
+        required: false
+        type: integer
+      - name: includecloseandunauth
+        in: query
+        description: "includecloseandunauth need to be set to fetch summary record, defult value is false"
+        required: false
+        type: boolean     
+      - name: "applicationName" 
+        in: "query" 
+        description: "Application Name" 
+        required: false
+        type: "string"
+      - name: "productCode" 
+        in: "query" 
+        description: "Product Code" 
+        required: false
+        type: "string"
+      - name: "corporateId" 
+        in: "query" 
+        description: "Corporate Id" 
+        required: false
+        type: "string" 
+      - name: "divisonCode" 
+        in: "query" 
+        description: "Divison Code" 
+        required: false
+        type: "string" 
+      - name: "locationId" 
+        in: "query" 
+        description: "Location Id" 
+        required: false
+        type: "string" 
+      - name: "accountNumber" 
+        in: "query" 
+        description: "Account Number" 
+        required: false
+        type: "string"
+      - name: "recordStatus" 
+        in: "query" 
+        description: "Record Status" 
+        required: false
+        type: "string"
+      - name: "callFromLov"
+        in: "query"
+        required: false
+        description: "Lov Filter"
+        type: "string"
+         
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+           $ref: "./intaccmapAggregate.yaml#/definitions/IntaccmapAggregateModelCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"       
+          
+definitions:
+  GenericPoolingAccountDTO:
+    type: object
+    required:
+      - applicationType
+    properties:
+      refNo:
+        description: "Transaction reference number"
+        type: "string"
+      applicationName:
+        description: "Application Name"
+        type: "string"
+      accTxnColl:
+        $ref: "./obscfcm-accounting-def.yaml#/definitions/AccountingTransactionCollection"
+      ecaBlockAmountDetailsColl:
+        $ref: "./obscfcm-accounting-def.yaml#/definitions/EcaBlockAmountDetailsCollection"                                      
+      isFcubsSuccess:
+        description: "Fcubs post accounting status"
+        type: boolean 
+        
+  AccountMapMasterDTO:
+    type: object
+    required:
+      - applicationType
+    properties:
+      applicationName:
+        description: "Application Name"
+        type: "string"
+      poolingAcntType:
+        description: "Pooling Account Type"
+        type: "string"        

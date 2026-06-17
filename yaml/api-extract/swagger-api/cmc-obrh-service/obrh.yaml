@@ -1,0 +1,62 @@
+swagger: "2.0"
+info:
+   description: "OBIH service for oracle banking integration hub"
+   version: "1.0.0"
+   title: "OBIH Service"
+basePath: "/api/1.0/"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+tags:
+-  name: "ApplicationAPI"
+   description: "API for Application CRUD Operations"
+-  name: "ProductProcessorAPI"
+   description: "API for Product Processor CRUD Operations"
+-  name: "DispatchAPI"
+   description: "API for Dispatch CRUD Operations"
+schemes:
+- "https"
+paths:
+   /dispatch:
+      post:
+         tags:
+         - "DispatchAPI"
+         summary: "Dispatch request to a configured application service route."
+         description: "Dispatches request to route"
+         operationId: "dispatch"
+         parameters:
+         - name: "dispatchModel"
+           in: "body"
+           required: true
+           schema:
+              $ref: "#/definitions/DispatchModel"
+         responses:
+            200:
+               description: "Successfully performed the operation."
+               schema:
+                  $ref: "#/definitions/DispatchModel"
+            400:
+               description: "Malformed syntax."
+            401:
+               description: "Request does not have sufficient credentials."
+            403:
+               description: "Request is not authorized."
+            405:
+               description: "Invalid input"
+            500:
+               description: "Internal error"
+definitions:
+   DispatchModel:
+      description: "Dispatch Model"
+      type: "object"
+      properties:
+         application:
+            description: "name of the application"
+            type: "string"
+         applicationService:
+            description: "name of the application service"
+            type: "string"
+         payload:
+            description: "stringified json request payload"
+            type: "string"

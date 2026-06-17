@@ -1,0 +1,251 @@
+swagger: "2.0"
+info:
+  description: "Provides api's and models required for obcm obpm intgration."
+  version: "1.0.0"
+  title: "OBPM Payment Models"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PaymentService"
+    description: "This service provides notification api and models required for obcm obpm integration."
+    
+schemes:
+- "https"
+
+paths:
+  /service/v1/OBCMClgStatusNS:
+    post:
+      tags:
+        - "PaymentService"
+      summary: "Notification api consumed by OBPM to send the instrument clearing status."
+      description: "Notification api consumed by OBPM to send the instrument clearing status."
+      operationId: "clgStatusNotification"
+      parameters:
+        - name: "clgStatusNSRequestModel"
+          in: "body"
+          description: "Request Body that contains data required for notification api"
+          required: true
+          schema:
+            $ref: "#/definitions/ClgStatusNSRequestModel"
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "User ID for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Branch Code for SMS"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "Application ID for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+          description: "Content of a file"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ClgStatusNSResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+definitions:
+  OutwardClearingRequestModel:
+    description: "Outward clearing request model"
+    type: "object"
+    properties:
+      txnBranch:
+        type: string
+        description: "Transaction branch"
+      sourceCode:
+        type: string
+        description: "Source Code for outward clearing"
+      networkCode:
+        type: string
+        description: "Network Code for outward clearing"
+      userRefNo:
+        type: string
+        description: "User reference no"
+      extRefNo:
+        type: string
+        description: "External Reference no"
+      hostCode:
+        type: string
+        description: "Host code for outward clearing"
+      customerNo:
+        type: string
+        description: "Customer No"
+      drawerAcNo:
+        type: string
+        description: "Drawer Account No"
+      drawerAcIban:
+        type: string
+        description: "Drawer Account"
+      drawerName:
+        type: string
+        description: "Drawer Name"
+      drawerRoutingNo:
+        type: string
+        description: "Drawer Routing No"
+      drawerBankName:
+        type: string
+        description: "Drawer Bank Name"
+      drawerBankCode:
+        type: string
+        description: "Drawer Bank Code"
+      drawerBranchCode:
+        type: string
+        description: "Drawer Branch Code"
+      instrumentIssueDate:
+        type: string
+        description: "Instrument Issue Date"
+      instrumentCode:
+        type: string
+        description: "Instrument Code"
+      instrumentCcy:
+        type: string
+        description: "Intrument Currency"
+      instrumentNo:
+        type: string
+        description: "Instrument No"
+      instrumentAmount:
+        type: string
+        description: "Instrument Amount"
+      clearingBranch:
+        type: string
+        description: "Clearing Branch"
+      routingNo:
+        type: string
+        description: "Routing No."
+      remarks:
+        type: string
+        description: "Additional Info if any"
+      creditToGl:
+        type: string
+        description: "Credit To GL Flag" 
+      crAcIban:
+        type: string
+        description: "Credit Account"
+      crAcNo:
+        type: string
+        description: "Credit Account No"
+      crName:
+        type: string
+        description: "Credit Account Name"
+      crAcCcy:
+        type: string
+        description: "Credit Account Currency"
+      crAcBranch:
+        type: string
+        description: "Credit Account Branch"
+      crAmount:
+        type: string
+        description: "Credit Amount"
+      sourceRefNo:
+        type: string
+        description: "Source Reference No"
+  OutwardClearingResponseModel:
+    description: "Outward clearing response model"
+    type: "object"
+    properties:
+      txnRefNo:
+        type: string
+        description: "Transaction Reference No"
+      sourceCode:
+        type: string
+        description: "Source Code for outward clearing"
+      sourceRefno:
+        type: string
+        description: "Source Reference No"
+      userRefNo:
+        type: string
+        description: "User reference no"
+      msgStats:
+        type: string
+        description: "Message Status"
+      txnId:
+        type: string
+        description: "Transaction ID"
+  ClgStatusNSRequestModel:
+    description: "Outward clearing notification api request data"
+    type: "object"
+    properties:
+      data:
+        type: array
+        items:
+         $ref: "#/definitions/OutclgNSRequestModel"
+  ClgStatusNSResponseModel:
+    description: "Outward clearing notification api response data"
+    type: "object"
+    properties:
+      data:
+        type: array
+        items:
+         $ref: "#/definitions/OutclgNSResponseModel"
+  OutclgNSRequestModel:
+    description: "Outward clearing notification request model"
+    type: "object"
+    properties:
+      clgTxnRefNo:
+        type: string
+        description: "Transaction reference No generated in OBPM for each instrument sent for clearing."
+      instrumentNo:
+        type: string
+        description: "Instrument identification number"
+      instrumentStatus:
+        type: string
+        description: "Instrument Status"
+      networkCode:
+        type: string
+        description: "Network Code"
+      valueDate:
+        type: string
+        description: "Value Date"
+      rejectReasonCode:
+        type: string
+        description: "Reason Code in case of reject"
+  OutclgNSResponseModel:
+    description: "Outward clearing notification response model"
+    type: "object"
+    properties:
+      txnRefNo:
+        type: string
+        description: "Transaction Reference No"
+      msgStats:
+        type: string
+        description: "Message Status"
+      responses:
+        type: array
+        description: "Response Code List"
+        items:
+         $ref: "#/definitions/ResponseCodeModel"        
+
+  ResponseCodeModel:
+    description: "Response Code model"
+    type: "object"
+    properties:
+      respCode:
+        type: string
+        description: "Response Code"
+      respDesc:
+        type: string
+        description: "Response Description"               
+                                                                                                                                                        

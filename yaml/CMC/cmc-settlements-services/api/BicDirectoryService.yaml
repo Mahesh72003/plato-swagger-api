@@ -1,0 +1,517 @@
+#  This source is part of the Oracle Banking Software Product. 
+#  Copyright  2018 , 2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : cmc
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+
+
+swagger: "2.0"
+info:
+ description: "This is a sample server bicdirectorys server."
+ version: "1.0.0"
+ title: "bicdirectorys Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "bicdirectorys"
+   description: "Bank Codes can be defined using this service so that the bank is identified by SWIFT. BICs are used when it is necessary to identify exactly a party of a transaction and are frequently used to help route payments."
+
+schemes:
+ - "https"
+
+paths:
+
+ # path to create a new record and fetch all valid records or by intent
+ #
+ #  supported http methods POST and GET
+ #
+ # path example ../bicdirectorys
+
+ /service/bicdirectorys:
+  post:
+   tags:
+    - "bicdirectorys"
+   summary: "Adds a new bicdirectorys."
+   description: "Adds a new bicdirectory. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "bicdirectorys"
+      in: "body"
+      description: "Request Body that contains data required for creating a new bicdirectorys"
+      required: true
+      schema:
+       $ref: "#/definitions/BICDirectoryDTO"
+   responses:
+    201:
+     description: "Returns message of success or failure "
+     headers:
+      Location:
+       description: "URL for newly created bicdirectorys"
+       type: "string"
+     schema:
+      $ref: "#/definitions/BICDirectoryResponseServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+  get:
+    tags:
+      - "bicdirectorys"
+    summary: "Get all valid bicdirectorys."
+    description:  "Get all valid bicdirectorys. This endpoint will be used to get all valid bicdirectorys maintenance records."
+    operationId: "getAll"
+    parameters:
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer
+      - in: query
+        name: bicCode
+        required: false
+        type: string
+      - in: query
+        name: bankName
+        required: false
+        type: string
+      - in: query
+        name: customerNo
+        required: false
+        type: string
+      - in: query
+        name: skArrangement
+        required: false
+        type: string
+      - in: query
+        name: recordStat
+        required: false
+        type: string
+      - in: query
+        name: makerId
+        required: false
+        type: string
+      - in: query
+        name: checkerId
+        required: false
+        type: string
+      - in: query
+        name: authStat
+        required: false
+        type: string
+      - in: query
+        name: bankAddress1
+        required: false
+        type: string
+      - in: query
+        name: relationship
+        required: false
+        type: string
+      - in: query
+        name: beIndicator
+        required: false
+        type: string
+      - in: query
+        name: sourceCode
+        required: false
+        type: string
+    responses:
+      201:
+        description: "Returns message of success or failure"
+        headers:
+          Location:
+            description: ""
+            type: "string"
+        schema:
+          $ref: "#/definitions/BICDirectorysCollection"
+      400:
+        description: "Malformed syntax."
+      401:
+        description: "Request does not have sufficient credentials."
+      403:
+        description: "Request is not authorized."
+      405:
+        description: "Invalid input"
+      500:
+        description: "Internal error"
+  # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+  #
+  #  supprorted http methods PUT, DELETE and GET
+  #
+  # path examples----
+  #   PUT       .../bicdirectorys/xxx
+  #   DELETE    .../bicdirectorys/xxx
+  #   GET       .../bicdirectorys/xxx
+  #   GET       .../bicdirectorys/xxx?version=latestrecord
+  #   GET       .../bicdirectorys/xxx?version=1
+
+ /service/bicdirectorys/{bicCode}:
+  put:
+   tags:
+    - "bicdirectorys"
+   summary: "Update an existing bicdirectory."
+   description: "Update an existing bicdirectory."
+   operationId: "modifyRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "bicCode"
+      in: "path"
+      description: "BIC Code or Bank Code"
+      required: true
+      type: "string"
+    - name: "bicdirectorys"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing bicdirectory"
+      required: true
+      schema:
+       $ref: "#/definitions/BICDirectoryDTO"
+   responses:
+    200:
+     description: "Returns updated bicdirectorys"
+     schema:
+      $ref: "#/definitions/BICDirectoryResponseServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+ # path to close existing record
+ #
+ #  supported http methods PATCH
+ #
+ # path examples----
+ #   PATCH       .../bicdirectorys/xxx/close
+ /service/bicdirectorys/{bicCode}/close:
+  patch:
+   tags:
+    - "bicdirectorys"
+   summary: "Close the bicdirectory by given ID."
+   description:  "Close the bicdirectory identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "bicCode"
+      in: "path"
+      description: "BicCode of the bicdirectory maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/BICDirectoryResponseServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+ # path to reopen existing record
+ #
+ #  supported http methods PATCH
+ #
+ # path examples----
+ #   PATCH       .../bicdirectorys/xxx/reopen
+
+ /service/bicdirectorys/{bicCode}/reopen:
+  patch:
+   tags:
+    - "bicdirectorys"
+   summary: "reopen the bicdirectory by given ID."
+   description:  "reopen the bicdirectory identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: sourceCode
+      description: "Source from which request is initiated"
+      in: header
+      required: true
+      type: string
+    - name: "bicCode"
+      in: "path"
+      description: "BicCode of the bicdirectorys maintenance"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/BICDirectoryResponseServiceWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ BICDirectorysCollection:
+  description: "Collection of bicdirectory."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items:
+     $ref: "#/definitions/BICDirectoryServiceDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ NKValuesDto:
+  type: object
+  properties:
+   id:
+    type: string
+   modNo:
+    type: integer
+   wrapper:
+    $ref: "#/definitions/ResponseDto"
+ BICDirectoryServiceDTO:
+  type: object
+  allOf:
+   - $ref: '#/definitions/GenericDto'
+   - type: object
+     properties:
+      bicCode:
+       type: string
+       description: "BIC Code or Bank Code"
+       pattern: '[A-Za-z0-9_*-]+'
+      bankName:
+       type: string
+       description: "Name of the Bank"
+       minLength: 1
+       maxLength: 35
+      customerNo:
+       type: string
+       description: "If the bank is a customer of your bank, you can select the Customer No assigned to the bank"
+      skArrangement:
+       type: string
+       description: "Indicate whether a SK arrangement exists between your bank and the BIC entity"
+       pattern: '[Y,N]'
+      bankAddress1:
+       type: string
+       description: "Bank Address Line 1"
+       minLength: 0
+       maxLength: 35
+      bankAddress2:
+       type: string
+       description: "Bank Address Line 2"
+       minLength: 0
+       maxLength: 35
+      bankAddress3:
+       type: string
+       description: "Bank Address Line 3"
+       minLength: 0
+       maxLength: 90
+      relationship:
+       type: string
+       description: "the kind of relationship that exists between your bank and the BIC entity. Options are N - No, K - Keys, M - Mail"
+       pattern: '[N,K,M]'
+      swiftKey:
+       type: string
+       description: "If a SWIFT connectivity exists between your bank and the bank for which BIC details are maintained, relationship should be selected as Keys and SWIFT Key should be specified"
+       minLength: 0
+       maxLength: 50
+      telexKey:
+       type: string
+       description: "If a Telex connectivity exists between your bank and the bank for which BIC details are maintained, relationship should be selected as Keys and Telex Key should be specified"
+       minLength: 0
+       maxLength: 50
+      uploadFlag:
+       type: string
+       description: ""
+      uploadUpdate:
+       type: string
+       description: "Indicates whether update is required during upload"
+       pattern: '[Y,N]'
+      genMt103:
+       type: string
+       description: ""
+       pattern: '[Y,N]'
+      blacklisted:
+       type: string
+       description: "Indicates that the BIC entity is also black listed"
+       pattern: '[Y,N]'
+      cugMember:
+       type: string
+       description: "Indicates that the BIC entity is a Closed User Group member"
+       pattern: '[Y,N]'
+      genMt103p:
+       type: string
+       description: ""
+       pattern: '[Y,N]'
+      multiCustTransfer:
+       type: string
+       description: "Indicate whether or not a Multi Credit Transfer Feature [MT102 support] exists between your bank and the BIC entity"
+       pattern: '[Y,N]'
+      maxSize:
+       type: number
+       description: "Indicate the maximum size in bytes, agreed upon between the two parties for transmitting a MT102 message. A null value in this field signifies that there is no limit set on the size of the message"
+       pattern: '([0-9]+)?'
+      remitMember:
+       type: string
+       description: "Indicates that the customer is registered with MT 103 Extended Remittance Information Multi User Group"
+       pattern: '[Y,N]'
+      subTypeCode:
+       type: string
+       description: "Select the appropriate sub-type code to be mapped to the BIC"
+      genMt102p:
+       type: string
+       description: "Check this box to process MT102+ messages. Selecting this check box also required the ?Multi Customer Credit Transfer? checkbox to be selected"
+       pattern: '[Y,N]'
+      genMt101:
+       type: string
+       description: "Indicates whether an MT101 can be sent/received from this BIC. Select this option to generate MT101 message"
+       pattern: '[Y,N]'
+      transactionPerMsg:
+       type: number
+       description: "Indicate the no of transactions to be included in an MT101 message. If you do not specify a value it will be defaulted to 10"
+       pattern: '([0-9]+)?'
+      adbMember:
+       type: string
+       description: "Select a value to indicate membership of the specified BIC code in Asian Development Bank. Options are Y - Yes, N - No, X - Not Applicable"
+       pattern: '[Y,N,X]'
+      beIndicator:
+       type: string
+       description: "Identifies whether the BEI status for the chosen sub-type code is Yes or No"
+       pattern: '[Y,N]'
+     required:
+      - bicCode
+      - bankName
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ # BICDirectoryServiceCollection:
+ #  description: "Collection of bicdirectory."
+ #  type: "object"
+ #  properties:
+ #   data:
+ #    type: "array"
+ #    items:
+ #     $ref: "#/definitions/BICDirectoryServiceDTO"
+ #   paging:
+ #    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ BICDirectoryResponseServiceWrapperDTO:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/BICDirectoryServiceDTO"
+

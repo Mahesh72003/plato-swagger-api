@@ -1,0 +1,596 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : lookups
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server lookups server." 
+ version: "1.0.0"
+ title: "lookups Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "lookups"
+   description: "aksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysagaksdashjdhauseoquwyeuasghdvasbcnbjkzhsduiagdysag"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../lookups
+
+ /lookups:
+  post:
+   tags:
+    - "lookups"
+   summary: "Adds a new lookups."
+   description: "Adds a new lookups. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "lookups" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new lookups" 
+      required: true
+      schema:
+       $ref: "#/definitions/CbsTmLookupsDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created lookups" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "lookups"
+   summary: "Get all valid lookups."
+   description:  "Get all valid lookups. This endpoints will be used to Get all valid lookups maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: includecloseandunauth
+     in: query
+     description: includecloseandunauth need to be set to fetch summary record, defult value is false
+     required: false
+     type: boolean
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: lktType
+     in: query
+     description: lktType look up type  to be fetched
+     required: false
+     type: "string"
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: authStatus
+     in: query
+     description: Authorization Status
+     required: false
+     type: string
+   - name: recordStatus
+     in: query
+     description: Record Status
+     required: false
+     type: string
+   responses:
+    201:
+     description: "Returns message of succes or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/CbsTmLookupsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+# path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+#
+#  supprorted http methods PUT, DELETE and GET
+#
+# path examples----
+#   PUT       .../lookups/xxx
+#   DELETE    .../lookups/xxx
+#   GET       .../lookups/xxx
+#   GET       .../lookups/xxx?version=latestrecord
+#   GET       .../lookups/xxx?version=1
+
+ /lookups/{id}:
+  put:
+   tags:
+    - "lookups"
+   summary: "Update an existing lookups."
+   description:  "Update an existing lookups."
+   operationId: "modifyRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "key of the lookups Maintenance"
+      required: true
+      type: "string"
+    - name: "lookups"
+      in: "body"
+      description: "Request Body that contains data required for updating an existing lookups"
+      required: true
+      schema:
+       $ref: "#/definitions/CbsTmLookupsDTO"
+   responses:
+    200:
+     description: "Returns updated lookups"
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+  get:
+   tags:
+    - "lookups"
+   summary: "Retrieves the lookups by ID."
+   description:  "Retrieves the lookups by ID."
+   operationId: "getById"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+    - name: "version"
+      in: "query"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the lookups based on given id."
+     schema:
+      $ref: "#/definitions/CbsTmLookupsWrapperDTO"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+  delete:
+   tags:
+    - "lookups"
+   summary: "Deletes the lookups identified by given ID."
+   description:  "Deletes the lookups identified by given ID. Add additional information here for the this endpoint."
+   operationId: "delete"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the lookups maintenance"
+      required: true
+      type: "string"
+    - name: "lookups"
+      in: "body"
+      description: Request body contain lookups and Modification no of lookups maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to Authorize existing record.
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../lookups/xxx/approve
+
+ /lookups/{id}/approve:
+  patch:
+   tags:
+    - "lookups"
+   summary: "Authorize the lookups by given ID."
+   description:  "Authorize the lookups identified by given ID."
+   operationId: "authorize"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the lookups maintenance"
+      required: true
+      type: "string"
+    - name: "lookups"
+      in: "body"
+      description: Request body contain lookups and Modification no of lookups maintenance which need to be deleted"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to close existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../lookups/xxx/close
+ /lookups/{id}/close:
+  patch:
+   tags:
+    - "lookups"
+   summary: "Close the lookups by given ID."
+   description:  "Close the lookups identified by given ID."
+   operationId: "closeRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the lookups maintenance"
+      required: true
+      type: "string"
+    - name: "lookups"
+      in: "body"
+      description: Request body contain lookups and Modification no of lookups maintenance which need to be closed"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to reopen existing record
+#
+#  supprorted http methods PATCH
+#
+# path examples----
+#   PATCH       .../lookups/xxx/reopen
+
+ /lookups/{id}/reopen:
+  patch:
+   tags:
+    - "lookups"
+   summary: "reopen the lookups by given ID."
+   description:  "reopen the lookups identified by given ID."
+   operationId: "reopenRecord"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the lookups maintenance"
+      required: true
+      type: "string"
+    - name: "lookups"
+      in: "body"
+      description: Request body contain lookups and Modification no of lookups maintenance which need to be reopen"
+      required: true
+      schema:
+       $ref: "#/definitions/KeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to get all unauthorized records
+#
+#  supprorted http methods GET
+#
+# path examples----
+#   GET       .../lookups/xxx/unauthorized
+
+ /lookups/{id}/unauthorized:
+  get:
+   tags:
+    - "lookups"
+   summary: "Retrives the lookups by given ID."
+   description:  "Retrives the lookups identified by given ID."
+   operationId: "authQuery"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the lookups based on given id."
+     schema:
+       $ref: "#/definitions/CbsTmLookupsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+
+# path to  history record for remitterid
+#
+#  supprorted http methods GETS
+#
+# path examples----
+#   GET       .../lookups/xxx/history
+
+ /lookups/{id}/history:
+  get:
+   tags:
+    - "lookups"
+   summary: "Retrives the lookups by given ID."
+   description:  "Retrives the lookups by ID."
+   operationId: "getHistory"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Id of the user that needs to be fetched"
+      required: true
+      type: "string"
+   responses:
+    200:
+     description: "Returns the lookups based on given id."
+     schema:
+       $ref: "#/definitions/CbsTmLookupsCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+ /lookups/{id}/reject:
+  patch:
+   tags:
+    - "lookups"
+   summary: "Reject the lookups by given ID."
+   description:  "Reject the lookups identified by given ID."
+   operationId: "reject"
+   parameters:
+    - name: "id"
+      in: "path"
+      description: "Key of the maintenance"
+      required: true
+      type: "string"
+    - name: "lookups"
+      in: "body"
+      description: Request body contain Modification no of maintenance which need to be rejected"
+      required: true
+      schema:
+       $ref: "#/definitions/ModListKeyDto"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+      $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+definitions:
+ CbsTmLookupsDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     lktDesc:
+      type: string
+      description: ""
+     lktType:
+      type: string
+      description: ""
+     CbsTmLookupCodesDTO:
+      type: array
+      items:
+       $ref: '#/definitions/CbsTmLookupCodesDTO'
+ CbsTmLookupCodesDTO:
+  type: object
+  properties:
+     id:
+      type: string
+      description: ""
+     lkcCode:
+      type: string
+      description: ""
+     lkcDesc:
+      type: string
+      description: ""
+     lkcEnabledInd:
+      type: string
+      description: ""
+     lkcIdentifier:
+      type: string
+      description: ""
+     lkcSortOrder:
+      type: number
+      description: ""
+     lookupsId:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ CbsTmLookupsCollection: 
+  description: "Collection of lookups."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/CbsTmLookupsDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ CbsTmLookupsWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/CbsTmLookupsDTO"

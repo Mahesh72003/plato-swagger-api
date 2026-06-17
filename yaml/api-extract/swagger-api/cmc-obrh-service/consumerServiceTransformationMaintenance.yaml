@@ -1,0 +1,446 @@
+swagger: '2.0'
+info:
+   description: Maintenance service for oracle banking integration hub.
+   version: 1.0.0
+   title: OBRH Service
+host: api-plato.us.oracle.com:8080
+basePath: /api/1.0
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+-  name: ServiceTransformation
+   description: This service will be used for registering the serviceTransformation with service and route information in
+      order to integrate the 3rd party serviceTransformation with OBDX. Collectively all services will be called as Integration
+      Hub
+schemes:
+- https
+paths:
+   /serviceconsumer/{id}/service/{serviceId}/transformation:
+      post:
+         tags:
+         - ServiceTransformation
+         summary: Adds a new serviceTransformation.
+         description: Adds a new serviceTransformation. Add additional information here for this endpoint.
+         operationId: createRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceTransformation
+            in: body
+            description: Request Body that contains data required for creating a new serviceTransformation
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceTransformationDTO'
+         responses:
+            201:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceTransformation
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceTransformation
+         summary: Get all valid serviceTransformation.
+         description: Get all valid serviceTransformation. This endpoints will be used to Get all valid serviceTransformation
+            maintenance records.
+         operationId: getAll
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: offset
+            in: query
+            description: offset is starting no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: limit
+            in: query
+            description: limit is maximum no of records to be fetched
+            required: true
+            type: integer
+            minimum: 0
+         -  name: filterBy
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterValue
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: string
+         -  name: filterExactMatch
+            in: query
+            description: key of the serviceConsumer Maintenance
+            required: false
+            type: boolean
+         responses:
+            201:
+               description: Returns message of succes or failure
+               headers:
+                  Location:
+                     description: ''
+                     type: string
+               schema:
+                  $ref: '#/definitions/ServiceTransformationCollection'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/service/{serviceId}/transformation/{transformationId}:
+      put:
+         tags:
+         - ServiceTransformation
+         summary: Update an existing serviceTransformation.
+         description: Update an existing serviceTransformation.
+         operationId: modifyRecord
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: transformationId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceTransformation
+            in: body
+            description: Request Body that contains data required for updating an existing serviceTransformation
+            required: true
+            schema:
+               $ref: '#/definitions/ServiceTransformationDTO'
+         responses:
+            200:
+               description: Returns updated serviceTransformation
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error
+      get:
+         tags:
+         - ServiceTransformation
+         summary: Retrieves the serviceTransformation by ID.
+         description: Retrieves the serviceTransformation by ID.
+         operationId: getById
+         parameters:
+         -  name: id
+            in: path
+            description: Id of the user that needs to be fetched
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: transformationId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns the serviceTransformation based on given id.
+               schema:
+                  $ref: '#/definitions/ServiceTransformationWrapperDTO'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+      delete:
+         tags:
+         - ServiceTransformation
+         summary: Deletes the serviceTransformation identified by given ID.
+         description: Deletes the serviceTransformation identified by given ID. Add additional information here for the this
+            endpoint.
+         operationId: deleteRecord
+         parameters:
+         -  name: id
+            in: path
+            description: Key of the serviceTransformation maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: transformationId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Successful operation.
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            500:
+               description: Internal error
+   /serviceconsumer/{id}/service/{serviceId}/transformation/{transformationId}/export:
+      get:
+         tags:
+         - ServiceTransformation
+         summary: Export Consumer Details to a file.
+         description: Update an existing serviceConsumer.
+         operationId: exportTransformation
+         produces:
+         - application/json
+         - application/octet-stream
+         parameters:
+         -  name: id
+            in: path
+            description: Key of the serviceTransformation maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: transformationId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         responses:
+            200:
+               description: Returns updated serviceConsumer
+               schema:
+                  type: object
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error               
+   /serviceconsumer/{id}/service/{serviceId}/transformation/import:
+      post:
+         tags:
+         - ServiceTransformation
+         summary: Adds a new serviceTransformation.
+         description: Adds a new serviceTransformation. Add additional information here for this endpoint.
+         operationId: importTransformation
+         consumes:
+         - multipart/form-data
+         parameters:
+         -  name: id
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: serviceId
+            in: path
+            description: key of the serviceTransformation Maintenance
+            required: true
+            type: string
+            maxLength: 36
+         -  name: file
+            in: formData
+            description: Request Body that contains data required for creating a new serviceConsumer
+            required: true
+            type: file
+         responses:
+            200:
+               description: 'Returns message of succes or failure '
+               headers:
+                  Location:
+                     description: URL of newly created serviceTransformation
+                     type: string
+               schema:
+                  $ref: '#/definitions/ResponseDtoWrapper'
+            400:
+               description: Malformed syntax.
+            401:
+               description: Request does not have sufficient credentials.
+            403:
+               description: Request is not authorized.
+            405:
+               description: Invalid input
+            500:
+               description: Internal error               
+definitions:
+   ServiceTransformationDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            consumerAppServiceId:
+               type: string
+               description: ''
+               maxLength: 36
+            name:
+               type: string
+               description: ''
+               maxLength: 255
+            status:
+               type: string
+               description: ''
+               maxLength: 15
+            providedServiceId:
+               type: string
+               description: ''
+               maxLength: 36
+            isMock:
+               type: string
+               description: ''
+               maxLength: 1
+            serviceProviderImplId:
+               type: string
+               description: ''
+               maxLength: 36
+            reqTransformationTemplate:
+               type: string
+               description: ''
+            reqTransformationTemplateType:
+               type: string
+               description: ''
+               maxLength: 31
+            respTransformationTemplate:
+               type: string
+               description: ''
+            respTransformationTemplateType:
+               type: string
+               description: ''
+               maxLength: 31
+            respMockTransformationTemplate:
+               type: string
+               description: ''
+            ServiceProvider:
+               $ref: '#/definitions/ServiceProviderDTO'
+            ServiceProviderImpl:
+               $ref: '#/definitions/ServiceProviderImplDTO'
+            ProvidedService:
+               $ref: '#/definitions/ProvidedServiceDTO'
+            ServiceTransformationReqParam:
+               $ref: '#/definitions/ServiceTransformationReqParameterDTO'
+            isFactoryShipped:
+               type: string
+               description: ''
+               maxLength: 1
+         required:
+         - consumerAppServiceId    
+         - name    
+         - status    
+         - reqTransformationTemplateType    
+         - respTransformationTemplateType   
+         - providedServiceId
+   ServiceTransformationReqParameterDTO:
+      type: object
+      allOf:
+      -  $ref: '#/definitions/GenericDto'
+      -  type: object
+         properties:
+            pathParams:
+               type: string
+            headers:
+               type: string
+            queryParams:
+               type: string
+   ServiceTransformationCollection:
+      description: Collection of serviceTransformation.
+      type: object
+      properties:
+         data:
+            type: array
+            items:
+               $ref: '#/definitions/ServiceTransformationDTO'
+         paging:
+            $ref: '#/definitions/PagingDto'
+         messages:
+            $ref: '#/definitions/ResponseDto'            
+   ServiceTransformationWrapperDTO:
+      type: object
+      properties:
+         data:
+            $ref: '#/definitions/ServiceTransformationDTO'
+         messages:
+            $ref: '#/definitions/ResponseDto'            
+   GenericDto:
+      allOf:
+      -  type: object
+         discriminator: resource_type

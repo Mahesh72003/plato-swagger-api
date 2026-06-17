@@ -1,0 +1,1228 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Location Services
+host: 10.184.157.121:9000
+basePath: /obcm-collections-maintenance-services
+tags:
+- name: LocationAggregateWeb
+  description: API for data segment crud operations for UI
+- name: LocationAggregateService
+  description: API for data segment crud operations for Services
+schemes:
+- http
+paths:
+  /web/v1/locationmaster:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Get all valid locationmaster."
+    description:  "Get all valid locationmaster. This endpoints will be used to Get all valid location maintenance records."
+    operationId: "getAllLocationMaster"
+    parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: "locationCode"
+      in: "query"
+      description: "locationCode location maintenance"
+      required: false
+      type: "string"
+    - name: "locationDescription"
+      in: "query"
+      description: "location Description of location maintenance"
+      required: false
+      type: "string"
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    responses:
+     201:
+      description: "Returns message of succes or failure"
+      headers: 
+       Location:
+        description: "Response 201"
+        type: "string"
+      schema:
+        $ref: "#/definitions/CmTmLocationMasterCollection"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     405:
+      description: "Invalid input"
+     500:
+      description: "Internal error"
+  /web/v1/networkmaster:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Get all valid networkmaster."
+    description:  "Get all valid networkmaster. This endpoints will be used to Get all valid networkmaster maintenance records."
+    operationId: "getAllNetworkMaster"
+    parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: "networkCode"
+      in: "query"
+      description: "networkCode location maintenance"
+      required: false
+      type: "string"
+    - name: "networkDescription"
+      in: "query"
+      description: "network Description of location maintenance"
+      required: false
+      type: "string"
+    responses:
+     201:
+      description: "Returns message of succes or failure"
+      headers: 
+       Location:
+        description: "Response 201"
+        type: "string"
+      schema:
+        $ref: "#/definitions/CmTmNetworkMasterCollection"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     405:
+      description: "Invalid input"
+     500:
+      description: "Internal error"
+  /web/v1/location:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Adds a new datasegment details.
+      description: Adds a new datasegment details.
+      operationId: createResource
+      parameters:
+      - name: locationWebModel
+        in: body
+        description: Request Body that contains data required for creating a new datasegment
+        required: true
+        schema:
+         $ref: '#/definitions/LocationWebModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created datasegment
+          headers:
+            Location:
+              description: URL of newly created datasegment
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - LocationAggregateWeb
+     summary: "Get all valid master datasegment details"
+     description:  "Get all valid master datasegment. This endpoints will be used to Get all valid master datasegment maintenance records."
+     operationId: "getSummary"
+     parameters:
+     - name: includecloseandunauth
+       in: query
+       description: includecloseandunauth need to be set to fetch summary record, defult value is false
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: offset is starting no of records to be fetched
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: limit is maximum no of records to be fetched
+       required: false
+       type: integer
+     - name: authStat
+       in: query
+       description: auth status of the records to be fetched
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: records status of the records to be fetched
+       required: false
+       type: string
+     - name: locationCode
+       in: query
+       required: false
+       type: string
+     - name: locationDescription
+       in: query
+       required: false
+       type: string
+     - name: locationClusterCode
+       in: query
+       required: false
+       type: string 
+     - name: correspondentBanks
+       description: correspondent bank name description
+       in: query
+       required: false
+       type: string
+     - name: outsideNetworkBanks
+       description: outside network bank name description
+       in: query
+       required: false
+       type: string     
+     - name: ownBranches
+       description: own Branch for location maintenance
+       in: query
+       required: false
+       type: string
+     responses:
+      200:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         $ref: '#/definitions/CmTmLocationLinkCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /web/v1/location/{resourceId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Retrieves the datasegment deatils by resourceId.
+      description: Retrieves the datasegment deatils by resourceId.
+      operationId: getByResourceId
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id of the datasegment that needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: datasegmentCode of the datasegment
+        type: string
+      - name: version
+        in: query
+        description: version of the datasegment
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: "provides only latest lates auth records if true"
+        required: false
+        default: false
+        type: boolean               
+      responses:
+        200:
+          description: Returns the datasegment based on given resourceId.
+          schema:
+            $ref: '#/definitions/LocationWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Update an existing datasegment.
+      description: Update an existing datasegment.
+      operationId: updateResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be updated
+        required: true
+        type: string
+      - name: locationWebModel
+        in: body
+        description: Request Body that contains data required for updating an existing datasegment
+        required: true
+        schema:
+          $ref: '#/definitions/LocationWebModel'
+      responses:
+        202:
+          description: Returns updated datasegment Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/location/{resourceId}/delete:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Delete the resource based on the resourceId and version.
+      description: Deleting the resource.
+      operationId: deleteResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be deleted
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be deleted
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/location/{resourceId}/isValid:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Validates the resource by Resource Id.
+      description: Validates the resource by Resource Id.
+      operationId: validateResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be validated
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: version for which validation is required
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/location/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Submit for the Resource.
+      description: Validates datasegments and submits the resource.
+      operationId: submitResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be submited
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/location/{id}/reject:
+    patch:
+      tags:
+      - LocationAggregateWeb
+      summary: "Rejects the resource by given Resource Id"
+      description: Rejects the resource by given Resource Id
+      operationId: reject
+      parameters:
+      - name: id
+        in: path
+        description: Resource Id that needs to be closed
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be rejected
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/location/{resourceId}/unauthorized:
+    get:
+      tags:
+      - LocationAggregateWeb
+      summary: "Retrives the unauthorized resource by given resource id"
+      description:  "Retrives the unauthorized resource identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/CmTmLocationLinkCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/location/{resourceId}/authorize:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Authorize the resource.
+      description: Authorize the resource and moves the latest data from all worktables to main tables.
+      operationId: authorizeResource
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource id of the resource
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be authorized
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/location/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: removes the advisory lock on the resource.
+      description: removes the advisory lock on the resource.
+      operationId: removeResourceLock
+      parameters:
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /web/v1/location/{resourceId}/actions:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: provides action for Resource Id.
+      description: provides action for Resource Id.
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id for which actions needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/location/{resourceId}/history:
+    get:
+      tags:
+      - LocationAggregateWeb  
+      summary: "Retrives the history by given Resource Id"
+      description:  "Retrives the history by given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Successful operation.
+          schema:          
+            $ref: '#/definitions/CmTmLocationLinkCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /web/v1/location/{resourceId}/close:
+    patch:
+      tags:
+      - LocationAggregateWeb  
+      summary: "Closes the resource by given Resource Id"
+      description:  "Closes the resource by given Resource Id"
+      operationId: "closeResource"
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be closed
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be closed
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /web/v1/location/{resourceId}/reopen:
+    patch:
+      tags:
+      - LocationAggregateWeb    
+      summary: "reopen the resource by given Resource Id"
+      description:  "reopen the resource by given Resource Id"
+      operationId: "reopenResource"
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be reopned 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be reopened
+        required: true
+        schema:
+         $ref: "#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/location/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - LocationAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceAggregate
+      parameters:
+      - name: keyId
+        in: path
+        description: keyId for which the data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/LocationWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /service/v1/location:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Get all valid location."
+    description:  "Get all valid location. This endpoints will be used to Get all valid location maintenance records."
+    operationId: "getAll"
+    parameters:
+    - name: "userId"
+      in: "header"
+      description: "userId"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "branchCode"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      description: "App ID"
+      required: true
+    - name: includecloseandunauth
+      in: query
+      description: includecloseandunauth need to be set to fetch summary record, defult value is false
+      required: false
+      type: boolean
+    - name: offset
+      in: query
+      description: offset is starting no of records to be fetched
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: limit is maximum no of records to be fetched
+      required: false
+      type: integer
+    - in: query
+      name: locationCode
+      required: false
+      type: string
+    - in: query
+      name: locationDescription
+      required: false
+      type: string
+    - in: query
+      name: locationClusterCode
+      required: false
+      type: string
+    - name: authStat
+      in: query
+      description: authStatus need to be set to fetch summary record
+      required: false
+      type: string
+    - name: recordStat
+      in: query
+      description: recordStatus need to be set to fetch summary record
+      required: false
+      type: string
+    responses:
+     201:
+      description: "Returns message of succes or failure"
+      headers: 
+       Location:
+        description: "Response 201"
+        type: "string"
+      schema:
+        $ref: "#/definitions/CmTmLocationLinkCollection"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     405:
+      description: "Invalid input"
+     500:
+      description: "Internal error"
+ 
+ # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+ #
+ #  supprorted http methods PUT, DELETE and GET
+ #
+ # path examples----
+ #   PUT       .../location/xxx
+ #   DELETE    .../location/xxx
+ #   GET       .../location/xxx
+ #   GET       .../location/xxx?version=latestrecord
+ #   GET       .../location/xxx?version=1
+          
+  /service/v1/location/{locationCode}:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Retrieves the location by locationCode."
+    description:  "Retrieves the location by locationCode."
+    operationId: "getByLocationCode"
+    parameters:
+     - name: "userId"
+       in: "header"
+       description: "userId"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "branchCode"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App ID"
+       required: true
+     - name: "locationCode"
+       in: "path"
+       description: "locationCode of the location that needs to be fetched"
+       required: true
+       type: "string"
+     - name: "recordStat"
+       in: "query"
+       description: "recordStat of the location that needs to be fetched"
+       required: false
+       type: "string"
+    responses:
+     200:
+      description: "Returns the location based on given id."
+      schema:
+       $ref: "#/definitions/CmTmLocationLinkWrapperDTO"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     500:
+      description: "Internal error"
+  /service/v1/location/corrbanks/{locationCode}:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Retrieves the location by locationCode."
+    description:  "Retrieves the location by locationCode."
+    operationId: "getCorrBanksByLocationCode"
+    parameters:
+     - name: "userId"
+       in: "header"
+       description: "userId"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "branchCode"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App ID"
+       required: true
+     - name: "locationCode"
+       in: "path"
+       description: "locationCode of the location that needs to be fetched"
+       required: true
+       type: "string"
+    responses:
+     200:
+      description: "Returns the location based on given id."
+      schema:
+       $ref: "#/definitions/CmTmLocCorrBankCollection"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     500:
+      description: "Internal error"
+      
+  /service/v1/location/osnwbanks/{locationCode}:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Retrieves the location by locationCode."
+    description:  "Retrieves the location by locationCode."
+    operationId: "getOsNwBanksByLocationCode"
+    parameters:
+     - name: "userId"
+       in: "header"
+       description: "userId"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "branchCode"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App ID"
+       required: true
+     - name: "locationCode"
+       in: "path"
+       description: "locationCode of the location that needs to be fetched"
+       required: true
+       type: "string"
+    responses:
+     200:
+      description: "Returns the location based on given id."
+      schema:
+       $ref: "#/definitions/CmTmLocOsNwCollection"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     500:
+      description: "Internal error"
+  /service/v1/locationmaster/{locationCode}:
+   get:
+    tags:
+     - "LocationAggregateWeb"
+    summary: "Retrieves the location by locationCode."
+    description:  "Retrieves the location by locationCode."
+    operationId: "getLoactionMasterByLocationCode"
+    parameters:
+     - name: "userId"
+       in: "header"
+       description: "userId"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "branchCode"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App ID"
+       required: true
+     - name: "locationCode"
+       in: "path"
+       description: "locationCode of the location that needs to be fetched"
+       required: true
+       type: "string"
+    responses:
+     200:
+      description: "Returns the location based on given id."
+      schema:
+       $ref: "#/definitions/CmTmLocationMasterCollection"
+     400:
+      description: "Malformed syntax."
+     401:
+      description: "Request does not have sufficient credentials."
+     403:
+      description: "Request is not authorized."
+     500:
+      description: "Internal error"                                
+definitions:
+  LocationAggregateModel:
+    description: LocationAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       cmTmLocationLink:
+        $ref: '#/definitions/CmTmLocationLinkDTO'
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+  BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type                         
+  LocationAggregateModelCollection:
+    description: Collection of  LocationAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LocationAggregateModel'
+  LocationWebModel:
+    description: LocationWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      makerId:
+        description: maker id
+        type: string
+      makerDateStamp:
+        description: make date stamp
+        type: string
+      checkerId:
+        description: check id
+        type: string
+      checkerDateStamp:
+        description: checker date stamp
+        type: string
+      modNo:
+        description: mod no
+        type: integer
+      recordStatus:
+        description: record status flag
+        type: string
+      authStatus:
+        description: auth status flag
+        type: string
+      onceAuth:
+        description: once auth flag
+        type: string
+      doerRemarks:
+        description: doer remarks
+        type: string
+      approverRemarks:
+        description: approver  remarks
+        type: string        
+      cmTmLocationLink:
+        $ref: '#/definitions/CmTmLocationLinkDTO'      
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType         
+  LocationWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/LocationWebModel'
+  CmTmLocationMasterCollection: 
+   description: "Collection of Location Master."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmTmLocationMasterDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  CmTmLocationMasterDTO:
+   type: object
+   properties:
+      id:
+       type: string
+       description: "ID"
+      locationCode:
+       type: string
+       description: "Location Code"
+      locationDescription:
+       type: string
+       description: "Location Description"
+      countryCode:
+       type: string
+       description: "Country Code"
+      stateCode:
+       type: string
+       description: "State Code"
+      locationType:
+       type: string
+       description: "Location Type"
+  CmTmNetworkMasterCollection: 
+   description: "Collection of Network Master DTO"
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmTmNetworkMasterDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  PagingDto:
+   description: "Paging DTO"
+   type: object
+   properties:
+    totalResults:
+     type: integer
+     description: "Total Results"          
+  CmTmNetworkMasterDTO:
+   description: "CmTmNetworkMaster DTO"
+   type: object
+   properties:
+      id:
+       type: string
+       description: "ID"
+      networkCode:
+       type: string
+       description: "Network Code"
+      networkDescription:
+       type: string
+       description: "Network Description"
+  CmTmLocCorrBankCollection: 
+   description: "Collection of CmTmLocCorrBank DTO."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmTmLocCorrBankDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"     
+  CmTmLocCorrBankDTO:
+   description: "CmTmLocCorrBank DTO"
+   type: object
+   properties:
+      bankCode:
+       type: string
+       description: "Bank Code"
+      bankDescription:
+       type: string
+       description: "Bank Description"
+      branchCode:
+       type: string
+       description: "Branch Code"
+      branchDescription:
+       type: string
+       description: "Branch Description"
+      id:
+       type: string
+       description: "ID"
+      locationCode:
+       type: string
+       description: "Location Code"
+      locationMasterId:
+       type: string
+       description: "Location Master ID"
+      priority:
+       type: number
+       description: "Priority"
+  CmTmLocOsNwCollection: 
+   description: "Collection of CmTmLocOsNwBank DTO."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/CmTmLocOsNwBankDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"       
+  CmTmLocOsNwBankDTO:
+   description: "CmTmLocOsNwBank DTO"
+   type: object
+   properties:
+      bankCode:
+       type: string
+       description: "Bank Code"
+      bankDescription:
+       type: string
+       description: "Bank Description"
+      branchCode:
+       type: string
+       description: "Branch Code"
+      branchDescription:
+       type: string
+       description: "Branch Description"
+      id:
+       type: string
+       description: "ID"
+      locationCode:
+       type: string
+       description: "Location Code"
+      locationMasterId:
+       type: string
+       description: "Location Master ID"
+      priority:
+       type: number
+       description: "Priority"

@@ -1,0 +1,309 @@
+#----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : businessactivity.yaml
+#  **
+#  ** Module     : 
+#  ** 
+ 
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Loan Application Service
+host: 10.184.157.121:9000
+basePath: /loanapplication-services
+tags:
+- name: LoanApplication
+  description: API for LoanApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/businessactivities:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - BusinessActivities
+      summary: Adds a new BusinessActivity.
+      description: Adds a new BusinessActivity. Add additional information here for this endpoint.
+      operationId: addBusinessActivity
+      parameters:
+      - name: BusinessActivity
+        in: body
+        description: Request Body that contains data required for creating a new BusinessActivity
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessActivityModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created BusinessActivity
+          headers:
+            Location:
+              description: URL of newly created BusinessActivity
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - BusinessActivities
+      summary: Retrieves the list of existing BusinessActivity.
+      description: Retrieves the list of existing BusinessActivity. Add additional information here for the this endpoint.
+      operationId: getAllBusinessActivity
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/businessactivities/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - BusinessActivities
+      summary: Get a  BusinessActivity.
+      description: Update a  BusinessActivity. Add additional information here for the this endpoint.
+      operationId: getBusinessActivityById
+      parameters:
+      - name: id
+        in: path
+        description: id of the BusinessActivity that need to be retrieved
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns updated BusinessActivity
+          schema:
+            $ref: '#/definitions/BusinessActivityModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - BusinessActivities
+      summary: Update an existing BusinessActivity.
+      description: Update an existing BusinessActivity. Add additional information here for the this endpoint.
+      operationId: updateBusinessActivity
+      parameters:
+      - name: id
+        in: path
+        description: id of the BusinessActivity that need to be updated
+        required: true
+        type: string
+      - name: BusinessActivity
+        in: body
+        description: Request Body that contains data required for updating an existing BusinessActivity
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessActivityModel'
+      responses:
+        200:
+          description: Returns updated BusinessActivity
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - BusinessActivities
+      summary: Deletes the ABusinessActivityidentified by given ID.
+      description: Deletes the BusinessActivity identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteBusinessActivity
+      parameters:
+      - name: id
+        in: path
+        description: Id of the BusinessActivity that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  BusinessActivityModel:
+   description: BusinessActivity model
+   type: object
+   allOf:
+   - $ref: '#/definitions/GenericDatasegmentModel'
+   - type: object
+     properties:
+      entityType:
+        description: entityType of the BusinessActivity
+        type: string
+        maxLength: 20
+      businessNature:
+        description: businessNature of the BusinessActivity
+        type: string
+      exportImportLicenceNo:
+        description: exportImportLicenceNo of the BusinessActivity
+        type: string
+        minLength: 0
+        maxLength: 20
+      companyDetails:
+        description: Details of the companyDetails
+        type: array
+        items:
+          $ref: '#/definitions/CompanyDetailsModel'
+      yearWiseDetails:
+        description: Details of the yearWiseDetails
+        type: array
+        items:
+          $ref: '#/definitions/YearWiseDetailsModel'
+      businessActivityDocument:
+        description: businessActivityDocument of the BusinessActivity
+        type: array
+        items:
+          $ref: '../clmo-ds-utility/documentLinkage.yaml#/definitions/DocumentLinkageModel'
+  CompanyDetailsModel:
+    description: CompanyDetailsModel
+    type: object
+    properties:
+      id:
+        description: Id of the CompanyDetailsModel
+        type: string
+        maxLength: 36          
+      businessActivityId:
+        description: businessActivityId
+        type: string
+        maxLength: 36
+      parentCompanyName:
+        description: parentCompanyName
+        type: string
+        maxLength: 50
+      shareHoldingPercent:
+        description: shareHoldingPercent
+        type: integer
+        format: int64
+  YearWiseDetailsModel:
+    description: YearWiseDetailsModel
+    type: object
+    properties:
+      id:
+        description: Id of the YearWiseDetailsModel
+        type: string
+        maxLength: 36          
+      businessActivityId:
+        description: businessActivityId
+        type: string
+        maxLength: 36
+      year:
+        description: year
+        type: string
+        maxLength: 36
+      currencyCode:
+        description: currencyCode
+        type: string
+        maxLength: 36        
+      balanceSheetSize:
+        description: balanceSheetSize
+        type: integer
+        format: int64
+      operatingProfit:
+        description: operatingProfit
+        type: integer
+        format: int64
+      netProfit:
+        description: netProfit
+        type: integer
+        format: int64                                                   
+  BusinessActivityCollection:
+    description: Collection of BusinessActivity.
+    type: object
+    properties:
+      BusinessActivityList:
+        type: array
+        items:
+          $ref: '#/definitions/BusinessActivityModel'
+  GenericDatasegmentModel:
+   allOf:
+    - type: object
+      discriminator: resource_type

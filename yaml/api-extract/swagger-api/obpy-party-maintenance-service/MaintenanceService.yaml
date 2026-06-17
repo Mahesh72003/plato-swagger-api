@@ -1,0 +1,744 @@
+swagger: '2.0'
+info:
+  description: This is a sample server Party Maintenance server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Party-Maintenance-Service
+host: whf00bdm:7801
+basePath: /obpy-party-maintenance-service
+consumes:
+  - application/json
+  - application/xml
+produces:
+  - application/json
+  - application/xml
+tags:
+  - name: PartyMaintenanceApi
+    description: API for Party  Operations
+schemes:
+  - http
+paths:
+  /maskdefinitions:
+    post:
+      tags:
+        - "maskdefinitions"
+      summary: "Adds a new maskdefinitions."
+      description: "Adds a new maskdefinitions. Add additional information here for this endpoint."
+      operationId: "saveRecord"
+      parameters:
+        - name: "maskdefinitions"
+          in: "body"
+          description: "Request Body that contains data required for creating a new maskdefinitions"
+          required: true
+          schema:
+            $ref: "#/definitions/ObpyTmMaskDefinitionDTO"
+      responses:
+        201:
+          description: "Returns message of succes or failure "
+          headers:
+            Location:
+              description: "URL of newly created maskdefinitions"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "maskdefinitions"
+      summary: "Get all valid maskdefinitions."
+      description: "Get all valid maskdefinitions. This endpoints will be used to Get all valid maskdefinitions maintenance records."
+      operationId: "getAll"
+      parameters:
+        - name: includecloseandunauth
+          in: query
+          description: includecloseandunauth need to be set to fetch summary record, defult value is false
+          required: false
+          type: boolean
+        - name: offset
+          in: query
+          description: offset is starting no of records to be fetched
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          description: limit is maximum no of records to be fetched
+          required: false
+          type: integer
+      responses:
+        201:
+          description: "Returns message of succes or failure"
+          headers:
+            Location:
+              description: ""
+              type: "string"
+          schema:
+            $ref: "#/definitions/ObpyTmMaskDefinitionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+
+    # path to modify existing record, delete existing record and fetch valid records by id or by intent( includes latestRecord, version no)
+    #
+    #  supprorted http methods PUT, DELETE and GET
+    #
+    # path examples----
+    #   PUT       .../maskdefinitions/xxx
+    #   DELETE    .../maskdefinitions/xxx
+    #   GET       .../maskdefinitions/xxx
+    #   GET       .../maskdefinitions/xxx?version=latestrecord
+    #   GET       .../maskdefinitions/xxx?version=1
+  /maskdefinitions/{id}:
+    put:
+      tags:
+        - "maskdefinitions"
+      summary: "Update an existing maskdefinitions."
+      description: "Update an existing maskdefinitions."
+      operationId: "modifyRecord"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "key of the maskdefinitions Maintenance"
+          required: true
+          type: "string"
+        - name: "maskdefinitions"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing maskdefinitions"
+          required: true
+          schema:
+            $ref: "#/definitions/ObpyTmMaskDefinitionDTO"
+      responses:
+        200:
+          description: "Returns updated maskdefinitions"
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+    get:
+      tags:
+        - "maskdefinitions"
+      summary: "Retrieves the maskdefinitions by ID."
+      description: "Retrieves the maskdefinitions by ID."
+      operationId: "getById"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+        - name: "version"
+          in: "query"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the maskdefinitions based on given id."
+          schema:
+            $ref: "#/definitions/ObpyTmMaskDefinitionWrapperDTO"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+    delete:
+      tags:
+        - "maskdefinitions"
+      summary: "Deletes the maskdefinitions identified by given ID."
+      description: "Deletes the maskdefinitions identified by given ID. Add additional information here for the this endpoint."
+      operationId: "delete"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the maskdefinitions maintenance"
+          required: true
+          type: "string"
+        - name: "maskdefinitions"
+          in: "body"
+          description: Request body contain maskdefinitions and Modification no of maskdefinitions maintenance which need to be deleted"
+          required: true
+          schema:
+            $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+    # path to Authorize existing record.
+    #
+    #  supprorted http methods PATCH
+    #
+    # path examples----
+    #   PATCH       .../maskdefinitions/xxx/approve
+  /maskdefinitions/{id}/approve:
+    patch:
+      tags:
+        - "maskdefinitions"
+      summary: "Authorize the maskdefinitions by given ID."
+      description: "Authorize the maskdefinitions identified by given ID."
+      operationId: "authorize"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the maskdefinitions maintenance"
+          required: true
+          type: "string"
+        - name: "maskdefinitions"
+          in: "body"
+          description: Request body contain maskdefinitions and Modification no of maskdefinitions maintenance which need to be deleted"
+          required: true
+          schema:
+            $ref: "#/definitions/ModListKeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to close existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../maskdefinitions/xxx/close
+  /maskdefinitions/{id}/close:
+    patch:
+      tags:
+        - "maskdefinitions"
+      summary: "Close the maskdefinitions by given ID."
+      description: "Close the maskdefinitions identified by given ID."
+      operationId: "closeRecord"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the maskdefinitions maintenance"
+          required: true
+          type: "string"
+        - name: "maskdefinitions"
+          in: "body"
+          description: Request body contain maskdefinitions and Modification no of maskdefinitions maintenance which need to be closed"
+          required: true
+          schema:
+            $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to reopen existing record
+  #
+  #  supprorted http methods PATCH
+  #
+  # path examples----
+  #   PATCH       .../maskdefinitions/xxx/reopen
+
+  /maskdefinitions/{id}/reopen:
+    patch:
+      tags:
+        - "maskdefinitions"
+      summary: "reopen the maskdefinitions by given ID."
+      description: "reopen the maskdefinitions identified by given ID."
+      operationId: "reopenRecord"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Key of the maskdefinitions maintenance"
+          required: true
+          type: "string"
+        - name: "maskdefinitions"
+          in: "body"
+          description: Request body contain maskdefinitions and Modification no of maskdefinitions maintenance which need to be reopen"
+          required: true
+          schema:
+            $ref: "#/definitions/KeyDto"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to get all unauthorized records
+  #
+  #  supprorted http methods GET
+  #
+  # path examples----
+  #   GET       .../maskdefinitions/xxx/unauthorized
+
+  /maskdefinitions/{id}/unauthorized:
+    get:
+      tags:
+        - "maskdefinitions"
+      summary: "Retrives the maskdefinitions by given ID."
+      description: "Retrives the maskdefinitions identified by given ID."
+      operationId: "authQuery"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the maskdefinitions based on given id."
+          schema:
+            $ref: "#/definitions/ObpyTmMaskDefinitionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+
+  # path to  history record for remitterid
+  #
+  #  supprorted http methods GETS
+  #
+  # path examples----
+  #   GET       .../maskdefinitions/xxx/history
+
+  /maskdefinitions/{id}/history:
+    get:
+      tags:
+        - "maskdefinitions"
+      summary: "Retrives the maskdefinitions by given ID."
+      description: "Retrives the maskdefinitions by ID."
+      operationId: "getHistory"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id of the user that needs to be fetched"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Returns the maskdefinitions based on given id."
+          schema:
+            $ref: "#/definitions/ObpyTmMaskDefinitionCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /maskdefinitions/generate/{maskKey}:
+    post:
+      tags:
+        - "maskdefinitions"
+      summary: "Generate a mask id for the given maskKey"
+      description: "Generate a new id from the given mask key."
+      operationId: "generateId"
+      parameters:
+        - name: "maskKey"
+          in: "path"
+          description: "Mask Key Persisted in Mask Definitions"
+          required: true
+          type: "string"
+        - name: "maskVariables"
+          in: "body"
+          description: "Request Body that contains data required for creating a new id from mask key"
+          required: true
+          schema:
+            $ref: "#/definitions/MaskVariables"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Returns the newly generated id"
+          headers:
+            Location:
+              description: "URL of newly created id"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+  /service/v1/getPartyId/{maskKey}:
+    post:
+      tags:
+        - "partyMaintenanceService"
+      summary: "Generate a mask id for the given maskKey"
+      description: "Generate a new id from the given mask key."
+      operationId: "generateId"
+      parameters:
+        - name: "maskKey"
+          in: "path"
+          description: "Mask Key Persisted in Mask Definitions"
+          required: true
+          type: "string"
+        - name: "maskVariables"
+          in: "body"
+          description: "Request Body that contains data required for creating a new id from mask key"
+          required: true
+          schema:
+            $ref: "#/definitions/MaskVariables"
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+      responses:
+        201:
+          description: "Returns the newly generated id"
+          headers:
+            Location:
+              description: "URL of newly created id"
+              type: "string"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"
+ 
+  /service/v1/location/getAll:
+    get:
+      tags:
+        - "locationMaintenanceService"
+      summary: "Retrieves the list of existing location details."
+      description:  "Retrieves the list of existing location details."
+      operationId: "getAllServiceLocation"
+      parameters:
+        - name: "locCode"
+          in: "query"
+          description: "location code of the details that needs to be fetched"
+          type: "string"
+          required: false
+        - name: "description"
+          in: "query"
+          description: "description of the details that needs to be fetched"
+          type: "string"
+          required: false                
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: limit
+          in: query
+          required: false
+          description: limit to be fetched
+          type: integer
+        - name: offset
+          in: query
+          required: false
+          description: offset of the limit
+          type: integer          
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error."           
+           
+definitions:
+  ObpyTmMaskDefinitionDTO:
+    type: object
+    allOf:
+      - $ref: '#/definitions/GenericDto'
+      - type: object
+        properties:
+          maskKey:
+            type: string
+            description: ""
+          maskDescription:
+            type: string
+            description: ""
+          keyId:
+            type: string
+          makerId:
+            type: string
+          makerDateStamp:
+            type: string
+            format: "date" #TODO
+          checkerId:
+            type: string
+          checkerDateStamp:
+            type: string
+            format: "date" #TODO
+          authStatus:
+            type: string
+          onceAuth:
+            type: string
+          recordStatus:
+            type: string
+          modNo:
+            type: integer #TODO
+          ObpyTmMaskDefinitionDetailsDTO:
+            type: array
+            items:
+              $ref: '#/definitions/ObpyTmMaskDefinitionDetailsDTO'
+  ObpyTmMaskDefinitionDetailsDTO:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ""
+      maskKey:
+        type: string
+        description: ""
+      maskComponent:
+        type: string
+        description: ""
+      sequenceOrder:
+        type: string
+        description: ""
+      componentText:
+        type: string
+        description: ""
+      parentId:
+        type: string
+        description: ""
+      remarks:
+        type: string
+        description: ""
+  ModListKeyDto:
+    type: object
+    properties:
+      modNos:
+        type: array
+        items:
+          type: integer
+      remarks:
+        type: string
+  KeyDto:
+    type: object
+    properties:
+      modNo:
+        type: integer
+      remarks:
+        type: string
+  ResponseDto:
+    type: object
+    properties:
+      id:
+        type: string
+      status:
+        type: string
+      codes:
+        type: array
+        items:
+          $ref: "#/definitions/ResponseCode"
+      requestId:
+        type: string
+  ResponseCode:
+    type: object
+    properties:
+      Code:
+        type: string
+      Desc:
+        type: string
+      Type:
+        type: string
+      Language:
+        type: string
+      args:
+        type: array
+        items:
+          type: object
+      arg:
+        type: string
+  GenericDto:
+    allOf:
+      - type: object
+        discriminator: resource_type
+  ObpyTmMaskDefinitionCollection:
+    description: "Collection of maskdefinition."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/ObpyTmMaskDefinitionDTO"
+      paging:
+        $ref: "#/definitions/PagingDto"
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+  ResponseDtoWrapper:
+    type: object
+    properties:
+      messages:
+        $ref: "#/definitions/ResponseDto"
+      data:
+        $ref: "#/definitions/ResponseResourceSupport"
+  ResponseResourceSupport:
+    type: object
+  ObpyTmMaskDefinitionWrapperDTO:
+    type: object
+    properties:
+      data:
+        $ref: "#/definitions/ObpyTmMaskDefinitionDTO"
+  MaskVariables:
+    type: object
+    properties:
+      sequenceNumber:
+        type: integer
+  ResponseModel:
+    properties:
+      errors:
+        type: object
+      data:
+        type: object
+      paging:
+        type: object

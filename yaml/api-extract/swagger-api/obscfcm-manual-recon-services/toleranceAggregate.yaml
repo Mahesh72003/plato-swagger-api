@@ -1,0 +1,1491 @@
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Tolerance Services
+host: 10.184.157.121:9000
+basePath: /obscfcm-manual-recon-services
+tags:
+- name: ToleranceAggregateWeb
+  description: API for tolerance related operations
+
+schemes:
+- http
+paths:
+  /web/v1/tolerance:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Adds a new datasegment details.
+      description: Adds a new datasegment details.
+      operationId: createResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true   
+      - name: tolerance
+        in: body
+        description: Request Body that contains data required for creating a new tolerance
+        required: true
+        schema:
+         $ref: '#/definitions/ToleranceWebModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created datasegment
+          headers:
+            Location:
+              description: URL of newly created datasegment
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'              
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+     tags:
+      - ToleranceAggregateWeb
+     summary: "Get all valid master tolerance details"
+     description:  "Get all valid master tolerance. This endpoints will be used to Get all valid master tolerance maintenance records."
+     operationId: "getSummary"
+     parameters:
+     - name: userId
+       in: header
+       description: userId
+       required: true
+       type: string
+     - name: branchCode
+       in: header
+       description: branchCode
+       required: true
+       type: string
+     - name: appId
+       in: header
+       type: string
+       required: true 
+     - name: includecloseandunauth
+       in: query
+       description: includecloseandunauth need to be set to fetch summary record, defult value is false
+       required: false
+       type: boolean
+     - name: offset
+       in: query
+       description: offset is starting no of records to be fetched
+       required: false
+       type: integer
+     - name: limit
+       in: query
+       description: limit is maximum no of records to be fetched
+       required: false
+       type: integer 
+     - name: authStat
+       in: query
+       description: auth status of the records to be fetched
+       required: false
+       type: string
+     - name: recordStat
+       in: query
+       description: records status of the records to be fetched
+       required: false
+       type: string
+     - in: query
+       name: filterAttr1
+       required: false
+       type: string
+     - in: query
+       name: filterAttr2
+       required: false
+       type: string
+     - in: query
+       name: filterAttr3
+       required: false
+       type: string
+     - in: query
+       name: filterAttr4
+       required: false
+       type: string       
+     - in: query
+       name: filterAttr5
+       required: false
+       type: string
+     - in: query
+       name: filterAttr6
+       required: false
+       type: string
+     - in: query
+       name: filterAttr7
+       required: false
+       type: string
+     - in: query
+       name: filterAttr8
+       required: false
+       type: string
+     - in: query
+       name: filterAttr9
+       required: false
+       type: string
+     - in: query
+       name: filterAttr10
+       required: false
+       type: string      
+     responses:
+      200:
+       description: "Returns message of succes or failure"
+       headers: 
+        Location:
+         description: ""
+         type: "string"
+       schema:
+         $ref: '#/definitions/ObscfcmTmToleranceMasterCollection'
+      400:
+       description: "Malformed syntax."
+      401:
+       description: "Request does not have sufficient credentials."
+      403:
+       description: "Request is not authorized."
+      404:
+       description: "Not found"       
+      405:
+       description: "Invalid input"
+      500:
+       description: "Internal error"            
+  /web/v1/tolerance/{resourceId}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Retrieves the datasegment deatils by resourceId.
+      description: Retrieves the datasegment deatils by resourceId.
+      operationId: getByResourceId
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the datasegment that needs to be fetched
+        required: true
+        type: string
+      - name: datasegmentCode
+        in: query
+        description: datasegmentCode of the datasegment
+        type: string
+      - name: version
+        in: query
+        description: version of the datasegment
+        type: string
+      - name: latestAuthRecord
+        in: query
+        description: provides only latest lates auth records if true
+        required: false
+        default: false
+        type: boolean
+      - name: applicationCode
+        in: query
+        description: applicationCode
+        required: false
+        type: string    
+      responses:
+        200:
+          description: Returns the datasegment based on given resourceId.
+          schema:
+            $ref: '#/definitions/ToleranceWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        404:
+          description: Not found       
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Update an existing tolerance.
+      description: Update an existing tolerance.
+      operationId: updateResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be updated
+        required: true
+        type: string
+      - name: tolerance
+        in: body
+        description: Request Body that contains data required for updating an existing datasegment
+        required: true
+        schema:
+          $ref: '#/definitions/ToleranceWebModel'
+      responses:
+        202:
+          description: Returns updated datasegment Details
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'          
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/tolerance/{resourceId}/delete:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Delete the resource based on the resourceId and version.
+      description: Deleting the resource.
+      operationId: deleteResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true  
+      - name: resourceId
+        in: path
+        description: Resource Id of the resource that need to be deleted
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be deleted
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/tolerance/{resourceId}/isValid:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Validates the resource by Resource Id.
+      description: Validates the resource by Resource Id.
+      operationId: validateResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true  
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be validated
+        required: true
+        type: string
+      - name: version
+        in: query
+        description: version for which validation is required
+        required: true
+        type: integer        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/tolerance/{resourceId}/submit:
+    patch:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Submit for the Resource.
+      description: Validates datasegments and submits the resource.
+      operationId: submitResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be submited
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/tolerance/{resourceId}/unauthorized:
+    get:
+      tags:
+      - ToleranceAggregateWeb
+      summary: "Retrives the unauthorized resource by given resource id"
+      description:  "Retrives the unauthorized resource identified by given resource id"
+      operationId: "getUnAuthResource"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ObscfcmTmToleranceMasterCollection'
+        400:           
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/tolerance/{resourceId}/authorize:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Authorize the resource.
+      description: Authorize the resource and moves the latest data from all worktables to main tables.
+      operationId: authorizeResource
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource id of the resource
+        required: true
+        type: string
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be authorized
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'
+      responses:
+        200:
+          description: Returns the success
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/tolerance/{resourceId}/unlock:
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: removes the advisory lock on the resource.
+      description: removes the advisory lock on the resource.
+      operationId: removeResourceLock
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error    
+  /web/v1/tolerance/{resourceId}/actions:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: provides action for Resource Id.
+      description: provides action for Resource Id.
+      operationId: getPermittedActionsOnRes
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id for which actions needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/String'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/tolerance/{resourceId}/history:
+    get:
+      tags:
+      - ToleranceAggregateWeb  
+      summary: "Retrives the history by given Resource Id"
+      description:  "Retrives the history by given Resource Id"
+      operationId: "getResourceHistory"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: resourceId of the resource
+        required: true
+        type: string      
+      responses:
+        200:
+          description: Successful operation.
+          schema:          
+            $ref: '#/definitions/ObscfcmTmToleranceMasterCollection'
+ 
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error        
+  /web/v1/tolerance/{resourceId}/close:
+    patch:
+      tags:
+      - ToleranceAggregateWeb  
+      summary: "Closes the resource by given Resource Id"
+      description:  "Closes the resource by given Resource Id"
+      operationId: "closeResource"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be closed
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be closed
+        required: true
+        schema:
+          $ref: '#/definitions/OrchestratorDTO'     
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'  
+        400:          
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error            
+  /web/v1/tolerance/{resourceId}/reopen:
+    patch:
+      tags:
+      - ToleranceAggregateWeb    
+      summary: "reopen the resource by given Resource Id"
+      description:  "reopen the resource by given Resource Id"
+      operationId: "reopenResource"
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: resourceId
+        in: path
+        description: Resource Id that needs to be reopned 
+        required: true
+        type: string      
+      - name: orchestratorDTO
+        in: body
+        description: Request body contains resource Id and resource mod numbers which need to be reopened
+        required: true
+        schema:
+         $ref: "#/definitions/OrchestratorDTO"        
+      responses:
+        200:
+          description: Successful operation.
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'   
+        400:         
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error 
+  /web/v1/tolerance/{keyId}/aggregate:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - ToleranceAggregateWeb
+      summary: Get aggregate details of the resource
+      description: Get aggregate details of the resource
+      operationId: getResourceAggregate
+      parameters:
+      - name: userId
+        in: header
+        description: userId
+        required: true
+        type: string
+      - name: branchCode
+        in: header
+        description: branchCode
+        required: true
+        type: string
+      - name: appId
+        in: header
+        type: string
+        required: true
+      - name: keyId
+        in: path
+        description: keyId for which the data needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns Aggregate data for the resource identified by keyid
+          schema:
+            $ref: '#/definitions/ToleranceWebModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error                        
+definitions:
+  ToleranceAggregateModel:
+    description: ToleranceAggregateModel
+    type: object
+    allOf:
+    - $ref: '#/definitions/BaseGenericModelDS'
+    - type: object
+      properties:    
+       keyId:
+        description: key Id
+        type: string
+       obscfcmTmToleranceMaster:
+        $ref: '#/definitions/ObscfcmTmToleranceMasterDTO'
+    
+ 
+       
+       extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+  BaseGenericModelDS:
+   allOf:
+    - type: object
+      discriminator: resource_type                         
+  ToleranceAggregateModelCollection:
+    description: Collection of  ToleranceAggregateModel.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ToleranceAggregateModel'
+  ToleranceWebModel:
+    description: ToleranceWebModel
+    type: object
+    properties:
+      resourceId:
+        description: resource id
+        type: string
+      resourceName:
+        description: resource name
+        type: string
+      operationType:
+        description: operation type
+        type: string
+      makerId:
+        description: maker id
+        type: string
+      makerDateStamp:
+        description: make date stamp
+        type: string
+        format: date-time
+      checkerId:
+        description: check id
+        type: string
+      checkerDateStamp:
+        description: checker date stamp
+        type: string
+        format: date-time
+      modNo:
+        description: mod no
+        type: integer
+      recordStatus:
+        description: record status flag
+        type: string
+      authStatus:
+        description: auth status flag
+        type: string
+      onceAuth:
+        description: once auth flag
+        type: string
+      doerRemarks:
+        description: doer remarks
+        type: string
+      approverRemarks:
+        description: approver  remarks
+        type: string        
+      obscfcmTmToleranceMaster:
+        $ref: '#/definitions/ObscfcmTmToleranceMasterDTO'
+      
+      
+            
+      extendedDatasegments:
+        description: data for the extended datasegment operation
+        type: array
+        items:
+          type: object
+    required:
+        - resourceId
+        - operationType         
+  ToleranceWebModelCollection:
+    description: Collection of datasegment.
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ToleranceWebModel'
+          
+          
+# newly added for filter client
+
+  ScfTransOutputResponse:
+    description: "Output response from transaction API"
+    type: "object"
+    properties:
+      queryList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfFilterQueryModel"
+         
+  ScfFilterInput:
+    description: "Represents the input request of the final filter service call from transaction services"
+    type: "object"
+    properties:
+      category:
+        description: "Represents the category of the filter"
+        type: "string"
+      applicationCode:
+        description: "Represents the applicationCode of the filter"
+        type: "string"
+      filterRecords:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfFilterRecords"        
+  ScfFilterOutput:
+    description: "Represents the best possible combination for the given category"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfAttribute"
+  ScfAttribute:
+    description: "Represents each attribute of the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeName:
+        description: "Name of the attribute representing DB column name"
+        type: "string"
+      attributeValue:
+        description: "Value of the corresponding column in DB"
+        type: "string"
+  ScfFilterRecords:
+    description: "Represents the records filtered in calling service using filter query"
+    type: "object"
+    properties:
+      attributeList:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfAttribute" 
+  ScfFilterQueryModel:
+    description: "Query and attribute list model"
+    type: "object"
+    properties:
+      queryId:
+        description: ""
+        type: number
+      query:
+        description: "Filter Query"
+        type: "string"
+      ScfTransCriteriaQueryAttributeModel:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfTransCriteriaQueryAttributeModel"
+  ScfTransCriteriaQueryAttributeModel:
+    description: "Query for each type of given category"
+    type: "object"
+    properties:
+      paramIndex:
+        description: "input parameter index in the query"
+        type: "integer"
+      paramName:
+        description: "input parameter name in the query"
+        type: "string"
+      columnName:
+        description: "corresponding column of the input parameter index in the query"
+        type: "string"
+      mappedParam:
+        description: "mapped column of the input parameter index in the query"
+        type: "string" 
+  StringStringMap:
+    type: object
+    additionalProperties:
+      type: string
+  ScfTmProgramMasterCollection: 
+   description: "Collection of program."
+   type: "object"
+   properties:
+    data:
+     type: "array"
+     items: 
+      $ref: "#/definitions/ScfTmProgramMasterDTO"
+    paging:
+     $ref: "#/definitions/PagingDto"
+  ScfTmProgramMasterDTO:
+    type: object
+    allOf:
+    - $ref: "./AutoReconWebDef.yaml#/definitions/GenericDto"
+    - type: object
+      properties:
+       anchorId:
+        type: string
+        description: "Anchor Id"
+       anchorName:
+        type: string
+        description: "Anchor Name"
+       authorizationRequired:
+        type: string
+        description: "Authorization Required"
+       autoAcceptanceApplicable:
+        type: string
+        description: "Auto Acceptance Applicable"
+       autoAcceptanceDays:
+        type: number
+        description: "Auto Acceptance Days"
+       autoFinanceApplicable:
+        type: string
+        description: "Auto Finance Applicable"
+       autoSettlementApplicable:
+        type: string
+        description: "Auto Settlement Applicable"
+       disbursementCcy:
+        type: string
+        description: "Disbursement Currency"
+       effectiveFrom:
+        type: string
+        format: date
+        description: "Effective From"
+       expiresOn:
+        type: string
+        format: date
+        description: "Expires on"
+       maxFinancePercentage:
+        type: number
+        description: "Maximum Finance Percentage"
+       maxTenorAllowed:
+        type: number
+        description: "Maximum Tenor Allowed"
+       minFinancePercentage:
+        type: number
+        description: "Minimum Finance Percentage"
+       minTenorAllowed:
+        type: number
+        description: "Minimum Tenor Allowed"
+       preferredDisbursementMode:
+        type: string
+        description: "Preferred Disbursement Mode"
+       preferredSettlementMode:
+        type: string
+        description: "Preferred Settlement Mode"
+       productCode:
+        type: string
+        description: "Product Code"
+       productDescription:
+        type: string
+        description: "Product Description"
+       programCode:
+        type: string
+        description: "Program Code"
+       programName:
+        type: string
+        description: "Program Name"
+       withRecourse:
+        type: string
+        description: "With Recourse"
+       graceDays:
+        type: number
+       interestBearingParty:
+        type: string
+        description: "Interest Bearing Party"
+       relationshipCode:
+        type: string
+        description: "Relationship Code"
+       reconciliationTowards:
+        type: string
+       txnControllerRefNo:
+        type: string
+        description: "Transaction Controller Reference Number" 
+       twoFactorApp:
+        type: string
+        default: N
+        description: "Two Factor App"
+       insuranceApp:
+        type: string
+        default: N
+        description: "Insurance App" 
+       interestRefundHandling:
+        type: string
+        description: "Interest Refund Handling"
+       interestRefundPaymentMode:
+        type: string
+        description: "Interest Refund Payment Mode"
+       marginHandling:
+        type: string
+        description: "Margin Handling"
+       marginPaymentMode:
+        type: string
+        description: "Margin Payment Mode"
+       autoDebitApplicable:
+        type: string
+        description: "Auto Debit Applicable"
+       ScfTmProgramSpokeMasterDTO:
+        type: array
+        items:
+          $ref: '#/definitions/ScfTmProgramSpokeMasterDTO'
+  ScfTmProgramSpokeMasterDTO:
+    type: object
+    properties:
+     authorizationRequired:
+      type: string
+      description: "Authorization Required"
+     autoFinanceApplicable:
+      type: string
+      description: "Auto Finance Applicable"
+     autoSettlementApplicable:
+      type: string
+      description: "Auto Settlement Applicable"
+     disbursementCcy:
+      type: string
+      description: "Disbursement Currency"
+     id:
+      type: string
+      description: "Id"
+     maxFinancePercentage:
+      type: number
+      description: "Maximum Finance Percentage"
+     maxTenorAllowed:
+      type: number
+      description: "Maximum Tenor Allowed"
+     minFinancePercentage:
+      type: number
+      description: "Minimum Finance Percentage"
+     minTenorAllowed:
+      type: number
+      description: "Minimum Tenor Allowed"
+     preferredDisbursementMode:
+      type: string
+      description: "Preferred Disbursement Mode"
+     preferredSettlementMode:
+      type: string
+      description: "Preferred Settlement Mode"
+     programCode:
+      type: string
+      description: "Program Code"
+     programMasterId:
+      type: string
+      description: "Program Master Id"
+     spokeId:
+      type: string
+      description: "Spoke id"
+     spokeName:
+      type: string
+      description: "Spoke Name"
+     withRecourse:
+      type: string
+      description: "With Recourse"
+     graceDays:
+      type: number
+     interestBearingParty:
+      type: string
+      description: "Interest Bearing Party"
+     importFactorId:
+      type: string
+      description: "Import Factor Id"
+     importFactorName:
+      type: string
+      description: "Import Factor Name"
+     insuranceCoId:
+      type: string
+      description: "Insurance Co Id"
+     insuranceCoName:
+      type: string
+      description: "Insurance Co Name"
+     interestRefundHandling:
+      type: string
+      description: "Interest Refund Handling"
+     interestRefundPaymentMode:
+      type: string
+      description: "Interest Refund Payment Mode"
+     marginHandling:
+      type: string
+      description: "Margin Handling"
+     marginPaymentMode:
+      type: string
+      description: "Margin Payment Mode"
+     autoDebitApplicable:
+      type: string
+      description: "Auto Debit Applicable"
+     ScfTmProgramSpokeCodeMasterDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ScfTmProgramSpokeCodeMasterDTO' 
+  ScfTmProgramSpokeCodeMasterDTO:
+   type: object
+   properties:
+      id:
+       type: string
+       description: "Id"
+      spokeMasterId:
+       type: string
+       description: "Spoke Master Id"
+      programCode:
+       type: string
+       description: "Program Code"
+      spokeId:
+       type: string
+       description: "Spoke Id"
+      spokeName:
+       type: string
+       description: "Spoke Name"
+      spokeExternalCode:
+       type: string
+       description: "Spoke External Code"
+      spokeDivisionCode:
+       type: string
+       description: "Spoke Division Code"
+      spokeDivisionName:
+       type: string
+       description: "Spoke Division Name"
+      anchorDivisionCode:
+       type: string
+       description: "Anchor Division Code"
+      anchorDivisionName:
+       type: string   
+  ObcmTmRelationshipMasterCollection: 
+     description: "Collection of relationship."
+     type: "object"
+     properties:
+      data:
+       type: "array"
+       items: 
+        $ref: "#/definitions/ObcmTmRelationshipMasterDTO"
+      paging:
+       $ref: "#/definitions/PagingDto"                        
+  ObcmTmRelationshipMasterDTO:
+     type: object
+     allOf:
+     - $ref: "./AutoReconWebDef.yaml#/definitions/GenericDto"
+     - type: object
+       properties:
+        autoAcceptance:
+         type: string
+         description: "Auto Acceptance"
+        corporateId:
+         type: string
+         description: "Corporate Id"
+        corporateName:
+         type: string
+         description: "Corporate Name"
+        effFromDate:
+         type: string
+         description: "Effective From Date"
+        relationshipCode:
+         type: string
+         description: "Relationship Code"
+        relationshipName:
+         type: string
+         description: "Relationship Name"
+        expiresOn:
+         type: string
+         description: "Expires On"
+        product:
+         type: string
+         description: "Product"
+        holidayTreatment:
+         type: string
+         description: "Holiday Treatment"
+        autoDebitApplicable:
+         type: string
+         description: "Auto Debit Applicable"            
+        noOfDays:
+         type: integer
+         description: "Number of Days"
+        maxDate:
+         type: string
+         description: "Maximum Date"
+        txnControllerRefNo:
+         type: string
+         description: "Transaction Controller Reference Number"
+        ObcmTmRelationshipDetailsDTO:
+         type: array
+         items:
+          $ref: '#/definitions/ObcmTmRelationshipDetailsDTO'
+  ObcmTmRelationshipDetailsDTO:
+     type: object
+     properties:
+        autoAcceptance:
+         type: string
+         description: "Auto Acceptance"
+        counterpartyid:
+         type: string
+         description: "Counterparty id"
+        counterpartyname:
+         type: string
+         description: "Counterparty Name"
+        id:
+         type: string
+         description: "Id"
+        partyType:
+         type: string
+         description: "Party Type"
+        relationsMasterId:
+         type: string
+         description: "Relations Master Id"
+        expiresOn:
+         type: string
+         description: "Expires On"
+        noOfDays:
+         type: integer
+         description: "Number of days"
+        holidayTreatment:
+         type: string
+         description: "Holiday Treatment"
+        autoDebitApplicable:
+         type: string
+         description: "Auto Debit Applicable"         
+        status:
+         type: string
+         description: "Status"
+        programCode:
+         type: string
+         description: "Program Code"
+        externalCodes:
+         type: array
+         description: "External Codes"
+         items:
+          $ref: '#/definitions/ObcmTmRelationshipDetailsExternalCodeDTO'
+        nonCust:
+         $ref: '#/definitions/ScfTmNonCustomerMasterDTO'
+  ObcmTmRelationshipDetailsExternalCodeDTO:
+     type: object
+     properties:
+        externalCode:
+         type: string
+         description: "External Code"
+        divisionCode:
+         type: string
+         description: "Division Code"
+        corporateDivisionCode:
+         type: string
+         description: "Corporate Division Code"
+        id:
+         type: string
+         description: "Id"
+        relationshipDetailId:
+         type: string
+         description: "Relationship Detail Id"
+  ScfTmNonCustomerMasterDTO:
+       type: object
+   #   allOf:
+   #   - $ref: '#/definitions/GenericDto'
+   #   - type: object
+       properties:
+        category:
+         type: string
+         description: "Category"
+        cif:
+         type: string
+         description: "Cif"
+        countryCode:
+         type: string
+         description: "Country Code"
+        email:
+         type: string
+         description: "Emai"
+        faxNumber:
+         type: string
+         description: "Fax Number"
+        giin:
+         type: string
+         description: "Giin"
+        industry:
+         type: string
+         description: "Industry"
+        mobileNumber:
+         type: string
+         description: "Mobile Number"
+        name:
+         type: string
+         description: "Name"
+        nonCustomerId:
+         type: string
+         description: "Non Customer Id"
+        phoneNumber:
+         type: string
+         description: "Phone Number"
+        prefferedCommMode:
+         type: string
+         description: "Preffered Comm Mode"
+        registrationNumber:
+         type: string
+         description: "Registration Number"
+        shortName:
+         type: string
+         description: "Short Name"
+        taxRefNo1:
+         type: string
+         description: "Tax Reference Number1"
+        taxRefNo2:
+         type: string
+         description: "Tax Reference Number2"
+        fatca:
+         type: string
+         description: "Fatca"
+        ScfTmNcAddressMasterDTO:
+         type: array
+         items:
+          $ref: '#/definitions/ScfTmNcAddressMasterDTO'
+        ScfTmNcRequestMasterDTO:
+         type: array
+         items:
+          $ref: '#/definitions/ScfTmNcRequestMasterDTO'
+        
+  ScfTmNcAddressMasterDTO:
+    type: object
+    properties:
+       addressLine1:
+        type: string
+        description: "Address Line1"
+       addressLine2:
+        type: string
+        description: "Address Line2"
+       addressLine3:
+        type: string
+        description: "Address Line3"
+       addressLine4:
+        type: string
+        description: "Address Line4"
+       addressType:
+        type: string
+        description: "Address Type"
+       country:
+        type: string
+        description: "Country"
+       id:
+        type: string
+        description: "Id"
+       nonCustMasterId:
+        type: string
+        description: "Non Customer Master Id"
+       pin:
+        type: string
+        description: "Pin"
+       street:
+        type: string
+        description: "Street"
+       nonCustomerId:
+        type: string
+        description: "Non Customer Id"
+        
+  ScfTmNcRequestMasterDTO:
+    type: object
+    properties:
+       anchorId:
+        type: string
+        description: "Anchor Id"
+       anchorName:
+        type: string
+        description: "Anchor Name"
+       id:
+        type: string
+        description: "Id"
+       nonCustomerCode:
+        type: string
+        description: "Non Customer Code"
+       nonCustMasterId:
+        type: string
+        description: "Non Customer Master Id"
+       status:
+        type: string
+        description: "Status"
+       nonCustomerId:
+        type: string
+        description: "Non Customer Id"
+    required:
+     - anchorId           
+    

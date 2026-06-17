@@ -1,0 +1,260 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : AuditTrail
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a sample server audittrail server." 
+ version: "1.0.0"
+ title: "audittrail Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "audittrail"
+   description: "AuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrailAuditTrail"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../audittrail
+
+ /audittrail:
+  get:
+   tags:
+    - "audittrail"
+   summary: "Get all valid audittrail."
+   description:  "Get all valid audittrail. This endpoints will be used to Get all valid audittrail maintenance records."
+   operationId: "getAll"
+   parameters:
+   - name: offset
+     in: query
+     description: offset is starting no of records to be fetched
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: limit is maximum no of records to be fetched
+     required: false
+     type: integer
+   - name: pprCode
+     in: query
+     description: Product Processor Code
+     required: false
+     type: string
+   - name: extRefNum
+     in: query
+     description: External Reference Number
+     required: false
+     type: string
+   - name: inquiryID
+     in: query
+     description: Credit Bureau Service Inquiry ID
+     required: false
+     type: string 
+   - name: inquiryDate
+     in: query
+     description: Date of Inquiry
+     required: false
+     type: string
+     format: date
+   - name: bureauName
+     in: query
+     description: Bureau Name
+     required: false
+     type: string
+   - name: startDate
+     in: query
+     description: Start Date
+     required: false
+     type: string
+     format: date
+   - name: endDate
+     in: query
+     description: End Date
+     required: false
+     type: string
+     format: date 
+   responses:
+    201:
+     description: "Returns message of success or failure"
+     headers: 
+      Location:
+       description: ""
+       type: "string"
+     schema:
+       $ref: "#/definitions/ObcbsAuditTrailCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+definitions:
+ ObcbsAuditTrailDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     bureauName:
+      type: string
+      description: ""
+     bureauReportId:
+      type: string
+      description: ""
+     userId:
+      type: string
+      description: ""
+     extRefNumber:
+      type: string
+      description: ""
+     inquiryDate:
+      type: string
+      format: date
+      description: ""
+     inquiryId:
+      type: string
+      description: ""
+     ppId:
+      type: string
+      description: ""
+     documentId:
+      type: string
+      description: "Contains the IPM document Id of the file attached to the response" 
+     request:
+      type: string
+      description: ""
+     errorCode:
+      type: string
+      description: ""
+     response:
+      type: string
+      description: ""
+     dispatch:
+      type: string
+      description: ""
+ ModListKeyDto:
+  type: object
+  properties:
+   modNos:
+    type: array
+    items:
+     type: integer
+   remarks:
+    type: string
+ KeyDto:
+  type: object
+  properties:
+   modNo:
+    type: integer
+   remarks:
+    type: string
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ BindingResult:
+  type: object
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ObcbsAuditTrailCollection: 
+  description: "Collection of representation."
+  type: "object"
+  properties:
+   data:
+    type: "array"
+    items: 
+     $ref: "#/definitions/ObcbsAuditTrailDTO"
+   paging:
+    $ref: "#/definitions/PagingDto"
+ PagingDto:
+  type: object
+  properties:
+   totalResults:
+    type: integer
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+ ObcbsAuditTrailWrapperDTO:
+  type: object
+  properties:
+   data:
+    $ref: "#/definitions/ObcbsAuditTrailDTO"

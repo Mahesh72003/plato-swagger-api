@@ -1,0 +1,199 @@
+swagger: "2.0"
+info:
+ description: "This is a sample server information server." 
+ version: "1.0.0"
+ title: "Instrument Finance Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "instrumentFinanceWeb"
+   description: "Instrument Finance Process"
+
+schemes:
+- "https"
+
+paths:    
+ /web/v1/initiateFinance:
+  post:
+   tags:
+    - "instrumentFinanceWeb"
+   summary: "Adds a new information."
+   description: "Adds a new information. Add additional information here for this endpoint."
+   operationId: "initiateInstrumentFinance"
+   parameters:
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "userId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "user id for SMS"
+    - name: "branchCode"
+      in: "header"
+      type: "string"
+      required: true
+    - name: "instrumentCollection" 
+      in: "body" 
+      description: "Request Body that contains data required for initiating finance on PO" 
+      required: true
+      schema:
+       $ref: "#/definitions/InstrumentFinanceCollection"
+   responses:
+    201: 
+     description: "Returns message of success or failure " 
+     schema:
+       type: "object"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+definitions:
+ InstrumentFinanceCollection:
+  description: "Collection of Instrument for financing."
+  type: "object"
+  properties:
+    poList:
+      type: "array"
+      items:
+        $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/PurchaseOrderDTO"
+    invoiceList:
+      type: "array"
+      items:
+        $ref: "./RecInstrumentInvoiceDef.yaml#/definitions/InvoiceModel"
+    productCategory:
+      type: string
+    disbursementCcy:
+      type: string
+    maxFinancePercentage:
+      type: number
+    financeAmt:
+      type: number
+    programCode:
+      type: string
+    isProgramLinked:
+      type: string
+    docRefNo:
+      type: string
+  required:
+    - isProgramLinked
+    - productCategory
+ InstrumentFinanceRefCollection:
+  description: "Collection of Instrument Reference numbers for financing."
+  type: "object"
+  properties:
+    internalInstrumentRefNoList:
+      type: "array"
+      items:
+        type: "string"
+    productCategory:
+      type: string
+    disbursementCcy:
+      type: string
+    maxFinancePercentage:
+      type: number
+    financeAmt:
+      type: number
+    programCode:
+      type: string
+    isProgramLinked:
+      type: string
+    docRefNo:
+      type: string
+  required:
+    - isProgramLinked
+    - productCategory
+ PurchaseOrderFinDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     seqNo:
+      type: "integer"
+      format: "int64"
+     buyerId:
+      type: string
+     buyerDivCode:
+      type: string
+     buyerDivName:
+      type: string
+     buyerName:
+      type: string
+     currency:
+      type: string
+     poDate:
+      type: string
+     poExternalNumber:
+      type: string
+     poInternalNumber:
+      type: string
+     programId:
+      type: string
+     programName:
+      type: string
+     relationshipCode:
+      type: string
+     relationshipName:
+      type: string
+     supplierId:
+      type: string
+     supplierDivCode:
+      type: string
+     supplierDivName:
+      type: string
+     supplierName:
+      type: string
+     poStatus:
+      type: string
+     processStatus:
+      type: string
+     poTransactionRefNo:
+      type: string
+     reqShipmentDate:
+      type: string
+     promisedShipmentDate:
+      type: string
+     basePoAmount:
+      type: number
+     totalPoAmount:
+      type: number
+     netPoAmount:
+      type: number
+     acceptanceAmount:
+      type: number
+     fundReqAmount:
+      type: number
+     acceptanceDate:
+      type: string
+     staleStatus:
+      type: string
+     financePCT:
+      type: number
+     financeAmount:
+      type: number
+     oldFinanceAmount:
+      type: number
+     financiableAmount:
+      type: number
+     financeStatus:
+      type: string
+ AmountPCTDTO:
+  type: object
+  allOf:
+  - type: object
+    properties:
+     amount:
+      type: number
+     percentage:
+      type: number

@@ -1,0 +1,347 @@
+ #----------------------------- OFSS-COPYRIGHT-BEGIN ----------------------------- 
+#
+#  This source is part of the Oracle Banking Corporate Lending Process Management.
+#  Copyright  2018 , Oracle and/or its affiliates.  All rights reserved.
+#  
+#  No part of this work may be reproduced, stored in a retrieval system, adopted or transmitted in any form or by any means, electronic, mechanical, photographic, graphic, optic recording or otherwise, translated in any language or computer language, without the prior written permission of Oracle and/or its affiliates.
+#  
+#  Oracle Financial Services Software Limited.
+#  Oracle Park, Off Western Express Highway,
+#  Goregaon (East), 
+#  Mumbai - 400 063, India. 
+#  
+# ------------------------------- OFSS-COPYRIGHT-END -----------------------------
+#
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : kycdetail.yaml
+#  **
+#  ** Module     : 
+#  ** 
+
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+swagger: '2.0'
+info:
+  description: You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Syndication Application Service
+host: 10.184.157.121:9000
+basePath: /syndicationapplication-services
+tags:
+- name: SyndicationApplication
+  description: API for SyndicationApplication Operations
+schemes:
+- http
+paths:
+  /web/v1/kycdetails:
+    post:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - KycDetails
+      summary: Adds a new Kyc.
+      description: Adds a new Kyc. Add additional information here for this endpoint.
+      operationId: createKycDetail
+      parameters:
+      - name: Kyc
+        in: body
+        description: Request Body that contains data required for creating a new KycDetail
+        required: true
+        schema:
+          $ref: '#/definitions/KycModel'
+      responses:
+        201:
+          description: Returns the Id of the newly created Kyc
+          headers:
+            Location:
+              description: URL of newly created Kyc
+              type: string
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - KycDetails
+      summary: Retrieves the list of existing Kyc.
+      description: Retrieves the list of existing Kyc. Add additional information here for the this endpoint.
+      operationId: getAllKycDetails
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: applicationNumber of the user that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful performs the operation
+          schema:
+            $ref: '#/definitions/ResponseModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+  /web/v1/kycdetails/{id}:
+    get:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - KycDetails
+      summary: Retrieves the Kyc by id.
+      description: Retrieves the Kyc by id. Add additional information here for the this endpoint.
+      operationId: getKycDetailById
+      parameters:
+      - name: id
+        in: path
+        description: Id that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Returns the Kyc based on given applicationNumber.
+          schema:
+            $ref: '#/definitions/KycModel'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+    put:
+      consumes:
+      - application/json
+      - application/xml
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - KycDetails
+      summary: Update an existing Kyc.
+      description: Update an existing Kyc. Add additional information here for the this endpoint.
+      operationId: updateKycDetails
+      parameters:
+      - name: id
+        in: path
+        description: id of the Kyc that need to be updated
+        required: true
+        type: string
+      - name: Kyc
+        in: body
+        description: Request Body that contains data required for updating an existing KycDetails
+        required: true
+        schema:
+          $ref: '#/definitions/KycModel'
+      responses:
+        200:
+          description: Returns updated Kyc
+          schema:
+            $ref: '#/definitions/ResponseDtoWrapper'
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+    delete:
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - KycDetails
+      summary: Deletes the Kyc identified by given ID.
+      description: Deletes the Kyc identified by given ID. Add additional information here for the this endpoint.
+      operationId: deleteKycDetails
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Kyc that needs to be fetched
+        required: true
+        type: string
+      responses:
+        200:
+          description: Successful operation.
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        500:
+          description: Internal error
+definitions:
+  KycModel:
+    description: Kyc model
+    type: object
+    properties:
+      id:
+        description: Id of the Kyc
+        type: string
+        maxLength: 36
+      applicationNumber:
+        description: Application Number of the KycDetail
+        type: string
+        maxLength: 20
+      processRefNumber:
+        description: Process Ref Number 
+        type: string
+      remarks:
+        description: Remarks
+        type: string
+        maxLength: 300
+      dataSegmentCode:
+        description: Data segment code
+        type: string    
+      updatedBy:
+        description: Updated By
+        type: string
+      updatedTimeStamp:
+        description: Updated Time Stamp
+        type: string
+      stageCode:
+        description: stageCode
+        type: string
+        maxLength: 36
+      createdBy:
+        description: createdBy
+        type: string
+        maxLength: 36
+      status:
+        description: status
+        type: string
+        maxLength: 36
+      kycDetails:
+        type: array
+        items:
+          $ref: '#/definitions/KycDetailModel'
+  KycDetailModel:
+    description: KycDetail model
+    type: object
+    properties:
+      id:
+        description: Id of the KycDetail
+        type: string
+      kycId:
+        description: Kyc Id
+        type: string
+      entityType:
+        description: Entity Type
+        type: string
+      entityName:
+        description: Entity Name
+        type: string 
+      entityLocation:
+        description: Entity Location
+        type: string
+      kycType:
+        description: Kyc Type
+        type: string
+      kycStatus:
+        description: Kyc Status
+        type: string
+      initiateKyc:
+        description: Initiate Kyc 
+        type: string
+      entityId:
+        description: Entity Id
+        type: string
+      entityNumber:
+        description: Entity Number
+        type: string
+      kycException:
+        description: Kyc Exception
+        type: string
+      description:
+        description: Description
+        type: string
+      entityRole:
+        type: array
+        items:
+          $ref: '#/definitions/KycEntityRoleModel'
+      kycDocuments:
+        type: array
+        items:
+          $ref: '#/definitions/KycDocumentsModel'
+  KycEntityRoleModel:
+    description: KycEntityRole model
+    type: object    
+    properties:
+      id:
+        description: Id of the kycEntityRole
+        type: string
+      entityRoleId:
+        description: entityRoleId of the kyc Entity Role
+        type: string
+      entityRole:
+        description: entityRole
+        type: string
+  KycDocumentsModel:
+    description: KycDocuments model
+    type: object    
+    properties:
+      id:
+        description: Id of the kycdocument
+        type: string
+        maxLength: 36
+      parentDatasegmentId:
+        description: parentDatasegmentId of the kycDetail
+        type: string
+        maxLength: 36
+      documentLinkageId:
+        description: documentLinkageId
+        type: string
+        maxLength: 36
+      documentType:
+        description: documentType
+        type: string
+        maxLength: 36
+      documentName:
+        description: documentName
+        type: string
+        maxLength: 105      
+  KycCollection:
+    description: Collection of Kyc.
+    type: object
+    properties:
+      KycList:
+        type: array
+        items:
+          $ref: '#/definitions/KycModel'
+

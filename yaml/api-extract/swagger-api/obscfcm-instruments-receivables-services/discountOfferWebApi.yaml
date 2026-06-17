@@ -1,0 +1,261 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Invoicing server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Discount Offer Web"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "DiscountOfferWeb"
+    description: "API for Invoice File's Operations"
+schemes:
+- "https"
+
+paths:
+  /web/v1/discountOffer:  
+    post:
+      tags:
+        - "DiscountOfferWeb"
+      summary: "create the discount offers"
+      description:  "Create the discount offers"
+      operationId: "createDiscountOffer"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "discountOffer"
+        in: "body"
+        required: true
+        schema:
+          $ref: './discountOfferDef.yaml#/definitions/DiscountOffer'
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+               $ref: "#/definitions/ResponseDtoWrapper"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /web/v1/discountOfferDetails:  
+    get:
+      tags:
+        - "DiscountOfferWeb"
+      summary: "Retrieves the list of existing Invoice Files."
+      description:  "Retrieves the list of existing Invoice Files. Add additional information here for the this endpoint."
+      operationId: "getDiscountOfferDetails"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "action"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "discountRuleId"
+        in: "query"
+        type: "string"
+        required: false   
+      - name: includecloseandunauth
+        in: query
+        description: includecloseandunauth need to be set to fetch summary record, defult value is false
+        required: false
+        type: boolean
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer             
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./discountOfferDef.yaml#/definitions/DiscountOfferModelCollection"          
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"     
+  /web/v1/discountTxnCreate:  
+    post:
+      tags:
+        - "DiscountOfferWeb"
+      summary: "Create a  transaction for the discount offer"
+      description:  "Create a  transaction for the discount offer"
+      operationId: "createDiscountOfferTxn"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "discountOfferTxnDto"
+        in: "body"
+        required: true
+        schema:
+          $ref: './discountOfferDef.yaml#/definitions/DiscountOfferTxnDto'
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+               $ref: "./discountOfferDef.yaml#/definitions/DiscountOfferTxnResponse"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"     
+  /web/v1/authorizeDiscounting:
+    post:
+       tags:
+       - DiscountOfferWeb
+       summary: authorize the data to put it in master table.
+       description: authorize the data to put in master table by discount rule id.
+       operationId: authorizeDiscounting
+       parameters:
+         - name: "conductorWorkflowModel" 
+           in: "body"  
+           description: "Request Body that contains data required for initiating a new txn"  
+           required: true  
+           schema: 
+             $ref: "./CommonDef.yaml#/definitions/ConductorWorkflowModel"  
+         - name: "appId"
+           in: "header"
+           type: "string"
+           required: true
+         - name: "userId"
+           in: "header"
+           type: "string"
+           required: true
+           description: "user id for SMS"
+         - name: "contentType"
+           in: "header"
+           type: "string"
+           required: false
+         - name: "branchCode"
+           in: "header"
+           type: "string"
+           required: true       
+       responses:
+         200:
+           description: "Successful performs the operation"
+           schema:
+             $ref: "./CommonDef.yaml#/definitions/ConductorWorkflowModel"
+         400:
+           description: Malformed syntax.
+         401:
+           description: Request does not have sufficient credentials.
+         403:
+           description: Request is not authorized.
+         405:
+           description: Invalid input
+         500:
+           description: Internal error  
+  /web/v1/discountOfferProcessing:  
+    get:
+      tags:
+        - "DiscountOfferWeb"
+      summary: "Retrieves the list of existing Invoice Files."
+      description:  "Retrieves the list of existing Invoice Files. Add additional information here for the this endpoint."
+      operationId: "getDiscountOfferProcessing"
+      parameters:
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "userId"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "branchCode"
+        in: "header"
+        type: "string"
+        required: true
+      - name: "action"
+        in: "query"
+        type: "string"
+        required: false
+      - name: "discountRuleId"
+        in: "query"
+        type: "string"
+        required: true
+      - name: "earlyPaymentDate"
+        in: "query"
+        type: "string"
+        required: true 
+      - name: "invDueDate"
+        in: "query"
+        type: "string"
+        required: true 
+      - name: "outstandingAmount"
+        in: "query"
+        type: "number"
+        required: true 
+      - name: offset
+        in: query
+        description: offset is starting no of records to be fetched
+        required: false
+        type: integer
+      - name: limit
+        in: query
+        description: limit is maximum no of records to be fetched
+        required: false
+        type: integer             
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "./discountOfferDef.yaml#/definitions/DiscountOfferProcessedModel"          
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"                    

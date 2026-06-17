@@ -1,0 +1,477 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "Instrument Collection Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "ProductDerivation"
+    description: "APIs DepositSlip related Operation"
+    
+schemes:
+- "https"
+
+paths:
+  /web/v1/productDerivation:
+    get:
+      tags:
+        - "ProductDerivation"
+      summary: "Retrieves the Product "
+      description:  "Retrieves the DepositSlip by referenceNum. Add additional information here for the this endpoint."
+      operationId: "getProduct"
+      parameters:     
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+          description: "branch code for SMS"
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: "limit"
+          in: "query"
+          required: false
+          description: "limit to be fetched"
+          type: "integer"
+        - name: "offset"
+          in: "query"
+          required: false
+          description: "offset of the limit"
+          type: "integer"
+        - name: "drwanOnBankCode"
+          in: "query"
+          type: "string"
+          required: true
+        - name: "pickUpLocationCode"
+          in: "query"
+          type: "string"
+          required: true
+        - name: "payableAtLocationCode"
+          in: "query"
+          type: "string"
+          required: true
+        - name: "productCode"
+          in: "query"
+          type: "string"
+          required: false
+        - name: "recordStat"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Record Status"
+        - name: "productBranch"
+          in: "query"
+          type: "string"
+          required: false
+          description: "Product Branch Code"
+      responses:
+        200:
+          description: "Returns the DepositSlip based on given id."
+          schema:
+            $ref: "#/definitions/ResponseModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+definitions:
+  ProductDerivationModel:
+    description: "ProductDerivationModel model"
+    type: "object"
+    properties:
+      drwanOnBankCode:
+        description: "drwanOnBankCode of the DepositSlip"
+        type: "string"
+      pickUpLocationCode:
+        description: "pickUpLocationCode of the DepositSlip"
+        type: "string"
+      payableAtLocationCode:
+        description: "payableAtLocationCode of the DepositSlip"
+        type: "string"
+
+  CmcBankModel:
+    description: "CmcBank model"
+    type: "object"
+    properties:
+      bankCode:
+        description: "Bank code"
+        type: "string"
+      bankName:
+        description: "Bank name"
+        type: "string"
+        
+        
+  CmcBankCollection:
+    description: "Collection of bankname."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CmcBankModel"
+      paging:
+          $ref: "#/definitions/PagingDto"  
+
+        
+  CmcBankBranchCollection:
+    description: "Collection of bankname."
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CmcBankBranchModel"
+      paging:
+          $ref: "#/definitions/PagingDto"
+          
+  CmcBankBranchModel:
+    description: "CmcBankBranch model"
+    type: "object"
+    properties:
+      addressLine1:
+        description: "Address line"
+        type: "string"
+      addressLine2:
+        description: "Address line"
+        type: "string"
+      addressLine3:
+        description: "Address line"
+        type: "string"
+      addressLine4:
+        description: "Address line"
+        type: "string"
+      bankCode:
+        description: "Bank code"
+        type: "string"
+      bankName:
+        description: "Bank name"
+        type: "string"
+      requestBranchCode:
+        description: "Branch code"
+        type: "string"
+      branchName:
+        description: "Branch name"
+        type: "string"
+      contactPerson:
+        description: "Contact Person"
+        type: "string"
+      countryCode:
+        description: "Country code"
+        type: "string"
+      designation:
+        description: "Designation"
+        type: "string"
+      emailId:
+        description: "Email Id"
+        type: "string"
+      fax:
+        description: "Fax"
+        type: "string" 
+      locationCode:
+        description: "Location Code"
+        type: "string"        
+      mobileNo:
+        description: "Consignment Number"
+        type: "number"
+      pinCode:
+        description: "Pincode"
+        type: string
+      routingCode:
+        description: "Rounting Code"
+        type: "number"
+      stateCode:
+        description: "State Code"
+        type: "string"
+      telephone:
+        description: "Telephone"
+        type: "number"
+      locationDesc:
+        description: "locationDesc"
+        type: string
+      locationClusterCode:
+        description: "locationClusterCode"
+        type: string
+      locationClusterDesc:
+        description: "locationClusterDesc"
+        type: string
+        
+  PagingDto:
+    type: object
+    properties:
+      totalResults:
+        type: integer
+        
+  LocationModel:
+    description: "location model"
+    type: "object"
+    properties:
+      locations:
+        type: "array"
+        items:
+          $ref: string
+          
+  CmcCoreBranchCollection:
+    description: "Collection of CmcCoreBranchModel"
+    type: "object"
+    properties:
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/CmcCoreBranchModel"
+      paging:
+          $ref: "#/definitions/PagingDto"
+          
+  CmcCoreBranchModel:
+    description: "CmcCoreBranch Model "
+    type: "object"
+    properties:
+      addressLine1:
+        description: "Address line"
+        type: "string"
+      addressLine2:
+        description: "Address line"
+        type: "string"
+      addressLine3:
+        description: "Address line"
+        type: "string"
+      addressLine4:
+        description: "Address line"
+        type: "string"
+      autoAuth:
+        description: "Bank code"
+        type: "string"
+      branchCode:
+        description: "Bank name"
+        type: "string"
+      branchLcy:
+        description: "Branch code"
+        type: "string"
+      branchName:
+        description: "Branch name"
+        type: "string"
+      contactPerson:
+        description: "Contact Person"
+        type: "string"
+      countryCode:
+        description: "Country code"
+        type: "string"
+      designation:
+        description: "Designation"
+        type: "string"
+      emailId:
+        description: "Email Id"
+        type: "string"
+      fax:
+        description: "Fax"
+        type: "string" 
+      locationCode:
+        description: "Location Code"
+        type: "string"
+      hostCode:
+        description: "hostCode"
+        type: "string"
+      isServiceBranch:
+        description: "isServiceBranch"
+        type: "string"
+      hoBranch:
+        description: "hoBranch"
+        type: "string"
+      localCcy:
+        description: "localCcy"
+        type: "string"                
+      mobileNo:
+        description: "Consignment Number"
+        type: "number"
+      pinCode:
+        description: "Pincode"
+        type: string
+      routingCode:
+        description: "Rounting Code"
+        type: "number"
+      sourceBranchCode:
+        description: "sourceBranchCode"
+        type: "string"
+      sourceSystem:
+        description: "sourceSystem"
+        type: "string"
+      stateCode:
+        description: "State Code"
+        type: "string"
+      telephone:
+        description: "Telephone"
+        type: "number"
+      locationDesc:
+        description: "locationDesc"
+        type: string
+      locationClusterCode:
+        description: "locationClusterCode"
+        type: string
+      locationClusterDesc:
+        description: "locationClusterDesc"
+        type: string
+      walkinCustomer:
+        description: "walkinCustomer"
+        type: string
+      weekHol1:
+        description: "walkinCustomer"
+        type: string
+      weekHol2:
+        description: "walkinCustomer"
+        type: string
+        
+        
+  CmTmProductMasterDTO:
+    type: object
+    allOf:
+    - $ref: '#/definitions/GenericDto'
+    - type: object
+      properties:
+       branchCode:
+        type: string
+        description: ""
+       clearingDays:
+        type: number
+        description: ""
+       currency:
+        type: string
+        description: ""
+       cutOffTime:
+        type: string
+        description: ""
+       effectiveDate:
+        type: string
+        format: date
+        description: ""
+       expiryDate:
+        type: string
+        format: date
+        description: ""
+       maxTxnAmt:
+        type: number
+        description: ""
+       minTxnAmt:
+        type: number
+        description: ""
+       networkType:
+        type: string
+        description: ""
+       productCategory:
+        type: string
+        description: ""
+       productCode:
+        type: string
+        description: ""
+       productDescription:
+        type: string
+        description: ""
+       productExposureLimit:
+        type: number
+        description: ""
+       productType:
+        type: string
+        description: ""
+       txnControllerRefNo:
+        type: string
+        description: ""
+       scheduleDestinationBranchDescription:
+        type: string
+        description: ""
+       scheduleDestinationBankDescription:
+        type: string
+        description: ""
+       scheduleDestinationBank:
+        type: string
+        description: ""
+       scheduleDestinationBranch:
+        type: string
+        description: ""
+       corrBankCode:
+        type: string
+        description: ""
+       coreBankBranchCode:
+        type: string
+        description: ""
+          
+          
+  CmTmProductMasterCollection: 
+    description: "Collection of product."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/CmTmProductMasterDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"
+      
+  CmTmLocOsNwBankDTO:
+    type: object
+    properties:
+       bankCode:
+        type: string
+        description: ""
+       bankDescription:
+        type: string
+        description: ""
+       branchCode:
+        type: string
+        description: ""
+       branchDescription:
+        type: string
+        description: ""
+       id:
+        type: string
+        description: ""
+       locationCode:
+        type: string
+        description: ""
+       locationMasterId:
+        type: string
+        description: ""
+       priority:
+        type: number
+        description: ""
+      
+  CmTmLocOsNwCollection: 
+    description: "Collection of CmTmLocOsNwBankDTO."
+    type: "object"
+    properties:
+     data:
+      type: "array"
+      items: 
+       $ref: "#/definitions/CmTmLocOsNwBankDTO"
+     paging:
+      $ref: "#/definitions/PagingDto"

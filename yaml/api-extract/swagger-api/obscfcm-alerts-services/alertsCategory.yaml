@@ -1,0 +1,145 @@
+swagger: "2.0"
+info:
+  description: "Provides services for Alert category"
+  version: 1.0.0
+  title: Alert Category Service API's
+host: 10.184.157.121:9000
+basePath: /obscfcm-alerts-services
+tags:
+- name: AlertCatagoryService
+  description: Provides services for Alert category
+paths:
+ /service/v1/updateJobStatus:
+  post:
+    tags:
+     - "AlertCatagoryService"
+    summary: "Updates the job status of an alert"
+    description: "Updates the Alert Category"
+    operationId: "updateJobStatus"
+    parameters:
+      - name: "userId"
+        in: "header"
+        description: "User Id"
+        required: true
+        type: "string"
+      - name: "branchCode"
+        in: "header"
+        description: "Branch Code"
+        required: true
+        type: "string"
+      - name: "appId"
+        in: "header"
+        type: "string"
+        required: true
+        description: "Application Id"
+      - name: "obTmAlertsCategoryUpdateCollection"
+        in: "body"
+        description: "Request Body that contains data required for updating the job status"
+        required: true
+        schema:
+          $ref: "#/definitions/ObTmAlertsCategoryUpdateCollection"
+    responses:
+      201:
+        description: "Returns message of succes or failure "
+        headers:
+          Location:
+            description: "URL of newly created fsgbu"
+            type: "string"
+        schema:
+          $ref: "#/definitions/ObTmAlertsCategoryCollectionResponse"
+      400:
+        description: "Malformed syntax."
+      401:
+        description: "Request does not have sufficient credentials."
+      403:
+        description: "Request is not authorized."
+      405:
+        description: "Invalid input"
+      500:
+        description: "Internal error"
+definitions:
+  ObTmAlertsCategoryUpdateCollection:
+   description: "Collection of Alerts Category Model"
+   type: "object"
+   properties:
+    data:
+     description: "List Of ObTmAlertsCategoryUpdateEventDefMaster"
+     type: array
+     items:
+       $ref: '#/definitions/ObTmAlertsCategoryUpdateEventDefMaster'
+  ObTmAlertsCategoryUpdateEventDefMaster:
+    description: "Alert Category Request Parameters model"
+    type: object
+    properties:
+      alertCode :
+        type: string
+        description: Alert Code
+      alertDescription:
+        type: string
+        description: Description
+      applicationCode:
+        type: string
+        description: Application Code 
+      language:
+        type: string
+        description: Language
+      className:
+        type: string
+        description: Class Name     
+      batchEndPoint: 
+        type: string
+        description: Batch End Point     
+      lastUpdatedJobStatus:
+        type: string
+        description: Last Updated Job Status
+      updatedTimeStamp:
+         type: string
+         description: Updated Timestamp
+         format: date-time             
+  ObTmAlertsCategoryCollectionResponse:
+    description: "Alert Category Response model"
+    type: "object"
+    properties:
+      alertResponse:
+        description: "Collection of Alert Category Response"
+        type: array
+        items:
+          $ref: '#/definitions/ObTmAlertsCategoryEventDefRespMaster'   
+  ObTmAlertsCategoryEventDefRespMaster:
+    description: "Alert Category Response Model"
+    type: object
+    properties:
+      alertCode :
+        type: string
+        description: Alert Code
+      alertDescription:
+        type: string
+        description: Description
+      applicationCode:
+        type: string
+        description: Application Code 
+      language:
+        type: string
+        description: Language
+      className:
+        type: string
+        description: Class Name     
+      batchEndPoint: 
+        type: string
+        description: Batch End Point     
+      lastUpdatedJobStatus:
+        type: string
+        description: Last Updated Job Status
+      updatedTimeStamp:
+         type: string
+         description: Updated Timestamp
+         format: date-time   
+      responseCode:
+        type: string
+        description: "Response Code"
+      errorCode:
+         type: "string"
+         description: "Error Code"
+      errorDesc:
+         type: "string"
+         description: "Error Description"        

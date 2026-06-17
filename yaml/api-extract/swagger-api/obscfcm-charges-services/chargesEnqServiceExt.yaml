@@ -1,0 +1,724 @@
+swagger: "2.0"
+info:
+ description: "Provides APIs to facilitate maintenance of charge enquiries"
+ version: "1.0.0"
+ title: "Charges Enquiry Service APIs"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/obscfcm-charges-services"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "ChargesEnqService"
+   description: "API that facilitates the maintenance of charge enquiries. These charges as per the maintained charge codes will be levied at the time of transaction processing. Post this the back office user will define pricing for those charge codes."
+
+paths:
+ /service/v1/chargeEnquiry:
+  get:
+   tags:
+    - "ChargesEnqService"
+   summary: "Charges Enquiry"
+   description:  "Charges Enquiry"
+   operationId: "getChargeDetails"
+   parameters:
+    - name: appId
+      in: header
+      type: string
+      required: true
+      description: "App id"
+    - name: tenantId
+      in: header
+      type: string
+      required: false
+      description: "Tenant id"
+    - name: userId
+      in: header
+      type: string
+      required: true
+      description: "User Id for SMS"
+    - name: branchCode
+      in: header
+      type: string
+      required: true
+      description: "Branch Code"
+    - name: authToken
+      in: header
+      type: string
+      required: false
+      description: "Authorization Token"
+    - name: contentType
+      in: header
+      type: string
+      required: false
+      description: "Content Type"
+    - name: branchDate
+      in: header
+      type: string
+      format: date-time
+      required: false
+      description: "Branch Date"
+    - name: applicationCode
+      in: query
+      required: true
+      type: string
+      description: "Application Code"
+    - name: branchCode
+      in: query
+      required: false
+      type: string
+      description: "Branch Code"
+    - name: offset
+      in: query
+      description: "Offset Is Starting No Of Records To Be Fetched"
+      required: false
+      type: integer
+    - name: limit
+      in: query
+      description: "Limit is Maximum No Of Records To Be Fetched"
+      required: false
+      type: integer
+    - name: event
+      in: query
+      required: false
+      type: string
+      description: "Event"
+    - name: party
+      in: query
+      required: false
+      type: string
+      description: "Party"
+    - name: partyRole
+      in: query
+      required: false
+      type: string
+      description: "Party Role"
+    - name: product
+      in: query
+      required: false
+      type: string
+      description: "Product"
+    - name: chargeCode
+      in: query
+      required: false
+      type: string
+      description: "Charge Code"
+    - name: chargeGroup
+      in: query
+      required: false
+      type: string
+      description: "Charge Group"
+    - name: chargeType
+      in: query
+      required: false
+      type: string
+      description: "Charge Type"
+    - name: chargeAccount
+      in: query
+      required: false
+      type: string
+      description: "Charge Account"
+    - name: collectionType
+      in: query
+      required: false
+      type: string
+      description: "Collection Type"
+    - name: txnRefNo
+      in: query
+      required: false
+      type: string
+      description: "Transaction Reference Number"
+    - name: dateRefBasis
+      in: query
+      required: false
+      type: string
+      description: "Date Reference Basis"
+    - name: fromDate
+      in: query
+      required: false
+      type: string
+      description: "From Date"
+    - name: toDate
+      in: query
+      required: false
+      type: string
+      description: "To Date"
+    - name: currency
+      in: query
+      required: false
+      type: string
+      description: "Currency"
+    - name: fromAmt
+      in: query
+      required: false
+      type: number
+      description: "From Amount"
+    - name: toAmt
+      in: query
+      required: false
+      type: number
+      description: "To Amount"
+    - name: status
+      in: query
+      required: false
+      type: string
+      description: "Status"
+   responses:
+    200:
+     description: "Provides fetched charge details"
+     schema:
+      $ref: "./chargesEnqDef.yaml#/definitions/ChargeEnquiryDetailCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/v1/chargesTxn/{id}:
+  patch:
+   tags:
+    - "ChargesEnqService"
+   summary: "Updates the charges transaction data for given id"
+   description:  "Updates the charges transaction data for given id"
+   operationId: "updateChargesTxn"
+   parameters:
+    - name: "userId"
+      in: "header"
+      description: "User id"
+      required: true
+      type: "string"
+    - name: "branchCode"
+      in: "header"
+      description: "Branch Code"
+      required: true
+      type: "string"
+    - name: "appId"
+      in: "header"
+      type: "string"
+      required: true
+      description: "App id"
+    - name: "id"
+      in: "path"
+      description: "Key id of the Charges Transaction"
+      required: true
+      type: "string"
+    - name: "chargesTxn"
+      in: "body"
+      description: "Request body contains fields to be modified"
+      required: true
+      schema:
+       $ref: "./chargesEnqDef.yaml#/definitions/ObChargesTxnDTO"
+   responses:
+    200:
+     description: "Successful operation."
+     schema:
+         type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"    
+     
+ /service/v1/getTxnDetails:
+  get:
+   tags:
+    - "ChargesEnqService"
+   summary: "Provides transaction details"
+   description:  "Provides transaction details"
+   operationId: "getAllTxnDetails"
+   parameters:
+   - name: "userId"
+     in: "header"
+     description: "User id"
+     required: true
+     type: "string"
+   - name: "branchCode"
+     in: "header"
+     description: "Branch Code"
+     required: true
+     type: "string"
+   - name: "appId"
+     in: "header"
+     description: "App id"
+     type: "string"
+     required: true
+   - name: offset
+     in: query
+     description: "Offset is starting no of records to be fetched"
+     required: false
+     type: integer
+   - name: limit
+     in: query
+     description: "Limit is maximum no of records to be fetched"
+     required: false
+     type: integer
+   - name: instrumentType
+     in: query
+     description: "Instrument Type of the transaction that needs to be fetched"
+     required: false
+     type: "string"
+   - name: txnRefNo
+     in: query
+     description: "Transaction Reference Number of the transaction that needs to be fetched"
+     required: true
+     type: "string"   
+   responses:
+    201:
+     description: "Provides transaction details"
+     headers: 
+      Location:
+       description: "Location"
+       type: "string"
+     schema:
+       $ref: "./chargesEnqDef.yaml#/definitions/GenricDtoCollection"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+     
+ /service/v1/chargesTxnData:
+  get:
+   tags:
+     - "ChargesEnqService"
+   summary: "Retrieves charges transaction data"
+   description:  "Retrieves charges transaction data"
+   operationId: "getObChargesTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+   responses:
+     200:
+       description: "Charges transaction details"
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/ObChargesTxnCollection"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+       
+ /service/v1/batchChargesTxnData:
+  get:
+   tags:
+     - "ChargesEnqService"
+   summary: "Processes charge transaction data & calculates charges for periodic charge transaction data"
+   description:  "Processes charge transaction data & calculates charges for periodic charge transaction data"
+   operationId: "getBatchObChargesTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       required: true
+       description: "App Id"
+     - name: "branchDate"
+       in: "query"
+       type: "string"
+       required: true
+       description: "Branch Date"
+   responses:
+     200:
+       description: "Success"
+       schema:
+         type: boolean
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"     
+       
+ /service/v1/postChargesTxnData:
+  post:
+   tags:
+     - "ChargesEnqService"
+   summary: "Creates charges transaction details record"
+   description:  "Creates charges transaction details record"
+   operationId: "postObChargesTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: "obChargesTxnDTOCollection"
+       in: "body"
+       description: "Request body with charges transaction details to be persisted"
+       required: true
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/ObChargesTxnDTOCollection"
+   responses:
+     200:
+       description: "Success"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+       
+ /service/v1/postInvoiceTxnData:
+  post:
+   tags:
+     - "ChargesEnqService"
+   summary: "Creates invoice transaction details record"
+   description:  "Creates invoice transaction details record"
+   operationId: "postInvoiceTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: "instrumentTxnDTOCollection"
+       in: "body"
+       description: "Request body with invoice transaction details to be persisted"
+       required: true
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/InstrumentTxnDTOCollection"
+   responses:
+     200:
+       description: "Success"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+       
+ /service/v1/postFinanceTxnData:
+  post:
+   tags:
+     - "ChargesEnqService"
+   summary: "Creates finance transaction details record"
+   description:  "Creates finance transaction details record"
+   operationId: "postFinanceTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: "financeTxnDTOCollection"
+       in: "body"
+       description: "Request body with finance transaction details to be persisted"
+       required: true
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/FinanceTxnDTOCollection"
+   responses:
+     200:
+       description: "Success"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+       
+       
+ /service/v1/postPoTxnData:
+  post:
+   tags:
+     - "ChargesEnqService"
+   summary: "Creates purchase order details record"
+   description:  "Creates purchase order details record"
+   operationId: "postPoTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch Code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: "poDTOCollection"
+       in: "body"
+       description: "Request body with purchase order details to be persisted"
+       required: true
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/PoDTOCollection"
+   responses:
+     200:
+       description: "Success"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+       
+ /service/v1/approveCharges:
+  get:
+   tags:
+    - "ChargesEnqService"
+   summary: "Approve charges transaction data"
+   description:  "Approve charges transaction data"
+   operationId: "approveCharges"
+   parameters:
+    - name: appId
+      in: header
+      type: string
+      description: "App Id"
+      required: true
+    - name: tenantId
+      in: header
+      type: string
+      description: "Tenant Id"
+      required: false
+    - name: userId
+      in: header
+      type: string
+      required: true
+      description: "User id for SMS"
+    - name: branchCode
+      in: header
+      type: string
+      description: "Branch code"
+      required: true
+    - name: contentType
+      in: header
+      type: string
+      description: "Content type"
+      required: false
+    - name: txnRefNo
+      in: query
+      required: false
+      type: string
+      description: "Transaction reference number"
+   responses:
+    200:
+       description: "Success"
+       schema:
+         type: boolean
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    500:
+     description: "Internal error"
+     
+ /service/v1/cashDepositTxn:
+  post:
+   tags:
+     - "ChargesEnqService"
+   summary: "Creates cash deposit transaction details record"
+   description:  "Creates cash deposit transaction details record"
+   operationId: "cashDepositTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: "cashDepositTxnDTOCollection"
+       in: "body"
+       description: "Request body with cash deposit transaction details to be persisted"
+       required: true
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/CashDepositTxnDTOCollection"
+   responses:
+     200:
+       description: "Success"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+ /service/v1/chequeDepositTxn:
+  post:
+   tags:
+     - "ChargesEnqService"
+   summary: "Creates cheque deposit transaction details record"
+   description:  "Creates cheque deposit transaction details record"
+   operationId: "chequeDepositTxnData"
+   parameters:
+     - name: "userId"
+       in: "header"
+       description: "User Id"
+       required: true
+       type: "string"
+     - name: "branchCode"
+       in: "header"
+       description: "Branch code"
+       required: true
+       type: "string"
+     - name: "appId"
+       in: "header"
+       type: "string"
+       description: "App Id"
+       required: true
+     - name: "chequeDepositTxnDTOCollection"
+       in: "body"
+       description: "Request body with cheque deposit transaction details to be persisted"
+       required: true
+       schema:
+         $ref: "./chargesEnqDef.yaml#/definitions/ChequeDepositTxnDTOCollection"
+   responses:
+     200:
+       description: "Success"
+     400:
+       description: "Malformed syntax."
+     401:
+       description: "Request does not have sufficient credentials."
+     403:
+       description: "Request is not authorized."
+     405:
+       description: "Invalid input"
+     500:
+       description: "Internal error"
+ /service/v1/charges:
+   post:
+     tags:
+       - "ChargesEnqService"
+     summary: "Performs Charge Calculation"
+     description: "Performs Charge Calculation"
+     operationId: "getCharges"
+     parameters:
+       - name: "userId"
+         in: "header"
+         description: "User Id"
+         required: true
+         type: "string"
+       - name: "branchCode"
+         in: "header"
+         description: "Branch Code"
+         required: true
+         type: "string"
+       - name: "appId"
+         in: "header"
+         description: "Application Id"
+         type: "string"
+         required: true
+       - name: "chargeDetails"
+         in: "body"
+         description: "Request Body For Charge Calculation"
+         required: true
+         schema:
+           $ref: "./chargesEnqDef.yaml#/definitions/ChargeCalculationRequestDto"
+     responses:
+       200:
+         description: "Calculated charges"
+         schema:
+           $ref: "./chargesEnqDef.yaml#/definitions/ChargesResponseDto"
+       400:
+         description: "Malformed syntax."
+       401:
+         description: "Request does not have sufficient credentials."
+       403:
+         description: "Request is not authorized."
+       500:
+         description: "Internal error"

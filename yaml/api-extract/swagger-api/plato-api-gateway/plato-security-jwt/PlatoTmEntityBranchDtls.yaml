@@ -1,0 +1,190 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "PlatoTmEntityBranchDtls Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "PlatoTmEntityBranchDtlsAPI"
+    description: ""
+    
+schemes:
+- "https"
+
+paths:
+  /associateBranchWithEntity:
+    post:
+      tags:
+        - "AssociateBranchWithEntityAPI"
+      summary: "Associate branch with entity"
+      description: ""
+      operationId: "associateBranchWithEntity"
+      parameters:
+        - name: "platoTmEntityBranchDtls"
+          in: "body"
+          description: "Request Body that contains data required for creating a new record"
+          required: true
+          schema:
+            $ref: "#/definitions/platoTmEntityBranchModel"
+      responses:
+        201:
+          description: ""
+          headers:
+            Location:
+              description: "URL of newly created customer"
+              type: "string"
+          schema:
+              type: "object"
+              description: "Id of the newly created customer"
+              properties:
+                id:
+                  type: "string"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"  
+  /retreiveEntityBranchAssociations:          
+    get:
+      tags:
+        - "AssociateBranchWithEntityAPI"
+      summary: "Retrieves the list of entity branch associations."
+      description:  "Retrieves the list of entity branch associations. "
+      operationId: "getEntityBranchAssociations"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/platoTmEntityBranchCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /authorizeAssociateBranchWithEntity/{id}:
+    post:
+      tags:
+        - "AssociateBranchWithEntityAPI"
+      summary: "Authorise Associate branch with entity"
+      description: ""
+      operationId: "authorizeAssociateBranchWithEntity"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id"
+          required: true
+          type: "string"     
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /updateAssociateBranchWithEntity/{id}:
+    put:
+      tags:
+        - "AssociateBranchWithEntityAPI"
+      summary: "Update an existing platoTmEntityBranchDtls."
+      description:  "Update an existing platoTmEntityBranchDtls."
+      operationId: "updatePlatoTmEntityBranchDtls"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the platoTmEntityBranchDtls that need to be updated"
+          required: true
+          type: "string"      
+        - name: "platoTmEntityBranchModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing platoTmEntityBranchDtls"
+          required: true
+          schema:
+            $ref: "#/definitions/platoTmEntityBranchModel"
+      responses:
+            200:
+              description: "Returns updated platoTmUserEntityMapping"
+              schema:
+                 $ref: "#/definitions/platoTmEntityBranchModel"
+            400:
+              description: "Malformed syntax."
+            401:
+              description: "Request does not have sufficient credentials."
+            403:
+              description: "Request is not authorized."
+            405:
+              description: "Invalid input"
+            500:
+              description: "Internal error" 
+definitions:
+  platoTmEntityBranchDtlsModel:
+    description: "platoTmEntityBranchDtls model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the platoTmEntityBranchDtls"
+        type: "string"
+      entityId:
+        description: "Entity ID"
+        type: "string"
+      branchCode:
+        description: "Branch Code"
+        type: "string"
+  platoTmEntityBranchDtlsCollection:
+    description: "Collection of platoTmEntityBranchDtls."
+    type: "object"
+    properties:
+      platoTmEntityBranchDtlsList:
+        type: "array"
+        items:
+          $ref: "#/definitions/platoTmEntityBranchDtlsModel"
+  platoTmEntityBranchModel:
+    description: "platoTmEntityBranchModel model"
+    type: "object"
+    properties:
+      id:
+        type: string
+      entityId:
+        description: "Entity Id"
+        type: "string"
+      entityName:
+        description: Entity name
+        type: string
+      branches:
+        description: "Branches"
+        type: "array"
+        items:
+          type: "object"
+          properties:
+              id:
+                type: string
+              branchCode:
+                type: string
+              branchName:
+                 type: string
+  platoTmEntityBranchCollection:
+    description: "Collection of platoTmEntityBranchModel."
+    type: "object"
+    properties:
+      entityBranchesList:
+        type: "array"
+        items:
+          $ref: "#/definitions/platoTmEntityBranchModel"  

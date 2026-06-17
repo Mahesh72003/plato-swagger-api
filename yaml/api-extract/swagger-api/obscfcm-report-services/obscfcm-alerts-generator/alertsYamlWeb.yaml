@@ -1,0 +1,319 @@
+#-----------------------------------------------------------------------------------------------------
+#  **
+#  ** File Name  : common.yaml
+#  **
+#  ** Module     : OBCM
+#  ** 
+#  ** This source is part of the Oracle FLEXCUBE  and is copyrighted by Oracle Financial Services Software Limited.  ** 
+#  ** 
+#  ** All rights reserved. No part of this work may be reproduced, stored in a retrieval system,
+#  ** adopted or transmitted in any form or by any means, electronic, mechanical, photographic,
+#  ** graphic, optic recording or otherwise, translated in any language or computer language,
+#  ** without the prior written permission of Oracle Financial Services Software Limited.
+#  ** 
+#  ** Oracle Financial Services Software Limited.
+#  ** 10-11, SDF I, SEEPZ, Andheri (East),
+#  ** Mumbai - 400 096.
+#  ** India
+#  ** Copyright 2017-2018 Oracle Financial Services Software Limited. All rights reserved.
+#  -------------------------------------------------------------------------------------------------------
+#
+#  CHANGE HISTORY
+#
+#  Created By         :  System
+#
+#  Bug Number         :  
+#  Changed By         :  
+#  Change Description :  
+#  Change On          :  
+#  Search String      :  
+#  
+#  -------------------------------------------------------------------------------------------------------
+  
+
+swagger: "2.0"
+info:
+ description: "This is a alertdefinitionmaster server." 
+ version: "1.0.0"
+ title: "Alert Definition master Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+ - "application/json"
+produces:
+ - "application/json"
+tags:
+ - name: "alertdefinitionmaster"
+   description: "This server is for maintaining alerts between corporate and its buyers and sellers. All parameter related to alerts will be configured through this service.
+Service will have all operations for ADD/MODIFY/DELETE/AUTHORIZE"
+
+schemes:
+- "https"
+
+paths:
+
+# path to create a new record and fetch all valid records or by intent
+#
+#  supprorted http methods POST and GET
+#
+# path example ../alertdefinitionmaster
+
+ /web/v1/alertdecisioning:
+  post:
+   tags:
+    - "alertdecisioning"
+   summary: "Adds a new alertdecisioning."
+   description: "Adds a new alertdecisioning. Add additional information here for this endpoint."
+   operationId: "saveRecord"
+   parameters:
+    - name: "alertdecisioning" 
+      in: "body" 
+      description: "Request Body that contains data required for creating a new alertdecisioning" 
+      required: true
+      schema:
+       $ref: "#/definitions/ObTmAlertsDecisioningMasterDTO"
+   responses:
+    201: 
+     description: "Returns message of succes or failure " 
+     headers:
+      Location:
+       description: "URL of newly created alertdecisioning" 
+       type: "string"
+     schema:
+       $ref: "#/definitions/ResponseDtoWrapper"
+    400:
+     description: "Malformed syntax."
+    401:
+     description: "Request does not have sufficient credentials."
+    403:
+     description: "Request is not authorized."
+    405:
+     description: "Invalid input"
+    500:
+     description: "Internal error"
+
+
+
+definitions:
+ ObTmAlertsDecisioningMasterDTO:
+  type: object
+  allOf:
+  - $ref: '#/definitions/GenericDto'
+  - type: object
+    properties:
+     filterAttr1:
+      type: string
+      description: "Filter Attribute 1"
+     filterAttr2:
+      type: string
+      description: "Filter Attribute 2"
+     filterAttr3:
+      type: string
+      description: "Filter Attribute 3"
+     filterAttr4:
+      type: string
+      description: "Filter Attribute 4"
+     filterAttr5:
+      type: string
+      description: "Filter Attribute 5"
+     filterAttr6:
+      type: string
+      description: "Filter Attribute 5"
+     filterCriteria:
+      type: string
+      description: "Filter Criteria"
+     alertCategory:
+      type: string
+      description: "Alert Category"
+     txnControllerRefNo:
+      type: string
+      description: "Transaction Controller Reference Number"
+     ObTmAlertsDecisioningDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObTmAlertsDecisioningDetailsDTO'
+ ObTmAlertsDecisioningDetailsDTO:
+  type: object
+  properties:
+     additionalDetails:
+      type: string
+      description: "Additional Details"
+     alertCode:
+      type: string
+      description: "Alert Code"
+     alertDescription:
+      type: string
+      description: "Alert Description"
+     alertFrequency:
+      type: string
+      description: "Alert Frequency"
+     beforeDays:
+      type: string
+      description: "Before Days"
+     decisioningMasterId:
+      type: string
+      description: "Decisioning Master Id"
+     deliveryMode:
+      type: string
+      description: "Delivery Mode"
+     event:
+      type: string
+      description: "Event"
+     id:
+      type: string
+      description: "Id"
+     intervalDays:
+      type: string
+      description: "Interval Days"
+     noOfAlerts:
+      type: string
+      description: "Number of Alerts"
+     recipient:
+      type: string
+      description: "Recipient"
+     ObTmAlertsDecisioningDeliveryDetailsDTO:
+      type: array
+      items:
+       $ref: '#/definitions/ObTmAlertsDecisioningDeliveryDetailsDTO'
+ ObTmAlertsDecisioningDeliveryDetailsDTO:
+  type: object
+  properties:
+     alertText:
+      type: string
+      description: "Alert text"
+     decisioningDetailsId:
+      type: string
+      description: "Decisioning Details Id"
+     documentId:
+      type: string
+      description: "Document Id"
+     id:
+      type: string
+      description: "Id"
+ ResponseDto:
+  type: object
+  properties:
+   id:
+    type: string
+   status:
+    type: string
+   codes:
+    type: array
+    items:
+     $ref: "#/definitions/ResponseCode"
+   requestId:
+    type: string
+ ResponseCode:
+  type: object
+  properties:
+   Code:
+    type: string
+   Desc:
+    type: string
+   Type:
+    type: string
+   Language:
+    type: string
+   args:
+    type: array
+    items:
+     type: object
+   arg:
+    type: string
+ GenericDto:
+  allOf:
+   - type: object
+     discriminator: resource_type
+ ResponseDtoWrapper:
+  type: object
+  properties:
+   messages:
+    $ref: "#/definitions/ResponseDto"
+   data:
+    $ref: "#/definitions/ResponseResourceSupport"
+ ResponseResourceSupport:
+  type: object
+  
+ AdviceResponse:
+    description: Advice Response
+    type: object
+    properties:
+      status:
+        description: Status
+        type: string
+      documentReferenceId:
+        description: Document Reference Id
+        type: string
+      documentInbase64:
+        description: Document Inbase64
+        type: string
+      documentNature:
+        description: Document Nature
+        type: string
+ EmailRequest:
+    description: Data required for sending a mail to the user
+    type: object
+    required:
+    - emailFrom
+    - emailTo
+    - documentInBase64
+    - reportContentType
+    properties:
+      serviceName:
+        description: Service Name
+        type: string
+      emailBCC:
+        description: Email-BCC
+        type: string
+      emailBody:
+        description: Email-Body
+        type: string
+      emailCC:
+        description: Email-CC
+        type: string
+      emailFrom:
+        description: Email-From
+        type: string
+      emailReplyTo:
+        description: Email-Reply-To
+        type: string
+      emailSubject:
+        description: Email-Subject
+        type: string
+      emailTo:
+        description: Email-To
+        type: string
+      contentType:
+        description: Content-Type
+        type: string
+      documentInBase64:
+        description: Document in Base64
+        type: string
+      documentName:
+        description: documentName
+        type: string
+      reportContentType:
+        description: reportContentType
+        type: string
+ ScfSystemParamModel:
+     description: "Scf System Param model"
+     type: "object"
+     properties:
+      id:
+        description: "Id of the Parameter"
+        type: "integer"
+        format: "int64"
+      key:
+        description: "Key for the parameter.This is a unique constraint"
+        type: "string"
+      value:
+        description: "Configured value which will be used in rest of application."
+        type: "string"
+ ScfSystemParamCollection:
+     description: "Collection of list of Parameters."
+     type: "object"
+     properties:
+      ScfSystemParamModel:      
+        type: "array"
+        items:
+          $ref: "#/definitions/ScfSystemParamModel"

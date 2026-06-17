@@ -1,0 +1,322 @@
+swagger: '2.0'
+info:
+  description: This is a sample server Manual Recon Service.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)
+  version: 1.0.0
+  title: Cashflow Recon Service
+host: api-plato.us.oracle.com:8080
+basePath: /obscfcm-manual-recon-services
+consumes:
+- application/json
+- application/xml
+produces:
+- application/json
+- application/xml
+tags:
+- name: cashflowReconService
+  description: APIs for Cashflow Recon
+schemes:
+- https
+paths:
+  /web/v1/getExpDrCrPmtReconDet:
+    get:
+      tags:
+          - cashflowReconService
+      summary: "Get Expected Debit Credit Payment Reconciliation Details"
+      description: "Get Expected Debit Credit Payment Reconciliation Details"
+      operationId: "getExpDrCrPmtReconDet"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "branchDate"
+          in: "header"
+          type: "string"
+          format: "date-time"
+          required: false
+        - name: paymentRefNo
+          in: query
+          type: string
+          description: Request parameter
+          required: true
+      responses:
+        200:
+          description: Search performed successfully
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/ExpDrCrPayReconDtoCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"                             
+  /web/v1/initiateExpDrCrPayRecon:
+    post:
+      tags:
+      - cashflowReconService
+      summary: "create new reconcilation data"
+      description: "create new reconcilation data by passing all the required details."
+      operationId: "createExpDrCrPayRecon"
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: './manualReconDef.yaml#/definitions/ReconTxnDto'
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/initiateExpDrCrPayDerecon:
+    post:
+      tags:
+      - cashflowReconService
+      summary: "create new de reconcilation data"
+      description: "create new de reconcilation data by passing all the required details."
+      operationId: "createExpDrCrPayDerecon"
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: reconTxnTwDto
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: "./manualReconDef.yaml#/definitions/ReconTxnDto"
+      responses:
+        201:
+          description: Successfully saved data
+          schema:
+               $ref: "./AutoReconWebDef.yaml#/definitions/ResponseDtoWrapper"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error
+  /web/v1/expDrCrPmtRecon:
+    post:
+      tags:
+          - cashflowReconService
+      summary: "get expected debit/credit payment reconcilation"
+      description: "get expected debit/credit payment reconcilation detail"
+      operationId: "getExpDrcrPayReconDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "tenantId"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true
+          description: "user id for SMS"
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true
+        - name: "authToken"
+          in: "header"
+          type: "string"
+          required: false
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false
+        - name: expDrCrPmtSearchModel
+          in: body
+          description: Request Body
+          required: true
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/ExpDrCrPmtSearchModel"
+      responses:
+        200:
+          description: Search performed successfully
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/ExpDrCrPayReconDtoCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"   
+  /web/v1/expDrCrPmtSearch:
+    post:
+      tags:
+      - cashflowReconService
+      summary: "Get Expected debit/credit and payment list."
+      description: "Get Expected debit/credit and payment list to reconcile."
+      operationId: "getExpDrCrPmtsForRecon"
+      parameters:
+      - name: appId
+        in: header
+        type: string
+        required: true
+        description: Application id
+      - name: userId
+        in: header
+        type: string
+        required: true
+        description: User id
+      - name: branchCode
+        in: header
+        type: string
+        required: true
+        description: Branch Code
+      - name: expDrCrPmtSearchModel
+        in: body
+        description: Request Body
+        required: true
+        schema:
+          $ref: "./manualReconDef.yaml#/definitions/ExpDrCrPmtSearchModel"
+      responses:
+        200:
+          description: Successfully received invoicesPayments details
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/ExpDrCrPaymentCollection"
+        400:
+          description: Malformed syntax.
+        401:
+          description: Request does not have sufficient credentials.
+        403:
+          description: Request is not authorized.
+        405:
+          description: Invalid input
+        500:
+          description: Internal error  
+  /web/v1/getcashflowPmtReconDet:
+    get:
+      tags:
+          - cashflowReconService
+      summary: "getting cashflow transaction details"
+      description: "getting cashflow transaction details"
+      operationId: "getCashflowPmtReconDetails"
+      parameters:
+        - name: "appId"
+          in: "header"
+          type: "string"
+          required: true      
+        - name: "userId"
+          in: "header"
+          type: "string"
+          required: true         
+        - name: "branchCode"
+          in: "header"
+          type: "string"
+          required: true       
+        - name: "contentType"
+          in: "header"
+          type: "string"
+          required: false        
+        - name: externalTransactionRefNo
+          in: query
+          type: string
+          description: Request parameter
+          required: true
+        - name: partyId
+          in: query
+          type: string
+          description: Request parameter
+          required: true
+        - name: applicationName
+          in: query
+          type: string
+          description: Request parameter
+          required: true
+        - name: cashFlowType
+          in: query
+          type: string
+          description: Request parameter
+          required: true    
+      responses:
+        200:
+          description: Search performed successfully  
+          schema:
+            $ref: "./manualReconDef.yaml#/definitions/CashflowResponse"        
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"               

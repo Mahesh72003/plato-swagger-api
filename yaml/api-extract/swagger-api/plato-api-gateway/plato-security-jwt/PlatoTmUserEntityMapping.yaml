@@ -1,0 +1,242 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Customer server.  You can find out more about Swagger at [swagger.io](http://swagger.io) and about data types at [Swagger Data Types](https://swagger.io/docs/specification/data-models/data-types/)"
+  version: "1.0.0"
+  title: "PlatoTmUserEntityMapping Service"
+host: "api-plato.us.oracle.com:8080"
+basePath: "/api/1.0"
+consumes:
+  - "application/json"
+  - "application/xml"
+produces:
+  - "application/json"
+  - "application/xml"
+tags:
+  - name: "UserEntityMappingAPI"
+    description: ""
+    
+schemes:
+- "https"
+
+paths:
+  /associateUserWithEntity:
+    post:
+      tags:
+        - "UserEntityMappingAPI"
+      summary: "User Entity Mapping"
+      description: ""
+      operationId: "associateUserWithEntity"
+      parameters:
+        - name: "platoTmUserEntityMapping"
+          in: "body"
+          description: "Request Body that contains data required for creating a new record"
+          required: true
+          schema:
+            $ref: "#/definitions/platoTmUserEntityModel"
+      responses:
+        200:
+          description: ""
+          schema:
+              type: "object"
+              description: ""
+              properties:
+                id:
+                  type: "string"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error" 
+  /retreiveEntityUserAssociations:          
+    get:
+      tags:
+        - "AssociateUserWithEntityAPI"
+      summary: "Retrieves the list of entity user associations."
+      description:  "Retrieves the list of entity user associations. "
+      operationId: "getEntityUserAssociations"
+      responses:
+        200:
+          description: "Successful performs the operation"
+          schema:
+            $ref: "#/definitions/platoTmUserEntityCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error" 
+  /authorizeUser/{id}:
+    post:
+      tags:
+        - "AssociateUserWithEntityAPI"
+      summary: "Authorise Associate user with entity"
+      description: ""
+      operationId: "authorizeAssociateUserWithEntity"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Id"
+          required: true
+          type: "string"     
+      responses:
+        200:
+          description: "Successful operation."
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"
+  /updateAssociateUserWithEntity:
+    put:
+      tags:
+        - "AssociateUserWithEntityAPI"
+      summary: "Update an existing platoTmUserEntityMapping."
+      description:  "Update an existing platoTmUserEntityMapping."
+      operationId: "updatePlatoTwUserEntityMapping"
+      parameters:    
+        - name: "platoTmUserEntityMappingModel"
+          in: "body"
+          description: "Request Body that contains data required for updating an existing platoTmUserEntityMapping"
+          required: true
+          schema:
+            $ref: "#/definitions/platoTmUserEntityModel"
+      responses:
+        200:
+          description: "Returns updated platoTmUserEntityMapping"
+          schema:
+            $ref: "#/definitions/platoTmUserEntityModel"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        405:
+          description: "Invalid input"
+        500:
+          description: "Internal error"   
+  /allowedEntitiesList/{userId}:
+    get:
+      tags:
+        - "AssociateUserWithEntityAPI"
+      summary: "Retrieves the entites and associated barnch details by userId."
+      description:  "Retrieves the entites and associated barnch details by userId."
+      operationId: "getEntitiesAndBranchByUserId"
+      parameters:
+         - name: "userId"
+           in: "path"
+           description: "Id of the user that needs to be fetched"
+           required: true
+           type: "string"
+      responses:
+        200:
+          description: "Returns the entites and associated barnch details by userId."
+          schema:
+            $ref: "#/definitions/platoTmUserEntityBranchMappingCollection"
+        400:
+          description: "Malformed syntax."
+        401:
+          description: "Request does not have sufficient credentials."
+        403:
+          description: "Request is not authorized."
+        500:
+          description: "Internal error"       
+definitions:
+  platoTmUserEntityMappingModel:
+    description: "platoTmUserEntityMapping model"
+    type: "object"
+    properties:
+      id:
+        description: "Id of the platoTmUserEntityMapping"
+        type: "string"
+      userId:
+        description: "User Id"
+        type: "string"
+      entityId:
+        description: "Entity ID"
+        type: "string"
+      homeEntity:
+        description: "Home Entity(Y/N)"
+        type: "string"
+  platoTmUserEntityMappingCollection:
+    description: "Collection of platoTmEntityUserEntiyMapping."
+    type: "object"
+    properties:
+      platoTmEntityUserEntityMappingList:
+        type: "array"
+        items:
+          $ref: "#/definitions/platoTmUserEntityMappingModel"
+  platoTmUserEntityBranchMappingModel:
+     description: "platoTmUserEntityBranchMappingModel"
+     type: object
+     properties:
+       id:
+        description: "Id"
+        type: "string"
+       entityId:
+        description: "Entity ID"
+        type: "string"
+       entityName:
+        description: "Entity Name"
+        type: "string"
+       branchsList: 
+        description: "Collection of platoTmEntityBranchDtls."
+        type: "object"
+        properties:
+             BranchDtlsList:
+               type: "array"
+               items:
+                 $ref: "#/definitions/BranchDtlsModel"
+  platoTmUserEntityBranchMappingCollection:
+    description: "Collection of platoTmUserEntityBranchMapping."
+    type: "object"
+    properties:
+      entitiesList:
+        type: "array"
+        items:
+          $ref: "#/definitions/platoTmUserEntityBranchMappingModel"
+  BranchDtlsModel:
+    description: "BranchDtlsModel model"
+    type: "object"
+    properties:
+      branchCode:
+        description: "Branch Code"
+        type: "string" 
+  platoTmUserEntityModel:
+    description: "platoTmUserEntityModel model"
+    type: "object"
+    properties:
+      userId:
+        description: "User Id"
+        type: "string"
+      entities:
+        description: "Entities"
+        type: "array"
+        items:
+          type: "object"
+          properties:
+              id:
+                type: string
+              entityId:
+                type: string
+              homeEntity:
+                 type: string
+  platoTmUserEntityCollection:
+    description: "Collection of platoTmUserEntityModel."
+    type: "object"
+    properties:
+      UserentitiesList:
+        type: "array"
+        items:
+          $ref: "#/definitions/platoTmUserEntityModel"  
+       
