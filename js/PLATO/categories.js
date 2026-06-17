@@ -26,14 +26,14 @@ var subCategories = {
   list: [
     {
       "index": 1,
-      "yaml": "PLATO/APIs.yaml",
+      "yaml": "PLATO/APIs.yml",
       "description": "login Api",
       "parentcategory": "Plato Api",
       "displayName": "Login",
     },
     {
       "index": 2,
-      "yaml": "PLATO/Alerts.yaml",
+      "yaml": "PLATO/Alerts.yml",
       "description": "Alerts API",
       "parentcategory": "Plato Api",
       "displayName": "Alerts",
@@ -47,8 +47,8 @@ var subCategories = {
     },
     {
       "index": 4,
-      "yaml": "PLATO/Feed.yaml",
-      "description": "Feed Services API",
+      "yaml": "PLATO/Feed.yml",
+      "description": "Feed API",
       "parentcategory": "Plato Api",
       "displayName": "Feed Services",
     },
